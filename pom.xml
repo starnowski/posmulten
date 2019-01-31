@@ -8,6 +8,10 @@
     <artifactId>parent</artifactId>
     <version>0.1.0-SNAPSHOT</version>
 
+    <properties>
+        <maven.surefire.plugin.version>2.22.1</maven.surefire.plugin.version>
+    </properties>
+
     <issueManagement>
         <url>https://github.com/starnowski/posmulten/issues</url>
         <system>GitHub Issues</system>
@@ -30,5 +34,61 @@
             </plugin>
         </plugins>
     </reporting>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <!-- The gmavenplus plugin is used to compile Groovy code. To learn more about this plugin,
+                    visit https://github.com/groovy/GMavenPlus/wiki -->
+                    <groupId>org.codehaus.gmavenplus</groupId>
+                    <artifactId>gmavenplus-plugin</artifactId>
+                    <version>1.5</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>testCompile</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${maven.surefire.plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>cobertura-maven-plugin</artifactId>
+                    <version>2.7</version>
+                    <configuration>
+                        <check />
+                        <formats>
+                            <format>html</format>
+                            <format>xml</format>
+                        </formats>
+                        <aggregate>true</aggregate>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <phase>post-integration-test</phase>
+                            <goals>
+                                <goal>check</goal>
+                                <goal>cobertura</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-release-plugin</artifactId>
+                    <version>2.5.3</version>
+                    <configuration>
+                        <tagNameFormat>v@{project.version}</tagNameFormat>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 
 </project>
