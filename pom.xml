@@ -14,6 +14,7 @@
 
     <properties>
         <maven.surefire.plugin.version>2.22.1</maven.surefire.plugin.version>
+        <org.hibernate.version>5.1.12.Final</org.hibernate.version>
     </properties>
 
     <issueManagement>
@@ -38,6 +39,16 @@
             </plugin>
         </plugins>
     </reporting>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-core</artifactId>
+                <version>${org.hibernate.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <build>
         <pluginManagement>
