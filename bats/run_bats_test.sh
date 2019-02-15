@@ -4,21 +4,25 @@ set -e
 function shutdownDockerContainer {
     lastCommandStatus="$?"
     echo "Shutting down docker container"
-    sudo docker stop test-postgres
+    sudo docker rm -f -v test-postgres
+    #sudo docker stop test-postgres
     exit $lastCommandStatus
 }
 trap shutdownDockerContainer EXIT SIGINT
 
-export DATABASE_PORT=5432
+export DATABASE_PORT=15432
 
-sudo docker run --rm --name test-postgres -e POSTGRES_PASSWORD=postgres -d postgres:9.6
+sudo docker run --rm --name test-postgres -e POSTGRES_PASSWORD=postgres_posmulten -p 127.0.0.1:15432:5432/tcp -d postgres:9.6.12
+DOCKER_DB_IP="127.0.0.1"
 
-export PGPASSWORD=postgres
-psql -qtAX -U postgres -p $DATABASE_PORT --host=localhost -f "../db_scripts/prepare_postgresql-core_db.sql"
+#TODO make better condition until docker container will rise
+sleep 30
+export PGPASSWORD=postgres_posmulten
+psql -qtAX -U postgres -p $DATABASE_PORT --host="$DOCKER_DB_IP" -f "../db_scripts/prepare_postgresql-core_db.sql"
 
 
 #Run test
-bats -r .
+bats -rt .
 
 
 #
