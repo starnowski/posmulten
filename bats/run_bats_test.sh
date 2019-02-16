@@ -3,10 +3,11 @@ set -e
 
 function waitUntilDockerContainerIsReady {
     checkCount=1
+    timeoutInSecond=180
     while : ; do
         set +e
         results=`psql -qtAX -U postgres -p $DATABASE_PORT --host="$DOCKER_DB_IP" -c "SELECT 1;"`
-        [[ "$?" -ne 0 && checkCount -ne 50 ]] || break
+        [[ "$?" -ne 0 && $checkCount -ne $timeoutInSecond ]] || break
         checkCount=$(( checkCount+1 ))
         echo "Waiting $checkCount seconds for database to start"
         sleep 1
