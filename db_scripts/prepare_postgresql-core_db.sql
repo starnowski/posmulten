@@ -1,3 +1,7 @@
+CREATE USER "postgresql-core-superuser" WITH
+  SUPERUSER
+  ENCRYPTED PASSWORD 'superuser123';
+
 CREATE USER "postgresql-core-owner" WITH
   NOSUPERUSER
   ENCRYPTED PASSWORD 'owner123';
