@@ -3,11 +3,11 @@ set -e
 
 function waitUntilDockerContainerIsReady {
     checkCount=1
-    timeoutInSecond=180
+    timeoutInSeconds=180
     while : ; do
         set +e
         results=`psql -qtAX -U postgres -p $DATABASE_PORT --host="$DOCKER_DB_IP" -c "SELECT 1;"`
-        [[ "$?" -ne 0 && $checkCount -ne $timeoutInSecond ]] || break
+        [[ "$?" -ne 0 && $checkCount -ne $timeoutInSeconds ]] || break
         checkCount=$(( checkCount+1 ))
         echo "Waiting $checkCount seconds for database to start"
         sleep 1
@@ -25,7 +25,7 @@ trap shutdownDockerContainer EXIT SIGINT
 
 export DATABASE_PORT=15432
 
-sudo docker run --rm --name test-postgres -e POSTGRES_PASSWORD=postgres_posmulten -p 127.0.0.1:15432:5432/tcp -d postgres:9.6.12
+sudo docker run --rm --name test-postgres -e POSTGRES_PASSWORD=postgres_posmulten -p 127.0.0.1:$DATABASE_PORT:5432/tcp -d postgres:9.6.12
 export DOCKER_DB_IP="127.0.0.1"
 
 export PGPASSWORD=postgres_posmulten
@@ -43,7 +43,7 @@ bats -rt .
 # - To quit command line console (no-interactive mode) pass '\q' then press ENTER
 # - If docker container is still working, you can login to database by executing below commands:
 #   export PGPASSWORD=postgres
-#   psql -d postgres -U postgres -p 5432 --host=localhost
+#   psql -d postgres -U postgres -p 15432 --host=127.0.0.1
 #
 # In case problem with error "/usr/local/lib/libldap_r-2.4.so.2: no version information available (required by /usr/lib/x86_64-linux-gnu/libpq.so.5)"
 # try https://www.dangtrinh.com/2017/04/how-to-fix-usrlocalliblibldapr-24so2-no.html and execute:
