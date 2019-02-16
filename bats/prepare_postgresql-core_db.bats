@@ -57,6 +57,31 @@ function setup {
   [ "$output" = "1" ]
 }
 
+@test "Database user 'postgresql-core-owner' should not have super user privilege" {
+  #given
+  export PGPASSWORD=postgres_posmulten
+
+  #when usesuper
+  run psql -qtAX -d postgresql_core -U "postgres" --host="$DOCKER_DB_IP" -p $DATABASE_PORT -c "SELECT COUNT(*) FROM pg_user WHERE usename = 'postgresql-core-owner' AND usesuper IS true;" >&3
+
+  #then
+  echo "output is --> $output <--"  >&3
+  [ "$status" -eq 0 ]
+  [ "$output" = "0" ]
+}
+
+@test "Database user 'postgresql-core-user' should not have super user privilege" {
+  #given
+  export PGPASSWORD=postgres_posmulten
+
+  #when usesuper
+  run psql -qtAX -d postgresql_core -U "postgres" --host="$DOCKER_DB_IP" -p $DATABASE_PORT -c "SELECT COUNT(*) FROM pg_user WHERE usename = 'postgresql-core-user' AND usesuper IS true;" >&3
+
+  #then
+  echo "output is --> $output <--"  >&3
+  [ "$status" -eq 0 ]
+  [ "$output" = "0" ]
+}
 
 function teardown {
   #Restore previous password
