@@ -25,7 +25,7 @@ trap shutdownDockerContainer EXIT SIGINT
 export DATABASE_PORT=15432
 
 sudo docker run --rm --name test-postgres -e POSTGRES_PASSWORD=postgres_posmulten -p 127.0.0.1:15432:5432/tcp -d postgres:9.6.12
-DOCKER_DB_IP="127.0.0.1"
+export DOCKER_DB_IP="127.0.0.1"
 
 export PGPASSWORD=postgres_posmulten
 waitUntilDockerContainerIsReady
@@ -43,4 +43,9 @@ bats -rt .
 # - If docker container is still working, you can login to database by executing below commands:
 #   export PGPASSWORD=postgres
 #   psql -d postgres -U postgres -p 5432 --host=localhost
+#
+# In case problem with error "/usr/local/lib/libldap_r-2.4.so.2: no version information available (required by /usr/lib/x86_64-linux-gnu/libpq.so.5)"
+# try https://www.dangtrinh.com/2017/04/how-to-fix-usrlocalliblibldapr-24so2-no.html and execute:
+# sudo ln -fs /usr/lib/liblber-2.4.so.2 /usr/local/lib/
+# sudo ln -fs /usr/lib/libldap_r-2.4.so.2 /usr/local/lib/
 #
