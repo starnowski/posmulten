@@ -25,5 +25,5 @@ jobs:
         - .travis/bats/bats-core-installation.sh
       services:
         - docker
-      script: bats/run_bats_test.sh
+      script: export PATH="$PATH:.travis/bats/bats-core/bin" && bats/run_bats_test.sh
 
