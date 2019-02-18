@@ -1,6 +1,10 @@
 #!/bin/bash
 set -e
 
+function resolveScriptDirectory {
+    echo "$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+}
+
 function waitUntilDockerContainerIsReady {
     checkCount=1
     timeoutInSeconds=180
@@ -26,15 +30,18 @@ trap shutdownDockerContainer EXIT SIGINT
 export DATABASE_PORT=15432
 
 sudo docker run --rm --name test-postgres -e POSTGRES_PASSWORD=postgres_posmulten -p 127.0.0.1:$DATABASE_PORT:5432/tcp -d postgres:9.6.12
-export DOCKER_DB_IP="127.0.0.1"
 
+export DOCKER_DB_IP="127.0.0.1"
 export PGPASSWORD=postgres_posmulten
+
 waitUntilDockerContainerIsReady
-psql -qtAX -U postgres -p $DATABASE_PORT --host="$DOCKER_DB_IP" -f "../db_scripts/prepare_postgresql-core_db.sql"
+
+SCRIPT_DIR=`resolveScriptDirectory`
+psql -qtAX -U postgres -p $DATABASE_PORT --host="$DOCKER_DB_IP" -f "$SCRIPT_DIR/../db_scripts/prepare_postgresql-core_db.sql"
 
 
 #Run test
-bats -rt .
+bats -rt "$SCRIPT_DIR"
 
 
 #
