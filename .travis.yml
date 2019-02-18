@@ -1,16 +1,32 @@
-language: java
-jdk:
-  - oraclejdk8
-sudo: false
-addons:
-  postgresql: "9.6"
-services:
-  - postgresql
+stages:
+  # Compilation and unit tests
+  - test
+  # Testing database creation scripts
+  - test database scripts
+jobs:
+  include:
+    - stage: test
+      language: java
+      jdk: oraclejdk8
+      sudo: false
+      addons:
+        postgresql: "9.6"
+      services:
+        - postgresql
+      before_script:
+        - psql -f 'db_scripts/prepare_postgresql-core_db.sql' -U postgres
+      cache:
+        directories:
+          - $HOME/.m2
+      script: mvn clean install
 
-before_script:
-  - psql -f 'db_scripts/prepare_postgresql-core_db.sql' -U postgres
+    - stage: test database scripts
+      language: bash
+      sudo: true
+      before_install:
+        # Install bats-core with version 1.1.0 when package will be available (see https://github.com/bats-core/bats-core/issues/103)
+        - .travis/bats/bats-core-installation.sh "$TRAVIS_BUILD_DIR/.travis/bats"
+      services:
+        - docker
+      script: export PATH="$TRAVIS_BUILD_DIR/.travis/bats/bats-core/bin:$PATH" && bats/run_bats_test.sh
 
-cache:
-  directories:
-    - $HOME/.m2
-script: mvn clean install
