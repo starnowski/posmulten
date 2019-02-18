@@ -22,8 +22,7 @@ jobs:
       language: bash
       sudo: true
       before_install:
-        - sudo apt install -y nodejs npm
-        - sudo npm install -g bats@1.1.0
+        - sudo npm install -g bats bats@1.1.0
       services:
         - docker
       script: bats/run_bats_test.sh
