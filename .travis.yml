@@ -1,3 +1,5 @@
+stages:
+  - test
 jobs:
   include:
     - stage: test
@@ -16,6 +18,7 @@ jobs:
 #      cache:
 #        directories:
 #          - $HOME/.m2
+
       script: mvn clean install
 
 #    - stage:  test database scripts
