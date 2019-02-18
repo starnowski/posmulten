@@ -22,10 +22,7 @@ jobs:
       language: bash
       sudo: true
       before_install:
-        - git clone https://github.com/bats-core/bats-core.git
-        - git fetch --all --tags --prune
-        - git checkout v1.1.0
-        - bats-core/install.sh /usr/local
+        - .travis/bats/bats-core-installation.sh
       services:
         - docker
       script: bats/run_bats_test.sh
