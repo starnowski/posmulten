@@ -1,6 +1,8 @@
 stages:
-  - test # Compilation and unit tests
-  - test database scripts # Testing database creation scripts
+  # Compilation and unit tests
+  - test
+  # Testing database creation scripts
+  - test database scripts
 jobs:
   include:
     - stage: test
@@ -25,5 +27,5 @@ jobs:
         - .travis/bats/bats-core-installation.sh
       services:
         - docker
-      script: export PATH="$TRAVIS_BUILD_DIR/.travis/bats/bats-core/bin:$PATH" && bats/run_bats_test.sh
+      script: ls -la $TRAVIS_BUILD_DIR/.travis/bats/bats-core/ && export PATH="$TRAVIS_BUILD_DIR/.travis/bats/bats-core/bin:$PATH" && which bats && bats/run_bats_test.sh
 
