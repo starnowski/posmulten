@@ -1,5 +1,6 @@
 stages:
   - test
+  - test database scripts
 jobs:
   include:
     - stage: test
@@ -17,15 +18,14 @@ jobs:
           - $HOME/.m2
       script: mvn clean install
 
-
-#    - stage:  test database scripts
-#      language: bash
-#      sudo: true
-#      before_install:
-#        - sudo add-apt-repository ppa:duggan/bats --yes
-#        - sudo apt-get update -qq
-#        - sudo apt-get install -qq bats
-#      services:
-#        - docker
-#      script: bats/run_bats_test.sh
+    - stage: test database scripts
+      language: bash
+      sudo: true
+      before_install:
+        - sudo add-apt-repository ppa:duggan/bats --yes
+        - sudo apt-get update -qq
+        - sudo apt-get install -qq bats
+      services:
+        - docker
+      script: bats/run_bats_test.sh
 
