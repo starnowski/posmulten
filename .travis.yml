@@ -22,7 +22,10 @@ jobs:
       language: bash
       sudo: true
       before_install:
-        - sudo npm install -g bats bats@1.1.0
+        - git clone https://github.com/bats-core/bats-core.git
+        - git fetch --all --tags --prune
+        - git checkout tags/v1.1.0
+        - bats-core/install.sh /usr/local
       services:
         - docker
       script: bats/run_bats_test.sh
