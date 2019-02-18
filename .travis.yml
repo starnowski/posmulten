@@ -1,16 +1,30 @@
-language: java
-jdk:
-  - oraclejdk8
-sudo: false
-addons:
-  postgresql: "9.6"
-services:
-  - postgresql
+jobs:
+  include:
+    - stage: test
+      language: java
+      jdk:
+        - oraclejdk8
+      sudo: false
+      addons:
+        postgresql: "9.6"
+      services:
+        - postgresql
 
-before_script:
-  - psql -f 'db_scripts/prepare_postgresql-core_db.sql' -U postgres
+      before_script:
+        - psql -f 'db_scripts/prepare_postgresql-core_db.sql' -U postgres
 
-cache:
-  directories:
-    - $HOME/.m2
-script: mvn clean install
+      cache:
+        directories:
+          - $HOME/.m2
+      script: mvn clean install
+    - stage:  test database scripts
+      language: bash
+      sudo: true
+      before_install:
+        - sudo add-apt-repository ppa:duggan/bats --yes
+        - sudo apt-get update -qq
+        - sudo apt-get install -qq bats
+      services:
+        - docker
+      script: bats/run_bats_test.sh
+
