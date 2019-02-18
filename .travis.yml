@@ -4,8 +4,10 @@ jobs:
   include:
     - stage: test
       language: java
-      jdk:
-        - oraclejdk8
+      script: mvn clean install
+
+#      jdk:
+#        - oraclejdk8
 #      sudo: false
 #      addons:
 #        postgresql: "9.6"
@@ -19,7 +21,6 @@ jobs:
 #        directories:
 #          - $HOME/.m2
 
-      script: mvn clean install
 
 #    - stage:  test database scripts
 #      language: bash
