@@ -22,7 +22,7 @@ jobs:
       language: bash
       sudo: true
       before_install:
-        - sudo apt install npm
+        - sudo apt install -y nodejs npm
         - sudo npm install -g bats@1.1.0
       services:
         - docker
