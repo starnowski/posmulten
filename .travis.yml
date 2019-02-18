@@ -24,8 +24,9 @@ jobs:
       language: bash
       sudo: true
       before_install:
+        # Install bats-core with version 1.1.0 when package will be available (see https://github.com/bats-core/bats-core/issues/103)
         - .travis/bats/bats-core-installation.sh "$TRAVIS_BUILD_DIR/.travis/bats"
       services:
         - docker
-      script: ls -la $TRAVIS_BUILD_DIR/.travis/bats/bats-core/ && export PATH="$TRAVIS_BUILD_DIR/.travis/bats/bats-core/bin:$PATH" && which bats && bats/run_bats_test.sh
+      script: export PATH="$TRAVIS_BUILD_DIR/.travis/bats/bats-core/bin:$PATH" && bats/run_bats_test.sh
 
