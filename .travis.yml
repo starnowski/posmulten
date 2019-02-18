@@ -1,11 +1,9 @@
 stages:
-  # Compilation and unit tests
-  - test
-  # Testing database creation scripts
-  - test database scripts
+  # Compilation, tests, testing database creation scripts
+  - "compile, tests, database creation tests"
 jobs:
   include:
-    - stage: test
+    - stage: "compile, tests, database creation tests"
       language: java
       jdk: oraclejdk8
       sudo: false
@@ -20,7 +18,7 @@ jobs:
           - $HOME/.m2
       script: mvn clean install
 
-    - stage: test database scripts
+    - stage: "compile, tests, database creation tests"
       language: bash
       sudo: true
       before_install:
