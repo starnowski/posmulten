@@ -16,3 +16,16 @@ CREATE DATABASE postgresql_core WITH
   CONNECTION LIMIT = -1;
 
 GRANT ALL PRIVILEGES ON DATABASE postgresql_core to "postgresql-core-owner" ;
+
+\c postgresql_core;
+
+CREATE TABLE public.users
+(
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.users
+    OWNER to "postgresql-core-owner";
