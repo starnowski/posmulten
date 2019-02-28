@@ -48,7 +48,7 @@ function setup {
   #given
   export PGPASSWORD=postgres_posmulten
 
-  #when usesuper
+  #when
   run psql -qtAX -d postgresql_core -U "postgres" --host="$DOCKER_DB_IP" -p $DATABASE_PORT -c "SELECT COUNT(*) FROM pg_user WHERE usename = 'postgresql-core-superuser' AND usesuper IS true;" >&3
 
   #then
@@ -61,7 +61,7 @@ function setup {
   #given
   export PGPASSWORD=postgres_posmulten
 
-  #when usesuper
+  #when
   run psql -qtAX -d postgresql_core -U "postgres" --host="$DOCKER_DB_IP" -p $DATABASE_PORT -c "SELECT COUNT(*) FROM pg_user WHERE usename = 'postgresql-core-owner' AND usesuper IS true;" >&3
 
   #then
@@ -74,13 +74,39 @@ function setup {
   #given
   export PGPASSWORD=postgres_posmulten
 
-  #when usesuper
+  #when
   run psql -qtAX -d postgresql_core -U "postgres" --host="$DOCKER_DB_IP" -p $DATABASE_PORT -c "SELECT COUNT(*) FROM pg_user WHERE usename = 'postgresql-core-user' AND usesuper IS true;" >&3
 
   #then
   echo "output is --> $output <--"  >&3
   [ "$status" -eq 0 ]
   [ "$output" = "0" ]
+}
+
+@test "Database table 'users' should exists" {
+  #given
+  export PGPASSWORD=postgres_posmulten
+
+  #when
+  run psql -qtAX -d postgresql_core -U "postgres" --host="$DOCKER_DB_IP" -p $DATABASE_PORT -c "SELECT EXISTS (SELECT 1 FROM   information_schema.tables WHERE  table_schema = 'public' AND table_name = 'users');" >&3
+
+  #then
+  echo "output is --> $output <--"  >&3
+  [ "$status" -eq 0 ]
+  [ "$output" = "true" ]
+}
+
+@test "The user 'postgresql-core-owner' should be an owner of 'users' table" {
+  #given
+  export PGPASSWORD=postgres_posmulten
+
+  #when
+  run psql -qtAX -d postgresql_core -U "postgres" --host="$DOCKER_DB_IP" -p $DATABASE_PORT -c "SELECT EXISTS (SELECT 1 FROM information_schema.tables t JOIN pg_catalog.pg_class c ON (t.table_name = c.relname) JOIN pg_catalog.pg_user u ON (c.relowner = u.usesysid) WHERE t.table_schema='public' AND t.table_name='users' AND u.usename = 'postgresql-core-owner');" >&3
+
+  #then
+  echo "output is --> $output <--"  >&3
+  [ "$status" -eq 0 ]
+  [ "$output" = "true" ]
 }
 
 function teardown {
