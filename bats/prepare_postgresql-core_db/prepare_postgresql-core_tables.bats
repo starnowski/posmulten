@@ -69,6 +69,19 @@ function setup {
   [ "$output" = "t" ]
 }
 
+@test "Database table 'groups' should have column 'name'" {
+  #given
+  export PGPASSWORD=postgres_posmulten
+
+  #when
+  run psql -qtAX -d postgresql_core -U "postgres" --host="$DOCKER_DB_IP" -p $DATABASE_PORT -c "SELECT EXISTS (SELECT 1 FROM information_schema.columns WHERE  table_schema = 'public' AND table_name = 'groups' and column_name = 'name');" >&3
+
+  #then
+  echo "output is --> $output <--"  >&3
+  [ "$status" -eq 0 ]
+  [ "$output" = "t" ]
+}
+
 @test "Database table 'users_groups' should exists" {
   #given
   export PGPASSWORD=postgres_posmulten
