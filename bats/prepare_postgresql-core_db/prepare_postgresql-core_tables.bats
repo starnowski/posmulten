@@ -30,12 +30,12 @@ function setup {
   [ "$output" = "t" ]
 }
 
-@test "Database table 'users' should have column 'name'" {
+@test "Database table 'users' should have column 'name' with data type 'character varying' and maximal length '255'" {
   #given
   export PGPASSWORD=postgres_posmulten
 
   #when
-  run psql -qtAX -d postgresql_core -U "postgres" --host="$DOCKER_DB_IP" -p $DATABASE_PORT -c "SELECT EXISTS (SELECT 1 FROM information_schema.columns WHERE  table_schema = 'public' AND table_name = 'users' and column_name = 'name');" >&3
+  run psql -qtAX -d postgresql_core -U "postgres" --host="$DOCKER_DB_IP" -p $DATABASE_PORT -c "SELECT EXISTS (SELECT 1 FROM information_schema.columns WHERE  table_schema = 'public' AND table_name = 'users' AND column_name = 'name' AND data_type = 'character varying' AND character_maximum_length = 255);" >&3
 
   #then
   echo "output is --> $output <--"  >&3
