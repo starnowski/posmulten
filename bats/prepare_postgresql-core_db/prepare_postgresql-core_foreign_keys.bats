@@ -2,15 +2,13 @@
 function setup {
   #Save previous password
   PREVIOUS_PGPASSWORD="$PGPASSWORD"
+  export TIMESTAMP='date +%s'
 }
 
 @test "Relation between "users"(id) and "users_groups"(user_id) should be one-to-many." {
   #given
   export PGPASSWORD=postgres_posmulten
-
-  #when
-  run psql -qtAX -d postgresql_core -U "postgres" --host="$DOCKER_DB_IP" -p $DATABASE_PORT -f
-    <<SQL
+  cat << SQL > "$BATS_TMPDIR/$TIMESTAMP_timestamp.sql"
     SELECT EXISTS (
     SELECT 1
     FROM INFORMATION_SCHEMA.CONSTRAINT_COLUMN_USAGE u
@@ -31,6 +29,10 @@ function setup {
         AND U.table_schema = 'public'
     );
 SQL
+
+
+  #when
+  run psql -qtAX -d postgresql_core -U "postgres" --host="$DOCKER_DB_IP" -p $DATABASE_PORT -f "$BATS_TMPDIR/$TIMESTAMP_timestamp.sql"
 
   #then
   echo "output is --> $output <--"  >&3
@@ -65,6 +67,7 @@ SQL
         AND U.table_schema = 'public'
     );
 SQL
+run psql -qtAX -d postgresql_core -U "postgres" --host="$DOCKER_DB_IP" -p $DATABASE_PORT -f
 
   #then
   echo "output is --> $output <--"  >&3
