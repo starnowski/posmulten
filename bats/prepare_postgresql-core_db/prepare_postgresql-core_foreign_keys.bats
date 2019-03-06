@@ -3,12 +3,13 @@ function setup {
   #Save previous password
   PREVIOUS_PGPASSWORD="$PGPASSWORD"
   export TIMESTAMP='date +%s'
+  export TMP_SQL_FILE="$TIMESTAMP_timestamp.sql"
 }
 
 @test "Relation between 'users'(id) and 'users_groups'(user_id) should be one-to-many." {
   #given
   export PGPASSWORD=postgres_posmulten
-  cat << SQL > "$BATS_TMPDIR/$TIMESTAMP_timestamp.sql"
+  cat << SQL > "$BATS_TMPDIR/$TMP_SQL_FILE"
     SELECT EXISTS (
     SELECT 1
     FROM INFORMATION_SCHEMA.CONSTRAINT_COLUMN_USAGE u
@@ -32,7 +33,7 @@ SQL
 
 
   #when
-  run psql -qtAX -d postgresql_core -U "postgres" --host="$DOCKER_DB_IP" -p $DATABASE_PORT -f "$BATS_TMPDIR/$TIMESTAMP_timestamp.sql"
+  run psql -qtAX -d postgresql_core -U "postgres" --host="$DOCKER_DB_IP" -p $DATABASE_PORT -f "$BATS_TMPDIR/$TMP_SQL_FILEl"
 
   #then
   echo "output is --> $output <--"  >&3
@@ -112,4 +113,5 @@ SQL
 function teardown {
   #Restore previous password
   PGPASSWORD="$PREVIOUS_PGPASSWORD"
+  rm "$BATS_TMPDIR/$TMP_SQL_FILE"
 }
