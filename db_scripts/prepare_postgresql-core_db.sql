@@ -57,6 +57,8 @@ TABLESPACE pg_default;
 
 CREATE TABLE public.posts
 (
+    id bigint NOT NULL,
+    text text NOT NULL
 )
 WITH (
     OIDS = FALSE
