@@ -21,6 +21,7 @@ GRANT ALL PRIVILEGES ON DATABASE postgresql_core to "postgresql-core-owner" ;
 
 CREATE TABLE public.users
 (
+    name character varying(255)
 )
 WITH (
     OIDS = FALSE
@@ -29,6 +30,7 @@ TABLESPACE pg_default;
 
 CREATE TABLE public.groups
 (
+    name character varying(255)
 )
 WITH (
     OIDS = FALSE
