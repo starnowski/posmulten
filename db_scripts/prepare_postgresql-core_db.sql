@@ -61,7 +61,8 @@ CREATE TABLE public.posts
     text text NOT NULL,
     user_id bigint NOT NULL,
     CONSTRAINT fk_posts_user_id FOREIGN KEY (user_id)
-              REFERENCES users (id) MATCH SIMPLE
+              REFERENCES users (id) MATCH SIMPLE,
+    CONSTRAINT posts_pkey PRIMARY KEY (id)
 )
 WITH (
     OIDS = FALSE
