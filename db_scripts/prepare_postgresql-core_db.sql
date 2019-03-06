@@ -21,7 +21,9 @@ GRANT ALL PRIVILEGES ON DATABASE postgresql_core to "postgresql-core-owner" ;
 
 CREATE TABLE public.users
 (
-    name character varying(255)
+    id bigint NOT NULL,
+    name character varying(255),
+    CONSTRAINT users_pkey PRIMARY KEY (id)
 )
 WITH (
     OIDS = FALSE
@@ -30,7 +32,9 @@ TABLESPACE pg_default;
 
 CREATE TABLE public.groups
 (
-    name character varying(255)
+    uuid uuid NOT NULL,
+    name character varying(255),
+    CONSTRAINT groups_pkey PRIMARY KEY (uuid)
 )
 WITH (
     OIDS = FALSE
@@ -39,6 +43,12 @@ TABLESPACE pg_default;
 
 CREATE TABLE public.users_groups
 (
+    user_id bigint NOT NULL,
+    group_id uuid NOT NULL,
+    CONSTRAINT fk_users_groups_user_id FOREIGN KEY (user_id)
+        REFERENCES users (id) MATCH SIMPLE,
+    CONSTRAINT fk_users_groups_group_id FOREIGN KEY (group_id)
+            REFERENCES groups (uuid) MATCH SIMPLE
 )
 WITH (
     OIDS = FALSE
