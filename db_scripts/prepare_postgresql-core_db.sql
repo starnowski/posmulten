@@ -27,5 +27,38 @@ WITH (
 )
 TABLESPACE pg_default;
 
+CREATE TABLE public.groups
+(
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+CREATE TABLE public.users_groups
+(
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+CREATE TABLE public.posts
+(
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
 ALTER TABLE public.users
+    OWNER to "postgresql-core-owner";
+
+ALTER TABLE public.groups
+    OWNER to "postgresql-core-owner";
+
+ALTER TABLE public.users_groups
+    OWNER to "postgresql-core-owner";
+
+ALTER TABLE public.posts
     OWNER to "postgresql-core-owner";
