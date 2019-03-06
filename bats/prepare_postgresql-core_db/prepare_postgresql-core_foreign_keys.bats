@@ -5,7 +5,7 @@ function setup {
   export TIMESTAMP='date +%s'
 }
 
-@test "Relation between "users"(id) and "users_groups"(user_id) should be one-to-many." {
+@test "Relation between 'users'(id) and 'users_groups'(user_id) should be one-to-many." {
   #given
   export PGPASSWORD=postgres_posmulten
   cat << SQL > "$BATS_TMPDIR/$TIMESTAMP_timestamp.sql"
@@ -40,7 +40,7 @@ SQL
   [ "$output" = "t" ]
 }
 
-@test "Relation between "groups"(uuid) and "users_groups"(group_id) should be one-to-many." {
+@test "Relation between 'groups'(uuid) and 'users_groups'(group_id) should be one-to-many." {
   #given
   export PGPASSWORD=postgres_posmulten
 
@@ -75,7 +75,7 @@ run psql -qtAX -d postgresql_core -U "postgres" --host="$DOCKER_DB_IP" -p $DATAB
   [ "$output" = "t" ]
 }
 
-@test "Relation between "users"(id) and "posts"(user_id) should be one-to-many." {
+@test "Relation between 'users'(id) and 'posts'(user_id) should be one-to-many." {
   #given
   export PGPASSWORD=postgres_posmulten
 
