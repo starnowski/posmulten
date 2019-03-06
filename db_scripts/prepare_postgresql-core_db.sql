@@ -58,7 +58,10 @@ TABLESPACE pg_default;
 CREATE TABLE public.posts
 (
     id bigint NOT NULL,
-    text text NOT NULL
+    text text NOT NULL,
+    user_id bigint NOT NULL,
+    CONSTRAINT fk_posts_user_id FOREIGN KEY (user_id)
+              REFERENCES users (id) MATCH SIMPLE
 )
 WITH (
     OIDS = FALSE

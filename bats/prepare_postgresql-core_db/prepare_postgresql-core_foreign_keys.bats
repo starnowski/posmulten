@@ -78,10 +78,7 @@ SQL
 @test "Relation between 'users'(id) and 'posts'(user_id) should be one-to-many." {
   #given
   export PGPASSWORD=postgres_posmulten
-
-  #when
-  run psql -qtAX -d postgresql_core -U "postgres" --host="$DOCKER_DB_IP" -p $DATABASE_PORT -f
-    <<SQL
+  cat << SQL > "$BATS_TMPDIR/$TMP_SQL_FILE"
     SELECT EXISTS (
     SELECT 1
     FROM INFORMATION_SCHEMA.CONSTRAINT_COLUMN_USAGE u
@@ -102,6 +99,9 @@ SQL
         AND U.table_schema = 'public'
     );
 SQL
+
+  #when
+  run psql -qtAX -d postgresql_core -U "postgres" --host="$DOCKER_DB_IP" -p $DATABASE_PORT -f "$BATS_TMPDIR/$TMP_SQL_FILE"
 
   #then
   echo "output is --> $output <--"  >&3
