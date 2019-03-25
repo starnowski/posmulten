@@ -2,7 +2,7 @@
 function setup {
   #Save previous password
   PREVIOUS_PGPASSWORD="$PGPASSWORD"
-  export TIMESTAMP='date +%s'
+  export TIMESTAMP=`date +%s`
   export TMP_SQL_FILE="$TIMESTAMP_timestamp.sql"
 }
 
