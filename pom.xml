@@ -16,6 +16,7 @@
     <properties>
         <maven.surefire.plugin.version>2.22.1</maven.surefire.plugin.version>
         <org.hibernate.version>5.1.12.Final</org.hibernate.version>
+        <spock.core.version>1.1-groovy-2.4</spock.core.version>
     </properties>
 
     <issueManagement>
@@ -47,6 +48,12 @@
                 <groupId>org.hibernate</groupId>
                 <artifactId>hibernate-core</artifactId>
                 <version>${org.hibernate.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.spockframework</groupId>
+                <artifactId>spock-core</artifactId>
+                <version>${spock.core.version}</version>
+                <scope>test</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
