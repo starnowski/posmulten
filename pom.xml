@@ -17,6 +17,7 @@
         <maven.surefire.plugin.version>2.22.1</maven.surefire.plugin.version>
         <org.hibernate.version>5.1.12.Final</org.hibernate.version>
         <spock.core.version>1.1-groovy-2.4</spock.core.version>
+        <org.codehaus.groovy.groovy-all.version>2.4.12</org.codehaus.groovy.groovy-all.version>
     </properties>
 
     <issueManagement>
@@ -53,6 +54,12 @@
                 <groupId>org.spockframework</groupId>
                 <artifactId>spock-core</artifactId>
                 <version>${spock.core.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.codehaus.groovy</groupId>
+                <artifactId>groovy-all</artifactId>
+                <version>${org.codehaus.groovy.groovy-all.version}</version>
                 <scope>test</scope>
             </dependency>
         </dependencies>
