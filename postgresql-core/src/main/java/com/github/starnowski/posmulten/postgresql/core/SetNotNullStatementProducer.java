@@ -11,6 +11,9 @@ public class SetNotNullStatementProducer {
         if (column == null) {
             throw new IllegalArgumentException("Column name cannot be null");
         }
+        if (column.trim().isEmpty()) {
+            throw new IllegalArgumentException("Column name cannot be blank");
+        }
         return "ALTER TABLE " + table + " ALTER COLUMN " + column + " SET NOT NULL;";
     }
 }
