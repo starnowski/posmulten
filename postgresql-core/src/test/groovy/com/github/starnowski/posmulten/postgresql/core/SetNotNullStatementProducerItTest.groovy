@@ -9,7 +9,7 @@ import spock.lang.Unroll
 import static org.junit.Assert.assertEquals
 import static com.github.starnowski.posmulten.postgresql.core.TestUtils.isAnyRecordExists
 
-@SpringBootTest
+@SpringBootTest(classes = [TestApplication.class])
 class SetNotNullStatementProducerItTest extends Specification {
 
     @Autowired
@@ -21,14 +21,14 @@ class SetNotNullStatementProducerItTest extends Specification {
     String column
 
     @Unroll
-    def "should change '#testColumn' column definition and set column as 'not null' in table '#testTable' when column value can be null before test execution" () {
+    def "should change #testColumn column definition and set column as 'not null' in table #testTable when column value can be null before test execution" () {
         given:
             table = testTable
             column = testColumn
             assertEquals(true, isAnyRecordExists(jdbcTemplate, selectStatement(table, column, true)))
 
         when:
-            jdbcTemplate.execute(tested.produce(testTable, testColumn))
+            jdbcTemplate.execute((String)tested.produce(testTable, testColumn))
 
         then:
             isAnyRecordExists(jdbcTemplate, selectStatement(table, column, false))
@@ -44,7 +44,7 @@ class SetNotNullStatementProducerItTest extends Specification {
     }
 
     def cleanup() {
-        jdbcTemplate.execute("ALTER TABLE " + table + " ALTER COLUMN " + column + " SET NULL;")
+        jdbcTemplate.execute("ALTER TABLE " + table + " ALTER COLUMN " + column + " DROP NOT NULL;")
         assertEquals(true, isAnyRecordExists(jdbcTemplate, selectStatement(table, column, true)))
     }
 
