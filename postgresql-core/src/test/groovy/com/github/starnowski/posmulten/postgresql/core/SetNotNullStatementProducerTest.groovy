@@ -19,4 +19,20 @@ class SetNotNullStatementProducerTest extends Specification {
             "users"     |   "col1" ||  "ALTER TABLE users ALTER COLUMN col1 SET NOT NULL;"
             "groups"    |   "col1" ||  "ALTER TABLE groups ALTER COLUMN col1 SET NOT NULL;"
     }
+
+    @Unroll
+    def "should throw exception of type 'IllegalArgumentException' when table name is null, no matter if column name is correct \"#column\""()
+    {
+        when:
+            tested.produce(null, column)
+
+        then:
+            def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+            ex.message == "Table name can not be null"
+
+        where:
+        column << ["xxx", "col1", "test"]
+    }
 }
