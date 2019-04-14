@@ -73,4 +73,26 @@ class SetNotNullStatementProducerTest extends Specification {
         where:
             table << ["xxx", "col1", "test"]
     }
+
+    @Unroll
+    def "should throw exception of type 'IllegalArgumentException' when column name is blank, no matter if table name is correct \"#table\""()
+    {
+        when:
+            tested.produce(table, column)
+
+        then:
+            def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+            ex.message == "Table name cannot be blank"
+
+        where:
+            table           | column
+            "tab"           | ""
+            "tab"           | " "
+            "tab"           | "         "
+            "user_groups"   | ""
+            "user_groups"   | " "
+            "user_groups"   | "         "
+    }
 }
