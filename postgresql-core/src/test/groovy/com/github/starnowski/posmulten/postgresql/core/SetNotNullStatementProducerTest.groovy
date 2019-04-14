@@ -84,7 +84,7 @@ class SetNotNullStatementProducerTest extends Specification {
             def ex = thrown(IllegalArgumentException.class)
 
         and: "exception should have correct message"
-            ex.message == "Table name cannot be blank"
+            ex.message == "Column name cannot be blank"
 
         where:
             table           | column
