@@ -35,4 +35,20 @@ class SetNotNullStatementProducerTest extends Specification {
         where:
         column << ["xxx", "col1", "test"]
     }
+
+    @Unroll
+    def "should throw exception of type 'IllegalArgumentException' when column name is null, no matter if table name is correct \"#table\""()
+    {
+        when:
+        tested.produce(table, null)
+
+        then:
+        def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+        ex.message == "Column name cannot be null"
+
+        where:
+        table << ["xxx", "col1", "test"]
+    }
 }
