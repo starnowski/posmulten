@@ -5,6 +5,9 @@ public class SetNotNullStatementProducer {
         if (table == null) {
             throw new IllegalArgumentException("Table name cannot be null");
         }
+        if (column == null) {
+            throw new IllegalArgumentException("Column name cannot be null");
+        }
         return "ALTER TABLE " + table + " ALTER COLUMN " + column + " SET NOT NULL;";
     }
 }
