@@ -18,6 +18,7 @@
         <org.hibernate.version>5.1.12.Final</org.hibernate.version>
         <spock.core.version>1.1-groovy-2.4</spock.core.version>
         <org.codehaus.groovy.groovy-all.version>2.4.12</org.codehaus.groovy.groovy-all.version>
+        <org.postgresql.postgresql.version>42.2.5</org.postgresql.postgresql.version>
         <java.version>1.6</java.version>
         <maven.compiler.source>1.6</maven.compiler.source>
         <maven.compiler.target>1.6</maven.compiler.target>
@@ -60,10 +61,22 @@
                 <scope>test</scope>
             </dependency>
             <dependency>
+                <groupId>org.spockframework</groupId>
+                <artifactId>spock-spring</artifactId>
+                <version>${spock.core.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
                 <groupId>org.codehaus.groovy</groupId>
                 <artifactId>groovy-all</artifactId>
                 <version>${org.codehaus.groovy.groovy-all.version}</version>
                 <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.postgresql</groupId>
+                <artifactId>postgresql</artifactId>
+                <optional>true</optional>
+                <version>${org.postgresql.postgresql.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
