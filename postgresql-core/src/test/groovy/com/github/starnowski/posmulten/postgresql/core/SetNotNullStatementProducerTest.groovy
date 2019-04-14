@@ -30,7 +30,7 @@ class SetNotNullStatementProducerTest extends Specification {
             def ex = thrown(IllegalArgumentException.class)
 
         and: "exception should have correct message"
-            ex.message == "Table name can not be null"
+            ex.message == "Table name cannot be null"
 
         where:
         column << ["xxx", "col1", "test"]
