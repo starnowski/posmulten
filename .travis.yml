@@ -1,9 +1,29 @@
 stages:
   # Compilation, tests, testing database creation scripts
-  - "compile, tests, database creation tests"
+  - "compilation, unit tests, database creation tests"
+  - "integration tests"
 jobs:
   include:
-    - stage: "compile, tests, database creation tests"
+    - stage: "compilation, unit tests, database creation tests"
+      language: java
+      jdk: oraclejdk8
+      sudo: false
+      cache:
+        directories:
+          - $HOME/.m2
+      script: mvn clean install
+
+    - stage: "compilation, unit tests, database creation tests"
+      language: bash
+      sudo: true
+      before_install:
+        # Install bats-core with version 1.1.0 when package will be available (see https://github.com/bats-core/bats-core/issues/103)
+        - .travis/bats/bats-core-installation.sh "$TRAVIS_BUILD_DIR/.travis/bats"
+      services:
+        - docker
+      script: export PATH="$TRAVIS_BUILD_DIR/.travis/bats/bats-core/bin:$PATH" && bats/run_bats_test.sh
+
+    - stage: "integration tests"
       language: java
       jdk: oraclejdk8
       sudo: false
@@ -16,15 +36,5 @@ jobs:
       cache:
         directories:
           - $HOME/.m2
-      script: mvn clean install
-
-    - stage: "compile, tests, database creation tests"
-      language: bash
-      sudo: true
-      before_install:
-        # Install bats-core with version 1.1.0 when package will be available (see https://github.com/bats-core/bats-core/issues/103)
-        - .travis/bats/bats-core-installation.sh "$TRAVIS_BUILD_DIR/.travis/bats"
-      services:
-        - docker
-      script: export PATH="$TRAVIS_BUILD_DIR/.travis/bats/bats-core/bin:$PATH" && bats/run_bats_test.sh
+      script: mvn -DskipTests clean install && mvn -P !unit-tests,integration-tests test
 
