@@ -1,18 +1,13 @@
 stages:
   # Compilation, tests, testing database creation scripts
   - "compile, tests, database creation tests"
+  - "integration tests"
 jobs:
   include:
     - stage: "compile, tests, database creation tests"
       language: java
       jdk: oraclejdk8
       sudo: false
-      addons:
-        postgresql: "9.6"
-      services:
-        - postgresql
-      before_script:
-        - psql -f 'db_scripts/prepare_postgresql-core_db.sql' -U postgres
       cache:
         directories:
           - $HOME/.m2
@@ -27,4 +22,19 @@ jobs:
       services:
         - docker
       script: export PATH="$TRAVIS_BUILD_DIR/.travis/bats/bats-core/bin:$PATH" && bats/run_bats_test.sh
+
+    - stage: "integration tests"
+      language: java
+      jdk: oraclejdk8
+      sudo: false
+      addons:
+        postgresql: "9.6"
+      services:
+        - postgresql
+      before_script:
+        - psql -f 'db_scripts/prepare_postgresql-core_db.sql' -U postgres
+      cache:
+        directories:
+          - $HOME/.m2
+      script: mvn -DskipTests clean install && mvn -P !unit-tests,integration-tests test
 
