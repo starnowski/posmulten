@@ -23,4 +23,16 @@ public class TestUtils {
             }
         });
     }
+
+    public static String selectAndReturnFirstRecordAsString(JdbcTemplate jdbcTemplate, final String sql)
+    {
+        return jdbcTemplate.execute(new StatementCallback<String>() {
+            public String doInStatement(Statement statement) throws SQLException, DataAccessException {
+                StringBuilder sb = new StringBuilder();
+                sb.append(sql);
+                ResultSet rs = statement.executeQuery(sb.toString());rs.next();
+                return rs.getString(1);
+            }
+        });
+    }
 }
