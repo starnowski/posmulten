@@ -15,7 +15,7 @@ class SetDefaultStatementProducerItTest extends Specification {
     @Autowired
     JdbcTemplate jdbcTemplate
 
-    def tested = new SetNotNullStatementProducer()
+    def tested = new SetDefaultStatementProducer()
 
     String table
     String column
@@ -28,7 +28,7 @@ class SetDefaultStatementProducerItTest extends Specification {
             assertEquals("NO_DEFAULT", selectAndReturnFirstRecordAsString(jdbcTemplate, selectStatement(table, column)))
 
         when:
-            jdbcTemplate.execute((String)tested.produce(testTable, testColumn))
+            jdbcTemplate.execute((String)tested.produce(testTable, testColumn, defaultValue))
 
         then:
             selectAndReturnFirstRecordAsString(jdbcTemplate, selectStatement(table, column)) == expectedDefaultValue
