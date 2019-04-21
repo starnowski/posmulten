@@ -17,7 +17,7 @@ class SetDefaultStatementProducerTest extends Specification {
             "users"     |   "tenant_id" |   "current_setting('posmulten.current_tenant')"   ||  "ALTER TABLE users ALTER COLUMN tenant_id SET DEFAULT current_setting('posmulten.current_tenant');"
             "groups"    |   "tenant_id" |   "'value'"                                       ||  "ALTER TABLE groups ALTER COLUMN tenant_id SET DEFAULT 'value';"
             "users"     |   "col1"      |   "current_setting('posmulten.current_tenant')"   ||  "ALTER TABLE users ALTER COLUMN col1 SET DEFAULT current_setting('posmulten.current_tenant');"
-            "groups"    |   "col1"      |   "'xxx1'"                                        ||  "ALTER TABLE groups ALTER COLUMN col1 SET DEFAULT 'xxx1');"
+            "groups"    |   "col1"      |   "'xxx1'"                                        ||  "ALTER TABLE groups ALTER COLUMN col1 SET DEFAULT 'xxx1';"
     }
 
     @Unroll
