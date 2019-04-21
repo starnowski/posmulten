@@ -5,6 +5,7 @@ stages:
 jobs:
   include:
     - stage: "compilation, unit tests, database creation tests"
+      name: "Compilation and unit tests"
       language: java
       jdk: oraclejdk8
       sudo: false
@@ -14,6 +15,7 @@ jobs:
       script: mvn clean install
 
     - stage: "compilation, unit tests, database creation tests"
+      name: "Database creation tests"
       language: bash
       sudo: true
       before_install:
@@ -24,6 +26,7 @@ jobs:
       script: export PATH="$TRAVIS_BUILD_DIR/.travis/bats/bats-core/bin:$PATH" && bats/run_bats_test.sh
 
     - stage: "integration tests"
+      name: "Integration tests in postgresql-core module"
       language: java
       jdk: oraclejdk8
       sudo: false
