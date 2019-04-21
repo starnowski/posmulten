@@ -37,10 +37,10 @@ class SetDefaultStatementProducerItTest extends Specification {
             testTable       |   testColumn  |   defaultValue                                    ||  expectedDefaultValue
             "users"         |   "name"      |   "current_setting('poc.current_tenant')"         ||  "current_setting('poc.current_tenant'::text)"
             "users"         |   "tenant_id" |   "current_setting('poc.current_tenant')"         ||  "current_setting('poc.current_tenant'::text)"
-            "groups"        |   "name"      |   "Simon_group"                                   ||  "'Simon_group'::character varying"
-            "groups"        |   "tenant_id" |   "tenant_one"                                    ||  "'tenant_one'::character varying"
+            "groups"        |   "name"      |   "'Simon_group'"                                   ||  "'Simon_group'::character varying"
+            "groups"        |   "tenant_id" |   "'tenant_one'"                                    ||  "'tenant_one'::character varying"
             "users_groups"  |   "tenant_id" |   "current_setting('posmulten_current_tenant')"   ||  "current_setting('posmulten_current_tenant'::text)"
-            "posts"         |   "tenant_id" |   "ddd"                                           ||  "'ddd'::character varying"
+            "posts"         |   "tenant_id" |   "'ddd'"                                           ||  "'ddd'::character varying"
     }
 
     def cleanup() {
