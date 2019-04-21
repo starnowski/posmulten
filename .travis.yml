@@ -39,5 +39,5 @@ jobs:
       cache:
         directories:
           - $HOME/.m2
-      script: mvn -DskipTests clean install && mvn -P !unit-tests,integration-tests test
+      script: mvn -DskipTests clean install && mvn -pl :postgresql-core -P !unit-tests,integration-tests test
 
