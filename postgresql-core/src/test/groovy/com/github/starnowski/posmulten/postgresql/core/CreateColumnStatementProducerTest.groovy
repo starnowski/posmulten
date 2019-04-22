@@ -16,8 +16,8 @@ class CreateColumnStatementProducerTest extends Specification {
             table       |   column      |   columnType                  ||  expectedStatement
             "users"     |   "tenant_id" |   "character varying(255)"    ||  "ALTER TABLE users ADD COLUMN tenant_id character varying(255);"
             "groups"    |   "tenant_id" |   "text"                      ||  "ALTER TABLE groups ADD COLUMN tenant_id text;"
-            "users"     |   "col1"      |   "character varying(255)"    ||  "ALTER TABLE users ADD COLUMN tenant_id character varying(255);"
-            "groups"    |   "col1"      |   "text"                      ||  "ALTER TABLE groups ADD COLUMN tenant_id text;"
+            "users"     |   "col1"      |   "character varying(255)"    ||  "ALTER TABLE users ADD COLUMN col1 character varying(255);"
+            "groups"    |   "col1"      |   "text"                      ||  "ALTER TABLE groups ADD COLUMN col1 text;"
     }
 
     @Unroll
