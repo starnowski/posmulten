@@ -33,16 +33,16 @@ class CreateColumnStatementProducerItTest extends Specification {
 
         then:
             isAnyRecordExists(jdbcTemplate, selectStatement(table, column))
-            selectAndReturnFirstRecordAsString(jdbcTemplate, selectStatement(table, column)) == expectedDefaultValue
+            selectAndReturnFirstRecordAsString(jdbcTemplate, selectStatement(table, column)) == expectedConcatenationOfColumnNameAndType
 
         where:
-            testTable       |   testColumn      |   columnType                  ||  expectedDefaultValue
-            "users"         |   "first_name"    |   "character varying(255)"    ||  "character varying(255)"
-            "users"         |   "tenant_x_id"   |   "text"                      ||  "text"
-            "groups"        |   "title_name"    |   "text"                      ||  "text"
-            "groups"        |   "tenant_x_id"   |   "character varying(45)"     ||  "character varying(45)"
-            "users_groups"  |   "tenant_x_id"   |   "character varying(30)"     ||  "character varying(30)"
-            "posts"         |   "tenant_x_id"   |   "text"                      ||  "text"
+            testTable       |   testColumn      |   columnType                  ||  expectedConcatenationOfColumnNameAndType
+            "users"         |   "first_name"    |   "character varying(255)"    ||  "first_name character varying(255)"
+            "users"         |   "tenant_x_id"   |   "text"                      ||  "tenant_x_id text"
+            "groups"        |   "title_name"    |   "text"                      ||  "title_name text"
+            "groups"        |   "tenant_x_id"   |   "character varying(45)"     ||  "tenant_x_id character varying(45)"
+            "users_groups"  |   "tenant_x_id"   |   "character varying(30)"     ||  "tenant_x_id character varying(30)"
+            "posts"         |   "tenant_x_id"   |   "text"                      ||  "tenant_x_id text"
     }
 
     def cleanup() {
