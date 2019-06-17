@@ -6,6 +6,7 @@ jobs:
   include:
     - stage: "compilation, unit tests, database creation tests"
       name: "Compilation and unit tests"
+      dist: xenial
       language: java
       jdk: oraclejdk8
       sudo: false
@@ -27,6 +28,7 @@ jobs:
 
     - stage: "integration tests"
       name: "Integration tests in postgresql-core module"
+      dist: xenial
       language: java
       jdk: oraclejdk8
       sudo: false
