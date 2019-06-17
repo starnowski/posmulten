@@ -6,7 +6,7 @@ jobs:
   include:
     - stage: "compilation, unit tests, database creation tests"
       name: "Compilation and unit tests"
-      dist: xenial # https://travis-ci.community/t/the-travis-ci-build-could-not-be-completed-due-to-an-error/1345/12 - Xenial supports java 8
+      dist: trusty # https://docs.travis-ci.com/user/reference/trusty/#jvm-clojure-groovy-java-scala-images - Trusty supports java 8
       language: java
       jdk: oraclejdk8
       sudo: false
@@ -28,7 +28,7 @@ jobs:
 
     - stage: "integration tests"
       name: "Integration tests in postgresql-core module"
-      dist: xenial # https://travis-ci.community/t/the-travis-ci-build-could-not-be-completed-due-to-an-error/1345/12 - Xenial supports java 8
+      dist: trusty # https://docs.travis-ci.com/user/reference/trusty/#jvm-clojure-groovy-java-scala-images - Trusty supports java 8
       language: java
       jdk: oraclejdk8
       sudo: false
