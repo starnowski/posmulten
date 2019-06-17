@@ -6,6 +6,7 @@ jobs:
   include:
     - stage: "compilation, unit tests, database creation tests"
       name: "Compilation and unit tests"
+      dist: trusty # https://docs.travis-ci.com/user/reference/trusty/#jvm-clojure-groovy-java-scala-images - Trusty supports java 8
       language: java
       jdk: oraclejdk8
       sudo: false
@@ -27,6 +28,7 @@ jobs:
 
     - stage: "integration tests"
       name: "Integration tests in postgresql-core module"
+      dist: trusty # https://docs.travis-ci.com/user/reference/trusty/#jvm-clojure-groovy-java-scala-images - Trusty supports java 8
       language: java
       jdk: oraclejdk8
       sudo: false
