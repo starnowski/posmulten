@@ -14,26 +14,26 @@ class GrantSchemaPrivilegesProducerTest extends Specification {
 
         where:
             privileges	        |	schema	    | policyTargetUsername  ||	expectedStatement
-            ["ALL"]	            |	"public"	| "pos-user"	        ||	"GRANT ALL ON SCHEMA public TO 'pos-user';"
-            ["ALL PRIVILEGES"]	|	"public"	| "pos-user"	        ||	"GRANT ALL PRIVILEGES ON SCHEMA public TO 'pos-user';"
-            ["CREATE"]	        |	"public"	| "pos-user"	        ||	"GRANT CREATE ON SCHEMA public TO 'pos-user';"
-            ["USAGE"]	        |	"public"	| "pos-user"	        ||	"GRANT USAGE ON SCHEMA public TO 'pos-user';"
-            ["CREATE", "USAGE"]	|	"public"	| "pos-user"	        ||	"GRANT CREATE, USAGE ON SCHEMA public TO 'pos-user';"
-            ["USAGE", "CREATE"]	|	"public"	| "pos-user"	        ||	"GRANT USAGE, CREATE ON SCHEMA public TO 'pos-user';"
+            ["ALL"]	            |	"public"	| "pos-user"	        ||	"GRANT ALL ON SCHEMA public TO \"pos-user\";"
+            ["ALL PRIVILEGES"]	|	"public"	| "pos-user"	        ||	"GRANT ALL PRIVILEGES ON SCHEMA public TO \"pos-user\";"
+            ["CREATE"]	        |	"public"	| "pos-user"	        ||	"GRANT CREATE ON SCHEMA public TO \"pos-user\";"
+            ["USAGE"]	        |	"public"	| "pos-user"	        ||	"GRANT USAGE ON SCHEMA public TO \"pos-user\";"
+            ["CREATE", "USAGE"]	|	"public"	| "pos-user"	        ||	"GRANT CREATE, USAGE ON SCHEMA public TO \"pos-user\";"
+            ["USAGE", "CREATE"]	|	"public"	| "pos-user"	        ||	"GRANT USAGE, CREATE ON SCHEMA public TO \"pos-user\";"
             // other schema
-            ["ALL"]	            |	"secondary"	| "pos-user"	        ||	"GRANT ALL ON SCHEMA secondary TO 'pos-user';"
-            ["ALL PRIVILEGES"]	|	"secondary"	| "pos-user"	        ||	"GRANT ALL PRIVILEGES ON SCHEMA secondary TO 'pos-user';"
-            ["CREATE"]	        |	"secondary"	| "pos-user"	        ||	"GRANT CREATE ON SCHEMA secondary TO 'pos-user';"
-            ["USAGE"]	        |	"secondary"	| "pos-user"	        ||	"GRANT USAGE ON SCHEMA secondary TO 'pos-user';"
-            ["CREATE", "USAGE"]	|	"secondary"	| "pos-user"	        ||	"GRANT CREATE, USAGE ON SCHEMA secondary TO 'pos-user';"
-            ["USAGE", "CREATE"]	|	"secondary"	| "pos-user"	        ||	"GRANT USAGE, CREATE ON SCHEMA secondary TO 'pos-user';"
+            ["ALL"]	            |	"secondary"	| "pos-user"	        ||	"GRANT ALL ON SCHEMA secondary TO \"pos-user\";"
+            ["ALL PRIVILEGES"]	|	"secondary"	| "pos-user"	        ||	"GRANT ALL PRIVILEGES ON SCHEMA secondary TO \"pos-user\";"
+            ["CREATE"]	        |	"secondary"	| "pos-user"	        ||	"GRANT CREATE ON SCHEMA secondary TO \"pos-user\";"
+            ["USAGE"]	        |	"secondary"	| "pos-user"	        ||	"GRANT USAGE ON SCHEMA secondary TO \"pos-user\";"
+            ["CREATE", "USAGE"]	|	"secondary"	| "pos-user"	        ||	"GRANT CREATE, USAGE ON SCHEMA secondary TO \"pos-user\";"
+            ["USAGE", "CREATE"]	|	"secondary"	| "pos-user"	        ||	"GRANT USAGE, CREATE ON SCHEMA secondary TO \"pos-user\";"
             // other user
-            ["ALL"]	            |	"secondary"	| "john-doe"	        ||	"GRANT ALL ON SCHEMA secondary TO 'john-doe';"
-            ["ALL PRIVILEGES"]	|	"secondary"	| "john-doe"	        ||	"GRANT ALL PRIVILEGES ON SCHEMA secondary TO 'john-doe';"
-            ["CREATE"]	        |	"secondary"	| "john-doe"	        ||	"GRANT CREATE ON SCHEMA secondary TO 'john-doe';"
-            ["USAGE"]	        |	"secondary"	| "john-doe"	        ||	"GRANT USAGE ON SCHEMA secondary TO 'john-doe';"
-            ["CREATE", "USAGE"]	|	"secondary"	| "john-doe"	        ||	"GRANT CREATE, USAGE ON SCHEMA secondary TO 'john-doe';"
-            ["USAGE", "CREATE"]	|	"secondary"	| "john-doe"	        ||	"GRANT USAGE, CREATE ON SCHEMA secondary TO 'john-doe';"
+            ["ALL"]	            |	"secondary"	| "john-doe"	        ||	"GRANT ALL ON SCHEMA secondary TO \"john-doe\";"
+            ["ALL PRIVILEGES"]	|	"secondary"	| "john-doe"	        ||	"GRANT ALL PRIVILEGES ON SCHEMA secondary TO \"john-doe\";"
+            ["CREATE"]	        |	"secondary"	| "john-doe"	        ||	"GRANT CREATE ON SCHEMA secondary TO \"john-doe\";"
+            ["USAGE"]	        |	"secondary"	| "john-doe"	        ||	"GRANT USAGE ON SCHEMA secondary TO \"john-doe\";"
+            ["CREATE", "USAGE"]	|	"secondary"	| "john-doe"	        ||	"GRANT CREATE, USAGE ON SCHEMA secondary TO \"john-doe\";"
+            ["USAGE", "CREATE"]	|	"secondary"	| "john-doe"	        ||	"GRANT USAGE, CREATE ON SCHEMA secondary TO \"john-doe\";"
     }
 
 }
