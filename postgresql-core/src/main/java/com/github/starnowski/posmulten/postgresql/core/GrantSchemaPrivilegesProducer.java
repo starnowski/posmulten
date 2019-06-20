@@ -17,9 +17,9 @@ public class GrantSchemaPrivilegesProducer {
         }
         sb.append(" ON SCHEMA ");
         sb.append(schema);
-        sb.append(" TO '");
+        sb.append(" TO \"");
         sb.append(policyTargetUsername);
-        sb.append("';");
+        sb.append("\";");
         return sb.toString();
     }
 }
