@@ -46,5 +46,9 @@ public class GrantSchemaPrivilegesProducer {
         {
             throw new IllegalArgumentException("privileges list cannot be null");
         }
+        if (privileges.isEmpty())
+        {
+            throw new IllegalArgumentException("privileges list cannot be empty");
+        }
     }
 }
