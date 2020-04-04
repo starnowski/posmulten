@@ -84,3 +84,5 @@ ALTER TABLE public.users_groups
 
 ALTER TABLE public.posts
     OWNER to "postgresql-core-owner";
+
+CREATE SCHEMA non_public_schema AUTHORIZATION "postgresql-core-owner";
