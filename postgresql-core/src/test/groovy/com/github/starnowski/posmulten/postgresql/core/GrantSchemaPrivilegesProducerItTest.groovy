@@ -6,7 +6,6 @@ import org.springframework.jdbc.core.JdbcTemplate
 import spock.lang.Specification
 import spock.lang.Unroll
 
-import static com.github.starnowski.posmulten.postgresql.core.TestUtils.isAnyRecordExists
 import static com.github.starnowski.posmulten.postgresql.core.TestUtils.selectAndReturnFirstRecordAsString
 import static org.junit.Assert.assertEquals
 
@@ -21,45 +20,47 @@ class GrantSchemaPrivilegesProducerItTest extends Specification {
     String user
     String schema
     String[] privileges
+    String[] expectedPrivileges
 
     @Unroll
-    def "should add \"#testColumn\" column with type \"#columnType\" in table \"#testTable\" when column does not exists before test execution" () {
+    def "should add \"#testPrivileges\" privileges to \"#testUser\" user for \"#testSchema\" schema" () {
         given:
             user = testUser
             schema = testSchema
             privileges = testPrivileges
-            for (String privilege : privileges) {
-                assertEquals("false", selectAndReturnFirstRecordAsString(jdbcTemplate, selectStatement(user, schema, privilege)))
+            expectedPrivileges = testExpectedPrivileges
+            for (String privilege : testExpectedPrivileges) {
+                assertEquals("f", selectAndReturnFirstRecordAsString(jdbcTemplate, selectStatement(user, schema, privilege)))
             }
 
         when:
-            jdbcTemplate.execute((String)tested.produce(schema, user, privileges))
+            jdbcTemplate.execute(tested.produce(testSchema, testUser, testPrivileges))
 
         then:
-        isAnyRecordExists(jdbcTemplate, selectStatement(table, column))
-        selectAndReturnFirstRecordAsString(jdbcTemplate, selectStatement(table, column)) == expectedConcatenationOfColumnNameAndType
+            for (String privilege : testExpectedPrivileges) {
+                assertEquals("t", selectAndReturnFirstRecordAsString(jdbcTemplate, selectStatement(user, schema, privilege)))
+            }
 
         where:
-        testTable       |   testColumn      |   columnType                  ||  expectedConcatenationOfColumnNameAndType
-        "users"         |   "first_name"    |   "character varying(255)"    ||  "first_name character varying(255)"
-        "users"         |   "tenant_x_id"   |   "text"                      ||  "tenant_x_id text"
-        "groups"        |   "title_name"    |   "text"                      ||  "title_name text"
-        "groups"        |   "tenant_x_id"   |   "character varying(45)"     ||  "tenant_x_id character varying(45)"
-        "users_groups"  |   "tenant_x_id"   |   "character varying(30)"     ||  "tenant_x_id character varying(30)"
-        "posts"         |   "tenant_x_id"   |   "text"                      ||  "tenant_x_id text"
+            testUser                        |   testSchema      |   testPrivileges          ||  testExpectedPrivileges
+            "postgresql-core-user"          |   "public"        |   ["USAGE"]               ||  ["USAGE"]
+            "postgresql-core-user"          |   "public"        |   ["CREATE"]              ||  ["CREATE"]
+            "postgresql-core-user"          |   "public"        |   ["CREATE", "USAGE"]     ||  ["CREATE", "USAGE"]
+            "postgresql-core-user"          |   "public"        |   ["ALL"]                 ||  ["CREATE", "USAGE"]
+            "postgresql-core-user"          |   "public"        |   ["ALL PRIVILEGES"]      ||  ["CREATE", "USAGE"]
     }
 
     def cleanup() {
-        for (String privilege : privileges) {
+        for (String privilege : expectedPrivileges) {
             jdbcTemplate.execute("REVOKE " + privilege + " ON SCHEMA " + schema + " FROM  \"" + user + "\";")
-            assertEquals("false", selectAndReturnFirstRecordAsString(jdbcTemplate, selectStatement(user, schema, privilege)))
+            assertEquals("f", selectAndReturnFirstRecordAsString(jdbcTemplate, selectStatement(user, schema, privilege)))
         }
     }
 
     def selectStatement(String user, String schema, String privilege)
     {
         StringBuilder sb = new StringBuilder()
-        sb.append("SELECT pg_catalog.has_schema_privilege(' ")
+        sb.append("SELECT pg_catalog.has_schema_privilege('")
         sb.append(user)
         sb.append("', '")
         sb.append(schema)
