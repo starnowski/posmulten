@@ -43,11 +43,11 @@ class GrantSchemaPrivilegesProducerItTest extends Specification {
 
         where:
             testUser                        |   testSchema      |   testPrivileges          ||  testExpectedPrivileges
-            "postgresql-core-user"          |   "public"        |   ["USAGE"]               ||  ["USAGE"]
-            "postgresql-core-user"          |   "public"        |   ["CREATE"]              ||  ["CREATE"]
-            "postgresql-core-user"          |   "public"        |   ["CREATE", "USAGE"]     ||  ["CREATE", "USAGE"]
-            "postgresql-core-user"          |   "public"        |   ["ALL"]                 ||  ["CREATE", "USAGE"]
-            "postgresql-core-user"          |   "public"        |   ["ALL PRIVILEGES"]      ||  ["CREATE", "USAGE"]
+            "postgresql-core-user"          |   "non_public_schema"        |   ["USAGE"]               ||  ["USAGE"]
+            "postgresql-core-user"          |   "non_public_schema"        |   ["CREATE"]              ||  ["CREATE"]
+            "postgresql-core-user"          |   "non_public_schema"        |   ["CREATE", "USAGE"]     ||  ["CREATE", "USAGE"]
+            "postgresql-core-user"          |   "non_public_schema"        |   ["ALL"]                 ||  ["CREATE", "USAGE"]
+            "postgresql-core-user"          |   "non_public_schema"        |   ["ALL PRIVILEGES"]      ||  ["CREATE", "USAGE"]
     }
 
     def cleanup() {
