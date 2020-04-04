@@ -67,7 +67,7 @@ class GrantSchemaPrivilegesProducerTest extends Specification {
             def ex = thrown(IllegalArgumentException.class)
 
         and: "exception should have correct message"
-            ex.message == "Schema name cannot be null"
+            ex.message == "Schema name cannot be blank"
 
         where:
             user                |   privileges          |   schema
