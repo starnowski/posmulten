@@ -42,5 +42,9 @@ public class GrantSchemaPrivilegesProducer {
         {
             throw new IllegalArgumentException("user cannot be blank");
         }
+        if (privileges == null)
+        {
+            throw new IllegalArgumentException("privileges list cannot be null");
+        }
     }
 }
