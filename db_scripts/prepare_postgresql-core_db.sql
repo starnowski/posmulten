@@ -84,3 +84,6 @@ ALTER TABLE public.users_groups
 
 ALTER TABLE public.posts
     OWNER to "postgresql-core-owner";
+
+-- Revoke privliges for "postgresql-core-user" user
+REVOKE ALL PRIVILEGES ON SCHEMA public FROM  "postgresql-core-user";
