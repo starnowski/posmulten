@@ -7,7 +7,7 @@ function setup {
   export TMP_SQL_FILE="$TIMESTAMP_timestamp.sql"
 }
 
-@test "Database user 'postgresql-core-user' should not have privilege 'USAGE' for 'public' schema" {
+@test "Database user 'postgresql-core-user' should have privilege 'USAGE' for 'public' schema" {
   #given
   export PGPASSWORD=postgres_posmulten
   cat << SQL > "$BATS_TMPDIR/$TMP_SQL_FILE"
@@ -20,10 +20,10 @@ SQL
   #then
   echo "output is --> $output <--"  >&3
   [ "$status" -eq 0 ]
-  [ "$output" = "f" ]
+  [ "$output" = "t" ]
 }
 
-@test "Database user 'postgresql-core-user' should not have privilege 'CREATE' for 'public' schema" {
+@test "Database user 'postgresql-core-user' should have privilege 'CREATE' for 'public' schema" {
   #given
   export PGPASSWORD=postgres_posmulten
   cat << SQL > "$BATS_TMPDIR/$TMP_SQL_FILE"
@@ -36,7 +36,7 @@ SQL
   #then
   echo "output is --> $output <--"  >&3
   [ "$status" -eq 0 ]
-  [ "$output" = "f" ]
+  [ "$output" = "t" ]
 }
 
 function teardown {
