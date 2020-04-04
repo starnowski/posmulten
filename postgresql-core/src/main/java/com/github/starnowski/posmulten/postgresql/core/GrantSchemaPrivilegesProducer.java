@@ -4,8 +4,8 @@ import java.util.Iterator;
 import java.util.List;
 
 public class GrantSchemaPrivilegesProducer {
-    public String produce(String schema, String policyTargetUsername, List<String> privileges) {
-        validateParameters(schema, policyTargetUsername, privileges);
+    public String produce(String schema, String user, List<String> privileges) {
+        validateParameters(schema, user, privileges);
         StringBuilder sb = new StringBuilder();
         sb.append("GRANT ");
         Iterator<String> it = privileges.iterator();
@@ -19,12 +19,12 @@ public class GrantSchemaPrivilegesProducer {
         sb.append(" ON SCHEMA ");
         sb.append(schema);
         sb.append(" TO \"");
-        sb.append(policyTargetUsername);
+        sb.append(user);
         sb.append("\";");
         return sb.toString();
     }
 
-    private void validateParameters(String schema, String policyTargetUsername, List<String> privileges)
+    private void validateParameters(String schema, String user, List<String> privileges)
     {
         if (schema == null)
         {
@@ -33,6 +33,10 @@ public class GrantSchemaPrivilegesProducer {
         if (schema.trim().isEmpty())
         {
             throw new IllegalArgumentException("Schema name cannot be blank");
+        }
+        if (user == null)
+        {
+            throw new IllegalArgumentException("user cannot be null");
         }
     }
 }
