@@ -36,4 +36,25 @@ class GrantSchemaPrivilegesProducerTest extends Specification {
             ["USAGE", "CREATE"]	|	"secondary"	| "john-doe"	        ||	"GRANT USAGE, CREATE ON SCHEMA secondary TO \"john-doe\";"
     }
 
+    @Unroll
+    def "should throw exception of type 'IllegalArgumentException' when schema name is null, no matter if column name \"#user\" or column type \"#privileges\" are correct"()
+    {
+        when:
+            tested.produce(schema, policyTargetUsername, privileges)
+
+        then:
+            def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+            ex.message == "Schema name cannot be null"
+
+        where:
+            user                |   privileges
+            "pos-user"          |   ["USAGE"]
+            "pos-user"          |   ["CREATE"]
+            "pos-user"          |   ["CREATE", "USAGE"]
+            "pos-user"          |   ["ALL"]
+            "pos-user"          |   ["ALL PRIVILEGES"]
+    }
+
 }
