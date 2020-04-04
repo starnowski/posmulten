@@ -140,4 +140,24 @@ class GrantSchemaPrivilegesProducerTest extends Specification {
             "non_public"    |   "owner"
             "non_public"    |   "pos-user"
     }
+
+    @Unroll
+    def "should throw exception of type 'IllegalArgumentException' when privileges list is empty, no matter if schema name \"#schema\" or user name \"#user\" are correct"()
+    {
+        when:
+            tested.produce(schema, user, new ArrayList<String>())
+
+        then:
+            def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+            ex.message == "privileges list cannot be empty"
+
+        where:
+            schema          |   user
+            "public"        |   "pos-user"
+            "public"        |   "owner"
+            "non_public"    |   "owner"
+            "non_public"    |   "pos-user"
+    }
 }
