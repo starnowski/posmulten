@@ -104,7 +104,7 @@ class GrantSchemaPrivilegesProducerTest extends Specification {
     def "should throw exception of type 'IllegalArgumentException' when user is blank, no matter if column name \"#schema\" or column type \"#privileges\" are correct"()
     {
         when:
-            tested.produce(schema, null, privileges)
+            tested.produce(schema, user, privileges)
 
         then:
             def ex = thrown(IllegalArgumentException.class)
