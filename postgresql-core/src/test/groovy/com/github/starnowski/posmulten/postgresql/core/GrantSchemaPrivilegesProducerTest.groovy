@@ -37,7 +37,7 @@ class GrantSchemaPrivilegesProducerTest extends Specification {
     }
 
     @Unroll
-    def "should throw exception of type 'IllegalArgumentException' when schema name is null, no matter if column name \"#user\" or column type \"#privileges\" are correct"()
+    def "should throw exception of type 'IllegalArgumentException' when schema name is null, no matter if user name \"#user\" or privileges \"#privileges\" are correct"()
     {
         when:
             tested.produce(null, user, privileges)
@@ -58,7 +58,7 @@ class GrantSchemaPrivilegesProducerTest extends Specification {
     }
 
     @Unroll
-    def "should throw exception of type 'IllegalArgumentException' when schema name is blank \"#schema\" , no matter if column name \"#user\" or column type \"#privileges\" are correct"()
+    def "should throw exception of type 'IllegalArgumentException' when schema name is blank \"#schema\" , no matter if user name \"#user\" or privileges \"#privileges\" are correct"()
     {
         when:
             tested.produce(schema, user, privileges)
@@ -80,7 +80,7 @@ class GrantSchemaPrivilegesProducerTest extends Specification {
     }
 
     @Unroll
-    def "should throw exception of type 'IllegalArgumentException' when user is null, no matter if column name \"#schema\" or column type \"#privileges\" are correct"()
+    def "should throw exception of type 'IllegalArgumentException' when user is null, no matter if schema name \"#schema\" or privileges \"#privileges\" are correct"()
     {
         when:
             tested.produce(schema, null, privileges)
@@ -101,7 +101,7 @@ class GrantSchemaPrivilegesProducerTest extends Specification {
     }
 
     @Unroll
-    def "should throw exception of type 'IllegalArgumentException' when user is blank, no matter if column name \"#schema\" or column type \"#privileges\" are correct"()
+    def "should throw exception of type 'IllegalArgumentException' when user is blank, no matter if schema name \"#schema\" or privileges \"#privileges\" are correct"()
     {
         when:
             tested.produce(schema, user, privileges)
@@ -122,7 +122,7 @@ class GrantSchemaPrivilegesProducerTest extends Specification {
     }
 
     @Unroll
-    def "should throw exception of type 'IllegalArgumentException' when privileges list is null, no matter if column name \"#schema\" or column type \"#user\" are correct"()
+    def "should throw exception of type 'IllegalArgumentException' when privileges list is null, no matter if schema name \"#schema\" or user name \"#user\" are correct"()
     {
         when:
             tested.produce(schema, user, null)
