@@ -3,6 +3,8 @@
 function setup {
   #Save previous password
   PREVIOUS_PGPASSWORD="$PGPASSWORD"
+  export TIMESTAMP=`date +%s`
+  export TMP_SQL_FILE="$TIMESTAMP_timestamp.sql"
 }
 
 @test "Database user 'postgresql-core-user' should not have privilege 'USAGE' for 'public' schema" {
