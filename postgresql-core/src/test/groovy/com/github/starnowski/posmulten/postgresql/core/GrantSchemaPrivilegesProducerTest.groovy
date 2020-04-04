@@ -120,4 +120,24 @@ class GrantSchemaPrivilegesProducerTest extends Specification {
             "schema1"       |   ["ALL"]             |   "  "
             "non_public"    |   ["ALL PRIVILEGES"]  |   "              "
     }
+
+    @Unroll
+    def "should throw exception of type 'IllegalArgumentException' when privileges list is null, no matter if column name \"#schema\" or column type \"#user\" are correct"()
+    {
+        when:
+            tested.produce(schema, user, null)
+
+        then:
+            def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+            ex.message == "privileges list cannot be null"
+
+        where:
+            schema          |   user
+            "public"        |   "pos-user"
+            "public"        |   "owner"
+            "non_public"    |   "owner"
+            "non_public"    |   "pos-user"
+    }
 }
