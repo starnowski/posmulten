@@ -30,5 +30,9 @@ public class GrantSchemaPrivilegesProducer {
         {
             throw new IllegalArgumentException("Schema name cannot be null");
         }
+        if (schema.trim().isEmpty())
+        {
+            throw new IllegalArgumentException("Schema name cannot be blank");
+        }
     }
 }
