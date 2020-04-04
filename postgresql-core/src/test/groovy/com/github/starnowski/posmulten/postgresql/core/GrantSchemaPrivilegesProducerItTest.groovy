@@ -30,7 +30,7 @@ class GrantSchemaPrivilegesProducerItTest extends Specification {
             privileges = testPrivileges
             expectedPrivileges = testExpectedPrivileges
             for (String privilege : testExpectedPrivileges) {
-                assertEquals("f", selectAndReturnFirstRecordAsString(jdbcTemplate, selectStatement(user, schema, privilege)))
+                assertEquals("User " + testUser + " has privilege " + privilege, "f", selectAndReturnFirstRecordAsString(jdbcTemplate, selectStatement(user, schema, privilege)))
             }
 
         when:
@@ -38,7 +38,7 @@ class GrantSchemaPrivilegesProducerItTest extends Specification {
 
         then:
             for (String privilege : testExpectedPrivileges) {
-                assertEquals("t", selectAndReturnFirstRecordAsString(jdbcTemplate, selectStatement(user, schema, privilege)))
+                assertEquals("User " + testUser + " does not have privilege " + privilege, "t", selectAndReturnFirstRecordAsString(jdbcTemplate, selectStatement(user, schema, privilege)))
             }
 
         where:
@@ -53,7 +53,7 @@ class GrantSchemaPrivilegesProducerItTest extends Specification {
     def cleanup() {
         for (String privilege : expectedPrivileges) {
             jdbcTemplate.execute("REVOKE " + privilege + " ON SCHEMA " + schema + " FROM  \"" + user + "\";")
-            assertEquals("f", selectAndReturnFirstRecordAsString(jdbcTemplate, selectStatement(user, schema, privilege)))
+            assertEquals("User " + user + " still has privilege " + privilege + " after cleanup", "f", selectAndReturnFirstRecordAsString(jdbcTemplate, selectStatement(user, schema, privilege)))
         }
     }
 
