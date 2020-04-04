@@ -57,4 +57,26 @@ class GrantSchemaPrivilegesProducerTest extends Specification {
             "pos-user"          |   ["ALL PRIVILEGES"]
     }
 
+    @Unroll
+    def "should throw exception of type 'IllegalArgumentException' when schema name is blank \"#schema\" , no matter if column name \"#user\" or column type \"#privileges\" are correct"()
+    {
+        when:
+            tested.produce(schema, user, privileges)
+
+        then:
+            def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+            ex.message == "Schema name cannot be null"
+
+        where:
+            user                |   privileges          |   schema
+            "pos-user"          |   ["USAGE"]           |   ""
+            "pos-user"          |   ["USAGE"]           |   "     "
+            "pos-user"          |   ["CREATE"]          |   ""
+            "pos-user"          |   ["CREATE"]          |   "     "
+            "pos-user"          |   ["CREATE", "USAGE"] |   ""
+            "pos-user"          |   ["CREATE", "USAGE"] |   "         "
+    }
+
 }
