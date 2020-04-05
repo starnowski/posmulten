@@ -14,14 +14,14 @@ class GrantTablePrivilegesProducerTest extends Specification {
 
         where:
             schema      | user          | table         | privileges                                                                        ||	expectedStatement
-            null        | "user1"       | "players"     | ["INSERT"]                                                                        || "GRANT INSERT ON 'players' TO 'user1';"
-            null        | "john_doe"    | "players"     | ["INSERT"]                                                                        || "GRANT INSERT ON 'players' TO 'john_doe';"
-            null        | "user1"       | "users"       | ["INSERT"]                                                                        || "GRANT INSERT ON 'users' TO 'user1';"
-            null        | "user1"       | "players"     | ["UPDATE"]                                                                        || "GRANT UPDATE ON 'players' TO 'user1';"
-            null        | "user1"       | "players"     | ["SELECT", "INSERT", "UPDATE", "DELETE", "TRUNCATE", "REFERENCES", "TRIGGER"]     || "GRANT SELECT, INSERT, UPDATE, DELETE, TRUNCATE, REFERENCES, TRIGGER ON 'players' TO 'user1';"
-            null        | "user1"       | "players"     | ["SELECT", "TRIGGER"]                                                             || "GRANT SELECT, TRIGGER ON 'players' TO 'user1';"
-            null        | "user1"       | "players"     | ["ALL"]                                                                           || "GRANT ALL ON 'players' TO 'user1';"
-            null        | "user1"       | "players"     | ["ALL PRIVILEGES"]                                                                || "GRANT ALL PRIVILEGES ON 'players' TO 'user1';"
+            null        | "user1"       | "players"     | ["INSERT"]                                                                        || "GRANT INSERT ON \"players\" TO \"user1\";"
+            null        | "john_doe"    | "players"     | ["INSERT"]                                                                        || "GRANT INSERT ON \"players\" TO \"john_doe\";"
+            null        | "user1"       | "users"       | ["INSERT"]                                                                        || "GRANT INSERT ON \"users\" TO \"user1\";"
+            null        | "user1"       | "players"     | ["UPDATE"]                                                                        || "GRANT UPDATE ON \"players\" TO \"user1\";"
+            null        | "user1"       | "players"     | ["SELECT", "INSERT", "UPDATE", "DELETE", "TRUNCATE", "REFERENCES", "TRIGGER"]     || "GRANT SELECT, INSERT, UPDATE, DELETE, TRUNCATE, REFERENCES, TRIGGER ON \"players\" TO \"user1\";"
+            null        | "user1"       | "players"     | ["SELECT", "TRIGGER"]                                                             || "GRANT SELECT, TRIGGER ON \"players\" TO \"user1\";"
+            null        | "user1"       | "players"     | ["ALL"]                                                                           || "GRANT ALL ON \"players\" TO \"user1\";"
+            null        | "user1"       | "players"     | ["ALL PRIVILEGES"]                                                                || "GRANT ALL PRIVILEGES ON \"players\" TO \"user1\";"
             "public"    | "user1"       | "players"     | ["INSERT"]                                                                        || "GRANT INSERT ON public.'players' TO 'user1';"
             "other_she" | "user1"       | "players"     | ["INSERT"]                                                                        || "GRANT INSERT ON other_she.'players' TO 'user1';"
             "other_she" | "bro"         | "posts"       | ["UPDATE", "SELECT"]                                                              || "GRANT UPDATE, SELECT ON other_she.'posts' TO 'bro';"
