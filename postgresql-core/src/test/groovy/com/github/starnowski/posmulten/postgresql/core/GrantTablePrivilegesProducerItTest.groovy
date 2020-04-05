@@ -44,12 +44,13 @@ class GrantTablePrivilegesProducerItTest extends Specification {
             }
 
         where:
-            testUser                        |   testSchema                  |   testTable   |   testPrivileges          ||  testExpectedPrivileges
-            "postgresql-core-user"          |   "non_public_schema"         |   "users"     |   ["INSERT"]              ||  ["INSERT"]
-            "postgresql-core-user"          |   "non_public_schema"         |   "users"     |   ["SELECT"]              ||  ["SELECT"]
-            "postgresql-core-user"          |   "non_public_schema"         |   "users"     |   ["DELETE", "UPDATE"]    ||  ["DELETE", "UPDATE"]
-            "postgresql-core-user"          |   "non_public_schema"         |   "users"     |   ["ALL"]                 ||  ["SELECT", "INSERT", "UPDATE", "DELETE", "TRUNCATE", "REFERENCES", "TRIGGER"]
-            "postgresql-core-user"          |   "non_public_schema"         |   "users"     |   ["ALL PRIVILEGES"]      ||  ["SELECT", "INSERT", "UPDATE", "DELETE", "TRUNCATE", "REFERENCES", "TRIGGER"]
+            testUser                        |   testSchema                  |   testTable   |   testPrivileges              ||  testExpectedPrivileges
+            "postgresql-core-user"          |   "non_public_schema"         |   "users"     |   ["INSERT"]                  ||  ["INSERT"]
+            "postgresql-core-user"          |   "non_public_schema"         |   "users"     |   ["SELECT"]                  ||  ["SELECT"]
+            "postgresql-core-user"          |   "non_public_schema"         |   "users"     |   ["DELETE", "UPDATE"]        ||  ["DELETE", "UPDATE"]
+            "postgresql-core-user"          |   "non_public_schema"         |   "users"     |   ["ALL"]                     ||  ["SELECT", "INSERT", "UPDATE", "DELETE", "TRUNCATE", "REFERENCES", "TRIGGER"]
+            "postgresql-core-user"          |   "non_public_schema"         |   "users"     |   ["ALL PRIVILEGES"]          ||  ["SELECT", "INSERT", "UPDATE", "DELETE", "TRUNCATE", "REFERENCES", "TRIGGER"]
+            "postgresql-core-user"          |   "public"                    |   "posts"     |   ["DELETE", "REFERENCES"]    ||  ["DELETE", "REFERENCES"]
     }
 
     def cleanup() {
