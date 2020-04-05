@@ -6,6 +6,7 @@ import java.util.List;
 public class GrantTablePrivilegesProducer {
 
     public String produce(String schema, String table, String user, List<String> privileges) {
+        validateParameters(table, user, privileges);
         StringBuilder sb = new StringBuilder();
         sb.append("GRANT ");
         Iterator<String> it = privileges.iterator();
@@ -29,4 +30,12 @@ public class GrantTablePrivilegesProducer {
         sb.append("\";");
         return sb.toString();
     }
+
+    private void validateParameters(String table, String user, List<String> privileges) {
+        if (table == null)
+        {
+            throw new IllegalArgumentException("Table name cannot be null");
+        }
+    }
+
 }
