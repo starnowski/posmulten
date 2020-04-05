@@ -82,6 +82,7 @@ class GrantTablePrivilegesProducerItTest extends Specification {
         sb.append("' AND ")
         sb.append(" grantee = '")
         sb.append(user)
-        sb.append("';")
+        sb.append("'")
+        sb.toString()
     }
 }
