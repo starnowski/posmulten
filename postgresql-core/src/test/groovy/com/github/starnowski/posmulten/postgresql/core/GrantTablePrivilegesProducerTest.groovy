@@ -10,7 +10,7 @@ class GrantTablePrivilegesProducerTest extends Specification {
     @Unroll
     def "should return granting access statement '#expectedStatement' for table '#table', user '#user', schema '#schema' with specified privileges '#privileges'" () {
         expect:
-            tested.produce(schema, policyTargetUsername, privileges) == expectedStatement
+            tested.produce(schema, table, user, privileges) == expectedStatement
 
         where:
             schema      | user          | table         | privileges                                                                        ||	expectedStatement
