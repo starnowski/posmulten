@@ -53,8 +53,8 @@ class GrantTablePrivilegesProducerItTest extends Specification {
 
     def cleanup() {
         for (String privilege : expectedPrivileges) {
-            //TODO Revoke
-            jdbcTemplate.execute("REVOKE " + privilege + " ON SCHEMA " + schema + " FROM  \"" + user + "\";")
+            def tableId = schema + ".'" + table + "'"
+            jdbcTemplate.execute("REVOKE " + privilege + " ON " + tableId + " FROM  \"" + user + "\";")
             assertEquals("User " + user + " has privilege " + privilege, false, isAnyRecordExists(jdbcTemplate, selectStatement(user, table, schema, privilege)))
         }
     }
