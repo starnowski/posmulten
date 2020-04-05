@@ -40,6 +40,14 @@ public class GrantTablePrivilegesProducer {
         {
             throw new IllegalArgumentException("Table name cannot be blank");
         }
+        if (user == null)
+        {
+            throw new IllegalArgumentException("user cannot be null");
+        }
+        if (user.trim().isEmpty())
+        {
+            throw new IllegalArgumentException("user cannot be blank");
+        }
     }
 
 }
