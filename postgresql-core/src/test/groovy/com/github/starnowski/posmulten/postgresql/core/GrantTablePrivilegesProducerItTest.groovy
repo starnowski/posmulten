@@ -6,7 +6,7 @@ import org.springframework.jdbc.core.JdbcTemplate
 import spock.lang.Specification
 import spock.lang.Unroll
 
-import static com.github.starnowski.posmulten.postgresql.core.TestUtils.selectAndReturnFirstRecordAsString
+import static com.github.starnowski.posmulten.postgresql.core.TestUtils.isAnyRecordExists
 import static org.junit.Assert.assertEquals
 
 @SpringBootTest(classes = [TestApplication.class])
@@ -31,7 +31,7 @@ class GrantTablePrivilegesProducerItTest extends Specification {
             privileges = testPrivileges
             expectedPrivileges = testExpectedPrivileges
             for (String privilege : testExpectedPrivileges) {
-                assertEquals("User " + testUser + " has privilege " + privilege, "f", selectAndReturnFirstRecordAsString(jdbcTemplate, selectStatement(user, schema, privilege)))
+                assertEquals("User " + testUser + " has privilege " + privilege, false, isAnyRecordExists(jdbcTemplate, selectStatement(user, table, schema, privilege)))
             }
 
         when:
@@ -39,7 +39,7 @@ class GrantTablePrivilegesProducerItTest extends Specification {
 
         then:
             for (String privilege : testExpectedPrivileges) {
-                assertEquals("User " + testUser + " does not have privilege " + privilege, "t", selectAndReturnFirstRecordAsString(jdbcTemplate, selectStatement(user, schema, privilege)))
+                assertEquals("User " + testUser + " has privilege " + privilege, true, isAnyRecordExists(jdbcTemplate, selectStatement(user, table, schema, privilege)))
             }
 
         where:
@@ -53,8 +53,9 @@ class GrantTablePrivilegesProducerItTest extends Specification {
 
     def cleanup() {
         for (String privilege : expectedPrivileges) {
+            //TODO Revoke
             jdbcTemplate.execute("REVOKE " + privilege + " ON SCHEMA " + schema + " FROM  \"" + user + "\";")
-            assertEquals("User " + user + " still has privilege " + privilege + " after cleanup", "f", selectAndReturnFirstRecordAsString(jdbcTemplate, selectStatement(user, schema, privilege)))
+            assertEquals("User " + user + " has privilege " + privilege, false, isAnyRecordExists(jdbcTemplate, selectStatement(user, table, schema, privilege)))
         }
     }
 
