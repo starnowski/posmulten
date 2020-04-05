@@ -36,7 +36,7 @@ class GrantTablePrivilegesProducerItTest extends Specification {
             }
 
         when:
-            jdbcTemplate.execute(tested.produce(testSchema, testUser, testPrivileges))
+            jdbcTemplate.execute(tested.produce(testSchema, testTable, testUser, testPrivileges))
 
         then:
             for (String privilege : testExpectedPrivileges) {
