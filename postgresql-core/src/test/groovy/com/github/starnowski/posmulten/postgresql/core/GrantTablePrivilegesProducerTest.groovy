@@ -31,7 +31,7 @@ class GrantTablePrivilegesProducerTest extends Specification {
     def "should throw exception of type 'IllegalArgumentException' when table name is null"()
     {
         when:
-            tested.produce(schema, user, privileges)
+            tested.produce(schema, null, user, privileges)
 
         then:
             def ex = thrown(IllegalArgumentException.class)
