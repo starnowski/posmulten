@@ -22,8 +22,8 @@ class GrantTablePrivilegesProducerTest extends Specification {
             null        | "user1"       | "players"     | ["SELECT", "TRIGGER"]                                                             || "GRANT SELECT, TRIGGER ON \"players\" TO \"user1\";"
             null        | "user1"       | "players"     | ["ALL"]                                                                           || "GRANT ALL ON \"players\" TO \"user1\";"
             null        | "user1"       | "players"     | ["ALL PRIVILEGES"]                                                                || "GRANT ALL PRIVILEGES ON \"players\" TO \"user1\";"
-            "public"    | "user1"       | "players"     | ["INSERT"]                                                                        || "GRANT INSERT ON public.'players' TO 'user1';"
-            "other_she" | "user1"       | "players"     | ["INSERT"]                                                                        || "GRANT INSERT ON other_she.'players' TO 'user1';"
-            "other_she" | "bro"         | "posts"       | ["UPDATE", "SELECT"]                                                              || "GRANT UPDATE, SELECT ON other_she.'posts' TO 'bro';"
+            "public"    | "user1"       | "players"     | ["INSERT"]                                                                        || "GRANT INSERT ON public.\"players\" TO \"user1\";"
+            "other_she" | "user1"       | "players"     | ["INSERT"]                                                                        || "GRANT INSERT ON other_she.\"players\" TO \"user1\";"
+            "other_she" | "bro"         | "posts"       | ["UPDATE", "SELECT"]                                                              || "GRANT UPDATE, SELECT ON other_she.\"posts\" TO \"bro\";"
     }
 }
