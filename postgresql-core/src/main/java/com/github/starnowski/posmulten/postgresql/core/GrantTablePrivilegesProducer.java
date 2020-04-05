@@ -21,12 +21,12 @@ public class GrantTablePrivilegesProducer {
             sb.append(schema);
             sb.append(".");
         }
-        sb.append("'");
+        sb.append("\"");
         sb.append(table);
-        sb.append("'");
-        sb.append(" TO '");
+        sb.append("\"");
+        sb.append(" TO \"");
         sb.append(user);
-        sb.append("';");
+        sb.append("\";");
         return sb.toString();
     }
 }
