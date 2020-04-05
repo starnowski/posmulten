@@ -82,56 +82,56 @@ class GrantTablePrivilegesProducerTest extends Specification {
     }
 
     @Unroll
-    def "should throw exception of type 'IllegalArgumentException' when table name is null"()
+    def "should throw exception of type 'IllegalArgumentException' when user name is null"()
     {
         when:
-        tested.produce(schema, null, user, privileges)
+            tested.produce(schema, table, null, privileges)
 
         then:
-        def ex = thrown(IllegalArgumentException.class)
+            def ex = thrown(IllegalArgumentException.class)
 
         and: "exception should have correct message"
-        ex.message == "Table name cannot be null"
+            ex.message == "user cannot be null"
 
         where:
-        schema      | user          |   privileges
-        null        | "user1"       |   ["INSERT"]
-        null        | "john_doe"    |   ["INSERT"]
-        null        | "user1"       |   ["INSERT"]
-        null        | "user1"       |   ["UPDATE"]
-        null        | "user1"       |   ["SELECT", "INSERT", "UPDATE", "DELETE", "TRUNCATE", "REFERENCES", "TRIGGER"]
-        null        | "user1"       |   ["SELECT", "TRIGGER"]
-        null        | "user1"       |   ["ALL"]
-        null        | "user1"       |   ["ALL PRIVILEGES"]
-        "public"    | "user1"       |   ["INSERT"]
-        "other_she" | "user1"       |   ["INSERT"]
-        "other_she" | "bro"         |   ["UPDATE", "SELECT"]
+            schema      | table         |   privileges
+            null        | "users"       |   ["INSERT"]
+            null        | "posts"       |   ["INSERT"]
+            null        | "posts"       |   ["INSERT"]
+            null        | "posts"       |   ["UPDATE"]
+            null        | "posts"       |   ["SELECT", "INSERT", "UPDATE", "DELETE", "TRUNCATE", "REFERENCES", "TRIGGER"]
+            null        | "posts"       |   ["SELECT", "TRIGGER"]
+            null        | "posts"       |   ["ALL"]
+            null        | "posts"       |   ["ALL PRIVILEGES"]
+            "public"    | "posts"       |   ["INSERT"]
+            "other_she" | "posts"       |   ["INSERT"]
+            "other_she" | "posts"       |   ["UPDATE", "SELECT"]
     }
 
     @Unroll
-    def "should throw exception of type 'IllegalArgumentException' when table name is blank"()
+    def "should throw exception of type 'IllegalArgumentException' when table user is blank"()
     {
         when:
-        tested.produce(schema, table, user, privileges)
+            tested.produce(schema, table, user, privileges)
 
         then:
-        def ex = thrown(IllegalArgumentException.class)
+            def ex = thrown(IllegalArgumentException.class)
 
         and: "exception should have correct message"
-        ex.message == "Table name cannot be blank"
+            ex.message == "user cannot be blank"
 
         where:
-        schema      | user          |   privileges              |   table
-        null        | "user1"       |   ["INSERT"]              | ""
-        null        | "john_doe"    |   ["INSERT"]              | "   "
-        null        | "user1"       |   ["INSERT"]              | "  "
-        null        | "user1"       |   ["UPDATE"]              | "     "
-        null        | "user1"       |   ["SELECT", "INSERT"]    | "  "
-        null        | "user1"       |   ["SELECT", "TRIGGER"]   | "   "
-        null        | "user1"       |   ["ALL"]                 | "   "
-        null        | "user1"       |   ["ALL PRIVILEGES"]      | "  "
-        "public"    | "user1"       |   ["INSERT"]              | " "
-        "other_she" | "user1"       |   ["INSERT"]              | "    "
-        "other_she" | "bro"         |   ["UPDATE", "SELECT"]    | "        "
+            schema      | table         |   privileges              |   user
+            null        | "posts"       |   ["INSERT"]              | ""
+            null        | "users"       |   ["INSERT"]              | "   "
+            null        | "posts"       |   ["INSERT"]              | "  "
+            null        | "posts"       |   ["UPDATE"]              | "     "
+            null        | "posts"       |   ["SELECT", "INSERT"]    | "  "
+            null        | "posts"       |   ["SELECT", "TRIGGER"]   | "   "
+            null        | "posts"       |   ["ALL"]                 | "   "
+            null        | "posts"       |   ["ALL PRIVILEGES"]      | "  "
+            "public"    | "posts"       |   ["INSERT"]              | " "
+            "other_she" | "posts"       |   ["INSERT"]              | "    "
+            "other_she" | "posts"       |   ["UPDATE", "SELECT"]    | "        "
     }
 }
