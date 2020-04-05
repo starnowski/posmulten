@@ -48,8 +48,8 @@ class GrantTablePrivilegesProducerItTest extends Specification {
             "postgresql-core-user"          |   "non_public_schema"         |   "users"     |   ["INSERT"]              ||  ["INSERT"]
             "postgresql-core-user"          |   "non_public_schema"         |   "users"     |   ["SELECT"]              ||  ["SELECT"]
             "postgresql-core-user"          |   "non_public_schema"         |   "users"     |   ["DELETE", "UPDATE"]    ||  ["DELETE", "UPDATE"]
-            "postgresql-core-user"          |   "non_public_schema"         |   "users"     |   ["ALL"]                 ||  ["CREATE", "USAGE"]
-            "postgresql-core-user"          |   "non_public_schema"         |   "users"     |   ["ALL PRIVILEGES"]      ||  ["CREATE", "USAGE"]
+            "postgresql-core-user"          |   "non_public_schema"         |   "users"     |   ["ALL"]                 ||  ["SELECT", "INSERT", "UPDATE", "DELETE", "TRUNCATE", "REFERENCES", "TRIGGER"]
+            "postgresql-core-user"          |   "non_public_schema"         |   "users"     |   ["ALL PRIVILEGES"]      ||  ["SELECT", "INSERT", "UPDATE", "DELETE", "TRUNCATE", "REFERENCES", "TRIGGER"]
     }
 
     def cleanup() {
