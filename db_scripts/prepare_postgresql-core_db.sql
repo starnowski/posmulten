@@ -87,3 +87,15 @@ ALTER TABLE public.posts
 
 -- The separate database schema, used for the test cases where there are no default privileges set, just like in case of 'public' schema.
 CREATE SCHEMA non_public_schema AUTHORIZATION "postgresql-core-owner";
+
+CREATE TABLE non_public_schema.users
+(
+id bigint NOT NULL,
+name character varying(255),
+tenant_id character varying(255),
+CONSTRAINT users_pkey PRIMARY KEY (id)
+)
+WITH (
+OIDS = FALSE
+)
+TABLESPACE pg_default;
