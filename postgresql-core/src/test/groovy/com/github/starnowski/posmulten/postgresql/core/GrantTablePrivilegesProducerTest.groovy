@@ -58,6 +58,60 @@ class GrantTablePrivilegesProducerTest extends Specification {
     def "should throw exception of type 'IllegalArgumentException' when table name is blank"()
     {
         when:
+            tested.produce(schema, table, user, privileges)
+
+        then:
+            def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+            ex.message == "Table name cannot be blank"
+
+        where:
+            schema      | user          |   privileges              |   table
+            null        | "user1"       |   ["INSERT"]              | ""
+            null        | "john_doe"    |   ["INSERT"]              | "   "
+            null        | "user1"       |   ["INSERT"]              | "  "
+            null        | "user1"       |   ["UPDATE"]              | "     "
+            null        | "user1"       |   ["SELECT", "INSERT"]    | "  "
+            null        | "user1"       |   ["SELECT", "TRIGGER"]   | "   "
+            null        | "user1"       |   ["ALL"]                 | "   "
+            null        | "user1"       |   ["ALL PRIVILEGES"]      | "  "
+            "public"    | "user1"       |   ["INSERT"]              | " "
+            "other_she" | "user1"       |   ["INSERT"]              | "    "
+            "other_she" | "bro"         |   ["UPDATE", "SELECT"]    | "        "
+    }
+
+    @Unroll
+    def "should throw exception of type 'IllegalArgumentException' when table name is null"()
+    {
+        when:
+        tested.produce(schema, null, user, privileges)
+
+        then:
+        def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+        ex.message == "Table name cannot be null"
+
+        where:
+        schema      | user          |   privileges
+        null        | "user1"       |   ["INSERT"]
+        null        | "john_doe"    |   ["INSERT"]
+        null        | "user1"       |   ["INSERT"]
+        null        | "user1"       |   ["UPDATE"]
+        null        | "user1"       |   ["SELECT", "INSERT", "UPDATE", "DELETE", "TRUNCATE", "REFERENCES", "TRIGGER"]
+        null        | "user1"       |   ["SELECT", "TRIGGER"]
+        null        | "user1"       |   ["ALL"]
+        null        | "user1"       |   ["ALL PRIVILEGES"]
+        "public"    | "user1"       |   ["INSERT"]
+        "other_she" | "user1"       |   ["INSERT"]
+        "other_she" | "bro"         |   ["UPDATE", "SELECT"]
+    }
+
+    @Unroll
+    def "should throw exception of type 'IllegalArgumentException' when table name is blank"()
+    {
+        when:
         tested.produce(schema, table, user, privileges)
 
         then:
