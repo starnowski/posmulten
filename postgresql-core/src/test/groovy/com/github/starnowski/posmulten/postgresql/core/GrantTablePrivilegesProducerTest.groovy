@@ -155,4 +155,25 @@ class GrantTablePrivilegesProducerTest extends Specification {
             "other_she" | "user1"       | "players"
             "other_she" | "bro"         | "posts"
     }
+
+    @Unroll
+    def "should throw exception of type 'IllegalArgumentException' when table privileges list is empty"()
+    {
+        when:
+            tested.produce(schema, table, user, new ArrayList<String>())
+
+        then:
+            def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+            ex.message == "privileges list cannot be null"
+
+        where:
+            schema      | user          | table
+            null        | "user1"       | "players"
+            null        | "john_doe"    | "players"
+            null        | "user1"       | "users"
+            "other_she" | "user1"       | "players"
+            "other_she" | "bro"         | "posts"
+    }
 }
