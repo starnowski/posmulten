@@ -8,6 +8,14 @@ import java.util.List;
  */
 public class GrantTablePrivilegesProducer {
 
+    /**
+     *
+     * @param schema - Database schema
+     * @param table - Database table
+     * @param user  - Database user (grantee)
+     * @param privileges - List of table privileges
+     * @return
+     */
     public String produce(String schema, String table, String user, List<String> privileges) {
         validateParameters(schema, table, user, privileges);
         StringBuilder sb = new StringBuilder();
