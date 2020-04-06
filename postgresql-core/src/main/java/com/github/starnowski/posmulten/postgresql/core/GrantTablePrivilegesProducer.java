@@ -52,6 +52,10 @@ public class GrantTablePrivilegesProducer {
         {
             throw new IllegalArgumentException("privileges list cannot be null");
         }
+        if (privileges.isEmpty())
+        {
+            throw new IllegalArgumentException("privileges list cannot be empty");
+        }
     }
 
 }
