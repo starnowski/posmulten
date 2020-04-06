@@ -3,6 +3,9 @@ package com.github.starnowski.posmulten.postgresql.core;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * Service creates a SQL statement that grants privileges to database table.
+ */
 public class GrantTablePrivilegesProducer {
 
     public String produce(String schema, String table, String user, List<String> privileges) {
