@@ -166,7 +166,7 @@ class GrantTablePrivilegesProducerTest extends Specification {
             def ex = thrown(IllegalArgumentException.class)
 
         and: "exception should have correct message"
-            ex.message == "privileges list cannot be null"
+            ex.message == "privileges list cannot be empty"
 
         where:
             schema      | user          | table
