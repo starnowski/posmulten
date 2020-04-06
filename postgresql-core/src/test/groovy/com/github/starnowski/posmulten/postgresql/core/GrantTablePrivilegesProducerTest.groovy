@@ -176,4 +176,22 @@ class GrantTablePrivilegesProducerTest extends Specification {
             "other_she" | "user1"       | "players"
             "other_she" | "bro"         | "posts"
     }
+
+    @Unroll
+    def "should throw exception of type 'IllegalArgumentException' when table schema is blank"()
+    {
+        when:
+            tested.produce(schema, table, user, privileges)
+
+        then:
+            def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+            ex.message == "schema cannot be blank"
+
+        where:
+        user      | table         |   privileges              |   schema
+        "user1"        | "posts"       |   ["INSERT"]              | ""
+        "user1"        | "users"       |   ["UPDATE"]              | "   "
+    }
 }
