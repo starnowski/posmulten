@@ -48,6 +48,10 @@ public class GrantTablePrivilegesProducer {
         {
             throw new IllegalArgumentException("user cannot be blank");
         }
+        if (privileges == null)
+        {
+            throw new IllegalArgumentException("privileges list cannot be null");
+        }
     }
 
 }
