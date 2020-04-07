@@ -42,7 +42,17 @@ psql -qtAX -U postgres -p $DATABASE_PORT --host="$DOCKER_DB_IP" -f "$SCRIPT_DIR/
 
 #Run test
 bats -rt "$SCRIPT_DIR/prepare_postgresql-core_db"
+DATABASE_TESTS_RESULT="$?"
 
+export DATABASE_TESTS_SCHEMA_NAME="public"
+bats -rt "$SCRIPT_DIR/schema_structure"
+DATABASE_TESTS_PUBLIC_SCHEMA_RESULT="$?"
+
+export DATABASE_TESTS_SCHEMA_NAME="non_public_schema"
+bats -rt "$SCRIPT_DIR/schema_structure"
+DATABASE_TESTS_NON_PUBLIC_SCHEMA_RESULT="$?"
+
+[[ $DATABASE_TESTS_RESULT -eq 0 ]] && [[ $DATABASE_TESTS_PUBLIC_SCHEMA_RESULT -eq 0 ]] && [[ $DATABASE_TESTS_NON_PUBLIC_SCHEMA_RESULT -eq 0 ]]
 
 #
 # TIPS!
