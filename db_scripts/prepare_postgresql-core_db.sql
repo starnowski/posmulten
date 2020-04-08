@@ -99,3 +99,36 @@ WITH (
 OIDS = FALSE
 )
 TABLESPACE pg_default;
+
+CREATE TABLE non_public_schema.groups
+(
+uuid uuid NOT NULL,
+name character varying(255),
+tenant_id character varying(255),
+CONSTRAINT groups_pkey PRIMARY KEY (uuid)
+)
+WITH (
+OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+CREATE TABLE non_public_schema.users_groups
+(
+user_id bigint NOT NULL,
+group_id uuid NOT NULL,
+tenant_id character varying(255),
+CONSTRAINT fk_users_groups_user_id FOREIGN KEY (user_id)
+REFERENCES users (id) MATCH SIMPLE,
+CONSTRAINT fk_users_groups_group_id FOREIGN KEY (group_id)
+REFERENCES groups (uuid) MATCH SIMPLE
+)
+WITH (
+OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE non_public_schema.groups
+OWNER to "postgresql-core-owner";
+
+ALTER TABLE non_public_schema.users_groups
+OWNER to "postgresql-core-owner";
