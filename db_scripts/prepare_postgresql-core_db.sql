@@ -127,8 +127,26 @@ OIDS = FALSE
 )
 TABLESPACE pg_default;
 
+CREATE TABLE non_public_schema.posts
+(
+id bigint NOT NULL,
+text text NOT NULL,
+user_id bigint NOT NULL,
+tenant_id character varying(255),
+CONSTRAINT fk_posts_user_id FOREIGN KEY (user_id)
+REFERENCES users (id) MATCH SIMPLE,
+CONSTRAINT posts_pkey PRIMARY KEY (id)
+)
+WITH (
+OIDS = FALSE
+)
+TABLESPACE pg_default;
+
 ALTER TABLE non_public_schema.groups
 OWNER to "postgresql-core-owner";
 
 ALTER TABLE non_public_schema.users_groups
+OWNER to "postgresql-core-owner";
+
+ALTER TABLE public.posts
 OWNER to "postgresql-core-owner";
