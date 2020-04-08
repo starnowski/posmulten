@@ -24,10 +24,10 @@ function setup {
     WHERE
         R.table_name = 'users_groups'
         AND R.column_name = 'user_id'
-        AND R.table_schema = 'public'
+        AND R.table_schema = '$DATABASE_TESTS_SCHEMA_NAME'
         AND U.table_name = 'users'
         AND U.column_name = 'id'
-        AND U.table_schema = 'public'
+        AND U.table_schema = '$DATABASE_TESTS_SCHEMA_NAME'
     );
 SQL
 
@@ -59,10 +59,10 @@ SQL
     WHERE
         R.table_name = 'users_groups'
         AND R.column_name = 'group_id'
-        AND R.table_schema = 'public'
+        AND R.table_schema = '$DATABASE_TESTS_SCHEMA_NAME'
         AND U.table_name = 'groups'
         AND U.column_name = 'uuid'
-        AND U.table_schema = 'public'
+        AND U.table_schema = '$DATABASE_TESTS_SCHEMA_NAME'
     );
 SQL
 
@@ -93,10 +93,10 @@ SQL
     WHERE
         R.table_name = 'posts'
         AND R.column_name = 'user_id'
-        AND R.table_schema = 'public'
+        AND R.table_schema = '$DATABASE_TESTS_SCHEMA_NAME'
         AND U.table_name = 'users'
         AND U.column_name = 'id'
-        AND U.table_schema = 'public'
+        AND U.table_schema = '$DATABASE_TESTS_SCHEMA_NAME'
     );
 SQL
 
