@@ -41,6 +41,7 @@ psql -qtAX -U postgres -p $DATABASE_PORT --host="$DOCKER_DB_IP" -f "$SCRIPT_DIR/
 
 
 #Run test
+set +e
 bats -rt "$SCRIPT_DIR/prepare_postgresql-core_db"
 DATABASE_TESTS_RESULT="$?"
 
