@@ -118,9 +118,9 @@ user_id bigint NOT NULL,
 group_id uuid NOT NULL,
 tenant_id character varying(255),
 CONSTRAINT fk_users_groups_user_id FOREIGN KEY (user_id)
-REFERENCES users (id) MATCH SIMPLE,
+REFERENCES non_public_schema.users (id) MATCH SIMPLE,
 CONSTRAINT fk_users_groups_group_id FOREIGN KEY (group_id)
-REFERENCES groups (uuid) MATCH SIMPLE
+REFERENCES non_public_schema.groups (uuid) MATCH SIMPLE
 )
 WITH (
 OIDS = FALSE
@@ -134,7 +134,7 @@ text text NOT NULL,
 user_id bigint NOT NULL,
 tenant_id character varying(255),
 CONSTRAINT fk_posts_user_id FOREIGN KEY (user_id)
-REFERENCES users (id) MATCH SIMPLE,
+REFERENCES non_public_schema.users (id) MATCH SIMPLE,
 CONSTRAINT posts_pkey PRIMARY KEY (id)
 )
 WITH (
