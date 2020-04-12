@@ -14,10 +14,10 @@ class GrantSequencePrivilegesProducerTest extends Specification {
 
         where:
             schema                  | user          | sequence      ||	expectedStatement
-            null                    | "user1"       | "primary"     || "GRANT ALL PRIVILEGES ON public.\"primary\" TO \"user1\";"
-            "public"                | "user1"       | "primary"     || "GRANT ALL PRIVILEGES ON public.\"primary\" TO \"user1\";"
-            "non_public_schema"     | "johndoe"     | "primary"     || "GRANT ALL PRIVILEGES ON non_public_schema.\"primary\" TO \"johndoe\";"
-            "non_public_schema"     | "johndoe"     | "secondary"   || "GRANT ALL PRIVILEGES ON non_public_schema.\"secondary\" TO \"johndoe\";"
+            null                    | "user1"       | "primary"     || "GRANT ALL PRIVILEGES ON SEQUENCE public.\"primary\" TO \"user1\";"
+            "public"                | "user1"       | "primary"     || "GRANT ALL PRIVILEGES ON SEQUENCE public.\"primary\" TO \"user1\";"
+            "non_public_schema"     | "johndoe"     | "primary"     || "GRANT ALL PRIVILEGES ON SEQUENCE non_public_schema.\"primary\" TO \"johndoe\";"
+            "non_public_schema"     | "johndoe"     | "secondary"   || "GRANT ALL PRIVILEGES ON SEQUENCE non_public_schema.\"secondary\" TO \"johndoe\";"
     }
 
 }
