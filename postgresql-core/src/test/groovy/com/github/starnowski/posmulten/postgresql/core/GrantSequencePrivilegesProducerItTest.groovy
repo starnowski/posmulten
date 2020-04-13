@@ -35,7 +35,7 @@ class GrantSequencePrivilegesProducerItTest extends Specification {
             }
 
         when:
-            tested.produce(schema, sequence, user)
+            jdbcTemplate.execute(tested.produce(schema, sequence, user))
 
         then:
             for (String privilege : testExpectedPrivileges) {
