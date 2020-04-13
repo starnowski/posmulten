@@ -110,7 +110,7 @@ class GrantSequencePrivilegesProducerTest extends Specification {
         def ex = thrown(IllegalArgumentException.class)
 
         and: "exception should have correct message"
-        ex.message == "user cannot be blank"
+        ex.message == "sequence cannot be blank"
 
         where:
         schema          | user          |   sequence
