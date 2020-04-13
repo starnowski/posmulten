@@ -27,6 +27,10 @@ public class GrantSequencePrivilegesProducer {
         {
             throw new IllegalArgumentException("schema cannot be blank");
         }
+        if (user == null)
+        {
+            throw new IllegalArgumentException("user cannot be null");
+        }
         if (user.trim().isEmpty())
         {
             throw new IllegalArgumentException("user cannot be blank");
