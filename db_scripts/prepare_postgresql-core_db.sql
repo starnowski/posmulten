@@ -86,14 +86,14 @@ ALTER TABLE public.posts
     OWNER to "postgresql-core-owner";
 
 -- sequences definition
-CREATE SEQUENCE public.primay_sequence
+CREATE SEQUENCE public.primary_sequence
 INCREMENT 1
 START 32
 MINVALUE 1
 MAXVALUE 9223372036854775807
 CACHE 1;
 
-ALTER SEQUENCE public.primay_sequence
+ALTER SEQUENCE public.primary_sequence
 OWNER TO "postgresql-core-owner";
 
 -- The separate database schema, used for the test cases where there are no default privileges set, just like in case of 'public' schema.
@@ -163,12 +163,12 @@ ALTER TABLE public.posts
 OWNER to "postgresql-core-owner";
 
 -- sequences definition
-CREATE SEQUENCE non_public_schema.primay_sequence
+CREATE SEQUENCE non_public_schema.primary_sequence
 INCREMENT 1
 START 32
 MINVALUE 1
 MAXVALUE 9223372036854775807
 CACHE 1;
 
-ALTER SEQUENCE non_public_schema.primay_sequence
+ALTER SEQUENCE non_public_schema.primary_sequence
 OWNER TO "postgresql-core-owner";
