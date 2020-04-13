@@ -20,4 +20,23 @@ class GrantSequencePrivilegesProducerTest extends Specification {
             "non_public_schema"     | "johndoe"     | "secondary"   || "GRANT ALL PRIVILEGES ON SEQUENCE non_public_schema.\"secondary\" TO \"johndoe\";"
     }
 
+    @Unroll
+    def "should throw exception of type 'IllegalArgumentException' when table schema is blank"()
+    {
+        when:
+            tested.produce(schema, sequence, user)
+
+        then:
+            def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+            ex.message == "schema cannot be blank"
+
+        where:
+            user        | sequence      |schema
+            "user1"     | "primary"     |""
+            "user1"     | "secondary"   |"   "
+            "john_doe"  | "primary"     |""
+            "john_doe"  | "secondary"   |"   "
+    }
 }
