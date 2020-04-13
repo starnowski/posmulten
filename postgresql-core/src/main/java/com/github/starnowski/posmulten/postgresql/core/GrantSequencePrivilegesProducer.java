@@ -35,5 +35,9 @@ public class GrantSequencePrivilegesProducer {
         {
             throw new IllegalArgumentException("user cannot be blank");
         }
+        if (sequence == null)
+        {
+            throw new IllegalArgumentException("sequence cannot be null");
+        }
     }
 }
