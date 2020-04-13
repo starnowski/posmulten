@@ -100,4 +100,24 @@ class GrantSequencePrivilegesProducerTest extends Specification {
             "secondary"     | "user1"
     }
 
+    @Unroll
+    def "should throw exception of type 'IllegalArgumentException' when sequence is blank"()
+    {
+        when:
+        tested.produce(schema, sequence, user)
+
+        then:
+        def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+        ex.message == "user cannot be blank"
+
+        where:
+        schema          | user          |   sequence
+        "public"        | "postgres"    |   ""
+        "public"        | "user1"       |   "   "
+        "secondary"     | "postgres"    |   ""
+        "secondary"     | "user1"       |   "   "
+    }
+
 }
