@@ -80,4 +80,24 @@ class GrantSequencePrivilegesProducerTest extends Specification {
             "secondary"     | "secondary"   |   "   "
     }
 
+    @Unroll
+    def "should throw exception of type 'IllegalArgumentException' when sequence is null"()
+    {
+        when:
+            tested.produce(schema, null, user)
+
+        then:
+            def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+            ex.message == "sequence cannot be null"
+
+        where:
+            schema          | user
+            "public"        | "postgres"
+            "public"        | "user1"
+            "secondary"     | "postgres"
+            "secondary"     | "user1"
+    }
+
 }
