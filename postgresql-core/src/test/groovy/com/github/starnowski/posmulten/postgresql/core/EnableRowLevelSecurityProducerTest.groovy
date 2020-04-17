@@ -11,7 +11,7 @@ class EnableRowLevelSecurityProducerTest extends Specification {
     def "should return statement (#expectedStatement) that enables row level security mode for table (#table) and schema (#schema)"()
     {
         expect:
-            tested.produce(schema, table) == expectedStatement
+            tested.produce(table, schema) == expectedStatement
 
         where:
             schema      | table     ||	expectedStatement
