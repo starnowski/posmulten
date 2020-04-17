@@ -12,6 +12,7 @@ class EnableRowLevelSecurityProducerTest extends Specification {
     {
         expect:
             tested.produce(schema, table) == expectedStatement
+
         where:
             schema      | table     ||	expectedStatement
             null        | "users"   ||  "ALTER TABLE \"users\" ENABLE ROW LEVEL SECURITY;"
