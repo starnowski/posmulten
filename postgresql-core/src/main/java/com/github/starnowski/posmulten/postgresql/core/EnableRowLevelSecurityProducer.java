@@ -4,6 +4,7 @@ public class EnableRowLevelSecurityProducer {
 
     public String produce(String table, String schema)
     {
+        validateParameters(table, schema);
         StringBuilder sb = new StringBuilder();
         sb.append("ALTER TABLE ");
         if (schema != null)
@@ -16,5 +17,12 @@ public class EnableRowLevelSecurityProducer {
         sb.append("\"");
         sb.append(" ENABLE ROW LEVEL SECURITY;");
         return sb.toString();
+    }
+
+    private void validateParameters(String table, String schema) {
+        if (schema != null && schema.trim().isEmpty())
+        {
+            throw new IllegalArgumentException("Schema name cannot be blank");
+        }
     }
 }
