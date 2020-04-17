@@ -159,7 +159,7 @@ OWNER to "postgresql-core-owner";
 ALTER TABLE non_public_schema.users_groups
 OWNER to "postgresql-core-owner";
 
-ALTER TABLE public.posts
+ALTER TABLE non_public_schema.posts
 OWNER to "postgresql-core-owner";
 
 -- sequences definition
