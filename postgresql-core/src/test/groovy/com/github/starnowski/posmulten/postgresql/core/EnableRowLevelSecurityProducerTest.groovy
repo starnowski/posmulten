@@ -61,4 +61,20 @@ class EnableRowLevelSecurityProducerTest extends Specification {
             "secondary"     |   ""
             "secondary"     |   "   "
     }
+
+    @Unroll
+    def "should throw exception of type 'IllegalArgumentException' when table name is null '#table', no matter if schema \"#schema\" is correct"()
+    {
+        when:
+            tested.produce(null, schema)
+
+        then:
+            def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+            ex.message == "Table name cannot be null"
+
+        where:
+            schema  << ["public", "secondary"]
+    }
 }
