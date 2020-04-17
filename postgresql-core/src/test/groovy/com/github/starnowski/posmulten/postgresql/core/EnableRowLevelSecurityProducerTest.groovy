@@ -19,7 +19,7 @@ class EnableRowLevelSecurityProducerTest extends Specification {
             null        | "posts"   ||  "ALTER TABLE \"posts\" ENABLE ROW LEVEL SECURITY;"
             "secondary" | "users"   ||  "ALTER TABLE secondary.\"users\" ENABLE ROW LEVEL SECURITY;"
             "secondary" | "posts"   ||  "ALTER TABLE secondary.\"posts\" ENABLE ROW LEVEL SECURITY;"
-            "public" | "posts"      ||  "ALTER TABLE public.\"posts\" ENABLE ROW LEVEL SECURITY;"
+            "public"    | "posts"      ||  "ALTER TABLE public.\"posts\" ENABLE ROW LEVEL SECURITY;"
     }
 
 }
