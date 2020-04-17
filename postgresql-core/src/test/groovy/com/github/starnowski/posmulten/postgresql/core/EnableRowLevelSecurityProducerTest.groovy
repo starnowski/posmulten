@@ -41,4 +41,24 @@ class EnableRowLevelSecurityProducerTest extends Specification {
             "posts"             |   ""
             "posts"             |   "   "
     }
+
+    @Unroll
+    def "should throw exception of type 'IllegalArgumentException' when table name is blank '#table', no matter if schema \"#schema\" is correct"()
+    {
+        when:
+        tested.produce(table, schema)
+
+        then:
+        def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+        ex.message == "Table name cannot be blank"
+
+        where:
+            schema          |   table
+            "public"        |   ""
+            "public"        |   "   "
+            "secondary"     |   ""
+            "secondary"     |   "   "
+    }
 }
