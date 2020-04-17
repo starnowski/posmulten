@@ -24,5 +24,9 @@ public class EnableRowLevelSecurityProducer {
         {
             throw new IllegalArgumentException("Schema name cannot be blank");
         }
+        if (table.trim().isEmpty())
+        {
+            throw new IllegalArgumentException("Table name cannot be blank");
+        }
     }
 }
