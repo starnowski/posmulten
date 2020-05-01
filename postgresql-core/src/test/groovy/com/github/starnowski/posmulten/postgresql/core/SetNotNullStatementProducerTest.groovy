@@ -8,16 +8,24 @@ class SetNotNullStatementProducerTest extends Specification {
     def tested = new SetNotNullStatementProducer()
 
     @Unroll
-    def "should return statement '#expectedStatement' for table '#table' and column '#column'" () {
+    def "should return statement '#expectedStatement' for table '#table', schema '#schema' and column '#column'" () {
         expect:
-            tested.produce(new SetNotNullStatementProducerParameters(table, column, null)) == expectedStatement
+            tested.produce(new SetNotNullStatementProducerParameters(table, column, schema)) == expectedStatement
 
         where:
-            table       |   column      ||  expectedStatement
-            "users"     |   "tenant_id" ||  "ALTER TABLE users ALTER COLUMN tenant_id SET NOT NULL;"
-            "groups"    |   "tenant_id" ||  "ALTER TABLE groups ALTER COLUMN tenant_id SET NOT NULL;"
-            "users"     |   "col1" ||  "ALTER TABLE users ALTER COLUMN col1 SET NOT NULL;"
-            "groups"    |   "col1" ||  "ALTER TABLE groups ALTER COLUMN col1 SET NOT NULL;"
+            table       |   column      | schema            ||  expectedStatement
+            "users"     |   "tenant_id" |   null            ||  "ALTER TABLE users ALTER COLUMN tenant_id SET NOT NULL;"
+            "groups"    |   "tenant_id" |   null            ||  "ALTER TABLE groups ALTER COLUMN tenant_id SET NOT NULL;"
+            "users"     |   "col1"      |   null            ||  "ALTER TABLE users ALTER COLUMN col1 SET NOT NULL;"
+            "groups"    |   "col1"      |   null            ||  "ALTER TABLE groups ALTER COLUMN col1 SET NOT NULL;"
+            "users"     |   "tenant_id" |   "public"        ||  "ALTER TABLE public.users ALTER COLUMN tenant_id SET NOT NULL;"
+            "groups"    |   "tenant_id" |   "public"        ||  "ALTER TABLE public.groups ALTER COLUMN tenant_id SET NOT NULL;"
+            "users"     |   "col1"      |   "public"        ||  "ALTER TABLE public.users ALTER COLUMN col1 SET NOT NULL;"
+            "groups"    |   "col1"      |   "public"        ||  "ALTER TABLE public.groups ALTER COLUMN col1 SET NOT NULL;"
+            "users"     |   "tenant_id" |   "secondary"     ||  "ALTER TABLE secondary.users ALTER COLUMN tenant_id SET NOT NULL;"
+            "groups"    |   "tenant_id" |   "secondary"     ||  "ALTER TABLE secondary.groups ALTER COLUMN tenant_id SET NOT NULL;"
+            "users"     |   "col1"      |   "secondary"     ||  "ALTER TABLE secondary.users ALTER COLUMN col1 SET NOT NULL;"
+            "groups"    |   "col1"      |   "secondary"     ||  "ALTER TABLE secondary.groups ALTER COLUMN col1 SET NOT NULL;"
     }
 
     @Unroll
