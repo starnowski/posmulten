@@ -10,7 +10,7 @@ class SetDefaultStatementProducerTest extends Specification {
     @Unroll
     def "should return statement '#expectedStatement' for table '#table' and column '#column' and default value '#defaultValue'" () {
         expect:
-            tested.produce(table, column, defaultValue) == expectedStatement
+            tested.produce(new SetDefaultStatementProducerParameters(table, column, defaultValue, null)) == expectedStatement
 
         where:
             table       |   column      |   defaultValue                                    ||  expectedStatement
@@ -24,7 +24,7 @@ class SetDefaultStatementProducerTest extends Specification {
     def "should throw exception of type 'IllegalArgumentException' when table name is null, no matter if column name \"#column\" or default value \"#defaultValue\" is correct"()
     {
         when:
-            tested.produce(null, column, defaultValue)
+            tested.produce(new SetDefaultStatementProducerParameters(null, column, defaultValue, null))
 
         then:
             def ex = thrown(IllegalArgumentException.class)
@@ -44,7 +44,7 @@ class SetDefaultStatementProducerTest extends Specification {
     def "should throw exception of type 'IllegalArgumentException' when table name is blank, no matter if column name \"#column\" or default value \"#defaultValue\" is correct"()
     {
         when:
-            tested.produce(table, column, defaultValue)
+            tested.produce(new SetDefaultStatementProducerParameters(table, column, defaultValue, null))
 
         then:
             def ex = thrown(IllegalArgumentException.class)
@@ -66,7 +66,7 @@ class SetDefaultStatementProducerTest extends Specification {
     def "should throw exception of type 'IllegalArgumentException' when column name is null, no matter if table name \"#table\" or default value \"#defaultValue\" is correct"()
     {
         when:
-            tested.produce(table, null, defaultValue)
+            tested.produce(new SetDefaultStatementProducerParameters(table, null, defaultValue, null))
 
         then:
             def ex = thrown(IllegalArgumentException.class)
@@ -86,7 +86,7 @@ class SetDefaultStatementProducerTest extends Specification {
     def "should throw exception of type 'IllegalArgumentException' when column name is blank, no matter if table name \"#table\" or default value \"#defaultValue\" is correct"()
     {
         when:
-            tested.produce(table, column, defaultValue)
+            tested.produce(new SetDefaultStatementProducerParameters(table, column, defaultValue, null))
 
         then:
             def ex = thrown(IllegalArgumentException.class)
@@ -108,7 +108,7 @@ class SetDefaultStatementProducerTest extends Specification {
     def "should throw exception of type 'IllegalArgumentException' when default value is null, no matter if table name \"#table\" or column name \"#column\" is correct"()
     {
         when:
-            tested.produce(table, column, null)
+            tested.produce(new SetDefaultStatementProducerParameters(table, column, null, null))
 
         then:
             def ex = thrown(IllegalArgumentException.class)
@@ -128,7 +128,7 @@ class SetDefaultStatementProducerTest extends Specification {
     def "should throw exception of type 'IllegalArgumentException' when default value is blank, no matter if table name \"#table\" or column name \"#column\" is correct"()
     {
         when:
-            tested.produce(table, column, defaultValue)
+            tested.produce(new SetDefaultStatementProducerParameters(table, column, defaultValue, null))
 
         then:
             def ex = thrown(IllegalArgumentException.class)
