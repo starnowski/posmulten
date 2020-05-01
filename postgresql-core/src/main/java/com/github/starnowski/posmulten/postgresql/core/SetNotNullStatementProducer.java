@@ -17,6 +17,7 @@ public class SetNotNullStatementProducer {
         if (column.trim().isEmpty()) {
             throw new IllegalArgumentException("Column name cannot be blank");
         }
-        return "ALTER TABLE " + table + " ALTER COLUMN " + column + " SET NOT NULL;";
+        String tableReference = schema == null ? table : schema + "." + table;
+        return "ALTER TABLE " + tableReference + " ALTER COLUMN " + column + " SET NOT NULL;";
     }
 }
