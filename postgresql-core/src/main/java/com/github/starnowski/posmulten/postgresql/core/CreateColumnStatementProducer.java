@@ -2,7 +2,10 @@ package com.github.starnowski.posmulten.postgresql.core;
 
 public class CreateColumnStatementProducer {
 
-        public String produce(String table, String column, String columnType){
+        public String produce(ICreateColumnStatementProducerParameters parameters){
+            String table = parameters.getTable();
+            String  column = parameters.getColumn();
+            String columnType = parameters.getColumnType();
             if (table == null) {
                 throw new IllegalArgumentException("Table name cannot be null");
             }
