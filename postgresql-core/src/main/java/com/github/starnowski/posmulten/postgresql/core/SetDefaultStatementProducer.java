@@ -2,7 +2,10 @@ package com.github.starnowski.posmulten.postgresql.core;
 
 public class SetDefaultStatementProducer {
 
-    public String produce(String table, String column, String defaultValueDefinition) {
+    public String produce(ISetDefaultStatementProducerParameters parameters) {
+        String table = parameters.getTable();
+        String  column = parameters.getColumn();
+        String defaultValueDefinition = parameters.getDefaultValueDefinition();
         if (table == null) {
             throw new IllegalArgumentException("Table name cannot be null");
         }
