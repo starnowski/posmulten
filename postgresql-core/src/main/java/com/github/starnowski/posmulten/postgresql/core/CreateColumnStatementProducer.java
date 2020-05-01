@@ -24,6 +24,8 @@ public class CreateColumnStatementProducer {
             if (columnType.trim().isEmpty()) {
                 throw new IllegalArgumentException("Statement for column type cannot be blank");
             }
-            return "ALTER TABLE " + table + " ADD COLUMN " + column + " " + columnType + ";";
+            String schema = parameters.getSchema();
+            String tableReference = schema == null ? table : schema + "." + table;
+            return "ALTER TABLE " + tableReference + " ADD COLUMN " + column + " " + columnType + ";";
         }
 }
