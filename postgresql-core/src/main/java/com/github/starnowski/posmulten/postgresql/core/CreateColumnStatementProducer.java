@@ -2,7 +2,14 @@ package com.github.starnowski.posmulten.postgresql.core;
 
 public class CreateColumnStatementProducer {
 
-        public String produce(String table, String column, String columnType){
+        public String produce(ICreateColumnStatementProducerParameters parameters){
+            if (parameters == null)
+            {
+                throw new IllegalArgumentException("The parameters object cannot be null");
+            }
+            String table = parameters.getTable();
+            String  column = parameters.getColumn();
+            String columnType = parameters.getColumnType();
             if (table == null) {
                 throw new IllegalArgumentException("Table name cannot be null");
             }
@@ -21,6 +28,8 @@ public class CreateColumnStatementProducer {
             if (columnType.trim().isEmpty()) {
                 throw new IllegalArgumentException("Statement for column type cannot be blank");
             }
-            return "ALTER TABLE " + table + " ADD COLUMN " + column + " " + columnType + ";";
+            String schema = parameters.getSchema();
+            String tableReference = schema == null ? table : schema + "." + table;
+            return "ALTER TABLE " + tableReference + " ADD COLUMN " + column + " " + columnType + ";";
         }
 }

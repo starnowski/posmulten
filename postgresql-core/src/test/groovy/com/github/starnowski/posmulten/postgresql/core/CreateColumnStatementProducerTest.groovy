@@ -10,21 +10,41 @@ class CreateColumnStatementProducerTest extends Specification {
     @Unroll
     def "should return statement '#expectedStatement' for table '#table' and column '#column' and type '#columnType'" () {
         expect:
-            tested.produce(table, column, columnType) == expectedStatement
+            tested.produce(new CreateColumnStatementProducerParameters(table, column, columnType, schema)) == expectedStatement
 
         where:
-            table       |   column      |   columnType                  ||  expectedStatement
-            "users"     |   "tenant_id" |   "character varying(255)"    ||  "ALTER TABLE users ADD COLUMN tenant_id character varying(255);"
-            "groups"    |   "tenant_id" |   "text"                      ||  "ALTER TABLE groups ADD COLUMN tenant_id text;"
-            "users"     |   "col1"      |   "character varying(255)"    ||  "ALTER TABLE users ADD COLUMN col1 character varying(255);"
-            "groups"    |   "col1"      |   "text"                      ||  "ALTER TABLE groups ADD COLUMN col1 text;"
+            table       |   column      |   columnType                  | schema            ||  expectedStatement
+            "users"     |   "tenant_id" |   "character varying(255)"    | null              ||  "ALTER TABLE users ADD COLUMN tenant_id character varying(255);"
+            "groups"    |   "tenant_id" |   "text"                      | null              ||  "ALTER TABLE groups ADD COLUMN tenant_id text;"
+            "users"     |   "col1"      |   "character varying(255)"    | null              ||  "ALTER TABLE users ADD COLUMN col1 character varying(255);"
+            "groups"    |   "col1"      |   "text"                      | null              ||  "ALTER TABLE groups ADD COLUMN col1 text;"
+            "users"     |   "tenant_id" |   "character varying(255)"    | "public"          ||  "ALTER TABLE public.users ADD COLUMN tenant_id character varying(255);"
+            "groups"    |   "tenant_id" |   "text"                      | "public"          ||  "ALTER TABLE public.groups ADD COLUMN tenant_id text;"
+            "users"     |   "col1"      |   "character varying(255)"    | "public"          ||  "ALTER TABLE public.users ADD COLUMN col1 character varying(255);"
+            "groups"    |   "col1"      |   "text"                      | "public"          ||  "ALTER TABLE public.groups ADD COLUMN col1 text;"
+            "users"     |   "tenant_id" |   "character varying(255)"    | "secondary"       ||  "ALTER TABLE secondary.users ADD COLUMN tenant_id character varying(255);"
+            "groups"    |   "tenant_id" |   "text"                      | "secondary"       ||  "ALTER TABLE secondary.groups ADD COLUMN tenant_id text;"
+            "users"     |   "col1"      |   "character varying(255)"    | "secondary"       ||  "ALTER TABLE secondary.users ADD COLUMN col1 character varying(255);"
+            "groups"    |   "col1"      |   "text"                      | "secondary"       ||  "ALTER TABLE secondary.groups ADD COLUMN col1 text;"
+    }
+
+    def "should throw exception of type 'IllegalArgumentException' when parameters object is null" ()
+    {
+        when:
+        tested.produce(null)
+
+        then:
+        def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+        ex.message == "The parameters object cannot be null"
     }
 
     @Unroll
     def "should throw exception of type 'IllegalArgumentException' when table name is null, no matter if column name \"#column\" or column type \"#columnType\" is correct"()
     {
         when:
-            tested.produce(null, column, columnType)
+            tested.produce(new CreateColumnStatementProducerParameters(null, column, columnType, null))
 
         then:
             def ex = thrown(IllegalArgumentException.class)
@@ -44,7 +64,7 @@ class CreateColumnStatementProducerTest extends Specification {
     def "should throw exception of type 'IllegalArgumentException' when table name is blank, no matter if column name \"#column\" or column type \"#columnType\" is correct"()
     {
         when:
-            tested.produce(table, column, columnType)
+            tested.produce(new CreateColumnStatementProducerParameters(table, column, columnType, null))
 
         then:
             def ex = thrown(IllegalArgumentException.class)
@@ -66,7 +86,7 @@ class CreateColumnStatementProducerTest extends Specification {
     def "should throw exception of type 'IllegalArgumentException' when column name is null, no matter if table name \"#table\" or column type \"#columnType\" is correct"()
     {
         when:
-            tested.produce(table, null, columnType)
+            tested.produce(new CreateColumnStatementProducerParameters(table, null, columnType, null))
 
         then:
             def ex = thrown(IllegalArgumentException.class)
@@ -86,7 +106,7 @@ class CreateColumnStatementProducerTest extends Specification {
     def "should throw exception of type 'IllegalArgumentException' when column name is blank, no matter if table name \"#table\" or column type \"#columnType\" is correct"()
     {
         when:
-            tested.produce(table, column, columnType)
+            tested.produce(new CreateColumnStatementProducerParameters(table, column, columnType, null))
 
         then:
             def ex = thrown(IllegalArgumentException.class)
@@ -108,7 +128,7 @@ class CreateColumnStatementProducerTest extends Specification {
     def "should throw exception of type 'IllegalArgumentException' when column type is null, no matter if table name \"#table\" or column name \"#column\" is correct"()
     {
         when:
-            tested.produce(table, column, null)
+            tested.produce(new CreateColumnStatementProducerParameters(table, column, null, null))
 
         then:
             def ex = thrown(IllegalArgumentException.class)
@@ -128,7 +148,7 @@ class CreateColumnStatementProducerTest extends Specification {
     def "should throw exception of type 'IllegalArgumentException' when column type is blank, no matter if table name \"#table\" or column name \"#column\" is correct"()
     {
         when:
-            tested.produce(table, column, columnType)
+            tested.produce(new CreateColumnStatementProducerParameters(table, column, columnType, null))
 
         then:
             def ex = thrown(IllegalArgumentException.class)

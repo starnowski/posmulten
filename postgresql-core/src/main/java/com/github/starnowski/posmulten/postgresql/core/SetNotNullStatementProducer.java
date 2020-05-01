@@ -1,7 +1,13 @@
 package com.github.starnowski.posmulten.postgresql.core;
 
 public class SetNotNullStatementProducer {
-    public String produce(String table, String column) {
+    public String produce(ISetNotNullStatementProducerParameters parameters) {
+        if (parameters == null)
+        {
+            throw new IllegalArgumentException("The parameters object cannot be null");
+        }
+        String table = parameters.getTable();
+        String column = parameters.getColumn();
         if (table == null) {
             throw new IllegalArgumentException("Table name cannot be null");
         }
@@ -14,6 +20,8 @@ public class SetNotNullStatementProducer {
         if (column.trim().isEmpty()) {
             throw new IllegalArgumentException("Column name cannot be blank");
         }
-        return "ALTER TABLE " + table + " ALTER COLUMN " + column + " SET NOT NULL;";
+        String schema = parameters.getSchema();
+        String tableReference = schema == null ? table : schema + "." + table;
+        return "ALTER TABLE " + tableReference + " ALTER COLUMN " + column + " SET NOT NULL;";
     }
 }

@@ -29,7 +29,7 @@ public class GrantTablePrivilegesProducer {
             }
         }
         sb.append(" ON ");
-        if (schema != null && !schema.trim().isEmpty()) {
+        if (schema != null) {
             sb.append(schema);
             sb.append(".");
         }

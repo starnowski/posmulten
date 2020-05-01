@@ -8,23 +8,43 @@ class SetDefaultStatementProducerTest extends Specification {
     def tested = new SetDefaultStatementProducer()
 
     @Unroll
-    def "should return statement '#expectedStatement' for table '#table' and column '#column' and default value '#defaultValue'" () {
+    def "should return statement '#expectedStatement' for table '#table' and column '#column', schema '#schema' and default value '#defaultValue'" () {
         expect:
-            tested.produce(table, column, defaultValue) == expectedStatement
+            tested.produce(new SetDefaultStatementProducerParameters(table, column, defaultValue, schema)) == expectedStatement
 
         where:
-            table       |   column      |   defaultValue                                    ||  expectedStatement
-            "users"     |   "tenant_id" |   "current_setting('posmulten.current_tenant')"   ||  "ALTER TABLE users ALTER COLUMN tenant_id SET DEFAULT current_setting('posmulten.current_tenant');"
-            "groups"    |   "tenant_id" |   "'value'"                                       ||  "ALTER TABLE groups ALTER COLUMN tenant_id SET DEFAULT 'value';"
-            "users"     |   "col1"      |   "current_setting('posmulten.current_tenant')"   ||  "ALTER TABLE users ALTER COLUMN col1 SET DEFAULT current_setting('posmulten.current_tenant');"
-            "groups"    |   "col1"      |   "'xxx1'"                                        ||  "ALTER TABLE groups ALTER COLUMN col1 SET DEFAULT 'xxx1';"
+            table       |   column      |   defaultValue                                    | schema            ||  expectedStatement
+            "users"     |   "tenant_id" |   "current_setting('posmulten.current_tenant')"   | null              ||  "ALTER TABLE users ALTER COLUMN tenant_id SET DEFAULT current_setting('posmulten.current_tenant');"
+            "groups"    |   "tenant_id" |   "'value'"                                       | null              ||  "ALTER TABLE groups ALTER COLUMN tenant_id SET DEFAULT 'value';"
+            "users"     |   "col1"      |   "current_setting('posmulten.current_tenant')"   | null              ||  "ALTER TABLE users ALTER COLUMN col1 SET DEFAULT current_setting('posmulten.current_tenant');"
+            "groups"    |   "col1"      |   "'xxx1'"                                        | null              ||  "ALTER TABLE groups ALTER COLUMN col1 SET DEFAULT 'xxx1';"
+            "users"     |   "tenant_id" |   "current_setting('posmulten.current_tenant')"   | "public"          ||  "ALTER TABLE public.users ALTER COLUMN tenant_id SET DEFAULT current_setting('posmulten.current_tenant');"
+            "groups"    |   "tenant_id" |   "'value'"                                       | "public"          ||  "ALTER TABLE public.groups ALTER COLUMN tenant_id SET DEFAULT 'value';"
+            "users"     |   "col1"      |   "current_setting('posmulten.current_tenant')"   | "public"          ||  "ALTER TABLE public.users ALTER COLUMN col1 SET DEFAULT current_setting('posmulten.current_tenant');"
+            "groups"    |   "col1"      |   "'xxx1'"                                        | "public"          ||  "ALTER TABLE public.groups ALTER COLUMN col1 SET DEFAULT 'xxx1';"
+            "users"     |   "tenant_id" |   "current_setting('posmulten.current_tenant')"   | "secondary"       ||  "ALTER TABLE secondary.users ALTER COLUMN tenant_id SET DEFAULT current_setting('posmulten.current_tenant');"
+            "groups"    |   "tenant_id" |   "'value'"                                       | "secondary"       ||  "ALTER TABLE secondary.groups ALTER COLUMN tenant_id SET DEFAULT 'value';"
+            "users"     |   "col1"      |   "current_setting('posmulten.current_tenant')"   | "secondary"       ||  "ALTER TABLE secondary.users ALTER COLUMN col1 SET DEFAULT current_setting('posmulten.current_tenant');"
+            "groups"    |   "col1"      |   "'xxx1'"                                        | "secondary"       ||  "ALTER TABLE secondary.groups ALTER COLUMN col1 SET DEFAULT 'xxx1';"
+    }
+
+    def "should throw exception of type 'IllegalArgumentException' when parameters object is null" ()
+    {
+        when:
+        tested.produce(null)
+
+        then:
+        def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+        ex.message == "The parameters object cannot be null"
     }
 
     @Unroll
     def "should throw exception of type 'IllegalArgumentException' when table name is null, no matter if column name \"#column\" or default value \"#defaultValue\" is correct"()
     {
         when:
-            tested.produce(null, column, defaultValue)
+            tested.produce(new SetDefaultStatementProducerParameters(null, column, defaultValue, null))
 
         then:
             def ex = thrown(IllegalArgumentException.class)
@@ -44,7 +64,7 @@ class SetDefaultStatementProducerTest extends Specification {
     def "should throw exception of type 'IllegalArgumentException' when table name is blank, no matter if column name \"#column\" or default value \"#defaultValue\" is correct"()
     {
         when:
-            tested.produce(table, column, defaultValue)
+            tested.produce(new SetDefaultStatementProducerParameters(table, column, defaultValue, null))
 
         then:
             def ex = thrown(IllegalArgumentException.class)
@@ -66,7 +86,7 @@ class SetDefaultStatementProducerTest extends Specification {
     def "should throw exception of type 'IllegalArgumentException' when column name is null, no matter if table name \"#table\" or default value \"#defaultValue\" is correct"()
     {
         when:
-            tested.produce(table, null, defaultValue)
+            tested.produce(new SetDefaultStatementProducerParameters(table, null, defaultValue, null))
 
         then:
             def ex = thrown(IllegalArgumentException.class)
@@ -86,7 +106,7 @@ class SetDefaultStatementProducerTest extends Specification {
     def "should throw exception of type 'IllegalArgumentException' when column name is blank, no matter if table name \"#table\" or default value \"#defaultValue\" is correct"()
     {
         when:
-            tested.produce(table, column, defaultValue)
+            tested.produce(new SetDefaultStatementProducerParameters(table, column, defaultValue, null))
 
         then:
             def ex = thrown(IllegalArgumentException.class)
@@ -108,7 +128,7 @@ class SetDefaultStatementProducerTest extends Specification {
     def "should throw exception of type 'IllegalArgumentException' when default value is null, no matter if table name \"#table\" or column name \"#column\" is correct"()
     {
         when:
-            tested.produce(table, column, null)
+            tested.produce(new SetDefaultStatementProducerParameters(table, column, null, null))
 
         then:
             def ex = thrown(IllegalArgumentException.class)
@@ -128,7 +148,7 @@ class SetDefaultStatementProducerTest extends Specification {
     def "should throw exception of type 'IllegalArgumentException' when default value is blank, no matter if table name \"#table\" or column name \"#column\" is correct"()
     {
         when:
-            tested.produce(table, column, defaultValue)
+            tested.produce(new SetDefaultStatementProducerParameters(table, column, defaultValue, null))
 
         then:
             def ex = thrown(IllegalArgumentException.class)

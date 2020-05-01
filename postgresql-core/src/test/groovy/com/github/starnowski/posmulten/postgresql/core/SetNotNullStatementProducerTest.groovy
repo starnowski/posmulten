@@ -8,23 +8,43 @@ class SetNotNullStatementProducerTest extends Specification {
     def tested = new SetNotNullStatementProducer()
 
     @Unroll
-    def "should return statement '#expectedStatement' for table '#table' and column '#column'" () {
+    def "should return statement '#expectedStatement' for table '#table', schema '#schema' and column '#column'" () {
         expect:
-            tested.produce(table, column) == expectedStatement
+            tested.produce(new SetNotNullStatementProducerParameters(table, column, schema)) == expectedStatement
 
         where:
-            table       |   column      ||  expectedStatement
-            "users"     |   "tenant_id" ||  "ALTER TABLE users ALTER COLUMN tenant_id SET NOT NULL;"
-            "groups"    |   "tenant_id" ||  "ALTER TABLE groups ALTER COLUMN tenant_id SET NOT NULL;"
-            "users"     |   "col1" ||  "ALTER TABLE users ALTER COLUMN col1 SET NOT NULL;"
-            "groups"    |   "col1" ||  "ALTER TABLE groups ALTER COLUMN col1 SET NOT NULL;"
+            table       |   column      | schema            ||  expectedStatement
+            "users"     |   "tenant_id" |   null            ||  "ALTER TABLE users ALTER COLUMN tenant_id SET NOT NULL;"
+            "groups"    |   "tenant_id" |   null            ||  "ALTER TABLE groups ALTER COLUMN tenant_id SET NOT NULL;"
+            "users"     |   "col1"      |   null            ||  "ALTER TABLE users ALTER COLUMN col1 SET NOT NULL;"
+            "groups"    |   "col1"      |   null            ||  "ALTER TABLE groups ALTER COLUMN col1 SET NOT NULL;"
+            "users"     |   "tenant_id" |   "public"        ||  "ALTER TABLE public.users ALTER COLUMN tenant_id SET NOT NULL;"
+            "groups"    |   "tenant_id" |   "public"        ||  "ALTER TABLE public.groups ALTER COLUMN tenant_id SET NOT NULL;"
+            "users"     |   "col1"      |   "public"        ||  "ALTER TABLE public.users ALTER COLUMN col1 SET NOT NULL;"
+            "groups"    |   "col1"      |   "public"        ||  "ALTER TABLE public.groups ALTER COLUMN col1 SET NOT NULL;"
+            "users"     |   "tenant_id" |   "secondary"     ||  "ALTER TABLE secondary.users ALTER COLUMN tenant_id SET NOT NULL;"
+            "groups"    |   "tenant_id" |   "secondary"     ||  "ALTER TABLE secondary.groups ALTER COLUMN tenant_id SET NOT NULL;"
+            "users"     |   "col1"      |   "secondary"     ||  "ALTER TABLE secondary.users ALTER COLUMN col1 SET NOT NULL;"
+            "groups"    |   "col1"      |   "secondary"     ||  "ALTER TABLE secondary.groups ALTER COLUMN col1 SET NOT NULL;"
+    }
+
+    def "should throw exception of type 'IllegalArgumentException' when parameters object is null" ()
+    {
+        when:
+            tested.produce(null)
+
+        then:
+            def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+            ex.message == "The parameters object cannot be null"
     }
 
     @Unroll
     def "should throw exception of type 'IllegalArgumentException' when table name is null, no matter if column name is correct \"#column\""()
     {
         when:
-            tested.produce(null, column)
+            tested.produce(new SetNotNullStatementProducerParameters(null, column, null))
 
         then:
             def ex = thrown(IllegalArgumentException.class)
@@ -40,7 +60,7 @@ class SetNotNullStatementProducerTest extends Specification {
     def "should throw exception of type 'IllegalArgumentException' when table name is blank, no matter if column name is correct \"#column\""()
     {
         when:
-            tested.produce(table, column)
+            tested.produce(new SetNotNullStatementProducerParameters(table, column, null))
 
         then:
             def ex = thrown(IllegalArgumentException.class)
@@ -62,7 +82,7 @@ class SetNotNullStatementProducerTest extends Specification {
     def "should throw exception of type 'IllegalArgumentException' when column name is null, no matter if table name is correct \"#table\""()
     {
         when:
-            tested.produce(table, null)
+            tested.produce(new SetNotNullStatementProducerParameters(table, null, null))
 
         then:
             def ex = thrown(IllegalArgumentException.class)
@@ -78,7 +98,7 @@ class SetNotNullStatementProducerTest extends Specification {
     def "should throw exception of type 'IllegalArgumentException' when column name is blank, no matter if table name is correct \"#table\""()
     {
         when:
-            tested.produce(table, column)
+            tested.produce(new SetNotNullStatementProducerParameters(table, column, null))
 
         then:
             def ex = thrown(IllegalArgumentException.class)
