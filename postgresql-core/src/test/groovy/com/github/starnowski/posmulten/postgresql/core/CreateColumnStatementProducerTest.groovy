@@ -10,14 +10,22 @@ class CreateColumnStatementProducerTest extends Specification {
     @Unroll
     def "should return statement '#expectedStatement' for table '#table' and column '#column' and type '#columnType'" () {
         expect:
-            tested.produce(new CreateColumnStatementProducerParameters(table, column, columnType, null)) == expectedStatement
+            tested.produce(new CreateColumnStatementProducerParameters(table, column, columnType, schema)) == expectedStatement
 
         where:
-            table       |   column      |   columnType                  ||  expectedStatement
-            "users"     |   "tenant_id" |   "character varying(255)"    ||  "ALTER TABLE users ADD COLUMN tenant_id character varying(255);"
-            "groups"    |   "tenant_id" |   "text"                      ||  "ALTER TABLE groups ADD COLUMN tenant_id text;"
-            "users"     |   "col1"      |   "character varying(255)"    ||  "ALTER TABLE users ADD COLUMN col1 character varying(255);"
-            "groups"    |   "col1"      |   "text"                      ||  "ALTER TABLE groups ADD COLUMN col1 text;"
+            table       |   column      |   columnType                  | schema            ||  expectedStatement
+            "users"     |   "tenant_id" |   "character varying(255)"    | null              ||  "ALTER TABLE users ADD COLUMN tenant_id character varying(255);"
+            "groups"    |   "tenant_id" |   "text"                      | null              ||  "ALTER TABLE groups ADD COLUMN tenant_id text;"
+            "users"     |   "col1"      |   "character varying(255)"    | null              ||  "ALTER TABLE users ADD COLUMN col1 character varying(255);"
+            "groups"    |   "col1"      |   "text"                      | null              ||  "ALTER TABLE groups ADD COLUMN col1 text;"
+            "users"     |   "tenant_id" |   "character varying(255)"    | "public"          ||  "ALTER TABLE public.users ADD COLUMN tenant_id character varying(255);"
+            "groups"    |   "tenant_id" |   "text"                      | "public"          ||  "ALTER TABLE public.groups ADD COLUMN tenant_id text;"
+            "users"     |   "col1"      |   "character varying(255)"    | "public"          ||  "ALTER TABLE public.users ADD COLUMN col1 character varying(255);"
+            "groups"    |   "col1"      |   "text"                      | "public"          ||  "ALTER TABLE public.groups ADD COLUMN col1 text;"
+            "users"     |   "tenant_id" |   "character varying(255)"    | "secondary"       ||  "ALTER TABLE secondary.users ADD COLUMN tenant_id character varying(255);"
+            "groups"    |   "tenant_id" |   "text"                      | "secondary"       ||  "ALTER TABLE secondary.groups ADD COLUMN tenant_id text;"
+            "users"     |   "col1"      |   "character varying(255)"    | "secondary"       ||  "ALTER TABLE secondary.users ADD COLUMN col1 character varying(255);"
+            "groups"    |   "col1"      |   "text"                      | "secondary"       ||  "ALTER TABLE secondary.groups ADD COLUMN col1 text;"
     }
 
     def "should throw exception of type 'IllegalArgumentException' when parameters object is null" ()
