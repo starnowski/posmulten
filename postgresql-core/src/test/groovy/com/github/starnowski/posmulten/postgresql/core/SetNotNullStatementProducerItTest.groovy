@@ -28,7 +28,7 @@ class SetNotNullStatementProducerItTest extends Specification {
             assertEquals(true, isAnyRecordExists(jdbcTemplate, selectStatement(table, column, true)))
 
         when:
-            jdbcTemplate.execute((String)tested.produce(testTable, testColumn))
+            jdbcTemplate.execute((String)tested.produce(new SetNotNullStatementProducerParameters(testTable, testColumn, null)))
 
         then:
             isAnyRecordExists(jdbcTemplate, selectStatement(table, column, false))

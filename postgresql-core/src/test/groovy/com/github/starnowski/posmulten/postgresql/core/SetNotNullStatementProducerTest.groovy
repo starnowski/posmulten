@@ -10,7 +10,7 @@ class SetNotNullStatementProducerTest extends Specification {
     @Unroll
     def "should return statement '#expectedStatement' for table '#table' and column '#column'" () {
         expect:
-            tested.produce(table, column) == expectedStatement
+            tested.produce(new SetNotNullStatementProducerParameters(table, column, null)) == expectedStatement
 
         where:
             table       |   column      ||  expectedStatement
@@ -24,7 +24,7 @@ class SetNotNullStatementProducerTest extends Specification {
     def "should throw exception of type 'IllegalArgumentException' when table name is null, no matter if column name is correct \"#column\""()
     {
         when:
-            tested.produce(null, column)
+            tested.produce(new SetNotNullStatementProducerParameters(null, column, null))
 
         then:
             def ex = thrown(IllegalArgumentException.class)
@@ -40,7 +40,7 @@ class SetNotNullStatementProducerTest extends Specification {
     def "should throw exception of type 'IllegalArgumentException' when table name is blank, no matter if column name is correct \"#column\""()
     {
         when:
-            tested.produce(table, column)
+            tested.produce(new SetNotNullStatementProducerParameters(table, column, null))
 
         then:
             def ex = thrown(IllegalArgumentException.class)
@@ -62,7 +62,7 @@ class SetNotNullStatementProducerTest extends Specification {
     def "should throw exception of type 'IllegalArgumentException' when column name is null, no matter if table name is correct \"#table\""()
     {
         when:
-            tested.produce(table, null)
+            tested.produce(new SetNotNullStatementProducerParameters(table, null, null))
 
         then:
             def ex = thrown(IllegalArgumentException.class)
@@ -78,7 +78,7 @@ class SetNotNullStatementProducerTest extends Specification {
     def "should throw exception of type 'IllegalArgumentException' when column name is blank, no matter if table name is correct \"#table\""()
     {
         when:
-            tested.produce(table, column)
+            tested.produce(new SetNotNullStatementProducerParameters(table, column, null))
 
         then:
             def ex = thrown(IllegalArgumentException.class)
