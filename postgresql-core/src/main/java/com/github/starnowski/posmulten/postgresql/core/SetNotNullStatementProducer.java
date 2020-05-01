@@ -8,7 +8,6 @@ public class SetNotNullStatementProducer {
         }
         String table = parameters.getTable();
         String column = parameters.getColumn();
-        String schema = parameters.getSchema();
         if (table == null) {
             throw new IllegalArgumentException("Table name cannot be null");
         }
@@ -21,6 +20,7 @@ public class SetNotNullStatementProducer {
         if (column.trim().isEmpty()) {
             throw new IllegalArgumentException("Column name cannot be blank");
         }
+        String schema = parameters.getSchema();
         String tableReference = schema == null ? table : schema + "." + table;
         return "ALTER TABLE " + tableReference + " ALTER COLUMN " + column + " SET NOT NULL;";
     }
