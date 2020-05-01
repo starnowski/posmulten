@@ -28,7 +28,7 @@ class SetDefaultStatementProducerItTest extends Specification {
             assertEquals("NO_DEFAULT", selectAndReturnFirstRecordAsString(jdbcTemplate, selectStatement(table, column)))
 
         when:
-            jdbcTemplate.execute((String)tested.produce(testTable, testColumn, defaultValue))
+            jdbcTemplate.execute((String)tested.produce(new SetDefaultStatementProducerParameters(testTable, testColumn, defaultValue, null)))
 
         then:
             selectAndReturnFirstRecordAsString(jdbcTemplate, selectStatement(table, column)) == expectedDefaultValue
