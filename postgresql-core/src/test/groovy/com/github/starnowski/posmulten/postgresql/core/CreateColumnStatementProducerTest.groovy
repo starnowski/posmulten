@@ -20,6 +20,18 @@ class CreateColumnStatementProducerTest extends Specification {
             "groups"    |   "col1"      |   "text"                      ||  "ALTER TABLE groups ADD COLUMN col1 text;"
     }
 
+    def "should throw exception of type 'IllegalArgumentException' when parameters object is null" ()
+    {
+        when:
+        tested.produce(null)
+
+        then:
+        def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+        ex.message == "The parameters object cannot be null"
+    }
+
     @Unroll
     def "should throw exception of type 'IllegalArgumentException' when table name is null, no matter if column name \"#column\" or column type \"#columnType\" is correct"()
     {
