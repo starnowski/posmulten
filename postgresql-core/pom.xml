@@ -109,6 +109,7 @@
                                 <mutator>VOID_METHOD_CALLS</mutator>
                                 <!-- extended -->
                                 <mutator>EXPERIMENTAL_ARGUMENT_PROPAGATION</mutator>
+                                <mutator>EXPERIMENTAL_NAKED_RECEIVER</mutator>
                             </mutators>
                         </configuration>
                     </plugin>
