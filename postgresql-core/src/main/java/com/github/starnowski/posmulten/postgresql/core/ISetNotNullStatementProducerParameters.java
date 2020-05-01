@@ -2,9 +2,9 @@ package com.github.starnowski.posmulten.postgresql.core;
 
 public interface ISetNotNullStatementProducerParameters {
 
-    public String getTable();
+    String getTable();
 
-    public String getColumn();
+    String getColumn();
 
-    public String getSchema();
+    String getSchema();
 }
