@@ -8,16 +8,24 @@ class SetDefaultStatementProducerTest extends Specification {
     def tested = new SetDefaultStatementProducer()
 
     @Unroll
-    def "should return statement '#expectedStatement' for table '#table' and column '#column' and default value '#defaultValue'" () {
+    def "should return statement '#expectedStatement' for table '#table' and column '#column', schema '#schema' and default value '#defaultValue'" () {
         expect:
-            tested.produce(new SetDefaultStatementProducerParameters(table, column, defaultValue, null)) == expectedStatement
+            tested.produce(new SetDefaultStatementProducerParameters(table, column, defaultValue, schema)) == expectedStatement
 
         where:
-            table       |   column      |   defaultValue                                    ||  expectedStatement
-            "users"     |   "tenant_id" |   "current_setting('posmulten.current_tenant')"   ||  "ALTER TABLE users ALTER COLUMN tenant_id SET DEFAULT current_setting('posmulten.current_tenant');"
-            "groups"    |   "tenant_id" |   "'value'"                                       ||  "ALTER TABLE groups ALTER COLUMN tenant_id SET DEFAULT 'value';"
-            "users"     |   "col1"      |   "current_setting('posmulten.current_tenant')"   ||  "ALTER TABLE users ALTER COLUMN col1 SET DEFAULT current_setting('posmulten.current_tenant');"
-            "groups"    |   "col1"      |   "'xxx1'"                                        ||  "ALTER TABLE groups ALTER COLUMN col1 SET DEFAULT 'xxx1';"
+            table       |   column      |   defaultValue                                    | schema            ||  expectedStatement
+            "users"     |   "tenant_id" |   "current_setting('posmulten.current_tenant')"   | null              ||  "ALTER TABLE users ALTER COLUMN tenant_id SET DEFAULT current_setting('posmulten.current_tenant');"
+            "groups"    |   "tenant_id" |   "'value'"                                       | null              ||  "ALTER TABLE groups ALTER COLUMN tenant_id SET DEFAULT 'value';"
+            "users"     |   "col1"      |   "current_setting('posmulten.current_tenant')"   | null              ||  "ALTER TABLE users ALTER COLUMN col1 SET DEFAULT current_setting('posmulten.current_tenant');"
+            "groups"    |   "col1"      |   "'xxx1'"                                        | null              ||  "ALTER TABLE groups ALTER COLUMN col1 SET DEFAULT 'xxx1';"
+            "users"     |   "tenant_id" |   "current_setting('posmulten.current_tenant')"   | "public"          ||  "ALTER TABLE public.users ALTER COLUMN tenant_id SET DEFAULT current_setting('posmulten.current_tenant');"
+            "groups"    |   "tenant_id" |   "'value'"                                       | "public"          ||  "ALTER TABLE public.groups ALTER COLUMN tenant_id SET DEFAULT 'value';"
+            "users"     |   "col1"      |   "current_setting('posmulten.current_tenant')"   | "public"          ||  "ALTER TABLE public.users ALTER COLUMN col1 SET DEFAULT current_setting('posmulten.current_tenant');"
+            "groups"    |   "col1"      |   "'xxx1'"                                        | "public"          ||  "ALTER TABLE public.groups ALTER COLUMN col1 SET DEFAULT 'xxx1';"
+            "users"     |   "tenant_id" |   "current_setting('posmulten.current_tenant')"   | "secondary"       ||  "ALTER TABLE secondary.users ALTER COLUMN tenant_id SET DEFAULT current_setting('posmulten.current_tenant');"
+            "groups"    |   "tenant_id" |   "'value'"                                       | "secondary"       ||  "ALTER TABLE secondary.groups ALTER COLUMN tenant_id SET DEFAULT 'value';"
+            "users"     |   "col1"      |   "current_setting('posmulten.current_tenant')"   | "secondary"       ||  "ALTER TABLE secondary.users ALTER COLUMN col1 SET DEFAULT current_setting('posmulten.current_tenant');"
+            "groups"    |   "col1"      |   "'xxx1'"                                        | "secondary"       ||  "ALTER TABLE secondary.groups ALTER COLUMN col1 SET DEFAULT 'xxx1';"
     }
 
     @Unroll
