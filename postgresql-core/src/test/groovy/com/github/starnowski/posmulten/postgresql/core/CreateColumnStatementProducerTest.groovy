@@ -10,7 +10,7 @@ class CreateColumnStatementProducerTest extends Specification {
     @Unroll
     def "should return statement '#expectedStatement' for table '#table' and column '#column' and type '#columnType'" () {
         expect:
-            tested.produce(table, column, columnType) == expectedStatement
+            tested.produce(new CreateColumnStatementProducerParameters(table, column, columnType, null)) == expectedStatement
 
         where:
             table       |   column      |   columnType                  ||  expectedStatement
@@ -24,7 +24,7 @@ class CreateColumnStatementProducerTest extends Specification {
     def "should throw exception of type 'IllegalArgumentException' when table name is null, no matter if column name \"#column\" or column type \"#columnType\" is correct"()
     {
         when:
-            tested.produce(null, column, columnType)
+            tested.produce(new CreateColumnStatementProducerParameters(null, column, columnType, null))
 
         then:
             def ex = thrown(IllegalArgumentException.class)
@@ -44,7 +44,7 @@ class CreateColumnStatementProducerTest extends Specification {
     def "should throw exception of type 'IllegalArgumentException' when table name is blank, no matter if column name \"#column\" or column type \"#columnType\" is correct"()
     {
         when:
-            tested.produce(table, column, columnType)
+            tested.produce(new CreateColumnStatementProducerParameters(table, column, columnType, null))
 
         then:
             def ex = thrown(IllegalArgumentException.class)
@@ -66,7 +66,7 @@ class CreateColumnStatementProducerTest extends Specification {
     def "should throw exception of type 'IllegalArgumentException' when column name is null, no matter if table name \"#table\" or column type \"#columnType\" is correct"()
     {
         when:
-            tested.produce(table, null, columnType)
+            tested.produce(new CreateColumnStatementProducerParameters(table, null, columnType, null))
 
         then:
             def ex = thrown(IllegalArgumentException.class)
@@ -86,7 +86,7 @@ class CreateColumnStatementProducerTest extends Specification {
     def "should throw exception of type 'IllegalArgumentException' when column name is blank, no matter if table name \"#table\" or column type \"#columnType\" is correct"()
     {
         when:
-            tested.produce(table, column, columnType)
+            tested.produce(new CreateColumnStatementProducerParameters(table, column, columnType, null))
 
         then:
             def ex = thrown(IllegalArgumentException.class)
@@ -108,7 +108,7 @@ class CreateColumnStatementProducerTest extends Specification {
     def "should throw exception of type 'IllegalArgumentException' when column type is null, no matter if table name \"#table\" or column name \"#column\" is correct"()
     {
         when:
-            tested.produce(table, column, null)
+            tested.produce(new CreateColumnStatementProducerParameters(table, column, null, null))
 
         then:
             def ex = thrown(IllegalArgumentException.class)
@@ -128,7 +128,7 @@ class CreateColumnStatementProducerTest extends Specification {
     def "should throw exception of type 'IllegalArgumentException' when column type is blank, no matter if table name \"#table\" or column name \"#column\" is correct"()
     {
         when:
-            tested.produce(table, column, columnType)
+            tested.produce(new CreateColumnStatementProducerParameters(table, column, columnType, null))
 
         then:
             def ex = thrown(IllegalArgumentException.class)
