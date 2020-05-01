@@ -29,7 +29,7 @@ class CreateColumnStatementProducerItTest extends Specification {
             assertEquals(false, isAnyRecordExists(jdbcTemplate, selectStatement(table, column)))
 
         when:
-            jdbcTemplate.execute((String)tested.produce(testTable, testColumn, columnType))
+            jdbcTemplate.execute((String)tested.produce(new CreateColumnStatementProducerParameters(testTable, testColumn, columnType, null)))
 
         then:
             isAnyRecordExists(jdbcTemplate, selectStatement(table, column))
