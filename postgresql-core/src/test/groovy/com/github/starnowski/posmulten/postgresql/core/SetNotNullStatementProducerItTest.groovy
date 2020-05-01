@@ -19,41 +19,64 @@ class SetNotNullStatementProducerItTest extends Specification {
 
     String table
     String column
+    String schema
 
     @Unroll
-    def "should change #testColumn column definition and set column as 'not null' in table #testTable when column value can be null before test execution" () {
+    def "should change #testColumn column definition and set column as 'not null' in table #testTable and schema #testSchema when column value can be null before test execution" () {
         given:
             table = testTable
             column = testColumn
-            assertEquals(true, isAnyRecordExists(jdbcTemplate, selectStatement(table, column, true)))
+            schema = testSchema
+            assertEquals(true, isAnyRecordExists(jdbcTemplate, selectStatement(table, column, schema, true)))
 
         when:
             jdbcTemplate.execute((String)tested.produce(new SetNotNullStatementProducerParameters(testTable, testColumn, null)))
 
         then:
-            isAnyRecordExists(jdbcTemplate, selectStatement(table, column, false))
+            isAnyRecordExists(jdbcTemplate, selectStatement(table, column, schema, false))
 
         where:
-            testTable       |   testColumn
-            "users"         |   "name"
-            "users"         |   "tenant_id"
-            "groups"        |   "name"
-            "groups"        |   "tenant_id"
-            "users_groups"  |   "tenant_id"
-            "posts"         |   "tenant_id"
+            testTable       |   testColumn  |   testSchema
+            "users"         |   "name"      |   null
+            "users"         |   "name"      |   "public"
+            "users"         |   "name"      |   "non_public_schema"
+            "users"         |   "tenant_id" |   null
+            "users"         |   "tenant_id" |   "public"
+            "users"         |   "tenant_id" |   "non_public_schema"
+            "groups"        |   "name"      |   null
+            "groups"        |   "name"      |   "public"
+            "groups"        |   "name"      |   "non_public_schema"
+            "groups"        |   "tenant_id" |   null
+            "groups"        |   "tenant_id" |   "public"
+            "groups"        |   "tenant_id" |   "non_public_schema"
+            "users_groups"  |   "tenant_id" |   null
+            "users_groups"  |   "tenant_id" |   "public"
+            "users_groups"  |   "tenant_id" |   "non_public_schema"
+            "posts"         |   "tenant_id" |   null
+            "posts"         |   "tenant_id" |   "public"
+            "posts"         |   "tenant_id" |   "non_public_schema"
     }
 
     def cleanup() {
-        jdbcTemplate.execute("ALTER TABLE " + table + " ALTER COLUMN " + column + " DROP NOT NULL;")
-        assertEquals(true, isAnyRecordExists(jdbcTemplate, selectStatement(table, column, true)))
+        def tableReference = schema == null ? table : schema + "." + table
+        jdbcTemplate.execute("ALTER TABLE " + tableReference + " ALTER COLUMN " + column + " DROP NOT NULL;")
+        assertEquals(true, isAnyRecordExists(jdbcTemplate, selectStatement(table, column, schema, true)))
     }
 
-    def selectStatement(String table, String column, boolean isNullAble)
+    def selectStatement(String table, String column, String schema, boolean isNullAble)
     {
         StringBuilder sb = new StringBuilder()
         sb.append("SELECT 1 FROM information_schema.columns WHERE ")
         sb.append("table_catalog = 'postgresql_core' AND ")
-        sb.append("table_schema = 'public' AND ")
+        if (schema == null)
+        {
+            sb.append("table_schema = 'public'")
+        } else {
+            sb.append("table_schema = '")
+            sb.append(schema)
+            sb.append("'")
+        }
+        sb.append(" AND ")
         sb.append("table_name = '")
         sb.append(table)
         sb.append("' AND ")
