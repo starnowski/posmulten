@@ -2,6 +2,10 @@ package com.github.starnowski.posmulten.postgresql.core;
 
 public class SetNotNullStatementProducer {
     public String produce(ISetNotNullStatementProducerParameters parameters) {
+        if (parameters == null)
+        {
+            throw new IllegalArgumentException("The parameters object cannot be null");
+        }
         String table = parameters.getTable();
         String column = parameters.getColumn();
         String schema = parameters.getSchema();
