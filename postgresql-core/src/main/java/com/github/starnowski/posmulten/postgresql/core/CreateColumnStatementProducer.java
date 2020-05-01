@@ -3,6 +3,10 @@ package com.github.starnowski.posmulten.postgresql.core;
 public class CreateColumnStatementProducer {
 
         public String produce(ICreateColumnStatementProducerParameters parameters){
+            if (parameters == null)
+            {
+                throw new IllegalArgumentException("The parameters object cannot be null");
+            }
             String table = parameters.getTable();
             String  column = parameters.getColumn();
             String columnType = parameters.getColumnType();
