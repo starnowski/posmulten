@@ -82,6 +82,21 @@
             </build>
         </profile>
         <profile>
+            <id>pitest</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.pitest</groupId>
+                        <artifactId>pitest-maven</artifactId>
+                        <version>1.5.1</version>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
             <id>integration-tests</id>
             <activation>
                 <activeByDefault>false</activeByDefault>
