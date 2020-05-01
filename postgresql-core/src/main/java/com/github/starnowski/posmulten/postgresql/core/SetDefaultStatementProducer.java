@@ -24,6 +24,8 @@ public class SetDefaultStatementProducer {
         if (defaultValueDefinition.trim().isEmpty()) {
             throw new IllegalArgumentException("Statement for default value cannot be blank");
         }
-        return "ALTER TABLE " + table + " ALTER COLUMN " + column + " SET DEFAULT " + defaultValueDefinition + ";";
+        String schema = parameters.getSchema();
+        String tableReference = schema == null ? table : schema + "." + table;
+        return "ALTER TABLE " + tableReference + " ALTER COLUMN " + column + " SET DEFAULT " + defaultValueDefinition + ";";
     }
 }
