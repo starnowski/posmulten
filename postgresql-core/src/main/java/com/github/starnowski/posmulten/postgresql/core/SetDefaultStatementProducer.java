@@ -3,6 +3,10 @@ package com.github.starnowski.posmulten.postgresql.core;
 public class SetDefaultStatementProducer {
 
     public String produce(ISetDefaultStatementProducerParameters parameters) {
+        if (parameters == null)
+        {
+            throw new IllegalArgumentException("The parameters object cannot be null");
+        }
         String table = parameters.getTable();
         String  column = parameters.getColumn();
         String defaultValueDefinition = parameters.getDefaultValueDefinition();
