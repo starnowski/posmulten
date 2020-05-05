@@ -162,4 +162,29 @@ class GetCurrentTenantIdFunctionProducerTest extends Specification {
             "pos.tenant"                    |   "get_current_tenant"        |   "VARCHAR(32)"   | ""
             "t.id"                          |   "get_current_tenant"        |   "text"          | "          "
     }
+
+    @Unroll
+    def "should throw exception of type 'IllegalArgumentException' when the return type is blank ('#testReturnType'), even if the rest of parameters are correct, function name #functionName, tenant id property name #testCurrentTenantIdProperty, schema name #testSchema"()
+    {
+        when:
+            tested.produce(new GetCurrentTenantIdFunctionProducerParameters(functionName, testCurrentTenantIdProperty, testSchema, testReturnType))
+
+        then:
+            def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+            ex.message == "Return type cannot be blank"
+
+        where:
+            testCurrentTenantIdProperty     |   functionName                |   testSchema          | testReturnType
+            "c.c_ten"                       |   "return_current_tenant"     |   null                | ""
+            "pos.tenant"                    |   "return_current_tenant"     |   null                | "     "
+            "t.id"                          |   "return_current_tenant"     |   null                | " "
+            "c.c_ten"                       |   "return_current_tenant"     |   "public"            | "         "
+            "pos.tenant"                    |   "return_current_tenant"     |   "public"            | " "
+            "t.id"                          |   "return_current_tenant"     |   "public"            | "             "
+            "c.c_ten"                       |   "get_current_tenant"        |   "non_public_schema" | " "
+            "pos.tenant"                    |   "get_current_tenant"        |   "non_public_schema" | ""
+            "t.id"                          |   "get_current_tenant"        |   "non_public_schema" | "          "
+    }
 }
