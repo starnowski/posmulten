@@ -83,7 +83,7 @@ class GetCurrentTenantIdFunctionProducerItTest extends Specification {
     {
         return jdbcTemplate.execute(new StatementCallback<String>() {
             @Override
-            public String doInStatement(Statement statement) throws SQLException, DataAccessException {
+            String doInStatement(Statement statement) throws SQLException, DataAccessException {
                 statement.execute("SET " + propertyName + " = '" + propertyValue + "';")
                 ResultSet rs = statement.executeQuery(selectStatement);rs.next()
                 return rs.getString(1)
