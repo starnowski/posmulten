@@ -117,7 +117,7 @@ class GetCurrentTenantIdFunctionProducerTest extends Specification {
     def "should throw exception of type 'IllegalArgumentException' when tenant id property name is blank ('#testCurrentTenantIdProperty'), even if the rest of parameters are correct, function name #functionName, tenant id property #currentTenantIdProperty, return type #returnType"()
     {
         when:
-            tested.produce(new GetCurrentTenantIdFunctionProducerParameters(functionName, null, testSchema, testReturnType))
+            tested.produce(new GetCurrentTenantIdFunctionProducerParameters(functionName, testCurrentTenantIdProperty, testSchema, testReturnType))
 
         then:
             def ex = thrown(IllegalArgumentException.class)
