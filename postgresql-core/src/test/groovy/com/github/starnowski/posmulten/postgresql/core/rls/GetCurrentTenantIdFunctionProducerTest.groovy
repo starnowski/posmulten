@@ -26,11 +26,23 @@ class GetCurrentTenantIdFunctionProducerTest extends Specification {
             "non_public_schema"     |   "return_current_tenant"     |   "t.id"                          |   "text"              ||  "CREATE OR REPLACE FUNCTION non_public_schema.return_current_tenant() RETURNS text as \$\$\nSELECT current_setting('t.id')\n\$\$ LANGUAGE sql\nSTABLE PARALLEL SAFE;"
     }
 
+    def "should throw exception of type 'IllegalArgumentException' when parameters object is null" ()
+    {
+        when:
+            tested.produce(null)
+
+        then:
+            def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+            ex.message == "The parameters object cannot be null"
+    }
+
     @Unroll
     def "should throw exception of type 'IllegalArgumentException' when function name is null, even if the rest of parameters are correct, schema #schema, tenant id property #currentTenantIdProperty, return type #returnType"()
     {
         when:
-        tested.produce(new GetCurrentTenantIdFunctionProducerParameters(null, testCurrentTenantIdProperty, testSchema, testReturnType))
+            tested.produce(new GetCurrentTenantIdFunctionProducerParameters(null, testCurrentTenantIdProperty, testSchema, testReturnType))
 
         then:
             def ex = thrown(IllegalArgumentException.class)
