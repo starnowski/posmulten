@@ -50,4 +50,29 @@ class GetCurrentTenantIdFunctionProducerTest extends Specification {
             "public"                |   "pos.tenant"                    |   "VARCHAR(32)"
             "non_public_schema"     |   "t.id"                          |   "text"
     }
+
+    @Unroll
+    def "should throw exception of type 'IllegalArgumentException' when function name is blank ('#testFunctionName'), even if the rest of parameters are correct, schema #schema, tenant id property #currentTenantIdProperty, return type #returnType"()
+    {
+        when:
+            tested.produce(new GetCurrentTenantIdFunctionProducerParameters(testFunctionName, testCurrentTenantIdProperty, testSchema, testReturnType))
+
+        then:
+            def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+            ex.message == "Function name cannot be null"
+
+        where:
+            testSchema              |   testCurrentTenantIdProperty     |   testReturnType  |   testFunctionName
+            null                    |   "c.c_ten"                       |   null            |   ""
+            "public"                |   "c.c_ten"                       |   null            |   "      "
+            "non_public_schema"     |   "c.c_ten"                       |   null            |   "  "
+            null                    |   "c.c_ten"                       |   "text"          |   "            "
+            "public"                |   "c.c_ten"                       |   "text"          |   " "
+            "non_public_schema"     |   "c.c_ten"                       |   "text"          |   ""
+            null                    |   "con.tenant_id"                 |   "VARCHAR(128)"  |   "      "
+            "public"                |   "pos.tenant"                    |   "VARCHAR(32)"   |   " "
+            "non_public_schema"     |   "t.id"                          |   "text"          |   "     "
+    }
 }
