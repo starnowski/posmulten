@@ -4,9 +4,15 @@ package com.github.starnowski.posmulten.postgresql.core.rls
 import com.github.starnowski.posmulten.postgresql.core.TestApplication
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.dao.DataAccessException
 import org.springframework.jdbc.core.JdbcTemplate
+import org.springframework.jdbc.core.StatementCallback
 import spock.lang.Specification
 import spock.lang.Unroll
+
+import java.sql.ResultSet
+import java.sql.SQLException
+import java.sql.Statement
 
 import static com.github.starnowski.posmulten.postgresql.core.TestUtils.isAnyRecordExists
 import static org.junit.Assert.assertEquals
@@ -28,6 +34,8 @@ class GetCurrentTenantIdFunctionProducerItTest extends Specification {
             functionName = testFunctionName
             schema = testSchema
             assertEquals(false, isAnyRecordExists(jdbcTemplate, selectStatement(functionName, schema)))
+            def expectedStatementResult = "function_value-->" + testPropertyValue + "<--"
+            def selectStatementWithStringConcat = "SELECT CONCAT('function_value-->' || " + (testSchema == null ? "" : testSchema + ".") + testFunctionName + "()" + " || '<--')"
 
         when:
             jdbcTemplate.execute((String)tested.produce(new GetCurrentTenantIdFunctionProducerParameters(testFunctionName, testCurrentTenantIdProperty, testSchema, testReturnType)))
@@ -35,11 +43,14 @@ class GetCurrentTenantIdFunctionProducerItTest extends Specification {
         then:
             isAnyRecordExists(jdbcTemplate, selectStatement(functionName, schema))
 
+        and: "return correct result for contact statement"
+            getStringResultForSelectStatement(testCurrentTenantIdProperty, testPropertyValue, selectStatementWithStringConcat) == expectedStatementResult
+
         where:
-            testSchema              |   testFunctionName        |   testCurrentTenantIdProperty |   testReturnType
-            null                    |   "get_current_tenant"    |   "c_ten"                     |   null
-            "public"                |   "get_current_tenant"    |   "c_ten"                     |   null
-            "non_public_schema"     |   "get_current_tenant"    |   "c_ten"                     |   null
+            testSchema              |   testFunctionName        |   testCurrentTenantIdProperty |   testReturnType  | testPropertyValue
+            null                    |   "get_current_tenant"    |   "c.c_ten"                     |   null            |   "XXX-JJJ"
+            "public"                |   "get_current_tenant"    |   "c.c_ten"                     |   null            |   "XXX-JJJ"
+            "non_public_schema"     |   "get_current_tenant"    |   "c.c_ten"                     |   null            |   "XXX-JJJ"
     }
 
     def cleanup() {
@@ -50,7 +61,6 @@ class GetCurrentTenantIdFunctionProducerItTest extends Specification {
 
     def selectStatement(String functionName, String schema)
     {
-        //SELECT pg.*, pgn.* FROM pg_proc pg, pg_catalog.pg_namespace pgn WHERE pg.proname = 'is_valid_tenant' AND pg.pronamespace =  pgn.oid AND pgn.nspname = 'public';
         StringBuilder sb = new StringBuilder()
         sb.append("SELECT 1 FROM pg_proc pg, pg_catalog.pg_namespace pgn WHERE ")
         sb.append("pg.proname = '")
@@ -67,5 +77,17 @@ class GetCurrentTenantIdFunctionProducerItTest extends Specification {
         sb.append(" AND ")
         sb.append("pg.pronamespace =  pgn.oid")
         sb.toString()
+    }
+
+    def getStringResultForSelectStatement(String propertyName, String propertyValue, String selectStatement)
+    {
+        return jdbcTemplate.execute(new StatementCallback<String>() {
+            @Override
+            public String doInStatement(Statement statement) throws SQLException, DataAccessException {
+                statement.execute("SET " + propertyName + " = '" + propertyValue + "';")
+                ResultSet rs = statement.executeQuery(selectStatement);rs.next()
+                return rs.getString(1)
+            }
+        });
     }
 }
