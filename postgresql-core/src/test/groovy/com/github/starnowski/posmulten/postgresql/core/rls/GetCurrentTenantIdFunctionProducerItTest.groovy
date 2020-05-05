@@ -85,9 +85,10 @@ class GetCurrentTenantIdFunctionProducerItTest extends Specification {
             @Override
             String doInStatement(Statement statement) throws SQLException, DataAccessException {
                 statement.execute("SET " + propertyName + " = '" + propertyValue + "';")
-                ResultSet rs = statement.executeQuery(selectStatement);rs.next()
+                ResultSet rs = statement.executeQuery(selectStatement)
+                rs.next()
                 return rs.getString(1)
             }
-        });
+        })
     }
 }
