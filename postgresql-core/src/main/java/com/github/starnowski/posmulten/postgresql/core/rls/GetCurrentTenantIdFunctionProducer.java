@@ -68,5 +68,9 @@ public class GetCurrentTenantIdFunctionProducer {
         {
             throw new IllegalArgumentException("Schema name cannot be blank");
         }
+        if (parameters.getFunctionReturnType() != null && parameters.getFunctionReturnType().trim().isEmpty())
+        {
+            throw new IllegalArgumentException("Return type cannot be blank");
+        }
     }
 }
