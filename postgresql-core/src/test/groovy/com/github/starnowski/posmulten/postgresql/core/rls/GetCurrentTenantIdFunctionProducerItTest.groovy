@@ -47,10 +47,13 @@ class GetCurrentTenantIdFunctionProducerItTest extends Specification {
             getStringResultForSelectStatement(testCurrentTenantIdProperty, testPropertyValue, selectStatementWithStringConcat) == expectedStatementResult
 
         where:
-            testSchema              |   testFunctionName        |   testCurrentTenantIdProperty |   testReturnType  | testPropertyValue
-            null                    |   "get_current_tenant"    |   "c.c_ten"                     |   null            |   "XXX-JJJ"
-            "public"                |   "get_current_tenant"    |   "c.c_ten"                     |   null            |   "XXX-JJJ"
-            "non_public_schema"     |   "get_current_tenant"    |   "c.c_ten"                     |   null            |   "XXX-JJJ"
+            testSchema              |   testFunctionName        |   testCurrentTenantIdProperty     |   testReturnType  | testPropertyValue
+            null                    |   "get_current_tenant"    |   "c.c_ten"                       |   null            |   "XXX-JJJ"
+            "public"                |   "get_current_tenant"    |   "c.c_ten"                       |   null            |   "XXX-JJJ"
+            "non_public_schema"     |   "get_current_tenant"    |   "c.c_ten"                       |   null            |   "XXX-JJJ"
+            null                    |   "get_current_tenant"    |   "c.c_ten"                       |   "text"          |   "dfafdzcxvzcxv"
+            "public"                |   "get_current_tenant"    |   "c.c_ten"                       |   "text"          |   "jjjjhhkkl"
+            "non_public_schema"     |   "get_current_tenant"    |   "c.c_ten"                       |   "text"          |   "this_is_testtenantsssdd"
     }
 
     def cleanup() {
