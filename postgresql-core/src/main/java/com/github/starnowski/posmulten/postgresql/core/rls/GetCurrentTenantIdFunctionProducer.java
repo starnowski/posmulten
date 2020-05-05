@@ -48,5 +48,9 @@ public class GetCurrentTenantIdFunctionProducer {
         {
             throw new IllegalArgumentException("Function name cannot be null");
         }
+        if (parameters.getFunctionName().trim().isEmpty())
+        {
+            throw new IllegalArgumentException("Function name cannot be blank");
+        }
     }
 }
