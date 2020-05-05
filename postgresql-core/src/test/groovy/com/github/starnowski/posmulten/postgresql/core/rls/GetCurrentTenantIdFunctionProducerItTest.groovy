@@ -1,6 +1,6 @@
 package com.github.starnowski.posmulten.postgresql.core.rls
 
-
+import com.github.starnowski.posmulten.postgresql.core.RandomString
 import com.github.starnowski.posmulten.postgresql.core.TestApplication
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -56,7 +56,7 @@ class GetCurrentTenantIdFunctionProducerItTest extends Specification {
             "non_public_schema"     |   "get_current_tenant"    |   "c.c_ten"                       |   "text"          |   "this_is_testtenantsssdd"
             null                    |   "cur_tenant_val"        |   "con.tenant_id"                 |   "VARCHAR(128)"  |   "dfafdzcxvzcxv"
             "public"                |   "give_me_tenant"        |   "pos.tenant"                    |   "VARCHAR(32)"   |   "abc"
-            "non_public_schema"     |   "returnCurrentTenant"   |   "t.id"                          |   "text"          |   "my_old_tenant"
+            "non_public_schema"     |   "return_current_tenant"   |   "t.id"                          |   "text"          |   "my_old_tenant"
     }
 
     def cleanup() {
