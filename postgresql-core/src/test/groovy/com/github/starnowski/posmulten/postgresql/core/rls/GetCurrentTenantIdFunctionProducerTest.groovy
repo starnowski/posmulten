@@ -123,7 +123,7 @@ class GetCurrentTenantIdFunctionProducerTest extends Specification {
             def ex = thrown(IllegalArgumentException.class)
 
         and: "exception should have correct message"
-            ex.message == "Tenant id property name cannot be null"
+            ex.message == "Tenant id property name cannot be blank"
 
         where:
             testSchema              |   functionName                |   testReturnType  | testCurrentTenantIdProperty
