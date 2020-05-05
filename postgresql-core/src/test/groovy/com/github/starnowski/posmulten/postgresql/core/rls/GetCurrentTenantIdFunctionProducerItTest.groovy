@@ -13,6 +13,7 @@ import spock.lang.Unroll
 import java.sql.ResultSet
 import java.sql.SQLException
 import java.sql.Statement
+import java.util.logging.Logger
 
 import static com.github.starnowski.posmulten.postgresql.core.TestUtils.isAnyRecordExists
 import static org.junit.Assert.assertEquals
@@ -22,6 +23,8 @@ class GetCurrentTenantIdFunctionProducerItTest extends Specification {
 
     @Autowired
     JdbcTemplate jdbcTemplate
+
+    static Logger logger = Logger.getLogger(GetCurrentTenantIdFunctionProducerItTest.class.getName())
 
     def tested = new GetCurrentTenantIdFunctionProducer()
 
@@ -70,6 +73,9 @@ class GetCurrentTenantIdFunctionProducerItTest extends Specification {
             assertEquals(false, isAnyRecordExists(jdbcTemplate, selectStatement(functionName, schema)))
             def expectedStatementResult = "function_value-->" + propertyValue + "<--"
             def selectStatementWithStringConcat = "SELECT CONCAT('function_value-->' || " + (testSchema == null ? "" : testSchema + ".") + functionName + "()" + " || '<--')"
+            logger.log(java.util.logging.Level.INFO, "Random function name: " + functionName)
+            logger.log(java.util.logging.Level.INFO, "Random current tenant property name: " + currentTenantIdProperty)
+            logger.log(java.util.logging.Level.INFO, "Random tenant property value: " + propertyValue)
 
         when:
             jdbcTemplate.execute((String)tested.produce(new GetCurrentTenantIdFunctionProducerParameters(functionName, currentTenantIdProperty, testSchema, null)))
