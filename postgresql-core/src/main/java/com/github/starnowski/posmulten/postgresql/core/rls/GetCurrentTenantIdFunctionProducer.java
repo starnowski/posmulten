@@ -11,7 +11,6 @@ public class GetCurrentTenantIdFunctionProducer {
     public String produce(IGetCurrentTenantIdFunctionProducerParameters parameters)
     {
         validate(parameters);
-        //TODO validation
         StringBuilder sb = new StringBuilder();
         sb.append("CREATE OR REPLACE FUNCTION ");
         if (parameters.getSchema() != null)
