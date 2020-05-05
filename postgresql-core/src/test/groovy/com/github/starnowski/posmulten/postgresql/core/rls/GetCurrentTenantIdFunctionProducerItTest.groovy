@@ -47,16 +47,16 @@ class GetCurrentTenantIdFunctionProducerItTest extends Specification {
             getStringResultForSelectStatement(testCurrentTenantIdProperty, testPropertyValue, selectStatementWithStringConcat) == expectedStatementResult
 
         where:
-            testSchema              |   testFunctionName        |   testCurrentTenantIdProperty     |   testReturnType  | testPropertyValue
-            null                    |   "get_current_tenant"    |   "c.c_ten"                       |   null            |   "XXX-JJJ"
-            "public"                |   "get_current_tenant"    |   "c.c_ten"                       |   null            |   "XXX-JJJ"
-            "non_public_schema"     |   "get_current_tenant"    |   "c.c_ten"                       |   null            |   "XXX-JJJ"
-            null                    |   "get_current_tenant"    |   "c.c_ten"                       |   "text"          |   "dfafdzcxvzcxv"
-            "public"                |   "get_current_tenant"    |   "c.c_ten"                       |   "text"          |   "jjjjhhkkl"
-            "non_public_schema"     |   "get_current_tenant"    |   "c.c_ten"                       |   "text"          |   "this_is_testtenantsssdd"
-            null                    |   "cur_tenant_val"        |   "con.tenant_id"                 |   "VARCHAR(128)"  |   "dfafdzcxvzcxv"
-            "public"                |   "give_me_tenant"        |   "pos.tenant"                    |   "VARCHAR(32)"   |   "abc"
-            "non_public_schema"     |   "return_current_tenant"   |   "t.id"                          |   "text"          |   "my_old_tenant"
+            testSchema              |   testFunctionName            |   testCurrentTenantIdProperty     |   testReturnType  | testPropertyValue
+            null                    |   "get_current_tenant"        |   "c.c_ten"                       |   null            |   "XXX-JJJ"
+            "public"                |   "get_current_tenant"        |   "c.c_ten"                       |   null            |   "XXX-JJJ"
+            "non_public_schema"     |   "get_current_tenant"        |   "c.c_ten"                       |   null            |   "XXX-JJJ"
+            null                    |   "get_current_tenant"        |   "c.c_ten"                       |   "text"          |   "dfafdzcxvzcxv"
+            "public"                |   "get_current_tenant"        |   "c.c_ten"                       |   "text"          |   "jjjjhhkkl"
+            "non_public_schema"     |   "get_current_tenant"        |   "c.c_ten"                       |   "text"          |   "this_is_testtenantsssdd"
+            null                    |   "cur_tenant_val"            |   "con.tenant_id"                 |   "VARCHAR(128)"  |   "dfafdzcxvzcxv"
+            "public"                |   "give_me_tenant"            |   "pos.tenant"                    |   "VARCHAR(32)"   |   "abc"
+            "non_public_schema"     |   "return_current_tenant"     |   "t.id"                          |   "text"          |   "my_old_tenant"
     }
 
     @Unroll
