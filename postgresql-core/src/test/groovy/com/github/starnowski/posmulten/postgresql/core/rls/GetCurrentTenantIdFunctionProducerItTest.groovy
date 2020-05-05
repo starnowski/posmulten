@@ -54,6 +54,9 @@ class GetCurrentTenantIdFunctionProducerItTest extends Specification {
             null                    |   "get_current_tenant"    |   "c.c_ten"                       |   "text"          |   "dfafdzcxvzcxv"
             "public"                |   "get_current_tenant"    |   "c.c_ten"                       |   "text"          |   "jjjjhhkkl"
             "non_public_schema"     |   "get_current_tenant"    |   "c.c_ten"                       |   "text"          |   "this_is_testtenantsssdd"
+            null                    |   "cur_tenant_val"        |   "con.tenant_id"                 |   "VARCHAR(128)"  |   "dfafdzcxvzcxv"
+            "public"                |   "give_me_tenant"        |   "pos.tenant"                    |   "VARCHAR(32)"   |   "abc"
+            "non_public_schema"     |   "returnCurrentTenant"   |   "t.id"                          |   "text"          |   "my_old_tenant"
     }
 
     def cleanup() {
