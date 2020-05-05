@@ -43,7 +43,10 @@ $BODY$;
         sb.append(parameters.getCurrentTenantIdProperty());
         sb.append("')");
         sb.append("\n");
-        sb.append("$$ LANGUAGE sql;");
+        sb.append("$$ LANGUAGE sql");
+        sb.append("\n");
+        sb.append("STABLE PARALLEL SAFE");
+        sb.append(";");
         return sb.toString();
     }
 }
