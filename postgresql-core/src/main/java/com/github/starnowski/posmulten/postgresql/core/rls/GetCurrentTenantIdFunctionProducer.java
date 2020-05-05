@@ -40,7 +40,7 @@ current_setting('poc.current_tenant')
         {
             sb.append(parameters.getFunctionReturnType());
         }
-        sb.append("as $$");
+        sb.append(" as $$");
         sb.append("\n");
         sb.append("SELECT current_setting('");
         sb.append(parameters.getCurrentTenantIdProperty());
