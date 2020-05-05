@@ -64,5 +64,9 @@ public class GetCurrentTenantIdFunctionProducer {
         {
             throw new IllegalArgumentException("Tenant id property name cannot be blank");
         }
+        if (parameters.getSchema() != null && parameters.getSchema().trim().isEmpty())
+        {
+            throw new IllegalArgumentException("Schema name cannot be blank");
+        }
     }
 }
