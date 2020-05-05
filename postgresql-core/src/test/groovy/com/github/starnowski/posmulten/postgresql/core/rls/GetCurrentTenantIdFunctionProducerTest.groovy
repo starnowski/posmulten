@@ -139,7 +139,7 @@ class GetCurrentTenantIdFunctionProducerTest extends Specification {
     }
 
     @Unroll
-    def "should throw exception of type 'IllegalArgumentException' when schema is blank ('#testSchema'), even if the rest of parameters are correct, function name #functionName, schema #testSchema, return type #testReturnType"()
+    def "should throw exception of type 'IllegalArgumentException' when schema is blank ('#testSchema'), even if the rest of parameters are correct, function name #functionName, tenant id property name #testCurrentTenantIdProperty, return type #testReturnType"()
     {
         when:
             tested.produce(new GetCurrentTenantIdFunctionProducerParameters(functionName, testCurrentTenantIdProperty, testSchema, testReturnType))
