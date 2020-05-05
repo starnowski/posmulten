@@ -46,7 +46,7 @@ current_setting('poc.current_tenant')
         sb.append(parameters.getCurrentTenantIdProperty());
         sb.append("')");
         sb.append("\n");
-        sb.append("$$ language sql;");
+        sb.append("$$ LANGUAGE sql;");
         return sb.toString();
     }
 }
