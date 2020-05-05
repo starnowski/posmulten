@@ -44,6 +44,10 @@ public class GetCurrentTenantIdFunctionProducer {
     }
 
     private void validate(IGetCurrentTenantIdFunctionProducerParameters parameters) {
+        if (parameters == null)
+        {
+            throw new IllegalArgumentException("The parameters object cannot be null");
+        }
         if (parameters.getFunctionName() == null)
         {
             throw new IllegalArgumentException("Function name cannot be null");
