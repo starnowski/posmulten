@@ -10,6 +10,7 @@ public class GetCurrentTenantIdFunctionProducer {
 
     public String produce(IGetCurrentTenantIdFunctionProducerParameters parameters)
     {
+        validate(parameters);
         //TODO validation
         StringBuilder sb = new StringBuilder();
         sb.append("CREATE OR REPLACE FUNCTION ");
@@ -40,5 +41,12 @@ public class GetCurrentTenantIdFunctionProducer {
         sb.append("STABLE PARALLEL SAFE");
         sb.append(";");
         return sb.toString();
+    }
+
+    private void validate(IGetCurrentTenantIdFunctionProducerParameters parameters) {
+        if (parameters.getFunctionName() == null)
+        {
+            throw new IllegalArgumentException("Function name cannot be null");
+        }
     }
 }
