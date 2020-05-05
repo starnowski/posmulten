@@ -19,9 +19,6 @@ AS $BODY$
 show_config_by_name_missing_ok
 $BODY$;
          */
-        /*
-current_setting('poc.current_tenant')
-         */
         StringBuilder sb = new StringBuilder();
         sb.append("CREATE OR REPLACE FUNCTION ");
         if (parameters.getSchema() != null)
