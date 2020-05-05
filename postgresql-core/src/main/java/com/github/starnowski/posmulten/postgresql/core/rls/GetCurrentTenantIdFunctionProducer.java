@@ -22,7 +22,31 @@ $BODY$;
         /*
 current_setting('poc.current_tenant')
          */
-
-        return null;
+        StringBuilder sb = new StringBuilder();
+        sb.append("CREATE OR REPLACE FUNCTION ");
+        if (parameters.getSchema() != null)
+        {
+            sb.append(parameters.getSchema());
+            sb.append(".");
+        }
+        sb.append(parameters.getFunctionName());
+        sb.append("()");
+        sb.append(" RETURNS ");
+        if (parameters.getFunctionReturnType() == null)
+        {
+            sb.append("VARCHAR(255)");
+        }
+        else
+        {
+            sb.append(parameters.getFunctionReturnType());
+        }
+        sb.append("as $$");
+        sb.append("\n");
+        sb.append("SELECT current_setting('");
+        sb.append(parameters.getCurrentTenantIdProperty());
+        sb.append("')");
+        sb.append("\n");
+        sb.append("$$ language sql;");
+        return sb.toString();
     }
 }
