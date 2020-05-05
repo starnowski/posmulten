@@ -59,6 +59,31 @@ class GetCurrentTenantIdFunctionProducerItTest extends Specification {
             "non_public_schema"     |   "return_current_tenant"   |   "t.id"                          |   "text"          |   "my_old_tenant"
     }
 
+    @Unroll
+    def "should create a function for the random function name, schema '#testSchema', property name and return the value that matches the random generated value" () {
+        given:
+            def r = new RandomString(12, new Random(), RandomString.lower)
+            schema = testSchema
+            functionName = r.nextString()
+            def currentTenantIdProperty = r.nextString() + "." + r.nextString()
+            def propertyValue = r.nextString()
+            assertEquals(false, isAnyRecordExists(jdbcTemplate, selectStatement(functionName, schema)))
+            def expectedStatementResult = "function_value-->" + propertyValue + "<--"
+            def selectStatementWithStringConcat = "SELECT CONCAT('function_value-->' || " + (testSchema == null ? "" : testSchema + ".") + functionName + "()" + " || '<--')"
+
+        when:
+            jdbcTemplate.execute((String)tested.produce(new GetCurrentTenantIdFunctionProducerParameters(functionName, currentTenantIdProperty, testSchema, null)))
+
+        then:
+            isAnyRecordExists(jdbcTemplate, selectStatement(functionName, schema))
+
+        and: "return correct result for contact statement"
+            getStringResultForSelectStatement(currentTenantIdProperty, propertyValue, selectStatementWithStringConcat) == expectedStatementResult
+
+        where:
+            testSchema << [null, "public", "non_public_schema"]
+    }
+
     def cleanup() {
         def functionReference = schema == null ? functionName : schema + "." + functionName
         jdbcTemplate.execute("DROP FUNCTION IF EXISTS " + functionReference + "()")
