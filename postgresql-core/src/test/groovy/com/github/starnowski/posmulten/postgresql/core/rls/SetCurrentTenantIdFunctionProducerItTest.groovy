@@ -43,16 +43,16 @@ class SetCurrentTenantIdFunctionProducerItTest extends Specification {
 //        getStringResultForSelectStatement(testCurrentTenantIdProperty, testPropertyValue, selectStatementWithStringConcat) == expectedStatementResult
 
         where:
-            testSchema              |   testFunctionName            |   testCurrentTenantIdProperty     |   testArgumentType  | testPropertyValue
-            null                    |   "set_current_tenant"        |   "c.c_ten"                       |   null            |   "XXX-JJJ"
-            "public"                |   "set_current_tenant"        |   "c.c_ten"                       |   null            |   "XXX-JJJ"
-            "non_public_schema"     |   "set_current_tenant"        |   "c.c_ten"                       |   null            |   "XXX-JJJ"
-            null                    |   "set_current_tenant"        |   "c.c_ten"                       |   "text"          |   "dfafdzcxvzcxv"
-            "public"                |   "set_current_tenant"        |   "c.c_ten"                       |   "text"          |   "jjjjhhkkl"
-            "non_public_schema"     |   "set_current_tenant"        |   "c.c_ten"                       |   "text"          |   "this_is_testtenantsssdd"
-            null                    |   "tenant_val"                |   "con.tenant_id"                 |   "VARCHAR(128)"  |   "dfafdzcxvzcxv"
-            "public"                |   "give_me_tenant"            |   "pos.tenant"                    |   "VARCHAR(32)"   |   "abc"
-            "non_public_schema"     |   "setup_current_tenant"      |   "t.id"                          |   "text"          |   "my_old_tenant"
+            testSchema              |   testFunctionName            |   testCurrentTenantIdProperty     |   testArgumentType    | testPropertyValue
+            null                    |   "set_current_tenant"        |   "c.c_ten"                       |   null                |   "XXX-JJJ"
+            "public"                |   "set_current_tenant"        |   "c.c_ten"                       |   null                |   "XXX-JJJ"
+            "non_public_schema"     |   "set_current_tenant"        |   "c.c_ten"                       |   null                |   "XXX-JJJ"
+            null                    |   "set_current_tenant"        |   "c.c_ten"                       |   "text"              |   "dfafdzcxvzcxv"
+            "public"                |   "set_current_tenant"        |   "c.c_ten"                       |   "text"              |   "jjjjhhkkl"
+            "non_public_schema"     |   "set_current_tenant"        |   "c.c_ten"                       |   "text"              |   "this_is_testtenantsssdd"
+            null                    |   "tenant_val"                |   "con.tenant_id"                 |   "VARCHAR(128)"      |   "dfafdzcxvzcxv"
+            "public"                |   "give_me_tenant"            |   "pos.tenant"                    |   "VARCHAR(32)"       |   "abc"
+            "non_public_schema"     |   "setup_current_tenant"      |   "t.id"                          |   "text"              |   "my_old_tenant"
     }
 
     def cleanup() {
