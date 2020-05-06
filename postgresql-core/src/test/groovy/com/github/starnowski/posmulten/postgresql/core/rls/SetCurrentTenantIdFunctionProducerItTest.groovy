@@ -1,5 +1,6 @@
 package com.github.starnowski.posmulten.postgresql.core.rls
 
+import com.github.starnowski.posmulten.postgresql.core.RandomString
 import com.github.starnowski.posmulten.postgresql.core.TestApplication
 import com.github.starnowski.posmulten.postgresql.core.TestUtils
 import org.springframework.beans.factory.annotation.Autowired
@@ -13,6 +14,7 @@ import spock.lang.Unroll
 import java.sql.ResultSet
 import java.sql.SQLException
 import java.sql.Statement
+import java.util.logging.Logger
 
 import static com.github.starnowski.posmulten.postgresql.core.TestUtils.dropFunction
 import static com.github.starnowski.posmulten.postgresql.core.TestUtils.isFunctionExists
@@ -20,6 +22,8 @@ import static org.junit.Assert.assertEquals
 
 @SpringBootTest(classes = [TestApplication.class])
 class SetCurrentTenantIdFunctionProducerItTest extends Specification {
+
+    static Logger logger = Logger.getLogger(SetCurrentTenantIdFunctionProducerItTest.class.getName())
 
     @Autowired
     JdbcTemplate jdbcTemplate
@@ -60,6 +64,31 @@ class SetCurrentTenantIdFunctionProducerItTest extends Specification {
             null                    |   "tenant_val"                |   "con.tenant_id"                 |   "VARCHAR(128)"      |   "dfafdzcxvzcxv"
             "public"                |   "give_me_tenant"            |   "pos.tenant"                    |   "VARCHAR(32)"       |   "abc"
             "non_public_schema"     |   "setup_current_tenant"      |   "t.id"                          |   "text"              |   "my_old_tenant"
+    }
+
+    @Unroll
+    def "should create a function for the random function name, schema '#testSchema', property name and return the value that matches the random generated value" () {
+        given:
+            def r = new RandomString(12, new Random(), RandomString.lower)
+            functionName = r.nextString()
+            schema = testSchema
+            def currentTenantIdProperty = r.nextString() + "." + r.nextString()
+            def propertyValue = r.nextString()
+            assertEquals(false, isFunctionExists(jdbcTemplate, functionName, schema))
+            def expectedStatementResult = "function_value-->" + propertyValue + "<--"
+            def selectStatementWithStringConcat = returnSelectStatementWithStringConcat(currentTenantIdProperty)
+
+        when:
+            jdbcTemplate.execute((String)tested.produce(new SetCurrentTenantIdFunctionProducerParameters(functionName, currentTenantIdProperty, schema, null)))
+
+        then:
+            isFunctionExists(jdbcTemplate, functionName, schema)
+
+        and: "return correct result for contact statement"
+            getStringResultForSelectStatement(TestUtils.returnFunctionReference(functionName, schema), propertyValue, selectStatementWithStringConcat) == expectedStatementResult
+
+        where:
+            testSchema << [null, "public", "non_public_schema"]
     }
 
     def cleanup() {
