@@ -1,6 +1,7 @@
 package com.github.starnowski.posmulten.postgresql.core.rls
 
 import spock.lang.Specification
+import spock.lang.Unroll
 
 abstract class AbstractFunctionFactoryTest extends Specification {
 
@@ -44,6 +45,24 @@ abstract class AbstractFunctionFactoryTest extends Specification {
         then:
             1 * parameters.getFunctionName() >> null
             def ex = thrown(IllegalArgumentException.class)
+    }
+
+    @Unroll
+    def "should throw exception of type 'IllegalArgumentException' when function name is blank, even if the rest of parameters are correct"()
+    {
+        given:
+            AbstractFunctionFactory tested = returnTestedObject()
+            IFunctionFactoryParameters parameters = returnCorrectParametersSpyObject()
+
+        when:
+            String result = tested.produce(parameters)
+
+        then:
+            (1.._) * parameters.getFunctionName() >> functionName
+            def ex = thrown(IllegalArgumentException.class)
+
+        where:
+            functionName << ["", "  ", "            "]
     }
 
     abstract protected returnTestedObject();
