@@ -48,7 +48,7 @@ abstract class AbstractFunctionFactoryTest extends Specification {
     }
 
     @Unroll
-    def "should throw exception of type 'IllegalArgumentException' when function name is blank, even if the rest of parameters are correct"()
+    def "should throw exception of type 'IllegalArgumentException' when function name is blank ('#functionName'), even if the rest of parameters are correct"()
     {
         given:
             AbstractFunctionFactory tested = returnTestedObject()
