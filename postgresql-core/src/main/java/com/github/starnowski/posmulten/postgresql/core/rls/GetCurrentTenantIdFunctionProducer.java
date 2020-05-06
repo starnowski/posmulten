@@ -10,18 +10,6 @@ public class GetCurrentTenantIdFunctionProducer extends AbstractFunctionFactory<
 
     protected void validate(IGetCurrentTenantIdFunctionProducerParameters parameters) {
         super.validate(parameters);
-        if (parameters == null)
-        {
-            throw new IllegalArgumentException("The parameters object cannot be null");
-        }
-        if (parameters.getFunctionName() == null)
-        {
-            throw new IllegalArgumentException("Function name cannot be null");
-        }
-        if (parameters.getFunctionName().trim().isEmpty())
-        {
-            throw new IllegalArgumentException("Function name cannot be blank");
-        }
         if (parameters.getCurrentTenantIdProperty() == null)
         {
             throw new IllegalArgumentException("Tenant id property name cannot be null");
@@ -29,10 +17,6 @@ public class GetCurrentTenantIdFunctionProducer extends AbstractFunctionFactory<
         if (parameters.getCurrentTenantIdProperty().trim().isEmpty())
         {
             throw new IllegalArgumentException("Tenant id property name cannot be blank");
-        }
-        if (parameters.getSchema() != null && parameters.getSchema().trim().isEmpty())
-        {
-            throw new IllegalArgumentException("Schema name cannot be blank");
         }
         if (parameters.getFunctionReturnType() != null && parameters.getFunctionReturnType().trim().isEmpty())
         {
