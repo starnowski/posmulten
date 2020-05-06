@@ -39,7 +39,7 @@ class GetCurrentTenantIdFunctionProducerItTest extends Specification {
             schema = testSchema
             assertEquals(false, isFunctionExists(jdbcTemplate, functionName, schema))
             def expectedStatementResult = "function_value-->" + testPropertyValue + "<--"
-            def selectStatementWithStringConcat = "SELECT CONCAT('function_value-->' || " + (testSchema == null ? "" : testSchema + ".") + testFunctionName + "()" + " || '<--')"
+            def selectStatementWithStringConcat = returnSelectStatementWithStringConcat(testSchema, testFunctionName)
 
         when:
             jdbcTemplate.execute((String)tested.produce(new GetCurrentTenantIdFunctionProducerParameters(testFunctionName, testCurrentTenantIdProperty, testSchema, testReturnType)))
@@ -73,7 +73,7 @@ class GetCurrentTenantIdFunctionProducerItTest extends Specification {
             def propertyValue = r.nextString()
             assertEquals(false, isFunctionExists(jdbcTemplate, functionName, schema))
             def expectedStatementResult = "function_value-->" + propertyValue + "<--"
-            def selectStatementWithStringConcat = "SELECT CONCAT('function_value-->' || " + (testSchema == null ? "" : testSchema + ".") + functionName + "()" + " || '<--')"
+            def selectStatementWithStringConcat = returnSelectStatementWithStringConcat(testSchema, functionName)
             logger.log(java.util.logging.Level.INFO, "Random function name: " + functionName)
             logger.log(java.util.logging.Level.INFO, "Random current tenant property name: " + currentTenantIdProperty)
             logger.log(java.util.logging.Level.INFO, "Random tenant property value: " + propertyValue)
@@ -107,5 +107,9 @@ class GetCurrentTenantIdFunctionProducerItTest extends Specification {
                 return rs.getString(1)
             }
         })
+    }
+
+    private String returnSelectStatementWithStringConcat(String testSchema, String testFunctionName) {
+        "SELECT CONCAT('function_value-->' || " + (testSchema == null ? "" : testSchema + ".") + testFunctionName + "()" + " || '<--')"
     }
 }
