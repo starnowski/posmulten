@@ -17,6 +17,20 @@ abstract class AbstractFunctionFactoryTest extends Specification {
             !result.trim().isEmpty()
     }
 
+    def "should throw exception of type 'IllegalArgumentException' when function name is null, even if the rest of parameters are correct"()
+    {
+        given:
+            AbstractFunctionFactory tested = returnTestedObject()
+            IFunctionFactoryParameters parameters = returnCorrectParametersSpyObject()
+
+        when:
+            String result = tested.produce(parameters)
+
+        then:
+            1 * parameters.getFunctionName() >> null
+            def ex = thrown(IllegalArgumentException.class)
+    }
+
     abstract protected returnTestedObject();
 
     abstract protected returnCorrectParametersSpyObject();
