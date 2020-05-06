@@ -22,14 +22,18 @@ public class SetCurrentTenantIdFunctionProducer extends AbstractFunctionFactory<
         }
         sb.append(")");
         sb.append(" RETURNS ");
-        sb.append("void");
-        sb.append(" as $$");
+        sb.append("VOID");
+        sb.append(" AS $$");
         sb.append("\n");
-        sb.append("SELECT set_config('");
+        sb.append("BEGIN");
+        sb.append("\n");
+        sb.append("PERFORM set_config('");
         sb.append(parameters.getCurrentTenantIdProperty());
-        sb.append("', $1, false)");
+        sb.append("', $1, false);");
         sb.append("\n");
-        sb.append("$$ LANGUAGE sql");
+        sb.append("END");
+        sb.append("\n");
+        sb.append("$$ LANGUAGE plpgsql");
         sb.append("\n");
         sb.append("VOLATILE");
         sb.append(";");
