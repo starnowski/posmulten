@@ -21,18 +21,20 @@ class SetCurrentTenantIdFunctionProducerItTest extends Specification {
 
     String schema
     String functionName
+    String argumentType
 
     @Unroll
-    def "should create function '#testFunctionName' for schema '#testSchema' (null means public) which expect argument of type '#argumentType' (null means 'text') and set correct value of property #testCurrentTenantIdProperty" () {
+    def "should create function '#testFunctionName' for schema '#testSchema' (null means public) which expect argument of type '#testArgumentType' (null means 'text') and set correct value of property #testCurrentTenantIdProperty" () {
         given:
             functionName = testFunctionName
             schema = testSchema
+            argumentType = testArgumentType
             assertEquals(false, isFunctionExists(jdbcTemplate, functionName, schema))
 //        def expectedStatementResult = "function_value-->" + testPropertyValue + "<--"
 //        def selectStatementWithStringConcat = "SELECT CONCAT('function_value-->' || " + (testSchema == null ? "" : testSchema + ".") + testFunctionName + "()" + " || '<--')"
 
         when:
-            jdbcTemplate.execute((String)tested.produce(new SetCurrentTenantIdFunctionProducerParameters(testFunctionName, testCurrentTenantIdProperty, testSchema, argumentType)))
+            jdbcTemplate.execute((String)tested.produce(new SetCurrentTenantIdFunctionProducerParameters(testFunctionName, testCurrentTenantIdProperty, testSchema, testArgumentType)))
 
         then:
             isFunctionExists(jdbcTemplate, functionName, schema)
@@ -41,7 +43,7 @@ class SetCurrentTenantIdFunctionProducerItTest extends Specification {
 //        getStringResultForSelectStatement(testCurrentTenantIdProperty, testPropertyValue, selectStatementWithStringConcat) == expectedStatementResult
 
         where:
-            testSchema              |   testFunctionName            |   testCurrentTenantIdProperty     |   argumentType  | testPropertyValue
+            testSchema              |   testFunctionName            |   testCurrentTenantIdProperty     |   testArgumentType  | testPropertyValue
             null                    |   "set_current_tenant"        |   "c.c_ten"                       |   null            |   "XXX-JJJ"
             "public"                |   "set_current_tenant"        |   "c.c_ten"                       |   null            |   "XXX-JJJ"
             "non_public_schema"     |   "set_current_tenant"        |   "c.c_ten"                       |   null            |   "XXX-JJJ"
@@ -54,7 +56,8 @@ class SetCurrentTenantIdFunctionProducerItTest extends Specification {
     }
 
     def cleanup() {
-        dropFunction(jdbcTemplate, functionName, schema)
+        def argumentTypePhrase = argumentType == null ? "text" : argumentType
+        dropFunction(jdbcTemplate, functionName, schema, argumentTypePhrase)
         assertEquals(false, isFunctionExists(jdbcTemplate, functionName, schema))
     }
 
