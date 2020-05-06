@@ -1,10 +1,9 @@
 package com.github.starnowski.posmulten.postgresql.core.rls
 
 
-import spock.lang.Specification
 import spock.lang.Unroll
 
-class GetCurrentTenantIdFunctionProducerTest extends Specification {
+class GetCurrentTenantIdFunctionProducerTest extends AbstractFunctionFactoryTest {
 
     def tested = new GetCurrentTenantIdFunctionProducer()
 
@@ -186,5 +185,15 @@ class GetCurrentTenantIdFunctionProducerTest extends Specification {
             "c.c_ten"                       |   "get_current_tenant"        |   "non_public_schema" | " "
             "pos.tenant"                    |   "get_current_tenant"        |   "non_public_schema" | ""
             "t.id"                          |   "get_current_tenant"        |   "non_public_schema" | "          "
+    }
+
+    @Override
+    protected returnTestedObject() {
+        return tested
+    }
+
+    @Override
+    protected returnCorrectParametersObject() {
+        return new GetCurrentTenantIdFunctionProducerParameters("get_current_tenant_id", "conf.tenant_id", "public", "text")
     }
 }
