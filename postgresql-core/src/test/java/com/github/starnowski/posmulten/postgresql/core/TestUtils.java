@@ -55,4 +55,10 @@ public class TestUtils {
         sb.append("pg.pronamespace =  pgn.oid");
         return isAnyRecordExists(jdbcTemplate, sb.toString());
     }
+
+    public static void dropFunction(JdbcTemplate jdbcTemplate, String functionName, String schema)
+    {
+        String functionReference = schema == null ? functionName : schema + "." + functionName;
+        jdbcTemplate.execute("DROP FUNCTION IF EXISTS " + functionReference + "()");
+    }
 }

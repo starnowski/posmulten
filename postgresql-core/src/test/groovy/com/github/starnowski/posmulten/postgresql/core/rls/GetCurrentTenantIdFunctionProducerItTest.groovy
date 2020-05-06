@@ -15,6 +15,7 @@ import java.sql.SQLException
 import java.sql.Statement
 import java.util.logging.Logger
 
+import static com.github.starnowski.posmulten.postgresql.core.TestUtils.dropFunction
 import static com.github.starnowski.posmulten.postgresql.core.TestUtils.isFunctionExists
 import static org.junit.Assert.assertEquals
 
@@ -91,8 +92,7 @@ class GetCurrentTenantIdFunctionProducerItTest extends Specification {
     }
 
     def cleanup() {
-        def functionReference = schema == null ? functionName : schema + "." + functionName
-        jdbcTemplate.execute("DROP FUNCTION IF EXISTS " + functionReference + "()")
+        dropFunction(jdbcTemplate, functionName, schema)
         assertEquals(false, isFunctionExists(jdbcTemplate, functionName, schema))
     }
 
