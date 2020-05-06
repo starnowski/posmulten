@@ -40,11 +40,14 @@ abstract class AbstractFunctionFactoryTest extends Specification {
             IFunctionFactoryParameters parameters = returnCorrectParametersSpyObject()
 
         when:
-            String result = tested.produce(parameters)
+            tested.produce(parameters)
 
         then:
             1 * parameters.getFunctionName() >> null
             def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+            ex.message == "Function name cannot be null"
     }
 
     @Unroll
@@ -55,11 +58,14 @@ abstract class AbstractFunctionFactoryTest extends Specification {
             IFunctionFactoryParameters parameters = returnCorrectParametersSpyObject()
 
         when:
-            String result = tested.produce(parameters)
+            tested.produce(parameters)
 
         then:
             (1.._) * parameters.getFunctionName() >> functionName
             def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+            ex.message == "Function name cannot be blank"
 
         where:
             functionName << ["", "  ", "            "]
