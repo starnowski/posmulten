@@ -71,6 +71,27 @@ abstract class AbstractFunctionFactoryTest extends Specification {
             functionName << ["", "  ", "            "]
     }
 
+    @Unroll
+    def "should throw exception of type 'IllegalArgumentException' when schema name is blank ('#schema'), even if the rest of parameters are correct"()
+    {
+        given:
+            AbstractFunctionFactory tested = returnTestedObject()
+            IFunctionFactoryParameters parameters = returnCorrectParametersSpyObject()
+
+        when:
+            tested.produce(parameters)
+
+        then:
+            (1.._) * parameters.getSchema() >> schema
+            def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+            ex.message == "Schema name cannot be blank"
+
+        where:
+            schema << ["", "  ", "            "]
+    }
+
     abstract protected returnTestedObject();
 
     abstract protected returnCorrectParametersSpyObject();
