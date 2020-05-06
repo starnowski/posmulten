@@ -17,6 +17,21 @@ abstract class AbstractFunctionFactoryTest extends Specification {
             !result.trim().isEmpty()
     }
 
+    def "should throw exception of type 'IllegalArgumentException' when parameters object is null" ()
+    {
+        given:
+            AbstractFunctionFactory tested = returnTestedObject()
+
+        when:
+            tested.produce(null)
+
+        then:
+            def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+            ex.message == "The parameters object cannot be null"
+    }
+
     def "should throw exception of type 'IllegalArgumentException' when function name is null, even if the rest of parameters are correct"()
     {
         given:
