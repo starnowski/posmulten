@@ -56,9 +56,10 @@ public class TestUtils {
         return isAnyRecordExists(jdbcTemplate, sb.toString());
     }
 
-    public static void dropFunction(JdbcTemplate jdbcTemplate, String functionName, String schema)
+    public static void dropFunction(JdbcTemplate jdbcTemplate, String functionName, String schema, String... argumentsTypes)
     {
         String functionReference = schema == null ? functionName : schema + "." + functionName;
-        jdbcTemplate.execute("DROP FUNCTION IF EXISTS " + functionReference + "()");
+        String argumentsTypesPhrase = argumentsTypes == null ? "" : String.join(",", argumentsTypes);
+        jdbcTemplate.execute("DROP FUNCTION IF EXISTS " + functionReference + "(" + argumentsTypesPhrase + ")");
     }
 }
