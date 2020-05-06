@@ -189,11 +189,11 @@ class GetCurrentTenantIdFunctionProducerTest extends AbstractFunctionFactoryTest
 
     @Override
     protected returnTestedObject() {
-        return tested
+        tested
     }
 
     @Override
-    protected returnCorrectParametersObject() {
-        return new GetCurrentTenantIdFunctionProducerParameters("get_current_tenant_id", "conf.tenant_id", "public", "text")
+    protected returnCorrectParametersSpyObject() {
+        Spy(GetCurrentTenantIdFunctionProducerParameters, constructorArgs: ["get_current_tenant_id", "conf.tenant_id", "public", "text"])
     }
 }
