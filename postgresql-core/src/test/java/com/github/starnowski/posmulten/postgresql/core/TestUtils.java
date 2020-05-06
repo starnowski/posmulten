@@ -58,8 +58,13 @@ public class TestUtils {
 
     public static void dropFunction(JdbcTemplate jdbcTemplate, String functionName, String schema, String... argumentsTypes)
     {
-        String functionReference = schema == null ? functionName : schema + "." + functionName;
+        String functionReference = returnFunctionReference(functionName, schema);
         String argumentsTypesPhrase = argumentsTypes == null ? "" : String.join(",", argumentsTypes);
         jdbcTemplate.execute("DROP FUNCTION IF EXISTS " + functionReference + "(" + argumentsTypesPhrase + ")");
+    }
+
+    public static String returnFunctionReference(String functionName, String schema)
+    {
+        return schema == null ? functionName : schema + "." + functionName;
     }
 }
