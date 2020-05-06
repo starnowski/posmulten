@@ -15,7 +15,7 @@ import java.sql.SQLException
 import java.sql.Statement
 import java.util.logging.Logger
 
-import static com.github.starnowski.posmulten.postgresql.core.TestUtils.isAnyRecordExists
+import static com.github.starnowski.posmulten.postgresql.core.TestUtils.isFunctionExists
 import static org.junit.Assert.assertEquals
 
 @SpringBootTest(classes = [TestApplication.class])
@@ -36,7 +36,7 @@ class GetCurrentTenantIdFunctionProducerItTest extends Specification {
         given:
             functionName = testFunctionName
             schema = testSchema
-            assertEquals(false, isAnyRecordExists(jdbcTemplate, selectStatement(functionName, schema)))
+            assertEquals(false, isFunctionExists(jdbcTemplate, functionName, schema))
             def expectedStatementResult = "function_value-->" + testPropertyValue + "<--"
             def selectStatementWithStringConcat = "SELECT CONCAT('function_value-->' || " + (testSchema == null ? "" : testSchema + ".") + testFunctionName + "()" + " || '<--')"
 
@@ -44,7 +44,7 @@ class GetCurrentTenantIdFunctionProducerItTest extends Specification {
             jdbcTemplate.execute((String)tested.produce(new GetCurrentTenantIdFunctionProducerParameters(testFunctionName, testCurrentTenantIdProperty, testSchema, testReturnType)))
 
         then:
-            isAnyRecordExists(jdbcTemplate, selectStatement(functionName, schema))
+            isFunctionExists(jdbcTemplate, functionName, schema)
 
         and: "return correct result for contact statement"
             getStringResultForSelectStatement(testCurrentTenantIdProperty, testPropertyValue, selectStatementWithStringConcat) == expectedStatementResult
@@ -70,7 +70,7 @@ class GetCurrentTenantIdFunctionProducerItTest extends Specification {
             functionName = r.nextString()
             def currentTenantIdProperty = r.nextString() + "." + r.nextString()
             def propertyValue = r.nextString()
-            assertEquals(false, isAnyRecordExists(jdbcTemplate, selectStatement(functionName, schema)))
+            assertEquals(false, isFunctionExists(jdbcTemplate, functionName, schema))
             def expectedStatementResult = "function_value-->" + propertyValue + "<--"
             def selectStatementWithStringConcat = "SELECT CONCAT('function_value-->' || " + (testSchema == null ? "" : testSchema + ".") + functionName + "()" + " || '<--')"
             logger.log(java.util.logging.Level.INFO, "Random function name: " + functionName)
@@ -81,7 +81,7 @@ class GetCurrentTenantIdFunctionProducerItTest extends Specification {
             jdbcTemplate.execute((String)tested.produce(new GetCurrentTenantIdFunctionProducerParameters(functionName, currentTenantIdProperty, testSchema, null)))
 
         then:
-            isAnyRecordExists(jdbcTemplate, selectStatement(functionName, schema))
+            isFunctionExists(jdbcTemplate, functionName, schema)
 
         and: "return correct result for contact statement"
             getStringResultForSelectStatement(currentTenantIdProperty, propertyValue, selectStatementWithStringConcat) == expectedStatementResult
@@ -93,27 +93,7 @@ class GetCurrentTenantIdFunctionProducerItTest extends Specification {
     def cleanup() {
         def functionReference = schema == null ? functionName : schema + "." + functionName
         jdbcTemplate.execute("DROP FUNCTION IF EXISTS " + functionReference + "()")
-        assertEquals(false, isAnyRecordExists(jdbcTemplate, selectStatement(functionName, schema)))
-    }
-
-    def selectStatement(String functionName, String schema)
-    {
-        StringBuilder sb = new StringBuilder()
-        sb.append("SELECT 1 FROM pg_proc pg, pg_catalog.pg_namespace pgn WHERE ")
-        sb.append("pg.proname = '")
-        sb.append(functionName)
-        sb.append("' AND ")
-        if (schema == null)
-        {
-            sb.append("pgn.nspname = 'public'")
-        } else {
-            sb.append("pgn.nspname = '")
-            sb.append(schema)
-            sb.append("'")
-        }
-        sb.append(" AND ")
-        sb.append("pg.pronamespace =  pgn.oid")
-        sb.toString()
+        assertEquals(false, isFunctionExists(jdbcTemplate, functionName, schema))
     }
 
     def getStringResultForSelectStatement(String propertyName, String propertyValue, String selectStatement)
