@@ -6,11 +6,42 @@ package com.github.starnowski.posmulten.postgresql.core.rls;
  * @see <a href="https://www.postgresql.org/docs/9.6/sql-createfunction.html">Postgres, create function</a>
  *
  */
-public class GetCurrentTenantIdFunctionProducer {
+public class GetCurrentTenantIdFunctionProducer extends AbstractFunctionFactory<IGetCurrentTenantIdFunctionProducerParameters>{
 
-    public String produce(IGetCurrentTenantIdFunctionProducerParameters parameters)
-    {
-        validate(parameters);
+    protected void validate(IGetCurrentTenantIdFunctionProducerParameters parameters) {
+        super.validate(parameters);
+        if (parameters == null)
+        {
+            throw new IllegalArgumentException("The parameters object cannot be null");
+        }
+        if (parameters.getFunctionName() == null)
+        {
+            throw new IllegalArgumentException("Function name cannot be null");
+        }
+        if (parameters.getFunctionName().trim().isEmpty())
+        {
+            throw new IllegalArgumentException("Function name cannot be blank");
+        }
+        if (parameters.getCurrentTenantIdProperty() == null)
+        {
+            throw new IllegalArgumentException("Tenant id property name cannot be null");
+        }
+        if (parameters.getCurrentTenantIdProperty().trim().isEmpty())
+        {
+            throw new IllegalArgumentException("Tenant id property name cannot be blank");
+        }
+        if (parameters.getSchema() != null && parameters.getSchema().trim().isEmpty())
+        {
+            throw new IllegalArgumentException("Schema name cannot be blank");
+        }
+        if (parameters.getFunctionReturnType() != null && parameters.getFunctionReturnType().trim().isEmpty())
+        {
+            throw new IllegalArgumentException("Return type cannot be blank");
+        }
+    }
+
+    @Override
+    protected String produceStatement(IGetCurrentTenantIdFunctionProducerParameters parameters) {
         StringBuilder sb = new StringBuilder();
         sb.append("CREATE OR REPLACE FUNCTION ");
         if (parameters.getSchema() != null)
@@ -40,36 +71,5 @@ public class GetCurrentTenantIdFunctionProducer {
         sb.append("STABLE PARALLEL SAFE");
         sb.append(";");
         return sb.toString();
-    }
-
-    private void validate(IGetCurrentTenantIdFunctionProducerParameters parameters) {
-        if (parameters == null)
-        {
-            throw new IllegalArgumentException("The parameters object cannot be null");
-        }
-        if (parameters.getFunctionName() == null)
-        {
-            throw new IllegalArgumentException("Function name cannot be null");
-        }
-        if (parameters.getFunctionName().trim().isEmpty())
-        {
-            throw new IllegalArgumentException("Function name cannot be blank");
-        }
-        if (parameters.getCurrentTenantIdProperty() == null)
-        {
-            throw new IllegalArgumentException("Tenant id property name cannot be null");
-        }
-        if (parameters.getCurrentTenantIdProperty().trim().isEmpty())
-        {
-            throw new IllegalArgumentException("Tenant id property name cannot be blank");
-        }
-        if (parameters.getSchema() != null && parameters.getSchema().trim().isEmpty())
-        {
-            throw new IllegalArgumentException("Schema name cannot be blank");
-        }
-        if (parameters.getFunctionReturnType() != null && parameters.getFunctionReturnType().trim().isEmpty())
-        {
-            throw new IllegalArgumentException("Return type cannot be blank");
-        }
     }
 }
