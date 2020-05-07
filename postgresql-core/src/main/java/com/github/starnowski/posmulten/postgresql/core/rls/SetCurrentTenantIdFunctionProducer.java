@@ -13,6 +13,10 @@ public class SetCurrentTenantIdFunctionProducer extends AbstractFunctionFactory<
         {
             throw new IllegalArgumentException("Tenant id property name cannot be blank");
         }
+        if (parameters.getArgumentType() != null && parameters.getArgumentType().trim().isEmpty())
+        {
+            throw new IllegalArgumentException("Argument type cannot be blank");
+        }
     }
 
     @Override
