@@ -1,6 +1,16 @@
 package com.github.starnowski.posmulten.postgresql.core.rls;
 
 public class SetCurrentTenantIdFunctionProducer extends AbstractFunctionFactory<ISetCurrentTenantIdFunctionProducerParameters>{
+
+    @Override
+    protected void validate(ISetCurrentTenantIdFunctionProducerParameters parameters) {
+        super.validate(parameters);
+        if (parameters.getCurrentTenantIdProperty() == null)
+        {
+            throw new IllegalArgumentException("Tenant id property name cannot be null");
+        }
+    }
+
     @Override
     protected String produceStatement(ISetCurrentTenantIdFunctionProducerParameters parameters) {
         StringBuilder sb = new StringBuilder();
