@@ -1,14 +1,15 @@
 package com.github.starnowski.posmulten.postgresql.core.rls;
 
 /**
- * The component produces a statement that creates a function that returns the current tenant identifier.
+ * The component produces a statement that creates a function that sets the current tenant identifier.
  * For more details about function creation please check postgres documentation
  * @see <a href="https://www.postgresql.org/docs/9.6/sql-createfunction.html">Postgres, create function</a>
  *
  */
-public class GetCurrentTenantIdFunctionProducer extends AbstractFunctionFactory<IGetCurrentTenantIdFunctionProducerParameters>{
+public class SetCurrentTenantIdFunctionProducer extends AbstractFunctionFactory<ISetCurrentTenantIdFunctionProducerParameters>{
 
-    protected void validate(IGetCurrentTenantIdFunctionProducerParameters parameters) {
+    @Override
+    protected void validate(ISetCurrentTenantIdFunctionProducerParameters parameters) {
         super.validate(parameters);
         if (parameters.getCurrentTenantIdProperty() == null)
         {
@@ -18,14 +19,14 @@ public class GetCurrentTenantIdFunctionProducer extends AbstractFunctionFactory<
         {
             throw new IllegalArgumentException("Tenant id property name cannot be blank");
         }
-        if (parameters.getFunctionReturnType() != null && parameters.getFunctionReturnType().trim().isEmpty())
+        if (parameters.getArgumentType() != null && parameters.getArgumentType().trim().isEmpty())
         {
-            throw new IllegalArgumentException("Return type cannot be blank");
+            throw new IllegalArgumentException("Argument type cannot be blank");
         }
     }
 
     @Override
-    protected String produceStatement(IGetCurrentTenantIdFunctionProducerParameters parameters) {
+    protected String produceStatement(ISetCurrentTenantIdFunctionProducerParameters parameters) {
         StringBuilder sb = new StringBuilder();
         sb.append("CREATE OR REPLACE FUNCTION ");
         if (parameters.getSchema() != null)
@@ -34,25 +35,31 @@ public class GetCurrentTenantIdFunctionProducer extends AbstractFunctionFactory<
             sb.append(".");
         }
         sb.append(parameters.getFunctionName());
-        sb.append("()");
-        sb.append(" RETURNS ");
-        if (parameters.getFunctionReturnType() == null)
+        sb.append("(");
+        if (parameters.getArgumentType() == null)
         {
-            sb.append("VARCHAR(255)");
+            sb.append("text");
         }
         else
         {
-            sb.append(parameters.getFunctionReturnType());
+            sb.append(parameters.getArgumentType());
         }
-        sb.append(" as $$");
+        sb.append(")");
+        sb.append(" RETURNS ");
+        sb.append("VOID");
+        sb.append(" AS $$");
         sb.append("\n");
-        sb.append("SELECT current_setting('");
+        sb.append("BEGIN");
+        sb.append("\n");
+        sb.append("PERFORM set_config('");
         sb.append(parameters.getCurrentTenantIdProperty());
-        sb.append("')");
+        sb.append("', $1, false);");
         sb.append("\n");
-        sb.append("$$ LANGUAGE sql");
+        sb.append("END");
         sb.append("\n");
-        sb.append("STABLE PARALLEL SAFE");
+        sb.append("$$ LANGUAGE plpgsql");
+        sb.append("\n");
+        sb.append("VOLATILE");
         sb.append(";");
         return sb.toString();
     }
