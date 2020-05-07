@@ -24,6 +24,31 @@ class SetCurrentTenantIdFunctionProducerTest extends AbstractFunctionFactoryTest
             "non_public_schema"     |   "this_is_tenant"            |   "t.id"                          |   "text"              ||  "CREATE OR REPLACE FUNCTION non_public_schema.this_is_tenant(text) RETURNS VOID AS \$\$\nBEGIN\nPERFORM set_config('t.id', \$1, false);\nEND\n\$\$ LANGUAGE plpgsql\nVOLATILE;"
     }
 
+    @Unroll
+    def "should throw exception of type 'IllegalArgumentException' when tenant id property name is null, even if the rest of parameters are correct, function name #functionName, schema #testSchema, argument type #testArgumentType"()
+    {
+        when:
+            tested.produce(new SetCurrentTenantIdFunctionProducerParameters(functionName, null, testSchema, testArgumentType))
+
+        then:
+            def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+            ex.message == "Tenant id property name cannot be null"
+
+        where:
+            testSchema              |   functionName                |   testArgumentType
+            null                    |   "return_current_tenant"     |   null
+            "public"                |   "return_current_tenant"     |   null
+            "non_public_schema"     |   "return_current_tenant"     |   null
+            null                    |   "return_current_tenant"     |   "text"
+            "public"                |   "return_current_tenant"     |   "text"
+            "non_public_schema"     |   "return_current_tenant"     |   "text"
+            null                    |   "get_current_tenant"        |   "VARCHAR(128)"
+            "public"                |   "get_current_tenant"        |   "VARCHAR(32)"
+            "non_public_schema"     |   "get_current_tenant"        |   "text"
+    }
+
     @Override
     protected returnTestedObject() {
         tested
