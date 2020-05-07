@@ -1,5 +1,11 @@
 package com.github.starnowski.posmulten.postgresql.core.rls;
 
+/**
+ * The component produces a statement that creates a function that sets the current tenant identifier.
+ * For more details about function creation please check postgres documentation
+ * @see <a href="https://www.postgresql.org/docs/9.6/sql-createfunction.html">Postgres, create function</a>
+ *
+ */
 public class SetCurrentTenantIdFunctionProducer extends AbstractFunctionFactory<ISetCurrentTenantIdFunctionProducerParameters>{
 
     @Override
