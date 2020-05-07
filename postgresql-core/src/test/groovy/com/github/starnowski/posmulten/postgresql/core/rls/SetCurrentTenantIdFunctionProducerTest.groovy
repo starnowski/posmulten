@@ -84,7 +84,7 @@ class SetCurrentTenantIdFunctionProducerTest extends AbstractFunctionFactoryTest
             def ex = thrown(IllegalArgumentException.class)
 
         and: "exception should have correct message"
-            ex.message == "Return type cannot be blank"
+            ex.message == "Argument type cannot be blank"
 
         where:
             testCurrentTenantIdProperty     |   functionName                |   testSchema          | testArgumentType
