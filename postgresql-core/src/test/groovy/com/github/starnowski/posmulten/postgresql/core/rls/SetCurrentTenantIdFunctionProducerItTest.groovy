@@ -77,6 +77,8 @@ class SetCurrentTenantIdFunctionProducerItTest extends Specification {
             assertEquals(false, isFunctionExists(jdbcTemplate, functionName, schema))
             def expectedStatementResult = "function_value-->" + propertyValue + "<--"
             def selectStatementWithStringConcat = returnSelectStatementWithStringConcat(currentTenantIdProperty)
+            logger.log(java.util.logging.Level.INFO, "Random function name: " + functionName)
+            logger.log(java.util.logging.Level.INFO, "Random current tenant property name: " + currentTenantIdProperty)
 
         when:
             jdbcTemplate.execute((String)tested.produce(new SetCurrentTenantIdFunctionProducerParameters(functionName, currentTenantIdProperty, schema, null)))
