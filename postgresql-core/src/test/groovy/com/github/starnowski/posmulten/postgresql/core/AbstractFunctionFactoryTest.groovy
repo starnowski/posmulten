@@ -121,7 +121,7 @@ abstract class AbstractFunctionFactoryTest extends Specification {
     }
 
     @Unroll
-    def "should create correct create statement for schema #schema and function #functionName"()
+    def "should create correct the creation statement with contains the right phrase for schema #schema and function #functionName"()
     {
         given:
             AbstractFunctionFactory tested = returnTestedObject()
