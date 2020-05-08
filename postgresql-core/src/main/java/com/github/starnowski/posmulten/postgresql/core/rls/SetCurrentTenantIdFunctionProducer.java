@@ -1,6 +1,8 @@
 package com.github.starnowski.posmulten.postgresql.core.rls;
 
 import com.github.starnowski.posmulten.postgresql.core.AbstractFunctionFactory;
+import com.github.starnowski.posmulten.postgresql.core.DefaultFunctionDefinition;
+import com.github.starnowski.posmulten.postgresql.core.IFunctionDefinition;
 
 /**
  * The component produces a statement that creates a function that sets the current tenant identifier.
@@ -8,7 +10,7 @@ import com.github.starnowski.posmulten.postgresql.core.AbstractFunctionFactory;
  * @see <a href="https://www.postgresql.org/docs/9.6/sql-createfunction.html">Postgres, create function</a>
  *
  */
-public class SetCurrentTenantIdFunctionProducer extends AbstractFunctionFactory<ISetCurrentTenantIdFunctionProducerParameters> {
+public class SetCurrentTenantIdFunctionProducer extends AbstractFunctionFactory<ISetCurrentTenantIdFunctionProducerParameters, DefaultFunctionDefinition> {
 
     @Override
     protected void validate(ISetCurrentTenantIdFunctionProducerParameters parameters) {
@@ -25,6 +27,11 @@ public class SetCurrentTenantIdFunctionProducer extends AbstractFunctionFactory<
         {
             throw new IllegalArgumentException("Argument type cannot be blank");
         }
+    }
+
+    @Override
+    protected DefaultFunctionDefinition returnFunctionDefinition(ISetCurrentTenantIdFunctionProducerParameters parameters, IFunctionDefinition functionDefinition) {
+        return new DefaultFunctionDefinition(functionDefinition);
     }
 
     @Override

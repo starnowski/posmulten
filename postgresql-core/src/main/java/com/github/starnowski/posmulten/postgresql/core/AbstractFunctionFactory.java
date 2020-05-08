@@ -2,12 +2,13 @@ package com.github.starnowski.posmulten.postgresql.core;
 
 import com.github.starnowski.posmulten.postgresql.core.rls.IFunctionFactoryParameters;
 
-public abstract class AbstractFunctionFactory<P extends IFunctionFactoryParameters, R extends IFunctionDefinition> implements FunctionFactory<P,R> {
+public abstract class AbstractFunctionFactory<P extends IFunctionFactoryParameters, R extends DefaultFunctionDefinition> implements FunctionFactory<P,R> {
 
     @Override
     public R produce(P parameters) {
         validate(parameters);
-        return produceStatement(parameters);
+        String createScript = produceStatement(parameters);
+        return returnFunctionDefinition(parameters, new FunctionDefinitionBuilder().withCreateScript(createScript).build());
     }
 
     protected void validate(P parameters)
@@ -30,5 +31,9 @@ public abstract class AbstractFunctionFactory<P extends IFunctionFactoryParamete
         }
     }
 
+    abstract protected R returnFunctionDefinition(P parameters, IFunctionDefinition functionDefinition);
+
     abstract protected String produceStatement(P parameters);
+
+
 }
