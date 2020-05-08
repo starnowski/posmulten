@@ -2,7 +2,7 @@ package com.github.starnowski.posmulten.postgresql.core;
 
 import com.github.starnowski.posmulten.postgresql.core.rls.IFunctionFactoryParameters;
 
-public interface FunctionFactory<P extends IFunctionFactoryParameters> {
+public interface FunctionFactory<P extends IFunctionFactoryParameters, R extends IFunctionDefinition> {
 
-    String produce(P parameters);
+    R produce(P parameters);
 }
