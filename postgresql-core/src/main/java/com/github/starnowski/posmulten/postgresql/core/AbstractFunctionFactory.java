@@ -8,7 +8,19 @@ public abstract class AbstractFunctionFactory<P extends IFunctionFactoryParamete
     public R produce(P parameters) {
         validate(parameters);
         String createScript = produceStatement(parameters);
-        return returnFunctionDefinition(parameters, new FunctionDefinitionBuilder().withCreateScript(createScript).build());
+        String functionReference = returnFunctionReference(parameters);
+        return returnFunctionDefinition(parameters, new FunctionDefinitionBuilder().withCreateScript(createScript).withFunctionReference(functionReference).build());
+    }
+
+    protected String returnFunctionReference(P parameters) {
+        StringBuilder sb = new StringBuilder();
+        if (parameters.getSchema() != null)
+        {
+            sb.append(parameters.getSchema());
+            sb.append(".");
+        }
+        sb.append(parameters.getFunctionName());
+        return sb.toString();
     }
 
     protected void validate(P parameters)
