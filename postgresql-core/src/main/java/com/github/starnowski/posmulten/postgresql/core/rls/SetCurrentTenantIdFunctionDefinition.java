@@ -11,6 +11,11 @@ public class SetCurrentTenantIdFunctionDefinition extends DefaultFunctionDefinit
 
     @Override
     public String generateStatementThatSetTenant(String tenantId) {
-        return null;
+        StringBuilder sb = new StringBuilder();
+        sb.append(getFunctionReference());
+        sb.append("('");
+        sb.append(tenantId);
+        sb.append("')");
+        return sb.toString();
     }
 }
