@@ -1,6 +1,6 @@
-package com.github.starnowski.posmulten.postgresql.core.rls;
+package com.github.starnowski.posmulten.postgresql.core;
 
-import com.github.starnowski.posmulten.postgresql.core.FunctionFactory;
+import com.github.starnowski.posmulten.postgresql.core.rls.IFunctionFactoryParameters;
 
 public abstract class AbstractFunctionFactory<P extends IFunctionFactoryParameters> implements FunctionFactory<P> {
 
