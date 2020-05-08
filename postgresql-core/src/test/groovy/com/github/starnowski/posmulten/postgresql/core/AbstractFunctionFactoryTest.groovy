@@ -4,6 +4,11 @@ import com.github.starnowski.posmulten.postgresql.core.rls.IFunctionFactoryParam
 import spock.lang.Specification
 import spock.lang.Unroll
 
+import java.util.stream.Collectors
+
+import static java.lang.String.format
+import static java.util.Optional.ofNullable
+
 abstract class AbstractFunctionFactoryTest extends Specification {
 
     def "should return non-empty string object for correct parameters object"() {
@@ -113,6 +118,36 @@ abstract class AbstractFunctionFactoryTest extends Specification {
             null        |   "this_is_function"      ||  "this_is_function"
             "public"    |   "this_is_function"      ||  "public.this_is_function"
             "sch"       |   "this_is_function"      ||  "sch.this_is_function"
+    }
+
+    @Unroll
+    def "should create correct drop statement for schema #schema and function #functionName"()
+    {
+        given:
+            AbstractFunctionFactory tested = returnTestedObject()
+            IFunctionFactoryParameters parameters = returnCorrectParametersSpyObject()
+            parameters.getSchema() >> schema
+            parameters.getFunctionName() >> functionName
+            def functionDefinition = tested.produce(parameters)
+            String functionReference = functionDefinition.getFunctionReference()
+            String expectedDropFunctionStatement = format("DROP FUNCTION IF EXISTS %s(%s)", functionReference, prepareArgumentsPhrase(functionDefinition.getFunctionArguments()))
+
+        expect:
+            functionDefinition.getDropScript() == expectedDropFunctionStatement
+
+        where:
+            schema      |   functionName
+            null        |   "fun1"
+            "public"    |   "fun1"
+            "sch"       |   "fun1"
+            null        |   "this_is_function"
+            "public"    |   "this_is_function"
+            "sch"       |   "this_is_function"
+    }
+
+    private String prepareArgumentsPhrase(List<IFunctionArgument> functionArguments)
+    {
+        ofNullable(functionArguments).orElse(new ArrayList<IFunctionArgument>()).stream().flatMap({ argument -> argument.getType() }).collect(Collectors.joining( ", " ))
     }
 
     abstract protected returnTestedObject();
