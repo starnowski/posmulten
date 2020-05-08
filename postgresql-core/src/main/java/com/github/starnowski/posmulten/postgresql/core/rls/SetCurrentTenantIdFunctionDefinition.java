@@ -10,7 +10,7 @@ public class SetCurrentTenantIdFunctionDefinition extends DefaultFunctionDefinit
     }
 
     @Override
-    public String produce(String tenantId) {
+    public String generateStatementThatSetTenant(String tenantId) {
         return null;
     }
 }

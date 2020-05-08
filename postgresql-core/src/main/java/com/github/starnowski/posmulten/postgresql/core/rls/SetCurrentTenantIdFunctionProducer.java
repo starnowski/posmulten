@@ -13,7 +13,7 @@ import static java.util.Collections.singletonList;
  * @see <a href="https://www.postgresql.org/docs/9.6/sql-createfunction.html">Postgres, create function</a>
  *
  */
-public class SetCurrentTenantIdFunctionProducer extends AbstractFunctionFactory<ISetCurrentTenantIdFunctionProducerParameters, DefaultFunctionDefinition> {
+public class SetCurrentTenantIdFunctionProducer extends AbstractFunctionFactory<ISetCurrentTenantIdFunctionProducerParameters, SetCurrentTenantIdFunctionDefinition> {
 
     @Override
     protected void validate(ISetCurrentTenantIdFunctionProducerParameters parameters) {
@@ -33,8 +33,8 @@ public class SetCurrentTenantIdFunctionProducer extends AbstractFunctionFactory<
     }
 
     @Override
-    protected DefaultFunctionDefinition returnFunctionDefinition(ISetCurrentTenantIdFunctionProducerParameters parameters, IFunctionDefinition functionDefinition) {
-        return new DefaultFunctionDefinition(functionDefinition);
+    protected SetCurrentTenantIdFunctionDefinition returnFunctionDefinition(ISetCurrentTenantIdFunctionProducerParameters parameters, IFunctionDefinition functionDefinition) {
+        return new SetCurrentTenantIdFunctionDefinition(functionDefinition);
     }
 
     @Override
