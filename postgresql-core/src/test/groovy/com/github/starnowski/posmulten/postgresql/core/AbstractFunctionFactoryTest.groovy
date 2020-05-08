@@ -121,6 +121,31 @@ abstract class AbstractFunctionFactoryTest extends Specification {
     }
 
     @Unroll
+    def "should create correct create statement for schema #schema and function #functionName"()
+    {
+        given:
+            AbstractFunctionFactory tested = returnTestedObject()
+            IFunctionFactoryParameters parameters = returnCorrectParametersSpyObject()
+            parameters.getSchema() >> schema
+            parameters.getFunctionName() >> functionName
+            def functionDefinition = tested.produce(parameters)
+            String functionReference = functionDefinition.getFunctionReference()
+            String expectedCreateFunctionPhrase = format("CREATE OR REPLACE FUNCTION %s(%s)", functionReference, prepareArgumentsPhrase(functionDefinition.getFunctionArguments()))
+
+        expect:
+            functionDefinition.getCreateScript().contains(expectedCreateFunctionPhrase)
+
+        where:
+            schema      |   functionName
+            null        |   "fun1"
+            "public"    |   "fun1"
+            "sch"       |   "fun1"
+            null        |   "this_is_function"
+            "public"    |   "this_is_function"
+            "sch"       |   "this_is_function"
+    }
+
+    @Unroll
     def "should create correct drop statement for schema #schema and function #functionName"()
     {
         given:
