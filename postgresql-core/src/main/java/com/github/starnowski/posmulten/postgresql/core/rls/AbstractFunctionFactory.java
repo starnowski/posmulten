@@ -1,5 +1,7 @@
 package com.github.starnowski.posmulten.postgresql.core.rls;
 
+import com.github.starnowski.posmulten.postgresql.core.FunctionFactory;
+
 public abstract class AbstractFunctionFactory<P extends IFunctionFactoryParameters> implements FunctionFactory<P> {
 
     @Override
