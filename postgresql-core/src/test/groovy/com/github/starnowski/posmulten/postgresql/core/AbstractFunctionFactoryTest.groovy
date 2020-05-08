@@ -12,7 +12,7 @@ abstract class AbstractFunctionFactoryTest extends Specification {
         IFunctionFactoryParameters parameters = returnCorrectParametersSpyObject()
 
         when:
-            String result = tested.produce(parameters)
+            String result = tested.produce(parameters).getCreateScript()
 
         then:
             result != null

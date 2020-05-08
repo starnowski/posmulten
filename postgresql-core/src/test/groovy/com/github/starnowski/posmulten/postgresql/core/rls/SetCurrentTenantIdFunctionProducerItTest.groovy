@@ -45,7 +45,7 @@ class SetCurrentTenantIdFunctionProducerItTest extends Specification {
             def selectStatementWithStringConcat = returnSelectStatementWithStringConcat(testCurrentTenantIdProperty)
 
         when:
-            jdbcTemplate.execute((String)tested.produce(new SetCurrentTenantIdFunctionProducerParameters(testFunctionName, testCurrentTenantIdProperty, testSchema, testArgumentType)))
+            jdbcTemplate.execute(tested.produce(new SetCurrentTenantIdFunctionProducerParameters(testFunctionName, testCurrentTenantIdProperty, testSchema, testArgumentType)).getCreateScript())
 
         then:
             isFunctionExists(jdbcTemplate, functionName, schema)
@@ -81,7 +81,7 @@ class SetCurrentTenantIdFunctionProducerItTest extends Specification {
             logger.log(java.util.logging.Level.INFO, "Random current tenant property name: " + currentTenantIdProperty)
 
         when:
-            jdbcTemplate.execute((String)tested.produce(new SetCurrentTenantIdFunctionProducerParameters(functionName, currentTenantIdProperty, schema, null)))
+            jdbcTemplate.execute(tested.produce(new SetCurrentTenantIdFunctionProducerParameters(functionName, currentTenantIdProperty, schema, null)).getCreateScript())
 
         then:
             isFunctionExists(jdbcTemplate, functionName, schema)

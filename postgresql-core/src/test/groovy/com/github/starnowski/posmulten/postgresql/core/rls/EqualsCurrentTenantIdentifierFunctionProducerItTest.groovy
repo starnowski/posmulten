@@ -34,7 +34,7 @@ class EqualsCurrentTenantIdentifierFunctionProducerItTest extends Specification 
             assertEquals(false, isFunctionExists(jdbcTemplate, functionName, schema))
 
         when:
-            jdbcTemplate.execute((String)tested.produce(new EqualsCurrentTenantIdentifierFunctionProducerParameters(testFunctionName, testSchema, null, "")))
+            jdbcTemplate.execute(tested.produce(new EqualsCurrentTenantIdentifierFunctionProducerParameters(testFunctionName, testSchema, null, "")).getCreateScript())
 
         then:
             isFunctionExists(jdbcTemplate, functionName, schema)

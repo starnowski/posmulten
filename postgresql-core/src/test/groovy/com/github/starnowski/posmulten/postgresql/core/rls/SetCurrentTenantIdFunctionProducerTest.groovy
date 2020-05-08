@@ -10,7 +10,7 @@ class SetCurrentTenantIdFunctionProducerTest extends AbstractFunctionFactoryTest
     @Unroll
     def "should generate statement that creates function '#testFunctionName' for schema '#testSchema' with argument type '#testArgumentType' (null means 'text') which sets value for property '#testCurrentTenantIdProperty'" () {
         expect:
-            tested.produce(new SetCurrentTenantIdFunctionProducerParameters(testFunctionName, testCurrentTenantIdProperty, testSchema, testArgumentType)) == expectedStatement
+            tested.produce(new SetCurrentTenantIdFunctionProducerParameters(testFunctionName, testCurrentTenantIdProperty, testSchema, testArgumentType)).getCreateScript() == expectedStatement
 
         where:
             testSchema              |   testFunctionName            |   testCurrentTenantIdProperty     |   testArgumentType    || expectedStatement
