@@ -6,12 +6,14 @@ public class DefaultFunctionDefinition implements IFunctionDefinition{
 
     private final String createScript;
     private final String functionReference;
+    private final String dropScript;
     private final List<IFunctionArgument> functionArguments;
 
     public DefaultFunctionDefinition(IFunctionDefinition functionDefinition)
     {
         this.createScript = functionDefinition.getCreateScript();
         this.functionReference = functionDefinition.getFunctionReference();
+        this.dropScript = functionDefinition.getDropScript();
         this.functionArguments = functionDefinition.getFunctionArguments();
     }
 
@@ -28,5 +30,10 @@ public class DefaultFunctionDefinition implements IFunctionDefinition{
     @Override
     public List<IFunctionArgument> getFunctionArguments() {
         return functionArguments;
+    }
+
+    @Override
+    public String getDropScript() {
+        return dropScript;
     }
 }

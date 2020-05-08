@@ -8,11 +8,13 @@ public class FunctionDefinitionBuilder {
 
     private String functionReference;
 
+    private String dropScript;
+
     private List<IFunctionArgument> functionArguments;
 
     public IFunctionDefinition build()
     {
-        return new InnerFunctionDefinition(createScript, functionReference, functionArguments);
+        return new InnerFunctionDefinition(createScript, functionReference, dropScript, functionArguments);
     }
 
     public FunctionDefinitionBuilder withCreateScript(String createScript) {
@@ -25,6 +27,11 @@ public class FunctionDefinitionBuilder {
         return this;
     }
 
+    public FunctionDefinitionBuilder withDropScript(String dropScript) {
+        this.dropScript = dropScript;
+        return this;
+    }
+
     public FunctionDefinitionBuilder withFunctionArguments(List<IFunctionArgument> functionArguments) {
         this.functionArguments = functionArguments;
         return this;
@@ -34,11 +41,13 @@ public class FunctionDefinitionBuilder {
     {
         private final String createScript;
         private final String functionReference;
+        private final String dropScript;
         private final List<IFunctionArgument> functionArguments;
 
-        public InnerFunctionDefinition(String createScript, String functionReference, List<IFunctionArgument> functionArguments) {
+        public InnerFunctionDefinition(String createScript, String functionReference, String dropScript, List<IFunctionArgument> functionArguments) {
             this.createScript = createScript;
             this.functionReference = functionReference;
+            this.dropScript = dropScript;
             this.functionArguments = functionArguments;
         }
 
@@ -55,6 +64,11 @@ public class FunctionDefinitionBuilder {
         @Override
         public List<IFunctionArgument> getFunctionArguments() {
             return functionArguments;
+        }
+
+        @Override
+        public String getDropScript() {
+            return dropScript;
         }
     }
 }

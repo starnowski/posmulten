@@ -10,5 +10,5 @@ public interface IFunctionDefinition {
 
     List<IFunctionArgument> getFunctionArguments();
 
-//    String getDropScript();
+    String getDropScript();
 }

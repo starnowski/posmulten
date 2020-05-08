@@ -1,6 +1,8 @@
 package com.github.starnowski.posmulten.postgresql.core
 
 import org.jeasy.random.EasyRandom
+import org.jeasy.random.EasyRandomParameters
+import org.jeasy.random.api.Randomizer
 import org.junit.Assert
 import spock.lang.Specification
 
@@ -15,7 +17,14 @@ class DefaultFunctionDefinitionTest extends Specification {
     def "should create object based on passed object of type that implements IFunctionDefinition" ()
     {
         given:
-            EasyRandom easyRandom = new EasyRandom()
+            def r = new RandomString(12, new Random(), RandomString.lower)
+            EasyRandomParameters easyRandomParameters = new EasyRandomParameters().randomize(IFunctionArgument.class, new Randomizer<IFunctionArgument>() {
+
+                IFunctionArgument getRandomValue() {
+                    new TestFunctionArgument(r.nextString())
+                }
+            })
+            EasyRandom easyRandom = new EasyRandom(easyRandomParameters)
             IFunctionDefinition passedObject = easyRandom.nextObject(DefaultFunctionDefinition)
             List<Method> publicMethods = returnPublicMethodsForInterface(IFunctionDefinition.class)
 
@@ -38,5 +47,19 @@ class DefaultFunctionDefinitionTest extends Specification {
         Stream.of(aClass.getDeclaredMethods()).filter({ method ->
             Modifier.isPublic(method.getModifiers())
         }).collect(toList())
+    }
+
+    private static class TestFunctionArgument implements IFunctionArgument{
+
+        private String type;
+
+        TestFunctionArgument(String type) {
+            this.type = type
+        }
+
+        @Override
+        String getType() {
+            return type
+        }
     }
 }
