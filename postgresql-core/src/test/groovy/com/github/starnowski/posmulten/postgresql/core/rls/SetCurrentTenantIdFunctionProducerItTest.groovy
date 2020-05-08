@@ -100,11 +100,13 @@ class SetCurrentTenantIdFunctionProducerItTest extends Specification {
         assertEquals(false, isFunctionExists(jdbcTemplate, functionName, schema))
     }
 
+    //TODO Rename method ... returnSelectStatementResultAfterSettingCurrentTenantId
     def getStringResultForSelectStatement(String statementThatSetTenant, String selectStatement)
     {
         return jdbcTemplate.execute(new StatementCallback<String>() {
             @Override
             String doInStatement(Statement statement) throws SQLException, DataAccessException {
+                //TODO Code refactor - change method (rename also) so that the 'SELECT' phrase should be also expected part of the statement.
                 statement.execute("SELECT " + statementThatSetTenant)
                 ResultSet rs = statement.executeQuery(selectStatement)
                 rs.next()
