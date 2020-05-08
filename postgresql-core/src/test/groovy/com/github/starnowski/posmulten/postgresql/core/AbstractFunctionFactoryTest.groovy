@@ -110,9 +110,9 @@ abstract class AbstractFunctionFactoryTest extends Specification {
             null        |   "fun1"                  ||  "fun1"
             "public"    |   "fun1"                  ||  "public.fun1"
             "sch"       |   "fun1"                  ||  "sch.fun1"
-            null        |   "this_is_function"      ||  "fun1"
-            "public"    |   "this_is_function"      ||  "public.fun1"
-            "sch"       |   "this_is_function"      ||  "sch.fun1"
+            null        |   "this_is_function"      ||  "this_is_function"
+            "public"    |   "this_is_function"      ||  "public.this_is_function"
+            "sch"       |   "this_is_function"      ||  "sch.this_is_function"
 
     }
 
