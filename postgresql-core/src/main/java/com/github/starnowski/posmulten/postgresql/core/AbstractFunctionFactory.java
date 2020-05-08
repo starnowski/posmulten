@@ -2,10 +2,10 @@ package com.github.starnowski.posmulten.postgresql.core;
 
 import com.github.starnowski.posmulten.postgresql.core.rls.IFunctionFactoryParameters;
 
-public abstract class AbstractFunctionFactory<P extends IFunctionFactoryParameters> implements FunctionFactory<P> {
+public abstract class AbstractFunctionFactory<P extends IFunctionFactoryParameters, R extends IFunctionDefinition> implements FunctionFactory<P,R> {
 
     @Override
-    public String produce(P parameters) {
+    public R produce(P parameters) {
         validate(parameters);
         return produceStatement(parameters);
     }
