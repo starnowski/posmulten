@@ -1,11 +1,11 @@
 package com.github.starnowski.posmulten.postgresql.core.rls;
 
-import com.github.starnowski.posmulten.postgresql.core.AbstractFunctionFactory;
-import com.github.starnowski.posmulten.postgresql.core.DefaultFunctionDefinition;
-import com.github.starnowski.posmulten.postgresql.core.IFunctionArgument;
-import com.github.starnowski.posmulten.postgresql.core.IFunctionDefinition;
+import com.github.starnowski.posmulten.postgresql.core.*;
 
 import java.util.List;
+
+import static com.github.starnowski.posmulten.postgresql.core.FunctionArgumentBuilder.forType;
+import static java.util.Collections.singletonList;
 
 /**
  * The component produces a statement that creates a function that sets the current tenant identifier.
@@ -78,6 +78,6 @@ public class SetCurrentTenantIdFunctionProducer extends AbstractFunctionFactory<
 
     @Override
     protected List<IFunctionArgument> prepareFunctionArguments(ISetCurrentTenantIdFunctionProducerParameters parameters) {
-        return null;
+        return singletonList(forType(parameters.getArgumentType() == null ? "text" : parameters.getArgumentType()));
     }
 }

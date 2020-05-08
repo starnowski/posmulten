@@ -17,7 +17,12 @@ public abstract class AbstractFunctionFactory<P extends IFunctionFactoryParamete
         String createScript = produceStatement(parameters);
         String functionReference = returnFunctionReference(parameters);
         String dropScript = returnDropScript(parameters);
-        return returnFunctionDefinition(parameters, new FunctionDefinitionBuilder().withCreateScript(createScript).withFunctionReference(functionReference).withDropScript(dropScript).build());
+        return returnFunctionDefinition(parameters, new FunctionDefinitionBuilder()
+                .withCreateScript(createScript)
+                .withFunctionReference(functionReference)
+                .withDropScript(dropScript)
+                .withFunctionArguments(prepareFunctionArguments(parameters))
+                .build());
     }
 
     protected String returnFunctionReference(P parameters) {
