@@ -1,5 +1,6 @@
 package com.github.starnowski.posmulten.postgresql.core.rls
 
+import com.github.starnowski.posmulten.postgresql.core.AbstractFunctionFactoryTest
 import spock.lang.Unroll
 
 class SetCurrentTenantIdFunctionProducerTest extends AbstractFunctionFactoryTest {

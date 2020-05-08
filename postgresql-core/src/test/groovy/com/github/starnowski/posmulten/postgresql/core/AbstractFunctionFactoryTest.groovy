@@ -1,6 +1,7 @@
-package com.github.starnowski.posmulten.postgresql.core.rls
+package com.github.starnowski.posmulten.postgresql.core
 
 import com.github.starnowski.posmulten.postgresql.core.AbstractFunctionFactory
+import com.github.starnowski.posmulten.postgresql.core.rls.IFunctionFactoryParameters
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -9,7 +10,7 @@ abstract class AbstractFunctionFactoryTest extends Specification {
     def "should return non-empty string object for correct parameters object"() {
         given:
         AbstractFunctionFactory tested = returnTestedObject()
-            IFunctionFactoryParameters parameters = returnCorrectParametersSpyObject()
+        IFunctionFactoryParameters parameters = returnCorrectParametersSpyObject()
 
         when:
             String result = tested.produce(parameters)
