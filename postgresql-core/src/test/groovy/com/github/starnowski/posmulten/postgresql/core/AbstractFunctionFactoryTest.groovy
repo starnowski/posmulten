@@ -172,7 +172,7 @@ abstract class AbstractFunctionFactoryTest extends Specification {
 
     private String prepareArgumentsPhrase(List<IFunctionArgument> functionArguments)
     {
-        ofNullable(functionArguments).orElse(new ArrayList<IFunctionArgument>()).stream().flatMap({ argument -> argument.getType() }).collect(Collectors.joining( ", " ))
+        ofNullable(functionArguments).orElse(new ArrayList<IFunctionArgument>()).stream().map({ argument -> argument.getType() }).collect(Collectors.joining( ", " ))
     }
 
     abstract protected returnTestedObject();

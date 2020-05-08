@@ -2,6 +2,13 @@ package com.github.starnowski.posmulten.postgresql.core;
 
 import com.github.starnowski.posmulten.postgresql.core.rls.IFunctionFactoryParameters;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static java.lang.String.format;
+import static java.util.Optional.ofNullable;
+
 public abstract class AbstractFunctionFactory<P extends IFunctionFactoryParameters, R extends DefaultFunctionDefinition> implements FunctionFactory<P,R> {
 
     @Override
@@ -9,7 +16,8 @@ public abstract class AbstractFunctionFactory<P extends IFunctionFactoryParamete
         validate(parameters);
         String createScript = produceStatement(parameters);
         String functionReference = returnFunctionReference(parameters);
-        return returnFunctionDefinition(parameters, new FunctionDefinitionBuilder().withCreateScript(createScript).withFunctionReference(functionReference).build());
+        String dropScript = returnDropScript(parameters);
+        return returnFunctionDefinition(parameters, new FunctionDefinitionBuilder().withCreateScript(createScript).withFunctionReference(functionReference).withDropScript(dropScript).build());
     }
 
     protected String returnFunctionReference(P parameters) {
@@ -21,6 +29,16 @@ public abstract class AbstractFunctionFactory<P extends IFunctionFactoryParamete
         }
         sb.append(parameters.getFunctionName());
         return sb.toString();
+    }
+
+    protected String returnDropScript(P parameters) {
+        List<IFunctionArgument> arguments = prepareFunctionArguments(parameters);
+        return format("DROP FUNCTION IF EXISTS %s(%s)", returnFunctionReference(parameters), prepareArgumentsPhrase(arguments));
+    }
+
+    protected String prepareArgumentsPhrase(List<IFunctionArgument> functionArguments)
+    {
+        return ofNullable(functionArguments).orElse(new ArrayList<IFunctionArgument>()).stream().map(IFunctionArgument::getType).collect(Collectors.joining( ", " ));
     }
 
     protected void validate(P parameters)
@@ -47,5 +65,5 @@ public abstract class AbstractFunctionFactory<P extends IFunctionFactoryParamete
 
     abstract protected String produceStatement(P parameters);
 
-
+    abstract protected List<IFunctionArgument> prepareFunctionArguments(P parameters);
 }

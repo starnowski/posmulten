@@ -2,7 +2,10 @@ package com.github.starnowski.posmulten.postgresql.core.rls;
 
 import com.github.starnowski.posmulten.postgresql.core.AbstractFunctionFactory;
 import com.github.starnowski.posmulten.postgresql.core.DefaultFunctionDefinition;
+import com.github.starnowski.posmulten.postgresql.core.IFunctionArgument;
 import com.github.starnowski.posmulten.postgresql.core.IFunctionDefinition;
+
+import java.util.List;
 
 public class EqualsCurrentTenantIdentifierFunctionProducer extends AbstractFunctionFactory<IEqualsCurrentTenantIdentifierFunctionProducerParameters, DefaultFunctionDefinition> {
     @Override
@@ -12,6 +15,11 @@ public class EqualsCurrentTenantIdentifierFunctionProducer extends AbstractFunct
 
     @Override
     protected String produceStatement(IEqualsCurrentTenantIdentifierFunctionProducerParameters parameters) {
+        return null;
+    }
+
+    @Override
+    protected List<IFunctionArgument> prepareFunctionArguments(IEqualsCurrentTenantIdentifierFunctionProducerParameters parameters) {
         return null;
     }
 }
