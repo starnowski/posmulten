@@ -113,7 +113,6 @@ abstract class AbstractFunctionFactoryTest extends Specification {
             null        |   "this_is_function"      ||  "this_is_function"
             "public"    |   "this_is_function"      ||  "public.this_is_function"
             "sch"       |   "this_is_function"      ||  "sch.this_is_function"
-
     }
 
     abstract protected returnTestedObject();
