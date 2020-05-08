@@ -17,11 +17,12 @@ class DefaultFunctionDefinitionTest extends Specification {
     def "should create object based on passed object of type that implements IFunctionDefinition" ()
     {
         given:
-            def r = new RandomString(12, new Random(), RandomString.lower)
-            EasyRandomParameters easyRandomParameters = new EasyRandomParameters().randomize(IFunctionArgument.class, new Randomizer<IFunctionArgument>() {
+            RandomString randomString = new RandomString(12, new Random(), RandomString.lower)
+            EasyRandomParameters easyRandomParameters = new EasyRandomParameters()
+                    .randomize(IFunctionArgument.class, new Randomizer<IFunctionArgument>() {
 
                 IFunctionArgument getRandomValue() {
-                    new TestFunctionArgument(r.nextString())
+                    new TestFunctionArgument(randomString.nextString())
                 }
             })
             EasyRandom easyRandom = new EasyRandom(easyRandomParameters)
