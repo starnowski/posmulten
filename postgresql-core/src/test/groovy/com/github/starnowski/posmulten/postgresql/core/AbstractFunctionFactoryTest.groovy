@@ -93,6 +93,29 @@ abstract class AbstractFunctionFactoryTest extends Specification {
             schema << ["", "  ", "            "]
     }
 
+    @Unroll
+    def "should return expected reference to function #expectedFunctionReference for schema #schema and function name #functionName"()
+    {
+        given:
+            AbstractFunctionFactory tested = returnTestedObject()
+            IFunctionFactoryParameters parameters = returnCorrectParametersSpyObject()
+            parameters.getSchema() >> schema
+            parameters.getFunctionName() >> functionName
+
+        expect:
+            tested.produce(parameters).getFunctionReference() == expectedFunctionReference
+
+        where:
+            schema      |   functionName            ||  expectedFunctionReference
+            null        |   "fun1"                  ||  "fun1"
+            "public"    |   "fun1"                  ||  "public.fun1"
+            "sch"       |   "fun1"                  ||  "sch.fun1"
+            null        |   "this_is_function"      ||  "fun1"
+            "public"    |   "this_is_function"      ||  "public.fun1"
+            "sch"       |   "this_is_function"      ||  "sch.fun1"
+
+    }
+
     abstract protected returnTestedObject();
 
     abstract protected returnCorrectParametersSpyObject();

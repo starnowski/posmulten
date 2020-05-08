@@ -4,5 +4,7 @@ public interface IFunctionDefinition {
 
     String getCreateScript();
 
+    String getFunctionReference();
+
 //    String getDropScript();
 }
