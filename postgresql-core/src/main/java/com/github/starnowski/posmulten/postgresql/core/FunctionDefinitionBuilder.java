@@ -11,17 +11,9 @@ public class FunctionDefinitionBuilder {
         return new InnerFunctionDefinition(createScript, functionReference);
     }
 
-    public String getCreateScript() {
-        return createScript;
-    }
-
     public FunctionDefinitionBuilder withCreateScript(String createScript) {
         this.createScript = createScript;
         return this;
-    }
-
-    public String getFunctionReference() {
-        return functionReference;
     }
 
     public FunctionDefinitionBuilder withFunctionReference(String functionReference) {
