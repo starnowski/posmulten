@@ -1,6 +1,7 @@
 package com.github.starnowski.posmulten.postgresql.core
 
 import org.jeasy.random.EasyRandom
+import org.junit.Assert
 import spock.lang.Specification
 
 import java.lang.reflect.Method
@@ -28,7 +29,7 @@ class DefaultFunctionDefinitionTest extends Specification {
             publicMethods.each {method ->
                 Object resultValue =  method.invoke(result)
                 Object passedObjectValue =  method.invoke(passedObject)
-                assert Objects.equals(resultValue, passedObjectValue)
+                Assert.assertEquals("values for method " + method.getName() + " does not match", resultValue, passedObjectValue)
             }
     }
 
