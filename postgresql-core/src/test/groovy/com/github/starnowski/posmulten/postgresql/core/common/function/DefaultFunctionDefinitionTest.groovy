@@ -14,6 +14,7 @@ import java.lang.reflect.Method
 import java.lang.reflect.Modifier
 import java.util.stream.Stream
 
+import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentBuilder.forType
 import static java.util.stream.Collectors.toList
 
 class DefaultFunctionDefinitionTest extends Specification {
@@ -21,16 +22,16 @@ class DefaultFunctionDefinitionTest extends Specification {
     def "should create object based on passed object of type that implements IFunctionDefinition" ()
     {
         given:
-        RandomString randomString = new RandomString(12, new Random(), RandomString.lower)
+            RandomString randomString = new RandomString(12, new Random(), RandomString.lower)
             EasyRandomParameters easyRandomParameters = new EasyRandomParameters()
                     .randomize(IFunctionArgument.class, new Randomizer<IFunctionArgument>() {
 
                 IFunctionArgument getRandomValue() {
-                    new TestFunctionArgument(randomString.nextString())
+                    forType(randomString.nextString())
                 }
             })
             EasyRandom easyRandom = new EasyRandom(easyRandomParameters)
-        IFunctionDefinition passedObject = easyRandom.nextObject(DefaultFunctionDefinition)
+            IFunctionDefinition passedObject = easyRandom.nextObject(DefaultFunctionDefinition)
             List<Method> publicMethods = returnPublicMethodsForInterface(IFunctionDefinition.class)
 
         when:
@@ -52,19 +53,5 @@ class DefaultFunctionDefinitionTest extends Specification {
         Stream.of(aClass.getDeclaredMethods()).filter({ method ->
             Modifier.isPublic(method.getModifiers())
         }).collect(toList())
-    }
-
-    private static class TestFunctionArgument implements IFunctionArgument{
-
-        private String type;
-
-        TestFunctionArgument(String type) {
-            this.type = type
-        }
-
-        @Override
-        String getType() {
-            return type
-        }
     }
 }
