@@ -1,10 +1,12 @@
 package com.github.starnowski.posmulten.postgresql.core.rls.function;
 
-import com.github.starnowski.posmulten.postgresql.core.*;
+import com.github.starnowski.posmulten.postgresql.core.common.function.AbstractFunctionFactory;
+import com.github.starnowski.posmulten.postgresql.core.common.function.IFunctionArgument;
+import com.github.starnowski.posmulten.postgresql.core.common.function.IFunctionDefinition;
 
 import java.util.List;
 
-import static com.github.starnowski.posmulten.postgresql.core.FunctionArgumentBuilder.forType;
+import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentBuilder.forType;
 import static java.util.Collections.singletonList;
 
 /**

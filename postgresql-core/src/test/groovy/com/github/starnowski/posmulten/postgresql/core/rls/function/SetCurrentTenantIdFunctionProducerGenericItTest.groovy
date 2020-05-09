@@ -1,6 +1,6 @@
 package com.github.starnowski.posmulten.postgresql.core.rls.function
 
-import com.github.starnowski.posmulten.postgresql.core.AbstractFunctionFactoryGenericItTest
+import com.github.starnowski.posmulten.postgresql.core.common.function.AbstractFunctionFactoryGenericItTest
 
 class SetCurrentTenantIdFunctionProducerGenericItTest extends AbstractFunctionFactoryGenericItTest{
 

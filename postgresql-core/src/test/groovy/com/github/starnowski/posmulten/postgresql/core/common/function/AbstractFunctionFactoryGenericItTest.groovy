@@ -1,6 +1,8 @@
-package com.github.starnowski.posmulten.postgresql.core
+package com.github.starnowski.posmulten.postgresql.core.common.function
 
-
+import com.github.starnowski.posmulten.postgresql.core.TestApplication
+import com.github.starnowski.posmulten.postgresql.core.common.function.AbstractFunctionFactory
+import com.github.starnowski.posmulten.postgresql.core.common.function.IFunctionFactoryParameters
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.jdbc.core.JdbcTemplate
@@ -20,8 +22,8 @@ abstract class AbstractFunctionFactoryGenericItTest extends Specification {
     def "should create correctly the creation and drop statements for schema #schema and function #functionName"()
     {
         given:
-            AbstractFunctionFactory tested = returnTestedObject()
-            IFunctionFactoryParameters parameters = returnCorrectParametersSpyObject()
+        AbstractFunctionFactory tested = returnTestedObject()
+        IFunctionFactoryParameters parameters = returnCorrectParametersSpyObject()
             parameters.getSchema() >> schema
             parameters.getFunctionName() >> functionName
             def functionDefinition = tested.produce(parameters)

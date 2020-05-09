@@ -1,7 +1,7 @@
 package com.github.starnowski.posmulten.postgresql.core.rls.function;
 
-import com.github.starnowski.posmulten.postgresql.core.DefaultFunctionDefinition;
-import com.github.starnowski.posmulten.postgresql.core.IFunctionDefinition;
+import com.github.starnowski.posmulten.postgresql.core.common.function.DefaultFunctionDefinition;
+import com.github.starnowski.posmulten.postgresql.core.common.function.IFunctionDefinition;
 
 public class SetCurrentTenantIdFunctionDefinition extends DefaultFunctionDefinition implements ISetCurrentTenantIdFunctionInvocationFactory {
 

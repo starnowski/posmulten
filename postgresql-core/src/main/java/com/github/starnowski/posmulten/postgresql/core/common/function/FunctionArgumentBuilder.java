@@ -1,4 +1,4 @@
-package com.github.starnowski.posmulten.postgresql.core;
+package com.github.starnowski.posmulten.postgresql.core.common.function;
 
 import java.util.Objects;
 

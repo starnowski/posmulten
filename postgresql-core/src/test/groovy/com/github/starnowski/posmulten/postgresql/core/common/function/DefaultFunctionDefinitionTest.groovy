@@ -1,5 +1,9 @@
-package com.github.starnowski.posmulten.postgresql.core
+package com.github.starnowski.posmulten.postgresql.core.common.function
 
+import com.github.starnowski.posmulten.postgresql.core.RandomString
+import com.github.starnowski.posmulten.postgresql.core.common.function.DefaultFunctionDefinition
+import com.github.starnowski.posmulten.postgresql.core.common.function.IFunctionArgument
+import com.github.starnowski.posmulten.postgresql.core.common.function.IFunctionDefinition
 import org.jeasy.random.EasyRandom
 import org.jeasy.random.EasyRandomParameters
 import org.jeasy.random.api.Randomizer
@@ -17,7 +21,7 @@ class DefaultFunctionDefinitionTest extends Specification {
     def "should create object based on passed object of type that implements IFunctionDefinition" ()
     {
         given:
-            RandomString randomString = new RandomString(12, new Random(), RandomString.lower)
+        RandomString randomString = new RandomString(12, new Random(), RandomString.lower)
             EasyRandomParameters easyRandomParameters = new EasyRandomParameters()
                     .randomize(IFunctionArgument.class, new Randomizer<IFunctionArgument>() {
 
@@ -26,7 +30,7 @@ class DefaultFunctionDefinitionTest extends Specification {
                 }
             })
             EasyRandom easyRandom = new EasyRandom(easyRandomParameters)
-            IFunctionDefinition passedObject = easyRandom.nextObject(DefaultFunctionDefinition)
+        IFunctionDefinition passedObject = easyRandom.nextObject(DefaultFunctionDefinition)
             List<Method> publicMethods = returnPublicMethodsForInterface(IFunctionDefinition.class)
 
         when:
