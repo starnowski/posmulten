@@ -40,13 +40,13 @@ abstract class AbstractFunctionFactoryGenericItTest extends Specification {
             functionWasDeleted
 
         where:
-            schema      |   functionName
-            null        |   "fun1"
-            "public"    |   "fun1"
-            "non_public_schema"       |   "fun1"
-            null        |   "this_is_function"
-            "public"    |   "this_is_function"
-            "non_public_schema"       |   "this_is_function"
+            schema                      |   functionName
+            null                        |   "fun1"
+            "public"                    |   "fun1"
+            "non_public_schema"         |   "fun1"
+            null                        |   "this_is_function"
+            "public"                    |   "this_is_function"
+            "non_public_schema"         |   "this_is_function"
     }
 
     abstract protected returnTestedObject();
