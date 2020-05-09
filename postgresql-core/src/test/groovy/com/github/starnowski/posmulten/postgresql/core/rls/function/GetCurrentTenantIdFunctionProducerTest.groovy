@@ -5,6 +5,8 @@ import spock.lang.Unroll
 
 class GetCurrentTenantIdFunctionProducerTest extends AbstractFunctionFactoryTest {
 
+    private static String VALID_CURRENT_TENANT_ID_PROPERTY_NAME = "c.c_ten"
+
     def tested = new GetCurrentTenantIdFunctionProducer()
 
     @Unroll
@@ -23,6 +25,21 @@ class GetCurrentTenantIdFunctionProducerTest extends AbstractFunctionFactoryTest
             null                    |   "cur_tenant_val"            |   "con.tenant_id"                 |   "VARCHAR(128)"      ||  "CREATE OR REPLACE FUNCTION cur_tenant_val() RETURNS VARCHAR(128) as \$\$\nSELECT current_setting('con.tenant_id')\n\$\$ LANGUAGE sql\nSTABLE PARALLEL SAFE;"
             "public"                |   "give_me_tenant"            |   "pos.tenant"                    |   "VARCHAR(32)"       ||  "CREATE OR REPLACE FUNCTION public.give_me_tenant() RETURNS VARCHAR(32) as \$\$\nSELECT current_setting('pos.tenant')\n\$\$ LANGUAGE sql\nSTABLE PARALLEL SAFE;"
             "non_public_schema"     |   "return_current_tenant"     |   "t.id"                          |   "text"              ||  "CREATE OR REPLACE FUNCTION non_public_schema.return_current_tenant() RETURNS text as \$\$\nSELECT current_setting('t.id')\n\$\$ LANGUAGE sql\nSTABLE PARALLEL SAFE;"
+    }
+
+    @Unroll
+    def "should generate statement that returns the current tenant id function invocation '" () {
+        expect:
+            tested.produce(new GetCurrentTenantIdFunctionProducerParameters(testFunctionName, VALID_CURRENT_TENANT_ID_PROPERTY_NAME, testSchema, null)).returnGetCurrentTenantIdFunctionInvocation() == expectedStatement
+
+        where:
+            testSchema              |   testFunctionName            || expectedStatement
+            null                    |   "get_current_tenant"        || "get_current_tenant()"
+            "public"                |   "get_current_tenant"        || "public.get_current_tenant()"
+            "non_public_schema"     |   "get_current_tenant"        || "non_public_schema.get_current_tenant()"
+            null                    |   "return_current_tenant"     || "return_current_tenant()"
+            "public"                |   "return_current_tenant"     || "public.return_current_tenant()"
+            "non_public_schema"     |   "return_current_tenant"     || "non_public_schema.return_current_tenant()"
     }
 
     @Unroll

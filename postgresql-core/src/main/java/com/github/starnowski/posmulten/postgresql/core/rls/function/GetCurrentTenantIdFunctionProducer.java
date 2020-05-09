@@ -10,7 +10,7 @@ import com.github.starnowski.posmulten.postgresql.core.common.function.IFunction
  * @see <a href="https://www.postgresql.org/docs/9.6/sql-createfunction.html">Postgres, create function</a>
  *
  */
-public class GetCurrentTenantIdFunctionProducer extends AbstractFunctionFactory<IGetCurrentTenantIdFunctionProducerParameters, DefaultFunctionDefinition> {
+public class GetCurrentTenantIdFunctionProducer extends AbstractFunctionFactory<IGetCurrentTenantIdFunctionProducerParameters, GetCurrentTenantIdFunctionDefinition> {
 
     protected void validate(IGetCurrentTenantIdFunctionProducerParameters parameters) {
         super.validate(parameters);
@@ -29,8 +29,8 @@ public class GetCurrentTenantIdFunctionProducer extends AbstractFunctionFactory<
     }
 
     @Override
-    protected DefaultFunctionDefinition returnFunctionDefinition(IGetCurrentTenantIdFunctionProducerParameters parameters, IFunctionDefinition functionDefinition) {
-        return new DefaultFunctionDefinition(functionDefinition);
+    protected GetCurrentTenantIdFunctionDefinition returnFunctionDefinition(IGetCurrentTenantIdFunctionProducerParameters parameters, IFunctionDefinition functionDefinition) {
+        return new GetCurrentTenantIdFunctionDefinition(functionDefinition);
     }
 
     @Override
