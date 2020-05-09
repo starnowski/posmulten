@@ -22,9 +22,14 @@ class EqualsCurrentTenantIdentifierFunctionProducerItTest extends Specification 
     static Logger logger = Logger.getLogger(GetCurrentTenantIdFunctionProducerItTest.class.getName())
 
     def tested = new EqualsCurrentTenantIdentifierFunctionProducer()
+    def getCurrentTenantIdFunctionProducer = new GetCurrentTenantIdFunctionProducer()
+    def setCurrentTenantIdFunctionProducer = new SetCurrentTenantIdFunctionProducer()
 
     String schema
     String functionName
+    String argumentType
+    GetCurrentTenantIdFunctionDefinition getCurrentTenantIdFunctionDefinition
+    SetCurrentTenantIdFunctionDefinition setCurrentTenantIdFunctionDefinition
 
     @Unroll
     def "should create function '#testFunctionName' for schema '#testSchema' (null means public) which returns type '#testReturnType' and returns correct value of property #testCurrentTenantIdProperty" () {
@@ -32,9 +37,13 @@ class EqualsCurrentTenantIdentifierFunctionProducerItTest extends Specification 
             functionName = testFunctionName
             schema = testSchema
             assertEquals(false, isFunctionExists(jdbcTemplate, functionName, schema))
+            getCurrentTenantIdFunctionDefinition = getCurrentTenantIdFunctionProducer.produce(new GetCurrentTenantIdFunctionProducerParameters(testFunctionName, testCurrentTenantIdProperty, testSchema, null))
+            setCurrentTenantIdFunctionDefinition = setCurrentTenantIdFunctionProducer.produce(new SetCurrentTenantIdFunctionProducerParameters(testFunctionName, testCurrentTenantIdProperty, testSchema, null))
+            jdbcTemplate.execute(getCurrentTenantIdFunctionDefinition.getCreateScript())
+            jdbcTemplate.execute(setCurrentTenantIdFunctionDefinition.getCreateScript())
 
         when:
-            jdbcTemplate.execute(tested.produce(new EqualsCurrentTenantIdentifierFunctionProducerParameters(testFunctionName, testSchema, null, "")).getCreateScript())
+            jdbcTemplate.execute(tested.produce(new EqualsCurrentTenantIdentifierFunctionProducerParameters(testFunctionName, testSchema, null, getCurrentTenantIdFunctionDefinition)).getCreateScript())
 
         then:
             isFunctionExists(jdbcTemplate, functionName, schema)
@@ -43,14 +52,15 @@ class EqualsCurrentTenantIdentifierFunctionProducerItTest extends Specification 
             getStringResultForSelectStatement(expectedCurrentTenantId, passedTenantId) == exptectedResult
 
         where:
-            testSchema              |   testFunctionName            |   expectedCurrentTenantId         |  passedTenantId           | exptectedResult
-            null                    |   "get_current_tenant"        |   "ASDFZXCVZS"                    |   "ASDFZXCVZS"            |   "t"
-            "public"                |   "get_current_tenant"        |   "ASDFZXCVZS"                    |   "ASDFZXCVZS"            |   "t"
-            "non_public_schema"     |   "get_current_tenant"        |   "ASDFZXCVZS"                    |   "ASDFZXCVZS"            |   "t"
+            testSchema              |   testFunctionName            |   expectedCurrentTenantId         |  testCurrentTenantIdProperty              | exptectedResult
+            null                    |   "get_current_tenant"        |   "ASDFZXCVZS"                    |   "ASDFZXCVZS"                            |   "t"
+            "public"                |   "get_current_tenant"        |   "ASDFZXCVZS"                    |   "ASDFZXCVZS"                            |   "t"
+            "non_public_schema"     |   "get_current_tenant"        |   "ASDFZXCVZS"                    |   "ASDFZXCVZS"                            |   "t"
     }
 
     def cleanup() {
-        dropFunction(jdbcTemplate, functionName, schema)
+        def argumentTypePhrase = argumentType == null ? "text" : argumentType
+        dropFunction(jdbcTemplate, functionName, schema, argumentTypePhrase)
         assertEquals(false, isFunctionExists(jdbcTemplate, functionName, schema))
     }
 
