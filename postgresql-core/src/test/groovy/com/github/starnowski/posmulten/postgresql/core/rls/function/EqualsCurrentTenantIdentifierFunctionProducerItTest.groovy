@@ -2,7 +2,6 @@ package com.github.starnowski.posmulten.postgresql.core.rls.function
 
 import com.github.starnowski.posmulten.postgresql.core.TestApplication
 import com.github.starnowski.posmulten.postgresql.core.rls.EqualsCurrentTenantIdentifierFunctionProducerParameters
-import com.github.starnowski.posmulten.postgresql.core.rls.GetCurrentTenantIdFunctionProducerItTest
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.jdbc.core.JdbcTemplate

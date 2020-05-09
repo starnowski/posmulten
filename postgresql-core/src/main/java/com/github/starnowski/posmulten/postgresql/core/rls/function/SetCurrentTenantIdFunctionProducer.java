@@ -1,6 +1,8 @@
-package com.github.starnowski.posmulten.postgresql.core.rls;
+package com.github.starnowski.posmulten.postgresql.core.rls.function;
 
 import com.github.starnowski.posmulten.postgresql.core.*;
+import com.github.starnowski.posmulten.postgresql.core.rls.ISetCurrentTenantIdFunctionProducerParameters;
+import com.github.starnowski.posmulten.postgresql.core.rls.SetCurrentTenantIdFunctionDefinition;
 
 import java.util.List;
 

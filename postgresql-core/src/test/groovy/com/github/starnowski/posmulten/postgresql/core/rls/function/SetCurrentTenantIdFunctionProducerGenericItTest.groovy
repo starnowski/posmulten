@@ -1,6 +1,7 @@
-package com.github.starnowski.posmulten.postgresql.core.rls
+package com.github.starnowski.posmulten.postgresql.core.rls.function
 
 import com.github.starnowski.posmulten.postgresql.core.AbstractFunctionFactoryGenericItTest
+import com.github.starnowski.posmulten.postgresql.core.rls.SetCurrentTenantIdFunctionProducerParameters
 
 class SetCurrentTenantIdFunctionProducerGenericItTest extends AbstractFunctionFactoryGenericItTest{
 
@@ -13,6 +14,6 @@ class SetCurrentTenantIdFunctionProducerGenericItTest extends AbstractFunctionFa
 
     @Override
     protected returnCorrectParametersSpyObject() {
-        Spy(SetCurrentTenantIdFunctionProducerParameters, constructorArgs: ["set_current_tenant", "c.c_ten" , "public", "text"])
+        Spy(SetCurrentTenantIdFunctionProducerParameters, constructorArgs: ["set_current_tenant", "c.c_ten", "public", "text"])
     }
 }
