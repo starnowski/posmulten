@@ -39,16 +39,16 @@ class GetCurrentTenantIdFunctionProducerItTest extends Specification {
             schema = testSchema
             assertEquals(false, isFunctionExists(jdbcTemplate, functionName, schema))
             def expectedStatementResult = "function_value-->" + testPropertyValue + "<--"
-            def selectStatementWithStringConcat = returnSelectStatementWithStringConcat(testSchema, testFunctionName)
 
         when:
-            jdbcTemplate.execute(tested.produce(new GetCurrentTenantIdFunctionProducerParameters(testFunctionName, testCurrentTenantIdProperty, testSchema, testReturnType)).getCreateScript())
+            def definition = tested.produce(new GetCurrentTenantIdFunctionProducerParameters(testFunctionName, testCurrentTenantIdProperty, testSchema, testReturnType))
+            jdbcTemplate.execute(definition.getCreateScript())
 
         then:
             isFunctionExists(jdbcTemplate, functionName, schema)
 
         and: "return correct result for contact statement"
-            getStringResultForSelectStatement(testCurrentTenantIdProperty, testPropertyValue, selectStatementWithStringConcat) == expectedStatementResult
+            getStringResultForSelectStatement(testCurrentTenantIdProperty, testPropertyValue, returnSelectStatementWithStringConcat(definition.returnGetCurrentTenantIdFunctionInvocation())) == expectedStatementResult
 
         where:
             testSchema              |   testFunctionName            |   testCurrentTenantIdProperty     |   testReturnType  | testPropertyValue
@@ -73,19 +73,19 @@ class GetCurrentTenantIdFunctionProducerItTest extends Specification {
             def propertyValue = r.nextString()
             assertEquals(false, isFunctionExists(jdbcTemplate, functionName, schema))
             def expectedStatementResult = "function_value-->" + propertyValue + "<--"
-            def selectStatementWithStringConcat = returnSelectStatementWithStringConcat(testSchema, functionName)
             logger.log(java.util.logging.Level.INFO, "Random function name: " + functionName)
             logger.log(java.util.logging.Level.INFO, "Random current tenant property name: " + currentTenantIdProperty)
             logger.log(java.util.logging.Level.INFO, "Random tenant property value: " + propertyValue)
 
         when:
-            jdbcTemplate.execute(tested.produce(new GetCurrentTenantIdFunctionProducerParameters(functionName, currentTenantIdProperty, testSchema, null)).getCreateScript())
+            def definition = tested.produce(new GetCurrentTenantIdFunctionProducerParameters(functionName, currentTenantIdProperty, testSchema, null))
+            jdbcTemplate.execute(definition.getCreateScript())
 
         then:
             isFunctionExists(jdbcTemplate, functionName, schema)
 
         and: "return correct result for contact statement"
-            getStringResultForSelectStatement(currentTenantIdProperty, propertyValue, selectStatementWithStringConcat) == expectedStatementResult
+            getStringResultForSelectStatement(currentTenantIdProperty, propertyValue, returnSelectStatementWithStringConcat(definition.returnGetCurrentTenantIdFunctionInvocation())) == expectedStatementResult
 
         where:
             testSchema << [null, "public", "non_public_schema"]
@@ -109,7 +109,7 @@ class GetCurrentTenantIdFunctionProducerItTest extends Specification {
         })
     }
 
-    private String returnSelectStatementWithStringConcat(String testSchema, String testFunctionName) {
-        "SELECT CONCAT('function_value-->' || " + (testSchema == null ? "" : testSchema + ".") + testFunctionName + "()" + " || '<--')"
+    private String returnSelectStatementWithStringConcat(String getCurrentTenantIdFunctionInvocation) {
+        "SELECT CONCAT('function_value-->' || " + getCurrentTenantIdFunctionInvocation + " || '<--')"
     }
 }
