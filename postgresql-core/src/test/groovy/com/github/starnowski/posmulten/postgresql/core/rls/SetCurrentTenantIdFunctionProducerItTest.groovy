@@ -105,8 +105,7 @@ class SetCurrentTenantIdFunctionProducerItTest extends Specification {
         return jdbcTemplate.execute(new StatementCallback<String>() {
             @Override
             String doInStatement(Statement statement) throws SQLException, DataAccessException {
-                //TODO Code refactor - change method (rename also) so that the 'SELECT' phrase should be also expected part of the statement.
-                statement.execute("SELECT " + statementThatSetTenant)
+                statement.execute(statementThatSetTenant)
                 ResultSet rs = statement.executeQuery(selectStatement)
                 rs.next()
                 return rs.getString(1)
