@@ -1,6 +1,6 @@
-package com.github.starnowski.posmulten.postgresql.core.rls;
+package com.github.starnowski.posmulten.postgresql.core.rls.function;
 
-public class SetCurrentTenantIdFunctionProducerParameters implements ISetCurrentTenantIdFunctionProducerParameters{
+public class SetCurrentTenantIdFunctionProducerParameters implements ISetCurrentTenantIdFunctionProducerParameters {
 
     private final String functionName;
     private final String currentTenantIdProperty;

@@ -4,7 +4,6 @@ import com.github.starnowski.posmulten.postgresql.core.AbstractFunctionFactory;
 import com.github.starnowski.posmulten.postgresql.core.DefaultFunctionDefinition;
 import com.github.starnowski.posmulten.postgresql.core.IFunctionArgument;
 import com.github.starnowski.posmulten.postgresql.core.IFunctionDefinition;
-import com.github.starnowski.posmulten.postgresql.core.rls.IEqualsCurrentTenantIdentifierFunctionProducerParameters;
 
 import java.util.List;
 
