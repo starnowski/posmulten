@@ -4,10 +4,15 @@ import com.github.starnowski.posmulten.postgresql.core.TestApplication
 import com.github.starnowski.posmulten.postgresql.core.common.function.DefaultFunctionDefinition
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.dao.DataAccessException
 import org.springframework.jdbc.core.JdbcTemplate
+import org.springframework.jdbc.core.StatementCallback
 import spock.lang.Specification
 import spock.lang.Unroll
 
+import java.sql.ResultSet
+import java.sql.SQLException
+import java.sql.Statement
 import java.util.logging.Logger
 
 import static com.github.starnowski.posmulten.postgresql.core.TestUtils.dropFunction
@@ -33,6 +38,7 @@ class EqualsCurrentTenantIdentifierFunctionProducerItTest extends Specification 
     String argumentType
     GetCurrentTenantIdFunctionDefinition getCurrentTenantIdFunctionDefinition
     SetCurrentTenantIdFunctionDefinition setCurrentTenantIdFunctionDefinition
+    DefaultFunctionDefinition functionDefinition
 
     @Unroll
     def "should create function '#testFunctionName' for schema '#testSchema' (null means public) which returns type '#testReturnType' and returns correct value of property #testCurrentTenantIdProperty" () {
@@ -46,14 +52,14 @@ class EqualsCurrentTenantIdentifierFunctionProducerItTest extends Specification 
             jdbcTemplate.execute(setCurrentTenantIdFunctionDefinition.getCreateScript())
 
         when:
-            def definition = tested.produce(new EqualsCurrentTenantIdentifierFunctionProducerParameters(testFunctionName, testSchema, null, getCurrentTenantIdFunctionDefinition))
-            jdbcTemplate.execute(definition.getCreateScript())
+            functionDefinition = tested.produce(new EqualsCurrentTenantIdentifierFunctionProducerParameters(testFunctionName, testSchema, null, getCurrentTenantIdFunctionDefinition))
+            jdbcTemplate.execute(functionDefinition.getCreateScript())
 
         then:
             isFunctionExists(jdbcTemplate, functionName, schema)
 
-        and: "return correct result for contact statement"
-            getStringResultForSelectStatement(definition, testCurrentTenantIdValue, passedValue) == exptectedResult
+        and: "return correct result"
+            returnSelectStatementResultAfterSettingCurrentTenantId(testCurrentTenantIdValue, passedValue) == exptectedResult
 
         where:
             testSchema              |   testFunctionName            |   testCurrentTenantIdProperty             |  testCurrentTenantIdValue     |   passedValue             || exptectedResult
@@ -69,20 +75,21 @@ class EqualsCurrentTenantIdentifierFunctionProducerItTest extends Specification 
         def argumentTypePhrase = argumentType == null ? "text" : argumentType
         dropFunction(jdbcTemplate, functionName, schema, argumentTypePhrase)
         assertEquals(false, isFunctionExists(jdbcTemplate, functionName, schema))
+        jdbcTemplate.execute(getCurrentTenantIdFunctionDefinition.getDropScript())
+        jdbcTemplate.execute(setCurrentTenantIdFunctionDefinition.getDropScript())
     }
 
-    def getStringResultForSelectStatement(DefaultFunctionDefinition functionDefinition, String propertyName, String propertyValue)
+    def returnSelectStatementResultAfterSettingCurrentTenantId(String propertyValue, String passedValue)
     {
-//        return jdbcTemplate.execute(new StatementCallback<String>() {
-//            @Override
-//            String doInStatement(Statement statement) throws SQLException, DataAccessException {
-//                statement.execute("SET " + propertyName + " = '" + propertyValue + "';")
-//                ResultSet rs = statement.executeQuery(selectStatement)
-//                rs.next()
-//                return rs.getString(1)
-//            }
-//        })
-        //TODO
-        null
+        return jdbcTemplate.execute(new StatementCallback<String>() {
+            @Override
+            String doInStatement(Statement statement) throws SQLException, DataAccessException {
+                statement.execute(setCurrentTenantIdFunctionDefinition.generateStatementThatSetTenant(propertyValue))
+                def selectStatement = String.format("SELECT %s('%s')", functionDefinition.getFunctionReference(), passedValue)
+                ResultSet rs = statement.executeQuery(selectStatement)
+                rs.next()
+                return rs.getString(1)
+            }
+        })
     }
 }
