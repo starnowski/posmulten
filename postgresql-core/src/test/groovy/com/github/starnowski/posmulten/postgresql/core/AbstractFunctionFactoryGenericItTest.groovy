@@ -1,6 +1,6 @@
 package com.github.starnowski.posmulten.postgresql.core
 
-import com.github.starnowski.posmulten.postgresql.core.rls.IFunctionFactoryParameters
+
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.jdbc.core.JdbcTemplate

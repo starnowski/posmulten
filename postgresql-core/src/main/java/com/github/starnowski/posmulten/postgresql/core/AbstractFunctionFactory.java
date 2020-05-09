@@ -1,7 +1,5 @@
 package com.github.starnowski.posmulten.postgresql.core;
 
-import com.github.starnowski.posmulten.postgresql.core.rls.IFunctionFactoryParameters;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
