@@ -1,6 +1,7 @@
 package com.github.starnowski.posmulten.postgresql.core.rls.function
 
 import com.github.starnowski.posmulten.postgresql.core.TestApplication
+import com.github.starnowski.posmulten.postgresql.core.common.function.DefaultFunctionDefinition
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.jdbc.core.JdbcTemplate
@@ -52,10 +53,10 @@ class EqualsCurrentTenantIdentifierFunctionProducerItTest extends Specification 
             isFunctionExists(jdbcTemplate, functionName, schema)
 
         and: "return correct result for contact statement"
-            getStringResultForSelectStatement(expectedCurrentTenantId, passedTenantId) == exptectedResult
+            getStringResultForSelectStatement(definition, testCurrentTenantIdValue, passedValue) == exptectedResult
 
         where:
-            testSchema              |   testFunctionName            |   testCurrentTenantIdProperty             |  testCurrentTenantIdProperty  |   passedValue             || exptectedResult
+            testSchema              |   testFunctionName            |   testCurrentTenantIdProperty             |  testCurrentTenantIdValue     |   passedValue             || exptectedResult
             null                    |   "get_current_tenant"        |   VALID_CURRENT_TENANT_ID_PROPERTY_NAME   |   "ASDFZXCVZS"                |   "ASDFZXCVZS"            ||   "t"
             "public"                |   "get_current_tenant"        |   VALID_CURRENT_TENANT_ID_PROPERTY_NAME   |   "ASDFZXCVZS"                |   "ASDFZXCVZS"            ||   "t"
             "non_public_schema"     |   "get_current_tenant"        |   VALID_CURRENT_TENANT_ID_PROPERTY_NAME   |   "ASDFZXCVZS"                |   "ASDFZXCVZS"            ||   "t"
@@ -70,7 +71,7 @@ class EqualsCurrentTenantIdentifierFunctionProducerItTest extends Specification 
         assertEquals(false, isFunctionExists(jdbcTemplate, functionName, schema))
     }
 
-    def getStringResultForSelectStatement(String propertyName, String propertyValue)
+    def getStringResultForSelectStatement(DefaultFunctionDefinition functionDefinition, String propertyName, String propertyValue)
     {
 //        return jdbcTemplate.execute(new StatementCallback<String>() {
 //            @Override
