@@ -51,7 +51,7 @@ class SetCurrentTenantIdFunctionProducerItTest extends Specification {
             isFunctionExists(jdbcTemplate, functionName, schema)
 
         and: "return correct result for contact statement"
-            getStringResultForSelectStatement(functionDefinition.generateStatementThatSetTenant(testPropertyValue), selectStatementWithStringConcat) == expectedStatementResult
+            returnSelectStatementResultAfterSettingCurrentTenantId(functionDefinition.generateStatementThatSetTenant(testPropertyValue), selectStatementWithStringConcat) == expectedStatementResult
 
         where:
             testSchema              |   testFunctionName            |   testCurrentTenantIdProperty     |   testArgumentType    | testPropertyValue
@@ -88,7 +88,7 @@ class SetCurrentTenantIdFunctionProducerItTest extends Specification {
             isFunctionExists(jdbcTemplate, functionName, schema)
 
         and: "return correct result for contact statement"
-            getStringResultForSelectStatement(functionDefinition.generateStatementThatSetTenant(propertyValue), selectStatementWithStringConcat) == expectedStatementResult
+            returnSelectStatementResultAfterSettingCurrentTenantId(functionDefinition.generateStatementThatSetTenant(propertyValue), selectStatementWithStringConcat) == expectedStatementResult
 
         where:
             testSchema << [null, "public", "non_public_schema"]
@@ -100,8 +100,7 @@ class SetCurrentTenantIdFunctionProducerItTest extends Specification {
         assertEquals(false, isFunctionExists(jdbcTemplate, functionName, schema))
     }
 
-    //TODO Rename method ... returnSelectStatementResultAfterSettingCurrentTenantId
-    def getStringResultForSelectStatement(String statementThatSetTenant, String selectStatement)
+    def returnSelectStatementResultAfterSettingCurrentTenantId(String statementThatSetTenant, String selectStatement)
     {
         return jdbcTemplate.execute(new StatementCallback<String>() {
             @Override
