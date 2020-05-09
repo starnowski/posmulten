@@ -34,15 +34,15 @@ class SetCurrentTenantIdFunctionProducerTest extends AbstractFunctionFactoryTest
 
         where:
             testSchema              |   testFunctionName            |   currentTenantValue      || expectedStatement
-            null                    |   "set_current_tenant"        |   "DFSDGFSG"              ||  "set_current_tenant('DFSDGFSG');"
-            "public"                |   "set_current_tenant"        |   "DFSDGFSG"              ||  "public.set_current_tenant('DFSDGFSG');"
-            "non_public_schema"     |   "set_current_tenant"        |   "DFSDGFSG"              ||  "non_public_schema.set_current_tenant('DFSDGFSG');"
-            null                    |   "set_current_tenant"        |   "xxxsdfadf"             ||  "set_current_tenant('xxxsdfadf');"
-            "public"                |   "set_current_tenant"        |   "xxxsdfadf"             ||  "public.set_current_tenant('xxxsdfadf');"
-            "non_public_schema"     |   "set_current_tenant"        |   "xxxsdfadf"             ||  "non_public_schema.set_current_tenant('xxxsdfadf');"
-            null                    |   "this_is_tenant"            |   "1234433"               ||  "this_is_tenant('1234433');"
-            "public"                |   "this_is_tenant"            |   "1234433"               ||  "public.this_is_tenant('1234433');"
-            "non_public_schema"     |   "this_is_tenant"            |   "1234433"               ||  "non_public_schema.this_is_tenant('1234433');"
+            null                    |   "set_current_tenant"        |   "DFSDGFSG"              ||  "SELECT set_current_tenant('DFSDGFSG');"
+            "public"                |   "set_current_tenant"        |   "DFSDGFSG"              ||  "SELECT public.set_current_tenant('DFSDGFSG');"
+            "non_public_schema"     |   "set_current_tenant"        |   "DFSDGFSG"              ||  "SELECT non_public_schema.set_current_tenant('DFSDGFSG');"
+            null                    |   "set_current_tenant"        |   "xxxsdfadf"             ||  "SELECT set_current_tenant('xxxsdfadf');"
+            "public"                |   "set_current_tenant"        |   "xxxsdfadf"             ||  "SELECT public.set_current_tenant('xxxsdfadf');"
+            "non_public_schema"     |   "set_current_tenant"        |   "xxxsdfadf"             ||  "SELECT non_public_schema.set_current_tenant('xxxsdfadf');"
+            null                    |   "this_is_tenant"            |   "1234433"               ||  "SELECT this_is_tenant('1234433');"
+            "public"                |   "this_is_tenant"            |   "1234433"               ||  "SELECT public.this_is_tenant('1234433');"
+            "non_public_schema"     |   "this_is_tenant"            |   "1234433"               ||  "SELECT non_public_schema.this_is_tenant('1234433');"
     }
 
     @Unroll
