@@ -1,7 +1,5 @@
 package com.github.starnowski.posmulten.postgresql.core.common.function;
 
-import java.util.Objects;
-
 public class FunctionArgumentBuilder {
 
     private String type;
@@ -33,17 +31,6 @@ public class FunctionArgumentBuilder {
         @Override
         public String getType() {
             return type;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            //TODO Add generic unit tests
-            return this == o;
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(type);
         }
     }
 }
