@@ -16,6 +16,8 @@ import static org.junit.Assert.assertEquals
 @SpringBootTest(classes = [TestApplication.class])
 class EqualsCurrentTenantIdentifierFunctionProducerItTest extends Specification {
 
+    private static String VALID_CURRENT_TENANT_ID_PROPERTY_NAME = "c.c_ten"
+
     @Autowired
     JdbcTemplate jdbcTemplate
 
@@ -43,7 +45,8 @@ class EqualsCurrentTenantIdentifierFunctionProducerItTest extends Specification 
             jdbcTemplate.execute(setCurrentTenantIdFunctionDefinition.getCreateScript())
 
         when:
-            jdbcTemplate.execute(tested.produce(new EqualsCurrentTenantIdentifierFunctionProducerParameters(testFunctionName, testSchema, null, getCurrentTenantIdFunctionDefinition)).getCreateScript())
+            def definition = tested.produce(new EqualsCurrentTenantIdentifierFunctionProducerParameters(testFunctionName, testSchema, null, getCurrentTenantIdFunctionDefinition))
+            jdbcTemplate.execute(definition.getCreateScript())
 
         then:
             isFunctionExists(jdbcTemplate, functionName, schema)
@@ -52,10 +55,13 @@ class EqualsCurrentTenantIdentifierFunctionProducerItTest extends Specification 
             getStringResultForSelectStatement(expectedCurrentTenantId, passedTenantId) == exptectedResult
 
         where:
-            testSchema              |   testFunctionName            |   expectedCurrentTenantId         |  testCurrentTenantIdProperty              | exptectedResult
-            null                    |   "get_current_tenant"        |   "ASDFZXCVZS"                    |   "ASDFZXCVZS"                            |   "t"
-            "public"                |   "get_current_tenant"        |   "ASDFZXCVZS"                    |   "ASDFZXCVZS"                            |   "t"
-            "non_public_schema"     |   "get_current_tenant"        |   "ASDFZXCVZS"                    |   "ASDFZXCVZS"                            |   "t"
+            testSchema              |   testFunctionName            |   testCurrentTenantIdProperty             |  testCurrentTenantIdProperty  |   passedValue             || exptectedResult
+            null                    |   "get_current_tenant"        |   VALID_CURRENT_TENANT_ID_PROPERTY_NAME   |   "ASDFZXCVZS"                |   "ASDFZXCVZS"            ||   "t"
+            "public"                |   "get_current_tenant"        |   VALID_CURRENT_TENANT_ID_PROPERTY_NAME   |   "ASDFZXCVZS"                |   "ASDFZXCVZS"            ||   "t"
+            "non_public_schema"     |   "get_current_tenant"        |   VALID_CURRENT_TENANT_ID_PROPERTY_NAME   |   "ASDFZXCVZS"                |   "ASDFZXCVZS"            ||   "t"
+            null                    |   "get_current_tenant"        |   VALID_CURRENT_TENANT_ID_PROPERTY_NAME   |   "ASDFZXCVZS"                |   "1234DADF"              ||   "f"
+            "public"                |   "get_current_tenant"        |   VALID_CURRENT_TENANT_ID_PROPERTY_NAME   |   "ASDFZXCVZS"                |   "VZXCV"                 ||   "f"
+            "non_public_schema"     |   "get_current_tenant"        |   VALID_CURRENT_TENANT_ID_PROPERTY_NAME   |   "ASDFZXCVZS"                |   "FDFGSFGS"              ||   "f"
     }
 
     def cleanup() {
