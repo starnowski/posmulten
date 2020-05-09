@@ -30,7 +30,7 @@ class SetCurrentTenantIdFunctionProducerTest extends AbstractFunctionFactoryTest
     @Unroll
     def "should generate statement that invokes function '#testFunctionName' and set current tenant value ('#currentTenantValue') for schema '#testSchema' " () {
         expect:
-            tested.produce(new SetCurrentTenantIdFunctionProducerParameters(testFunctionName, VALID_CURRENT_TENANT_ID_PROPERTY_NAME, testSchema, null)).generateStatementThatSetTenant(currentTenantValue)
+            tested.produce(new SetCurrentTenantIdFunctionProducerParameters(testFunctionName, VALID_CURRENT_TENANT_ID_PROPERTY_NAME, testSchema, null)).generateStatementThatSetTenant(currentTenantValue) == expectedStatement
 
         where:
             testSchema              |   testFunctionName            |   currentTenantValue      || expectedStatement
