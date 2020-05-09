@@ -4,7 +4,7 @@ import com.github.starnowski.posmulten.postgresql.core.common.function.IFunction
 
 public interface IEqualsCurrentTenantIdentifierFunctionProducerParameters extends IFunctionFactoryParameters {
 
-    String getParameterType();
+    String getArgumentType();
 
     IGetCurrentTenantIdFunctionInvocationFactory getCurrentTenantIdFunctionInvocationFactory();
 }

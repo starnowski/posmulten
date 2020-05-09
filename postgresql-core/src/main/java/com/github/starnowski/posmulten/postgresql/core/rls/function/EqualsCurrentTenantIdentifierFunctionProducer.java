@@ -21,13 +21,13 @@ public class EqualsCurrentTenantIdentifierFunctionProducer extends AbstractFunct
         }
         sb.append(parameters.getFunctionName());
         sb.append("(");
-        if (parameters.getParameterType() == null)
+        if (parameters.getArgumentType() == null)
         {
             sb.append("VARCHAR(255)");
         }
         else
         {
-            sb.append(parameters.getParameterType());
+            sb.append(parameters.getArgumentType());
         }
         sb.append(")");
         sb.append(" RETURNS BOOLEAN");
