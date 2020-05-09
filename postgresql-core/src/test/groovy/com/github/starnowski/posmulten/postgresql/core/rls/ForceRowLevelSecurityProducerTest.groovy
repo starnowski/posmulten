@@ -1,4 +1,4 @@
-package com.github.starnowski.posmulten.postgresql.core
+package com.github.starnowski.posmulten.postgresql.core.rls
 
 import spock.lang.Specification
 import spock.lang.Unroll
