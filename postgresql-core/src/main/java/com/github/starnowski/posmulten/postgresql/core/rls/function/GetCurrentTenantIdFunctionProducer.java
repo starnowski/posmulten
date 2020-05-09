@@ -2,10 +2,7 @@ package com.github.starnowski.posmulten.postgresql.core.rls.function;
 
 import com.github.starnowski.posmulten.postgresql.core.common.function.AbstractFunctionFactory;
 import com.github.starnowski.posmulten.postgresql.core.common.function.DefaultFunctionDefinition;
-import com.github.starnowski.posmulten.postgresql.core.common.function.IFunctionArgument;
 import com.github.starnowski.posmulten.postgresql.core.common.function.IFunctionDefinition;
-
-import java.util.List;
 
 /**
  * The component produces a statement that creates a function that returns the current tenant identifier.
@@ -67,10 +64,5 @@ public class GetCurrentTenantIdFunctionProducer extends AbstractFunctionFactory<
         sb.append("STABLE PARALLEL SAFE");
         sb.append(";");
         return sb.toString();
-    }
-
-    @Override
-    protected List<IFunctionArgument> prepareFunctionArguments(IGetCurrentTenantIdFunctionProducerParameters parameters) {
-        return null;
     }
 }

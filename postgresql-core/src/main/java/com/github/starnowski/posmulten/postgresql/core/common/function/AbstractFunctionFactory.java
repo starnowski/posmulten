@@ -1,11 +1,10 @@
 package com.github.starnowski.posmulten.postgresql.core.common.function;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static java.lang.String.format;
-import static java.util.Optional.ofNullable;
+import static java.util.Collections.emptyList;
 
 public abstract class AbstractFunctionFactory<P extends IFunctionFactoryParameters, R extends DefaultFunctionDefinition> implements FunctionFactory<P,R> {
 
@@ -41,7 +40,7 @@ public abstract class AbstractFunctionFactory<P extends IFunctionFactoryParamete
 
     protected String prepareArgumentsPhrase(List<IFunctionArgument> functionArguments)
     {
-        return ofNullable(functionArguments).orElse(new ArrayList<IFunctionArgument>()).stream().map(IFunctionArgument::getType).collect(Collectors.joining( ", " ));
+        return functionArguments.stream().map(IFunctionArgument::getType).collect(Collectors.joining( ", " ));
     }
 
     protected void validate(P parameters)
@@ -68,5 +67,8 @@ public abstract class AbstractFunctionFactory<P extends IFunctionFactoryParamete
 
     abstract protected String produceStatement(P parameters);
 
-    abstract protected List<IFunctionArgument> prepareFunctionArguments(P parameters);
+    protected List<IFunctionArgument> prepareFunctionArguments(P parameters)
+    {
+        return emptyList();
+    }
 }
