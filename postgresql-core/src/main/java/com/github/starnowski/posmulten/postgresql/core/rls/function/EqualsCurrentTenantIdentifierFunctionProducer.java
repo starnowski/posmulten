@@ -2,12 +2,26 @@ package com.github.starnowski.posmulten.postgresql.core.rls.function;
 
 import com.github.starnowski.posmulten.postgresql.core.common.function.AbstractFunctionFactory;
 import com.github.starnowski.posmulten.postgresql.core.common.function.DefaultFunctionDefinition;
+import com.github.starnowski.posmulten.postgresql.core.common.function.IFunctionArgument;
 import com.github.starnowski.posmulten.postgresql.core.common.function.IFunctionDefinition;
 
+import java.util.List;
+
+import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentBuilder.forType;
+import static java.util.Collections.singletonList;
+
 public class EqualsCurrentTenantIdentifierFunctionProducer extends AbstractFunctionFactory<IEqualsCurrentTenantIdentifierFunctionProducerParameters, DefaultFunctionDefinition> {
+
+    public static final String DEFAULT_ARGUMENT_TYPE = "VARCHAR(255)";
+
     @Override
     protected DefaultFunctionDefinition returnFunctionDefinition(IEqualsCurrentTenantIdentifierFunctionProducerParameters parameters, IFunctionDefinition functionDefinition) {
         return new DefaultFunctionDefinition(functionDefinition);
+    }
+
+    @Override
+    protected List<IFunctionArgument> prepareFunctionArguments(IEqualsCurrentTenantIdentifierFunctionProducerParameters parameters) {
+        return singletonList(forType(parameters.getArgumentType() == null ? DEFAULT_ARGUMENT_TYPE : parameters.getArgumentType()));
     }
 
     @Override
@@ -23,7 +37,7 @@ public class EqualsCurrentTenantIdentifierFunctionProducer extends AbstractFunct
         sb.append("(");
         if (parameters.getArgumentType() == null)
         {
-            sb.append("VARCHAR(255)");
+            sb.append(DEFAULT_ARGUMENT_TYPE);
         }
         else
         {
