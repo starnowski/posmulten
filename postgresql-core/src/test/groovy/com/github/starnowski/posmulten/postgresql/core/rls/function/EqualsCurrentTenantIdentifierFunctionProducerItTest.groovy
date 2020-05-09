@@ -13,7 +13,6 @@ import spock.lang.Unroll
 import java.sql.ResultSet
 import java.sql.SQLException
 import java.sql.Statement
-import java.util.logging.Logger
 
 import static com.github.starnowski.posmulten.postgresql.core.TestUtils.dropFunction
 import static com.github.starnowski.posmulten.postgresql.core.TestUtils.isFunctionExists
@@ -26,8 +25,6 @@ class EqualsCurrentTenantIdentifierFunctionProducerItTest extends Specification 
 
     @Autowired
     JdbcTemplate jdbcTemplate
-
-    static Logger logger = Logger.getLogger(GetCurrentTenantIdFunctionProducerItTest.class.getName())
 
     def tested = new EqualsCurrentTenantIdentifierFunctionProducer()
     def getCurrentTenantIdFunctionProducer = new GetCurrentTenantIdFunctionProducer()
