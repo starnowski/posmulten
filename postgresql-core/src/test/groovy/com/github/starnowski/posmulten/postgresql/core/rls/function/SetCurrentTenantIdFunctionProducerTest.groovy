@@ -127,6 +127,6 @@ class SetCurrentTenantIdFunctionProducerTest extends AbstractFunctionFactoryTest
 
     @Override
     protected returnCorrectParametersSpyObject() {
-        Spy(SetCurrentTenantIdFunctionProducerParameters, constructorArgs: ["set_current_tenant", VALID_CURRENT_TENANT_ID_PROPERTY_NAME , "public", "text"])
+        Spy(SetCurrentTenantIdFunctionProducerParameters, constructorArgs: ["set_current_tenant", VALID_CURRENT_TENANT_ID_PROPERTY_NAME , "public", "VARCHAR(32)"])
     }
 }
