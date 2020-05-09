@@ -108,16 +108,16 @@ class SetCurrentTenantIdFunctionProducerTest extends AbstractFunctionFactoryTest
             ex.message == "Argument type cannot be blank"
 
         where:
-            testCurrentTenantIdProperty     |   functionName                |   testSchema          | testArgumentType
-            VALID_CURRENT_TENANT_ID_PROPERTY_NAME                       |   "return_current_tenant"     |   null                | ""
-            "pos.tenant"                    |   "return_current_tenant"     |   null                | "     "
-            "t.id"                          |   "return_current_tenant"     |   null                | " "
-            VALID_CURRENT_TENANT_ID_PROPERTY_NAME                       |   "return_current_tenant"     |   "public"            | "         "
-            "pos.tenant"                    |   "return_current_tenant"     |   "public"            | " "
-            "t.id"                          |   "return_current_tenant"     |   "public"            | "             "
-            VALID_CURRENT_TENANT_ID_PROPERTY_NAME                       |   "get_current_tenant"        |   "non_public_schema" | " "
-            "pos.tenant"                    |   "get_current_tenant"        |   "non_public_schema" | ""
-            "t.id"                          |   "get_current_tenant"        |   "non_public_schema" | "          "
+            testCurrentTenantIdProperty             |   functionName                |   testSchema          | testArgumentType
+            VALID_CURRENT_TENANT_ID_PROPERTY_NAME   |   "return_current_tenant"     |   null                | ""
+            "pos.tenant"                            |   "return_current_tenant"     |   null                | "     "
+            "t.id"                                  |   "return_current_tenant"     |   null                | " "
+            VALID_CURRENT_TENANT_ID_PROPERTY_NAME   |   "return_current_tenant"     |   "public"            | "         "
+            "pos.tenant"                            |   "return_current_tenant"     |   "public"            | " "
+            "t.id"                                  |   "return_current_tenant"     |   "public"            | "             "
+            VALID_CURRENT_TENANT_ID_PROPERTY_NAME   |   "get_current_tenant"        |   "non_public_schema" | " "
+            "pos.tenant"                            |   "get_current_tenant"        |   "non_public_schema" | ""
+            "t.id"                                  |   "get_current_tenant"        |   "non_public_schema" | "          "
     }
 
     @Override
