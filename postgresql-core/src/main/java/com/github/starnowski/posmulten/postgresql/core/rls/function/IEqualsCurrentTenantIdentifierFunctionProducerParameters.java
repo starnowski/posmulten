@@ -7,4 +7,6 @@ public interface IEqualsCurrentTenantIdentifierFunctionProducerParameters extend
     String getParameterType();
 
     String getReturnCurrentTenantIdStatement();
+
+    IGetCurrentTenantIdFunctionInvocationFactory getCurrentTenantIdFunctionInvocationFactory();
 }

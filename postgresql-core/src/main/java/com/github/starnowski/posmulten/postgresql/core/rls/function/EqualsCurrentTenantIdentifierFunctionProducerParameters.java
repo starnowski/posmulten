@@ -6,12 +6,14 @@ public class EqualsCurrentTenantIdentifierFunctionProducerParameters implements 
     private final String schema;
     private final String parameterType;
     private final String returnCurrentTenantIdStatement;
+    private final IGetCurrentTenantIdFunctionInvocationFactory getCurrentTenantIdFunctionInvocationFactory;
 
-    public EqualsCurrentTenantIdentifierFunctionProducerParameters(String functionName, String schema, String parameterType, String returnCurrentTenantIdStatement) {
+    public EqualsCurrentTenantIdentifierFunctionProducerParameters(String functionName, String schema, String parameterType, String returnCurrentTenantIdStatement, IGetCurrentTenantIdFunctionInvocationFactory getCurrentTenantIdFunctionInvocationFactory) {
         this.functionName = functionName;
         this.schema = schema;
         this.parameterType = parameterType;
         this.returnCurrentTenantIdStatement = returnCurrentTenantIdStatement;
+        this.getCurrentTenantIdFunctionInvocationFactory = getCurrentTenantIdFunctionInvocationFactory;
     }
 
     @Override
@@ -32,6 +34,11 @@ public class EqualsCurrentTenantIdentifierFunctionProducerParameters implements 
     @Override
     public String getReturnCurrentTenantIdStatement() {
         return returnCurrentTenantIdStatement;
+    }
+
+    @Override
+    public IGetCurrentTenantIdFunctionInvocationFactory getCurrentTenantIdFunctionInvocationFactory() {
+        return getCurrentTenantIdFunctionInvocationFactory;
     }
 
 }
