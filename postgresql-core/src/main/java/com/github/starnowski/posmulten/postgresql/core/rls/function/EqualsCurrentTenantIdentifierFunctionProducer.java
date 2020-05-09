@@ -12,7 +12,35 @@ public class EqualsCurrentTenantIdentifierFunctionProducer extends AbstractFunct
 
     @Override
     protected String produceStatement(IEqualsCurrentTenantIdentifierFunctionProducerParameters parameters) {
-        return null;
+        StringBuilder sb = new StringBuilder();
+        sb.append("CREATE OR REPLACE FUNCTION ");
+        if (parameters.getSchema() != null)
+        {
+            sb.append(parameters.getSchema());
+            sb.append(".");
+        }
+        sb.append(parameters.getFunctionName());
+        sb.append("(");
+        if (parameters.getParameterType() == null)
+        {
+            sb.append("VARCHAR(255)");
+        }
+        else
+        {
+            sb.append(parameters.getParameterType());
+        }
+        sb.append(")");
+        sb.append(" RETURNS BOOLEAN");
+        sb.append(" as $$");
+        sb.append("\n");
+        sb.append("SELECT $1 = ");
+        sb.append(parameters.getCurrentTenantIdFunctionInvocationFactory().returnGetCurrentTenantIdFunctionInvocation());
+        sb.append("\n");
+        sb.append("$$ LANGUAGE sql");
+        sb.append("\n");
+        sb.append("STABLE PARALLEL SAFE");
+        sb.append(";");
+        return sb.toString();
     }
 
 }

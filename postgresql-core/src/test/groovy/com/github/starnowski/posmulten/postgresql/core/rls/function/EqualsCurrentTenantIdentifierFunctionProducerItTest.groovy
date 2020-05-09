@@ -43,8 +43,8 @@ class EqualsCurrentTenantIdentifierFunctionProducerItTest extends Specification 
             functionName = testFunctionName
             schema = testSchema
             assertEquals(false, isFunctionExists(jdbcTemplate, functionName, schema))
-            getCurrentTenantIdFunctionDefinition = getCurrentTenantIdFunctionProducer.produce(new GetCurrentTenantIdFunctionProducerParameters(testFunctionName, testCurrentTenantIdProperty, testSchema, null))
-            setCurrentTenantIdFunctionDefinition = setCurrentTenantIdFunctionProducer.produce(new SetCurrentTenantIdFunctionProducerParameters(testFunctionName, testCurrentTenantIdProperty, testSchema, null))
+            getCurrentTenantIdFunctionDefinition = getCurrentTenantIdFunctionProducer.produce(new GetCurrentTenantIdFunctionProducerParameters("get_current_tenant", testCurrentTenantIdProperty, testSchema, null))
+            setCurrentTenantIdFunctionDefinition = setCurrentTenantIdFunctionProducer.produce(new SetCurrentTenantIdFunctionProducerParameters("set_current_tenant", testCurrentTenantIdProperty, testSchema, null))
             jdbcTemplate.execute(getCurrentTenantIdFunctionDefinition.getCreateScript())
             jdbcTemplate.execute(setCurrentTenantIdFunctionDefinition.getCreateScript())
 
@@ -60,16 +60,16 @@ class EqualsCurrentTenantIdentifierFunctionProducerItTest extends Specification 
 
         where:
             testSchema              |   testFunctionName            |   testCurrentTenantIdProperty             |  testCurrentTenantIdValue     |   passedValue             || exptectedResult
-            null                    |   "get_current_tenant"        |   VALID_CURRENT_TENANT_ID_PROPERTY_NAME   |   "ASDFZXCVZS"                |   "ASDFZXCVZS"            ||   "t"
-            "public"                |   "get_current_tenant"        |   VALID_CURRENT_TENANT_ID_PROPERTY_NAME   |   "ASDFZXCVZS"                |   "ASDFZXCVZS"            ||   "t"
-            "non_public_schema"     |   "get_current_tenant"        |   VALID_CURRENT_TENANT_ID_PROPERTY_NAME   |   "ASDFZXCVZS"                |   "ASDFZXCVZS"            ||   "t"
-            null                    |   "get_current_tenant"        |   VALID_CURRENT_TENANT_ID_PROPERTY_NAME   |   "ASDFZXCVZS"                |   "1234DADF"              ||   "f"
-            "public"                |   "get_current_tenant"        |   VALID_CURRENT_TENANT_ID_PROPERTY_NAME   |   "ASDFZXCVZS"                |   "VZXCV"                 ||   "f"
-            "non_public_schema"     |   "get_current_tenant"        |   VALID_CURRENT_TENANT_ID_PROPERTY_NAME   |   "ASDFZXCVZS"                |   "FDFGSFGS"              ||   "f"
+            null                    |   "is_current_tenant"         |   VALID_CURRENT_TENANT_ID_PROPERTY_NAME   |   "ASDFZXCVZS"                |   "ASDFZXCVZS"            ||   true
+            "public"                |   "is_current_tenant"         |   VALID_CURRENT_TENANT_ID_PROPERTY_NAME   |   "ASDFZXCVZS"                |   "ASDFZXCVZS"            ||   true
+            "non_public_schema"     |   "is_current_tenant"         |   VALID_CURRENT_TENANT_ID_PROPERTY_NAME   |   "ASDFZXCVZS"                |   "ASDFZXCVZS"            ||   true
+            null                    |   "is_current_tenant"         |   VALID_CURRENT_TENANT_ID_PROPERTY_NAME   |   "ASDFZXCVZS"                |   "1234DADF"              ||   false
+            "public"                |   "is_current_tenant"         |   VALID_CURRENT_TENANT_ID_PROPERTY_NAME   |   "ASDFZXCVZS"                |   "VZXCV"                 ||   false
+            "non_public_schema"     |   "is_current_tenant"         |   VALID_CURRENT_TENANT_ID_PROPERTY_NAME   |   "ASDFZXCVZS"                |   "FDFGSFGS"              ||   false
     }
 
     def cleanup() {
-        def argumentTypePhrase = argumentType == null ? "text" : argumentType
+        def argumentTypePhrase = argumentType == null ? "VARCHAR(255)" : argumentType
         dropFunction(jdbcTemplate, functionName, schema, argumentTypePhrase)
         assertEquals(false, isFunctionExists(jdbcTemplate, functionName, schema))
         jdbcTemplate.execute(getCurrentTenantIdFunctionDefinition.getDropScript())
@@ -78,14 +78,14 @@ class EqualsCurrentTenantIdentifierFunctionProducerItTest extends Specification 
 
     def returnSelectStatementResultAfterSettingCurrentTenantId(String propertyValue, String passedValue)
     {
-        return jdbcTemplate.execute(new StatementCallback<String>() {
+        return jdbcTemplate.execute(new StatementCallback<Boolean>() {
             @Override
-            String doInStatement(Statement statement) throws SQLException, DataAccessException {
+            Boolean doInStatement(Statement statement) throws SQLException, DataAccessException {
                 statement.execute(setCurrentTenantIdFunctionDefinition.generateStatementThatSetTenant(propertyValue))
-                def selectStatement = String.format("SELECT %s('%s')", functionDefinition.getFunctionReference(), passedValue)
+                def selectStatement = String.format("SELECT %s('%s');", functionDefinition.getFunctionReference(), passedValue)
                 ResultSet rs = statement.executeQuery(selectStatement)
                 rs.next()
-                return rs.getString(1)
+                return rs.getBoolean(1)
             }
         })
     }
