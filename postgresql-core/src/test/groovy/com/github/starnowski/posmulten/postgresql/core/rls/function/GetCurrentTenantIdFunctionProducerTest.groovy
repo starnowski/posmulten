@@ -100,6 +100,19 @@ class GetCurrentTenantIdFunctionProducerTest extends AbstractFunctionFactoryTest
             "t.id"                          |   "get_current_tenant"        |   "non_public_schema" | "          "
     }
 
+    def "should return an empty array of the arguments object"()
+    {
+        given:
+            def parameters = new GetCurrentTenantIdFunctionProducerParameters("get_current_tenant", "c.c_ten", null, null)
+
+        when:
+            def result = tested.produce(parameters)
+
+        then:
+            result.getFunctionArguments() != null
+            result.getFunctionArguments().isEmpty()
+    }
+
     @Override
     protected returnTestedObject() {
         tested
