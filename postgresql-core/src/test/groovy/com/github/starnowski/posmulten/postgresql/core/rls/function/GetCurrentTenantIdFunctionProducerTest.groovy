@@ -28,7 +28,7 @@ class GetCurrentTenantIdFunctionProducerTest extends AbstractFunctionFactoryTest
     }
 
     @Unroll
-    def "should generate statement that returns the current tenant id function invocation '" () {
+    def "should generate statement that returns the current tenant id function invocation '#expectedStatement' for schema #testSchema with name #testFunctionName" () {
         expect:
             tested.produce(new GetCurrentTenantIdFunctionProducerParameters(testFunctionName, VALID_CURRENT_TENANT_ID_PROPERTY_NAME, testSchema, null)).returnGetCurrentTenantIdFunctionInvocation() == expectedStatement
 
