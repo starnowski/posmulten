@@ -57,4 +57,12 @@ public class EqualsCurrentTenantIdentifierFunctionProducer extends AbstractFunct
         return sb.toString();
     }
 
+    @Override
+    protected void validate(IEqualsCurrentTenantIdentifierFunctionProducerParameters parameters) {
+        super.validate(parameters);
+        if (parameters.getCurrentTenantIdFunctionInvocationFactory() == null)
+        {
+            throw new IllegalArgumentException("Argument of type IGetCurrentTenantIdFunctionInvocationFactory cannot be null");
+        }
+    }
 }
