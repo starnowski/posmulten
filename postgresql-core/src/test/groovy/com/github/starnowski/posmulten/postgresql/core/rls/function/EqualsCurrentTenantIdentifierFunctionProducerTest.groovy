@@ -30,7 +30,7 @@ class EqualsCurrentTenantIdentifierFunctionProducerTest extends AbstractFunction
     }
 
     @Unroll
-    def "should throw exception of type 'IllegalArgumentException' when argument type IGetCurrentTenantIdFunctionInvocationFactory is null, even if the rest of parameters are correct, function name #functionName, schema #testSchema, return type #testArgumentType"()
+    def "should throw exception of type 'IllegalArgumentException' when argument type IGetCurrentTenantIdFunctionInvocationFactory is null, even if the rest of parameters are correct, function name #functionName, schema #testSchema"()
     {
         when:
             tested.produce(new EqualsCurrentTenantIdentifierFunctionProducerParameters(testFunctionName, testSchema, testArgumentType, null))
@@ -58,10 +58,10 @@ class EqualsCurrentTenantIdentifierFunctionProducerTest extends AbstractFunction
     }
 
     @Unroll
-    def "should throw exception of type 'IllegalArgumentException' when the argument type is blank, even if the rest of parameters are correct, function name #functionName, schema #testSchema, return type #testArgumentType"()
+    def "should throw exception of type 'IllegalArgumentException' when the argument type is blank, even if the rest of parameters are correct, function name #functionName, schema #testSchema"()
     {
         when:
-            tested.produce(new EqualsCurrentTenantIdentifierFunctionProducerParameters(testFunctionName, testSchema, testArgumentType, null))
+            tested.produce(new EqualsCurrentTenantIdentifierFunctionProducerParameters(testFunctionName, testSchema, testArgumentType, { testGetCurrentTenantIdFunction }))
 
         then:
             def ex = thrown(IllegalArgumentException.class)
