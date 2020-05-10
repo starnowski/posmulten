@@ -64,5 +64,9 @@ public class EqualsCurrentTenantIdentifierFunctionProducer extends AbstractFunct
         {
             throw new IllegalArgumentException("Parameter of type IGetCurrentTenantIdFunctionInvocationFactory cannot be null");
         }
+        if (parameters.getArgumentType() != null && parameters.getArgumentType().trim().isEmpty())
+        {
+            throw new IllegalArgumentException("Argument type cannot be blank");
+        }
     }
 }
