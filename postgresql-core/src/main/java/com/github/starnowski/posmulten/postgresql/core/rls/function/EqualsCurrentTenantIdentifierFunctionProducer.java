@@ -10,6 +10,12 @@ import java.util.List;
 import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentBuilder.forType;
 import static java.util.Collections.singletonList;
 
+/**
+ * The component produces a statement that creates a function that returns boolean which determines if passed tenant id belongs to the current tenant.
+ * For more details about function creation please check postgres documentation
+ * @see <a href="https://www.postgresql.org/docs/9.6/sql-createfunction.html">Postgres, create function</a>
+ *
+ */
 public class EqualsCurrentTenantIdentifierFunctionProducer extends AbstractFunctionFactory<IEqualsCurrentTenantIdentifierFunctionProducerParameters, DefaultFunctionDefinition> {
 
     public static final String DEFAULT_ARGUMENT_TYPE = "VARCHAR(255)";
