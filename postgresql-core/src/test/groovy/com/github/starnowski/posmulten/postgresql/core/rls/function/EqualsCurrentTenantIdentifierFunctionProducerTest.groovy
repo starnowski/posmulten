@@ -39,7 +39,7 @@ class EqualsCurrentTenantIdentifierFunctionProducerTest extends AbstractFunction
             def ex = thrown(IllegalArgumentException.class)
 
         and: "exception should have correct message"
-            ex.message == "Argument of type IGetCurrentTenantIdFunctionInvocationFactory cannot be null"
+            ex.message == "Parameter of type IGetCurrentTenantIdFunctionInvocationFactory cannot be null"
 
         where:
             testSchema              |   testFunctionName            |   testArgumentType
