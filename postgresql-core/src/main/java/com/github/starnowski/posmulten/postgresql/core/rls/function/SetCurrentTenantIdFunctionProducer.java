@@ -1,4 +1,13 @@
-package com.github.starnowski.posmulten.postgresql.core.rls;
+package com.github.starnowski.posmulten.postgresql.core.rls.function;
+
+import com.github.starnowski.posmulten.postgresql.core.common.function.AbstractFunctionFactory;
+import com.github.starnowski.posmulten.postgresql.core.common.function.IFunctionArgument;
+import com.github.starnowski.posmulten.postgresql.core.common.function.IFunctionDefinition;
+
+import java.util.List;
+
+import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentBuilder.forType;
+import static java.util.Collections.singletonList;
 
 /**
  * The component produces a statement that creates a function that sets the current tenant identifier.
@@ -6,7 +15,7 @@ package com.github.starnowski.posmulten.postgresql.core.rls;
  * @see <a href="https://www.postgresql.org/docs/9.6/sql-createfunction.html">Postgres, create function</a>
  *
  */
-public class SetCurrentTenantIdFunctionProducer extends AbstractFunctionFactory<ISetCurrentTenantIdFunctionProducerParameters>{
+public class SetCurrentTenantIdFunctionProducer extends AbstractFunctionFactory<ISetCurrentTenantIdFunctionProducerParameters, SetCurrentTenantIdFunctionDefinition> {
 
     @Override
     protected void validate(ISetCurrentTenantIdFunctionProducerParameters parameters) {
@@ -23,6 +32,11 @@ public class SetCurrentTenantIdFunctionProducer extends AbstractFunctionFactory<
         {
             throw new IllegalArgumentException("Argument type cannot be blank");
         }
+    }
+
+    @Override
+    protected SetCurrentTenantIdFunctionDefinition returnFunctionDefinition(ISetCurrentTenantIdFunctionProducerParameters parameters, IFunctionDefinition functionDefinition) {
+        return new SetCurrentTenantIdFunctionDefinition(functionDefinition);
     }
 
     @Override
@@ -62,5 +76,10 @@ public class SetCurrentTenantIdFunctionProducer extends AbstractFunctionFactory<
         sb.append("VOLATILE");
         sb.append(";");
         return sb.toString();
+    }
+
+    @Override
+    protected List<IFunctionArgument> prepareFunctionArguments(ISetCurrentTenantIdFunctionProducerParameters parameters) {
+        return singletonList(forType(parameters.getArgumentType() == null ? "text" : parameters.getArgumentType()));
     }
 }

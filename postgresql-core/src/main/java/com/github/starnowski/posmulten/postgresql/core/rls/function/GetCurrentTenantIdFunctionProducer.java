@@ -1,4 +1,8 @@
-package com.github.starnowski.posmulten.postgresql.core.rls;
+package com.github.starnowski.posmulten.postgresql.core.rls.function;
+
+import com.github.starnowski.posmulten.postgresql.core.common.function.AbstractFunctionFactory;
+import com.github.starnowski.posmulten.postgresql.core.common.function.DefaultFunctionDefinition;
+import com.github.starnowski.posmulten.postgresql.core.common.function.IFunctionDefinition;
 
 /**
  * The component produces a statement that creates a function that returns the current tenant identifier.
@@ -6,7 +10,7 @@ package com.github.starnowski.posmulten.postgresql.core.rls;
  * @see <a href="https://www.postgresql.org/docs/9.6/sql-createfunction.html">Postgres, create function</a>
  *
  */
-public class GetCurrentTenantIdFunctionProducer extends AbstractFunctionFactory<IGetCurrentTenantIdFunctionProducerParameters>{
+public class GetCurrentTenantIdFunctionProducer extends AbstractFunctionFactory<IGetCurrentTenantIdFunctionProducerParameters, GetCurrentTenantIdFunctionDefinition> {
 
     protected void validate(IGetCurrentTenantIdFunctionProducerParameters parameters) {
         super.validate(parameters);
@@ -22,6 +26,11 @@ public class GetCurrentTenantIdFunctionProducer extends AbstractFunctionFactory<
         {
             throw new IllegalArgumentException("Return type cannot be blank");
         }
+    }
+
+    @Override
+    protected GetCurrentTenantIdFunctionDefinition returnFunctionDefinition(IGetCurrentTenantIdFunctionProducerParameters parameters, IFunctionDefinition functionDefinition) {
+        return new GetCurrentTenantIdFunctionDefinition(functionDefinition);
     }
 
     @Override

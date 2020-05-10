@@ -1,5 +1,6 @@
-package com.github.starnowski.posmulten.postgresql.core
+package com.github.starnowski.posmulten.postgresql.core.rls
 
+import com.github.starnowski.posmulten.postgresql.core.TestApplication
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.jdbc.core.JdbcTemplate
@@ -10,28 +11,28 @@ import static com.github.starnowski.posmulten.postgresql.core.TestUtils.selectAn
 import static org.junit.Assert.assertEquals
 
 @SpringBootTest(classes = [TestApplication.class])
-class ForceRowLevelSecurityProducerItTest extends Specification {
+class EnableRowLevelSecurityProducerItTest extends Specification {
 
     @Autowired
     JdbcTemplate jdbcTemplate
 
-    def tested = new ForceRowLevelSecurityProducer()
+    def tested = new EnableRowLevelSecurityProducer()
 
     String table
     String schema
 
     @Unroll
-    def "should force row level security for table #testTable and schema #testSchema" () {
+    def "should enable row level security for table #testTable and schema #testSchema" () {
         given:
             table = testTable
             schema = testSchema
-            assertEquals("Table " + testTable + " has forced row level security", "f", selectAndReturnFirstRecordAsString(jdbcTemplate, selectStatement(table, schema)))
+            assertEquals("Table " + testTable + " has enabled row level security", "f", selectAndReturnFirstRecordAsString(jdbcTemplate, selectStatement(table, schema)))
 
         when:
             jdbcTemplate.execute(tested.produce(testTable, testSchema))
 
         then:
-            assertEquals("Table " + testTable + " does not have forced row level security", "t", selectAndReturnFirstRecordAsString(jdbcTemplate, selectStatement(table, schema)))
+            assertEquals("Table " + testTable + " does not have enabled row level security", "t", selectAndReturnFirstRecordAsString(jdbcTemplate, selectStatement(table, schema)))
 
         where:
             testTable           |   testSchema
@@ -48,14 +49,14 @@ class ForceRowLevelSecurityProducerItTest extends Specification {
 
     def cleanup() {
         String alteredTable = (schema == null ? "" : schema + ".") + "\"" + table + "\""
-        jdbcTemplate.execute("ALTER TABLE " + alteredTable + " NO FORCE ROW LEVEL SECURITY;")
-        assertEquals("Table " + table + " still has forced row level security", "f", selectAndReturnFirstRecordAsString(jdbcTemplate, selectStatement(table, schema)))
+        jdbcTemplate.execute("ALTER TABLE " + alteredTable + " DISABLE ROW LEVEL SECURITY;")
+        assertEquals("Table " + table + " still has enabled row level security", "f", selectAndReturnFirstRecordAsString(jdbcTemplate, selectStatement(table, schema)))
     }
 
     def selectStatement(String table, String schema)
     {
         StringBuilder sb = new StringBuilder()
-        sb.append("SELECT pc.relforcerowsecurity FROM pg_class pc, pg_catalog.pg_namespace pg ")
+        sb.append("SELECT pc.relrowsecurity FROM pg_class pc, pg_catalog.pg_namespace pg ")
         sb.append("WHERE")
         sb.append(" pc.relname = '")
         sb.append(table)

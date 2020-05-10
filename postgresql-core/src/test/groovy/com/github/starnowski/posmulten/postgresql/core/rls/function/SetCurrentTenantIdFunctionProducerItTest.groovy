@@ -1,8 +1,7 @@
-package com.github.starnowski.posmulten.postgresql.core.rls
+package com.github.starnowski.posmulten.postgresql.core.rls.function
 
 import com.github.starnowski.posmulten.postgresql.core.RandomString
 import com.github.starnowski.posmulten.postgresql.core.TestApplication
-import com.github.starnowski.posmulten.postgresql.core.TestUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.dao.DataAccessException
@@ -45,13 +44,14 @@ class SetCurrentTenantIdFunctionProducerItTest extends Specification {
             def selectStatementWithStringConcat = returnSelectStatementWithStringConcat(testCurrentTenantIdProperty)
 
         when:
-            jdbcTemplate.execute((String)tested.produce(new SetCurrentTenantIdFunctionProducerParameters(testFunctionName, testCurrentTenantIdProperty, testSchema, testArgumentType)))
+            def functionDefinition = tested.produce(new SetCurrentTenantIdFunctionProducerParameters(testFunctionName, testCurrentTenantIdProperty, testSchema, testArgumentType))
+            jdbcTemplate.execute(functionDefinition.getCreateScript())
 
         then:
             isFunctionExists(jdbcTemplate, functionName, schema)
 
         and: "return correct result for contact statement"
-            getStringResultForSelectStatement(TestUtils.returnFunctionReference(testFunctionName, testSchema), testPropertyValue, selectStatementWithStringConcat) == expectedStatementResult
+            returnSelectStatementResultAfterSettingCurrentTenantId(functionDefinition.generateStatementThatSetTenant(testPropertyValue), selectStatementWithStringConcat) == expectedStatementResult
 
         where:
             testSchema              |   testFunctionName            |   testCurrentTenantIdProperty     |   testArgumentType    | testPropertyValue
@@ -81,13 +81,14 @@ class SetCurrentTenantIdFunctionProducerItTest extends Specification {
             logger.log(java.util.logging.Level.INFO, "Random current tenant property name: " + currentTenantIdProperty)
 
         when:
-            jdbcTemplate.execute((String)tested.produce(new SetCurrentTenantIdFunctionProducerParameters(functionName, currentTenantIdProperty, schema, null)))
+            def functionDefinition = tested.produce(new SetCurrentTenantIdFunctionProducerParameters(functionName, currentTenantIdProperty, schema, null))
+            jdbcTemplate.execute(functionDefinition.getCreateScript())
 
         then:
             isFunctionExists(jdbcTemplate, functionName, schema)
 
         and: "return correct result for contact statement"
-            getStringResultForSelectStatement(TestUtils.returnFunctionReference(functionName, schema), propertyValue, selectStatementWithStringConcat) == expectedStatementResult
+            returnSelectStatementResultAfterSettingCurrentTenantId(functionDefinition.generateStatementThatSetTenant(propertyValue), selectStatementWithStringConcat) == expectedStatementResult
 
         where:
             testSchema << [null, "public", "non_public_schema"]
@@ -99,12 +100,12 @@ class SetCurrentTenantIdFunctionProducerItTest extends Specification {
         assertEquals(false, isFunctionExists(jdbcTemplate, functionName, schema))
     }
 
-    def getStringResultForSelectStatement(String functionReference, String propertyValue, String selectStatement)
+    def returnSelectStatementResultAfterSettingCurrentTenantId(String statementThatSetTenant, String selectStatement)
     {
         return jdbcTemplate.execute(new StatementCallback<String>() {
             @Override
             String doInStatement(Statement statement) throws SQLException, DataAccessException {
-                statement.execute("SELECT " + functionReference + "('" + propertyValue + "')")
+                statement.execute(statementThatSetTenant)
                 ResultSet rs = statement.executeQuery(selectStatement)
                 rs.next()
                 return rs.getString(1)

@@ -1,16 +1,18 @@
-package com.github.starnowski.posmulten.postgresql.core.rls
+package com.github.starnowski.posmulten.postgresql.core.rls.function
 
-
+import com.github.starnowski.posmulten.postgresql.core.common.function.AbstractFunctionFactoryTest
 import spock.lang.Unroll
 
 class GetCurrentTenantIdFunctionProducerTest extends AbstractFunctionFactoryTest {
+
+    private static String VALID_CURRENT_TENANT_ID_PROPERTY_NAME = "c.c_ten"
 
     def tested = new GetCurrentTenantIdFunctionProducer()
 
     @Unroll
     def "should generate statement that creates function '#testFunctionName' for schema '#testSchema' which returns type '#testReturnType' which returns value for property '#testCurrentTenantIdProperty'" () {
         expect:
-            tested.produce(new GetCurrentTenantIdFunctionProducerParameters(testFunctionName, testCurrentTenantIdProperty, testSchema, testReturnType)) == expectedStatement
+            tested.produce(new GetCurrentTenantIdFunctionProducerParameters(testFunctionName, testCurrentTenantIdProperty, testSchema, testReturnType)).getCreateScript() == expectedStatement
 
         where:
             testSchema              |   testFunctionName            |   testCurrentTenantIdProperty     |   testReturnType      || expectedStatement
@@ -23,6 +25,21 @@ class GetCurrentTenantIdFunctionProducerTest extends AbstractFunctionFactoryTest
             null                    |   "cur_tenant_val"            |   "con.tenant_id"                 |   "VARCHAR(128)"      ||  "CREATE OR REPLACE FUNCTION cur_tenant_val() RETURNS VARCHAR(128) as \$\$\nSELECT current_setting('con.tenant_id')\n\$\$ LANGUAGE sql\nSTABLE PARALLEL SAFE;"
             "public"                |   "give_me_tenant"            |   "pos.tenant"                    |   "VARCHAR(32)"       ||  "CREATE OR REPLACE FUNCTION public.give_me_tenant() RETURNS VARCHAR(32) as \$\$\nSELECT current_setting('pos.tenant')\n\$\$ LANGUAGE sql\nSTABLE PARALLEL SAFE;"
             "non_public_schema"     |   "return_current_tenant"     |   "t.id"                          |   "text"              ||  "CREATE OR REPLACE FUNCTION non_public_schema.return_current_tenant() RETURNS text as \$\$\nSELECT current_setting('t.id')\n\$\$ LANGUAGE sql\nSTABLE PARALLEL SAFE;"
+    }
+
+    @Unroll
+    def "should generate statement that returns the current tenant id function invocation '#expectedStatement' for schema #testSchema with name #testFunctionName" () {
+        expect:
+            tested.produce(new GetCurrentTenantIdFunctionProducerParameters(testFunctionName, VALID_CURRENT_TENANT_ID_PROPERTY_NAME, testSchema, null)).returnGetCurrentTenantIdFunctionInvocation() == expectedStatement
+
+        where:
+            testSchema              |   testFunctionName            || expectedStatement
+            null                    |   "get_current_tenant"        || "get_current_tenant()"
+            "public"                |   "get_current_tenant"        || "public.get_current_tenant()"
+            "non_public_schema"     |   "get_current_tenant"        || "non_public_schema.get_current_tenant()"
+            null                    |   "return_current_tenant"     || "return_current_tenant()"
+            "public"                |   "return_current_tenant"     || "public.return_current_tenant()"
+            "non_public_schema"     |   "return_current_tenant"     || "non_public_schema.return_current_tenant()"
     }
 
     @Unroll
@@ -98,6 +115,19 @@ class GetCurrentTenantIdFunctionProducerTest extends AbstractFunctionFactoryTest
             "c.c_ten"                       |   "get_current_tenant"        |   "non_public_schema" | " "
             "pos.tenant"                    |   "get_current_tenant"        |   "non_public_schema" | ""
             "t.id"                          |   "get_current_tenant"        |   "non_public_schema" | "          "
+    }
+
+    def "should return an empty array of the arguments object"()
+    {
+        given:
+            def parameters = new GetCurrentTenantIdFunctionProducerParameters("get_current_tenant", "c.c_ten", null, null)
+
+        when:
+            def result = tested.produce(parameters)
+
+        then:
+            result.getFunctionArguments() != null
+            result.getFunctionArguments().isEmpty()
     }
 
     @Override
