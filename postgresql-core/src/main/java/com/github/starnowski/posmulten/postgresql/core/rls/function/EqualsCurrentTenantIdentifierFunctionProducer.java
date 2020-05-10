@@ -62,7 +62,7 @@ public class EqualsCurrentTenantIdentifierFunctionProducer extends AbstractFunct
         super.validate(parameters);
         if (parameters.getCurrentTenantIdFunctionInvocationFactory() == null)
         {
-            throw new IllegalArgumentException("Argument of type IGetCurrentTenantIdFunctionInvocationFactory cannot be null");
+            throw new IllegalArgumentException("Parameter of type IGetCurrentTenantIdFunctionInvocationFactory cannot be null");
         }
     }
 }
