@@ -29,6 +29,34 @@ class EqualsCurrentTenantIdentifierFunctionProducerTest extends AbstractFunction
             "non_public_schema"     |   "equal_cur_ten"             |   "tenant()"                          |   "text"              ||   "CREATE OR REPLACE FUNCTION non_public_schema.equal_cur_ten(text) RETURNS BOOLEAN as \$\$\nSELECT \$1 = tenant()\n\$\$ LANGUAGE sql\nSTABLE PARALLEL SAFE;"
     }
 
+    @Unroll
+    def "should throw exception of type 'IllegalArgumentException' when argument type IGetCurrentTenantIdFunctionInvocationFactory is null, even if the rest of parameters are correct, function name #functionName, schema #testSchema, return type #testArgumentType"()
+    {
+        when:
+            tested.produce(new EqualsCurrentTenantIdentifierFunctionProducerParameters(testFunctionName, testSchema, testArgumentType, null))
+
+        then:
+            def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+            ex.message == "Argument of type IGetCurrentTenantIdFunctionInvocationFactory cannot be null"
+
+        where:
+            testSchema              |   testFunctionName            |   testArgumentType
+            null                    |   "is_current_tenant"         |   null
+            "public"                |   "is_current_tenant"         |   null
+            "non_public_schema"     |   "is_current_tenant"         |   null
+            null                    |   "is_current_tenant"         |   "text"
+            "public"                |   "is_current_tenant"         |   "text"
+            "non_public_schema"     |   "is_current_tenant"         |   "text"
+            null                    |   "give_me_tenant"            |   "text"
+            "public"                |   "give_me_tenant"            |   "text"
+            "non_public_schema"     |   "give_me_tenant"            |   "text"
+            null                    |   "give_me_tenant"            |   "VARCHAR(255)"
+            "public"                |   "give_me_tenant"            |   "VARCHAR(255)"
+            "non_public_schema"     |   "give_me_tenant"            |   "VARCHAR(255)"
+    }
+
     @Override
     protected returnTestedObject() {
         tested
