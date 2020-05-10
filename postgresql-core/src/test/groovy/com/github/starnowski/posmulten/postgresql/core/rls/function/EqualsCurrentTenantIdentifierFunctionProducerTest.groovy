@@ -57,6 +57,31 @@ class EqualsCurrentTenantIdentifierFunctionProducerTest extends AbstractFunction
             "non_public_schema"     |   "give_me_tenant"            |   "VARCHAR(255)"
     }
 
+    @Unroll
+    def "should throw exception of type 'IllegalArgumentException' when the argument type is blank, even if the rest of parameters are correct, function name #functionName, schema #testSchema, return type #testArgumentType"()
+    {
+        when:
+            tested.produce(new EqualsCurrentTenantIdentifierFunctionProducerParameters(testFunctionName, testSchema, testArgumentType, null))
+
+        then:
+            def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+            ex.message == "Argument type cannot be blank"
+
+        where:
+            testSchema              |   testFunctionName            |   testGetCurrentTenantIdFunction  |   testArgumentType
+            null                    |   "is_current_tenant"         |   "get_current_tenant()"          |   ""
+            "public"                |   "is_current_tenant"         |   "get_current_tenant()"          |   ""
+            "non_public_schema"     |   "is_current_tenant"         |   "get_current_tenant()"          |   ""
+            null                    |   "is_current_tenant"         |   "tenant()"                      |   " "
+            "public"                |   "is_current_tenant"         |   "tenant()"                      |   " "
+            "non_public_schema"     |   "is_current_tenant"         |   "tenant()"                      |   " "
+            null                    |   "give_me_tenant"            |   "tenant()"                      |   "      "
+            "public"                |   "give_me_tenant"            |   "tenant()"                      |   "      "
+            "non_public_schema"     |   "give_me_tenant"            |   "tenant()"                      |   "      "
+    }
+
     @Override
     protected returnTestedObject() {
         tested
