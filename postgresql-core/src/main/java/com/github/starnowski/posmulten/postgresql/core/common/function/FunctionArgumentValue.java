@@ -7,10 +7,7 @@ public interface FunctionArgumentValue {
 
     String getValue();
 
-    default FunctionArgumentValueEnum getType()
-    {
-        return STRING;
-    }
+    FunctionArgumentValueEnum getType();
 
     public static FunctionArgumentValue forString(String value)
     {
