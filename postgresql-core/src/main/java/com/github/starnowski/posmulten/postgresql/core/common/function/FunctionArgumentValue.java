@@ -9,17 +9,17 @@ public interface FunctionArgumentValue {
 
     FunctionArgumentValueEnum getType();
 
-    public static FunctionArgumentValue forString(String value)
+    static FunctionArgumentValue forString(String value)
     {
         return new DefaultFunctionArgumentValue(value, STRING);
     }
 
-    public static FunctionArgumentValue forReference(String value)
+    static FunctionArgumentValue forReference(String value)
     {
         return new DefaultFunctionArgumentValue(value, REFERENCE);
     }
 
-    public static class DefaultFunctionArgumentValue implements FunctionArgumentValue {
+    static class DefaultFunctionArgumentValue implements FunctionArgumentValue {
 
         private final String value;
         private final FunctionArgumentValueEnum type;
