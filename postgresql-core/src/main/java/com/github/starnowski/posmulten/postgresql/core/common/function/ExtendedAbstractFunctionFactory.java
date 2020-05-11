@@ -45,5 +45,24 @@ public abstract class ExtendedAbstractFunctionFactory<P extends IFunctionFactory
         return sb.toString();
     }
 
-    protected abstract String buildBodyAndMetaData(P parameters);
+    protected String buildBodyAndMetaData(P parameters)
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append(buildBody(parameters));
+        sb.append("\n");
+        sb.append("$$ LANGUAGE ");
+        sb.append(returnFunctionLanguage(parameters));
+        sb.append("\n");
+        sb.append(buildMetaData(parameters));
+        return sb.toString();
+    }
+
+    protected abstract String buildMetaData(P parameters);
+
+    protected abstract String buildBody(P parameters);
+
+    protected String returnFunctionLanguage(P parameters)
+    {
+        return "sql";
+    }
 }

@@ -38,15 +38,16 @@ public class GetCurrentTenantIdFunctionProducer extends ExtendedAbstractFunction
     }
 
     @Override
-    protected String buildBodyAndMetaData(IGetCurrentTenantIdFunctionProducerParameters parameters) {
+    protected String buildMetaData(IGetCurrentTenantIdFunctionProducerParameters parameters) {
+        return "STABLE PARALLEL SAFE";
+    }
+
+    @Override
+    protected String buildBody(IGetCurrentTenantIdFunctionProducerParameters parameters) {
         StringBuilder sb = new StringBuilder();
         sb.append("SELECT current_setting('");
         sb.append(parameters.getCurrentTenantIdProperty());
         sb.append("')");
-        sb.append("\n");
-        sb.append("$$ LANGUAGE sql");
-        sb.append("\n");
-        sb.append("STABLE PARALLEL SAFE");
         return sb.toString();
     }
 }
