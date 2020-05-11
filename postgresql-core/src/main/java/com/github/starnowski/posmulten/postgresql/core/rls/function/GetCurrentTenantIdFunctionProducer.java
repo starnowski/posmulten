@@ -39,7 +39,7 @@ public class GetCurrentTenantIdFunctionProducer extends ExtendedAbstractFunction
 
     @Override
     protected String buildMetaData(IGetCurrentTenantIdFunctionProducerParameters parameters) {
-        return "STABLE PARALLEL SAFE";
+        return "STABLE\nPARALLEL SAFE";
     }
 
     @Override
