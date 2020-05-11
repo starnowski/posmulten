@@ -16,13 +16,13 @@ import static java.util.Collections.singletonList;
  * @see <a href="https://www.postgresql.org/docs/9.6/sql-createfunction.html">Postgres, create function</a>
  *
  */
-public class EqualsCurrentTenantIdentifierFunctionProducer extends AbstractFunctionFactory<IEqualsCurrentTenantIdentifierFunctionProducerParameters, DefaultFunctionDefinition> {
+public class EqualsCurrentTenantIdentifierFunctionProducer extends AbstractFunctionFactory<IEqualsCurrentTenantIdentifierFunctionProducerParameters, EqualsCurrentTenantIdentifierFunctionDefinition> {
 
     public static final String DEFAULT_ARGUMENT_TYPE = "VARCHAR(255)";
 
     @Override
-    protected DefaultFunctionDefinition returnFunctionDefinition(IEqualsCurrentTenantIdentifierFunctionProducerParameters parameters, IFunctionDefinition functionDefinition) {
-        return new DefaultFunctionDefinition(functionDefinition);
+    protected EqualsCurrentTenantIdentifierFunctionDefinition returnFunctionDefinition(IEqualsCurrentTenantIdentifierFunctionProducerParameters parameters, IFunctionDefinition functionDefinition) {
+        return new EqualsCurrentTenantIdentifierFunctionDefinition(functionDefinition);
     }
 
     @Override
