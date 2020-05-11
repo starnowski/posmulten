@@ -1,8 +1,9 @@
 package com.github.starnowski.posmulten.postgresql.core.rls.function
 
-
 import com.github.starnowski.posmulten.postgresql.core.common.function.AbstractFunctionFactoryTest
 import spock.lang.Unroll
+
+import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValue.forString
 
 class EqualsCurrentTenantIdentifierFunctionProducerTest extends AbstractFunctionFactoryTest {
 
@@ -27,6 +28,27 @@ class EqualsCurrentTenantIdentifierFunctionProducerTest extends AbstractFunction
             null                    |   "equal_cur_ten"             |   "tenant()"                          |   "text"              ||   "CREATE OR REPLACE FUNCTION equal_cur_ten(text) RETURNS BOOLEAN as \$\$\nSELECT \$1 = tenant()\n\$\$ LANGUAGE sql\nSTABLE PARALLEL SAFE;"
             "public"                |   "equal_cur_ten"             |   "tenant()"                          |   "text"              ||   "CREATE OR REPLACE FUNCTION public.equal_cur_ten(text) RETURNS BOOLEAN as \$\$\nSELECT \$1 = tenant()\n\$\$ LANGUAGE sql\nSTABLE PARALLEL SAFE;"
             "non_public_schema"     |   "equal_cur_ten"             |   "tenant()"                          |   "text"              ||   "CREATE OR REPLACE FUNCTION non_public_schema.equal_cur_ten(text) RETURNS BOOLEAN as \$\$\nSELECT \$1 = tenant()\n\$\$ LANGUAGE sql\nSTABLE PARALLEL SAFE;"
+    }
+
+    @Unroll
+    def "should generate invocation of the function that determines if the passed tenant id belongs to the current tenant (#expectedInvocation) for schema #testSchema and for name #testFunctionName" () {
+        expect:
+            tested.produce(new EqualsCurrentTenantIdentifierFunctionProducerParameters(testFunctionName, testSchema, null, { "get_current_tenant()" })).returnEqualsCurrentTenantIdentifierFunctionInvocation(passedFunctionArgument) == expectedInvocation
+
+        where:
+            testSchema              |   testFunctionName    |   passedFunctionArgument      ||  expectedInvocation
+            null                    |   "is_current_tenant" |   forString("XXDFSAF")        ||  "is_current_tenant('XXDFSAF')"
+            "public"                |   "is_current_tenant" |   forString("XXDFSAF")        ||  "public.is_current_tenant('XXDFSAF')"
+            "non_public_schema"     |   "is_current_tenant" |   forString("XXDFSAF")        ||  "non_public_schema.is_current_tenant('XXDFSAF')"
+            null                    |   "equal_cur_ten"     |   forString("XXDFSAF")        ||  "equal_cur_ten('XXDFSAF')"
+            "public"                |   "equal_cur_ten"     |   forString("XXDFSAF")        ||  "public.equal_cur_ten('XXDFSAF')"
+            "non_public_schema"     |   "equal_cur_ten"     |   forString("XXDFSAF")        ||  "non_public_schema.equal_cur_ten('XXDFSAF')"
+            null                    |   "is_current_tenant" |   forString("GGGSQSF-hhh")    ||  "is_current_tenant('GGGSQSF-hhh')"
+            "public"                |   "is_current_tenant" |   forString("GGGSQSF-hhh")    ||  "public.is_current_tenant('GGGSQSF-hhh')"
+            "non_public_schema"     |   "is_current_tenant" |   forString("GGGSQSF-hhh")    ||  "non_public_schema.is_current_tenant('GGGSQSF-hhh')"
+            null                    |   "equal_cur_ten"     |   forString("GGGSQSF-hhh")    ||  "equal_cur_ten('GGGSQSF-hhh')"
+            "public"                |   "equal_cur_ten"     |   forString("GGGSQSF-hhh")    ||  "public.equal_cur_ten('GGGSQSF-hhh')"
+            "non_public_schema"     |   "equal_cur_ten"     |   forString("GGGSQSF-hhh")    ||  "non_public_schema.equal_cur_ten('GGGSQSF-hhh')"
     }
 
     @Unroll
