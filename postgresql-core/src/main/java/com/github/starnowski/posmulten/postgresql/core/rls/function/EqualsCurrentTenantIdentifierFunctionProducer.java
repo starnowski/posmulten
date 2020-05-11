@@ -57,7 +57,7 @@ public class EqualsCurrentTenantIdentifierFunctionProducer extends AbstractFunct
         sb.append("\n");
         sb.append("$$ LANGUAGE sql");
         sb.append("\n");
-        sb.append("STABLE PARALLEL SAFE");
+        sb.append("STABLE\nPARALLEL SAFE");
         sb.append(";");
         return sb.toString();
     }
