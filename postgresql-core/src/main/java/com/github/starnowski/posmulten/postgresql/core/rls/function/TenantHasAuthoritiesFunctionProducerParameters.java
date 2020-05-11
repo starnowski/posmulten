@@ -4,22 +4,26 @@ public class TenantHasAuthoritiesFunctionProducerParameters implements ITenantHa
 
     private final String functionName;
     private final String schema;
+    private final EqualsCurrentTenantIdentifierFunctionInvocationFactory equalsCurrentTenantIdentifierFunctionInvocationFactory; // TODO mandatory
     private final String tenantIdArgumentType;
     private final String usingExpressionArgumentType;
     private final String checkWithExpressionArgumentType;
     private final String tableArgumentType;
     private final String schemaArgumentType;
-    private final EqualsCurrentTenantIdentifierFunctionInvocationFactory equalsCurrentTenantIdentifierFunctionInvocationFactory; // TODO mandatory
 
-    public TenantHasAuthoritiesFunctionProducerParameters(String functionName, String schema, String tenantIdArgumentType, String usingExpressionArgumentType, String checkWithExpressionArgumentType, String tableArgumentType, String schemaArgumentType, EqualsCurrentTenantIdentifierFunctionInvocationFactory equalsCurrentTenantIdentifierFunctionInvocationFactory) {
+    public TenantHasAuthoritiesFunctionProducerParameters(String functionName, String schema, EqualsCurrentTenantIdentifierFunctionInvocationFactory equalsCurrentTenantIdentifierFunctionInvocationFactory) {
+        this(functionName, schema, equalsCurrentTenantIdentifierFunctionInvocationFactory, null, null, null, null, null);
+    }
+
+    public TenantHasAuthoritiesFunctionProducerParameters(String functionName, String schema, EqualsCurrentTenantIdentifierFunctionInvocationFactory equalsCurrentTenantIdentifierFunctionInvocationFactory, String tenantIdArgumentType, String usingExpressionArgumentType, String checkWithExpressionArgumentType, String tableArgumentType, String schemaArgumentType) {
         this.functionName = functionName;
         this.schema = schema;
+        this.equalsCurrentTenantIdentifierFunctionInvocationFactory = equalsCurrentTenantIdentifierFunctionInvocationFactory;
         this.tenantIdArgumentType = tenantIdArgumentType;
         this.usingExpressionArgumentType = usingExpressionArgumentType;
         this.checkWithExpressionArgumentType = checkWithExpressionArgumentType;
         this.tableArgumentType = tableArgumentType;
         this.schemaArgumentType = schemaArgumentType;
-        this.equalsCurrentTenantIdentifierFunctionInvocationFactory = equalsCurrentTenantIdentifierFunctionInvocationFactory;
     }
 
     public String getFunctionName() {
