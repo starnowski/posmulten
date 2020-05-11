@@ -73,8 +73,6 @@ public class GetCurrentTenantIdFunctionProducer extends ExtendedAbstractFunction
     @Override
     protected String buildBodyAndMetaData(IGetCurrentTenantIdFunctionProducerParameters parameters) {
         StringBuilder sb = new StringBuilder();
-        sb.append(" as $$");
-        sb.append("\n");
         sb.append("SELECT current_setting('");
         sb.append(parameters.getCurrentTenantIdProperty());
         sb.append("')");

@@ -8,6 +8,7 @@ public abstract class ExtendedAbstractFunctionFactory<P extends IFunctionFactory
     protected String produceStatement(P parameters) {
         StringBuilder sb = new StringBuilder();
         sb.append(buildFunctionNameAndArgumentDeclaration(parameters));
+        sb.append(" as $$");
         sb.append("\n");
         sb.append(buildBodyAndMetaData(parameters));
         sb.append(";");
