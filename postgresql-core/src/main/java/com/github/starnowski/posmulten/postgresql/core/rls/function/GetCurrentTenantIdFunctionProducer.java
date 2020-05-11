@@ -32,39 +32,6 @@ public class GetCurrentTenantIdFunctionProducer extends ExtendedAbstractFunction
         return new GetCurrentTenantIdFunctionDefinition(functionDefinition);
     }
 
-//    @Override
-//    protected String produceStatement(IGetCurrentTenantIdFunctionProducerParameters parameters) {
-//        StringBuilder sb = new StringBuilder();
-//        sb.append("CREATE OR REPLACE FUNCTION ");
-//        if (parameters.getSchema() != null)
-//        {
-//            sb.append(parameters.getSchema());
-//            sb.append(".");
-//        }
-//        sb.append(parameters.getFunctionName());
-//        sb.append("()");
-//        sb.append(" RETURNS ");
-//        if (parameters.getFunctionReturnType() == null)
-//        {
-//            sb.append("VARCHAR(255)");
-//        }
-//        else
-//        {
-//            sb.append(parameters.getFunctionReturnType());
-//        }
-//        sb.append(" as $$");
-//        sb.append("\n");
-//        sb.append("SELECT current_setting('");
-//        sb.append(parameters.getCurrentTenantIdProperty());
-//        sb.append("')");
-//        sb.append("\n");
-//        sb.append("$$ LANGUAGE sql");
-//        sb.append("\n");
-//        sb.append("STABLE PARALLEL SAFE");
-//        sb.append(";");
-//        return sb.toString();
-//    }
-
     @Override
     protected String prepareReturnType(IGetCurrentTenantIdFunctionProducerParameters parameters) {
         return parameters.getFunctionReturnType() == null ? "VARCHAR(255)" : parameters.getFunctionReturnType();
