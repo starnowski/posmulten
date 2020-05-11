@@ -3,15 +3,13 @@ package com.github.starnowski.posmulten.postgresql.core.rls.function;
 public class TenantHasAuthoritiesFunctionProducerParameters implements ITenantHasAuthoritiesFunctionProducerParameters{
 
     private final String functionName;
-
     private final String schema;
-
     private final String tenantIdArgumentType;
     private final String usingExpressionArgumentType;
     private final String checkWithExpressionArgumentType;
     private final String tableArgumentType;
     private final String schemaArgumentType;
-    private final EqualsCurrentTenantIdentifierFunctionInvocationFactory equalsCurrentTenantIdentifierFunctionInvocationFactory;
+    private final EqualsCurrentTenantIdentifierFunctionInvocationFactory equalsCurrentTenantIdentifierFunctionInvocationFactory; // TODO mandatory
 
     public TenantHasAuthoritiesFunctionProducerParameters(String functionName, String schema, String tenantIdArgumentType, String usingExpressionArgumentType, String checkWithExpressionArgumentType, String tableArgumentType, String schemaArgumentType, EqualsCurrentTenantIdentifierFunctionInvocationFactory equalsCurrentTenantIdentifierFunctionInvocationFactory) {
         this.functionName = functionName;
