@@ -1,7 +1,6 @@
 package com.github.starnowski.posmulten.postgresql.core.rls.function
 
 import com.github.starnowski.posmulten.postgresql.core.TestApplication
-import com.github.starnowski.posmulten.postgresql.core.common.function.DefaultFunctionDefinition
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.dao.DataAccessException
@@ -16,6 +15,7 @@ import java.sql.Statement
 
 import static com.github.starnowski.posmulten.postgresql.core.TestUtils.dropFunction
 import static com.github.starnowski.posmulten.postgresql.core.TestUtils.isFunctionExists
+import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValue.forString
 import static org.junit.Assert.assertEquals
 
 @SpringBootTest(classes = [TestApplication.class])
@@ -35,7 +35,7 @@ class EqualsCurrentTenantIdentifierFunctionProducerItTest extends Specification 
     String argumentType
     GetCurrentTenantIdFunctionDefinition getCurrentTenantIdFunctionDefinition
     SetCurrentTenantIdFunctionDefinition setCurrentTenantIdFunctionDefinition
-    DefaultFunctionDefinition functionDefinition
+    EqualsCurrentTenantIdentifierFunctionDefinition functionDefinition
 
     @Unroll
     def "should create function '#testFunctionName' for schema '#testSchema' (null means public) which returns type '#testReturnType' and returns correct value of property #testCurrentTenantIdProperty" () {
@@ -82,7 +82,7 @@ class EqualsCurrentTenantIdentifierFunctionProducerItTest extends Specification 
             @Override
             Boolean doInStatement(Statement statement) throws SQLException, DataAccessException {
                 statement.execute(setCurrentTenantIdFunctionDefinition.generateStatementThatSetTenant(propertyValue))
-                def selectStatement = String.format("SELECT %s('%s');", functionDefinition.getFunctionReference(), passedValue)
+                def selectStatement = String.format("SELECT %s;", functionDefinition.returnEqualsCurrentTenantIdentifierFunctionInvocation(forString(passedValue)))
                 ResultSet rs = statement.executeQuery(selectStatement)
                 rs.next()
                 return rs.getBoolean(1)
