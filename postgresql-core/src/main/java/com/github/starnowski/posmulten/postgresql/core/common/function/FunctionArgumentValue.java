@@ -19,7 +19,7 @@ public interface FunctionArgumentValue {
         return new DefaultFunctionArgumentValue(value, REFERENCE);
     }
 
-    static class DefaultFunctionArgumentValue implements FunctionArgumentValue {
+    class DefaultFunctionArgumentValue implements FunctionArgumentValue {
 
         private final String value;
         private final FunctionArgumentValueEnum type;
