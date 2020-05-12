@@ -71,4 +71,61 @@ public class TenantHasAuthoritiesFunctionProducerParameters implements ITenantHa
                 ", equalsCurrentTenantIdentifierFunctionInvocationFactory=" + (equalsCurrentTenantIdentifierFunctionInvocationFactory == null ? null : equalsCurrentTenantIdentifierFunctionInvocationFactory.getClass()) +
                 '}';
     }
+
+    public static class TenantHasAuthoritiesFunctionProducerParametersBuilder
+    {
+        private String functionName;
+        private String schema;
+        private EqualsCurrentTenantIdentifierFunctionInvocationFactory equalsCurrentTenantIdentifierFunctionInvocationFactory;
+        private String tenantIdArgumentType;
+        private String permissionCommandPolicyArgumentType;
+        private String rlsExpressionArgumentType;
+        private String tableArgumentType;
+        private String schemaArgumentType;
+
+        public TenantHasAuthoritiesFunctionProducerParametersBuilder withFunctionName(String functionName) {
+            this.functionName = functionName;
+            return this;
+        }
+
+        public TenantHasAuthoritiesFunctionProducerParametersBuilder withSchema(String schema) {
+            this.schema = schema;
+            return this;
+        }
+
+        public TenantHasAuthoritiesFunctionProducerParametersBuilder withEqualsCurrentTenantIdentifierFunctionInvocationFactory(EqualsCurrentTenantIdentifierFunctionInvocationFactory equalsCurrentTenantIdentifierFunctionInvocationFactory) {
+            this.equalsCurrentTenantIdentifierFunctionInvocationFactory = equalsCurrentTenantIdentifierFunctionInvocationFactory;
+            return this;
+        }
+
+        public TenantHasAuthoritiesFunctionProducerParametersBuilder withTenantIdArgumentType(String tenantIdArgumentType) {
+            this.tenantIdArgumentType = tenantIdArgumentType;
+            return this;
+        }
+
+        public TenantHasAuthoritiesFunctionProducerParametersBuilder withPermissionCommandPolicyArgumentType(String permissionCommandPolicyArgumentType) {
+            this.permissionCommandPolicyArgumentType = permissionCommandPolicyArgumentType;
+            return this;
+        }
+
+        public TenantHasAuthoritiesFunctionProducerParametersBuilder withRlsExpressionArgumentType(String rlsExpressionArgumentType) {
+            this.rlsExpressionArgumentType = rlsExpressionArgumentType;
+            return this;
+        }
+
+        public TenantHasAuthoritiesFunctionProducerParametersBuilder withTableArgumentType(String tableArgumentType) {
+            this.tableArgumentType = tableArgumentType;
+            return this;
+        }
+
+        public TenantHasAuthoritiesFunctionProducerParametersBuilder withSchemaArgumentType(String schemaArgumentType) {
+            this.schemaArgumentType = schemaArgumentType;
+            return this;
+        }
+
+        public TenantHasAuthoritiesFunctionProducerParameters build()
+        {
+            return new TenantHasAuthoritiesFunctionProducerParameters(functionName, schema, equalsCurrentTenantIdentifierFunctionInvocationFactory, tenantIdArgumentType, permissionCommandPolicyArgumentType, rlsExpressionArgumentType, tableArgumentType, schemaArgumentType);
+        }
+    }
 }
