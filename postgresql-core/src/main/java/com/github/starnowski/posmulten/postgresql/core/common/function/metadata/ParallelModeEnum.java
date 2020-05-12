@@ -5,8 +5,10 @@ public enum ParallelModeEnum implements ParallelModeSupplier{
     RESTRICTED,
     SAFE;
 
+    public static String PHRASE_PREFIX = "https://www.postgresql.org/docs/9.6/sql-createfunction.htm";
+
     @Override
     public String getParallelModeString() {
-        return name();
+        return PHRASE_PREFIX + name();
     }
 }
