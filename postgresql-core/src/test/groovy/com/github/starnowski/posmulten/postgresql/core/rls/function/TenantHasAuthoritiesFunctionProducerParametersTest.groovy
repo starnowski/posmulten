@@ -1,6 +1,5 @@
 package com.github.starnowski.posmulten.postgresql.core.rls.function
 
-import com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValue
 import spock.lang.Specification
 
 class TenantHasAuthoritiesFunctionProducerParametersTest extends Specification {
@@ -9,7 +8,6 @@ class TenantHasAuthoritiesFunctionProducerParametersTest extends Specification {
         given:
             def functionName = "tenant_is_privilege"
             def schema = "pub_sche"
-            EqualsCurrentTenantIdentifierFunctionInvocationFactory equalsCurrentTenantIdentifierFunctionInvocationFactory = new TestEqualsCurrentTenantIdentifierFunctionInvocationFactoryClass()
             def tenantIdArgumentType = "VARCHAR(13)"
             def permissionCommandPolicyArgumentType = "VARCHAR(57)"
             def rlsExpressionArgumentType = "VARCHAR(233)"
@@ -20,7 +18,6 @@ class TenantHasAuthoritiesFunctionProducerParametersTest extends Specification {
             def parameters = new TenantHasAuthoritiesFunctionProducerParameters.TenantHasAuthoritiesFunctionProducerParametersBuilder()
                     .withFunctionName(functionName)
                     .withSchema(schema)
-                    .withEqualsCurrentTenantIdentifierFunctionInvocationFactory(equalsCurrentTenantIdentifierFunctionInvocationFactory)
                     .withTenantIdArgumentType(tenantIdArgumentType)
                     .withPermissionCommandPolicyArgumentType(permissionCommandPolicyArgumentType)
                     .withRlsExpressionArgumentType(rlsExpressionArgumentType)
@@ -37,15 +34,6 @@ class TenantHasAuthoritiesFunctionProducerParametersTest extends Specification {
             result.contains("rlsExpressionArgumentType='VARCHAR(233)'")
             result.contains("tableArgumentType='VARCHAR(512)'")
             result.contains("schemaArgumentType='VARCHAR(10)'")
-    }
-
-    private static class TestEqualsCurrentTenantIdentifierFunctionInvocationFactoryClass implements EqualsCurrentTenantIdentifierFunctionInvocationFactory
-    {
-
-        @Override
-        String returnEqualsCurrentTenantIdentifierFunctionInvocation(FunctionArgumentValue argumentValue) {
-            // do nothing
-            return null
-        }
+            result.matches("TenantHasAuthoritiesFunctionProducerParameters\\{.*}")
     }
 }
