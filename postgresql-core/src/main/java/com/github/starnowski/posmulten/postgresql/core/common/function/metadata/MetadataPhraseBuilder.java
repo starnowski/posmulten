@@ -30,16 +30,8 @@ public class MetadataPhraseBuilder {
         return this;
     }
 
-    public ParallelModeSupplier getParallelModeSupplier() {
-        return parallelModeSupplier;
-    }
-
     public MetadataPhraseBuilder withVolatilityCategorySupplier(VolatilityCategorySupplier volatilityCategorySupplier) {
         this.volatilityCategorySupplier = volatilityCategorySupplier;
         return this;
-    }
-
-    public VolatilityCategorySupplier getVolatilityCategorySupplier() {
-        return volatilityCategorySupplier;
     }
 }
