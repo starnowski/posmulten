@@ -5,7 +5,7 @@ import spock.lang.Specification
 
 class TenantHasAuthoritiesFunctionProducerParametersTest extends Specification {
 
-    def "should correct value fot the toString method"() {
+    def "should return correct value fot the toString method"() {
         given:
             def functionName = "tenant_is_privilege"
             def schema = "pub_sche"
