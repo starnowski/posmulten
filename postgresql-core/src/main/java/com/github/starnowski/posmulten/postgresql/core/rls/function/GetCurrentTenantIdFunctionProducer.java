@@ -2,6 +2,10 @@ package com.github.starnowski.posmulten.postgresql.core.rls.function;
 
 import com.github.starnowski.posmulten.postgresql.core.common.function.ExtendedAbstractFunctionFactory;
 import com.github.starnowski.posmulten.postgresql.core.common.function.IFunctionDefinition;
+import com.github.starnowski.posmulten.postgresql.core.common.function.metadata.MetadataPhraseBuilder;
+
+import static com.github.starnowski.posmulten.postgresql.core.common.function.metadata.ParallelModeEnum.SAFE;
+import static com.github.starnowski.posmulten.postgresql.core.common.function.metadata.VolatilityCategoryEnum.STABLE;
 
 /**
  * The component produces a statement that creates a function that returns the current tenant identifier.
@@ -38,8 +42,8 @@ public class GetCurrentTenantIdFunctionProducer extends ExtendedAbstractFunction
     }
 
     @Override
-    protected String buildMetaData(IGetCurrentTenantIdFunctionProducerParameters parameters) {
-        return "STABLE\nPARALLEL SAFE";
+    protected void enrichMetadataPhraseBuilder(IGetCurrentTenantIdFunctionProducerParameters parameters, MetadataPhraseBuilder metadataPhraseBuilder) {
+        metadataPhraseBuilder.withParallelModeSupplier(SAFE).withVolatilityCategorySupplier(STABLE);
     }
 
     @Override

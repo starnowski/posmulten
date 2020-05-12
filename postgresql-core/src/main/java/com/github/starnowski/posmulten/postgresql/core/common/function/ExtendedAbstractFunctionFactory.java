@@ -1,5 +1,7 @@
 package com.github.starnowski.posmulten.postgresql.core.common.function;
 
+import com.github.starnowski.posmulten.postgresql.core.common.function.metadata.MetadataPhraseBuilder;
+
 import java.util.List;
 
 public abstract class ExtendedAbstractFunctionFactory<P extends IFunctionFactoryParameters, R extends DefaultFunctionDefinition> extends AbstractFunctionFactory<P, R>{
@@ -57,7 +59,14 @@ public abstract class ExtendedAbstractFunctionFactory<P extends IFunctionFactory
         return sb.toString();
     }
 
-    protected abstract String buildMetaData(P parameters);
+    protected String buildMetaData(P parameters)
+    {
+        MetadataPhraseBuilder metadataPhraseBuilder = new MetadataPhraseBuilder();
+        enrichMetadataPhraseBuilder(parameters, metadataPhraseBuilder);
+        return metadataPhraseBuilder.build();
+    }
+
+    protected abstract void enrichMetadataPhraseBuilder(P parameters, MetadataPhraseBuilder metadataPhraseBuilder);
 
     protected abstract String buildBody(P parameters);
 
