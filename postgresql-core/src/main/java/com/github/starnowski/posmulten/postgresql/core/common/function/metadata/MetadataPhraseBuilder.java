@@ -11,8 +11,6 @@ public class MetadataPhraseBuilder {
 
     private ParallelModeSupplier parallelModeSupplier;
 
-    //TODO getters and tests
-
     public String build()
     {
         List<String> metadataDefinitions = new ArrayList<>();
@@ -25,6 +23,14 @@ public class MetadataPhraseBuilder {
             metadataDefinitions.add(parallelModeSupplier.getParallelModeString());
         }
         return metadataDefinitions.stream().collect(joining("\n"));
+    }
+
+    public VolatilityCategorySupplier getVolatilityCategorySupplier() {
+        return volatilityCategorySupplier;
+    }
+
+    public ParallelModeSupplier getParallelModeSupplier() {
+        return parallelModeSupplier;
     }
 
     public MetadataPhraseBuilder withParallelModeSupplier(ParallelModeSupplier parallelModeSupplier) {
