@@ -1,12 +1,14 @@
 package com.github.starnowski.posmulten.postgresql.core.rls.function;
 
-import com.github.starnowski.posmulten.postgresql.core.common.function.AbstractFunctionFactory;
+import com.github.starnowski.posmulten.postgresql.core.common.function.ExtendedAbstractFunctionFactory;
 import com.github.starnowski.posmulten.postgresql.core.common.function.IFunctionArgument;
 import com.github.starnowski.posmulten.postgresql.core.common.function.IFunctionDefinition;
+import com.github.starnowski.posmulten.postgresql.core.common.function.metadata.MetadataPhraseBuilder;
 
 import java.util.List;
 
 import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentBuilder.forType;
+import static com.github.starnowski.posmulten.postgresql.core.common.function.metadata.VolatilityCategoryEnum.VOLATILE;
 import static java.util.Collections.singletonList;
 
 /**
@@ -15,7 +17,7 @@ import static java.util.Collections.singletonList;
  * @see <a href="https://www.postgresql.org/docs/9.6/sql-createfunction.html">Postgres, create function</a>
  *
  */
-public class SetCurrentTenantIdFunctionProducer extends AbstractFunctionFactory<ISetCurrentTenantIdFunctionProducerParameters, SetCurrentTenantIdFunctionDefinition> {
+public class SetCurrentTenantIdFunctionProducer extends ExtendedAbstractFunctionFactory<ISetCurrentTenantIdFunctionProducerParameters, SetCurrentTenantIdFunctionDefinition> {
 
     @Override
     protected void validate(ISetCurrentTenantIdFunctionProducerParameters parameters) {
@@ -40,29 +42,18 @@ public class SetCurrentTenantIdFunctionProducer extends AbstractFunctionFactory<
     }
 
     @Override
-    protected String produceStatement(ISetCurrentTenantIdFunctionProducerParameters parameters) {
+    protected String prepareReturnType(ISetCurrentTenantIdFunctionProducerParameters parameters) {
+        return "VOID";
+    }
+
+    @Override
+    protected void enrichMetadataPhraseBuilder(ISetCurrentTenantIdFunctionProducerParameters parameters, MetadataPhraseBuilder metadataPhraseBuilder) {
+        metadataPhraseBuilder.withVolatilityCategorySupplier(VOLATILE);
+    }
+
+    @Override
+    protected String buildBody(ISetCurrentTenantIdFunctionProducerParameters parameters) {
         StringBuilder sb = new StringBuilder();
-        sb.append("CREATE OR REPLACE FUNCTION ");
-        if (parameters.getSchema() != null)
-        {
-            sb.append(parameters.getSchema());
-            sb.append(".");
-        }
-        sb.append(parameters.getFunctionName());
-        sb.append("(");
-        if (parameters.getArgumentType() == null)
-        {
-            sb.append("text");
-        }
-        else
-        {
-            sb.append(parameters.getArgumentType());
-        }
-        sb.append(")");
-        sb.append(" RETURNS ");
-        sb.append("VOID");
-        sb.append(" AS $$");
-        sb.append("\n");
         sb.append("BEGIN");
         sb.append("\n");
         sb.append("PERFORM set_config('");
@@ -70,12 +61,12 @@ public class SetCurrentTenantIdFunctionProducer extends AbstractFunctionFactory<
         sb.append("', $1, false);");
         sb.append("\n");
         sb.append("END");
-        sb.append("\n");
-        sb.append("$$ LANGUAGE plpgsql");
-        sb.append("\n");
-        sb.append("VOLATILE");
-        sb.append(";");
         return sb.toString();
+    }
+
+    @Override
+    protected String returnFunctionLanguage(ISetCurrentTenantIdFunctionProducerParameters parameters) {
+        return "plpgsql";
     }
 
     @Override
