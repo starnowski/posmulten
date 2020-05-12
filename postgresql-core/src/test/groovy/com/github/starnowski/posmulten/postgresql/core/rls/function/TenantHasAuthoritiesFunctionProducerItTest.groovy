@@ -89,6 +89,7 @@ class TenantHasAuthoritiesFunctionProducerItTest extends Specification {
             @Override
             Boolean doInStatement(Statement statement) throws SQLException, DataAccessException {
                 def selectStatement = format("SELECT %s;", functionDefinition.returnTenantHasAuthoritiesFunctionInvocation(forString(passedValue), ALL, USING, null, null))
+                System.out.println(selectStatement)
                 ResultSet rs = statement.executeQuery(selectStatement)
                 rs.next()
                 return rs.getBoolean(1)
