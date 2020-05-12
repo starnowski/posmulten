@@ -24,7 +24,7 @@ public class TenantHasAuthoritiesFunctionProducer extends ExtendedAbstractFuncti
 
     @Override
     protected List<IFunctionArgument> prepareFunctionArguments(ITenantHasAuthoritiesFunctionProducerParameters parameters) {
-        return Arrays.asList(argument(parameters.getTenantIdArgumentType()), argument(parameters.getUsingExpressionArgumentType()), argument(parameters.getCheckWithExpressionArgumentType())
+        return Arrays.asList(argument(parameters.getTenantIdArgumentType()), argument(parameters.getPermissionCommandPolicyArgumentType()), argument(parameters.getRLSExpressionArgumentType())
         ,argument(parameters.getTableArgumentType()), argument(parameters.getSchemaArgumentType()));
     }
 

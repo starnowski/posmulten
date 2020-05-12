@@ -6,9 +6,9 @@ public interface ITenantHasAuthoritiesFunctionProducerParameters extends IFuncti
 
     String getTenantIdArgumentType();
 
-    String getUsingExpressionArgumentType();
+    String getPermissionCommandPolicyArgumentType();
 
-    String getCheckWithExpressionArgumentType();
+    String getRLSExpressionArgumentType();
 
     String getTableArgumentType();
 

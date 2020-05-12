@@ -6,8 +6,8 @@ public class TenantHasAuthoritiesFunctionProducerParameters implements ITenantHa
     private final String schema;
     private final EqualsCurrentTenantIdentifierFunctionInvocationFactory equalsCurrentTenantIdentifierFunctionInvocationFactory; // TODO mandatory
     private final String tenantIdArgumentType;
-    private final String usingExpressionArgumentType;
-    private final String checkWithExpressionArgumentType;
+    private final String permissionCommandPolicyArgumentType;
+    private final String rlsExpressionArgumentType;
     private final String tableArgumentType;
     private final String schemaArgumentType;
 
@@ -15,13 +15,13 @@ public class TenantHasAuthoritiesFunctionProducerParameters implements ITenantHa
         this(functionName, schema, equalsCurrentTenantIdentifierFunctionInvocationFactory, null, null, null, null, null);
     }
 
-    public TenantHasAuthoritiesFunctionProducerParameters(String functionName, String schema, EqualsCurrentTenantIdentifierFunctionInvocationFactory equalsCurrentTenantIdentifierFunctionInvocationFactory, String tenantIdArgumentType, String usingExpressionArgumentType, String checkWithExpressionArgumentType, String tableArgumentType, String schemaArgumentType) {
+    public TenantHasAuthoritiesFunctionProducerParameters(String functionName, String schema, EqualsCurrentTenantIdentifierFunctionInvocationFactory equalsCurrentTenantIdentifierFunctionInvocationFactory, String tenantIdArgumentType, String permissionCommandPolicyArgumentType, String rlsExpressionArgumentType, String tableArgumentType, String schemaArgumentType) {
         this.functionName = functionName;
         this.schema = schema;
         this.equalsCurrentTenantIdentifierFunctionInvocationFactory = equalsCurrentTenantIdentifierFunctionInvocationFactory;
         this.tenantIdArgumentType = tenantIdArgumentType;
-        this.usingExpressionArgumentType = usingExpressionArgumentType;
-        this.checkWithExpressionArgumentType = checkWithExpressionArgumentType;
+        this.permissionCommandPolicyArgumentType = permissionCommandPolicyArgumentType;
+        this.rlsExpressionArgumentType = rlsExpressionArgumentType;
         this.tableArgumentType = tableArgumentType;
         this.schemaArgumentType = schemaArgumentType;
     }
@@ -38,12 +38,12 @@ public class TenantHasAuthoritiesFunctionProducerParameters implements ITenantHa
         return tenantIdArgumentType;
     }
 
-    public String getUsingExpressionArgumentType() {
-        return usingExpressionArgumentType;
+    public String getPermissionCommandPolicyArgumentType() {
+        return permissionCommandPolicyArgumentType;
     }
 
-    public String getCheckWithExpressionArgumentType() {
-        return checkWithExpressionArgumentType;
+    public String getRLSExpressionArgumentType() {
+        return rlsExpressionArgumentType;
     }
 
     public String getTableArgumentType() {
@@ -64,8 +64,8 @@ public class TenantHasAuthoritiesFunctionProducerParameters implements ITenantHa
                 "functionName='" + functionName + '\'' +
                 ", schema='" + schema + '\'' +
                 ", tenantIdArgumentType='" + tenantIdArgumentType + '\'' +
-                ", usingExpressionArgumentType='" + usingExpressionArgumentType + '\'' +
-                ", checkWithExpressionArgumentType='" + checkWithExpressionArgumentType + '\'' +
+                ", permissionCommandPolicyArgumentType='" + permissionCommandPolicyArgumentType + '\'' +
+                ", rlsExpressionArgumentType='" + rlsExpressionArgumentType + '\'' +
                 ", tableArgumentType='" + tableArgumentType + '\'' +
                 ", schemaArgumentType='" + schemaArgumentType + '\'' +
                 ", equalsCurrentTenantIdentifierFunctionInvocationFactory=" + (equalsCurrentTenantIdentifierFunctionInvocationFactory == null ? null : equalsCurrentTenantIdentifierFunctionInvocationFactory.getClass()) +
