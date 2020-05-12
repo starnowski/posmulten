@@ -1,10 +1,10 @@
 package com.github.starnowski.posmulten.postgresql.core.rls.function;
 
 import com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValue;
-import com.github.starnowski.posmulten.postgresql.core.rls.PermissionCommandPolicySupplier;
-import com.github.starnowski.posmulten.postgresql.core.rls.RLSExpressionTypeSupplier;
+import com.github.starnowski.posmulten.postgresql.core.rls.PermissionCommandPolicyEnum;
+import com.github.starnowski.posmulten.postgresql.core.rls.RLSExpressionTypeEnum;
 
 public interface TenantHasAuthoritiesFunctionInvocationFactory {
 
-    String returnTenantHasAuthoritiesFunctionInvocation(FunctionArgumentValue tenantIdValue, PermissionCommandPolicySupplier permissionCommandPolicy, RLSExpressionTypeSupplier rlsExpressionType, FunctionArgumentValue table, FunctionArgumentValue schema);
+    String returnTenantHasAuthoritiesFunctionInvocation(FunctionArgumentValue tenantIdValue, PermissionCommandPolicyEnum permissionCommandPolicy, RLSExpressionTypeEnum rlsExpressionType, FunctionArgumentValue table, FunctionArgumentValue schema);
 }
