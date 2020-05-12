@@ -11,6 +11,8 @@ public class MetadataPhraseBuilder {
 
     private ParallelModeSupplier parallelModeSupplier;
 
+    //TODO getters and tests
+
     public String build()
     {
         List<String> metadataDefinitions = new ArrayList<>();
