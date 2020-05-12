@@ -37,7 +37,6 @@ class TenantHasAuthoritiesFunctionProducerParametersTest extends Specification {
             result.contains("rlsExpressionArgumentType='VARCHAR(233)'")
             result.contains("tableArgumentType='VARCHAR(512)'")
             result.contains("schemaArgumentType='VARCHAR(10)'")
-            result.matches(".*equalsCurrentTenantIdentifierFunctionInvocationFactory=.*TestEqualsCurrentTenantIdentifierFunctionInvocationFactoryClass.*")
     }
 
     private static class TestEqualsCurrentTenantIdentifierFunctionInvocationFactoryClass implements EqualsCurrentTenantIdentifierFunctionInvocationFactory

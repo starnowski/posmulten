@@ -68,7 +68,6 @@ public class TenantHasAuthoritiesFunctionProducerParameters implements ITenantHa
                 ", rlsExpressionArgumentType='" + rlsExpressionArgumentType + '\'' +
                 ", tableArgumentType='" + tableArgumentType + '\'' +
                 ", schemaArgumentType='" + schemaArgumentType + '\'' +
-                ", equalsCurrentTenantIdentifierFunctionInvocationFactory=" + (equalsCurrentTenantIdentifierFunctionInvocationFactory == null ? null : equalsCurrentTenantIdentifierFunctionInvocationFactory.getClass()) +
                 '}';
     }
 
