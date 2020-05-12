@@ -14,9 +14,12 @@ import java.sql.ResultSet
 import java.sql.SQLException
 import java.sql.Statement
 
-import static com.github.starnowski.posmulten.postgresql.core.TestUtils.isFunctionExists
 import static com.github.starnowski.posmulten.postgresql.core.TestUtils.dropFunction
+import static com.github.starnowski.posmulten.postgresql.core.TestUtils.isFunctionExists
 import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValue.forString
+import static com.github.starnowski.posmulten.postgresql.core.rls.PermissionCommandPolicyEnum.ALL
+import static com.github.starnowski.posmulten.postgresql.core.rls.RLSExpressionTypeEnum.USING
+import static java.lang.String.format
 import static org.junit.Assert.assertEquals
 
 @SpringBootTest(classes = [TestApplication.class])
@@ -80,13 +83,12 @@ class TenantHasAuthoritiesFunctionProducerItTest extends Specification {
             "non_public_schema"     |   "tenant_has_privliges"              |   "ABEEE"                     ||   false
     }
 
-    def returnSelectStatementResultAfterSettingCurrentTenantId(String propertyValue, String passedValue)
+    def returnSelectStatementResultAfterSettingCurrentTenantId(String passedValue)
     {
         return jdbcTemplate.execute(new StatementCallback<Boolean>() {
             @Override
             Boolean doInStatement(Statement statement) throws SQLException, DataAccessException {
-                statement.execute(setCurrentTenantIdFunctionDefinition.generateStatementThatSetTenant(propertyValue))
-                def selectStatement = String.format("SELECT %s;", functionDefinition.returnEqualsCurrentTenantIdentifierFunctionInvocation(forString(passedValue)))
+                def selectStatement = format("SELECT %s;", functionDefinition.returnTenantHasAuthoritiesFunctionInvocation(forString(passedValue), ALL, USING, null, null))
                 ResultSet rs = statement.executeQuery(selectStatement)
                 rs.next()
                 return rs.getBoolean(1)
