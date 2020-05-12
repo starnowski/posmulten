@@ -1,6 +1,7 @@
 package com.github.starnowski.posmulten.postgresql.core.rls.function
 
 import com.github.starnowski.posmulten.postgresql.core.TestApplication
+import com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValueEnum
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.jdbc.core.JdbcTemplate
@@ -16,6 +17,8 @@ class TenantHasAuthoritiesFunctionProducerItTest extends Specification {
 
     def tested = new TenantHasAuthoritiesFunctionProducer()
 
+    EqualsCurrentTenantIdentifierFunctionInvocationFactory equalsCurrentTenantIdentifierFunctionInvocationFactory
+
     @Autowired
     JdbcTemplate jdbcTemplate
 
@@ -29,6 +32,9 @@ class TenantHasAuthoritiesFunctionProducerItTest extends Specification {
         sb.append("\$\$ LANGUAGE sql;")
         jdbcTemplate.execute(sb.toString())
         assertEquals(true, isFunctionExists(jdbcTemplate, "is_tenant_starts_with_abcd", null))
+        equalsCurrentTenantIdentifierFunctionInvocationFactory = { tenant ->
+            "is_tenant_starts_with_abcd(" + (FunctionArgumentValueEnum.STRING.equals(tenant.getType()) ? ("'" + tenant.getValue() + "'") : tenant.getValue()) + ")"
+        }
     }
 
     @Unroll

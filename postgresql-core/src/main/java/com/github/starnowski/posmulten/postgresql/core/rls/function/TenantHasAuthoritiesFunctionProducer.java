@@ -7,7 +7,7 @@ import com.github.starnowski.posmulten.postgresql.core.common.function.IFunction
 public class TenantHasAuthoritiesFunctionProducer extends AbstractFunctionFactory<ITenantHasAuthoritiesFunctionProducerParameters, DefaultFunctionDefinition> {
     @Override
     protected DefaultFunctionDefinition returnFunctionDefinition(ITenantHasAuthoritiesFunctionProducerParameters parameters, IFunctionDefinition functionDefinition) {
-        return null;
+        return new DefaultFunctionDefinition(functionDefinition);
     }
 
     @Override
