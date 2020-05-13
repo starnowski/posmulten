@@ -21,7 +21,7 @@ class TenantHasAuthoritiesFunctionProducerTest extends AbstractFunctionFactoryTe
     @Unroll
     def "should generate statement that creates function for parameters object '#parametersObject' and return expected statement '#expectedStatement'" () {
         expect:
-        tested.produce(parametersObject).getCreateScript() == expectedStatement
+            tested.produce(parametersObject).getCreateScript() == expectedStatement
 
         where:
             parametersObject <<     [
