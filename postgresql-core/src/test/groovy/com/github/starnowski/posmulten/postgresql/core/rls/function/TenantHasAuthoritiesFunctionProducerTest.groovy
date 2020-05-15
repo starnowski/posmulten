@@ -83,6 +83,40 @@ class TenantHasAuthoritiesFunctionProducerTest extends AbstractFunctionFactoryTe
             "public"    |   "tenant_has_authorities"    |   forReference("tenant")  |   ALL                     |   WITH_CHECK          |   forReference("table_variable")  |   forString("public")         ||  "public.tenant_has_authorities(tenant, 'ALL', 'WITH_CHECK', table_variable, 'public')"
     }
 
+    @Unroll
+    def "should throw exception of type 'IllegalArgumentException' when component of the EqualsCurrentTenantIdentifierFunctionInvocationFactory is null for parameters object '#parametersObject'" () {
+        when:
+            tested.produce(parametersObject).getCreateScript()
+
+        then:
+            def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+            ex.message == "Parameter of type EqualsCurrentTenantIdentifierFunctionInvocationFactory cannot be null"
+
+        where:
+        parametersObject <<     [
+                //1
+                builder().withFunctionName("tenant_has_authorities").withSchema(null)
+                        .withEqualsCurrentTenantIdentifierFunctionInvocationFactory(null)
+                        .withTenantIdArgumentType("VARCHAR(312)")
+                        .withPermissionCommandPolicyArgumentType("text")
+                        .withRlsExpressionArgumentType("VARCHAR(73)")
+                        .withTableArgumentType("text")
+                        .withSchemaArgumentType("VARCHAR(117)")
+                        .build(),
+                //2
+                builder().withFunctionName("this_tenant_has_authorities").withSchema("secondary_schema")
+                        .withEqualsCurrentTenantIdentifierFunctionInvocationFactory(null)
+                        .withTenantIdArgumentType("VARCHAR(55)")
+                        .withPermissionCommandPolicyArgumentType("VARCHAR(534)")
+                        .withRlsExpressionArgumentType("text")
+                        .withTableArgumentType("VARCHAR(231)")
+                        .withSchemaArgumentType("text")
+                        .build()
+        ]
+    }
+
     private TenantHasAuthoritiesFunctionProducerParameters.TenantHasAuthoritiesFunctionProducerParametersBuilder builder()
     {
         new TenantHasAuthoritiesFunctionProducerParameters.TenantHasAuthoritiesFunctionProducerParametersBuilder()
