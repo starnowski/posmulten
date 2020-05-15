@@ -213,6 +213,30 @@ class TenantHasAuthoritiesFunctionProducerTest extends AbstractFunctionFactoryTe
             table    << ["", " ", "       "]
     }
 
+    @Unroll
+    def "should throw exception of type 'IllegalArgumentException' when the schema argument type is blank '#schemaArgumentType'" () {
+        given:
+            def parameters = builder().withFunctionName("tenant_has_authorities").withSchema(null)
+                    .withEqualsCurrentTenantIdentifierFunctionInvocationFactory(firstEqualsCurrentTenantIdentifierFunctionInvocationFactory)
+                    .withTenantIdArgumentType("VARCHAR(312)")
+                    .withPermissionCommandPolicyArgumentType("text")
+                    .withRlsExpressionArgumentType("VARCHAR(73)")
+                    .withTableArgumentType("VARCHAR(117)")
+                    .withSchemaArgumentType(schemaArgumentType)
+                    .build()
+        when:
+            tested.produce(parameters)
+
+        then:
+            def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+            ex.message == "Schema argument type cannot be blank"
+
+        where:
+            schemaArgumentType    << ["", " ", "       "]
+    }
+
     private TenantHasAuthoritiesFunctionProducerParameters.TenantHasAuthoritiesFunctionProducerParametersBuilder builder()
     {
         new TenantHasAuthoritiesFunctionProducerParameters.TenantHasAuthoritiesFunctionProducerParametersBuilder()
