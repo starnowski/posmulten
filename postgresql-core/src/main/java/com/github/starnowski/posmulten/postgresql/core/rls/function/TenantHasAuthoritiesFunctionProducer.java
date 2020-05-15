@@ -44,6 +44,15 @@ public class TenantHasAuthoritiesFunctionProducer extends ExtendedAbstractFuncti
     }
 
     @Override
+    protected void validate(ITenantHasAuthoritiesFunctionProducerParameters parameters) {
+        super.validate(parameters);
+        if (parameters.getEqualsCurrentTenantIdentifierFunctionInvocationFactory() == null)
+        {
+            throw new IllegalArgumentException("Parameter of type EqualsCurrentTenantIdentifierFunctionInvocationFactory cannot be null");
+        }
+    }
+
+    @Override
     protected String buildBody(ITenantHasAuthoritiesFunctionProducerParameters parameters) {
         StringBuilder sb = new StringBuilder();
         sb.append("SELECT ");
