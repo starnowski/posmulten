@@ -5,6 +5,10 @@ import com.github.starnowski.posmulten.postgresql.core.common.function.FunctionA
 import spock.lang.Shared
 import spock.lang.Unroll
 
+import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValue.forString
+import static com.github.starnowski.posmulten.postgresql.core.rls.PermissionCommandPolicyEnum.ALL
+import static com.github.starnowski.posmulten.postgresql.core.rls.RLSExpressionTypeEnum.USING
+
 class TenantHasAuthoritiesFunctionProducerTest extends AbstractFunctionFactoryTest {
 
     def tested = new TenantHasAuthoritiesFunctionProducer()
@@ -58,6 +62,17 @@ class TenantHasAuthoritiesFunctionProducerTest extends AbstractFunctionFactoryTe
                                                 "\nSTABLE" +
                                                 "\nPARALLEL SAFE;"
                                     ]
+    }
+
+    @Unroll
+    def "should generate statement that invokes function for schema #schema, with function name #functionName, tenat id value '#tenantValue', permission command #permissionCommand, RLS expression type #rlsExpression, table #table and schema #argumentSchema"()
+    {
+        given:
+            tested.produce(new TenantHasAuthoritiesFunctionProducerParameters(functionName, schema, secondEqualsCurrentTenantIdentifierFunctionInvocationFactory)).returnTenantHasAuthoritiesFunctionInvocation(tenantValue, permissionCommand, rlsExpression, table, argumentSchema) == expectedStatement
+
+        where:
+        schema  |   functionName                |   tenantValue |   permissionCommand   |   rlsExpression   |   table   |   argumentSchema  ||  expectedStatement
+        null    |   "tenant_has_authorities"    |   forString("DDDS-AA")   |   ALL                 |   USING           |   forString("users") |   forString("public")        ||  "tenant_has_authorities('DDDS-AA', 'ALL', 'USING', 'users', 'public')"
     }
 
     private TenantHasAuthoritiesFunctionProducerParameters.TenantHasAuthoritiesFunctionProducerParametersBuilder builder()
