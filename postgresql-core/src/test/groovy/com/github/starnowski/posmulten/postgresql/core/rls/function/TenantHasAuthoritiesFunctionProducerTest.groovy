@@ -6,8 +6,9 @@ import spock.lang.Shared
 import spock.lang.Unroll
 
 import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValue.forString
-import static com.github.starnowski.posmulten.postgresql.core.rls.PermissionCommandPolicyEnum.ALL
+import static com.github.starnowski.posmulten.postgresql.core.rls.PermissionCommandPolicyEnum.*
 import static com.github.starnowski.posmulten.postgresql.core.rls.RLSExpressionTypeEnum.USING
+import static com.github.starnowski.posmulten.postgresql.core.rls.RLSExpressionTypeEnum.WITH_CHECK
 
 class TenantHasAuthoritiesFunctionProducerTest extends AbstractFunctionFactoryTest {
 
@@ -73,6 +74,8 @@ class TenantHasAuthoritiesFunctionProducerTest extends AbstractFunctionFactoryTe
         where:
         schema  |   functionName                |   tenantValue |   permissionCommand   |   rlsExpression   |   table   |   argumentSchema  ||  expectedStatement
         null    |   "tenant_has_authorities"    |   forString("DDDS-AA")   |   ALL                 |   USING           |   forString("users") |   forString("public")        ||  "tenant_has_authorities('DDDS-AA', 'ALL', 'USING', 'users', 'public')"
+        "public"    |   "has_authorities"    |   forString("XXX22")   | DELETE                 | WITH_CHECK        |   forString("notifications") |   forString("public")        ||  "public.has_authorities('XXX22', 'DELETE', 'WITH_CHECK', 'notifications', 'public')"
+        "secondary"    |   "has_auth"    |   forString("XXX22")   | INSERT                 | USING        |   forString("roles") |   forString("public")        ||  "secondary.has_auth('XXX22', 'INSERT', 'USING', 'roles', 'public')"
     }
 
     private TenantHasAuthoritiesFunctionProducerParameters.TenantHasAuthoritiesFunctionProducerParametersBuilder builder()
