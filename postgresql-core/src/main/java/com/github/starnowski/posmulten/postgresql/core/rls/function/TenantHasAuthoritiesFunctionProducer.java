@@ -50,6 +50,10 @@ public class TenantHasAuthoritiesFunctionProducer extends ExtendedAbstractFuncti
         {
             throw new IllegalArgumentException("Parameter of type EqualsCurrentTenantIdentifierFunctionInvocationFactory cannot be null");
         }
+        if (parameters.getTenantIdArgumentType() != null && parameters.getTenantIdArgumentType().trim().isEmpty())
+        {
+            throw new IllegalArgumentException("Tenant Id type cannot be blank");
+        }
     }
 
     @Override
