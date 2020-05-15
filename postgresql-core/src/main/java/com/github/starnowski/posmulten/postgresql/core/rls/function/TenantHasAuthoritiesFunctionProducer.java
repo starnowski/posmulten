@@ -54,6 +54,10 @@ public class TenantHasAuthoritiesFunctionProducer extends ExtendedAbstractFuncti
         {
             throw new IllegalArgumentException("Tenant Id type cannot be blank");
         }
+        if (parameters.getPermissionCommandPolicyArgumentType() != null && parameters.getPermissionCommandPolicyArgumentType().trim().isEmpty())
+        {
+            throw new IllegalArgumentException("Permission command policy argument type cannot be blank");
+        }
     }
 
     @Override
