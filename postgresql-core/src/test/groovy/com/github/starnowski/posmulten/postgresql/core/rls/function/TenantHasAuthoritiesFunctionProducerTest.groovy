@@ -5,6 +5,7 @@ import com.github.starnowski.posmulten.postgresql.core.common.function.FunctionA
 import spock.lang.Shared
 import spock.lang.Unroll
 
+import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValue.forReference
 import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValue.forString
 import static com.github.starnowski.posmulten.postgresql.core.rls.PermissionCommandPolicyEnum.*
 import static com.github.starnowski.posmulten.postgresql.core.rls.RLSExpressionTypeEnum.USING
@@ -72,10 +73,12 @@ class TenantHasAuthoritiesFunctionProducerTest extends AbstractFunctionFactoryTe
             tested.produce(new TenantHasAuthoritiesFunctionProducerParameters(functionName, schema, secondEqualsCurrentTenantIdentifierFunctionInvocationFactory)).returnTenantHasAuthoritiesFunctionInvocation(tenantValue, permissionCommand, rlsExpression, table, argumentSchema) == expectedStatement
 
         where:
-        schema  |   functionName                |   tenantValue |   permissionCommand   |   rlsExpression   |   table   |   argumentSchema  ||  expectedStatement
-        null    |   "tenant_has_authorities"    |   forString("DDDS-AA")   |   ALL                 |   USING           |   forString("users") |   forString("public")        ||  "tenant_has_authorities('DDDS-AA', 'ALL', 'USING', 'users', 'public')"
-        "public"    |   "has_authorities"    |   forString("XXX22")   | DELETE                 | WITH_CHECK        |   forString("notifications") |   forString("public")        ||  "public.has_authorities('XXX22', 'DELETE', 'WITH_CHECK', 'notifications', 'public')"
-        "secondary"    |   "has_auth"    |   forString("XXX22")   | INSERT                 | USING        |   forString("roles") |   forString("public")        ||  "secondary.has_auth('XXX22', 'INSERT', 'USING', 'roles', 'public')"
+            schema      |   functionName                |   tenantValue             |   permissionCommand   |   rlsExpression   |   table                       |   argumentSchema              ||  expectedStatement
+            null        |   "tenant_has_authorities"    |   forString("DDDS-AA")    |   ALL                 |   USING           |   forString("users")          |   forString("public")         ||  "tenant_has_authorities('DDDS-AA', 'ALL', 'USING', 'users', 'public')"
+            "public"    |   "has_authorities"           |   forString("XXX22")      | DELETE                | WITH_CHECK        |   forString("notifications")  |   forString("public")         ||  "public.has_authorities('XXX22', 'DELETE', 'WITH_CHECK', 'notifications', 'public')"
+            "secondary" |   "has_auth"                  |   forString("XXX22")      | INSERT                | USING             |   forString("roles")          |   forString("public")         ||  "secondary.has_auth('XXX22', 'INSERT', 'USING', 'roles', 'public')"
+            "third"     |   "t_h_a"                     |   forString("XXX22")      | UPDATE                | USING             |   forString("users")          |   forString("public")         ||  "third.t_h_a('XXX22', 'UPDATE', 'USING', 'users', 'public')"
+            "third"     |   "t_h_a"                     |   forReference("\$1")     | SELECT                | WITH_CHECK        |   forString("users")          |   forString("public")         ||  "third.t_h_a(\$1, 'SELECT', 'WITH_CHECK', 'users', 'public')"
     }
 
     private TenantHasAuthoritiesFunctionProducerParameters.TenantHasAuthoritiesFunctionProducerParametersBuilder builder()
