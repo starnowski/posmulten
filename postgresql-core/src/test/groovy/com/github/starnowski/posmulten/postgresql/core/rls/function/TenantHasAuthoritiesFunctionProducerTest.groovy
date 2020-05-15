@@ -69,7 +69,7 @@ class TenantHasAuthoritiesFunctionProducerTest extends AbstractFunctionFactoryTe
     @Unroll
     def "should generate statement that invokes function for schema #schema, with function name #functionName, tenat id value '#tenantValue', permission command #permissionCommand, RLS expression type #rlsExpression, table #table and schema #argumentSchema"()
     {
-        given:
+        expect:
             tested.produce(new TenantHasAuthoritiesFunctionProducerParameters(functionName, schema, secondEqualsCurrentTenantIdentifierFunctionInvocationFactory)).returnTenantHasAuthoritiesFunctionInvocation(tenantValue, permissionCommand, rlsExpression, table, argumentSchema) == expectedStatement
 
         where:

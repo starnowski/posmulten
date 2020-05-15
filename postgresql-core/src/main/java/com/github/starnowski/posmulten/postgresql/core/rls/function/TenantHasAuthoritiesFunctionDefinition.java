@@ -25,8 +25,8 @@ public class TenantHasAuthoritiesFunctionDefinition extends DefaultFunctionDefin
         sb.append("(");
         List<String> list = new ArrayList<>();
         list.add(prepareValue(tenantIdValue));
-        list.add(permissionCommandPolicy.name());
-        list.add(rlsExpressionType.name());
+        list.add("'" + permissionCommandPolicy.name() + "'");
+        list.add("'" + rlsExpressionType.name() + "'");
         list.add(prepareValue(table));
         list.add(prepareValue(schema));
         sb.append(list.stream().collect(joining(", ")));
@@ -36,7 +36,6 @@ public class TenantHasAuthoritiesFunctionDefinition extends DefaultFunctionDefin
 
     private String prepareValue(FunctionArgumentValue value)
     {
-        //TODO
-        return value == null ? null : (STRING.equals(value.getType()) ? (value.getValue()) : value.getValue());
+        return value == null ? null : (STRING.equals(value.getType()) ? ("'" + value.getValue() + "'") : value.getValue());
     }
 }
