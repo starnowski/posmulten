@@ -86,7 +86,7 @@ class TenantHasAuthoritiesFunctionProducerTest extends AbstractFunctionFactoryTe
     @Unroll
     def "should throw exception of type 'IllegalArgumentException' when component of the EqualsCurrentTenantIdentifierFunctionInvocationFactory is null for parameters object '#parametersObject'" () {
         when:
-            tested.produce(parametersObject).getCreateScript()
+            tested.produce(parametersObject)
 
         then:
             def ex = thrown(IllegalArgumentException.class)
