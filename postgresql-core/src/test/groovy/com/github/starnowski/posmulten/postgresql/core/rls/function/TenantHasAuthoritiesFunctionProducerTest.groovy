@@ -79,6 +79,7 @@ class TenantHasAuthoritiesFunctionProducerTest extends AbstractFunctionFactoryTe
             "secondary" |   "has_auth"                  |   forString("XXX22")      | INSERT                | USING             |   forString("roles")          |   forString("public")         ||  "secondary.has_auth('XXX22', 'INSERT', 'USING', 'roles', 'public')"
             "third"     |   "t_h_a"                     |   forString("XXX22")      | UPDATE                | USING             |   forString("users")          |   forString("public")         ||  "third.t_h_a('XXX22', 'UPDATE', 'USING', 'users', 'public')"
             "third"     |   "t_h_a"                     |   forReference("\$1")     | SELECT                | WITH_CHECK        |   forString("users")          |   forString("public")         ||  "third.t_h_a(\$1, 'SELECT', 'WITH_CHECK', 'users', 'public')"
+            "public"    |   "tenant_has_authorities"    |   forReference("tenant")  | ALL                   | WITH_CHECK        |   forString("users")          |   forString("public")         ||  "public.tenant_has_authorities(tenant, 'ALL', 'WITH_CHECK', 'users', 'public')"
     }
 
     private TenantHasAuthoritiesFunctionProducerParameters.TenantHasAuthoritiesFunctionProducerParametersBuilder builder()
