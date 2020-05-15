@@ -117,6 +117,30 @@ class TenantHasAuthoritiesFunctionProducerTest extends AbstractFunctionFactoryTe
         ]
     }
 
+    @Unroll
+    def "should throw exception of type 'IllegalArgumentException' when tenant id type argument is blank '#tenantIdType'" () {
+        given:
+            def parameters = builder().withFunctionName("tenant_has_authorities").withSchema(null)
+                    .withEqualsCurrentTenantIdentifierFunctionInvocationFactory(firstEqualsCurrentTenantIdentifierFunctionInvocationFactory)
+                    .withTenantIdArgumentType(tenantIdType)
+                    .withPermissionCommandPolicyArgumentType("text")
+                    .withRlsExpressionArgumentType("VARCHAR(73)")
+                    .withTableArgumentType("text")
+                    .withSchemaArgumentType("VARCHAR(117)")
+                    .build()
+        when:
+            tested.produce(parameters)
+
+        then:
+            def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+            ex.message == "Tenant Id type cannot be blank"
+
+        where:
+            tenantIdType    << ["", " ", "       "]
+    }
+
     private TenantHasAuthoritiesFunctionProducerParameters.TenantHasAuthoritiesFunctionProducerParametersBuilder builder()
     {
         new TenantHasAuthoritiesFunctionProducerParameters.TenantHasAuthoritiesFunctionProducerParametersBuilder()
