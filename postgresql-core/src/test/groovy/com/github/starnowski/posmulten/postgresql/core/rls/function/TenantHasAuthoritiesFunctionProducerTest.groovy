@@ -166,7 +166,7 @@ class TenantHasAuthoritiesFunctionProducerTest extends AbstractFunctionFactoryTe
     }
 
     @Unroll
-    def "should throw exception of type 'IllegalArgumentException' when the permission RLS expression argument type is blank '#rlsExpressionArgumentType'" () {
+    def "should throw exception of type 'IllegalArgumentException' when the RLS expression argument type is blank '#rlsExpressionArgumentType'" () {
         given:
             def parameters = builder().withFunctionName("tenant_has_authorities").withSchema(null)
                     .withEqualsCurrentTenantIdentifierFunctionInvocationFactory(firstEqualsCurrentTenantIdentifierFunctionInvocationFactory)
@@ -187,6 +187,30 @@ class TenantHasAuthoritiesFunctionProducerTest extends AbstractFunctionFactoryTe
 
         where:
             rlsExpressionArgumentType    << ["", " ", "       "]
+    }
+
+    @Unroll
+    def "should throw exception of type 'IllegalArgumentException' when the table argument type is blank '#table'" () {
+        given:
+            def parameters = builder().withFunctionName("tenant_has_authorities").withSchema(null)
+                    .withEqualsCurrentTenantIdentifierFunctionInvocationFactory(firstEqualsCurrentTenantIdentifierFunctionInvocationFactory)
+                    .withTenantIdArgumentType("VARCHAR(312)")
+                    .withPermissionCommandPolicyArgumentType("text")
+                    .withRlsExpressionArgumentType("VARCHAR(73)")
+                    .withTableArgumentType(table)
+                    .withSchemaArgumentType("VARCHAR(117)")
+                    .build()
+        when:
+            tested.produce(parameters)
+
+        then:
+            def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+            ex.message == "Table argument type cannot be blank"
+
+        where:
+            table    << ["", " ", "       "]
     }
 
     private TenantHasAuthoritiesFunctionProducerParameters.TenantHasAuthoritiesFunctionProducerParametersBuilder builder()
