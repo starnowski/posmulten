@@ -62,6 +62,10 @@ public class TenantHasAuthoritiesFunctionProducer extends ExtendedAbstractFuncti
         {
             throw new IllegalArgumentException("RLS expression argument type cannot be blank");
         }
+        if (parameters.getTableArgumentType() != null && parameters.getTableArgumentType().trim().isEmpty())
+        {
+            throw new IllegalArgumentException("Table argument type cannot be blank");
+        }
     }
 
     @Override
