@@ -141,6 +141,30 @@ class TenantHasAuthoritiesFunctionProducerTest extends AbstractFunctionFactoryTe
             tenantIdType    << ["", " ", "       "]
     }
 
+    @Unroll
+    def "should throw exception of type 'IllegalArgumentException' when the permission command policy argument type is blank '#permissionCommandPolicyArgumentType'" () {
+        given:
+            def parameters = builder().withFunctionName("tenant_has_authorities").withSchema(null)
+                    .withEqualsCurrentTenantIdentifierFunctionInvocationFactory(firstEqualsCurrentTenantIdentifierFunctionInvocationFactory)
+                    .withTenantIdArgumentType("VARCHAR(312)")
+                    .withPermissionCommandPolicyArgumentType(permissionCommandPolicyArgumentType)
+                    .withRlsExpressionArgumentType("VARCHAR(73)")
+                    .withTableArgumentType("text")
+                    .withSchemaArgumentType("VARCHAR(117)")
+                    .build()
+        when:
+            tested.produce(parameters)
+
+        then:
+            def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+            ex.message == "Permission command policy argument type cannot be blank"
+
+        where:
+            permissionCommandPolicyArgumentType    << ["", " ", "       "]
+    }
+
     private TenantHasAuthoritiesFunctionProducerParameters.TenantHasAuthoritiesFunctionProducerParametersBuilder builder()
     {
         new TenantHasAuthoritiesFunctionProducerParameters.TenantHasAuthoritiesFunctionProducerParametersBuilder()
