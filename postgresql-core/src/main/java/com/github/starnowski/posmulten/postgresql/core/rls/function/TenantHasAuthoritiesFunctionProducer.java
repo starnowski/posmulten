@@ -58,6 +58,10 @@ public class TenantHasAuthoritiesFunctionProducer extends ExtendedAbstractFuncti
         {
             throw new IllegalArgumentException("Permission command policy argument type cannot be blank");
         }
+        if (parameters.getRLSExpressionArgumentType() != null && parameters.getRLSExpressionArgumentType().trim().isEmpty())
+        {
+            throw new IllegalArgumentException("RLS expression argument type cannot be blank");
+        }
     }
 
     @Override
