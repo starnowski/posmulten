@@ -66,6 +66,10 @@ public class TenantHasAuthoritiesFunctionProducer extends ExtendedAbstractFuncti
         {
             throw new IllegalArgumentException("Table argument type cannot be blank");
         }
+        if (parameters.getSchemaArgumentType() != null && parameters.getSchemaArgumentType().trim().isEmpty())
+        {
+            throw new IllegalArgumentException("Schema argument type cannot be blank");
+        }
     }
 
     @Override
