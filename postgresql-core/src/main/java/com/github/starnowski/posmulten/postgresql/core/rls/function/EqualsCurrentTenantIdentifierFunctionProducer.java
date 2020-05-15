@@ -1,13 +1,15 @@
 package com.github.starnowski.posmulten.postgresql.core.rls.function;
 
-import com.github.starnowski.posmulten.postgresql.core.common.function.AbstractFunctionFactory;
-import com.github.starnowski.posmulten.postgresql.core.common.function.DefaultFunctionDefinition;
+import com.github.starnowski.posmulten.postgresql.core.common.function.ExtendedAbstractFunctionFactory;
 import com.github.starnowski.posmulten.postgresql.core.common.function.IFunctionArgument;
 import com.github.starnowski.posmulten.postgresql.core.common.function.IFunctionDefinition;
+import com.github.starnowski.posmulten.postgresql.core.common.function.metadata.MetadataPhraseBuilder;
 
 import java.util.List;
 
 import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentBuilder.forType;
+import static com.github.starnowski.posmulten.postgresql.core.common.function.metadata.ParallelModeEnum.SAFE;
+import static com.github.starnowski.posmulten.postgresql.core.common.function.metadata.VolatilityCategoryEnum.STABLE;
 import static java.util.Collections.singletonList;
 
 /**
@@ -16,13 +18,13 @@ import static java.util.Collections.singletonList;
  * @see <a href="https://www.postgresql.org/docs/9.6/sql-createfunction.html">Postgres, create function</a>
  *
  */
-public class EqualsCurrentTenantIdentifierFunctionProducer extends AbstractFunctionFactory<IEqualsCurrentTenantIdentifierFunctionProducerParameters, DefaultFunctionDefinition> {
+public class EqualsCurrentTenantIdentifierFunctionProducer extends ExtendedAbstractFunctionFactory<IEqualsCurrentTenantIdentifierFunctionProducerParameters, EqualsCurrentTenantIdentifierFunctionDefinition> {
 
     public static final String DEFAULT_ARGUMENT_TYPE = "VARCHAR(255)";
 
     @Override
-    protected DefaultFunctionDefinition returnFunctionDefinition(IEqualsCurrentTenantIdentifierFunctionProducerParameters parameters, IFunctionDefinition functionDefinition) {
-        return new DefaultFunctionDefinition(functionDefinition);
+    protected EqualsCurrentTenantIdentifierFunctionDefinition returnFunctionDefinition(IEqualsCurrentTenantIdentifierFunctionProducerParameters parameters, IFunctionDefinition functionDefinition) {
+        return new EqualsCurrentTenantIdentifierFunctionDefinition(functionDefinition);
     }
 
     @Override
@@ -31,35 +33,20 @@ public class EqualsCurrentTenantIdentifierFunctionProducer extends AbstractFunct
     }
 
     @Override
-    protected String produceStatement(IEqualsCurrentTenantIdentifierFunctionProducerParameters parameters) {
+    protected String prepareReturnType(IEqualsCurrentTenantIdentifierFunctionProducerParameters parameters) {
+        return "BOOLEAN";
+    }
+
+    @Override
+    protected void enrichMetadataPhraseBuilder(IEqualsCurrentTenantIdentifierFunctionProducerParameters parameters, MetadataPhraseBuilder metadataPhraseBuilder) {
+        metadataPhraseBuilder.withVolatilityCategorySupplier(STABLE).withParallelModeSupplier(SAFE);
+    }
+
+    @Override
+    protected String buildBody(IEqualsCurrentTenantIdentifierFunctionProducerParameters parameters) {
         StringBuilder sb = new StringBuilder();
-        sb.append("CREATE OR REPLACE FUNCTION ");
-        if (parameters.getSchema() != null)
-        {
-            sb.append(parameters.getSchema());
-            sb.append(".");
-        }
-        sb.append(parameters.getFunctionName());
-        sb.append("(");
-        if (parameters.getArgumentType() == null)
-        {
-            sb.append(DEFAULT_ARGUMENT_TYPE);
-        }
-        else
-        {
-            sb.append(parameters.getArgumentType());
-        }
-        sb.append(")");
-        sb.append(" RETURNS BOOLEAN");
-        sb.append(" as $$");
-        sb.append("\n");
         sb.append("SELECT $1 = ");
         sb.append(parameters.getCurrentTenantIdFunctionInvocationFactory().returnGetCurrentTenantIdFunctionInvocation());
-        sb.append("\n");
-        sb.append("$$ LANGUAGE sql");
-        sb.append("\n");
-        sb.append("STABLE PARALLEL SAFE");
-        sb.append(";");
         return sb.toString();
     }
 

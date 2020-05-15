@@ -1,8 +1,11 @@
 package com.github.starnowski.posmulten.postgresql.core.rls.function;
 
-import com.github.starnowski.posmulten.postgresql.core.common.function.AbstractFunctionFactory;
-import com.github.starnowski.posmulten.postgresql.core.common.function.DefaultFunctionDefinition;
+import com.github.starnowski.posmulten.postgresql.core.common.function.ExtendedAbstractFunctionFactory;
 import com.github.starnowski.posmulten.postgresql.core.common.function.IFunctionDefinition;
+import com.github.starnowski.posmulten.postgresql.core.common.function.metadata.MetadataPhraseBuilder;
+
+import static com.github.starnowski.posmulten.postgresql.core.common.function.metadata.ParallelModeEnum.SAFE;
+import static com.github.starnowski.posmulten.postgresql.core.common.function.metadata.VolatilityCategoryEnum.STABLE;
 
 /**
  * The component produces a statement that creates a function that returns the current tenant identifier.
@@ -10,7 +13,7 @@ import com.github.starnowski.posmulten.postgresql.core.common.function.IFunction
  * @see <a href="https://www.postgresql.org/docs/9.6/sql-createfunction.html">Postgres, create function</a>
  *
  */
-public class GetCurrentTenantIdFunctionProducer extends AbstractFunctionFactory<IGetCurrentTenantIdFunctionProducerParameters, GetCurrentTenantIdFunctionDefinition> {
+public class GetCurrentTenantIdFunctionProducer extends ExtendedAbstractFunctionFactory<IGetCurrentTenantIdFunctionProducerParameters, GetCurrentTenantIdFunctionDefinition> {
 
     protected void validate(IGetCurrentTenantIdFunctionProducerParameters parameters) {
         super.validate(parameters);
@@ -34,35 +37,21 @@ public class GetCurrentTenantIdFunctionProducer extends AbstractFunctionFactory<
     }
 
     @Override
-    protected String produceStatement(IGetCurrentTenantIdFunctionProducerParameters parameters) {
+    protected String prepareReturnType(IGetCurrentTenantIdFunctionProducerParameters parameters) {
+        return parameters.getFunctionReturnType() == null ? "VARCHAR(255)" : parameters.getFunctionReturnType();
+    }
+
+    @Override
+    protected void enrichMetadataPhraseBuilder(IGetCurrentTenantIdFunctionProducerParameters parameters, MetadataPhraseBuilder metadataPhraseBuilder) {
+        metadataPhraseBuilder.withParallelModeSupplier(SAFE).withVolatilityCategorySupplier(STABLE);
+    }
+
+    @Override
+    protected String buildBody(IGetCurrentTenantIdFunctionProducerParameters parameters) {
         StringBuilder sb = new StringBuilder();
-        sb.append("CREATE OR REPLACE FUNCTION ");
-        if (parameters.getSchema() != null)
-        {
-            sb.append(parameters.getSchema());
-            sb.append(".");
-        }
-        sb.append(parameters.getFunctionName());
-        sb.append("()");
-        sb.append(" RETURNS ");
-        if (parameters.getFunctionReturnType() == null)
-        {
-            sb.append("VARCHAR(255)");
-        }
-        else
-        {
-            sb.append(parameters.getFunctionReturnType());
-        }
-        sb.append(" as $$");
-        sb.append("\n");
         sb.append("SELECT current_setting('");
         sb.append(parameters.getCurrentTenantIdProperty());
         sb.append("')");
-        sb.append("\n");
-        sb.append("$$ LANGUAGE sql");
-        sb.append("\n");
-        sb.append("STABLE PARALLEL SAFE");
-        sb.append(";");
         return sb.toString();
     }
 }
