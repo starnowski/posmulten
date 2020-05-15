@@ -165,6 +165,30 @@ class TenantHasAuthoritiesFunctionProducerTest extends AbstractFunctionFactoryTe
             permissionCommandPolicyArgumentType    << ["", " ", "       "]
     }
 
+    @Unroll
+    def "should throw exception of type 'IllegalArgumentException' when the permission RLS expression argument type is blank '#rlsExpressionArgumentType'" () {
+        given:
+            def parameters = builder().withFunctionName("tenant_has_authorities").withSchema(null)
+                    .withEqualsCurrentTenantIdentifierFunctionInvocationFactory(firstEqualsCurrentTenantIdentifierFunctionInvocationFactory)
+                    .withTenantIdArgumentType("VARCHAR(312)")
+                    .withPermissionCommandPolicyArgumentType("text")
+                    .withRlsExpressionArgumentType(rlsExpressionArgumentType)
+                    .withTableArgumentType("text")
+                    .withSchemaArgumentType("VARCHAR(117)")
+                    .build()
+        when:
+            tested.produce(parameters)
+
+        then:
+            def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+            ex.message == "RLS expression argument type cannot be blank"
+
+        where:
+            rlsExpressionArgumentType    << ["", " ", "       "]
+    }
+
     private TenantHasAuthoritiesFunctionProducerParameters.TenantHasAuthoritiesFunctionProducerParametersBuilder builder()
     {
         new TenantHasAuthoritiesFunctionProducerParameters.TenantHasAuthoritiesFunctionProducerParametersBuilder()
