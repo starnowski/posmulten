@@ -36,6 +36,7 @@ public class TenantHasAuthoritiesFunctionDefinition extends DefaultFunctionDefin
 
     private String prepareValue(FunctionArgumentValue value)
     {
+        //TODO
         return value == null ? null : (STRING.equals(value.getType()) ? (value.getValue()) : value.getValue());
     }
 }

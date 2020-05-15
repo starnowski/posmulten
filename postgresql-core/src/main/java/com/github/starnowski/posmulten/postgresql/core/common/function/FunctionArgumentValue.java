@@ -40,5 +40,13 @@ public interface FunctionArgumentValue {
             return type;
         }
 
+        @Override
+        public String toString() {
+            return "DefaultFunctionArgumentValue{" +
+                    "value='" + value + '\'' +
+                    ", type=" + type +
+                    '}';
+        }
+
     }
 }
