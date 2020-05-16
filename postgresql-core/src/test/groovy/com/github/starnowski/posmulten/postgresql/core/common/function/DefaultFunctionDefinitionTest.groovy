@@ -9,6 +9,7 @@ import org.jeasy.random.EasyRandomParameters
 import org.jeasy.random.api.Randomizer
 import org.junit.Assert
 import spock.lang.Specification
+import spock.lang.Unroll
 
 import java.lang.reflect.Method
 import java.lang.reflect.Modifier
@@ -58,6 +59,23 @@ class DefaultFunctionDefinitionTest extends Specification {
                 Object resultValue2 = method.invoke(result)
                 Assert.assertNotSame("the method " + method.getName() + " returned the same reference for tested object", resultValue, resultValue2)
             }
+    }
+
+    @Unroll
+    def "should throw exception of type 'IllegalArgumentException' when the passed function argument collection is null"()
+    {
+        given:
+            IFunctionDefinition passedObject = Mock(IFunctionDefinition)
+
+        when:
+            new DefaultFunctionDefinition(passedObject)
+
+        then:
+            def ex = thrown(IllegalArgumentException.class)
+            1 * passedObject.getFunctionArguments() >> null
+
+        and: "exception should have correct message"
+            ex.message == "Function argument collection cannot be null"
     }
 
     protected Method[] returnPublicMethodsForInterface(Class aClass)
