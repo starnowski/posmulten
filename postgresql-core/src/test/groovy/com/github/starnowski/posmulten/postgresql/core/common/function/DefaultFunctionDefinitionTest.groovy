@@ -1,9 +1,6 @@
 package com.github.starnowski.posmulten.postgresql.core.common.function
 
 import com.github.starnowski.posmulten.postgresql.core.RandomString
-import com.github.starnowski.posmulten.postgresql.core.common.function.DefaultFunctionDefinition
-import com.github.starnowski.posmulten.postgresql.core.common.function.IFunctionArgument
-import com.github.starnowski.posmulten.postgresql.core.common.function.IFunctionDefinition
 import org.jeasy.random.EasyRandom
 import org.jeasy.random.EasyRandomParameters
 import org.jeasy.random.api.Randomizer
