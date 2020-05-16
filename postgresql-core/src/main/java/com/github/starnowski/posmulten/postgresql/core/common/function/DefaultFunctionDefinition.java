@@ -1,5 +1,6 @@
 package com.github.starnowski.posmulten.postgresql.core.common.function;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DefaultFunctionDefinition implements IFunctionDefinition{
@@ -29,7 +30,7 @@ public class DefaultFunctionDefinition implements IFunctionDefinition{
 
     @Override
     public List<IFunctionArgument> getFunctionArguments() {
-        return functionArguments;
+        return new ArrayList<>(functionArguments);
     }
 
     @Override
