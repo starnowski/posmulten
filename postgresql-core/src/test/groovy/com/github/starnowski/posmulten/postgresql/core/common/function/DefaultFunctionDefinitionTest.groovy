@@ -46,6 +46,15 @@ class DefaultFunctionDefinitionTest extends Specification {
                 Object passedObjectValue =  method.invoke(passedObject)
                 Assert.assertEquals("values for method " + method.getName() + " does not match", resultValue, passedObjectValue)
             }
+
+        and: "all methods that return collection should always return a new collection object"
+            publicMethods.findAll {method ->
+                Collection.class.isAssignableFrom(method.getReturnType())
+            }.each { method ->
+                Object resultValue =  method.invoke(result)
+                Object passedObjectValue =  method.invoke(passedObject)
+                Assert.assertNotSame("the method " + method.getName() + " returned the same reference for both objects", resultValue, passedObjectValue)
+            }
     }
 
     protected Method[] returnPublicMethodsForInterface(Class aClass)
