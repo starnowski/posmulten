@@ -5,5 +5,5 @@ public enum PermissionCommandPolicyEnum {
     SELECT,
     INSERT,
     UPDATE,
-    DELETE;
+    DELETE
 }
