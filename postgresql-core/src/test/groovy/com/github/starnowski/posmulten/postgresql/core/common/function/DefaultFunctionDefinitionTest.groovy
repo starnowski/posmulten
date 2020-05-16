@@ -54,6 +54,9 @@ class DefaultFunctionDefinitionTest extends Specification {
                 Object resultValue =  method.invoke(result)
                 Object passedObjectValue =  method.invoke(passedObject)
                 Assert.assertNotSame("the method " + method.getName() + " returned the same reference for both objects", resultValue, passedObjectValue)
+
+                Object resultValue2 = method.invoke(result)
+                Assert.assertNotSame("the method " + method.getName() + " returned the same reference for tested object", resultValue, resultValue2)
             }
     }
 
