@@ -8,9 +8,9 @@ public interface RLSPolicyProducerParameters {
 
     String getPolicySchema();
 
-    String getTenantIdColumn();
+    //TODO grantee
 
-    RLSExpressionTypeEnum getRlsExpressionType();
+    String getTenantIdColumn();
 
     PermissionCommandPolicyEnum getPermissionCommandPolicy();
 
