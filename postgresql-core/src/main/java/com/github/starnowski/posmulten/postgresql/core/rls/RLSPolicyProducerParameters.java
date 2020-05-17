@@ -1,6 +1,6 @@
 package com.github.starnowski.posmulten.postgresql.core.rls;
 
-public interface IRLSPolicyProducerParameters {
+public interface RLSPolicyProducerParameters {
 
     String getPolicyName();
 
