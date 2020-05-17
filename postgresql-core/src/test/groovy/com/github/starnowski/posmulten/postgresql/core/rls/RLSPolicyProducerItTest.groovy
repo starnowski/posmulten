@@ -21,6 +21,7 @@ class RLSPolicyProducerItTest extends Specification {
     def schema
     def table
     def policyName
+    def policyDefinition
     def tenantHasAuthoritiesFunction
 
     @Autowired

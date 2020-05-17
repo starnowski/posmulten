@@ -4,7 +4,7 @@ public interface IRLSPolicyProducerParameters {
 
     String getPolicyName();
 
-    String getPolicyTabe();
+    String getPolicyTable();
 
     String getPolicySchema();
 
