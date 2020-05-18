@@ -8,7 +8,7 @@ public interface RLSPolicyProducerParameters {
 
     String getPolicySchema();
 
-    //TODO grantee
+    String getGrantee();
 
     String getTenantIdColumn();
 
