@@ -11,6 +11,7 @@ import spock.lang.Specification
 
 import static com.github.starnowski.posmulten.postgresql.core.TestUtils.dropFunction
 import static com.github.starnowski.posmulten.postgresql.core.TestUtils.isFunctionExists
+import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValueToStringMapper.mapToString
 import static org.junit.Assert.assertEquals
 
 @SpringBootTest(classes = [TestApplication.class])
@@ -46,7 +47,7 @@ class RLSPolicyProducerItTest extends Specification {
         assertEquals(true, isFunctionExists(jdbcTemplate, "tenant_has_authorities_function", null))
         TenantHasAuthoritiesFunctionInvocationFactory dummyFactory =
                 {tenantIdValue, permissionCommandPolicy, rlsExpressionType, table, schema ->
-
+                    "is_tenant_starts_with_abcd(" + mapToString(tenantIdValue) + ")"
                 }
     }
 
