@@ -1,6 +1,7 @@
 package com.github.starnowski.posmulten.postgresql.core.rls
 
 import com.github.starnowski.posmulten.postgresql.core.TestApplication
+import com.github.starnowski.posmulten.postgresql.core.rls.function.EqualsCurrentTenantIdentifierFunctionInvocationFactory
 import com.github.starnowski.posmulten.postgresql.core.rls.function.TenantHasAuthoritiesFunctionProducer
 import com.github.starnowski.posmulten.postgresql.core.rls.function.TenantHasAuthoritiesFunctionProducerParameters
 import org.springframework.beans.factory.annotation.Autowired
@@ -39,9 +40,7 @@ class RLSPolicyProducerItTest extends Specification {
         sb.append("\$\$ LANGUAGE sql;")
         jdbcTemplate.execute(sb.toString())
         assertEquals(true, isFunctionExists(jdbcTemplate, IS_TENANT_ID_CORRECT_TEST_FUNCTION, null))
-        def equalsCurrentTenantIdentifierFunctionInvocationFactory = { tenant ->
-            IS_TENANT_ID_CORRECT_TEST_FUNCTION + "(" + mapToString(tenantIdValue) + ")"
-        }
+        EqualsCurrentTenantIdentifierFunctionInvocationFactory equalsCurrentTenantIdentifierFunctionInvocationFactory = prepareEqualsCurrentTenantIdentifierFunctionInvocationFactoryForTest()
         def producer = new TenantHasAuthoritiesFunctionProducer()
         tenantHasAuthoritiesFunction = producer.produce(new TenantHasAuthoritiesFunctionProducerParameters("tenant_has_authorities_function", null, equalsCurrentTenantIdentifierFunctionInvocationFactory))
         jdbcTemplate.execute(tenantHasAuthoritiesFunction.getCreateScript())
@@ -57,6 +56,12 @@ class RLSPolicyProducerItTest extends Specification {
         assertEquals(false, isFunctionExists(jdbcTemplate, "tenant_has_authorities_function", null))
 //        jdbcTemplate.execute(functionDefinition.getDropScript())
 //        assertEquals(false, isFunctionExists(jdbcTemplate, functionName, schema))
+    }
+
+    private Closure<String> prepareEqualsCurrentTenantIdentifierFunctionInvocationFactoryForTest() {
+        { tenant ->
+            IS_TENANT_ID_CORRECT_TEST_FUNCTION + "(" + mapToString(tenantIdValue) + ")"
+        }
     }
 
     private Closure<String> prepareTenantHasAuthoritiesFunctionInvocationFactoryForTestFunctionThatDetermineIfTenantIdIsCorrect() {
