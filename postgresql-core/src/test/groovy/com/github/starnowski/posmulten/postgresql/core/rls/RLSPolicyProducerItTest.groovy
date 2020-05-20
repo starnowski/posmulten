@@ -44,6 +44,10 @@ class RLSPolicyProducerItTest extends Specification {
         tenantHasAuthoritiesFunction = producer.produce(new TenantHasAuthoritiesFunctionProducerParameters("tenant_has_authorities_function", null, equalsCurrentTenantIdentifierFunctionInvocationFactory))
         jdbcTemplate.execute(tenantHasAuthoritiesFunction.getCreateScript())
         assertEquals(true, isFunctionExists(jdbcTemplate, "tenant_has_authorities_function", null))
+        TenantHasAuthoritiesFunctionInvocationFactory dummyFactory =
+                {tenantIdValue, permissionCommandPolicy, rlsExpressionType, table, schema ->
+
+                }
     }
 
     def cleanup()
