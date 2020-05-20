@@ -41,7 +41,7 @@ class RLSPolicyProducerItTest extends Specification {
         jdbcTemplate.execute(sb.toString())
         assertEquals(true, isFunctionExists(jdbcTemplate, IS_TENANT_ID_CORRECT_TEST_FUNCTION, null))
         EqualsCurrentTenantIdentifierFunctionInvocationFactory equalsCurrentTenantIdentifierFunctionInvocationFactory = prepareEqualsCurrentTenantIdentifierFunctionInvocationFactoryForTest()
-        def producer = new TenantHasAuthoritiesFunctionProducer()
+        TenantHasAuthoritiesFunctionProducer producer = new TenantHasAuthoritiesFunctionProducer()
         tenantHasAuthoritiesFunction = producer.produce(new TenantHasAuthoritiesFunctionProducerParameters("tenant_has_authorities_function", null, equalsCurrentTenantIdentifierFunctionInvocationFactory))
         jdbcTemplate.execute(tenantHasAuthoritiesFunction.getCreateScript())
         assertEquals(true, isFunctionExists(jdbcTemplate, "tenant_has_authorities_function", null))
