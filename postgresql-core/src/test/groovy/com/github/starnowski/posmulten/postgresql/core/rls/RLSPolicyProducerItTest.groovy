@@ -18,6 +18,7 @@ import static org.junit.Assert.assertEquals
 class RLSPolicyProducerItTest extends Specification {
 
     public static final String IS_TENANT_ID_CORRECT_TEST_FUNCTION = "is_tenant_starts_with_abcd"
+    public static final String TENANT_HAS_AUTHORITIES_TEST_FUNCTION = "tenant_has_authorities_function"
     def tested = new RLSPolicyProducer()
     def schema
     def table
@@ -38,9 +39,9 @@ class RLSPolicyProducerItTest extends Specification {
         assertEquals(true, isFunctionExists(jdbcTemplate, IS_TENANT_ID_CORRECT_TEST_FUNCTION, null))
         EqualsCurrentTenantIdentifierFunctionInvocationFactory equalsCurrentTenantIdentifierFunctionInvocationFactory = prepareEqualsCurrentTenantIdentifierFunctionInvocationFactoryForTest()
         TenantHasAuthoritiesFunctionProducer producer = new TenantHasAuthoritiesFunctionProducer()
-        tenantHasAuthoritiesFunction = producer.produce(new TenantHasAuthoritiesFunctionProducerParameters("tenant_has_authorities_function", null, equalsCurrentTenantIdentifierFunctionInvocationFactory))
+        tenantHasAuthoritiesFunction = producer.produce(new TenantHasAuthoritiesFunctionProducerParameters(TENANT_HAS_AUTHORITIES_TEST_FUNCTION, null, equalsCurrentTenantIdentifierFunctionInvocationFactory))
         jdbcTemplate.execute(tenantHasAuthoritiesFunction.getCreateScript())
-        assertEquals(true, isFunctionExists(jdbcTemplate, "tenant_has_authorities_function", null))
+        assertEquals(true, isFunctionExists(jdbcTemplate, TENANT_HAS_AUTHORITIES_TEST_FUNCTION, null))
 
         tenantHasAuthoritiesFunctionInvocationFactory1 = tenantHasAuthoritiesFunction
         tenantHasAuthoritiesFunctionInvocationFactory2 = prepareTenantHasAuthoritiesFunctionInvocationFactoryForTestFunctionThatDetermineIfTenantIdIsCorrect()
@@ -51,7 +52,7 @@ class RLSPolicyProducerItTest extends Specification {
         dropFunction(jdbcTemplate, IS_TENANT_ID_CORRECT_TEST_FUNCTION, null, "text")
         assertEquals(false, isFunctionExists(jdbcTemplate, IS_TENANT_ID_CORRECT_TEST_FUNCTION, null))
         jdbcTemplate.execute(tenantHasAuthoritiesFunction.getDropScript())
-        assertEquals(false, isFunctionExists(jdbcTemplate, "tenant_has_authorities_function", null))
+        assertEquals(false, isFunctionExists(jdbcTemplate, TENANT_HAS_AUTHORITIES_TEST_FUNCTION, null))
 //        jdbcTemplate.execute(functionDefinition.getDropScript())
 //        assertEquals(false, isFunctionExists(jdbcTemplate, functionName, schema))
     }
