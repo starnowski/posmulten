@@ -18,7 +18,6 @@ class RLSPolicyProducerItTest extends Specification {
 
     public static final String IS_TENANT_ID_CORRECT_TEST_FUNCTION = "is_tenant_starts_with_abcd"
     def tested = new RLSPolicyProducer()
-
     def schema
     def table
     def policyName
@@ -50,12 +49,6 @@ class RLSPolicyProducerItTest extends Specification {
         TenantHasAuthoritiesFunctionInvocationFactory dummyFactory = prepareTenantHasAuthoritiesFunctionInvocationFactoryForTestFunctionThatDetermineIfTenantIdIsCorrect()
     }
 
-    private Closure<String> prepareTenantHasAuthoritiesFunctionInvocationFactoryForTestFunctionThatDetermineIfTenantIdIsCorrect() {
-        { tenantIdValue, permissionCommandPolicy, rlsExpressionType, table, schema ->
-            IS_TENANT_ID_CORRECT_TEST_FUNCTION + "(" + mapToString(tenantIdValue) + ")"
-        }
-    }
-
     def cleanup()
     {
         dropFunction(jdbcTemplate, IS_TENANT_ID_CORRECT_TEST_FUNCTION, null, "text")
@@ -64,6 +57,12 @@ class RLSPolicyProducerItTest extends Specification {
         assertEquals(false, isFunctionExists(jdbcTemplate, "tenant_has_authorities_function", null))
 //        jdbcTemplate.execute(functionDefinition.getDropScript())
 //        assertEquals(false, isFunctionExists(jdbcTemplate, functionName, schema))
+    }
+
+    private Closure<String> prepareTenantHasAuthoritiesFunctionInvocationFactoryForTestFunctionThatDetermineIfTenantIdIsCorrect() {
+        { tenantIdValue, permissionCommandPolicy, rlsExpressionType, table, schema ->
+            IS_TENANT_ID_CORRECT_TEST_FUNCTION + "(" + mapToString(tenantIdValue) + ")"
+        }
     }
 
 }
