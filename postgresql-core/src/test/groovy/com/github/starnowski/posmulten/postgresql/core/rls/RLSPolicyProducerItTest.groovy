@@ -11,7 +11,6 @@ import org.springframework.jdbc.core.JdbcTemplate
 import spock.lang.Specification
 
 import static com.github.starnowski.posmulten.postgresql.core.TestUtils.dropFunction
-import static com.github.starnowski.posmulten.postgresql.core.TestUtils.isFunctionExists
 import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValueToStringMapper.mapToString
 import static org.junit.Assert.assertEquals
 
@@ -59,6 +58,26 @@ class RLSPolicyProducerItTest extends Specification {
         assertEquals(false, isFunctionExists(jdbcTemplate, TENANT_HAS_AUTHORITIES_TEST_FUNCTION, null))
         jdbcTemplate.execute(rlsPolicyDefinition.getDropScript())
 //        assertEquals(false, isFunctionExists(jdbcTemplate, functionName, schema))
+    }
+
+    public static boolean isFunctionExists(JdbcTemplate jdbcTemplate, String functionName, String schema)
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append("SELECT 1 FROM pg_proc pg, pg_catalog.pg_namespace pgn WHERE ");
+        sb.append("pg.proname = '");
+        sb.append(functionName);
+        sb.append("' AND ");
+        if (schema == null)
+        {
+            sb.append("pgn.nspname = 'public'");
+        } else {
+            sb.append("pgn.nspname = '");
+            sb.append(schema);
+            sb.append("'");
+        }
+        sb.append(" AND ");
+        sb.append("pg.pronamespace =  pgn.oid");
+        return isAnyRecordExists(jdbcTemplate, sb.toString());
     }
 
     private String prepareCreateScriptForFunctionThatDeterminesIfTenantIdIsCorrect() {
