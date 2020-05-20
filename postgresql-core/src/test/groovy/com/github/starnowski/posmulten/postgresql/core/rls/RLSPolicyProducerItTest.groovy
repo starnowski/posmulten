@@ -30,15 +30,8 @@ class RLSPolicyProducerItTest extends Specification {
 
     def setup()
     {
-        StringBuilder sb = new StringBuilder()
-        sb.append("CREATE OR REPLACE FUNCTION ")
-        sb.append(IS_TENANT_ID_CORRECT_TEST_FUNCTION)
-        sb.append("(text) RETURNS BOOLEAN AS \$\$")
-        sb.append("\n")
-        sb.append("SELECT \$1 LIKE 'ABCD%'")
-        sb.append("\n")
-        sb.append("\$\$ LANGUAGE sql;")
-        jdbcTemplate.execute(sb.toString())
+        String createScript = prepareCreateScriptForFunctionThatDeterminesIfTenantIdIsCorrect()
+        jdbcTemplate.execute(createScript)
         assertEquals(true, isFunctionExists(jdbcTemplate, IS_TENANT_ID_CORRECT_TEST_FUNCTION, null))
         EqualsCurrentTenantIdentifierFunctionInvocationFactory equalsCurrentTenantIdentifierFunctionInvocationFactory = prepareEqualsCurrentTenantIdentifierFunctionInvocationFactoryForTest()
         TenantHasAuthoritiesFunctionProducer producer = new TenantHasAuthoritiesFunctionProducer()
@@ -56,6 +49,18 @@ class RLSPolicyProducerItTest extends Specification {
         assertEquals(false, isFunctionExists(jdbcTemplate, "tenant_has_authorities_function", null))
 //        jdbcTemplate.execute(functionDefinition.getDropScript())
 //        assertEquals(false, isFunctionExists(jdbcTemplate, functionName, schema))
+    }
+
+    private String prepareCreateScriptForFunctionThatDeterminesIfTenantIdIsCorrect() {
+        StringBuilder sb = new StringBuilder()
+        sb.append("CREATE OR REPLACE FUNCTION ")
+        sb.append(IS_TENANT_ID_CORRECT_TEST_FUNCTION)
+        sb.append("(text) RETURNS BOOLEAN AS \$\$")
+        sb.append("\n")
+        sb.append("SELECT \$1 LIKE 'ABCD%'")
+        sb.append("\n")
+        sb.append("\$\$ LANGUAGE sql;")
+        sb.toString()
     }
 
     private Closure<String> prepareEqualsCurrentTenantIdentifierFunctionInvocationFactoryForTest() {
