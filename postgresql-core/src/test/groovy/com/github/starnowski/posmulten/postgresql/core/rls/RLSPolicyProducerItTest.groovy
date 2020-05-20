@@ -1,7 +1,6 @@
 package com.github.starnowski.posmulten.postgresql.core.rls
 
 import com.github.starnowski.posmulten.postgresql.core.TestApplication
-import com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValueEnum
 import com.github.starnowski.posmulten.postgresql.core.rls.function.TenantHasAuthoritiesFunctionProducer
 import com.github.starnowski.posmulten.postgresql.core.rls.function.TenantHasAuthoritiesFunctionProducerParameters
 import org.springframework.beans.factory.annotation.Autowired
@@ -17,6 +16,7 @@ import static org.junit.Assert.assertEquals
 @SpringBootTest(classes = [TestApplication.class])
 class RLSPolicyProducerItTest extends Specification {
 
+    public static final String IS_TENANT_ID_CORRECT_TEST_FUNCTION = "is_tenant_starts_with_abcd"
     def tested = new RLSPolicyProducer()
 
     def schema
@@ -31,30 +31,35 @@ class RLSPolicyProducerItTest extends Specification {
     def setup()
     {
         StringBuilder sb = new StringBuilder()
-        sb.append("CREATE OR REPLACE FUNCTION is_tenant_starts_with_abcd(text) RETURNS BOOLEAN AS \$\$")
+        sb.append("CREATE OR REPLACE FUNCTION ")
+        sb.append(IS_TENANT_ID_CORRECT_TEST_FUNCTION)
+        sb.append("(text) RETURNS BOOLEAN AS \$\$")
         sb.append("\n")
         sb.append("SELECT \$1 LIKE 'ABCD%'")
         sb.append("\n")
         sb.append("\$\$ LANGUAGE sql;")
         jdbcTemplate.execute(sb.toString())
-        assertEquals(true, isFunctionExists(jdbcTemplate, "is_tenant_starts_with_abcd", null))
+        assertEquals(true, isFunctionExists(jdbcTemplate, IS_TENANT_ID_CORRECT_TEST_FUNCTION, null))
         def equalsCurrentTenantIdentifierFunctionInvocationFactory = { tenant ->
-            "is_tenant_starts_with_abcd(" + (FunctionArgumentValueEnum.STRING.equals(tenant.getType()) ? ("'" + tenant.getValue() + "'") : tenant.getValue()) + ")"
+            IS_TENANT_ID_CORRECT_TEST_FUNCTION + "(" + mapToString(tenantIdValue) + ")"
         }
         def producer = new TenantHasAuthoritiesFunctionProducer()
         tenantHasAuthoritiesFunction = producer.produce(new TenantHasAuthoritiesFunctionProducerParameters("tenant_has_authorities_function", null, equalsCurrentTenantIdentifierFunctionInvocationFactory))
         jdbcTemplate.execute(tenantHasAuthoritiesFunction.getCreateScript())
         assertEquals(true, isFunctionExists(jdbcTemplate, "tenant_has_authorities_function", null))
-        TenantHasAuthoritiesFunctionInvocationFactory dummyFactory =
-                {tenantIdValue, permissionCommandPolicy, rlsExpressionType, table, schema ->
-                    "is_tenant_starts_with_abcd(" + mapToString(tenantIdValue) + ")"
-                }
+        TenantHasAuthoritiesFunctionInvocationFactory dummyFactory = prepareTenantHasAuthoritiesFunctionInvocationFactoryForTestFunctionThatDetermineIfTenantIdIsCorrect()
+    }
+
+    private Closure<String> prepareTenantHasAuthoritiesFunctionInvocationFactoryForTestFunctionThatDetermineIfTenantIdIsCorrect() {
+        { tenantIdValue, permissionCommandPolicy, rlsExpressionType, table, schema ->
+            IS_TENANT_ID_CORRECT_TEST_FUNCTION + "(" + mapToString(tenantIdValue) + ")"
+        }
     }
 
     def cleanup()
     {
-        dropFunction(jdbcTemplate, "is_tenant_starts_with_abcd", null, "text")
-        assertEquals(false, isFunctionExists(jdbcTemplate, "is_tenant_starts_with_abcd", null))
+        dropFunction(jdbcTemplate, IS_TENANT_ID_CORRECT_TEST_FUNCTION, null, "text")
+        assertEquals(false, isFunctionExists(jdbcTemplate, IS_TENANT_ID_CORRECT_TEST_FUNCTION, null))
         jdbcTemplate.execute(tenantHasAuthoritiesFunction.getDropScript())
         assertEquals(false, isFunctionExists(jdbcTemplate, "tenant_has_authorities_function", null))
 //        jdbcTemplate.execute(functionDefinition.getDropScript())
