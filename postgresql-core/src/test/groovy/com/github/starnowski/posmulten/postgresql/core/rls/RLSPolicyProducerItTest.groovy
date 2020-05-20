@@ -25,6 +25,9 @@ class RLSPolicyProducerItTest extends Specification {
     def policyDefinition
     def tenantHasAuthoritiesFunction
 
+    TenantHasAuthoritiesFunctionInvocationFactory tenantHasAuthoritiesFunctionInvocationFactory1
+    TenantHasAuthoritiesFunctionInvocationFactory tenantHasAuthoritiesFunctionInvocationFactory2
+
     @Autowired
     JdbcTemplate jdbcTemplate
 
@@ -38,7 +41,9 @@ class RLSPolicyProducerItTest extends Specification {
         tenantHasAuthoritiesFunction = producer.produce(new TenantHasAuthoritiesFunctionProducerParameters("tenant_has_authorities_function", null, equalsCurrentTenantIdentifierFunctionInvocationFactory))
         jdbcTemplate.execute(tenantHasAuthoritiesFunction.getCreateScript())
         assertEquals(true, isFunctionExists(jdbcTemplate, "tenant_has_authorities_function", null))
-        TenantHasAuthoritiesFunctionInvocationFactory dummyFactory = prepareTenantHasAuthoritiesFunctionInvocationFactoryForTestFunctionThatDetermineIfTenantIdIsCorrect()
+
+        tenantHasAuthoritiesFunctionInvocationFactory1 = tenantHasAuthoritiesFunction
+        tenantHasAuthoritiesFunctionInvocationFactory2 = prepareTenantHasAuthoritiesFunctionInvocationFactoryForTestFunctionThatDetermineIfTenantIdIsCorrect()
     }
 
     def cleanup()
