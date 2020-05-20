@@ -1,6 +1,7 @@
 package com.github.starnowski.posmulten.postgresql.core.rls
 
 import com.github.starnowski.posmulten.postgresql.core.TestApplication
+import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition
 import com.github.starnowski.posmulten.postgresql.core.rls.function.EqualsCurrentTenantIdentifierFunctionInvocationFactory
 import com.github.starnowski.posmulten.postgresql.core.rls.function.TenantHasAuthoritiesFunctionProducer
 import com.github.starnowski.posmulten.postgresql.core.rls.function.TenantHasAuthoritiesFunctionProducerParameters
@@ -25,6 +26,7 @@ class RLSPolicyProducerItTest extends Specification {
     def policyName
     def policyDefinition
     def tenantHasAuthoritiesFunction
+    SQLDefinition rlsPolicyDefinition
 
     TenantHasAuthoritiesFunctionInvocationFactory tenantHasAuthoritiesFunctionInvocationFactory1
     TenantHasAuthoritiesFunctionInvocationFactory tenantHasAuthoritiesFunctionInvocationFactory2
@@ -47,13 +49,15 @@ class RLSPolicyProducerItTest extends Specification {
         tenantHasAuthoritiesFunctionInvocationFactory2 = prepareTenantHasAuthoritiesFunctionInvocationFactoryForTestFunctionThatDetermineIfTenantIdIsCorrect()
     }
 
+
+
     def cleanup()
     {
         dropFunction(jdbcTemplate, IS_TENANT_ID_CORRECT_TEST_FUNCTION, null, "text")
         assertEquals(false, isFunctionExists(jdbcTemplate, IS_TENANT_ID_CORRECT_TEST_FUNCTION, null))
         jdbcTemplate.execute(tenantHasAuthoritiesFunction.getDropScript())
         assertEquals(false, isFunctionExists(jdbcTemplate, TENANT_HAS_AUTHORITIES_TEST_FUNCTION, null))
-//        jdbcTemplate.execute(functionDefinition.getDropScript())
+        jdbcTemplate.execute(rlsPolicyDefinition.getDropScript())
 //        assertEquals(false, isFunctionExists(jdbcTemplate, functionName, schema))
     }
 
