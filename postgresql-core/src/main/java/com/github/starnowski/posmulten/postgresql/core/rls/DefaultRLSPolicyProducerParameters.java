@@ -4,9 +4,7 @@ public class DefaultRLSPolicyProducerParameters implements RLSPolicyProducerPara
 
     private final String policyName;
     private final String policyTable;
-
     private final String policySchema;
-
     private final String grantee;
     private final String tenantIdColumn;
     private final PermissionCommandPolicyEnum permissionCommandPolicy;
@@ -62,5 +60,64 @@ public class DefaultRLSPolicyProducerParameters implements RLSPolicyProducerPara
     @Override
     public TenantHasAuthoritiesFunctionInvocationFactory getUsingExpressionTenantHasAuthoritiesFunctionInvocationFactory() {
         return usingExpressionTenantHasAuthoritiesFunctionInvocationFactory;
+    }
+
+    public static class Builder
+    {
+        private String policyName;
+        private String policyTable;
+        private String policySchema;
+        private String grantee;
+        private String tenantIdColumn;
+        private PermissionCommandPolicyEnum permissionCommandPolicy;
+        private TenantHasAuthoritiesFunctionInvocationFactory withCheckExpressionTenantHasAuthoritiesFunctionInvocationFactory;
+        private TenantHasAuthoritiesFunctionInvocationFactory usingExpressionTenantHasAuthoritiesFunctionInvocationFactory;
+
+        public DefaultRLSPolicyProducerParameters build()
+        {
+            return new DefaultRLSPolicyProducerParameters(policyName, policyTable, policySchema, grantee, tenantIdColumn, permissionCommandPolicy, withCheckExpressionTenantHasAuthoritiesFunctionInvocationFactory, usingExpressionTenantHasAuthoritiesFunctionInvocationFactory);
+        }
+
+        public Builder withPolicyName(String policyName) {
+            this.policyName = policyName;
+            return this;
+        }
+
+        public Builder withPolicyTable(String policyTable) {
+            this.policyTable = policyTable;
+            return this;
+        }
+
+        public Builder withPolicySchema(String policySchema) {
+            this.policySchema = policySchema;
+            return this;
+        }
+
+        public Builder withGrantee(String grantee) {
+            this.grantee = grantee;
+            return this;
+        }
+
+        public Builder withTenantIdColumn(String tenantIdColumn) {
+            this.tenantIdColumn = tenantIdColumn;
+            return this;
+        }
+
+        public Builder withPermissionCommandPolicy(PermissionCommandPolicyEnum permissionCommandPolicy) {
+            this.permissionCommandPolicy = permissionCommandPolicy;
+            return this;
+        }
+
+        public Builder withWithCheckExpressionTenantHasAuthoritiesFunctionInvocationFactory(TenantHasAuthoritiesFunctionInvocationFactory withCheckExpressionTenantHasAuthoritiesFunctionInvocationFactory) {
+            this.withCheckExpressionTenantHasAuthoritiesFunctionInvocationFactory = withCheckExpressionTenantHasAuthoritiesFunctionInvocationFactory;
+            return this;
+        }
+
+        public Builder withUsingExpressionTenantHasAuthoritiesFunctionInvocationFactory(TenantHasAuthoritiesFunctionInvocationFactory usingExpressionTenantHasAuthoritiesFunctionInvocationFactory) {
+            this.usingExpressionTenantHasAuthoritiesFunctionInvocationFactory = usingExpressionTenantHasAuthoritiesFunctionInvocationFactory;
+            return this;
+        }
+
+
     }
 }
