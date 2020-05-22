@@ -10,8 +10,9 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.jdbc.core.JdbcTemplate
 import spock.lang.Specification
 
-import static com.github.starnowski.posmulten.postgresql.core.TestUtils.dropFunction
+import static com.github.starnowski.posmulten.postgresql.core.TestUtils.*
 import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValueToStringMapper.mapToString
+import static java.lang.String.format
 import static org.junit.Assert.assertEquals
 
 @SpringBootTest(classes = [TestApplication.class])
@@ -57,27 +58,12 @@ class RLSPolicyProducerItTest extends Specification {
         jdbcTemplate.execute(tenantHasAuthoritiesFunction.getDropScript())
         assertEquals(false, isFunctionExists(jdbcTemplate, TENANT_HAS_AUTHORITIES_TEST_FUNCTION, null))
         jdbcTemplate.execute(rlsPolicyDefinition.getDropScript())
-//        assertEquals(false, isFunctionExists(jdbcTemplate, functionName, schema))
+        assertEquals(false, isRLSPolicyExists(jdbcTemplate, policyName, table, schema))
     }
 
-    public static boolean isFunctionExists(JdbcTemplate jdbcTemplate, String functionName, String schema)
+    private boolean isRLSPolicyExists(JdbcTemplate jdbcTemplate, String policy, String table, String schema)
     {
-        StringBuilder sb = new StringBuilder();
-        sb.append("SELECT 1 FROM pg_proc pg, pg_catalog.pg_namespace pgn WHERE ");
-        sb.append("pg.proname = '");
-        sb.append(functionName);
-        sb.append("' AND ");
-        if (schema == null)
-        {
-            sb.append("pgn.nspname = 'public'");
-        } else {
-            sb.append("pgn.nspname = '");
-            sb.append(schema);
-            sb.append("'");
-        }
-        sb.append(" AND ");
-        sb.append("pg.pronamespace =  pgn.oid");
-        return isAnyRecordExists(jdbcTemplate, sb.toString());
+        return isAnyRecordExists(jdbcTemplate, prepareStatementThatSelectPolicyExists(policy, table, schema));
     }
 
     private String prepareCreateScriptForFunctionThatDeterminesIfTenantIdIsCorrect() {
@@ -102,6 +88,11 @@ class RLSPolicyProducerItTest extends Specification {
         { tenantIdValue, permissionCommandPolicy, rlsExpressionType, table, schema ->
             IS_TENANT_ID_CORRECT_TEST_FUNCTION + "(" + mapToString(tenantIdValue) + ")"
         }
+    }
+
+    def prepareStatementThatSelectPolicyExists(String name, String table, String schema)
+    {
+        format("SELECT pg.polname, pg.polcmd, pc.relname, pn.nspname FROM pg_catalog.pg_policy pg, pg_class pc, pg_catalog.pg_namespace pn WHERE pg.polrelid = pc.oid AND pc.relnamespace = pn.oid AND pg.polname = '%1\$s' AND pc.relname = '%2\$s' AND pn.nspname = '%3\$s';", name, table, schema)
     }
 
 }
