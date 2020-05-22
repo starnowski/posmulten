@@ -27,11 +27,6 @@ public class RLSPolicyProducer {
     }
 
     private String prepareCreateScript(RLSPolicyProducerParameters parameters) {
-//        CREATE POLICY user_info_multi_tenant_policy ON user_info
-//        FOR ALL
-//        TO gdpr_user
-//        USING (current_setting('poc.current_tenant') = 'public_use' OR tenant_id = current_setting('poc.current_tenant') )
-//        WITH CHECK (current_setting('poc.current_tenant') = 'public_use' OR tenant_id = current_setting('poc.current_tenant') );
         StringBuilder sb = new StringBuilder();
         sb.append("CREATE POLICY ");
         sb.append(parameters.getPolicyName());
