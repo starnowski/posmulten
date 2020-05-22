@@ -27,9 +27,8 @@ class RLSPolicyProducerItTest extends Specification {
     def schema
     def table
     def policyName
-    def policyDefinition
+    SQLDefinition policyDefinition
     def tenantHasAuthoritiesFunction
-    SQLDefinition rlsPolicyDefinition
 
     TenantHasAuthoritiesFunctionInvocationFactory tenantHasAuthoritiesFunctionInvocationFactory1
     TenantHasAuthoritiesFunctionInvocationFactory tenantHasAuthoritiesFunctionInvocationFactory2
@@ -92,12 +91,15 @@ class RLSPolicyProducerItTest extends Specification {
 
     def cleanup()
     {
-        dropFunction(jdbcTemplate, IS_TENANT_ID_CORRECT_TEST_FUNCTION, null, "text")
-        assertEquals(false, isFunctionExists(jdbcTemplate, IS_TENANT_ID_CORRECT_TEST_FUNCTION, null))
+        // Drop policy
+        jdbcTemplate.execute(policyDefinition.getDropScript())
+        assertEquals(false, isRLSPolicyExists(jdbcTemplate, policyName, table, schema))
+
+        // Drop functions
         jdbcTemplate.execute(tenantHasAuthoritiesFunction.getDropScript())
         assertEquals(false, isFunctionExists(jdbcTemplate, TENANT_HAS_AUTHORITIES_TEST_FUNCTION, null))
-        jdbcTemplate.execute(rlsPolicyDefinition.getDropScript())
-        assertEquals(false, isRLSPolicyExists(jdbcTemplate, policyName, table, schema))
+        dropFunction(jdbcTemplate, IS_TENANT_ID_CORRECT_TEST_FUNCTION, null, "text")
+        assertEquals(false, isFunctionExists(jdbcTemplate, IS_TENANT_ID_CORRECT_TEST_FUNCTION, null))
     }
 
     private boolean isRLSPolicyExists(JdbcTemplate jdbcTemplate, String policy, String table, String schema)
