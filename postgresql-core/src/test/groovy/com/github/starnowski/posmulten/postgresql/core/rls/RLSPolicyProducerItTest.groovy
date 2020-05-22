@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.jdbc.core.JdbcTemplate
 import spock.lang.Specification
+import spock.lang.Unroll
 
 import static com.github.starnowski.posmulten.postgresql.core.TestUtils.*
 import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValueToStringMapper.mapToString
@@ -49,7 +50,36 @@ class RLSPolicyProducerItTest extends Specification {
         tenantHasAuthoritiesFunctionInvocationFactory2 = prepareTenantHasAuthoritiesFunctionInvocationFactoryForTestFunctionThatDetermineIfTenantIdIsCorrect()
     }
 
+    @Unroll
+    def "should create function '#testFunctionName' for schema '#testSchema' (null means public) which returns expected result (#exptectedResult) for passed tenant value (#passedValue)" () {
+        given:
+            policyName = testPolicyName
+            schema = testSchema
+            table = testTable
+            assertEquals(false, isRLSPolicyExists(jdbcTemplate, policyName, table, schema))
 
+        when:
+            policyDefinition = tested.produce(new TenantHasAuthoritiesFunctionProducerParameters(testFunctionName, testSchema, equalsCurrentTenantIdentifierFunctionInvocationFactory))
+            jdbcTemplate.execute(policyDefinition.getCreateScript())
+
+        then:
+            isRLSPolicyExists(jdbcTemplate, policyName, table, schema)
+
+        where:
+            testSchema              |   testPolicyName                          |   testTable                 || exptectedResult
+            null                    |   "tenant_has_authorities_function"   |   "ABCDE"                     ||   true
+            "public"                |   "tenant_has_authorities_function"   |   "ABCDE"                     ||   true
+            "non_public_schema"     |   "tenant_has_authorities_function"   |   "ABCDE"                     ||   true
+            null                    |   "tenant_has_privliges"              |   "ABCDE"                     ||   true
+            "public"                |   "tenant_has_privliges"              |   "ABCDE"                     ||   true
+            "non_public_schema"     |   "tenant_has_privliges"              |   "ABCDE"                     ||   true
+            null                    |   "tenant_has_authorities_function"   |   "ABEEE"                     ||   false
+            "public"                |   "tenant_has_authorities_function"   |   "ABEEE"                     ||   false
+            "non_public_schema"     |   "tenant_has_authorities_function"   |   "ABEEE"                     ||   false
+            null                    |   "tenant_has_privliges"              |   "ABEEE"                     ||   false
+            "public"                |   "tenant_has_privliges"              |   "ABEEE"                     ||   false
+            "non_public_schema"     |   "tenant_has_privliges"              |   "ABEEE"                     ||   false
+    }
 
     def cleanup()
     {
