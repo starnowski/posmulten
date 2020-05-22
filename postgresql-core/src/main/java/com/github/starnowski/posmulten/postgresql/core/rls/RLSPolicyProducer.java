@@ -52,8 +52,7 @@ public class RLSPolicyProducer {
         sb.append("(");
         sb.append(prepareWithCheckRLSExpression(parameters));
         sb.append(")");
-        sb.append("");
-        sb.append("");
+        sb.append(";");
         return sb.toString();
     }
 

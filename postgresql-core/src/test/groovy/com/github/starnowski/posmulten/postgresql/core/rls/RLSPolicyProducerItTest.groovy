@@ -14,6 +14,7 @@ import spock.lang.Unroll
 import static com.github.starnowski.posmulten.postgresql.core.TestUtils.*
 import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValueToStringMapper.mapToString
 import static com.github.starnowski.posmulten.postgresql.core.rls.DefaultRLSPolicyProducerParameters.builder
+import static com.github.starnowski.posmulten.postgresql.core.rls.PermissionCommandPolicyEnum.ALL
 import static java.lang.String.format
 import static org.junit.Assert.assertEquals
 
@@ -64,6 +65,7 @@ class RLSPolicyProducerItTest extends Specification {
                                                         .withPolicySchema(schema)
                                                         .withPolicyTable(table)
                                                         .withGrantee(grantee)
+                                                        .withPermissionCommandPolicy(ALL)
                                                         .withUsingExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory1)
                                                         .withWithCheckExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory2)
                                                         .build())
