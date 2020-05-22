@@ -76,18 +76,18 @@ class RLSPolicyProducerItTest extends Specification {
 
         where:
             testSchema              |   testPolicyName                          |   testTable                 || grantee
-            null                    |   "tenant_has_authorities_function"   |   "ABCDE"                     ||   "postgresql-core-user"
-            "public"                |   "tenant_has_authorities_function"   |   "ABCDE"                     ||   "postgresql-core-user"
-            "non_public_schema"     |   "tenant_has_authorities_function"   |   "ABCDE"                     ||   "postgresql-core-user"
-            null                    |   "tenant_has_privliges"              |   "ABCDE"                     ||   "postgresql-core-user"
-            "public"                |   "tenant_has_privliges"              |   "ABCDE"                     ||   "postgresql-core-user"
-            "non_public_schema"     |   "tenant_has_privliges"              |   "ABCDE"                     ||   "postgresql-core-user"
-            null                    |   "tenant_has_authorities_function"   |   "ABEEE"                     ||   "postgresql-core-owner"
-            "public"                |   "tenant_has_authorities_function"   |   "ABEEE"                     ||   "postgresql-core-owner"
-            "non_public_schema"     |   "tenant_has_authorities_function"   |   "ABEEE"                     ||   "postgresql-core-owner"
-            null                    |   "tenant_has_privliges"              |   "ABEEE"                     ||   "postgresql-core-owner"
-            "public"                |   "tenant_has_privliges"              |   "ABEEE"                     ||   "postgresql-core-owner"
-            "non_public_schema"     |   "tenant_has_privliges"              |   "ABEEE"                     ||   "postgresql-core-owner"
+            null                    |   "tenant_has_authorities_function"   |   "users"                     ||   "postgresql-core-user"
+            "public"                |   "tenant_has_authorities_function"   |   "users"                     ||   "postgresql-core-user"
+            "non_public_schema"     |   "tenant_has_authorities_function"   |   "users"                     ||   "postgresql-core-user"
+            null                    |   "tenant_has_privliges"              |   "users"                     ||   "postgresql-core-user"
+            "public"                |   "tenant_has_privliges"              |   "users"                     ||   "postgresql-core-user"
+            "non_public_schema"     |   "tenant_has_privliges"              |   "users"                     ||   "postgresql-core-user"
+            null                    |   "tenant_has_authorities_function"   |   "users_groups"                     ||   "postgresql-core-owner"
+            "public"                |   "tenant_has_authorities_function"   |   "users_groups"                     ||   "postgresql-core-owner"
+            "non_public_schema"     |   "tenant_has_authorities_function"   |   "users_groups"                     ||   "postgresql-core-owner"
+            null                    |   "tenant_has_privliges"              |   "users_groups"                     ||   "postgresql-core-owner"
+            "public"                |   "tenant_has_privliges"              |   "users_groups"                     ||   "postgresql-core-owner"
+            "non_public_schema"     |   "tenant_has_privliges"              |   "users_groups"                     ||   "postgresql-core-owner"
     }
 
     def cleanup()
