@@ -8,6 +8,7 @@ import static com.github.starnowski.posmulten.postgresql.core.common.function.Fu
 import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValue.forString;
 import static com.github.starnowski.posmulten.postgresql.core.rls.RLSExpressionTypeEnum.USING;
 import static com.github.starnowski.posmulten.postgresql.core.rls.RLSExpressionTypeEnum.WITH_CHECK;
+import static java.lang.String.format;
 
 public class RLSPolicyProducer {
 
@@ -17,7 +18,12 @@ public class RLSPolicyProducer {
     }
 
     private String prepareDropScript(RLSPolicyProducerParameters parameters) {
-        return null;
+        String tableReference = prepareTableReference(parameters);
+        return format("DROP POLICY IF EXISTS %1$s ON %2$s", parameters.getPolicyName(), tableReference);
+    }
+
+    private String prepareTableReference(RLSPolicyProducerParameters parameters) {
+        return parameters.getPolicySchema() == null ? parameters.getPolicyTable() : parameters.getPolicySchema() + "." + parameters.getPolicyTable();
     }
 
     private String prepareCreateScript(RLSPolicyProducerParameters parameters) {
