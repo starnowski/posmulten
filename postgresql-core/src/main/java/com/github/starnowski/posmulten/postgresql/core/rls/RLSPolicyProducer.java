@@ -4,6 +4,8 @@ import com.github.starnowski.posmulten.postgresql.core.common.DefaultSQLDefiniti
 import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition;
 import com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValue;
 
+import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValue.forReference;
+import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValue.forString;
 import static com.github.starnowski.posmulten.postgresql.core.rls.RLSExpressionTypeEnum.USING;
 
 public class RLSPolicyProducer {
@@ -42,13 +44,18 @@ public class RLSPolicyProducer {
         sb.append("\n");
         sb.append("USING ");
         sb.append("(");
-        sb.append(parameters.getUsingExpressionTenantHasAuthoritiesFunctionInvocationFactory().returnTenantHasAuthoritiesFunctionInvocation(prepareTenantIdColumnReference(parameters), parameters.getPermissionCommandPolicy(), USING, FunctionArgumentValue.forString(parameters.getPolicyTable()), FunctionArgumentValue.forString(parameters.getPolicySchema())));
+        sb.append(prepareUsingRLSExpression(parameters));
         sb.append(")");
+        sb.append("\n");
         sb.append("");
         return sb.toString();
     }
 
+    private String prepareUsingRLSExpression(RLSPolicyProducerParameters parameters) {
+        return parameters.getUsingExpressionTenantHasAuthoritiesFunctionInvocationFactory().returnTenantHasAuthoritiesFunctionInvocation(prepareTenantIdColumnReference(parameters), parameters.getPermissionCommandPolicy(), USING, forString(parameters.getPolicyTable()), forString(parameters.getPolicySchema()));
+    }
+
     private FunctionArgumentValue prepareTenantIdColumnReference(RLSPolicyProducerParameters parameters) {
-        return null;
+        return forReference(parameters.getTenantIdColumn() == null ? "tenant_id" : parameters.getTenantIdColumn());
     }
 }
