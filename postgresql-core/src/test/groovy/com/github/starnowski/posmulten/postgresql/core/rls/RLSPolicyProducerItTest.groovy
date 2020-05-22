@@ -52,7 +52,8 @@ class RLSPolicyProducerItTest extends Specification {
     }
 
     @Unroll
-    def "should create policy with name '#testPolicyName' for schema '#testSchema' (null means public) and table #testTable for grantee #grantee" () {
+    def "should create policy with name '#testPolicyName' for schema '#testSchema' (null means public) and table #testTable for grantee #grantee" ()
+    {
         given:
             policyName = testPolicyName
             schema = testSchema
