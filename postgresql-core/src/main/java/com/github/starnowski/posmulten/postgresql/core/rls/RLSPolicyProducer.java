@@ -47,7 +47,9 @@ public class RLSPolicyProducer {
         sb.append(parameters.getPermissionCommandPolicy());
         sb.append("\n");
         sb.append("TO ");
+        sb.append("\"");
         sb.append(parameters.getGrantee());
+        sb.append("\"");
         sb.append("\n");
         sb.append("USING ");
         sb.append("(");
