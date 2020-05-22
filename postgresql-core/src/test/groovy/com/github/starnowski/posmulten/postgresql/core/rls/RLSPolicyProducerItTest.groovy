@@ -52,7 +52,7 @@ class RLSPolicyProducerItTest extends Specification {
     }
 
     @Unroll
-    def "should create function '#testFunctionName' for schema '#testSchema' (null means public) which returns expected result (#exptectedResult) for passed tenant value (#passedValue)" () {
+    def "should create policy with name '#testPolicyName' for schema '#testSchema' (null means public) and table #testTable for grantee #grantee" () {
         given:
             policyName = testPolicyName
             schema = testSchema
@@ -74,19 +74,19 @@ class RLSPolicyProducerItTest extends Specification {
             isRLSPolicyExists(jdbcTemplate, policyName, table, schema)
 
         where:
-            testSchema              |   testPolicyName                          |   testTable                 || grantee
-            null                    |   "users_policy"   |   "users"                     ||   "postgresql-core-user"
-            "public"                |   "users_policy"   |   "users"                     ||   "postgresql-core-user"
-            "non_public_schema"     |   "users_policy"   |   "users"                     ||   "postgresql-core-user"
-            null                    |   "users_policy"              |   "users"                     ||   "postgresql-core-user"
-            "public"                |   "users_policy"              |   "users"                     ||   "postgresql-core-user"
-            "non_public_schema"     |   "users_policy"              |   "users"                     ||   "postgresql-core-user"
-            null                    |   "users_groups_policy"   |   "users_groups"                     ||   "postgresql-core-owner"
-            "public"                |   "users_groups_policy"   |   "users_groups"                     ||   "postgresql-core-owner"
-            "non_public_schema"     |   "users_groups_policy"   |   "users_groups"                     ||   "postgresql-core-owner"
-            null                    |   "users_groups_policy"              |   "users_groups"                     ||   "postgresql-core-owner"
-            "public"                |   "users_groups_policy"              |   "users_groups"                     ||   "postgresql-core-owner"
-            "non_public_schema"     |   "users_groups_policy"              |   "users_groups"                     ||   "postgresql-core-owner"
+            testSchema              |   testPolicyName          |   testTable       |   grantee
+            null                    |   "users_policy"          |   "users"         |   "postgresql-core-user"
+            "public"                |   "users_policy"          |   "users"         |   "postgresql-core-user"
+            "non_public_schema"     |   "users_policy"          |   "users"         |   "postgresql-core-user"
+            null                    |   "users_policy"          |   "users"         |   "postgresql-core-owner"
+            "public"                |   "users_policy"          |   "users"         |   "postgresql-core-owner"
+            "non_public_schema"     |   "users_policy"          |   "users"         |   "postgresql-core-owner"
+            null                    |   "users_groups_policy"   |   "users_groups"  |   "postgresql-core-user"
+            "public"                |   "users_groups_policy"   |   "users_groups"  |   "postgresql-core-user"
+            "non_public_schema"     |   "users_groups_policy"   |   "users_groups"  |   "postgresql-core-user"
+            null                    |   "users_groups_policy"   |   "users_groups"  |   "postgresql-core-owner"
+            "public"                |   "users_groups_policy"   |   "users_groups"  |   "postgresql-core-owner"
+            "non_public_schema"     |   "users_groups_policy"   |   "users_groups"  |   "postgresql-core-owner"
     }
 
     def cleanup()
