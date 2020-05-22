@@ -62,6 +62,11 @@ public class DefaultRLSPolicyProducerParameters implements RLSPolicyProducerPara
         return usingExpressionTenantHasAuthoritiesFunctionInvocationFactory;
     }
 
+    public static Builder builder()
+    {
+        return new Builder();
+    }
+
     public static class Builder
     {
         private String policyName;

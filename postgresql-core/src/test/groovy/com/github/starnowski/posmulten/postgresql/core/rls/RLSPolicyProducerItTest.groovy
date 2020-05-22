@@ -13,6 +13,7 @@ import spock.lang.Unroll
 
 import static com.github.starnowski.posmulten.postgresql.core.TestUtils.*
 import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValueToStringMapper.mapToString
+import static com.github.starnowski.posmulten.postgresql.core.rls.DefaultRLSPolicyProducerParameters.builder
 import static java.lang.String.format
 import static org.junit.Assert.assertEquals
 
@@ -59,26 +60,32 @@ class RLSPolicyProducerItTest extends Specification {
             assertEquals(false, isRLSPolicyExists(jdbcTemplate, policyName, table, schema))
 
         when:
-            policyDefinition = tested.produce(new TenantHasAuthoritiesFunctionProducerParameters(testFunctionName, testSchema, equalsCurrentTenantIdentifierFunctionInvocationFactory))
+            policyDefinition = tested.produce(builder().withPolicyName(policyName)
+                                                        .withPolicySchema(schema)
+                                                        .withPolicyTable(table)
+                                                        .withGrantee(grantee)
+                                                        .withUsingExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory1)
+                                                        .withWithCheckExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory2)
+                                                        .build())
             jdbcTemplate.execute(policyDefinition.getCreateScript())
 
         then:
             isRLSPolicyExists(jdbcTemplate, policyName, table, schema)
 
         where:
-            testSchema              |   testPolicyName                          |   testTable                 || exptectedResult
-            null                    |   "tenant_has_authorities_function"   |   "ABCDE"                     ||   true
-            "public"                |   "tenant_has_authorities_function"   |   "ABCDE"                     ||   true
-            "non_public_schema"     |   "tenant_has_authorities_function"   |   "ABCDE"                     ||   true
-            null                    |   "tenant_has_privliges"              |   "ABCDE"                     ||   true
-            "public"                |   "tenant_has_privliges"              |   "ABCDE"                     ||   true
-            "non_public_schema"     |   "tenant_has_privliges"              |   "ABCDE"                     ||   true
-            null                    |   "tenant_has_authorities_function"   |   "ABEEE"                     ||   false
-            "public"                |   "tenant_has_authorities_function"   |   "ABEEE"                     ||   false
-            "non_public_schema"     |   "tenant_has_authorities_function"   |   "ABEEE"                     ||   false
-            null                    |   "tenant_has_privliges"              |   "ABEEE"                     ||   false
-            "public"                |   "tenant_has_privliges"              |   "ABEEE"                     ||   false
-            "non_public_schema"     |   "tenant_has_privliges"              |   "ABEEE"                     ||   false
+            testSchema              |   testPolicyName                          |   testTable                 || grantee
+            null                    |   "tenant_has_authorities_function"   |   "ABCDE"                     ||   "postgresql-core-user"
+            "public"                |   "tenant_has_authorities_function"   |   "ABCDE"                     ||   "postgresql-core-user"
+            "non_public_schema"     |   "tenant_has_authorities_function"   |   "ABCDE"                     ||   "postgresql-core-user"
+            null                    |   "tenant_has_privliges"              |   "ABCDE"                     ||   "postgresql-core-user"
+            "public"                |   "tenant_has_privliges"              |   "ABCDE"                     ||   "postgresql-core-user"
+            "non_public_schema"     |   "tenant_has_privliges"              |   "ABCDE"                     ||   "postgresql-core-user"
+            null                    |   "tenant_has_authorities_function"   |   "ABEEE"                     ||   "postgresql-core-owner"
+            "public"                |   "tenant_has_authorities_function"   |   "ABEEE"                     ||   "postgresql-core-owner"
+            "non_public_schema"     |   "tenant_has_authorities_function"   |   "ABEEE"                     ||   "postgresql-core-owner"
+            null                    |   "tenant_has_privliges"              |   "ABEEE"                     ||   "postgresql-core-owner"
+            "public"                |   "tenant_has_privliges"              |   "ABEEE"                     ||   "postgresql-core-owner"
+            "non_public_schema"     |   "tenant_has_privliges"              |   "ABEEE"                     ||   "postgresql-core-owner"
     }
 
     def cleanup()
