@@ -7,6 +7,7 @@ import com.github.starnowski.posmulten.postgresql.core.common.function.FunctionA
 import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValue.forReference;
 import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValue.forString;
 import static com.github.starnowski.posmulten.postgresql.core.rls.RLSExpressionTypeEnum.USING;
+import static com.github.starnowski.posmulten.postgresql.core.rls.RLSExpressionTypeEnum.WITH_CHECK;
 
 public class RLSPolicyProducer {
 
@@ -47,8 +48,17 @@ public class RLSPolicyProducer {
         sb.append(prepareUsingRLSExpression(parameters));
         sb.append(")");
         sb.append("\n");
+        sb.append("WITH CHECK ");
+        sb.append("(");
+        sb.append(prepareWithCheckRLSExpression(parameters));
+        sb.append(")");
+        sb.append("");
         sb.append("");
         return sb.toString();
+    }
+
+    private String prepareWithCheckRLSExpression(RLSPolicyProducerParameters parameters) {
+        return parameters.getWithCheckExpressionTenantHasAuthoritiesFunctionInvocationFactory().returnTenantHasAuthoritiesFunctionInvocation(prepareTenantIdColumnReference(parameters), parameters.getPermissionCommandPolicy(), WITH_CHECK, forString(parameters.getPolicyTable()), forString(parameters.getPolicySchema()));
     }
 
     private String prepareUsingRLSExpression(RLSPolicyProducerParameters parameters) {
