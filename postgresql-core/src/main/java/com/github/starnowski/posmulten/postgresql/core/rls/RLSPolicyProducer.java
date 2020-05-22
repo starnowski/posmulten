@@ -1,12 +1,54 @@
 package com.github.starnowski.posmulten.postgresql.core.rls;
 
+import com.github.starnowski.posmulten.postgresql.core.common.DefaultSQLDefinition;
 import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition;
+import com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValue;
+
+import static com.github.starnowski.posmulten.postgresql.core.rls.RLSExpressionTypeEnum.USING;
 
 public class RLSPolicyProducer {
 
     public SQLDefinition produce(RLSPolicyProducerParameters parameters)
     {
-        //TODO
+        return new DefaultSQLDefinition(prepareCreateScript(parameters), prepareDropScript(parameters));
+    }
+
+    private String prepareDropScript(RLSPolicyProducerParameters parameters) {
+        return null;
+    }
+
+    private String prepareCreateScript(RLSPolicyProducerParameters parameters) {
+//        CREATE POLICY user_info_multi_tenant_policy ON user_info
+//        FOR ALL
+//        TO gdpr_user
+//        USING (current_setting('poc.current_tenant') = 'public_use' OR tenant_id = current_setting('poc.current_tenant') )
+//        WITH CHECK (current_setting('poc.current_tenant') = 'public_use' OR tenant_id = current_setting('poc.current_tenant') );
+        StringBuilder sb = new StringBuilder();
+        sb.append("CREATE POLICY ");
+        sb.append(parameters.getPolicyName());
+        sb.append(" ON ");
+        if (parameters.getPolicySchema() != null)
+        {
+            sb.append(parameters.getPolicySchema());
+            sb.append(".");
+        }
+        sb.append(parameters.getPolicyTable());
+        sb.append("\n");
+        sb.append("FOR ");
+        sb.append(parameters.getPermissionCommandPolicy());
+        sb.append("\n");
+        sb.append("TO ");
+        sb.append(parameters.getGrantee());
+        sb.append("\n");
+        sb.append("USING ");
+        sb.append("(");
+        sb.append(parameters.getUsingExpressionTenantHasAuthoritiesFunctionInvocationFactory().returnTenantHasAuthoritiesFunctionInvocation(prepareTenantIdColumnReference(parameters), parameters.getPermissionCommandPolicy(), USING, FunctionArgumentValue.forString(parameters.getPolicyTable()), FunctionArgumentValue.forString(parameters.getPolicySchema())));
+        sb.append(")");
+        sb.append("");
+        return sb.toString();
+    }
+
+    private FunctionArgumentValue prepareTenantIdColumnReference(RLSPolicyProducerParameters parameters) {
         return null;
     }
 }
