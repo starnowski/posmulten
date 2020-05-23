@@ -36,7 +36,7 @@ class RLSPolicyProducerTest extends Specification {
                 .withPolicySchema(schema)
                 .withPolicyTable(table)
                 .withGrantee(grantee)
-                .withPermissionCommandPolicy(ALL)
+                .withPermissionCommandPolicy(permissionCommand)
                 .withUsingExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory1)
                 .withWithCheckExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory2)
                 .build()).getCreateScript() == expectedStatement
