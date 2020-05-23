@@ -25,8 +25,8 @@ import static org.junit.Assert.assertEquals
 @SpringBootTest(classes = [TestApplication.class])
 class RLSPolicyProducerItTest extends Specification {
 
-    public static final String IS_TENANT_ID_CORRECT_TEST_FUNCTION = "is_tenant_starts_with_abcd"
-    public static final String TENANT_HAS_AUTHORITIES_TEST_FUNCTION = "tenant_has_authorities_function"
+    private static final String IS_TENANT_ID_CORRECT_TEST_FUNCTION = "is_tenant_starts_with_abcd"
+    private static final String TENANT_HAS_AUTHORITIES_TEST_FUNCTION = "tenant_has_authorities_function"
     def tested = new RLSPolicyProducer()
     def schema
     def table
