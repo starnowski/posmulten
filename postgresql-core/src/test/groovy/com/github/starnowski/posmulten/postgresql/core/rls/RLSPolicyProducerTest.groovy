@@ -9,7 +9,6 @@ import spock.lang.Unroll
 import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValueToStringMapper.mapToString
 import static com.github.starnowski.posmulten.postgresql.core.rls.DefaultRLSPolicyProducerParameters.builder
 import static com.github.starnowski.posmulten.postgresql.core.rls.PermissionCommandPolicyEnum.ALL
-import static org.junit.Assert.assertEquals
 
 class RLSPolicyProducerTest extends Specification {
 
@@ -30,44 +29,32 @@ class RLSPolicyProducerTest extends Specification {
     }
 
     @Unroll
-    def "should create policy with name '#testPolicyName' for schema '#testSchema' (null means public) and table #testTable for grantee #grantee" ()
+    def "should create policy with name '#policyName' for schema '#schema' (null means public) and table #table for grantee #grantee" ()
     {
-        given:
-        policyName = testPolicyName
-        schema = testSchema
-        table = testTable
-        assertEquals(false, isRLSPolicyExists(jdbcTemplate, policyName, table, schema))
-        assertEquals(false, isRLSPolicyForGranteeExists(jdbcTemplate, policyName, table, schema, grantee))
-
-        when:
-        policyDefinition = tested.produce(builder().withPolicyName(policyName)
+        expect:
+            tested.produce(builder().withPolicyName(policyName)
                 .withPolicySchema(schema)
                 .withPolicyTable(table)
                 .withGrantee(grantee)
                 .withPermissionCommandPolicy(ALL)
                 .withUsingExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory1)
                 .withWithCheckExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory2)
-                .build())
-        jdbcTemplate.execute(policyDefinition.getCreateScript())
-
-        then:
-        isRLSPolicyExists(jdbcTemplate, policyName, table, schema)
-        isRLSPolicyForGranteeExists(jdbcTemplate, policyName, table, schema, grantee)
+                .build()) == expectedStatement
 
         where:
-        testSchema              |   testPolicyName          |   testTable       |   grantee
-        null                    |   "users_policy"          |   "users"         |   "postgresql-core-user"
-        "public"                |   "users_policy"          |   "users"         |   "postgresql-core-user"
-        "non_public_schema"     |   "users_policy"          |   "users"         |   "postgresql-core-user"
-        null                    |   "users_policy"          |   "users"         |   "postgresql-core-owner"
-        "public"                |   "users_policy"          |   "users"         |   "postgresql-core-owner"
-        "non_public_schema"     |   "users_policy"          |   "users"         |   "postgresql-core-owner"
-        null                    |   "users_groups_policy"   |   "users_groups"  |   "postgresql-core-user"
-        "public"                |   "users_groups_policy"   |   "users_groups"  |   "postgresql-core-user"
-        "non_public_schema"     |   "users_groups_policy"   |   "users_groups"  |   "postgresql-core-user"
-        null                    |   "users_groups_policy"   |   "users_groups"  |   "postgresql-core-owner"
-        "public"                |   "users_groups_policy"   |   "users_groups"  |   "postgresql-core-owner"
-        "non_public_schema"     |   "users_groups_policy"   |   "users_groups"  |   "postgresql-core-owner"
+            schema                  |   policyName              |   table           |   grantee
+            null                    |   "users_policy"          |   "users"         |   "postgresql-core-user"
+            "public"                |   "users_policy"          |   "users"         |   "postgresql-core-user"
+            "non_public_schema"     |   "users_policy"          |   "users"         |   "postgresql-core-user"
+            null                    |   "users_policy"          |   "users"         |   "postgresql-core-owner"
+            "public"                |   "users_policy"          |   "users"         |   "postgresql-core-owner"
+            "non_public_schema"     |   "users_policy"          |   "users"         |   "postgresql-core-owner"
+            null                    |   "users_groups_policy"   |   "users_groups"  |   "postgresql-core-user"
+            "public"                |   "users_groups_policy"   |   "users_groups"  |   "postgresql-core-user"
+            "non_public_schema"     |   "users_groups_policy"   |   "users_groups"  |   "postgresql-core-user"
+            null                    |   "users_groups_policy"   |   "users_groups"  |   "postgresql-core-owner"
+            "public"                |   "users_groups_policy"   |   "users_groups"  |   "postgresql-core-owner"
+            "non_public_schema"     |   "users_groups_policy"   |   "users_groups"  |   "postgresql-core-owner"
     }
 
     private Closure<String> prepareEqualsCurrentTenantIdentifierFunctionInvocationFactoryForTest() {
