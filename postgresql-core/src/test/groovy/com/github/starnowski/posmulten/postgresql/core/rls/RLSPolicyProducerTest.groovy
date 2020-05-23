@@ -81,6 +81,27 @@ class RLSPolicyProducerTest extends Specification {
             "non_public_schema"     |   "users_policy"          |   "users"         |   "ti"                || "CREATE POLICY users_policy ON non_public_schema.users\nFOR ALL\nTO \"postgresql-core-user\"\nUSING (tenant_has_authorities_function(ti, 'ALL', 'USING', 'users', 'non_public_schema'))\nWITH CHECK (tenant_has_authorities_function(ti, 'ALL', 'WITH_CHECK', 'users', 'non_public_schema'));"
     }
 
+    @Unroll
+    def "for the USING expression factory #usingExpressionFactory and the CHECK WITH expression factory #checkWithExpressionFactory  should create statement : #expectedStatement" ()
+    {
+        expect:
+            tested.produce(builder().withPolicyName("users_policy")
+                    .withPolicySchema("public")
+                    .withPolicyTable("users")
+                    .withGrantee("postgresql-core-user")
+                    .withPermissionCommandPolicy(ALL)
+                    .withUsingExpressionTenantHasAuthoritiesFunctionInvocationFactory(getProperty(usingExpressionFactory))
+                    .withWithCheckExpressionTenantHasAuthoritiesFunctionInvocationFactory(getProperty(checkWithExpressionFactory))
+                    .build()).getCreateScript() == expectedStatement
+
+        where:
+            usingExpressionFactory                              |   checkWithExpressionFactory                          ||  expectedStatement
+            "tenantHasAuthoritiesFunctionInvocationFactory1"    |   "tenantHasAuthoritiesFunctionInvocationFactory2"    ||  "CREATE POLICY users_policy ON public.users\nFOR ALL\nTO \"postgresql-core-user\"\nUSING (tenant_has_authorities_function(tenant_id, 'ALL', 'USING', 'users', 'public'))\nWITH CHECK (is_tenant_starts_with_abcd(tenant_id));"
+            "tenantHasAuthoritiesFunctionInvocationFactory2"    |   "tenantHasAuthoritiesFunctionInvocationFactory2"    ||  "CREATE POLICY users_policy ON public.users\nFOR ALL\nTO \"postgresql-core-user\"\nUSING (is_tenant_starts_with_abcd(tenant_id))\nWITH CHECK (is_tenant_starts_with_abcd(tenant_id));"
+            "tenantHasAuthoritiesFunctionInvocationFactory2"    |   "tenantHasAuthoritiesFunctionInvocationFactory1"    ||  "CREATE POLICY users_policy ON public.users\nFOR ALL\nTO \"postgresql-core-user\"\nUSING (is_tenant_starts_with_abcd(tenant_id))\nWITH CHECK (tenant_has_authorities_function(tenant_id, 'ALL', 'WITH_CHECK', 'users', 'public'));"
+            "tenantHasAuthoritiesFunctionInvocationFactory1"    |   "tenantHasAuthoritiesFunctionInvocationFactory1"    ||  "CREATE POLICY users_policy ON public.users\nFOR ALL\nTO \"postgresql-core-user\"\nUSING (tenant_has_authorities_function(tenant_id, 'ALL', 'USING', 'users', 'public'))\nWITH CHECK (tenant_has_authorities_function(tenant_id, 'ALL', 'WITH_CHECK', 'users', 'public'));"
+    }
+
     //TODO Drop script
     //TODO random values
 
