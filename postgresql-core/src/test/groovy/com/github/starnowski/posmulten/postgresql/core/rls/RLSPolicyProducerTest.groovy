@@ -42,19 +42,19 @@ class RLSPolicyProducerTest extends Specification {
                 .build()) == expectedStatement
 
         where:
-            schema                  |   policyName              |   table           |   grantee                 |   permissionCommand
-            null                    |   "users_policy"          |   "users"         |   "postgresql-core-user"  |   ALL
-            "public"                |   "users_policy"          |   "users"         |   "postgresql-core-user"  |   INSERT
-            "non_public_schema"     |   "users_policy"          |   "users"         |   "postgresql-core-user"  |   SELECT
-            null                    |   "users_policy"          |   "users"         |   "postgresql-core-owner" |   UPDATE
-            "public"                |   "users_policy"          |   "users"         |   "postgresql-core-owner" |   DELETE
-            "non_public_schema"     |   "users_policy"          |   "users"         |   "postgresql-core-owner" |   ALL
-            null                    |   "users_groups_policy"   |   "users_groups"  |   "postgresql-core-user"  |   INSERT
-            "public"                |   "users_groups_policy"   |   "users_groups"  |   "postgresql-core-user"  |   SELECT
-            "non_public_schema"     |   "users_groups_policy"   |   "users_groups"  |   "postgresql-core-user"  |   UPDATE
-            null                    |   "users_groups_policy"   |   "users_groups"  |   "postgresql-core-owner" |   DELETE
-            "public"                |   "users_groups_policy"   |   "users_groups"  |   "postgresql-core-owner" |   ALL
-            "non_public_schema"     |   "users_groups_policy"   |   "users_groups"  |   "postgresql-core-owner" |   INSERT
+            schema                  |   policyName              |   table           |   grantee                 |   permissionCommand   ||  expectedStatement
+            null                    |   "users_policy"          |   "users"         |   "postgresql-core-user"  |   ALL                 || "sssss"
+            "public"                |   "users_policy"          |   "users"         |   "postgresql-core-user"  |   INSERT              || "sssss"
+            "non_public_schema"     |   "users_policy"          |   "users"         |   "postgresql-core-user"  |   SELECT              || "sssss"
+            null                    |   "users_policy"          |   "users"         |   "postgresql-core-owner" |   UPDATE              || "sssss"
+            "public"                |   "users_policy"          |   "users"         |   "postgresql-core-owner" |   DELETE              || "sssss"
+            "non_public_schema"     |   "users_policy"          |   "users"         |   "postgresql-core-owner" |   ALL                 || "sssss"
+            null                    |   "users_groups_policy"   |   "users_groups"  |   "postgresql-core-user"  |   INSERT              || "sssss"
+            "public"                |   "users_groups_policy"   |   "users_groups"  |   "postgresql-core-user"  |   SELECT              || "sssss"
+            "non_public_schema"     |   "users_groups_policy"   |   "users_groups"  |   "postgresql-core-user"  |   UPDATE              || "sssss"
+            null                    |   "users_groups_policy"   |   "users_groups"  |   "postgresql-core-owner" |   DELETE              || "sssss"
+            "public"                |   "users_groups_policy"   |   "users_groups"  |   "postgresql-core-owner" |   ALL                 || "sssss"
+            "non_public_schema"     |   "users_groups_policy"   |   "users_groups"  |   "postgresql-core-owner" |   INSERT              || "sssss"
     }
 
     private Closure<String> prepareEqualsCurrentTenantIdentifierFunctionInvocationFactoryForTest() {
