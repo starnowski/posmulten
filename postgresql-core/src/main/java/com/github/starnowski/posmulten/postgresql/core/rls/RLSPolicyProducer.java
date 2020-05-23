@@ -60,11 +60,15 @@ public class RLSPolicyProducer {
     }
 
     private String prepareWithCheckRLSExpression(RLSPolicyProducerParameters parameters) {
-        return parameters.getWithCheckExpressionTenantHasAuthoritiesFunctionInvocationFactory().returnTenantHasAuthoritiesFunctionInvocation(prepareTenantIdColumnReference(parameters), parameters.getPermissionCommandPolicy(), WITH_CHECK, forString(parameters.getPolicyTable()), forString(parameters.getPolicySchema()));
+        return parameters.getWithCheckExpressionTenantHasAuthoritiesFunctionInvocationFactory().returnTenantHasAuthoritiesFunctionInvocation(prepareTenantIdColumnReference(parameters), parameters.getPermissionCommandPolicy(), WITH_CHECK, forString(parameters.getPolicyTable()), preparePolicySchemaFunctionArgument(parameters.getPolicySchema()));
+    }
+
+    private FunctionArgumentValue preparePolicySchemaFunctionArgument(String schema) {
+        return schema == null ? forString("public") : forString(schema);
     }
 
     private String prepareUsingRLSExpression(RLSPolicyProducerParameters parameters) {
-        return parameters.getUsingExpressionTenantHasAuthoritiesFunctionInvocationFactory().returnTenantHasAuthoritiesFunctionInvocation(prepareTenantIdColumnReference(parameters), parameters.getPermissionCommandPolicy(), USING, forString(parameters.getPolicyTable()), forString(parameters.getPolicySchema()));
+        return parameters.getUsingExpressionTenantHasAuthoritiesFunctionInvocationFactory().returnTenantHasAuthoritiesFunctionInvocation(prepareTenantIdColumnReference(parameters), parameters.getPermissionCommandPolicy(), USING, forString(parameters.getPolicyTable()), preparePolicySchemaFunctionArgument(parameters.getPolicySchema()));
     }
 
     private FunctionArgumentValue prepareTenantIdColumnReference(RLSPolicyProducerParameters parameters) {
