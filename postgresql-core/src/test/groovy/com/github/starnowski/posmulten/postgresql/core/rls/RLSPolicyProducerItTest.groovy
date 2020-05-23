@@ -159,7 +159,7 @@ class RLSPolicyProducerItTest extends Specification {
     }
 
     private boolean isRLSPolicyForPermissionCommandPolicyExists(JdbcTemplate jdbcTemplate, String policy, String table, String schema, PermissionCommandPolicyEnum permissionCommandPolicy)
-    {   //TODO
+    {
         return isAnyRecordExists(jdbcTemplate, prepareStatementThatSelectPolicyWithSpecifiedCmdExists(policy, table, schema, permissionCommandPolicy))
     }
 
