@@ -15,6 +15,10 @@ import static com.github.starnowski.posmulten.postgresql.core.TestUtils.*
 import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValueToStringMapper.mapToString
 import static com.github.starnowski.posmulten.postgresql.core.rls.DefaultRLSPolicyProducerParameters.builder
 import static com.github.starnowski.posmulten.postgresql.core.rls.PermissionCommandPolicyEnum.ALL
+import static com.github.starnowski.posmulten.postgresql.core.rls.PermissionCommandPolicyEnum.DELETE
+import static com.github.starnowski.posmulten.postgresql.core.rls.PermissionCommandPolicyEnum.INSERT
+import static com.github.starnowski.posmulten.postgresql.core.rls.PermissionCommandPolicyEnum.SELECT
+import static com.github.starnowski.posmulten.postgresql.core.rls.PermissionCommandPolicyEnum.UPDATE
 import static java.lang.String.format
 import static org.junit.Assert.assertEquals
 
@@ -108,6 +112,12 @@ class RLSPolicyProducerItTest extends Specification {
         return isAnyRecordExists(jdbcTemplate, prepareStatementThatSelectPolicyExists(policy, table, schema));
     }
 
+    private boolean isRLSPolicyForGranteeExists(JdbcTemplate jdbcTemplate, String policy, String table, String schema)
+    {
+        //TODO
+        return isAnyRecordExists(jdbcTemplate, prepareStatementThatSelectPolicyExists(policy, table, schema));
+    }
+
     private String prepareCreateScriptForFunctionThatDeterminesIfTenantIdIsCorrect() {
         StringBuilder sb = new StringBuilder()
         sb.append("CREATE OR REPLACE FUNCTION ")
@@ -136,6 +146,30 @@ class RLSPolicyProducerItTest extends Specification {
     {
         def schemaName = schema == null ? "public" : schema
         format("SELECT pg.polname, pg.polcmd, pc.relname, pn.nspname FROM pg_catalog.pg_policy pg, pg_class pc, pg_catalog.pg_namespace pn WHERE pg.polrelid = pc.oid AND pc.relnamespace = pn.oid AND pg.polname = '%1\$s' AND pc.relname = '%2\$s' AND pn.nspname = '%3\$s'", name, table, schemaName)
+    }
+
+    def prepareStatementThatSelectPolicyWithSpecifiedCmdExists(String name, String table, String schema, PermissionCommandPolicyEnum permissionCommandPolicy)
+    {
+        def schemaName = schema == null ? "public" : schema
+        def cmd = ""
+        switch (permissionCommandPolicy)
+        {
+            case ALL:
+                cmd = "*"
+                break
+            case SELECT:
+                cmd = "r"
+                break
+            case INSERT:
+                cmd = "a"
+                break
+            case UPDATE:
+                cmd = "w"
+                break
+            case DELETE:
+                cmd = "d"
+        }
+        format("SELECT pg.polname, pg.polcmd, pc.relname, pn.nspname FROM pg_catalog.pg_policy pg, pg_class pc, pg_catalog.pg_namespace pn WHERE pg.polrelid = pc.oid AND pc.relnamespace = pn.oid AND pg.polname = '%1\$s' AND pc.relname = '%2\$s' AND pn.nspname = '%3\$s' AND pg.polcmd = '%4\$s'", name, table, schemaName, cmd)
     }
 
 }
