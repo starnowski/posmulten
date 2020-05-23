@@ -96,6 +96,45 @@ class RLSPolicyProducerItTest extends Specification {
             "non_public_schema"     |   "users_groups_policy"   |   "users_groups"  |   "postgresql-core-owner"
     }
 
+    @Unroll
+    def "should create policy with name '#testPolicyName' for schema '#testSchema' (null means public) and table #testTable for permission command #permissionCommand" ()
+    {
+        given:
+            policyName = testPolicyName
+            schema = testSchema
+            table = testTable
+            assertEquals(false, isRLSPolicyExists(jdbcTemplate, policyName, table, schema))
+            assertEquals(false, isRLSPolicyForPermissionCommandPolicyExists(jdbcTemplate, policyName, table, schema, permissionCommand))
+
+        when:
+            policyDefinition = tested.produce(builder().withPolicyName(policyName)
+                    .withPolicySchema(schema)
+                    .withPolicyTable(table)
+                    .withGrantee("postgresql-core-user")
+                    .withPermissionCommandPolicy(permissionCommand)
+                    .withUsingExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory1)
+                    .withWithCheckExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory2)
+                    .build())
+            jdbcTemplate.execute(policyDefinition.getCreateScript())
+
+        then:
+            isRLSPolicyExists(jdbcTemplate, policyName, table, schema)
+            isRLSPolicyForPermissionCommandPolicyExists(jdbcTemplate, policyName, table, schema, permissionCommand)
+
+        where:
+            testSchema              |   testPolicyName          |   testTable       |   permissionCommand
+            null                    |   "users_policy"          |   "users"         |   ALL
+            "public"                |   "users_policy"          |   "users"         |   SELECT
+            "non_public_schema"     |   "users_policy"          |   "users"         |   INSERT
+            null                    |   "users_policy"          |   "users"         |   UPDATE
+            "public"                |   "users_policy"          |   "users"         |   DELETE
+            null                    |   "users_groups_policy"   |   "users_groups"  |   ALL
+            "public"                |   "users_groups_policy"   |   "users_groups"  |   SELECT
+            "non_public_schema"     |   "users_groups_policy"   |   "users_groups"  |   INSERT
+            null                    |   "users_groups_policy"   |   "users_groups"  |   UPDATE
+            "public"                |   "users_groups_policy"   |   "users_groups"  |   DELETE
+    }
+
     def cleanup()
     {
         // Drop policy
@@ -117,6 +156,11 @@ class RLSPolicyProducerItTest extends Specification {
     private boolean isRLSPolicyForGranteeExists(JdbcTemplate jdbcTemplate, String policy, String table, String schema, String grantee)
     {
         return isAnyRecordExists(jdbcTemplate, prepareStatementThatSelectPolicyForGranteeExists(policy, table, schema, grantee))
+    }
+
+    private boolean isRLSPolicyForPermissionCommandPolicyExists(JdbcTemplate jdbcTemplate, String policy, String table, String schema, PermissionCommandPolicyEnum permissionCommandPolicy)
+    {   //TODO
+        return isAnyRecordExists(jdbcTemplate, prepareStatementThatSelectPolicyWithSpecifiedCmdExists(policy, table, schema, permissionCommandPolicy))
     }
 
     private String prepareCreateScriptForFunctionThatDeterminesIfTenantIdIsCorrect() {
