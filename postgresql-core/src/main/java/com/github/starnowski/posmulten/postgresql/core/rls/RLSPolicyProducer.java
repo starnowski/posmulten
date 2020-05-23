@@ -46,14 +46,16 @@ public class RLSPolicyProducer {
         sb.append("\"");
         sb.append(parameters.getGrantee());
         sb.append("\"");
-        if (isUsingExpressionShouldBeApplied(parameters)) {
+        if (isUsingExpressionShouldBeApplied(parameters))
+        {
             sb.append("\n");
             sb.append("USING ");
             sb.append("(");
             sb.append(prepareUsingRLSExpression(parameters));
             sb.append(")");
         }
-        if (isCheckWithExpressionShouldBeApplied(parameters)) {
+        if (isCheckWithExpressionShouldBeApplied(parameters))
+        {
             sb.append("\n");
             sb.append("WITH CHECK ");
             sb.append("(");
