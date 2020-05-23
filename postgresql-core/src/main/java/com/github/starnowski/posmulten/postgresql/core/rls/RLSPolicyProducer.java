@@ -6,6 +6,7 @@ import com.github.starnowski.posmulten.postgresql.core.common.function.FunctionA
 
 import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValue.forReference;
 import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValue.forString;
+import static com.github.starnowski.posmulten.postgresql.core.rls.PermissionCommandPolicyEnum.INSERT;
 import static com.github.starnowski.posmulten.postgresql.core.rls.RLSExpressionTypeEnum.USING;
 import static com.github.starnowski.posmulten.postgresql.core.rls.RLSExpressionTypeEnum.WITH_CHECK;
 import static java.lang.String.format;
@@ -45,11 +46,13 @@ public class RLSPolicyProducer {
         sb.append("\"");
         sb.append(parameters.getGrantee());
         sb.append("\"");
-        sb.append("\n");
-        sb.append("USING ");
-        sb.append("(");
-        sb.append(prepareUsingRLSExpression(parameters));
-        sb.append(")");
+        if (isUsingExpressionShouldBeApplied(parameters)) {
+            sb.append("\n");
+            sb.append("USING ");
+            sb.append("(");
+            sb.append(prepareUsingRLSExpression(parameters));
+            sb.append(")");
+        }
         sb.append("\n");
         sb.append("WITH CHECK ");
         sb.append("(");
@@ -57,6 +60,10 @@ public class RLSPolicyProducer {
         sb.append(")");
         sb.append(";");
         return sb.toString();
+    }
+
+    private boolean isUsingExpressionShouldBeApplied(RLSPolicyProducerParameters parameters) {
+        return !INSERT.equals(parameters.getPermissionCommandPolicy());
     }
 
     private String prepareWithCheckRLSExpression(RLSPolicyProducerParameters parameters) {
