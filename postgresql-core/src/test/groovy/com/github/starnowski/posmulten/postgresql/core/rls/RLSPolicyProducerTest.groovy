@@ -183,8 +183,6 @@ class RLSPolicyProducerTest extends Specification {
                     .build()).getCreateScript() == expectedStatement
     }
 
-    //TODO random values
-
     private Closure<String> prepareEqualsCurrentTenantIdentifierFunctionInvocationFactoryForTest() {
         { tenant ->
             IS_TENANT_ID_CORRECT_TEST_FUNCTION + "(" + mapToString(tenant) + ")"
