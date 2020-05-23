@@ -29,7 +29,7 @@ class RLSPolicyProducerTest extends Specification {
     }
 
     @Unroll
-    def "for policy name '#policyName' for schema '#schema' (null means public) and table #table for grantee #grantee and permission command #permissionCommand should create statement : #expectedStatement" ()
+    def "for policy name '#policyName' for schema '#schema' and table #table for grantee #grantee and permission command #permissionCommand should create statement : #expectedStatement" ()
     {
         expect:
             tested.produce(builder().withPolicyName(policyName)
@@ -39,11 +39,11 @@ class RLSPolicyProducerTest extends Specification {
                 .withPermissionCommandPolicy(ALL)
                 .withUsingExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory1)
                 .withWithCheckExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory2)
-                .build()) == expectedStatement
+                .build()).getCreateScript() == expectedStatement
 
         where:
             schema                  |   policyName              |   table           |   grantee                 |   permissionCommand   ||  expectedStatement
-            null                    |   "users_policy"          |   "users"         |   "postgresql-core-user"  |   ALL                 || "sssss"
+            null                    |   "users_policy"          |   "users"         |   "postgresql-core-user"  |   ALL                 || "CREATE POLICY users_policy ON users\nFOR ALL\nTO \"postgresql-core-user\"\nUSING (tenant_has_authorities_function(tenant_id, 'ALL', 'USING', 'users', 'null'))\nWITH CHECK (is_tenant_starts_with_abcd(tenant_id));"
             "public"                |   "users_policy"          |   "users"         |   "postgresql-core-user"  |   INSERT              || "sssss"
             "non_public_schema"     |   "users_policy"          |   "users"         |   "postgresql-core-user"  |   SELECT              || "sssss"
             null                    |   "users_policy"          |   "users"         |   "postgresql-core-owner" |   UPDATE              || "sssss"
