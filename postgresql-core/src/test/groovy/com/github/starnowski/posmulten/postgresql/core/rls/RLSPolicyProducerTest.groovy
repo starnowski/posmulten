@@ -157,6 +157,32 @@ class RLSPolicyProducerTest extends Specification {
                     .build()).getDropScript() == expectedStatement
     }
 
+    def "should generate the creation script for random values" ()
+    {
+        given:
+            def r = new RandomString(12, new Random(), RandomString.lower)
+            def policyName = r.nextString()
+            def schema = r.nextString()
+            def table = r.nextString()
+            def grantee = r.nextString()
+            def statementPattern = "CREATE POLICY %1\$s ON %2\$s.%3\$s\nFOR ALL\nTO \"%4\$s\"\nUSING (tenant_has_authorities_function(tenant_id, 'ALL', 'USING', '%3\$s', '%2\$s'))\nWITH CHECK (tenant_has_authorities_function(tenant_id, 'ALL', 'WITH_CHECK', '%3\$s', '%2\$s'));"
+            def expectedStatement = format(statementPattern, policyName, schema, table, grantee)
+            logger.log(java.util.logging.Level.INFO, "Random policy name: " + policyName)
+            logger.log(java.util.logging.Level.INFO, "Random schema name: " + schema)
+            logger.log(java.util.logging.Level.INFO, "Random table name: " + table)
+            logger.log(java.util.logging.Level.INFO, "Random grantee: " + grantee)
+
+        expect:
+            tested.produce(builder().withPolicyName(policyName)
+                    .withPolicySchema(schema)
+                    .withPolicyTable(table)
+                    .withGrantee(grantee)
+                    .withPermissionCommandPolicy(ALL)
+                    .withUsingExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory1)
+                    .withWithCheckExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory1)
+                    .build()).getCreateScript() == expectedStatement
+    }
+
     //TODO random values
 
     private Closure<String> prepareEqualsCurrentTenantIdentifierFunctionInvocationFactoryForTest() {
