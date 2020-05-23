@@ -196,7 +196,7 @@ class RLSPolicyProducerItTest extends Specification {
     def prepareStatementThatSelectPolicyWithSpecifiedCmdExists(String name, String table, String schema, PermissionCommandPolicyEnum permissionCommandPolicy)
     {
         def schemaName = schema == null ? "public" : schema
-        def cmd = ""
+        def cmd
         switch (permissionCommandPolicy)
         {
             case ALL:
