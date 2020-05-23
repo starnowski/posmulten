@@ -120,7 +120,12 @@ class RLSPolicyProducerTest extends Specification {
             null                    |   "users_policy"          |   "users"         || "DROP POLICY IF EXISTS users_policy ON users"
             "public"                |   "users_policy"          |   "users"         || "DROP POLICY IF EXISTS users_policy ON public.users"
             "non_public_schema"     |   "users_policy"          |   "users"         || "DROP POLICY IF EXISTS users_policy ON non_public_schema.users"
-
+            null                    |   "u_policy"              |   "users"         || "DROP POLICY IF EXISTS u_policy ON users"
+            "public"                |   "u_policy"              |   "users"         || "DROP POLICY IF EXISTS u_policy ON public.users"
+            "non_public_schema"     |   "u_policy"              |   "users"         || "DROP POLICY IF EXISTS u_policy ON non_public_schema.users"
+            null                    |   "u_policy"              |   "users_groups"  || "DROP POLICY IF EXISTS u_policy ON users_groups"
+            "public"                |   "u_policy"              |   "users_groups"  || "DROP POLICY IF EXISTS u_policy ON public.users_groups"
+            "non_public_schema"     |   "u_policy"              |   "users_groups"  || "DROP POLICY IF EXISTS u_policy ON non_public_schema.users_groups"
     }
 
     //TODO Drop script
