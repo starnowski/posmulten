@@ -102,6 +102,27 @@ class RLSPolicyProducerTest extends Specification {
             "tenantHasAuthoritiesFunctionInvocationFactory1"    |   "tenantHasAuthoritiesFunctionInvocationFactory1"    ||  "CREATE POLICY users_policy ON public.users\nFOR ALL\nTO \"postgresql-core-user\"\nUSING (tenant_has_authorities_function(tenant_id, 'ALL', 'USING', 'users', 'public'))\nWITH CHECK (tenant_has_authorities_function(tenant_id, 'ALL', 'WITH_CHECK', 'users', 'public'));"
     }
 
+    @Unroll
+    def "for policy name '#policyName' for schema '#schema' and table #table should create correct drop script : #expectedStatement" ()
+    {
+        expect:
+            tested.produce(builder().withPolicyName(policyName)
+                    .withPolicySchema(schema)
+                    .withPolicyTable(table)
+                    .withGrantee("some_user")
+                    .withPermissionCommandPolicy(ALL)
+                    .withUsingExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory1)
+                    .withWithCheckExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory1)
+                    .build()).getDropScript() == expectedStatement
+
+        where:
+            schema                  |   policyName              |   table           ||  expectedStatement
+            null                    |   "users_policy"          |   "users"         || "DROP POLICY IF EXISTS users_policy ON users"
+            "public"                |   "users_policy"          |   "users"         || "DROP POLICY IF EXISTS users_policy ON public.users"
+            "non_public_schema"     |   "users_policy"          |   "users"         || "DROP POLICY IF EXISTS users_policy ON non_public_schema.users"
+
+    }
+
     //TODO Drop script
     //TODO random values
 
