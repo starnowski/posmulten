@@ -2,19 +2,19 @@ package com.github.starnowski.posmulten.postgresql.core.rls;
 
 public interface RLSPolicyProducerParameters {
 
-    String getPolicyName();
+    String getPolicyName(); //TODO required
 
-    String getPolicyTable();
+    String getPolicyTable(); //TODO required
 
-    String getPolicySchema();
+    String getPolicySchema(); //TODO not blank
 
-    String getGrantee();
+    String getGrantee(); //TODO required
 
-    String getTenantIdColumn();
+    String getTenantIdColumn(); //TODO not blank
 
-    PermissionCommandPolicyEnum getPermissionCommandPolicy();
+    PermissionCommandPolicyEnum getPermissionCommandPolicy(); //TODO required
 
-    TenantHasAuthoritiesFunctionInvocationFactory getWithCheckExpressionTenantHasAuthoritiesFunctionInvocationFactory();
+    TenantHasAuthoritiesFunctionInvocationFactory getWithCheckExpressionTenantHasAuthoritiesFunctionInvocationFactory(); //TODO required for INSERT
 
-    TenantHasAuthoritiesFunctionInvocationFactory getUsingExpressionTenantHasAuthoritiesFunctionInvocationFactory();
+    TenantHasAuthoritiesFunctionInvocationFactory getUsingExpressionTenantHasAuthoritiesFunctionInvocationFactory(); //TODO required for SELECT and DELETE
 }

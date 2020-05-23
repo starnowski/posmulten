@@ -57,6 +57,9 @@ class RLSPolicyProducerTest extends Specification {
             "non_public_schema"     |   "users_groups_policy"   |   "users_groups"  |   "postgresql-core-owner" |   INSERT              || "CREATE POLICY users_groups_policy ON non_public_schema.users_groups\nFOR INSERT\nTO \"postgresql-core-owner\"\nWITH CHECK (tenant_has_authorities_function(tenant_id, 'INSERT', 'WITH_CHECK', 'users_groups', 'non_public_schema'));"
     }
 
+    //TODO Drop script
+    //TODO random values
+
     private Closure<String> prepareEqualsCurrentTenantIdentifierFunctionInvocationFactoryForTest() {
         { tenant ->
             IS_TENANT_ID_CORRECT_TEST_FUNCTION + "(" + mapToString(tenant) + ")"
