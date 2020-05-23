@@ -43,8 +43,8 @@ class RLSPolicyProducerTest extends Specification {
 
         where:
             schema                  |   policyName              |   table           |   grantee                 |   permissionCommand   ||  expectedStatement
-            null                    |   "users_policy"          |   "users"         |   "postgresql-core-user"  |   ALL                 || "CREATE POLICY users_policy ON users\nFOR ALL\nTO \"postgresql-core-user\"\nUSING (tenant_has_authorities_function(tenant_id, 'ALL', 'USING', 'users', 'null'))\nWITH CHECK (is_tenant_starts_with_abcd(tenant_id));"
-            "public"                |   "users_policy"          |   "users"         |   "postgresql-core-user"  |   INSERT              || "sssss"
+            null                    |   "users_policy"          |   "users"         |   "postgresql-core-user"  |   ALL                 || "CREATE POLICY users_policy ON users\nFOR ALL\nTO \"postgresql-core-user\"\nUSING (tenant_has_authorities_function(tenant_id, 'ALL', 'USING', 'users', 'public'))\nWITH CHECK (is_tenant_starts_with_abcd(tenant_id));"
+            "public"                |   "users_policy"          |   "users"         |   "postgresql-core-user"  |   INSERT              || "CREATE POLICY users_policy ON users\nFOR INSERT\nTO \"postgresql-core-user\"\nUSING (tenant_has_authorities_function(tenant_id, 'INSERT', 'USING', 'users', 'public'));"
             "non_public_schema"     |   "users_policy"          |   "users"         |   "postgresql-core-user"  |   SELECT              || "sssss"
             null                    |   "users_policy"          |   "users"         |   "postgresql-core-owner" |   UPDATE              || "sssss"
             "public"                |   "users_policy"          |   "users"         |   "postgresql-core-owner" |   DELETE              || "sssss"
