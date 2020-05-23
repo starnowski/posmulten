@@ -128,7 +128,6 @@ class RLSPolicyProducerTest extends Specification {
             "non_public_schema"     |   "u_policy"              |   "users_groups"  || "DROP POLICY IF EXISTS u_policy ON non_public_schema.users_groups"
     }
 
-    //TODO Drop script
     //TODO random values
 
     private Closure<String> prepareEqualsCurrentTenantIdentifierFunctionInvocationFactoryForTest() {
