@@ -48,12 +48,12 @@ class RLSPolicyProducerTest extends Specification {
             "non_public_schema"     |   "users_policy"          |   "users"         |   "postgresql-core-user"  |   SELECT              || "sssss"
             null                    |   "users_policy"          |   "users"         |   "postgresql-core-owner" |   UPDATE              || "sssss"
             "public"                |   "users_policy"          |   "users"         |   "postgresql-core-owner" |   DELETE              || "sssss"
-            "non_public_schema"     |   "users_policy"          |   "users"         |   "postgresql-core-owner" |   ALL                 || "sssss"
+            "non_public_schema"     |   "users_policy"          |   "users"         |   "postgresql-core-owner" |   ALL                 || "CREATE POLICY users_policy ON non_public_schema.users\nFOR ALL\nTO \"postgresql-core-owner\"\nUSING (tenant_has_authorities_function(tenant_id, 'ALL', 'USING', 'users', 'non_public_schema'))\nWITH CHECK (tenant_has_authorities_function(tenant_id, 'ALL', 'WITH_CHECK', 'users', 'non_public_schema'));"
             null                    |   "users_groups_policy"   |   "users_groups"  |   "postgresql-core-user"  |   INSERT              || "sssss"
             "public"                |   "users_groups_policy"   |   "users_groups"  |   "postgresql-core-user"  |   SELECT              || "sssss"
             "non_public_schema"     |   "users_groups_policy"   |   "users_groups"  |   "postgresql-core-user"  |   UPDATE              || "sssss"
             null                    |   "users_groups_policy"   |   "users_groups"  |   "postgresql-core-owner" |   DELETE              || "sssss"
-            "public"                |   "users_groups_policy"   |   "users_groups"  |   "postgresql-core-owner" |   ALL                 || "sssss"
+            "public"                |   "users_groups_policy"   |   "users_groups"  |   "postgresql-core-owner" |   ALL                 || "CREATE POLICY users_groups_policy ON public.users_groups\nFOR ALL\nTO \"postgresql-core-owner\"\nUSING (tenant_has_authorities_function(tenant_id, 'ALL', 'USING', 'users_groups', 'public'))\nWITH CHECK (tenant_has_authorities_function(tenant_id, 'ALL', 'WITH_CHECK', 'users_groups', 'public'));"
             "non_public_schema"     |   "users_groups_policy"   |   "users_groups"  |   "postgresql-core-owner" |   INSERT              || "sssss"
     }
 
