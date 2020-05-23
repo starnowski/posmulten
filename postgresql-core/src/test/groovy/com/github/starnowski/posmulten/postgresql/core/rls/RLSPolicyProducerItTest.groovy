@@ -63,6 +63,7 @@ class RLSPolicyProducerItTest extends Specification {
             schema = testSchema
             table = testTable
             assertEquals(false, isRLSPolicyExists(jdbcTemplate, policyName, table, schema))
+            assertEquals(false, isRLSPolicyForGranteeExists(jdbcTemplate, policyName, table, schema, grantee))
 
         when:
             policyDefinition = tested.produce(builder().withPolicyName(policyName)
@@ -77,6 +78,7 @@ class RLSPolicyProducerItTest extends Specification {
 
         then:
             isRLSPolicyExists(jdbcTemplate, policyName, table, schema)
+            isRLSPolicyForGranteeExists(jdbcTemplate, policyName, table, schema, grantee)
 
         where:
             testSchema              |   testPolicyName          |   testTable       |   grantee
@@ -112,10 +114,9 @@ class RLSPolicyProducerItTest extends Specification {
         return isAnyRecordExists(jdbcTemplate, prepareStatementThatSelectPolicyExists(policy, table, schema));
     }
 
-    private boolean isRLSPolicyForGranteeExists(JdbcTemplate jdbcTemplate, String policy, String table, String schema)
+    private boolean isRLSPolicyForGranteeExists(JdbcTemplate jdbcTemplate, String policy, String table, String schema, String grantee)
     {
-        //TODO
-        return isAnyRecordExists(jdbcTemplate, prepareStatementThatSelectPolicyExists(policy, table, schema));
+        return isAnyRecordExists(jdbcTemplate, prepareStatementThatSelectPolicyForGranteeExists(policy, table, schema, grantee));
     }
 
     private String prepareCreateScriptForFunctionThatDeterminesIfTenantIdIsCorrect() {
@@ -172,4 +173,9 @@ class RLSPolicyProducerItTest extends Specification {
         format("SELECT pg.polname, pg.polcmd, pc.relname, pn.nspname FROM pg_catalog.pg_policy pg, pg_class pc, pg_catalog.pg_namespace pn WHERE pg.polrelid = pc.oid AND pc.relnamespace = pn.oid AND pg.polname = '%1\$s' AND pc.relname = '%2\$s' AND pn.nspname = '%3\$s' AND pg.polcmd = '%4\$s'", name, table, schemaName, cmd)
     }
 
+    def prepareStatementThatSelectPolicyForGranteeExists(String name, String table, String schema, String grantee)
+    {
+        def schemaName = schema == null ? "public" : schema
+        format("SELECT pg.polname, pg.polcmd, pc.relname, pn.nspname, ro.rolname FROM pg_catalog.pg_policy pg, pg_class pc, pg_catalog.pg_namespace pn, pg_roles ro WHERE pg.polrelid = pc.oid AND pc.relnamespace = pn.oid AND pg.polname = '%1\$s' AND pc.relname = '%2\$s' AND pn.nspname = '%3\$s' AND ro.oid = ANY(pg.polroles) AND ro.rolname = '%4\$s'", name, table, schemaName, grantee)
+    }
 }
