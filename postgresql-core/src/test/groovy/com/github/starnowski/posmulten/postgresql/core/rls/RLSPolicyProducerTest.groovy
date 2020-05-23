@@ -57,6 +57,30 @@ class RLSPolicyProducerTest extends Specification {
             "non_public_schema"     |   "users_groups_policy"   |   "users_groups"  |   "postgresql-core-owner" |   INSERT              || "CREATE POLICY users_groups_policy ON non_public_schema.users_groups\nFOR INSERT\nTO \"postgresql-core-owner\"\nWITH CHECK (tenant_has_authorities_function(tenant_id, 'INSERT', 'WITH_CHECK', 'users_groups', 'non_public_schema'));"
     }
 
+    @Unroll
+    def "for policy name '#policyName' for schema '#schema' and table #table and tenant id column #tenantIdColumn should create statement : #expectedStatement" ()
+    {
+        expect:
+            tested.produce(builder().withPolicyName(policyName)
+                    .withPolicySchema(schema)
+                    .withPolicyTable(table)
+                    .withTenantIdColumn(tenantIdColumn)
+                    .withGrantee("postgresql-core-user")
+                    .withPermissionCommandPolicy(ALL)
+                    .withUsingExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory1)
+                    .withWithCheckExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory1)
+                    .build()).getCreateScript() == expectedStatement
+
+        where:
+            schema                  |   policyName              |   table           |   tenantIdColumn      ||  expectedStatement
+            null                    |   "users_policy"          |   "users"         |   "tenant"            || "CREATE POLICY users_policy ON users\nFOR ALL\nTO \"postgresql-core-user\"\nUSING (tenant_has_authorities_function(tenant, 'ALL', 'USING', 'users', 'public'))\nWITH CHECK (tenant_has_authorities_function(tenant, 'ALL', 'WITH_CHECK', 'users', 'public'));"
+            "public"                |   "users_policy"          |   "users"         |   "tenant"            || "CREATE POLICY users_policy ON public.users\nFOR ALL\nTO \"postgresql-core-user\"\nUSING (tenant_has_authorities_function(tenant, 'ALL', 'USING', 'users', 'public'))\nWITH CHECK (tenant_has_authorities_function(tenant, 'ALL', 'WITH_CHECK', 'users', 'public'));"
+            "non_public_schema"     |   "users_policy"          |   "users"         |   "tenant"            || "CREATE POLICY users_policy ON non_public_schema.users\nFOR ALL\nTO \"postgresql-core-user\"\nUSING (tenant_has_authorities_function(tenant, 'ALL', 'USING', 'users', 'non_public_schema'))\nWITH CHECK (tenant_has_authorities_function(tenant, 'ALL', 'WITH_CHECK', 'users', 'non_public_schema'));"
+            null                    |   "users_policy"          |   "users"         |   "ti"                || "CREATE POLICY users_policy ON users\nFOR ALL\nTO \"postgresql-core-user\"\nUSING (tenant_has_authorities_function(ti, 'ALL', 'USING', 'users', 'public'))\nWITH CHECK (tenant_has_authorities_function(ti, 'ALL', 'WITH_CHECK', 'users', 'public'));"
+            "public"                |   "users_policy"          |   "users"         |   "ti"                || "CREATE POLICY users_policy ON public.users\nFOR ALL\nTO \"postgresql-core-user\"\nUSING (tenant_has_authorities_function(ti, 'ALL', 'USING', 'users', 'public'))\nWITH CHECK (tenant_has_authorities_function(ti, 'ALL', 'WITH_CHECK', 'users', 'public'));"
+            "non_public_schema"     |   "users_policy"          |   "users"         |   "ti"                || "CREATE POLICY users_policy ON non_public_schema.users\nFOR ALL\nTO \"postgresql-core-user\"\nUSING (tenant_has_authorities_function(ti, 'ALL', 'USING', 'users', 'non_public_schema'))\nWITH CHECK (tenant_has_authorities_function(ti, 'ALL', 'WITH_CHECK', 'users', 'non_public_schema'));"
+    }
+
     //TODO Drop script
     //TODO random values
 
