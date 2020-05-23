@@ -8,7 +8,7 @@ import spock.lang.Unroll
 
 import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValueToStringMapper.mapToString
 import static com.github.starnowski.posmulten.postgresql.core.rls.DefaultRLSPolicyProducerParameters.builder
-import static com.github.starnowski.posmulten.postgresql.core.rls.PermissionCommandPolicyEnum.ALL
+import static com.github.starnowski.posmulten.postgresql.core.rls.PermissionCommandPolicyEnum.*
 
 class RLSPolicyProducerTest extends Specification {
 
@@ -43,18 +43,18 @@ class RLSPolicyProducerTest extends Specification {
 
         where:
             schema                  |   policyName              |   table           |   grantee                 |   permissionCommand
-            null                    |   "users_policy"          |   "users"         |   "postgresql-core-user"  |
-            "public"                |   "users_policy"          |   "users"         |   "postgresql-core-user"  |
-            "non_public_schema"     |   "users_policy"          |   "users"         |   "postgresql-core-user"  |
-            null                    |   "users_policy"          |   "users"         |   "postgresql-core-owner" |
-            "public"                |   "users_policy"          |   "users"         |   "postgresql-core-owner" |
-            "non_public_schema"     |   "users_policy"          |   "users"         |   "postgresql-core-owner" |
-            null                    |   "users_groups_policy"   |   "users_groups"  |   "postgresql-core-user"  |
-            "public"                |   "users_groups_policy"   |   "users_groups"  |   "postgresql-core-user"  |
-            "non_public_schema"     |   "users_groups_policy"   |   "users_groups"  |   "postgresql-core-user"  |
-            null                    |   "users_groups_policy"   |   "users_groups"  |   "postgresql-core-owner" |
-            "public"                |   "users_groups_policy"   |   "users_groups"  |   "postgresql-core-owner" |
-            "non_public_schema"     |   "users_groups_policy"   |   "users_groups"  |   "postgresql-core-owner" |
+            null                    |   "users_policy"          |   "users"         |   "postgresql-core-user"  |   ALL
+            "public"                |   "users_policy"          |   "users"         |   "postgresql-core-user"  |   INSERT
+            "non_public_schema"     |   "users_policy"          |   "users"         |   "postgresql-core-user"  |   SELECT
+            null                    |   "users_policy"          |   "users"         |   "postgresql-core-owner" |   UPDATE
+            "public"                |   "users_policy"          |   "users"         |   "postgresql-core-owner" |   DELETE
+            "non_public_schema"     |   "users_policy"          |   "users"         |   "postgresql-core-owner" |   ALL
+            null                    |   "users_groups_policy"   |   "users_groups"  |   "postgresql-core-user"  |   INSERT
+            "public"                |   "users_groups_policy"   |   "users_groups"  |   "postgresql-core-user"  |   SELECT
+            "non_public_schema"     |   "users_groups_policy"   |   "users_groups"  |   "postgresql-core-user"  |   UPDATE
+            null                    |   "users_groups_policy"   |   "users_groups"  |   "postgresql-core-owner" |   DELETE
+            "public"                |   "users_groups_policy"   |   "users_groups"  |   "postgresql-core-owner" |   ALL
+            "non_public_schema"     |   "users_groups_policy"   |   "users_groups"  |   "postgresql-core-owner" |   INSERT
     }
 
     private Closure<String> prepareEqualsCurrentTenantIdentifierFunctionInvocationFactoryForTest() {
