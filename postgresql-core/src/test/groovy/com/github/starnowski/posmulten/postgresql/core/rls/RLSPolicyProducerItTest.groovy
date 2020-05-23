@@ -111,12 +111,12 @@ class RLSPolicyProducerItTest extends Specification {
 
     private boolean isRLSPolicyExists(JdbcTemplate jdbcTemplate, String policy, String table, String schema)
     {
-        return isAnyRecordExists(jdbcTemplate, prepareStatementThatSelectPolicyExists(policy, table, schema));
+        return isAnyRecordExists(jdbcTemplate, prepareStatementThatSelectPolicyExists(policy, table, schema))
     }
 
     private boolean isRLSPolicyForGranteeExists(JdbcTemplate jdbcTemplate, String policy, String table, String schema, String grantee)
     {
-        return isAnyRecordExists(jdbcTemplate, prepareStatementThatSelectPolicyForGranteeExists(policy, table, schema, grantee));
+        return isAnyRecordExists(jdbcTemplate, prepareStatementThatSelectPolicyForGranteeExists(policy, table, schema, grantee))
     }
 
     private String prepareCreateScriptForFunctionThatDeterminesIfTenantIdIsCorrect() {
