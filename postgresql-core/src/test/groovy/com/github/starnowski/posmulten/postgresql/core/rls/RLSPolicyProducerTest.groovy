@@ -1,19 +1,25 @@
 package com.github.starnowski.posmulten.postgresql.core.rls
 
+import com.github.starnowski.posmulten.postgresql.core.RandomString
 import com.github.starnowski.posmulten.postgresql.core.rls.function.EqualsCurrentTenantIdentifierFunctionInvocationFactory
 import com.github.starnowski.posmulten.postgresql.core.rls.function.TenantHasAuthoritiesFunctionProducer
 import com.github.starnowski.posmulten.postgresql.core.rls.function.TenantHasAuthoritiesFunctionProducerParameters
 import spock.lang.Specification
 import spock.lang.Unroll
 
+import java.util.logging.Logger
+
 import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValueToStringMapper.mapToString
 import static com.github.starnowski.posmulten.postgresql.core.rls.DefaultRLSPolicyProducerParameters.builder
 import static com.github.starnowski.posmulten.postgresql.core.rls.PermissionCommandPolicyEnum.*
+import static java.lang.String.format
 
 class RLSPolicyProducerTest extends Specification {
 
     private static final String IS_TENANT_ID_CORRECT_TEST_FUNCTION = "is_tenant_starts_with_abcd"
     private static final String TENANT_HAS_AUTHORITIES_TEST_FUNCTION = "tenant_has_authorities_function"
+    private static final Logger logger = Logger.getLogger(RLSPolicyProducerTest.class.getName())
+
     TenantHasAuthoritiesFunctionInvocationFactory tenantHasAuthoritiesFunctionInvocationFactory1
     TenantHasAuthoritiesFunctionInvocationFactory tenantHasAuthoritiesFunctionInvocationFactory2
     def tested = new RLSPolicyProducer()
@@ -126,6 +132,29 @@ class RLSPolicyProducerTest extends Specification {
             null                    |   "u_policy"              |   "users_groups"  || "DROP POLICY IF EXISTS u_policy ON users_groups"
             "public"                |   "u_policy"              |   "users_groups"  || "DROP POLICY IF EXISTS u_policy ON public.users_groups"
             "non_public_schema"     |   "u_policy"              |   "users_groups"  || "DROP POLICY IF EXISTS u_policy ON non_public_schema.users_groups"
+    }
+
+    def "should generate drop script for random values" ()
+    {
+        given:
+            def r = new RandomString(12, new Random(), RandomString.lower)
+            def policyName = r.nextString()
+            def schema = r.nextString()
+            def table = r.nextString()
+            def expectedStatement = format("DROP POLICY IF EXISTS %1\$s ON %2\$s.%3\$s", policyName, schema, table)
+            logger.log(java.util.logging.Level.INFO, "Random policy name: " + policyName)
+            logger.log(java.util.logging.Level.INFO, "Random schema name: " + schema)
+            logger.log(java.util.logging.Level.INFO, "Random table name: " + table)
+
+        expect:
+            tested.produce(builder().withPolicyName(policyName)
+                    .withPolicySchema(schema)
+                    .withPolicyTable(table)
+                    .withGrantee("some_user")
+                    .withPermissionCommandPolicy(ALL)
+                    .withUsingExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory1)
+                    .withWithCheckExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory1)
+                    .build()).getDropScript() == expectedStatement
     }
 
     //TODO random values
