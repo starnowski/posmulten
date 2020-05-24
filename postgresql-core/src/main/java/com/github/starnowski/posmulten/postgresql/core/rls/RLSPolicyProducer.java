@@ -69,6 +69,10 @@ public class RLSPolicyProducer {
         {
             throw new IllegalArgumentException("For the INSERT permission command the CHECK WITH expressions cannot be null");
         }
+        if ((SELECT.equals(parameters.getPermissionCommandPolicy()) || DELETE.equals(parameters.getPermissionCommandPolicy())) && parameters.getUsingExpressionTenantHasAuthoritiesFunctionInvocationFactory() == null)
+        {
+            throw new IllegalArgumentException("For the SELECT and DELETE permission command the USING expressions cannot be null");
+        }
     }
 
     private String prepareDropScript(RLSPolicyProducerParameters parameters) {
