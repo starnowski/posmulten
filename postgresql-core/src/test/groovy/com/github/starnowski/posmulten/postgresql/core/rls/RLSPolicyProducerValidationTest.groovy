@@ -185,6 +185,21 @@ class RLSPolicyProducerValidationTest extends Specification {
             tenantIdColumn << ["", " ", "      "]
     }
 
+    def "should throw exception of type 'IllegalArgumentException' when permission command policy is null"()
+    {
+        given:
+            def parameters = prepareBuilderWithCorrectValues().withPermissionCommandPolicy(null).build()
+
+        when:
+            tested.produce(parameters)
+
+        then:
+            def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+            ex.message == "Permission command policy cannot be null"
+    }
+
     def prepareBuilderWithCorrectValues()
     {
         builder().withPolicyName("table_policy")
