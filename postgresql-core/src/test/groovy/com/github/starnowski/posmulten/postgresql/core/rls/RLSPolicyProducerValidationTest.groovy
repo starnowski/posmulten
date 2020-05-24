@@ -48,7 +48,7 @@ class RLSPolicyProducerValidationTest extends Specification {
     def "should throw exception of type 'IllegalArgumentException' when policy name is null"()
     {
         given:
-            def parameters = builder().withPolicyName(null).build()
+            def parameters = prepareBuilderWithCorrectValues().withPolicyName(null).build()
 
         when:
             tested.produce(parameters)
@@ -64,7 +64,7 @@ class RLSPolicyProducerValidationTest extends Specification {
     def "should throw exception of type 'IllegalArgumentException' when policy name is blank (#policyName)"()
     {
         given:
-            def parameters = builder().withPolicyName(policyName).build()
+            def parameters = prepareBuilderWithCorrectValues().withPolicyName(policyName).build()
 
         when:
             tested.produce(parameters)
@@ -82,7 +82,7 @@ class RLSPolicyProducerValidationTest extends Specification {
     def "should throw exception of type 'IllegalArgumentException' when policy table is null"()
     {
         given:
-            def parameters = builder().withPolicyTable(null).build()
+            def parameters = prepareBuilderWithCorrectValues().withPolicyTable(null).build()
 
         when:
             tested.produce(parameters)
