@@ -113,6 +113,25 @@ class RLSPolicyProducerValidationTest extends Specification {
             policyTable << ["", " ", "      "]
     }
 
+    @Unroll
+    def "should throw exception of type 'IllegalArgumentException' when policy schema is blank (#policySchema)"()
+    {
+        given:
+            def parameters = prepareBuilderWithCorrectValues().withPolicySchema(policySchema).build()
+
+        when:
+            tested.produce(parameters)
+
+        then:
+            def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+            ex.message == "Policy schema cannot be blank"
+
+        where:
+            policySchema << ["", " ", "      "]
+    }
+
     def prepareBuilderWithCorrectValues()
     {
         builder().withPolicyName("table_policy")
