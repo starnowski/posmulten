@@ -21,10 +21,10 @@ public class RLSPolicyProducer {
 
     protected void validate(RLSPolicyProducerParameters parameters)
     {
-//        if (parameters == null)
-//        {
-//            throw new IllegalArgumentException("The parameters object cannot be null");
-//        }
+        if (parameters == null)
+        {
+            throw new IllegalArgumentException("Parameters object cannot be null");
+        }
         if (parameters.getPolicyName() == null)
         {
             throw new IllegalArgumentException("Policy name cannot be null");
