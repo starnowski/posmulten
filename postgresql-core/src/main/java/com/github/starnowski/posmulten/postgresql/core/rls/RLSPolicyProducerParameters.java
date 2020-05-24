@@ -13,7 +13,7 @@ public interface RLSPolicyProducerParameters {
 
     String getGrantee();
 
-    String getTenantIdColumn(); //TODO not blank
+    String getTenantIdColumn();
 
     PermissionCommandPolicyEnum getPermissionCommandPolicy(); //TODO required
 
