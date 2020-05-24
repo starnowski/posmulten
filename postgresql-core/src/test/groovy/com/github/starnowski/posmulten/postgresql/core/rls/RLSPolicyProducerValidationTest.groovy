@@ -166,6 +166,25 @@ class RLSPolicyProducerValidationTest extends Specification {
             grantee << ["", " ", "      "]
     }
 
+    @Unroll
+    def "should throw exception of type 'IllegalArgumentException' when tenant id column is blank (#tenantIdColumn)"()
+    {
+        given:
+            def parameters = prepareBuilderWithCorrectValues().withTenantIdColumn(grantee).build()
+
+        when:
+            tested.produce(parameters)
+
+        then:
+            def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+            ex.message == "Tenant id column cannot be blank"
+
+        where:
+            tenantIdColumn << ["", " ", "      "]
+    }
+
     def prepareBuilderWithCorrectValues()
     {
         builder().withPolicyName("table_policy")
