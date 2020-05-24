@@ -170,7 +170,7 @@ class RLSPolicyProducerValidationTest extends Specification {
     def "should throw exception of type 'IllegalArgumentException' when tenant id column is blank (#tenantIdColumn)"()
     {
         given:
-            def parameters = prepareBuilderWithCorrectValues().withTenantIdColumn(grantee).build()
+            def parameters = prepareBuilderWithCorrectValues().withTenantIdColumn(tenantIdColumn).build()
 
         when:
             tested.produce(parameters)
