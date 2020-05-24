@@ -49,6 +49,10 @@ public class RLSPolicyProducer {
         {
             throw new IllegalArgumentException("Grantee cannot be null");
         }
+        if (parameters.getGrantee() != null && parameters.getGrantee().trim().isEmpty())
+        {
+            throw new IllegalArgumentException("Grantee cannot be blank");
+        }
     }
 
     private String prepareDropScript(RLSPolicyProducerParameters parameters) {
