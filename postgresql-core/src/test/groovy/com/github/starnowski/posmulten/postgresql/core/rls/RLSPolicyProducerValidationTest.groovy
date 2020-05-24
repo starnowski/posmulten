@@ -200,6 +200,24 @@ class RLSPolicyProducerValidationTest extends Specification {
             ex.message == "Permission command policy cannot be null"
     }
 
+    def "should throw exception of type 'IllegalArgumentException' when the USING and CHECK WITH expressions are null"()
+    {
+        given:
+        def parameters = prepareBuilderWithCorrectValues()
+                .withUsingExpressionTenantHasAuthoritiesFunctionInvocationFactory(null)
+                .withWithCheckExpressionTenantHasAuthoritiesFunctionInvocationFactory(null)
+                .build()
+
+        when:
+            tested.produce(parameters)
+
+        then:
+            def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+            ex.message == "The components for the USING and the CHECK WITH expressions cannot be null"
+    }
+
     def prepareBuilderWithCorrectValues()
     {
         builder().withPolicyName("table_policy")
