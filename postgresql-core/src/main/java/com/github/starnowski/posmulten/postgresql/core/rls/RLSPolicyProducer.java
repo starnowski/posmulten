@@ -41,6 +41,10 @@ public class RLSPolicyProducer {
         {
             throw new IllegalArgumentException("Policy table cannot be blank");
         }
+        if (parameters.getPolicySchema() != null && parameters.getPolicySchema().trim().isEmpty())
+        {
+            throw new IllegalArgumentException("Policy schema cannot be blank");
+        }
     }
 
     private String prepareDropScript(RLSPolicyProducerParameters parameters) {
