@@ -4,7 +4,7 @@ public interface RLSPolicyProducerParameters {
 
     String getPolicyName();
 
-    String getPolicyTable(); //TODO required
+    String getPolicyTable();
 
     String getPolicySchema(); //TODO not blank
 
