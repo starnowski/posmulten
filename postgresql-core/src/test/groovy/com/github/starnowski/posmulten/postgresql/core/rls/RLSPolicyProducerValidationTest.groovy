@@ -32,6 +32,18 @@ class RLSPolicyProducerValidationTest extends Specification {
             tested.produce(prepareBuilderWithCorrectValues().build()).getCreateScript() == "CREATE POLICY table_policy ON some_schema.table\nFOR ALL\nTO \"post-user\"\nUSING (tenant_has_authorities_function(tenant_id, 'ALL', 'USING', 'table', 'some_schema'))\nWITH CHECK (tenant_has_authorities_function(tenant_id, 'ALL', 'WITH_CHECK', 'table', 'some_schema'));"
     }
 
+    def "should throw exception of type 'IllegalArgumentException' when parameters object is null"()
+    {
+        when:
+            tested.produce(null)
+
+        then:
+            def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+            ex.message == "Parameters object cannot be null"
+    }
+
     def "should throw exception of type 'IllegalArgumentException' when policy name is null"()
     {
         given:
