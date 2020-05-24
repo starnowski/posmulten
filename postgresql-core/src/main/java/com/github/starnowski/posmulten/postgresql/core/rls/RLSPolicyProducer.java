@@ -57,6 +57,10 @@ public class RLSPolicyProducer {
         {
             throw new IllegalArgumentException("Tenant id column cannot be blank");
         }
+        if (parameters.getPermissionCommandPolicy() == null)
+        {
+            throw new IllegalArgumentException("Permission command policy cannot be null");
+        }
     }
 
     private String prepareDropScript(RLSPolicyProducerParameters parameters) {
