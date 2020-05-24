@@ -1,5 +1,8 @@
 package com.github.starnowski.posmulten.postgresql.core.rls;
 
+/*
+ * TODO the USING and CHECK WITH expressions cannot be null in the same time
+ */
 public interface RLSPolicyProducerParameters {
 
     String getPolicyName();
