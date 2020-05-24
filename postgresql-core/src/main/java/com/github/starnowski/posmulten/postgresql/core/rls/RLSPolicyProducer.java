@@ -53,6 +53,10 @@ public class RLSPolicyProducer {
         {
             throw new IllegalArgumentException("Grantee cannot be blank");
         }
+        if (parameters.getTenantIdColumn() != null && parameters.getTenantIdColumn().trim().isEmpty())
+        {
+            throw new IllegalArgumentException("Tenant id column cannot be blank");
+        }
     }
 
     private String prepareDropScript(RLSPolicyProducerParameters parameters) {
