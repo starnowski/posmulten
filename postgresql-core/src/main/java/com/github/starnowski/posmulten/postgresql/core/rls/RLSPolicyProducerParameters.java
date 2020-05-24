@@ -15,7 +15,7 @@ public interface RLSPolicyProducerParameters {
 
     String getTenantIdColumn();
 
-    PermissionCommandPolicyEnum getPermissionCommandPolicy(); //TODO required
+    PermissionCommandPolicyEnum getPermissionCommandPolicy();
 
     TenantHasAuthoritiesFunctionInvocationFactory getWithCheckExpressionTenantHasAuthoritiesFunctionInvocationFactory(); //TODO required for INSERT
 
