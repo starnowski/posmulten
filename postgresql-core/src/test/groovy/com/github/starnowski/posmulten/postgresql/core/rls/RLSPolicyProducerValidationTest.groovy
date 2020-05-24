@@ -9,7 +9,9 @@ import spock.lang.Unroll
 import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValueToStringMapper.mapToString
 import static com.github.starnowski.posmulten.postgresql.core.rls.DefaultRLSPolicyProducerParameters.builder
 import static com.github.starnowski.posmulten.postgresql.core.rls.PermissionCommandPolicyEnum.ALL
+import static com.github.starnowski.posmulten.postgresql.core.rls.PermissionCommandPolicyEnum.DELETE
 import static com.github.starnowski.posmulten.postgresql.core.rls.PermissionCommandPolicyEnum.INSERT
+import static com.github.starnowski.posmulten.postgresql.core.rls.PermissionCommandPolicyEnum.SELECT
 
 class RLSPolicyProducerValidationTest extends Specification {
 
@@ -235,6 +237,28 @@ class RLSPolicyProducerValidationTest extends Specification {
 
         and: "exception should have correct message"
             ex.message == "For the INSERT permission command the CHECK WITH expressions cannot be null"
+    }
+
+    @Unroll
+    def "should throw exception of type 'IllegalArgumentException' when the permission command policy is #permissionCommandPolicy and the USING expressions is null"()
+    {
+        given:
+            def parameters = prepareBuilderWithCorrectValues()
+                    .withPermissionCommandPolicy(permissionCommandPolicy)
+                    .withUsingExpressionTenantHasAuthoritiesFunctionInvocationFactory(null)
+                    .build()
+
+        when:
+            tested.produce(parameters)
+
+        then:
+            def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+            ex.message == "For the SELECT and DELETE permission command the USING expressions cannot be null"
+
+        where:
+            permissionCommandPolicy << [SELECT, DELETE]
     }
 
     def prepareBuilderWithCorrectValues()
