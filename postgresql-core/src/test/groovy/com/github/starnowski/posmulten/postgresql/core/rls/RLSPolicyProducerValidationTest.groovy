@@ -35,7 +35,7 @@ class RLSPolicyProducerValidationTest extends Specification {
     def "should throw exception of type 'IllegalArgumentException' when policy name is null"()
     {
         given:
-            def parameters = builder().withPolicyName(null)
+            def parameters = builder().withPolicyName(null).build()
 
         when:
             tested.produce(parameters)
