@@ -4,6 +4,7 @@ import com.github.starnowski.posmulten.postgresql.core.rls.function.EqualsCurren
 import com.github.starnowski.posmulten.postgresql.core.rls.function.TenantHasAuthoritiesFunctionProducer
 import com.github.starnowski.posmulten.postgresql.core.rls.function.TenantHasAuthoritiesFunctionProducerParameters
 import spock.lang.Specification
+import spock.lang.Unroll
 
 import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValueToStringMapper.mapToString
 import static com.github.starnowski.posmulten.postgresql.core.rls.DefaultRLSPolicyProducerParameters.builder
@@ -57,6 +58,25 @@ class RLSPolicyProducerValidationTest extends Specification {
 
         and: "exception should have correct message"
             ex.message == "Policy name cannot be null"
+    }
+
+    @Unroll
+    def "should throw exception of type 'IllegalArgumentException' when policy name is blank (#policyName)"()
+    {
+        given:
+            def parameters = builder().withPolicyName(policyName).build()
+
+        when:
+            tested.produce(parameters)
+
+        then:
+            def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+            ex.message == "Policy name cannot be blank"
+
+        where:
+            policyName << ["", " ", "      "]
     }
 
     def prepareBuilderWithCorrectValues()
