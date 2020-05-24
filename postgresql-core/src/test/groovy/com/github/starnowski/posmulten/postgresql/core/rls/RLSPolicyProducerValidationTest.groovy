@@ -1,6 +1,5 @@
 package com.github.starnowski.posmulten.postgresql.core.rls
 
-
 import com.github.starnowski.posmulten.postgresql.core.rls.function.EqualsCurrentTenantIdentifierFunctionInvocationFactory
 import com.github.starnowski.posmulten.postgresql.core.rls.function.TenantHasAuthoritiesFunctionProducer
 import com.github.starnowski.posmulten.postgresql.core.rls.function.TenantHasAuthoritiesFunctionProducerParameters
@@ -31,6 +30,21 @@ class RLSPolicyProducerValidationTest extends Specification {
     {
         expect:
             tested.produce(prepareBuilderWithCorrectValues().build()).getCreateScript() == "CREATE POLICY table_policy ON some_schema.table\nFOR ALL\nTO \"post-user\"\nUSING (tenant_has_authorities_function(tenant_id, 'ALL', 'USING', 'table', 'some_schema'))\nWITH CHECK (tenant_has_authorities_function(tenant_id, 'ALL', 'WITH_CHECK', 'table', 'some_schema'));"
+    }
+
+    def "should throw exception of type 'IllegalArgumentException' when policy name is null"()
+    {
+        given:
+            def parameters = builder().withPolicyName(null)
+
+        when:
+            tested.produce(parameters)
+
+        then:
+            def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+            ex.message == "Policy name cannot be null"
     }
 
     def prepareBuilderWithCorrectValues()
