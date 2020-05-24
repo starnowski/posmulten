@@ -61,6 +61,10 @@ public class RLSPolicyProducer {
         {
             throw new IllegalArgumentException("Permission command policy cannot be null");
         }
+        if (parameters.getUsingExpressionTenantHasAuthoritiesFunctionInvocationFactory() == null && parameters.getWithCheckExpressionTenantHasAuthoritiesFunctionInvocationFactory() == null)
+        {
+            throw new IllegalArgumentException("The components for the USING and the CHECK WITH expressions cannot be null");
+        }
     }
 
     private String prepareDropScript(RLSPolicyProducerParameters parameters) {
