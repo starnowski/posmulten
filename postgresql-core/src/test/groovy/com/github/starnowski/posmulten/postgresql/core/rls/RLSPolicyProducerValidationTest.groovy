@@ -9,6 +9,7 @@ import spock.lang.Unroll
 import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValueToStringMapper.mapToString
 import static com.github.starnowski.posmulten.postgresql.core.rls.DefaultRLSPolicyProducerParameters.builder
 import static com.github.starnowski.posmulten.postgresql.core.rls.PermissionCommandPolicyEnum.ALL
+import static com.github.starnowski.posmulten.postgresql.core.rls.PermissionCommandPolicyEnum.INSERT
 
 class RLSPolicyProducerValidationTest extends Specification {
 
@@ -216,6 +217,24 @@ class RLSPolicyProducerValidationTest extends Specification {
 
         and: "exception should have correct message"
             ex.message == "The components for the USING and the CHECK WITH expressions cannot be null"
+    }
+
+    def "should throw exception of type 'IllegalArgumentException' when the permission command policy is INSERT and the CHECK WITH expressions is null"()
+    {
+        given:
+        def parameters = prepareBuilderWithCorrectValues()
+                .withPermissionCommandPolicy(INSERT)
+                .withWithCheckExpressionTenantHasAuthoritiesFunctionInvocationFactory(null)
+                .build()
+
+        when:
+            tested.produce(parameters)
+
+        then:
+            def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+            ex.message == "For the INSERT permission command the CHECK WITH expressions cannot be null"
     }
 
     def prepareBuilderWithCorrectValues()
