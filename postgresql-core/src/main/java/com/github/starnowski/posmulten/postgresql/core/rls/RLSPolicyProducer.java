@@ -124,12 +124,10 @@ public class RLSPolicyProducer {
     }
 
     private boolean isCheckWithExpressionShouldBeApplied(RLSPolicyProducerParameters parameters) {
-        //TODO Add database test
         return !SELECT.equals(parameters.getPermissionCommandPolicy()) && !DELETE.equals(parameters.getPermissionCommandPolicy());
     }
 
     private boolean isUsingExpressionShouldBeApplied(RLSPolicyProducerParameters parameters) {
-        //TODO Add database test
         return !INSERT.equals(parameters.getPermissionCommandPolicy());
     }
 
