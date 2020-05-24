@@ -16,7 +16,6 @@ class RLSPolicyProducerValidationTest extends Specification {
     private static final String TENANT_HAS_AUTHORITIES_TEST_FUNCTION = "tenant_has_authorities_function"
 
     TenantHasAuthoritiesFunctionInvocationFactory tenantHasAuthoritiesFunctionInvocationFactory1
-    TenantHasAuthoritiesFunctionInvocationFactory tenantHasAuthoritiesFunctionInvocationFactory2
     def tested = new RLSPolicyProducer()
 
     def setup()
@@ -26,7 +25,6 @@ class RLSPolicyProducerValidationTest extends Specification {
         def tenantHasAuthoritiesFunction = producer.produce(new TenantHasAuthoritiesFunctionProducerParameters(TENANT_HAS_AUTHORITIES_TEST_FUNCTION, null, equalsCurrentTenantIdentifierFunctionInvocationFactory))
 
         tenantHasAuthoritiesFunctionInvocationFactory1 = tenantHasAuthoritiesFunction
-        tenantHasAuthoritiesFunctionInvocationFactory2 = prepareTenantHasAuthoritiesFunctionInvocationFactoryForTestFunctionThatDetermineIfTenantIdIsCorrect()
     }
 
     def "should generate the creation script for builder with correct values" ()
@@ -49,12 +47,6 @@ class RLSPolicyProducerValidationTest extends Specification {
     private Closure<String> prepareEqualsCurrentTenantIdentifierFunctionInvocationFactoryForTest() {
         { tenant ->
             IS_TENANT_ID_CORRECT_TEST_FUNCTION + "(" + mapToString(tenant) + ")"
-        }
-    }
-
-    private Closure<String> prepareTenantHasAuthoritiesFunctionInvocationFactoryForTestFunctionThatDetermineIfTenantIdIsCorrect() {
-        { tenantIdValue, permissionCommandPolicy, rlsExpressionType, table, schema ->
-            IS_TENANT_ID_CORRECT_TEST_FUNCTION + "(" + mapToString(tenantIdValue) + ")"
         }
     }
 }
