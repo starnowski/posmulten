@@ -147,6 +147,25 @@ class RLSPolicyProducerValidationTest extends Specification {
             ex.message == "Grantee cannot be null"
     }
 
+    @Unroll
+    def "should throw exception of type 'IllegalArgumentException' when grantee is blank (#grantee)"()
+    {
+        given:
+        def parameters = prepareBuilderWithCorrectValues().withGrantee(grantee).build()
+
+        when:
+            tested.produce(parameters)
+
+        then:
+            def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+            ex.message == "Grantee cannot be blank"
+
+        where:
+            grantee << ["", " ", "      "]
+    }
+
     def prepareBuilderWithCorrectValues()
     {
         builder().withPolicyName("table_policy")
