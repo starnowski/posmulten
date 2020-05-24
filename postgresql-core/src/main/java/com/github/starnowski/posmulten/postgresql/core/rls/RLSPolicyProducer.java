@@ -45,6 +45,10 @@ public class RLSPolicyProducer {
         {
             throw new IllegalArgumentException("Policy schema cannot be blank");
         }
+        if (parameters.getGrantee() == null)
+        {
+            throw new IllegalArgumentException("Grantee cannot be null");
+        }
     }
 
     private String prepareDropScript(RLSPolicyProducerParameters parameters) {
