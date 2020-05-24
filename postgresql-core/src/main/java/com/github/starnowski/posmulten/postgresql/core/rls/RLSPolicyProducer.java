@@ -33,6 +33,10 @@ public class RLSPolicyProducer {
         {
             throw new IllegalArgumentException("Policy name cannot be blank");
         }
+        if (parameters.getPolicyTable() == null)
+        {
+            throw new IllegalArgumentException("Policy table cannot be null");
+        }
     }
 
     private String prepareDropScript(RLSPolicyProducerParameters parameters) {
