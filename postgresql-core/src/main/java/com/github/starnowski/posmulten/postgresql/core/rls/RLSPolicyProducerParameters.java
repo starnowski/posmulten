@@ -11,7 +11,7 @@ public interface RLSPolicyProducerParameters {
 
     String getPolicySchema();
 
-    String getGrantee(); //TODO required
+    String getGrantee();
 
     String getTenantIdColumn(); //TODO not blank
 
