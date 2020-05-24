@@ -5,14 +5,15 @@ import com.github.starnowski.posmulten.postgresql.core.common.function.FunctionA
 import com.github.starnowski.posmulten.postgresql.core.common.function.IFunctionDefinition;
 import com.github.starnowski.posmulten.postgresql.core.rls.PermissionCommandPolicyEnum;
 import com.github.starnowski.posmulten.postgresql.core.rls.RLSExpressionTypeEnum;
+import com.github.starnowski.posmulten.postgresql.core.rls.TenantHasAuthoritiesFunctionInvocationFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValueEnum.STRING;
+import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValueToStringMapper.mapToString;
 import static java.util.stream.Collectors.joining;
 
-public class TenantHasAuthoritiesFunctionDefinition extends DefaultFunctionDefinition implements TenantHasAuthoritiesFunctionInvocationFactory{
+public class TenantHasAuthoritiesFunctionDefinition extends DefaultFunctionDefinition implements TenantHasAuthoritiesFunctionInvocationFactory {
 
     public TenantHasAuthoritiesFunctionDefinition(IFunctionDefinition functionDefinition) {
         super(functionDefinition);
@@ -36,6 +37,6 @@ public class TenantHasAuthoritiesFunctionDefinition extends DefaultFunctionDefin
 
     private String prepareValue(FunctionArgumentValue value)
     {
-        return value == null ? null : (STRING.equals(value.getType()) ? ("'" + value.getValue() + "'") : value.getValue());
+        return mapToString(value);
     }
 }

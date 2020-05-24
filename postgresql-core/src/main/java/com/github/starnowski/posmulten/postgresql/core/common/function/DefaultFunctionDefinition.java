@@ -1,6 +1,8 @@
 package com.github.starnowski.posmulten.postgresql.core.common.function;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class DefaultFunctionDefinition implements IFunctionDefinition{
 
@@ -14,7 +16,7 @@ public class DefaultFunctionDefinition implements IFunctionDefinition{
         this.createScript = functionDefinition.getCreateScript();
         this.functionReference = functionDefinition.getFunctionReference();
         this.dropScript = functionDefinition.getDropScript();
-        this.functionArguments = functionDefinition.getFunctionArguments();
+        this.functionArguments = new ArrayList<>(Optional.ofNullable(functionDefinition.getFunctionArguments()).orElseThrow(() -> new IllegalArgumentException("Function argument collection cannot be null")));
     }
 
     @Override
@@ -29,7 +31,7 @@ public class DefaultFunctionDefinition implements IFunctionDefinition{
 
     @Override
     public List<IFunctionArgument> getFunctionArguments() {
-        return functionArguments;
+        return new ArrayList<>(functionArguments);
     }
 
     @Override

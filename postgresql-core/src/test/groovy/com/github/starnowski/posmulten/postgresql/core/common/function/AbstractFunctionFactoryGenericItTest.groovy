@@ -1,8 +1,6 @@
 package com.github.starnowski.posmulten.postgresql.core.common.function
 
 import com.github.starnowski.posmulten.postgresql.core.TestApplication
-import com.github.starnowski.posmulten.postgresql.core.common.function.AbstractFunctionFactory
-import com.github.starnowski.posmulten.postgresql.core.common.function.IFunctionFactoryParameters
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.jdbc.core.JdbcTemplate

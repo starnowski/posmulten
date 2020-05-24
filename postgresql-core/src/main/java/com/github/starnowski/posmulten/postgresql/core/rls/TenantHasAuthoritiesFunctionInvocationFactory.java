@@ -1,8 +1,6 @@
-package com.github.starnowski.posmulten.postgresql.core.rls.function;
+package com.github.starnowski.posmulten.postgresql.core.rls;
 
 import com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValue;
-import com.github.starnowski.posmulten.postgresql.core.rls.PermissionCommandPolicyEnum;
-import com.github.starnowski.posmulten.postgresql.core.rls.RLSExpressionTypeEnum;
 
 public interface TenantHasAuthoritiesFunctionInvocationFactory {
 

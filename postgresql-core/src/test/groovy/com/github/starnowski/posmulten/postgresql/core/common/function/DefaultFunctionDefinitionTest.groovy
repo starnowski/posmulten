@@ -1,14 +1,12 @@
 package com.github.starnowski.posmulten.postgresql.core.common.function
 
 import com.github.starnowski.posmulten.postgresql.core.RandomString
-import com.github.starnowski.posmulten.postgresql.core.common.function.DefaultFunctionDefinition
-import com.github.starnowski.posmulten.postgresql.core.common.function.IFunctionArgument
-import com.github.starnowski.posmulten.postgresql.core.common.function.IFunctionDefinition
 import org.jeasy.random.EasyRandom
 import org.jeasy.random.EasyRandomParameters
 import org.jeasy.random.api.Randomizer
 import org.junit.Assert
 import spock.lang.Specification
+import spock.lang.Unroll
 
 import java.lang.reflect.Method
 import java.lang.reflect.Modifier
@@ -46,6 +44,35 @@ class DefaultFunctionDefinitionTest extends Specification {
                 Object passedObjectValue =  method.invoke(passedObject)
                 Assert.assertEquals("values for method " + method.getName() + " does not match", resultValue, passedObjectValue)
             }
+
+        and: "all methods that return collection should always return a new collection object"
+            publicMethods.findAll {method ->
+                Collection.class.isAssignableFrom(method.getReturnType())
+            }.each { method ->
+                Object resultValue =  method.invoke(result)
+                Object passedObjectValue =  method.invoke(passedObject)
+                Assert.assertNotSame("the method " + method.getName() + " returned the same reference for both objects", resultValue, passedObjectValue)
+
+                Object resultValue2 = method.invoke(result)
+                Assert.assertNotSame("the method " + method.getName() + " returned the same reference for tested object", resultValue, resultValue2)
+            }
+    }
+
+    @Unroll
+    def "should throw exception of type 'IllegalArgumentException' when the passed function argument collection is null"()
+    {
+        given:
+            IFunctionDefinition passedObject = Mock(IFunctionDefinition)
+
+        when:
+            new DefaultFunctionDefinition(passedObject)
+
+        then:
+            def ex = thrown(IllegalArgumentException.class)
+            1 * passedObject.getFunctionArguments() >> null
+
+        and: "exception should have correct message"
+            ex.message == "Function argument collection cannot be null"
     }
 
     protected Method[] returnPublicMethodsForInterface(Class aClass)

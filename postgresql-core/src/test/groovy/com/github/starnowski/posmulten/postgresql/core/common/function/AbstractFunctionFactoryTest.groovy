@@ -1,8 +1,5 @@
 package com.github.starnowski.posmulten.postgresql.core.common.function
 
-import com.github.starnowski.posmulten.postgresql.core.common.function.AbstractFunctionFactory
-import com.github.starnowski.posmulten.postgresql.core.common.function.IFunctionArgument
-import com.github.starnowski.posmulten.postgresql.core.common.function.IFunctionFactoryParameters
 import spock.lang.Specification
 import spock.lang.Unroll
 
