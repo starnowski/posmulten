@@ -5,7 +5,7 @@ import javafx.util.Pair;
 
 import java.util.List;
 
-public class IsRecordBelongsToCurrentTenantParameters implements AbstractIsRecordBelongsToCurrentTenantParameters{
+public class IsRecordBelongsToCurrentTenantProducerParameters implements AbstractIsRecordBelongsToCurrentTenantProducerParameters {
 
     private final String functionName;
     private final String schema;
@@ -15,7 +15,7 @@ public class IsRecordBelongsToCurrentTenantParameters implements AbstractIsRecor
     private final String recordSchemaName;
     private final IGetCurrentTenantIdFunctionInvocationFactory iGetCurrentTenantIdFunctionInvocationFactory;
 
-    public IsRecordBelongsToCurrentTenantParameters(String functionName, String schema, List<Pair<String, FunctionArgumentValue>> keyColumnsPairsList, Pair<String, FunctionArgumentValue> tenantColumnPair, String recordTableName, String recordSchemaName, IGetCurrentTenantIdFunctionInvocationFactory iGetCurrentTenantIdFunctionInvocationFactory) {
+    public IsRecordBelongsToCurrentTenantProducerParameters(String functionName, String schema, List<Pair<String, FunctionArgumentValue>> keyColumnsPairsList, Pair<String, FunctionArgumentValue> tenantColumnPair, String recordTableName, String recordSchemaName, IGetCurrentTenantIdFunctionInvocationFactory iGetCurrentTenantIdFunctionInvocationFactory) {
         this.functionName = functionName;
         this.schema = schema;
         this.keyColumnsPairsList = keyColumnsPairsList;

@@ -6,7 +6,7 @@ import javafx.util.Pair;
 
 import java.util.List;
 
-public interface AbstractIsRecordBelongsToCurrentTenantParameters extends IFunctionFactoryParameters {
+public interface AbstractIsRecordBelongsToCurrentTenantProducerParameters extends IFunctionFactoryParameters {
 
     List<Pair<String, FunctionArgumentValue>> getKeyColumnsPairsList();
 
