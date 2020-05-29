@@ -8,12 +8,13 @@ import com.github.starnowski.posmulten.postgresql.core.common.function.metadata.
 import javafx.util.Pair;
 
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import static com.github.starnowski.posmulten.postgresql.core.common.function.metadata.ParallelModeEnum.SAFE;
 import static com.github.starnowski.posmulten.postgresql.core.common.function.metadata.VolatilityCategoryEnum.STABLE;
+import static java.lang.String.format;
+import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.IntStream.range;
 import static java.util.stream.Stream.concat;
 import static java.util.stream.Stream.of;
 
@@ -50,24 +51,14 @@ public class IsRecordBelongsToCurrentTenantProducer extends ExtendedAbstractFunc
         sb.append("WHERE");
         sb.append(" ");
         sb.append(
-        IntStream
-                .range(0, parameters.getKeyColumnsPairsList().size())
+            range(0, parameters.getKeyColumnsPairsList().size())
                 .mapToObj(i ->
                 {
-                    StringBuilder conditionBuilder = new StringBuilder();
-                    conditionBuilder.append(RECORD_TABLE_ALIAS);
-                    conditionBuilder.append(".");
-                    conditionBuilder.append(parameters.getKeyColumnsPairsList().get(i).getKey());
-                    conditionBuilder.append(" ");
-                    conditionBuilder.append("=");
-                    conditionBuilder.append(" ");
-                    conditionBuilder.append("$");
-                    conditionBuilder.append(i + 1);
-                    return conditionBuilder.toString();
-                }).collect(Collectors.joining(" AND "))
+                    return format("%1$s.%2$s = $%3$s", RECORD_TABLE_ALIAS, parameters.getKeyColumnsPairsList().get(i).getKey(), i + 1);
+                }).collect(joining(" AND "))
         );
         sb.append(" AND ");
-        sb.append(String.format("$%1$s = %2$s", parameters.getKeyColumnsPairsList().size() + 1, parameters.getIGetCurrentTenantIdFunctionInvocationFactory().returnGetCurrentTenantIdFunctionInvocation()));
+        sb.append(format("$%1$s = %2$s", parameters.getKeyColumnsPairsList().size() + 1, parameters.getIGetCurrentTenantIdFunctionInvocationFactory().returnGetCurrentTenantIdFunctionInvocation()));
         sb.append("\n");
         sb.append(")");
         return sb.toString();
