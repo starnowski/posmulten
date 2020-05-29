@@ -8,6 +8,8 @@ import com.github.starnowski.posmulten.postgresql.core.common.function.metadata.
 import javafx.util.Pair;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static com.github.starnowski.posmulten.postgresql.core.common.function.metadata.ParallelModeEnum.SAFE;
 import static com.github.starnowski.posmulten.postgresql.core.common.function.metadata.VolatilityCategoryEnum.STABLE;
@@ -42,6 +44,23 @@ public class IsRecordBelongsToCurrentTenantProducer extends ExtendedAbstractFunc
         sb.append(" ");
         sb.append("WHERE");
         sb.append(" ");
+        sb.append(
+        IntStream
+                .range(0, parameters.getKeyColumnsPairsList().size())
+                .mapToObj(i ->
+                {
+                    StringBuilder conditionBuilder = new StringBuilder();
+                    conditionBuilder.append(RECORD_TABLE_ALIAS);
+                    conditionBuilder.append(".");
+                    conditionBuilder.append(parameters.getKeyColumnsPairsList().get(0).getKey());
+                    conditionBuilder.append(" ");
+                    conditionBuilder.append("=");
+                    conditionBuilder.append(" ");
+                    conditionBuilder.append("$");
+                    conditionBuilder.append(i + 1);
+                    return conditionBuilder.toString();
+                }).collect(Collectors.joining(" AND "))
+        );
         //TODO
         sb.append("\n");
         sb.append(")");
