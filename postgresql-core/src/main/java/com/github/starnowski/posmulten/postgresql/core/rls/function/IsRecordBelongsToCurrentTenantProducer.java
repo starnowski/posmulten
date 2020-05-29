@@ -16,6 +16,9 @@ import static java.util.stream.Stream.concat;
 import static java.util.stream.Stream.of;
 
 public class IsRecordBelongsToCurrentTenantProducer extends ExtendedAbstractFunctionFactory<AbstractIsRecordBelongsToCurrentTenantProducerParameters, DefaultFunctionDefinition> {
+
+    public static final String RECORD_TABLE_ALIAS = "rt";
+
     @Override
     protected String prepareReturnType(AbstractIsRecordBelongsToCurrentTenantProducerParameters parameters) {
         return "BOOLEAN";
@@ -28,7 +31,21 @@ public class IsRecordBelongsToCurrentTenantProducer extends ExtendedAbstractFunc
 
     @Override
     protected String buildBody(AbstractIsRecordBelongsToCurrentTenantProducerParameters parameters) {
-        return null;
+        StringBuilder sb = new StringBuilder();
+        sb.append("SELECT EXISTS (");
+        sb.append("\n");
+        sb.append("\t");
+        sb.append("SELECT 1 FROM ");
+        sb.append(parameters.getRecordTableName());
+        sb.append(" ");
+        sb.append(RECORD_TABLE_ALIAS);
+        sb.append(" ");
+        sb.append("WHERE");
+        sb.append(" ");
+        //TODO
+        sb.append("\n");
+        sb.append(")");
+        return sb.toString();
     }
 
     @Override
