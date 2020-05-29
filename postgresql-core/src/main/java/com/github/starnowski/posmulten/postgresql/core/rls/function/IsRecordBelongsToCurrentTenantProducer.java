@@ -52,7 +52,7 @@ public class IsRecordBelongsToCurrentTenantProducer extends ExtendedAbstractFunc
                     StringBuilder conditionBuilder = new StringBuilder();
                     conditionBuilder.append(RECORD_TABLE_ALIAS);
                     conditionBuilder.append(".");
-                    conditionBuilder.append(parameters.getKeyColumnsPairsList().get(0).getKey());
+                    conditionBuilder.append(parameters.getKeyColumnsPairsList().get(i).getKey());
                     conditionBuilder.append(" ");
                     conditionBuilder.append("=");
                     conditionBuilder.append(" ");
@@ -61,7 +61,8 @@ public class IsRecordBelongsToCurrentTenantProducer extends ExtendedAbstractFunc
                     return conditionBuilder.toString();
                 }).collect(Collectors.joining(" AND "))
         );
-        //TODO
+        sb.append(" AND ");
+        sb.append(String.format("$%1$s = %2$s", parameters.getKeyColumnsPairsList().size() + 1, parameters.getIGetCurrentTenantIdFunctionInvocationFactory().returnGetCurrentTenantIdFunctionInvocation()));
         sb.append("\n");
         sb.append(")");
         return sb.toString();
