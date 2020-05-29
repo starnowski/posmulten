@@ -30,6 +30,6 @@ class IsRecordBelongsToCurrentTenantProducerTest extends Specification {
 
         where:
             testSchema              |   testFunctionName                        |   recordTableName     |   recordSchemaName    |   getCurrentTenantFunction    |   tenantColumnPair                                |   keyColumnsPairs                         || expectedStatement
-            null                    |   "is_user_belongs_to_current_tenant"     |   "users"             |   null                |   "current_tenant()"          |   pairOfColumnWithType("tenant_id", "text")       |   [pairOfColumnWithType("id", "bigint")]  ||  "CREATE OR REPLACE FUNCTION get_current_tenant() RETURNS VARCHAR(255) AS \$\$\nSELECT current_setting('c.c_ten')\n\$\$ LANGUAGE sql\nSTABLE\nPARALLEL SAFE;"
+            null                    |   "is_user_belongs_to_current_tenant"     |   "users"             |   null                |   "current_tenant()"          |   pairOfColumnWithType("tenant_id", "text")       |   [pairOfColumnWithType("id", "bigint")]  ||  "CREATE OR REPLACE FUNCTION is_user_belongs_to_current_tenant(bigint, text) RETURNS BOOLEAN AS \$\$\nSELECT EXISTS (\n(SELECT 1 FROM user_info ui WHERE ui.user_id = \$1 AND ui.tenant_id = current_setting('current_tenant'))\n)\n\$\$ LANGUAGE sql\nSTABLE\nPARALLEL SAFE;"
     }
 }
