@@ -8,7 +8,7 @@ import com.github.starnowski.posmulten.postgresql.core.common.function.metadata.
 public class IsRecordBelongsToCurrentTenantProducer extends ExtendedAbstractFunctionFactory<AbstractIsRecordBelongsToCurrentTenantProducerParameters, DefaultFunctionDefinition> {
     @Override
     protected String prepareReturnType(AbstractIsRecordBelongsToCurrentTenantProducerParameters parameters) {
-        return null;
+        return "BOOLEAN";
     }
 
     @Override
