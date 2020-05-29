@@ -1,20 +1,27 @@
 package com.github.starnowski.posmulten.postgresql.core.rls.function;
 
-import com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValue;
+import com.github.starnowski.posmulten.postgresql.core.common.function.IFunctionArgument;
 import com.github.starnowski.posmulten.postgresql.core.common.function.IFunctionFactoryParameters;
 import javafx.util.Pair;
 
 import java.util.List;
 
+import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentBuilder.forType;
+
 public interface AbstractIsRecordBelongsToCurrentTenantProducerParameters extends IFunctionFactoryParameters {
 
-    List<Pair<String, FunctionArgumentValue>> getKeyColumnsPairsList();
+    List<Pair<String, IFunctionArgument>> getKeyColumnsPairsList();
 
-    Pair<String, FunctionArgumentValue> getTenantColumnPair();
+    Pair<String, IFunctionArgument> getTenantColumnPair();
 
     String getRecordTableName();
 
     String getRecordSchemaName();
 
     IGetCurrentTenantIdFunctionInvocationFactory getIGetCurrentTenantIdFunctionInvocationFactory();
+
+    static Pair<String, IFunctionArgument> pairOfColumnWithType(String column, String type)
+    {
+        return new Pair<>(column, forType(type));
+    }
 }
