@@ -10,9 +10,23 @@ class IsRecordBelongsToCurrentTenantProducerTest extends Specification {
     def tested = new IsRecordBelongsToCurrentTenantProducer()
 
     @Unroll
-    def "should generate statement that creates function '#testFunctionName' for schema '#testSchema' which returns type '#testReturnType' which returns value for property '#testCurrentTenantIdProperty'" () {
+    def "for function name '#testFunctionName' for schema '#testSchema', table #recordTableName in schema #recordSchemaName that compares values for columns #keyColumnsPairs and tenant column #tenantColumnPair, should generate statement that creates function : #expectedStatement" () {
+        given:
+            IGetCurrentTenantIdFunctionInvocationFactory getCurrentTenantIdFunctionInvocationFactory =
+                    {
+                        getCurrentTenantFunction
+                    }
+            def parameters = new IsRecordBelongsToCurrentTenantProducerParameters.Builder()
+                    .withSchema(testSchema)
+                    .withFunctionName(testFunctionName)
+                    .withRecordTableName(recordTableName)
+                    .withRecordSchemaName(recordSchemaName)
+                    .withiGetCurrentTenantIdFunctionInvocationFactory(getCurrentTenantIdFunctionInvocationFactory)
+                    .withTenantColumnPair(tenantColumnPair)
+                    .withKeyColumnsPairsList(keyColumnsPairs).build()
+
         expect:
-            tested.produce(new GetCurrentTenantIdFunctionProducerParameters(testFunctionName, testCurrentTenantIdProperty, testSchema, testReturnType)).getCreateScript() == expectedStatement
+            tested.produce(parameters).getCreateScript() == expectedStatement
 
         where:
             testSchema              |   testFunctionName                        |   recordTableName     |   recordSchemaName    |   getCurrentTenantFunction    |   tenantColumnPair                                |   keyColumnsPairs                         || expectedStatement

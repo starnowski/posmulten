@@ -58,4 +58,55 @@ public class IsRecordBelongsToCurrentTenantProducerParameters implements Abstrac
     public IGetCurrentTenantIdFunctionInvocationFactory getIGetCurrentTenantIdFunctionInvocationFactory() {
         return iGetCurrentTenantIdFunctionInvocationFactory;
     }
+
+    public static class Builder
+    {
+        private String functionName;
+        private String schema;
+        private List<Pair<String, IFunctionArgument>> keyColumnsPairsList;
+        private Pair<String, IFunctionArgument> tenantColumnPair;
+        private String recordTableName;
+        private String recordSchemaName;
+        private IGetCurrentTenantIdFunctionInvocationFactory iGetCurrentTenantIdFunctionInvocationFactory;
+
+        public Builder withFunctionName(String functionName) {
+            this.functionName = functionName;
+            return this;
+        }
+
+        public Builder withSchema(String schema) {
+            this.schema = schema;
+            return this;
+        }
+
+        public Builder withKeyColumnsPairsList(List<Pair<String, IFunctionArgument>> keyColumnsPairsList) {
+            this.keyColumnsPairsList = keyColumnsPairsList;
+            return this;
+        }
+
+        public Builder withTenantColumnPair(Pair<String, IFunctionArgument> tenantColumnPair) {
+            this.tenantColumnPair = tenantColumnPair;
+            return this;
+        }
+
+        public Builder withRecordTableName(String recordTableName) {
+            this.recordTableName = recordTableName;
+            return this;
+        }
+
+        public Builder withRecordSchemaName(String recordSchemaName) {
+            this.recordSchemaName = recordSchemaName;
+            return this;
+        }
+
+        public Builder withiGetCurrentTenantIdFunctionInvocationFactory(IGetCurrentTenantIdFunctionInvocationFactory iGetCurrentTenantIdFunctionInvocationFactory) {
+            this.iGetCurrentTenantIdFunctionInvocationFactory = iGetCurrentTenantIdFunctionInvocationFactory;
+            return this;
+        }
+
+        public IsRecordBelongsToCurrentTenantProducerParameters build()
+        {
+            return new IsRecordBelongsToCurrentTenantProducerParameters(functionName, schema, keyColumnsPairsList, tenantColumnPair, recordTableName, recordSchemaName, iGetCurrentTenantIdFunctionInvocationFactory);
+        }
+    }
 }
