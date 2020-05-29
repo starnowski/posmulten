@@ -12,8 +12,8 @@ abstract class AbstractFunctionFactoryTest extends Specification {
 
     def "should return non-empty string object for correct parameters object"() {
         given:
-        AbstractFunctionFactory tested = returnTestedObject()
-        IFunctionFactoryParameters parameters = returnCorrectParametersSpyObject()
+            AbstractFunctionFactory tested = returnTestedObject()
+            IFunctionFactoryParameters parameters = returnCorrectParametersSpyObject()
 
         when:
             String result = tested.produce(parameters).getCreateScript()
