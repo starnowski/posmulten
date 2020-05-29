@@ -38,6 +38,11 @@ public class IsRecordBelongsToCurrentTenantProducer extends ExtendedAbstractFunc
         sb.append("\n");
         sb.append("\t");
         sb.append("SELECT 1 FROM ");
+        if (parameters.getRecordSchemaName() != null)
+        {
+            sb.append(parameters.getRecordSchemaName());
+            sb.append(".");
+        }
         sb.append(parameters.getRecordTableName());
         sb.append(" ");
         sb.append(RECORD_TABLE_ALIAS);
