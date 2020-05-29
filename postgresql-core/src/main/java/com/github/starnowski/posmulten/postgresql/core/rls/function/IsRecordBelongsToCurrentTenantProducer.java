@@ -23,6 +23,6 @@ public class IsRecordBelongsToCurrentTenantProducer extends ExtendedAbstractFunc
 
     @Override
     protected DefaultFunctionDefinition returnFunctionDefinition(AbstractIsRecordBelongsToCurrentTenantProducerParameters parameters, IFunctionDefinition functionDefinition) {
-        return null;
+        return new DefaultFunctionDefinition(functionDefinition);
     }
 }
