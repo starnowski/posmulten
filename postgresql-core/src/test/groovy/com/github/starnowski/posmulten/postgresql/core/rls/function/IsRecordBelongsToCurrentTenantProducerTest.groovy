@@ -1,11 +1,11 @@
 package com.github.starnowski.posmulten.postgresql.core.rls.function
 
-import spock.lang.Specification
+import com.github.starnowski.posmulten.postgresql.core.common.function.AbstractFunctionFactoryTest
 import spock.lang.Unroll
 
 import static com.github.starnowski.posmulten.postgresql.core.rls.function.AbstractIsRecordBelongsToCurrentTenantProducerParameters.pairOfColumnWithType
 
-class IsRecordBelongsToCurrentTenantProducerTest extends Specification {
+class IsRecordBelongsToCurrentTenantProducerTest extends AbstractFunctionFactoryTest {
 
     def tested = new IsRecordBelongsToCurrentTenantProducer()
 
@@ -35,5 +35,25 @@ class IsRecordBelongsToCurrentTenantProducerTest extends Specification {
             "public"                |   "is_current_tenant_groups"              |   "groups"            |   "secondary"         |   "cur_ten()"                 |   pairOfColumnWithType("tenant_id", "text")       |   [pairOfColumnWithType("id", "bigint")]                                                  ||  "CREATE OR REPLACE FUNCTION public.is_current_tenant_groups(bigint, text) RETURNS BOOLEAN AS \$\$\nSELECT EXISTS (\n\tSELECT 1 FROM secondary.groups rt WHERE rt.id = \$1 AND \$2 = cur_ten()\n)\n\$\$ LANGUAGE sql\nSTABLE\nPARALLEL SAFE;"
             "secondary"             |   "is_posts_belong_to_tenant"             |   "posts"             |   "third"             |   "cur_ten()"                 |   pairOfColumnWithType("tenant", "VARCHAR")       |   [pairOfColumnWithType("uuid", "UUID")]                                                  ||  "CREATE OR REPLACE FUNCTION secondary.is_posts_belong_to_tenant(UUID, VARCHAR) RETURNS BOOLEAN AS \$\$\nSELECT EXISTS (\n\tSELECT 1 FROM third.posts rt WHERE rt.uuid = \$1 AND \$2 = cur_ten()\n)\n\$\$ LANGUAGE sql\nSTABLE\nPARALLEL SAFE;"
             "some_schema"           |   "is_user_belongs_to_current_tenant"     |   "user_info"         |   "pub"               |   "cur_ten()"                 |   pairOfColumnWithType("tenant_id", "VARCHAR")    |   [pairOfColumnWithType("uuid", "UUID"), pairOfColumnWithType("second_id", "bigint")]     ||  "CREATE OR REPLACE FUNCTION some_schema.is_user_belongs_to_current_tenant(UUID, bigint, VARCHAR) RETURNS BOOLEAN AS \$\$\nSELECT EXISTS (\n\tSELECT 1 FROM pub.user_info rt WHERE rt.uuid = \$1 AND rt.second_id = \$2 AND \$3 = cur_ten()\n)\n\$\$ LANGUAGE sql\nSTABLE\nPARALLEL SAFE;"
+    }
+
+    @Override
+    protected returnTestedObject() {
+        return tested
+    }
+
+    @Override
+    protected returnCorrectParametersSpyObject() {
+        IGetCurrentTenantIdFunctionInvocationFactory getCurrentTenantIdFunctionInvocationFactory =
+                {
+                    "current_tenant()"
+                }
+        Spy(IsRecordBelongsToCurrentTenantProducerParameters, constructorArgs: ["is_user_belongs_to_current_tenant",
+                                                                                "public",
+                                                                                [pairOfColumnWithType("uuid", "UUID"), pairOfColumnWithType("second_id", "bigint")],
+                                                                                pairOfColumnWithType("tenant_id", "text"),
+                                                                                "users",
+                                                                                "secondary",
+                                                                                getCurrentTenantIdFunctionInvocationFactory])
     }
 }
