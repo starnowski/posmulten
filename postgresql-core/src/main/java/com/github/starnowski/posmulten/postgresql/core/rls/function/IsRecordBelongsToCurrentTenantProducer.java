@@ -18,7 +18,7 @@ import static java.util.stream.IntStream.range;
 import static java.util.stream.Stream.concat;
 import static java.util.stream.Stream.of;
 
-public class IsRecordBelongsToCurrentTenantProducer extends ExtendedAbstractFunctionFactory<AbstractIsRecordBelongsToCurrentTenantProducerParameters, DefaultFunctionDefinition> {
+public class IsRecordBelongsToCurrentTenantProducer extends ExtendedAbstractFunctionFactory<AbstractIsRecordBelongsToCurrentTenantProducerParameters, IsRecordBelongsToCurrentTenantFunctionDefinition> {
 
     public static final String RECORD_TABLE_ALIAS = "rt";
 
@@ -65,8 +65,8 @@ public class IsRecordBelongsToCurrentTenantProducer extends ExtendedAbstractFunc
     }
 
     @Override
-    protected DefaultFunctionDefinition returnFunctionDefinition(AbstractIsRecordBelongsToCurrentTenantProducerParameters parameters, IFunctionDefinition functionDefinition) {
-        return new DefaultFunctionDefinition(functionDefinition);
+    protected IsRecordBelongsToCurrentTenantFunctionDefinition returnFunctionDefinition(AbstractIsRecordBelongsToCurrentTenantProducerParameters parameters, IFunctionDefinition functionDefinition) {
+        return new IsRecordBelongsToCurrentTenantFunctionDefinition(functionDefinition);
     }
 
     @Override
