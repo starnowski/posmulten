@@ -1,6 +1,5 @@
 package com.github.starnowski.posmulten.postgresql.core.rls.function;
 
-import com.github.starnowski.posmulten.postgresql.core.common.function.DefaultFunctionDefinition;
 import com.github.starnowski.posmulten.postgresql.core.common.function.ExtendedAbstractFunctionFactory;
 import com.github.starnowski.posmulten.postgresql.core.common.function.IFunctionArgument;
 import com.github.starnowski.posmulten.postgresql.core.common.function.IFunctionDefinition;
@@ -12,6 +11,7 @@ import java.util.List;
 import static com.github.starnowski.posmulten.postgresql.core.common.function.metadata.ParallelModeEnum.SAFE;
 import static com.github.starnowski.posmulten.postgresql.core.common.function.metadata.VolatilityCategoryEnum.STABLE;
 import static java.lang.String.format;
+import static java.util.Collections.unmodifiableList;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.IntStream.range;
@@ -52,10 +52,7 @@ public class IsRecordBelongsToCurrentTenantProducer extends ExtendedAbstractFunc
         sb.append(" ");
         sb.append(
             range(0, parameters.getKeyColumnsPairsList().size())
-                .mapToObj(i ->
-                {
-                    return format("%1$s.%2$s = $%3$s", RECORD_TABLE_ALIAS, parameters.getKeyColumnsPairsList().get(i).getKey(), i + 1);
-                }).collect(joining(" AND "))
+                .mapToObj(i -> format("%1$s.%2$s = $%3$s", RECORD_TABLE_ALIAS, parameters.getKeyColumnsPairsList().get(i).getKey(), i + 1)).collect(joining(" AND "))
         );
         sb.append(" AND ");
         sb.append(format("$%1$s = %2$s", parameters.getKeyColumnsPairsList().size() + 1, parameters.getIGetCurrentTenantIdFunctionInvocationFactory().returnGetCurrentTenantIdFunctionInvocation()));
@@ -66,7 +63,7 @@ public class IsRecordBelongsToCurrentTenantProducer extends ExtendedAbstractFunc
 
     @Override
     protected IsRecordBelongsToCurrentTenantFunctionDefinition returnFunctionDefinition(AbstractIsRecordBelongsToCurrentTenantProducerParameters parameters, IFunctionDefinition functionDefinition) {
-        return new IsRecordBelongsToCurrentTenantFunctionDefinition(functionDefinition);
+        return new IsRecordBelongsToCurrentTenantFunctionDefinition(functionDefinition, unmodifiableList(parameters.getKeyColumnsPairsList()));
     }
 
     @Override
