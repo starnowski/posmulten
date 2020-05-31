@@ -6,6 +6,8 @@ import com.github.starnowski.posmulten.postgresql.core.common.function.IFunction
 
 import java.util.Map;
 
+import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValueToStringMapper.mapToString;
+
 public class IsRecordBelongsToCurrentTenantFunctionDefinition extends DefaultFunctionDefinition implements IsRecordBelongsToCurrentTenantFunctionInvocationFactory{
 
     public IsRecordBelongsToCurrentTenantFunctionDefinition(IFunctionDefinition functionDefinition) {
@@ -14,6 +16,12 @@ public class IsRecordBelongsToCurrentTenantFunctionDefinition extends DefaultFun
 
     @Override
     public String returnIsRecordBelongsToCurrentTenantFunctionInvocation(FunctionArgumentValue tenantFunctionArgument, Map<String, FunctionArgumentValue> primaryColumnsValuesMap) {
-        return null;
+        StringBuilder sb = new StringBuilder();
+        sb.append(getFunctionReference());
+        sb.append("(");
+        sb.append(", ");
+        sb.append(mapToString(tenantFunctionArgument));
+        sb.append(")");
+        return sb.toString();
     }
 }
