@@ -10,14 +10,26 @@ import static com.github.starnowski.posmulten.postgresql.core.common.function.Fu
 
 public interface AbstractIsRecordBelongsToCurrentTenantProducerParameters extends IFunctionFactoryParameters {
 
+    //TODO cannot be null
+    //TODO cannot be empty
+    //TODO types validation similar to TenantColumnPair
     List<Pair<String, IFunctionArgument>> getKeyColumnsPairsList();
 
+    //TODO cannot be null
+    //TODO key cannot be empty
+    //TODO Type cannot be null
+    //TODO Type cannot be empty
     Pair<String, IFunctionArgument> getTenantColumnPair();
 
+    //TODO cannot be null
+    //TODO cannot be empty
     String getRecordTableName();
 
+    //TODO cannot be null
+    //TODO cannot be empty
     String getRecordSchemaName();
 
+    //TODO cannot be null
     IGetCurrentTenantIdFunctionInvocationFactory getIGetCurrentTenantIdFunctionInvocationFactory();
 
     static Pair<String, IFunctionArgument> pairOfColumnWithType(String column, String type)

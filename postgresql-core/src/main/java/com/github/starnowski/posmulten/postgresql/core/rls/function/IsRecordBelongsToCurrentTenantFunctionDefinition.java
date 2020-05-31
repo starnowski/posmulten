@@ -20,6 +20,12 @@ public class IsRecordBelongsToCurrentTenantFunctionDefinition extends DefaultFun
 
     @Override
     public String returnIsRecordBelongsToCurrentTenantFunctionInvocation(FunctionArgumentValue tenantFunctionArgument, Map<String, FunctionArgumentValue> primaryColumnsValuesMap) {
+        //TODO Validate if
+        //TODO tenantFunctionArgument cannot be null
+        //TODO tenantFunctionArgument cannot be blank
+        //TODO all entries in primaryColumnsValuesMap cannot be null
+        //TODO all entries in primaryColumnsValuesMap cannot be blank
+        //TODO all items from the keyColumnsPairsList should contains keys in primaryColumnsValuesMap
         StringBuilder sb = new StringBuilder();
         sb.append(getFunctionReference());
         sb.append("(");
