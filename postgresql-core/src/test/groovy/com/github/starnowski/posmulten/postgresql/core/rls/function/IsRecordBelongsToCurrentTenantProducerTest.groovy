@@ -60,6 +60,10 @@ class IsRecordBelongsToCurrentTenantProducerTest extends AbstractFunctionFactory
         where:
             testSchema              |   testFunctionName                        |   tenantColumnPair                                |   keyColumnsPairs                         |   tenantColumnValue           |   keyColumnsValues                || expectedStatement
             null                    |   "is_user_belongs_to_current_tenant"     |   pairOfColumnWithType("tenant_id", "text")       |   [pairOfColumnWithType("id", "bigint")]  |   forReference("tenant_id")   |   [id: forReference("id")]        ||  "is_user_belongs_to_current_tenant(id, tenant_id)"
+            "public"                |   "is_user_belongs_to_current_tenant"     |   pairOfColumnWithType("tenant_id", "text")       |   [pairOfColumnWithType("id", "bigint")]  |   forReference("tenant_id")   |   [id: forReference("id")]        ||  "public.is_user_belongs_to_current_tenant(id, tenant_id)"
+            "some_schema"           |   "is_user_belongs_to_current_tenant"     |   pairOfColumnWithType("tenant_id", "text")       |   [pairOfColumnWithType("id", "bigint")]  |   forReference("tenant_id")   |   [id: forReference("id")]        ||  "some_schema.is_user_belongs_to_current_tenant(id, tenant_id)"
+            "schema222"             |   "record_exists_for_tenant"              |   pairOfColumnWithType("tenant_id", "text")       |   [pairOfColumnWithType("id", "bigint")]  |   forReference("tenant_id")   |   [id: forReference("id")]        ||  "schema222.record_exists_for_tenant(id, tenant_id)"
+            "schema222"             |   "record_exists_for_tenant"              |   pairOfColumnWithType("tenant_id", "text")       |   [pairOfColumnWithType("id", "bigint")]  |   forReference("t_column")    |   [id: forReference("table_id")]  ||  "schema222.record_exists_for_tenant(table_id, t_column)"
     }
 
     @Override
