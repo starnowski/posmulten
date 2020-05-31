@@ -55,11 +55,11 @@ class IsRecordBelongsToCurrentTenantProducerTest extends AbstractFunctionFactory
                     .withKeyColumnsPairsList(keyColumnsPairs).build()
 
         expect:
-            tested.produce(parameters).returnIsRecordBelongsToCurrentTenantFunctionInvocation(tenantColumnValue, ) == expectedStatement
+            tested.produce(parameters).returnIsRecordBelongsToCurrentTenantFunctionInvocation(tenantColumnValue, keyColumnsValues) == expectedStatement
 
         where:
             testSchema              |   testFunctionName                        |   tenantColumnPair                                |   keyColumnsPairs                         |   tenantColumnValue           |   keyColumnsValues                || expectedStatement
-            null                    |   "is_user_belongs_to_current_tenant"     |   pairOfColumnWithType("tenant_id", "text")       |   [pairOfColumnWithType("id", "bigint")]  |   forReference("tenant_id")   |   [id: forReference("id")]        ||  "is_user_belongs_to_current_tenant(2321, id)"
+            null                    |   "is_user_belongs_to_current_tenant"     |   pairOfColumnWithType("tenant_id", "text")       |   [pairOfColumnWithType("id", "bigint")]  |   forReference("tenant_id")   |   [id: forReference("id")]        ||  "is_user_belongs_to_current_tenant(id, tenant_id)"
     }
 
     @Override
