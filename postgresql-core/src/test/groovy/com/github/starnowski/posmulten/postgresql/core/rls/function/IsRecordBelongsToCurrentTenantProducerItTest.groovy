@@ -62,6 +62,42 @@ class IsRecordBelongsToCurrentTenantProducerItTest extends Specification {
             "non_public_schema"     |   "is_comments_belongs_to_current_tenant" |   "comments"          |   "non_public_schema" |   pairOfColumnWithType("tenant", "character varying(255)")    |   [pairOfColumnWithType("id", "int"), pairOfColumnWithType("user_id", "bigint")]
     }
 
+    @Unroll
+    def "for function name '#testFunctionName' for schema '#testSchema', table #recordTableName in schema #recordSchemaName that compares values for columns #keyColumnsPairs and tenant column #tenantColumnPair, should generate statement that creates function" () {
+        given:
+        functionName = "is_user_belongs_to_current_tenant"
+        schema = "public"
+        assertEquals(false, isFunctionExists(jdbcTemplate, functionName, schema))
+        def parameters = new IsRecordBelongsToCurrentTenantProducerParameters.Builder()
+                .withSchema(schema)
+                .withFunctionName(functionName)
+                .withRecordTableName(recordTableName)
+                .withRecordSchemaName(recordSchemaName)
+                .withiGetCurrentTenantIdFunctionInvocationFactory(getCurrentTenantIdFunctionInvocationFactory)
+                .withTenantColumnPair(tenantColumnPair)
+                .withKeyColumnsPairsList(keyColumnsPairs).build()
+
+        when:
+        functionDefinition = tested.produce(parameters)
+        jdbcTemplate.execute(functionDefinition.getCreateScript())
+
+        then:
+        isFunctionExists(jdbcTemplate, functionName, schema)
+
+        where:
+        recordTableName     |   recordSchemaName    |   tenantColumnPair                                            |   keyColumnsPairs
+        "users"             |   null                |   pairOfColumnWithType("tenant_id", "text")                   |   [pairOfColumnWithType("id", "bigint")]
+        "users"             |   null                |   pairOfColumnWithType("tenant_id", "text")                   |   [pairOfColumnWithType("id", "bigint")]
+        "users"             |   "public"            |   pairOfColumnWithType("tenant_id", "text")                   |   [pairOfColumnWithType("id", "bigint")]
+        "users"             |   null                |   pairOfColumnWithType("tenant_id", "text")                   |   [pairOfColumnWithType("id", "bigint")]
+        "users"             |   "public"            |   pairOfColumnWithType("tenant_id", "text")                   |   [pairOfColumnWithType("id", "bigint")]
+        "users"             |   "non_public_schema" |   pairOfColumnWithType("tenant_id", "text")                   |   [pairOfColumnWithType("id", "bigint")]
+        "comments"          |   "public"            |   pairOfColumnWithType("tenant", "character varying(255)")    |   [pairOfColumnWithType("id", "int"), pairOfColumnWithType("user_id", "bigint")]
+        "comments"          |   "public"            |   pairOfColumnWithType("tenant", "character varying(255)")    |   [pairOfColumnWithType("id", "int"), pairOfColumnWithType("user_id", "bigint")]
+        "comments"          |   "non_public_schema" |   pairOfColumnWithType("tenant", "character varying(255)")    |   [pairOfColumnWithType("id", "int"), pairOfColumnWithType("user_id", "bigint")]
+    }
+
+
     def cleanup() {
         jdbcTemplate.execute(functionDefinition.getDropScript())
         assertEquals(false, isFunctionExists(jdbcTemplate, functionName, schema))
