@@ -11,6 +11,7 @@ import java.sql.Statement;
 public class TestUtils {
 
     public static String VALID_CURRENT_TENANT_ID_PROPERTY_NAME = "c.c_ten";
+    public static final String CLEAR_DATABASE_SCRIPT_PATH = "/com/github/starnowski/posmulten/postgresql/core/clean-database.sql";
 
     public static boolean isAnyRecordExists(JdbcTemplate jdbcTemplate, final String sql)
     {
