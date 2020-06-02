@@ -7,6 +7,9 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.dao.DataAccessException
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.jdbc.core.StatementCallback
+import org.springframework.test.context.jdbc.Sql
+import org.springframework.test.context.jdbc.SqlConfig
+import org.springframework.test.context.jdbc.SqlGroup
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -14,11 +17,15 @@ import java.sql.ResultSet
 import java.sql.SQLException
 import java.sql.Statement
 
+import static com.github.starnowski.posmulten.postgresql.core.TestUtils.CLEAR_DATABASE_SCRIPT_PATH
 import static com.github.starnowski.posmulten.postgresql.core.TestUtils.isFunctionExists
 import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValue.forNumeric
 import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValue.forString
 import static com.github.starnowski.posmulten.postgresql.core.rls.function.AbstractIsRecordBelongsToCurrentTenantProducerParameters.pairOfColumnWithType
 import static org.junit.Assert.assertEquals
+import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD
+import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD
+import static org.springframework.test.context.jdbc.SqlConfig.TransactionMode.ISOLATED
 
 @SpringBootTest(classes = [TestApplication.class])
 class IsRecordBelongsToCurrentTenantProducerItTest extends Specification {
@@ -72,6 +79,16 @@ class IsRecordBelongsToCurrentTenantProducerItTest extends Specification {
     }
 
     @Unroll
+    @SqlGroup([
+            @Sql(value = CLEAR_DATABASE_SCRIPT_PATH,
+            config = @SqlConfig(transactionMode = ISOLATED),
+            executionPhase = BEFORE_TEST_METHOD),
+            @Sql(value = "insert-unrelated-data.sql",
+                    config = @SqlConfig(transactionMode = ISOLATED),
+                    executionPhase = BEFORE_TEST_METHOD),
+            @Sql(value = CLEAR_DATABASE_SCRIPT_PATH,
+                    config = @SqlConfig(transactionMode = ISOLATED),
+                    executionPhase = AFTER_TEST_METHOD)])
     def "for table #recordTableName in schema #recordSchemaName that compares values for columns #keyColumnsPairs and tenant column #tenantColumnPair, should create function which invocation would return expected result : #expectedBooleanValue for tenant #testCurrentTenantIdValue and user id #testUsersId" () {
         given:
             functionName = "is_user_belongs_to_current_tenant"
