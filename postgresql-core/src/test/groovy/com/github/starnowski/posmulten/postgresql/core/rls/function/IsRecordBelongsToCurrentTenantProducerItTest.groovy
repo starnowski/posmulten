@@ -98,11 +98,12 @@ class IsRecordBelongsToCurrentTenantProducerItTest extends Specification {
         where:
         recordTableName     |   recordSchemaName    |   tenantColumnPair                                            |   keyColumnsPairs                         |   testCurrentTenantIdValue    |   testUsersId || expectedBooleanValue
         "users"             |   null                |   pairOfColumnWithType("tenant_id", "text")                   |   [pairOfColumnWithType("id", "bigint")]  |   "primary_tenant"            |   1           ||  true
-        "users"             |   null                |   pairOfColumnWithType("tenant_id", "text")                   |   [pairOfColumnWithType("id", "bigint")]  |   "primary_tenant"            |   1           ||  true
-        "users"             |   "public"            |   pairOfColumnWithType("tenant_id", "text")                   |   [pairOfColumnWithType("id", "bigint")]  |   "primary_tenant"            |   1           ||  true
-        "users"             |   null                |   pairOfColumnWithType("tenant_id", "text")                   |   [pairOfColumnWithType("id", "bigint")]  |   "primary_tenant"            |   1           ||  true
-        "users"             |   "public"            |   pairOfColumnWithType("tenant_id", "text")                   |   [pairOfColumnWithType("id", "bigint")]  |   "primary_tenant"            |   1           ||  true
-        "users"             |   "non_public_schema" |   pairOfColumnWithType("tenant_id", "text")                   |   [pairOfColumnWithType("id", "bigint")]  |   "primary_tenant"            |   1           ||  true
+        "users"             |   null                |   pairOfColumnWithType("tenant_id", "text")                   |   [pairOfColumnWithType("id", "bigint")]  |   "secondary_tenant"          |   2           ||  true
+        "users"             |   "public"            |   pairOfColumnWithType("tenant_id", "text")                   |   [pairOfColumnWithType("id", "bigint")]  |   "primary_tenant"            |   3           ||  true
+        "users"             |   null                |   pairOfColumnWithType("tenant_id", "text")                   |   [pairOfColumnWithType("id", "bigint")]  |   "secondary_tenant"          |   1           ||  false
+        "users"             |   "public"            |   pairOfColumnWithType("tenant_id", "text")                   |   [pairOfColumnWithType("id", "bigint")]  |   "primary_tenant"            |   2           ||  false
+        "users"             |   "public"            |   pairOfColumnWithType("tenant_id", "text")                   |   [pairOfColumnWithType("id", "bigint")]  |   "secondary_tenant"          |   3           ||  false
+        "users"             |   "non_public_schema" |   pairOfColumnWithType("tenant_id", "text")                   |   [pairOfColumnWithType("id", "bigint")]  |   "secondary_tenant"          |   1           ||  false
 //        "comments"          |   "public"            |   pairOfColumnWithType("tenant", "character varying(255)")    |   [pairOfColumnWithType("id", "int"), pairOfColumnWithType("user_id", "bigint")]
 //        "comments"          |   "public"            |   pairOfColumnWithType("tenant", "character varying(255)")    |   [pairOfColumnWithType("id", "int"), pairOfColumnWithType("user_id", "bigint")]
 //        "comments"          |   "non_public_schema" |   pairOfColumnWithType("tenant", "character varying(255)")    |   [pairOfColumnWithType("id", "int"), pairOfColumnWithType("user_id", "bigint")]
