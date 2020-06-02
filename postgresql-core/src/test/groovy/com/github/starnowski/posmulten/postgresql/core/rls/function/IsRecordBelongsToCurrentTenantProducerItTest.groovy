@@ -71,7 +71,7 @@ class IsRecordBelongsToCurrentTenantProducerItTest extends Specification {
     }
 
     @Unroll
-    def "for function name '#testFunctionName' for schema '#testSchema', table #recordTableName in schema #recordSchemaName that compares values for columns #keyColumnsPairs and tenant column #tenantColumnPair, should return positve boolean result" () {
+    def "for table #recordTableName in schema #recordSchemaName that compares values for columns #keyColumnsPairs and tenant column #tenantColumnPair, should return positve boolean result" () {
         given:
             functionName = "is_user_belongs_to_current_tenant"
             schema = "public"
