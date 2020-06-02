@@ -16,6 +16,7 @@ import java.sql.Statement
 
 import static com.github.starnowski.posmulten.postgresql.core.TestUtils.isFunctionExists
 import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValue.forNumeric
+import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValue.forString
 import static com.github.starnowski.posmulten.postgresql.core.rls.function.AbstractIsRecordBelongsToCurrentTenantProducerParameters.pairOfColumnWithType
 import static org.junit.Assert.assertEquals
 
@@ -85,14 +86,14 @@ class IsRecordBelongsToCurrentTenantProducerItTest extends Specification {
                     .withTenantColumnPair(tenantColumnPair)
                     .withKeyColumnsPairsList(keyColumnsPairs).build()
             Map<String, FunctionArgumentValue> map = new HashMap<>();
-            map.put(tenantColumnPair.getKey(), testCurrentTenantIdValue)
+            map.put("id", forNumeric(String.valueOf(testUsersId)))
 
         when:
             functionDefinition = tested.produce(parameters)
             jdbcTemplate.execute(functionDefinition.getCreateScript())
 
         then:
-            getBooleanResultForSelectStatement(testCurrentTenantIdValue, returnTestedSelectStatement(functionDefinition.returnIsRecordBelongsToCurrentTenantFunctionInvocation(forNumeric(String.valueOf(testUsersId)), map))) == expectedBooleanValue
+            getBooleanResultForSelectStatement(testCurrentTenantIdValue, returnTestedSelectStatement(functionDefinition.returnIsRecordBelongsToCurrentTenantFunctionInvocation(forString(testCurrentTenantIdValue), map))) == expectedBooleanValue
 
         where:
         recordTableName     |   recordSchemaName    |   tenantColumnPair                                            |   keyColumnsPairs                         |   testCurrentTenantIdValue    |   testUsersId || expectedBooleanValue
