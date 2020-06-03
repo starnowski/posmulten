@@ -6,5 +6,5 @@ import java.util.Map;
 
 public interface IsRecordBelongsToCurrentTenantFunctionInvocationFactory {
 
-    String returnIsRecordBelongsToCurrentTenantFunctionInvocation(FunctionArgumentValue tenantFunctionArgument, Map<String, FunctionArgumentValue> primaryColumnsValuesMap);
+    String returnIsRecordBelongsToCurrentTenantFunctionInvocation(Map<String, FunctionArgumentValue> primaryColumnsValuesMap);
 }

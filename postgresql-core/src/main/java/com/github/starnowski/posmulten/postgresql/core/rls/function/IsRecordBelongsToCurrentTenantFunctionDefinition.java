@@ -6,7 +6,6 @@ import javafx.util.Pair;
 import java.util.List;
 import java.util.Map;
 
-import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValueToStringMapper.mapToString;
 import static java.util.stream.Collectors.joining;
 
 public class IsRecordBelongsToCurrentTenantFunctionDefinition extends DefaultFunctionDefinition implements IsRecordBelongsToCurrentTenantFunctionInvocationFactory{
@@ -19,7 +18,7 @@ public class IsRecordBelongsToCurrentTenantFunctionDefinition extends DefaultFun
     }
 
     @Override
-    public String returnIsRecordBelongsToCurrentTenantFunctionInvocation(FunctionArgumentValue tenantFunctionArgument, Map<String, FunctionArgumentValue> primaryColumnsValuesMap) {
+    public String returnIsRecordBelongsToCurrentTenantFunctionInvocation(Map<String, FunctionArgumentValue> primaryColumnsValuesMap) {
         //TODO Validate if
         //TODO tenantFunctionArgument cannot be null
         //TODO tenantFunctionArgument cannot be blank
@@ -34,8 +33,6 @@ public class IsRecordBelongsToCurrentTenantFunctionDefinition extends DefaultFun
                 .map(primaryColumnsValuesMap::get)
                 .map(FunctionArgumentValueToStringMapper::mapToString)
                 .collect(joining(", ")));
-        sb.append(", ");
-        sb.append(mapToString(tenantFunctionArgument));
         sb.append(")");
         return sb.toString();
     }
