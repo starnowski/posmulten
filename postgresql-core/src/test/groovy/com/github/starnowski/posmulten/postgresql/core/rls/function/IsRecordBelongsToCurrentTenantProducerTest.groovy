@@ -82,7 +82,7 @@ class IsRecordBelongsToCurrentTenantProducerTest extends AbstractFunctionFactory
         Spy(IsRecordBelongsToCurrentTenantProducerParameters, constructorArgs: ["is_user_belongs_to_current_tenant",
                                                                                 "public",
                                                                                 [pairOfColumnWithType("uuid", "UUID"), pairOfColumnWithType("second_id", "bigint")],
-                                                                                pairOfColumnWithType("tenant_id", "text"),
+                                                                                "tenant_id",
                                                                                 "users",
                                                                                 "secondary",
                                                                                 getCurrentTenantIdFunctionInvocationFactory])
