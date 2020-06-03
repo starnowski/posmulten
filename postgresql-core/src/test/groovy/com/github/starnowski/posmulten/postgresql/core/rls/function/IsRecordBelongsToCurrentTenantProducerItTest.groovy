@@ -20,7 +20,6 @@ import java.sql.Statement
 import static com.github.starnowski.posmulten.postgresql.core.TestUtils.CLEAR_DATABASE_SCRIPT_PATH
 import static com.github.starnowski.posmulten.postgresql.core.TestUtils.isFunctionExists
 import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValue.forNumeric
-import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValue.forString
 import static com.github.starnowski.posmulten.postgresql.core.rls.function.AbstractIsRecordBelongsToCurrentTenantProducerParameters.pairOfColumnWithType
 import static org.junit.Assert.assertEquals
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD
@@ -111,7 +110,7 @@ class IsRecordBelongsToCurrentTenantProducerItTest extends Specification {
             System.out.println(functionDefinition.getCreateScript())
 
         then:
-            getBooleanResultForSelectStatement(testCurrentTenantIdValue, returnTestedSelectStatement(functionDefinition.returnIsRecordBelongsToCurrentTenantFunctionInvocation(forString(testCurrentTenantIdValue), map))) == expectedBooleanValue
+            getBooleanResultForSelectStatement(testCurrentTenantIdValue, returnTestedSelectStatement(functionDefinition.returnIsRecordBelongsToCurrentTenantFunctionInvocation(map))) == expectedBooleanValue
 
         where:
         recordTableName     |   recordSchemaName    |   keyColumnsPairs                         |   testCurrentTenantIdValue    |   testUsersId || expectedBooleanValue
@@ -119,7 +118,7 @@ class IsRecordBelongsToCurrentTenantProducerItTest extends Specification {
         "users"             |   null                |   [pairOfColumnWithType("id", "bigint")]  |   "secondary_tenant"          |   2           ||  true
         "users"             |   "public"            |   [pairOfColumnWithType("id", "bigint")]  |   "primary_tenant"            |   3           ||  true
         "users"             |   null                |   [pairOfColumnWithType("id", "bigint")]  |   "secondary_tenant"          |   1           ||  false
-        "users"             |   null                |   [pairOfColumnWithType("id", "bigint")]  |   "sdfafdsfa"          |   1           ||  false
+        "users"             |   null                |   [pairOfColumnWithType("id", "bigint")]  |   "sdfafdsfa"                 |   1           ||  false
 //        "users"             |   "public"            |   "tenant_id"                   |   [pairOfColumnWithType("id", "bigint")]  |   "primary_tenant"            |   2           ||  false
 //        "users"             |   "public"            |   "tenant_id"                   |   [pairOfColumnWithType("id", "bigint")]  |   "secondary_tenant"          |   3           ||  false
 //        "users"             |   "non_public_schema" |   "tenant_id"                   |   [pairOfColumnWithType("id", "bigint")]  |   "secondary_tenant"          |   1           ||  false
