@@ -53,7 +53,7 @@ public class IsRecordBelongsToCurrentTenantProducer extends ExtendedAbstractFunc
                 .mapToObj(i -> format("%1$s.%2$s = $%3$s", RECORD_TABLE_ALIAS, parameters.getKeyColumnsPairsList().get(i).getKey(), i + 1)).collect(joining(" AND "))
         );
         sb.append(" AND ");
-        sb.append(format("$%1$s = %2$s", parameters.getKeyColumnsPairsList().size() + 1, parameters.getIGetCurrentTenantIdFunctionInvocationFactory().returnGetCurrentTenantIdFunctionInvocation()));
+        sb.append(format("%1$s = %2$s", RECORD_TABLE_ALIAS + "." + parameters.getTenantColumn(), parameters.getIGetCurrentTenantIdFunctionInvocationFactory().returnGetCurrentTenantIdFunctionInvocation()));
         sb.append("\n");
         sb.append(")");
         return sb.toString();

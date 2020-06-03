@@ -22,7 +22,7 @@ class IsRecordBelongsToCurrentTenantProducerGenericItTest extends AbstractFuncti
         Spy(IsRecordBelongsToCurrentTenantProducerParameters, constructorArgs: ["is_comment_belongs_to_current_tenant",
                                                                                 "public",
                                                                                 [pairOfColumnWithType("id", "int"), pairOfColumnWithType("user_id", "bigint")],
-                                                                                pairOfColumnWithType("tenant", "character varying(255)"),
+                                                                                "tenant",
                                                                                 "comments",
                                                                                 "non_public_schema",
                                                                                 getCurrentTenantIdFunctionInvocationFactory])
