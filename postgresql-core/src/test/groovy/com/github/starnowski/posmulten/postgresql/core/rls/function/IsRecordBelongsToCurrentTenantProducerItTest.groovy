@@ -100,7 +100,7 @@ class IsRecordBelongsToCurrentTenantProducerItTest extends Specification {
                     .withRecordTableName(recordTableName)
                     .withRecordSchemaName(recordSchemaName)
                     .withiGetCurrentTenantIdFunctionInvocationFactory(getCurrentTenantIdFunctionInvocationFactory)
-                    .withTenantColumn(tenantColumn)
+                    .withTenantColumn("tenant_id")
                     .withKeyColumnsPairsList(keyColumnsPairs).build()
             Map<String, FunctionArgumentValue> map = new HashMap<>();
             map.put("id", forNumeric(String.valueOf(testUsersId)))
@@ -114,12 +114,12 @@ class IsRecordBelongsToCurrentTenantProducerItTest extends Specification {
             getBooleanResultForSelectStatement(testCurrentTenantIdValue, returnTestedSelectStatement(functionDefinition.returnIsRecordBelongsToCurrentTenantFunctionInvocation(forString(testCurrentTenantIdValue), map))) == expectedBooleanValue
 
         where:
-        recordTableName     |   recordSchemaName    |   tenantColumn                                            |   keyColumnsPairs                         |   testCurrentTenantIdValue    |   testUsersId || expectedBooleanValue
-        "users"             |   null                |   "tenant_id"                   |   [pairOfColumnWithType("id", "bigint")]  |   "primary_tenant"            |   1           ||  true
-        "users"             |   null                |   "tenant_id"                   |   [pairOfColumnWithType("id", "bigint")]  |   "secondary_tenant"          |   2           ||  true
-        "users"             |   "public"            |   "tenant_id"                   |   [pairOfColumnWithType("id", "bigint")]  |   "primary_tenant"            |   3           ||  true
-        "users"             |   null                |   "tenant_id"                   |   [pairOfColumnWithType("id", "bigint")]  |   "secondary_tenant"          |   1           ||  false
-        "users"             |   null                |   "tenant_id"                   |   [pairOfColumnWithType("id", "bigint")]  |   "sdfafdsfa"          |   1           ||  false
+        recordTableName     |   recordSchemaName    |   keyColumnsPairs                         |   testCurrentTenantIdValue    |   testUsersId || expectedBooleanValue
+        "users"             |   null                |   [pairOfColumnWithType("id", "bigint")]  |   "primary_tenant"            |   1           ||  true
+        "users"             |   null                |   [pairOfColumnWithType("id", "bigint")]  |   "secondary_tenant"          |   2           ||  true
+        "users"             |   "public"            |   [pairOfColumnWithType("id", "bigint")]  |   "primary_tenant"            |   3           ||  true
+        "users"             |   null                |   [pairOfColumnWithType("id", "bigint")]  |   "secondary_tenant"          |   1           ||  false
+        "users"             |   null                |   [pairOfColumnWithType("id", "bigint")]  |   "sdfafdsfa"          |   1           ||  false
 //        "users"             |   "public"            |   "tenant_id"                   |   [pairOfColumnWithType("id", "bigint")]  |   "primary_tenant"            |   2           ||  false
 //        "users"             |   "public"            |   "tenant_id"                   |   [pairOfColumnWithType("id", "bigint")]  |   "secondary_tenant"          |   3           ||  false
 //        "users"             |   "non_public_schema" |   "tenant_id"                   |   [pairOfColumnWithType("id", "bigint")]  |   "secondary_tenant"          |   1           ||  false
