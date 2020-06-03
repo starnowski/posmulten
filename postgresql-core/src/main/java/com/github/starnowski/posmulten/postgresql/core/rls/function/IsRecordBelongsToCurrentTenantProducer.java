@@ -15,8 +15,6 @@ import static java.util.Collections.unmodifiableList;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.IntStream.range;
-import static java.util.stream.Stream.concat;
-import static java.util.stream.Stream.of;
 
 public class IsRecordBelongsToCurrentTenantProducer extends ExtendedAbstractFunctionFactory<AbstractIsRecordBelongsToCurrentTenantProducerParameters, IsRecordBelongsToCurrentTenantFunctionDefinition> {
 
@@ -68,6 +66,6 @@ public class IsRecordBelongsToCurrentTenantProducer extends ExtendedAbstractFunc
 
     @Override
     protected List<IFunctionArgument> prepareFunctionArguments(AbstractIsRecordBelongsToCurrentTenantProducerParameters parameters) {
-        return concat(parameters.getKeyColumnsPairsList().stream().map(Pair::getValue), of(parameters.getTenantColumnPair().getValue())).collect(toList());
+        return parameters.getKeyColumnsPairsList().stream().map(Pair::getValue).collect(toList());
     }
 }
