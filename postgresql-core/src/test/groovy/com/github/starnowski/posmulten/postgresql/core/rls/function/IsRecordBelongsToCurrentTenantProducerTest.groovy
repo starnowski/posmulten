@@ -52,20 +52,20 @@ class IsRecordBelongsToCurrentTenantProducerTest extends AbstractFunctionFactory
                     .withRecordTableName("some_record_table")
                     .withRecordSchemaName("some_record_schema")
                     .withiGetCurrentTenantIdFunctionInvocationFactory(getCurrentTenantIdFunctionInvocationFactory)
-                    .withTenantColumnPair(pairOfColumnWithType("tenant_id", "text"))
+                    .withTenantColumn("tenant_id")
                     .withKeyColumnsPairsList(keyColumnsPairs).build()
 
         expect:
             tested.produce(parameters).returnIsRecordBelongsToCurrentTenantFunctionInvocation(tenantColumnValue, keyColumnsValues) == expectedStatement
 
         where:
-            testSchema              |   testFunctionName                        |   keyColumnsPairs                                                                 |   tenantColumnValue           |   keyColumnsValues                                    || expectedStatement
-            null                    |   "is_user_belongs_to_current_tenant"     |   [pairOfColumnWithType("id", "bigint")]                                          |   forReference("tenant_id")   |   [id: forReference("id")]                            ||  "is_user_belongs_to_current_tenant(id, tenant_id)"
-            "public"                |   "is_user_belongs_to_current_tenant"     |   [pairOfColumnWithType("id", "bigint")]                                          |   forReference("tenant_id")   |   [id: forReference("id")]                            ||  "public.is_user_belongs_to_current_tenant(id, tenant_id)"
-            "some_schema"           |   "is_user_belongs_to_current_tenant"     |   [pairOfColumnWithType("id", "bigint")]                                          |   forReference("tenant_id")   |   [id: forReference("id")]                            ||  "some_schema.is_user_belongs_to_current_tenant(id, tenant_id)"
-            "schema222"             |   "record_exists_for_tenant"              |   [pairOfColumnWithType("id", "bigint")]                                          |   forReference("tenant_id")   |   [id: forReference("id")]                            ||  "schema222.record_exists_for_tenant(id, tenant_id)"
-            "schema222"             |   "record_exists_for_tenant"              |   [pairOfColumnWithType("id", "bigint")]                                          |   forReference("t_column")    |   [id: forReference("table_id")]                      ||  "schema222.record_exists_for_tenant(table_id, t_column)"
-            "schema222"             |   "record_exists_for_tenant"              |   [pairOfColumnWithType("id", "bigint"), pairOfColumnWithType("id2", "bigint")]   |   forReference("t_column")    |   [id: forReference("col1"), id2: forNumeric("323")]  ||  "schema222.record_exists_for_tenant(col1, 323, t_column)"
+            testSchema              |   testFunctionName                        |   keyColumnsPairs                                                                 |   keyColumnsValues                                    || expectedStatement
+            null                    |   "is_user_belongs_to_current_tenant"     |   [pairOfColumnWithType("id", "bigint")]                                          |   [id: forReference("id")]                            ||  "is_user_belongs_to_current_tenant(id)"
+            "public"                |   "is_user_belongs_to_current_tenant"     |   [pairOfColumnWithType("id", "bigint")]                                          |   [id: forReference("id")]                            ||  "public.is_user_belongs_to_current_tenant(id)"
+            "some_schema"           |   "is_user_belongs_to_current_tenant"     |   [pairOfColumnWithType("id", "bigint")]                                          |   [id: forReference("id")]                            ||  "some_schema.is_user_belongs_to_current_tenant(id)"
+            "schema222"             |   "record_exists_for_tenant"              |   [pairOfColumnWithType("id", "bigint")]                                          |   [id: forReference("id")]                            ||  "schema222.record_exists_for_tenant(id)"
+            "schema222"             |   "record_exists_for_tenant"              |   [pairOfColumnWithType("id", "bigint")]                                          |   [id: forReference("table_id")]                      ||  "schema222.record_exists_for_tenant(table_id)"
+            "schema222"             |   "record_exists_for_tenant"              |   [pairOfColumnWithType("id", "bigint"), pairOfColumnWithType("id2", "bigint")]   |   [id: forReference("col1"), id2: forNumeric("323")]  ||  "schema222.record_exists_for_tenant(col1, 323)"
     }
 
     @Override
