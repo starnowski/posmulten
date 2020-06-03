@@ -19,7 +19,7 @@ public interface AbstractIsRecordBelongsToCurrentTenantProducerParameters extend
     //TODO key cannot be empty
     //TODO Type cannot be null
     //TODO Type cannot be empty
-    Pair<String, IFunctionArgument> getTenantColumnPair();
+    String getTenantColumn();
 
     //TODO cannot be null
     //TODO cannot be empty

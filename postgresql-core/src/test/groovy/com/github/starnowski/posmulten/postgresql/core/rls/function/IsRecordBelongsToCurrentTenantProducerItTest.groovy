@@ -108,6 +108,7 @@ class IsRecordBelongsToCurrentTenantProducerItTest extends Specification {
         when:
             functionDefinition = tested.produce(parameters)
             jdbcTemplate.execute(functionDefinition.getCreateScript())
+            System.out.println(functionDefinition.getCreateScript())
 
         then:
             getBooleanResultForSelectStatement(testCurrentTenantIdValue, returnTestedSelectStatement(functionDefinition.returnIsRecordBelongsToCurrentTenantFunctionInvocation(forString(testCurrentTenantIdValue), map))) == expectedBooleanValue
@@ -118,9 +119,10 @@ class IsRecordBelongsToCurrentTenantProducerItTest extends Specification {
         "users"             |   null                |   pairOfColumnWithType("tenant_id", "text")                   |   [pairOfColumnWithType("id", "bigint")]  |   "secondary_tenant"          |   2           ||  true
         "users"             |   "public"            |   pairOfColumnWithType("tenant_id", "text")                   |   [pairOfColumnWithType("id", "bigint")]  |   "primary_tenant"            |   3           ||  true
         "users"             |   null                |   pairOfColumnWithType("tenant_id", "text")                   |   [pairOfColumnWithType("id", "bigint")]  |   "secondary_tenant"          |   1           ||  false
-        "users"             |   "public"            |   pairOfColumnWithType("tenant_id", "text")                   |   [pairOfColumnWithType("id", "bigint")]  |   "primary_tenant"            |   2           ||  false
-        "users"             |   "public"            |   pairOfColumnWithType("tenant_id", "text")                   |   [pairOfColumnWithType("id", "bigint")]  |   "secondary_tenant"          |   3           ||  false
-        "users"             |   "non_public_schema" |   pairOfColumnWithType("tenant_id", "text")                   |   [pairOfColumnWithType("id", "bigint")]  |   "secondary_tenant"          |   1           ||  false
+        "users"             |   null                |   pairOfColumnWithType("tenant_id", "text")                   |   [pairOfColumnWithType("id", "bigint")]  |   "sdfafdsfa"          |   1           ||  false
+//        "users"             |   "public"            |   pairOfColumnWithType("tenant_id", "text")                   |   [pairOfColumnWithType("id", "bigint")]  |   "primary_tenant"            |   2           ||  false
+//        "users"             |   "public"            |   pairOfColumnWithType("tenant_id", "text")                   |   [pairOfColumnWithType("id", "bigint")]  |   "secondary_tenant"          |   3           ||  false
+//        "users"             |   "non_public_schema" |   pairOfColumnWithType("tenant_id", "text")                   |   [pairOfColumnWithType("id", "bigint")]  |   "secondary_tenant"          |   1           ||  false
 //        "comments"          |   "public"            |   pairOfColumnWithType("tenant", "character varying(255)")    |   [pairOfColumnWithType("id", "int"), pairOfColumnWithType("user_id", "bigint")]
 //        "comments"          |   "public"            |   pairOfColumnWithType("tenant", "character varying(255)")    |   [pairOfColumnWithType("id", "int"), pairOfColumnWithType("user_id", "bigint")]
 //        "comments"          |   "non_public_schema" |   pairOfColumnWithType("tenant", "character varying(255)")    |   [pairOfColumnWithType("id", "int"), pairOfColumnWithType("user_id", "bigint")]

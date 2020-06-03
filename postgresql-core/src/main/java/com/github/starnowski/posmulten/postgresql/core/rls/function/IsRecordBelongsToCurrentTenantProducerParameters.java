@@ -10,16 +10,16 @@ public class IsRecordBelongsToCurrentTenantProducerParameters implements Abstrac
     private final String functionName;
     private final String schema;
     private final List<Pair<String, IFunctionArgument>> keyColumnsPairsList;
-    private final Pair<String, IFunctionArgument> tenantColumnPair;
+    private final String tenantColumn;
     private final String recordTableName;
     private final String recordSchemaName;
     private final IGetCurrentTenantIdFunctionInvocationFactory iGetCurrentTenantIdFunctionInvocationFactory;
 
-    public IsRecordBelongsToCurrentTenantProducerParameters(String functionName, String schema, List<Pair<String, IFunctionArgument>> keyColumnsPairsList, Pair<String, IFunctionArgument> tenantColumnPair, String recordTableName, String recordSchemaName, IGetCurrentTenantIdFunctionInvocationFactory iGetCurrentTenantIdFunctionInvocationFactory) {
+    public IsRecordBelongsToCurrentTenantProducerParameters(String functionName, String schema, List<Pair<String, IFunctionArgument>> keyColumnsPairsList, String tenantColumn, String recordTableName, String recordSchemaName, IGetCurrentTenantIdFunctionInvocationFactory iGetCurrentTenantIdFunctionInvocationFactory) {
         this.functionName = functionName;
         this.schema = schema;
         this.keyColumnsPairsList = keyColumnsPairsList;
-        this.tenantColumnPair = tenantColumnPair;
+        this.tenantColumn = tenantColumn;
         this.recordTableName = recordTableName;
         this.recordSchemaName = recordSchemaName;
         this.iGetCurrentTenantIdFunctionInvocationFactory = iGetCurrentTenantIdFunctionInvocationFactory;
@@ -41,8 +41,8 @@ public class IsRecordBelongsToCurrentTenantProducerParameters implements Abstrac
     }
 
     @Override
-    public Pair<String, IFunctionArgument> getTenantColumnPair() {
-        return tenantColumnPair;
+    public String getTenantColumn() {
+        return tenantColumn;
     }
 
     @Override
@@ -64,7 +64,7 @@ public class IsRecordBelongsToCurrentTenantProducerParameters implements Abstrac
         private String functionName;
         private String schema;
         private List<Pair<String, IFunctionArgument>> keyColumnsPairsList;
-        private Pair<String, IFunctionArgument> tenantColumnPair;
+        private String tenantColumn;
         private String recordTableName;
         private String recordSchemaName;
         private IGetCurrentTenantIdFunctionInvocationFactory iGetCurrentTenantIdFunctionInvocationFactory;
@@ -84,8 +84,8 @@ public class IsRecordBelongsToCurrentTenantProducerParameters implements Abstrac
             return this;
         }
 
-        public Builder withTenantColumnPair(Pair<String, IFunctionArgument> tenantColumnPair) {
-            this.tenantColumnPair = tenantColumnPair;
+        public Builder withTenantColumn(String tenantColumn) {
+            this.tenantColumn = tenantColumn;
             return this;
         }
 
@@ -106,7 +106,7 @@ public class IsRecordBelongsToCurrentTenantProducerParameters implements Abstrac
 
         public IsRecordBelongsToCurrentTenantProducerParameters build()
         {
-            return new IsRecordBelongsToCurrentTenantProducerParameters(functionName, schema, keyColumnsPairsList, tenantColumnPair, recordTableName, recordSchemaName, iGetCurrentTenantIdFunctionInvocationFactory);
+            return new IsRecordBelongsToCurrentTenantProducerParameters(functionName, schema, keyColumnsPairsList, tenantColumn, recordTableName, recordSchemaName, iGetCurrentTenantIdFunctionInvocationFactory);
         }
     }
 }
