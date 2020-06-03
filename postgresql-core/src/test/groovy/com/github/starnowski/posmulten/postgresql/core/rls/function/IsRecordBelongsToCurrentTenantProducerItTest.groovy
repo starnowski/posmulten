@@ -66,16 +66,16 @@ class IsRecordBelongsToCurrentTenantProducerItTest extends Specification {
             isFunctionExists(jdbcTemplate, functionName, schema)
 
         where:
-            testSchema              |   testFunctionName                        |   recordTableName     |   recordSchemaName    |   tenantColumn                                            |   keyColumnsPairs
-            null                    |   "is_user_belongs_to_current_tenant"     |   "users"             |   null                |   "tenant_id"                   |   [pairOfColumnWithType("id", "bigint")]
-            "public"                |   "is_user_belongs_to_current_tenant"     |   "users"             |   null                |   "tenant_id"                   |   [pairOfColumnWithType("id", "bigint")]
-            "public"                |   "is_user_belongs_to_current_tenant"     |   "users"             |   "public"            |   "tenant_id"                   |   [pairOfColumnWithType("id", "bigint")]
-            "non_public_schema"     |   "is_user_belongs_to_current_tenant"     |   "users"             |   null                |   "tenant_id"                   |   [pairOfColumnWithType("id", "bigint")]
-            "non_public_schema"     |   "is_user_belongs_to_current_tenant"     |   "users"             |   "public"            |   "tenant_id"                   |   [pairOfColumnWithType("id", "bigint")]
-            "non_public_schema"     |   "is_user_belongs_to_current_tenant"     |   "users"             |   "non_public_schema" |   "tenant_id"                   |   [pairOfColumnWithType("id", "bigint")]
-            "public"                |   "is_comments_belongs_to_current_tenant" |   "comments"          |   "public"            |   "tenant"    |   [pairOfColumnWithType("id", "int"), pairOfColumnWithType("user_id", "bigint")]
-            "non_public_schema"     |   "is_comments_belongs_to_current_tenant" |   "comments"          |   "public"            |   "tenant"    |   [pairOfColumnWithType("id", "int"), pairOfColumnWithType("user_id", "bigint")]
-            "non_public_schema"     |   "is_comments_belongs_to_current_tenant" |   "comments"          |   "non_public_schema" |   "tenant"    |   [pairOfColumnWithType("id", "int"), pairOfColumnWithType("user_id", "bigint")]
+            testSchema              |   testFunctionName                        |   recordTableName     |   recordSchemaName    |   tenantColumn                    |   keyColumnsPairs
+            null                    |   "is_user_belongs_to_current_tenant"     |   "users"             |   null                |   "tenant_id"                     |   [pairOfColumnWithType("id", "bigint")]
+            "public"                |   "is_user_belongs_to_current_tenant"     |   "users"             |   null                |   "tenant_id"                     |   [pairOfColumnWithType("id", "bigint")]
+            "public"                |   "is_user_belongs_to_current_tenant"     |   "users"             |   "public"            |   "tenant_id"                     |   [pairOfColumnWithType("id", "bigint")]
+            "non_public_schema"     |   "is_user_belongs_to_current_tenant"     |   "users"             |   null                |   "tenant_id"                     |   [pairOfColumnWithType("id", "bigint")]
+            "non_public_schema"     |   "is_user_belongs_to_current_tenant"     |   "users"             |   "public"            |   "tenant_id"                     |   [pairOfColumnWithType("id", "bigint")]
+            "non_public_schema"     |   "is_user_belongs_to_current_tenant"     |   "users"             |   "non_public_schema" |   "tenant_id"                     |   [pairOfColumnWithType("id", "bigint")]
+            "public"                |   "is_comments_belongs_to_current_tenant" |   "comments"          |   "public"            |   "tenant"                        |   [pairOfColumnWithType("id", "int"), pairOfColumnWithType("user_id", "bigint")]
+            "non_public_schema"     |   "is_comments_belongs_to_current_tenant" |   "comments"          |   "public"            |   "tenant"                        |   [pairOfColumnWithType("id", "int"), pairOfColumnWithType("user_id", "bigint")]
+            "non_public_schema"     |   "is_comments_belongs_to_current_tenant" |   "comments"          |   "non_public_schema" |   "tenant"                        |   [pairOfColumnWithType("id", "int"), pairOfColumnWithType("user_id", "bigint")]
     }
 
     @Unroll
