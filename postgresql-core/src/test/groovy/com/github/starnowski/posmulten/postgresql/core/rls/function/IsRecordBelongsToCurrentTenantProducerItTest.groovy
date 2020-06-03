@@ -141,9 +141,9 @@ class IsRecordBelongsToCurrentTenantProducerItTest extends Specification {
         })
     }
 
-    def returnTestedSelectStatement(String functionIvocation)
+    def returnTestedSelectStatement(String functionInvocation)
     {
-        "SELECT " + functionIvocation
+        "SELECT " + functionInvocation
     }
 
     def cleanup() {
