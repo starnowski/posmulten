@@ -44,7 +44,7 @@ class IsRecordBelongsToCurrentTenantProducerItTest extends Specification {
     JdbcTemplate jdbcTemplate
 
     @Unroll
-    def "for function name '#testFunctionName' for schema '#testSchema', table #recordTableName in schema #recordSchemaName that compares values for columns #keyColumnsPairs and tenant column #tenantColumnPair, should generate statement that creates function" () {
+    def "for function name '#testFunctionName' for schema '#testSchema', table #recordTableName in schema #recordSchemaName that compares values for columns #keyColumnsPairs and tenant column #tenantColumn, should generate statement that creates function" () {
         given:
             functionName = testFunctionName
             schema = testSchema
@@ -55,7 +55,7 @@ class IsRecordBelongsToCurrentTenantProducerItTest extends Specification {
                     .withRecordTableName(recordTableName)
                     .withRecordSchemaName(recordSchemaName)
                     .withiGetCurrentTenantIdFunctionInvocationFactory(getCurrentTenantIdFunctionInvocationFactory)
-                    .withTenantColumnPair(tenantColumnPair)
+                    .withTenantColumn(tenantColumn)
                     .withKeyColumnsPairsList(keyColumnsPairs).build()
 
         when:
@@ -66,16 +66,16 @@ class IsRecordBelongsToCurrentTenantProducerItTest extends Specification {
             isFunctionExists(jdbcTemplate, functionName, schema)
 
         where:
-            testSchema              |   testFunctionName                        |   recordTableName     |   recordSchemaName    |   tenantColumnPair                                            |   keyColumnsPairs
-            null                    |   "is_user_belongs_to_current_tenant"     |   "users"             |   null                |   pairOfColumnWithType("tenant_id", "text")                   |   [pairOfColumnWithType("id", "bigint")]
-            "public"                |   "is_user_belongs_to_current_tenant"     |   "users"             |   null                |   pairOfColumnWithType("tenant_id", "text")                   |   [pairOfColumnWithType("id", "bigint")]
-            "public"                |   "is_user_belongs_to_current_tenant"     |   "users"             |   "public"            |   pairOfColumnWithType("tenant_id", "text")                   |   [pairOfColumnWithType("id", "bigint")]
-            "non_public_schema"     |   "is_user_belongs_to_current_tenant"     |   "users"             |   null                |   pairOfColumnWithType("tenant_id", "text")                   |   [pairOfColumnWithType("id", "bigint")]
-            "non_public_schema"     |   "is_user_belongs_to_current_tenant"     |   "users"             |   "public"            |   pairOfColumnWithType("tenant_id", "text")                   |   [pairOfColumnWithType("id", "bigint")]
-            "non_public_schema"     |   "is_user_belongs_to_current_tenant"     |   "users"             |   "non_public_schema" |   pairOfColumnWithType("tenant_id", "text")                   |   [pairOfColumnWithType("id", "bigint")]
-            "public"                |   "is_comments_belongs_to_current_tenant" |   "comments"          |   "public"            |   pairOfColumnWithType("tenant", "character varying(255)")    |   [pairOfColumnWithType("id", "int"), pairOfColumnWithType("user_id", "bigint")]
-            "non_public_schema"     |   "is_comments_belongs_to_current_tenant" |   "comments"          |   "public"            |   pairOfColumnWithType("tenant", "character varying(255)")    |   [pairOfColumnWithType("id", "int"), pairOfColumnWithType("user_id", "bigint")]
-            "non_public_schema"     |   "is_comments_belongs_to_current_tenant" |   "comments"          |   "non_public_schema" |   pairOfColumnWithType("tenant", "character varying(255)")    |   [pairOfColumnWithType("id", "int"), pairOfColumnWithType("user_id", "bigint")]
+            testSchema              |   testFunctionName                        |   recordTableName     |   recordSchemaName    |   tenantColumn                                            |   keyColumnsPairs
+            null                    |   "is_user_belongs_to_current_tenant"     |   "users"             |   null                |   "tenant_id"                   |   [pairOfColumnWithType("id", "bigint")]
+            "public"                |   "is_user_belongs_to_current_tenant"     |   "users"             |   null                |   "tenant_id"                   |   [pairOfColumnWithType("id", "bigint")]
+            "public"                |   "is_user_belongs_to_current_tenant"     |   "users"             |   "public"            |   "tenant_id"                   |   [pairOfColumnWithType("id", "bigint")]
+            "non_public_schema"     |   "is_user_belongs_to_current_tenant"     |   "users"             |   null                |   "tenant_id"                   |   [pairOfColumnWithType("id", "bigint")]
+            "non_public_schema"     |   "is_user_belongs_to_current_tenant"     |   "users"             |   "public"            |   "tenant_id"                   |   [pairOfColumnWithType("id", "bigint")]
+            "non_public_schema"     |   "is_user_belongs_to_current_tenant"     |   "users"             |   "non_public_schema" |   "tenant_id"                   |   [pairOfColumnWithType("id", "bigint")]
+            "public"                |   "is_comments_belongs_to_current_tenant" |   "comments"          |   "public"            |   "tenant"    |   [pairOfColumnWithType("id", "int"), pairOfColumnWithType("user_id", "bigint")]
+            "non_public_schema"     |   "is_comments_belongs_to_current_tenant" |   "comments"          |   "public"            |   "tenant"    |   [pairOfColumnWithType("id", "int"), pairOfColumnWithType("user_id", "bigint")]
+            "non_public_schema"     |   "is_comments_belongs_to_current_tenant" |   "comments"          |   "non_public_schema" |   "tenant"    |   [pairOfColumnWithType("id", "int"), pairOfColumnWithType("user_id", "bigint")]
     }
 
     @Unroll
@@ -89,7 +89,7 @@ class IsRecordBelongsToCurrentTenantProducerItTest extends Specification {
             @Sql(value = CLEAR_DATABASE_SCRIPT_PATH,
                     config = @SqlConfig(transactionMode = ISOLATED),
                     executionPhase = AFTER_TEST_METHOD)])
-    def "for table #recordTableName in schema #recordSchemaName that compares values for columns #keyColumnsPairs and tenant column #tenantColumnPair, should create function which invocation would return expected result : #expectedBooleanValue for tenant #testCurrentTenantIdValue and user id #testUsersId" () {
+    def "for table #recordTableName in schema #recordSchemaName that compares values for columns #keyColumnsPairs and tenant column #tenantColumn, should create function which invocation would return expected result : #expectedBooleanValue for tenant #testCurrentTenantIdValue and user id #testUsersId" () {
         given:
             functionName = "is_user_belongs_to_current_tenant"
             schema = "public"
@@ -100,7 +100,7 @@ class IsRecordBelongsToCurrentTenantProducerItTest extends Specification {
                     .withRecordTableName(recordTableName)
                     .withRecordSchemaName(recordSchemaName)
                     .withiGetCurrentTenantIdFunctionInvocationFactory(getCurrentTenantIdFunctionInvocationFactory)
-                    .withTenantColumnPair(tenantColumnPair)
+                    .withTenantColumn(tenantColumn)
                     .withKeyColumnsPairsList(keyColumnsPairs).build()
             Map<String, FunctionArgumentValue> map = new HashMap<>();
             map.put("id", forNumeric(String.valueOf(testUsersId)))
@@ -114,18 +114,18 @@ class IsRecordBelongsToCurrentTenantProducerItTest extends Specification {
             getBooleanResultForSelectStatement(testCurrentTenantIdValue, returnTestedSelectStatement(functionDefinition.returnIsRecordBelongsToCurrentTenantFunctionInvocation(forString(testCurrentTenantIdValue), map))) == expectedBooleanValue
 
         where:
-        recordTableName     |   recordSchemaName    |   tenantColumnPair                                            |   keyColumnsPairs                         |   testCurrentTenantIdValue    |   testUsersId || expectedBooleanValue
-        "users"             |   null                |   pairOfColumnWithType("tenant_id", "text")                   |   [pairOfColumnWithType("id", "bigint")]  |   "primary_tenant"            |   1           ||  true
-        "users"             |   null                |   pairOfColumnWithType("tenant_id", "text")                   |   [pairOfColumnWithType("id", "bigint")]  |   "secondary_tenant"          |   2           ||  true
-        "users"             |   "public"            |   pairOfColumnWithType("tenant_id", "text")                   |   [pairOfColumnWithType("id", "bigint")]  |   "primary_tenant"            |   3           ||  true
-        "users"             |   null                |   pairOfColumnWithType("tenant_id", "text")                   |   [pairOfColumnWithType("id", "bigint")]  |   "secondary_tenant"          |   1           ||  false
-        "users"             |   null                |   pairOfColumnWithType("tenant_id", "text")                   |   [pairOfColumnWithType("id", "bigint")]  |   "sdfafdsfa"          |   1           ||  false
-//        "users"             |   "public"            |   pairOfColumnWithType("tenant_id", "text")                   |   [pairOfColumnWithType("id", "bigint")]  |   "primary_tenant"            |   2           ||  false
-//        "users"             |   "public"            |   pairOfColumnWithType("tenant_id", "text")                   |   [pairOfColumnWithType("id", "bigint")]  |   "secondary_tenant"          |   3           ||  false
-//        "users"             |   "non_public_schema" |   pairOfColumnWithType("tenant_id", "text")                   |   [pairOfColumnWithType("id", "bigint")]  |   "secondary_tenant"          |   1           ||  false
-//        "comments"          |   "public"            |   pairOfColumnWithType("tenant", "character varying(255)")    |   [pairOfColumnWithType("id", "int"), pairOfColumnWithType("user_id", "bigint")]
-//        "comments"          |   "public"            |   pairOfColumnWithType("tenant", "character varying(255)")    |   [pairOfColumnWithType("id", "int"), pairOfColumnWithType("user_id", "bigint")]
-//        "comments"          |   "non_public_schema" |   pairOfColumnWithType("tenant", "character varying(255)")    |   [pairOfColumnWithType("id", "int"), pairOfColumnWithType("user_id", "bigint")]
+        recordTableName     |   recordSchemaName    |   tenantColumn                                            |   keyColumnsPairs                         |   testCurrentTenantIdValue    |   testUsersId || expectedBooleanValue
+        "users"             |   null                |   "tenant_id"                   |   [pairOfColumnWithType("id", "bigint")]  |   "primary_tenant"            |   1           ||  true
+        "users"             |   null                |   "tenant_id"                   |   [pairOfColumnWithType("id", "bigint")]  |   "secondary_tenant"          |   2           ||  true
+        "users"             |   "public"            |   "tenant_id"                   |   [pairOfColumnWithType("id", "bigint")]  |   "primary_tenant"            |   3           ||  true
+        "users"             |   null                |   "tenant_id"                   |   [pairOfColumnWithType("id", "bigint")]  |   "secondary_tenant"          |   1           ||  false
+        "users"             |   null                |   "tenant_id"                   |   [pairOfColumnWithType("id", "bigint")]  |   "sdfafdsfa"          |   1           ||  false
+//        "users"             |   "public"            |   "tenant_id"                   |   [pairOfColumnWithType("id", "bigint")]  |   "primary_tenant"            |   2           ||  false
+//        "users"             |   "public"            |   "tenant_id"                   |   [pairOfColumnWithType("id", "bigint")]  |   "secondary_tenant"          |   3           ||  false
+//        "users"             |   "non_public_schema" |   "tenant_id"                   |   [pairOfColumnWithType("id", "bigint")]  |   "secondary_tenant"          |   1           ||  false
+//        "comments"          |   "public"            |   "tenant"    |   [pairOfColumnWithType("id", "int"), pairOfColumnWithType("user_id", "bigint")]
+//        "comments"          |   "public"            |   "tenant"    |   [pairOfColumnWithType("id", "int"), pairOfColumnWithType("user_id", "bigint")]
+//        "comments"          |   "non_public_schema" |   "tenant"    |   [pairOfColumnWithType("id", "int"), pairOfColumnWithType("user_id", "bigint")]
     }
 
     def getBooleanResultForSelectStatement(String propertyValue, String selectStatement)
