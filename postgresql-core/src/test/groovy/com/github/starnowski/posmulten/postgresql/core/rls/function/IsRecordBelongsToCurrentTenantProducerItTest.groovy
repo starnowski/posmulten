@@ -88,7 +88,7 @@ class IsRecordBelongsToCurrentTenantProducerItTest extends Specification {
             @Sql(value = CLEAR_DATABASE_SCRIPT_PATH,
                     config = @SqlConfig(transactionMode = ISOLATED),
                     executionPhase = AFTER_TEST_METHOD)])
-    def "for table #recordTableName in schema #recordSchemaName that compares values for columns #keyColumnsPairs and tenant column #tenantColumn, should create function which invocation would return expected result : #expectedBooleanValue for tenant #testCurrentTenantIdValue and user id #testUsersId" () {
+    def "for table users in schema #recordSchemaName that compares values for primary key with single column and tenant column #tenantColumn, should create function which invocation would return expected result : #expectedBooleanValue for tenant #testCurrentTenantIdValue and user id #testUsersId" () {
         given:
             functionName = "is_user_belongs_to_current_tenant"
             schema = "public"
@@ -100,7 +100,7 @@ class IsRecordBelongsToCurrentTenantProducerItTest extends Specification {
                     .withRecordSchemaName(recordSchemaName)
                     .withiGetCurrentTenantIdFunctionInvocationFactory(getCurrentTenantIdFunctionInvocationFactory)
                     .withTenantColumn("tenant_id")
-                    .withKeyColumnsPairsList(keyColumnsPairs).build()
+                    .withKeyColumnsPairsList([pairOfColumnWithType("id", "bigint")]).build()
             Map<String, FunctionArgumentValue> map = new HashMap<>();
             map.put("id", forNumeric(String.valueOf(testUsersId)))
 
@@ -113,21 +113,74 @@ class IsRecordBelongsToCurrentTenantProducerItTest extends Specification {
             getBooleanResultForSelectStatement(testCurrentTenantIdValue, returnTestedSelectStatement(functionDefinition.returnIsRecordBelongsToCurrentTenantFunctionInvocation(map))) == expectedBooleanValue
 
         where:
-            recordSchemaName    |   keyColumnsPairs                         |   testCurrentTenantIdValue    |   testUsersId || expectedBooleanValue
-            null                |   [pairOfColumnWithType("id", "bigint")]  |   "primary_tenant"            |   1           ||  true
-            null                |   [pairOfColumnWithType("id", "bigint")]  |   "secondary_tenant"          |   2           ||  true
-            "public"            |   [pairOfColumnWithType("id", "bigint")]  |   "primary_tenant"            |   3           ||  true
-            null                |   [pairOfColumnWithType("id", "bigint")]  |   "secondary_tenant"          |   1           ||  false
-            null                |   [pairOfColumnWithType("id", "bigint")]  |   "sdfafdsfa"                 |   1           ||  false
-            null                |   [pairOfColumnWithType("id", "bigint")]  |   "secondary_tenant"          |   3           ||  false
-            "non_public_schema" |   [pairOfColumnWithType("id", "bigint")]  |   "third_tenant"              |   1           ||  true
-            "non_public_schema" |   [pairOfColumnWithType("id", "bigint")]  |   "third_tenant"              |   2           ||  true
-            "non_public_schema" |   [pairOfColumnWithType("id", "bigint")]  |   "primary_tenant"            |   3           ||  true
-            "non_public_schema" |   [pairOfColumnWithType("id", "bigint")]  |   "third_tenant"              |   4           ||  true
-            "non_public_schema" |   [pairOfColumnWithType("id", "bigint")]  |   "primary_tenant"            |   1           ||  false
-            "non_public_schema" |   [pairOfColumnWithType("id", "bigint")]  |   "primary_tenant"            |   2           ||  false
-            "non_public_schema" |   [pairOfColumnWithType("id", "bigint")]  |   "third_tenant"              |   3           ||  false
-            "non_public_schema" |   [pairOfColumnWithType("id", "bigint")]  |   "primary_tenant"            |   4           ||  false
+            recordSchemaName    |   testCurrentTenantIdValue    |   testUsersId || expectedBooleanValue
+            null                |   "primary_tenant"            |   1           ||  true
+            null                |   "secondary_tenant"          |   2           ||  true
+            "public"            |   "primary_tenant"            |   3           ||  true
+            null                |   "secondary_tenant"          |   1           ||  false
+            null                |   "sdfafdsfa"                 |   1           ||  false
+            null                |   "secondary_tenant"          |   3           ||  false
+            "non_public_schema" |   "third_tenant"              |   1           ||  true
+            "non_public_schema" |   "third_tenant"              |   2           ||  true
+            "non_public_schema" |   "primary_tenant"            |   3           ||  true
+            "non_public_schema" |   "third_tenant"              |   4           ||  true
+            "non_public_schema" |   "primary_tenant"            |   1           ||  false
+            "non_public_schema" |   "primary_tenant"            |   2           ||  false
+            "non_public_schema" |   "third_tenant"              |   3           ||  false
+            "non_public_schema" |   "primary_tenant"            |   4           ||  false
+    }
+
+    @Unroll
+    @SqlGroup([
+            @Sql(value = CLEAR_DATABASE_SCRIPT_PATH,
+                    config = @SqlConfig(transactionMode = ISOLATED),
+                    executionPhase = BEFORE_TEST_METHOD),
+            @Sql(value = "insert-basic-data.sql",
+                    config = @SqlConfig(transactionMode = ISOLATED),
+                    executionPhase = BEFORE_TEST_METHOD),
+            @Sql(value = CLEAR_DATABASE_SCRIPT_PATH,
+                    config = @SqlConfig(transactionMode = ISOLATED),
+                    executionPhase = AFTER_TEST_METHOD)])
+    def "for table comments in schema #recordSchemaName that compares values for columns #keyColumnsPairs (composite primary key) and tenant column #tenantColumn, should create function which invocation would return expected result : #expectedBooleanValue for tenant #testCurrentTenantIdValue and user id #testUsersId" () {
+        given:
+            functionName = "is_user_belongs_to_current_tenant"
+            schema = "public"
+            assertEquals(false, isFunctionExists(jdbcTemplate, functionName, schema))
+            def parameters = new IsRecordBelongsToCurrentTenantProducerParameters.Builder()
+                    .withSchema(schema)
+                    .withFunctionName(functionName)
+                    .withRecordTableName("users")
+                    .withRecordSchemaName(recordSchemaName)
+                    .withiGetCurrentTenantIdFunctionInvocationFactory(getCurrentTenantIdFunctionInvocationFactory)
+                    .withTenantColumn("tenant_id")
+                    .withKeyColumnsPairsList([pairOfColumnWithType("id", "int"), pairOfColumnWithType("user_id", "bigint")] ).build()
+            Map<String, FunctionArgumentValue> map = new HashMap<>();
+            map.put("id", forNumeric(String.valueOf(testUsersId)))
+
+        when:
+            functionDefinition = tested.produce(parameters)
+            jdbcTemplate.execute(functionDefinition.getCreateScript())
+            System.out.println(functionDefinition.getCreateScript())
+
+        then:
+            getBooleanResultForSelectStatement(testCurrentTenantIdValue, returnTestedSelectStatement(functionDefinition.returnIsRecordBelongsToCurrentTenantFunctionInvocation(map))) == expectedBooleanValue
+
+        where:
+            recordSchemaName    |   keyColumnsPairs                                                                 |   testCurrentTenantIdValue    |   testUsersId || expectedBooleanValue
+            null                |   [pairOfColumnWithType("id", "int"), pairOfColumnWithType("user_id", "bigint")]  |   "primary_tenant"            |   1           ||  true
+            null                |   [pairOfColumnWithType("id", "int"), pairOfColumnWithType("user_id", "bigint")]  |   "secondary_tenant"          |   2           ||  true
+            "public"            |   [pairOfColumnWithType("id", "int"), pairOfColumnWithType("user_id", "bigint")]  |   "primary_tenant"            |   3           ||  true
+            null                |   [pairOfColumnWithType("id", "int"), pairOfColumnWithType("user_id", "bigint")]  |   "secondary_tenant"          |   1           ||  false
+            null                |   [pairOfColumnWithType("id", "int"), pairOfColumnWithType("user_id", "bigint")]  |   "sdfafdsfa"                 |   1           ||  false
+            null                |   [pairOfColumnWithType("id", "int"), pairOfColumnWithType("user_id", "bigint")]  |   "secondary_tenant"          |   3           ||  false
+            "non_public_schema" |   [pairOfColumnWithType("id", "int"), pairOfColumnWithType("user_id", "bigint")]  |   "third_tenant"              |   1           ||  true
+            "non_public_schema" |   [pairOfColumnWithType("id", "int"), pairOfColumnWithType("user_id", "bigint")]  |   "third_tenant"              |   2           ||  true
+            "non_public_schema" |   [pairOfColumnWithType("id", "int"), pairOfColumnWithType("user_id", "bigint")]  |   "primary_tenant"            |   3           ||  true
+            "non_public_schema" |   [pairOfColumnWithType("id", "int"), pairOfColumnWithType("user_id", "bigint")]  |   "third_tenant"              |   4           ||  true
+            "non_public_schema" |   [pairOfColumnWithType("id", "int"), pairOfColumnWithType("user_id", "bigint")]  |   "primary_tenant"            |   1           ||  false
+            "non_public_schema" |   [pairOfColumnWithType("id", "int"), pairOfColumnWithType("user_id", "bigint")]  |   "primary_tenant"            |   2           ||  false
+            "non_public_schema" |   [pairOfColumnWithType("id", "int"), pairOfColumnWithType("user_id", "bigint")]  |   "third_tenant"              |   3           ||  false
+            "non_public_schema" |   [pairOfColumnWithType("id", "int"), pairOfColumnWithType("user_id", "bigint")]  |   "primary_tenant"            |   4           ||  false
     }
 
     def getBooleanResultForSelectStatement(String propertyValue, String selectStatement)
