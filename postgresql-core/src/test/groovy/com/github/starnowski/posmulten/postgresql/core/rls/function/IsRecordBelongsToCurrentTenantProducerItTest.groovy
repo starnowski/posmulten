@@ -149,13 +149,14 @@ class IsRecordBelongsToCurrentTenantProducerItTest extends Specification {
             def parameters = new IsRecordBelongsToCurrentTenantProducerParameters.Builder()
                     .withSchema(schema)
                     .withFunctionName(functionName)
-                    .withRecordTableName("users")
+                    .withRecordTableName("comments")
                     .withRecordSchemaName(recordSchemaName)
                     .withiGetCurrentTenantIdFunctionInvocationFactory(getCurrentTenantIdFunctionInvocationFactory)
-                    .withTenantColumn("tenant_id")
+                    .withTenantColumn("tenant")
                     .withKeyColumnsPairsList([pairOfColumnWithType("id", "int"), pairOfColumnWithType("user_id", "bigint")] ).build()
             Map<String, FunctionArgumentValue> map = new HashMap<>();
-            map.put("id", forNumeric(String.valueOf(testUsersId)))
+            map.put("id", forNumeric(String.valueOf(commentId)))
+            map.put("user_id", forNumeric(String.valueOf(testUsersId)))
 
         when:
             functionDefinition = tested.produce(parameters)
@@ -166,21 +167,21 @@ class IsRecordBelongsToCurrentTenantProducerItTest extends Specification {
             getBooleanResultForSelectStatement(testCurrentTenantIdValue, returnTestedSelectStatement(functionDefinition.returnIsRecordBelongsToCurrentTenantFunctionInvocation(map))) == expectedBooleanValue
 
         where:
-            recordSchemaName    |   testCurrentTenantIdValue    |   testUsersId || expectedBooleanValue
-            null                |   "primary_tenant"            |   1           ||  true
-            null                |   "secondary_tenant"          |   2           ||  true
-            "public"            |   "primary_tenant"            |   3           ||  true
-            null                |   "secondary_tenant"          |   1           ||  false
-            null                |   "sdfafdsfa"                 |   1           ||  false
-            null                |   "secondary_tenant"          |   3           ||  false
-            "non_public_schema" |   "third_tenant"              |   1           ||  true
-            "non_public_schema" |   "third_tenant"              |   2           ||  true
-            "non_public_schema" |   "primary_tenant"            |   3           ||  true
-            "non_public_schema" |   "third_tenant"              |   4           ||  true
-            "non_public_schema" |   "primary_tenant"            |   1           ||  false
-            "non_public_schema" |   "primary_tenant"            |   2           ||  false
-            "non_public_schema" |   "third_tenant"              |   3           ||  false
-            "non_public_schema" |   "primary_tenant"            |   4           ||  false
+            recordSchemaName    |   testCurrentTenantIdValue    |   testUsersId | commentId || expectedBooleanValue
+            null                |   "primary_tenant"            |   1           |   1       ||  true
+            null                |   "secondary_tenant"          |   2           |   1       ||  true
+            "public"            |   "primary_tenant"            |   3           |   1       ||  true
+            null                |   "secondary_tenant"          |   1           |   1       ||  false
+            null                |   "sdfafdsfa"                 |   1           |   1       ||  false
+            null                |   "secondary_tenant"          |   3           |   1       ||  false
+            "non_public_schema" |   "third_tenant"              |   1           |   1       ||  true
+            "non_public_schema" |   "third_tenant"              |   2           |   1       ||  true
+            "non_public_schema" |   "primary_tenant"            |   3           |   1       ||  true
+            "non_public_schema" |   "third_tenant"              |   4           |   1       ||  true
+            "non_public_schema" |   "primary_tenant"            |   1           |   1       ||  false
+            "non_public_schema" |   "primary_tenant"            |   2           |   1       ||  false
+            "non_public_schema" |   "third_tenant"              |   3           |   1       ||  false
+            "non_public_schema" |   "primary_tenant"            |   4           |   1       ||  false
     }
 
     def getBooleanResultForSelectStatement(String propertyValue, String selectStatement)
