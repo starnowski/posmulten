@@ -141,7 +141,7 @@ class IsRecordBelongsToCurrentTenantProducerItTest extends Specification {
             @Sql(value = CLEAR_DATABASE_SCRIPT_PATH,
                     config = @SqlConfig(transactionMode = ISOLATED),
                     executionPhase = AFTER_TEST_METHOD)])
-    def "for table comments in schema #recordSchemaName that compares values for composite primary key should create function which invocation would return expected result : #expectedBooleanValue for tenant #testCurrentTenantIdValue and user id #testUsersId" () {
+    def "for table comments in schema #recordSchemaName that compares values for composite primary key should create function which invocation would return expected result : #expectedBooleanValue for tenant #testCurrentTenantIdValue and user id #testUsersId and comment id #commentId" () {
         given:
             functionName = "is_user_belongs_to_current_tenant"
             schema = "public"
@@ -168,20 +168,20 @@ class IsRecordBelongsToCurrentTenantProducerItTest extends Specification {
 
         where:
             recordSchemaName    |   testCurrentTenantIdValue    |   testUsersId | commentId || expectedBooleanValue
-            null                |   "primary_tenant"            |   1           |   1       ||  true
+            null                |   "primary_tenant"            |   1           |   3       ||  true
             null                |   "secondary_tenant"          |   2           |   1       ||  true
-            "public"            |   "primary_tenant"            |   3           |   1       ||  true
-            null                |   "secondary_tenant"          |   1           |   1       ||  false
+            "public"            |   "primary_tenant"            |   3           |   1       ||  false
+            null                |   "secondary_tenant"          |   2           |   3       ||  false
             null                |   "sdfafdsfa"                 |   1           |   1       ||  false
             null                |   "secondary_tenant"          |   3           |   1       ||  false
-            "non_public_schema" |   "third_tenant"              |   1           |   1       ||  true
             "non_public_schema" |   "third_tenant"              |   2           |   1       ||  true
-            "non_public_schema" |   "primary_tenant"            |   3           |   1       ||  true
-            "non_public_schema" |   "third_tenant"              |   4           |   1       ||  true
-            "non_public_schema" |   "primary_tenant"            |   1           |   1       ||  false
+            "non_public_schema" |   "third_tenant"              |   2           |   2       ||  true
+            "non_public_schema" |   "primary_tenant"            |   3           |   3       ||  true
+            "non_public_schema" |   "primary_tenant"            |   3           |   4       ||  true
             "non_public_schema" |   "primary_tenant"            |   2           |   1       ||  false
-            "non_public_schema" |   "third_tenant"              |   3           |   1       ||  false
-            "non_public_schema" |   "primary_tenant"            |   4           |   1       ||  false
+            "non_public_schema" |   "primary_tenant"            |   2           |   2       ||  false
+            "non_public_schema" |   "third_tenant"              |   3           |   2       ||  false
+            "non_public_schema" |   "third_tenant"              |   3           |   4       ||  false
     }
 
     def getBooleanResultForSelectStatement(String propertyValue, String selectStatement)
