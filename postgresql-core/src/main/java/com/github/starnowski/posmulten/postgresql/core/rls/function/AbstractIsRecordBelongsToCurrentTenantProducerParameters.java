@@ -17,8 +17,6 @@ public interface AbstractIsRecordBelongsToCurrentTenantProducerParameters extend
 
     //TODO cannot be null
     //TODO key cannot be empty
-    //TODO Type cannot be null
-    //TODO Type cannot be empty
     String getTenantColumn();
 
     //TODO cannot be null
