@@ -82,7 +82,7 @@ class IsRecordBelongsToCurrentTenantProducerItTest extends Specification {
             @Sql(value = CLEAR_DATABASE_SCRIPT_PATH,
             config = @SqlConfig(transactionMode = ISOLATED),
             executionPhase = BEFORE_TEST_METHOD),
-            @Sql(value = "insert-unrelated-data.sql",
+            @Sql(value = "insert-basic-data.sql",
                     config = @SqlConfig(transactionMode = ISOLATED),
                     executionPhase = BEFORE_TEST_METHOD),
             @Sql(value = CLEAR_DATABASE_SCRIPT_PATH,
