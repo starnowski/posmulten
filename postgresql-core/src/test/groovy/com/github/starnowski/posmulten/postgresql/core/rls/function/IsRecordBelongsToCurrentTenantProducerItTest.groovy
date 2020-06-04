@@ -113,18 +113,21 @@ class IsRecordBelongsToCurrentTenantProducerItTest extends Specification {
             getBooleanResultForSelectStatement(testCurrentTenantIdValue, returnTestedSelectStatement(functionDefinition.returnIsRecordBelongsToCurrentTenantFunctionInvocation(map))) == expectedBooleanValue
 
         where:
-        recordTableName     |   recordSchemaName    |   keyColumnsPairs                         |   testCurrentTenantIdValue    |   testUsersId || expectedBooleanValue
-        "users"             |   null                |   [pairOfColumnWithType("id", "bigint")]  |   "primary_tenant"            |   1           ||  true
-        "users"             |   null                |   [pairOfColumnWithType("id", "bigint")]  |   "secondary_tenant"          |   2           ||  true
-        "users"             |   "public"            |   [pairOfColumnWithType("id", "bigint")]  |   "primary_tenant"            |   3           ||  true
-        "users"             |   null                |   [pairOfColumnWithType("id", "bigint")]  |   "secondary_tenant"          |   1           ||  false
-        "users"             |   null                |   [pairOfColumnWithType("id", "bigint")]  |   "sdfafdsfa"                 |   1           ||  false
-//        "users"             |   "public"            |   "tenant_id"                   |   [pairOfColumnWithType("id", "bigint")]  |   "primary_tenant"            |   2           ||  false
-//        "users"             |   "public"            |   "tenant_id"                   |   [pairOfColumnWithType("id", "bigint")]  |   "secondary_tenant"          |   3           ||  false
-//        "users"             |   "non_public_schema" |   "tenant_id"                   |   [pairOfColumnWithType("id", "bigint")]  |   "secondary_tenant"          |   1           ||  false
-//        "comments"          |   "public"            |   "tenant"    |   [pairOfColumnWithType("id", "int"), pairOfColumnWithType("user_id", "bigint")]
-//        "comments"          |   "public"            |   "tenant"    |   [pairOfColumnWithType("id", "int"), pairOfColumnWithType("user_id", "bigint")]
-//        "comments"          |   "non_public_schema" |   "tenant"    |   [pairOfColumnWithType("id", "int"), pairOfColumnWithType("user_id", "bigint")]
+            recordTableName     |   recordSchemaName    |   keyColumnsPairs                         |   testCurrentTenantIdValue    |   testUsersId || expectedBooleanValue
+            "users"             |   null                |   [pairOfColumnWithType("id", "bigint")]  |   "primary_tenant"            |   1           ||  true
+            "users"             |   null                |   [pairOfColumnWithType("id", "bigint")]  |   "secondary_tenant"          |   2           ||  true
+            "users"             |   "public"            |   [pairOfColumnWithType("id", "bigint")]  |   "primary_tenant"            |   3           ||  true
+            "users"             |   null                |   [pairOfColumnWithType("id", "bigint")]  |   "secondary_tenant"          |   1           ||  false
+            "users"             |   null                |   [pairOfColumnWithType("id", "bigint")]  |   "sdfafdsfa"                 |   1           ||  false
+            "users"             |   null                |   [pairOfColumnWithType("id", "bigint")]  |   "secondary_tenant"          |   3           ||  false
+            "users"             |   "non_public_schema" |   [pairOfColumnWithType("id", "bigint")]  |   "third_tenant"              |   1           ||  true
+            "users"             |   "non_public_schema" |   [pairOfColumnWithType("id", "bigint")]  |   "third_tenant"              |   2           ||  true
+            "users"             |   "non_public_schema" |   [pairOfColumnWithType("id", "bigint")]  |   "primary_tenant"            |   3           ||  true
+            "users"             |   "non_public_schema" |   [pairOfColumnWithType("id", "bigint")]  |   "third_tenant"              |   4           ||  true
+            "users"             |   "non_public_schema" |   [pairOfColumnWithType("id", "bigint")]  |   "primary_tenant"            |   1           ||  false
+            "users"             |   "non_public_schema" |   [pairOfColumnWithType("id", "bigint")]  |   "primary_tenant"            |   2           ||  false
+            "users"             |   "non_public_schema" |   [pairOfColumnWithType("id", "bigint")]  |   "third_tenant"              |   3           ||  false
+            "users"             |   "non_public_schema" |   [pairOfColumnWithType("id", "bigint")]  |   "primary_tenant"            |   4           ||  false
     }
 
     def getBooleanResultForSelectStatement(String propertyValue, String selectStatement)
