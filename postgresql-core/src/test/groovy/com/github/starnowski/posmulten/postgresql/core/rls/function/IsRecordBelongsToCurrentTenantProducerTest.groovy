@@ -68,6 +68,25 @@ class IsRecordBelongsToCurrentTenantProducerTest extends AbstractFunctionFactory
             "schema222"             |   "record_exists_for_tenant"              |   [pairOfColumnWithType("id", "bigint"), pairOfColumnWithType("id2", "bigint")]   |   [id: forReference("col1"), id2: forNumeric("323")]  ||  "schema222.record_exists_for_tenant(col1, 323)"
     }
 
+    @Unroll
+    def "should throw exception of type 'IllegalArgumentException' when the record schema name is blank '#recordSchemaName'" () {
+        given:
+            def parameters = returnCorrectParametersSpyObject()
+            parameters.getRecordSchemaName() >> recordSchemaName
+
+        when:
+            tested.produce(parameters)
+
+        then:
+            def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+            ex.message == "Record schema name cannot be blank"
+
+        where:
+            recordSchemaName    << ["", " ", "       "]
+    }
+
     @Override
     protected returnTestedObject() {
         tested
