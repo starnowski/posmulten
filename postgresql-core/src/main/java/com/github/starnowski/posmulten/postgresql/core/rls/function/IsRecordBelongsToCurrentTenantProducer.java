@@ -68,4 +68,13 @@ public class IsRecordBelongsToCurrentTenantProducer extends ExtendedAbstractFunc
     protected List<IFunctionArgument> prepareFunctionArguments(AbstractIsRecordBelongsToCurrentTenantProducerParameters parameters) {
         return parameters.getKeyColumnsPairsList().stream().map(Pair::getValue).collect(toList());
     }
+
+    @Override
+    protected void validate(AbstractIsRecordBelongsToCurrentTenantProducerParameters parameters) {
+        super.validate(parameters);
+        if (parameters.getRecordSchemaName() != null && parameters.getRecordSchemaName().trim().isEmpty())
+        {
+            throw new IllegalArgumentException("Record schema name cannot be blank");
+        }
+    }
 }
