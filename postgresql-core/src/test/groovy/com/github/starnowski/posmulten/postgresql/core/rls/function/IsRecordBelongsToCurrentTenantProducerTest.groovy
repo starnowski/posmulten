@@ -106,6 +106,21 @@ class IsRecordBelongsToCurrentTenantProducerTest extends AbstractFunctionFactory
             recordTableName    << ["", " ", "       "]
     }
 
+    def "should throw exception of type 'IllegalArgumentException' when the record table name is null" () {
+        given:
+            def parameters = returnCorrectParametersSpyObject()
+            parameters.getRecordTableName() >> null
+
+        when:
+            tested.produce(parameters)
+
+        then:
+            def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+            ex.message == "Record table name cannot be null"
+    }
+
     @Override
     protected returnTestedObject() {
         tested
