@@ -1,6 +1,7 @@
 package com.github.starnowski.posmulten.postgresql.core.rls.function
 
 import com.github.starnowski.posmulten.postgresql.core.common.function.AbstractFunctionFactoryTest
+import javafx.util.Pair
 import spock.lang.Unroll
 
 import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValue.forNumeric
@@ -258,10 +259,10 @@ class IsRecordBelongsToCurrentTenantProducerTest extends AbstractFunctionFactory
     }
 
     @Unroll
-    def "should throw an exception of type 'IllegalArgumentException' with expected message '#expectedMessage' when the list of primary key column pairs contains pair which value is null '#keyColumnsPairsList'" () {
+    def "should throw an exception of type 'IllegalArgumentException' with expected message '#expectedMessage' when the list of primary key column pairs contains pair which value is null for column '#key'" () {
         given:
             def parameters = returnCorrectParametersSpyObject()
-            parameters.getKeyColumnsPairsList() >> keyColumnsPairsList
+            parameters.getKeyColumnsPairsList() >> [new Pair<>(key, null)]
 
         when:
             tested.produce(parameters)
@@ -273,10 +274,10 @@ class IsRecordBelongsToCurrentTenantProducerTest extends AbstractFunctionFactory
             ex.message == expectedMessage
 
         where:
-            keyColumnsPairsList                     ||  expectedMessage
-            [pairOfColumnWithType("id", null)]      ||  "The list of primary key column pairs contains pair which value is null for key 'id'"
-            [pairOfColumnWithType("uuid", null)]    ||  "The list of primary key column pairs contains pair which value is null for key 'uuid'"
-            [pairOfColumnWithType("user_id", null)] ||  "The list of primary key column pairs contains pair which value is null for key 'user_id'"
+            key         ||  expectedMessage
+            "id"        ||  "The list of primary key column pairs contains pair which value is null for key 'id'"
+            "uuid"      ||  "The list of primary key column pairs contains pair which value is null for key 'uuid'"
+            "user_id"   ||  "The list of primary key column pairs contains pair which value is null for key 'user_id'"
     }
 
     @Override
