@@ -84,5 +84,9 @@ public class IsRecordBelongsToCurrentTenantProducer extends ExtendedAbstractFunc
         {
             throw new IllegalArgumentException("Record table name cannot be blank");
         }
+        if (parameters.getTenantColumn() == null)
+        {
+            throw new IllegalArgumentException("Tenant column cannot be null");
+        }
     }
 }
