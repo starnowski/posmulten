@@ -76,6 +76,10 @@ public class IsRecordBelongsToCurrentTenantProducer extends ExtendedAbstractFunc
         {
             throw new IllegalArgumentException("Record schema name cannot be blank");
         }
+        if (parameters.getRecordTableName() == null)
+        {
+            throw new IllegalArgumentException("Record table name cannot be null");
+        }
         if (parameters.getRecordTableName().trim().isEmpty())
         {
             throw new IllegalArgumentException("Record table name cannot be blank");
