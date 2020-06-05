@@ -200,6 +200,25 @@ class IsRecordBelongsToCurrentTenantProducerTest extends AbstractFunctionFactory
             ex.message == "The list of primary key column pairs cannot be empty"
     }
 
+    @Unroll
+    def "should throw an exception of type 'IllegalArgumentException' when the list element of primary key column pairs is null '#keyColumnsPairsList'" () {
+        given:
+            def parameters = returnCorrectParametersSpyObject()
+            parameters.getKeyColumnsPairsList() >> keyColumnsPairsList
+
+        when:
+            tested.produce(parameters)
+
+        then:
+            def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+            ex.message == "The list element of primary key column pairs cannot be null"
+
+        where:
+            keyColumnsPairsList    << [[null], [null, pairOfColumnWithType("id", "bigint")], [pairOfColumnWithType("id", "bigint"), null], [pairOfColumnWithType("id", "bigint"), null, pairOfColumnWithType("id2", "bigint")]]
+    }
+
     @Override
     protected returnTestedObject() {
         tested
