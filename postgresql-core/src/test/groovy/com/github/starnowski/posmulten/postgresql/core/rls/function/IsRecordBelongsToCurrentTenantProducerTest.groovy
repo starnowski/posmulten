@@ -257,6 +257,28 @@ class IsRecordBelongsToCurrentTenantProducerTest extends AbstractFunctionFactory
             key << ["", " ", "      "]
     }
 
+    @Unroll
+    def "should throw an exception of type 'IllegalArgumentException' with expected message '#expectedMessage' when the list of primary key column pairs contains pair which value is null '#keyColumnsPairsList'" () {
+        given:
+            def parameters = returnCorrectParametersSpyObject()
+            parameters.getKeyColumnsPairsList() >> keyColumnsPairsList
+
+        when:
+            tested.produce(parameters)
+
+        then:
+            def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+            ex.message == expectedMessage
+
+        where:
+            keyColumnsPairsList                     ||  expectedMessage
+            [pairOfColumnWithType("id", null)]      ||  "The list of primary key column pairs contains pair which value is null for key 'id'"
+            [pairOfColumnWithType("uuid", null)]    ||  "The list of primary key column pairs contains pair which value is null for key 'uuid'"
+            [pairOfColumnWithType("user_id", null)] ||  "The list of primary key column pairs contains pair which value is null for key 'user_id'"
+    }
+
     @Override
     protected returnTestedObject() {
         tested
