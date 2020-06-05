@@ -19,7 +19,6 @@ public interface AbstractIsRecordBelongsToCurrentTenantProducerParameters extend
     //TODO key cannot be empty
     String getTenantColumn();
 
-    //TODO cannot be null
     String getRecordTableName();
 
     String getRecordSchemaName();
