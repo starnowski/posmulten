@@ -238,6 +238,25 @@ class IsRecordBelongsToCurrentTenantProducerTest extends AbstractFunctionFactory
             keyColumnsPairsList    << [[pairOfColumnWithType(null, "bigint")], [pairOfColumnWithType(null, "bigint"), pairOfColumnWithType("id2", "bigint")]]
     }
 
+    @Unroll
+    def "should throw an exception of type 'IllegalArgumentException' when the list of primary key column pairs contains pair which key is blank :'#key'" () {
+        given:
+            def parameters = returnCorrectParametersSpyObject()
+            parameters.getKeyColumnsPairsList() >> [pairOfColumnWithType(key, "bigint")]
+
+        when:
+            tested.produce(parameters)
+
+        then:
+            def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+            ex.message == "The list of primary key column pairs contains pair which key is blank"
+
+        where:
+            key << ["", " ", "      "]
+    }
+
     @Override
     protected returnTestedObject() {
         tested
