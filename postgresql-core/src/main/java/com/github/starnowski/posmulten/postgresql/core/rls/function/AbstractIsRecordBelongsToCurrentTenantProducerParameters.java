@@ -15,7 +15,6 @@ public interface AbstractIsRecordBelongsToCurrentTenantProducerParameters extend
     //TODO types validation similar to TenantColumnPair
     List<Pair<String, IFunctionArgument>> getKeyColumnsPairsList();
 
-    //TODO key cannot be empty
     String getTenantColumn();
 
     String getRecordTableName();
