@@ -69,7 +69,7 @@ class IsRecordBelongsToCurrentTenantProducerTest extends AbstractFunctionFactory
     }
 
     @Unroll
-    def "should throw exception of type 'IllegalArgumentException' when the record schema name is blank '#recordSchemaName'" () {
+    def "should throw an exception of type 'IllegalArgumentException' when the record schema name is blank '#recordSchemaName'" () {
         given:
             def parameters = returnCorrectParametersSpyObject()
             parameters.getRecordSchemaName() >> recordSchemaName
@@ -88,7 +88,7 @@ class IsRecordBelongsToCurrentTenantProducerTest extends AbstractFunctionFactory
     }
 
     @Unroll
-    def "should throw exception of type 'IllegalArgumentException' when the record table name is blank '#recordTableName'" () {
+    def "should throw an exception of type 'IllegalArgumentException' when the record table name is blank '#recordTableName'" () {
         given:
             def parameters = returnCorrectParametersSpyObject()
             parameters.getRecordTableName() >> recordTableName
@@ -106,7 +106,7 @@ class IsRecordBelongsToCurrentTenantProducerTest extends AbstractFunctionFactory
             recordTableName    << ["", " ", "       "]
     }
 
-    def "should throw exception of type 'IllegalArgumentException' when the record table name is null" () {
+    def "should throw an exception of type 'IllegalArgumentException' when the record table name is null" () {
         given:
             def parameters = returnCorrectParametersSpyObject()
             parameters.getRecordTableName() >> null
@@ -121,7 +121,7 @@ class IsRecordBelongsToCurrentTenantProducerTest extends AbstractFunctionFactory
             ex.message == "Record table name cannot be null"
     }
 
-    def "should throw exception of type 'IllegalArgumentException' when the tenant column is null" () {
+    def "should throw an exception of type 'IllegalArgumentException' when the tenant column is null" () {
         given:
             def parameters = returnCorrectParametersSpyObject()
             parameters.getTenantColumn() >> null
@@ -137,7 +137,7 @@ class IsRecordBelongsToCurrentTenantProducerTest extends AbstractFunctionFactory
     }
 
     @Unroll
-    def "should throw exception of type 'IllegalArgumentException' when the tenant column is blank '#tenantColumn'" () {
+    def "should throw an exception of type 'IllegalArgumentException' when the tenant column is blank '#tenantColumn'" () {
         given:
             def parameters = returnCorrectParametersSpyObject()
             parameters.getTenantColumn() >> tenantColumn
@@ -155,7 +155,7 @@ class IsRecordBelongsToCurrentTenantProducerTest extends AbstractFunctionFactory
             tenantColumn    << ["", " ", "       "]
     }
 
-    def "should throw exception of type 'IllegalArgumentException' when the component of type IGetCurrentTenantIdFunctionInvocationFactory is null" () {
+    def "should throw an exception of type 'IllegalArgumentException' when the component of type IGetCurrentTenantIdFunctionInvocationFactory is null" () {
         given:
             def parameters = returnCorrectParametersSpyObject()
             parameters.getIGetCurrentTenantIdFunctionInvocationFactory() >> null
@@ -168,6 +168,21 @@ class IsRecordBelongsToCurrentTenantProducerTest extends AbstractFunctionFactory
 
         and: "exception should have correct message"
             ex.message == "The GetCurrentTenantId function invocation factory cannot be null"
+    }
+
+    def "should throw an exception of type 'IllegalArgumentException' when the list of column pairs is null" () {
+        given:
+            def parameters = returnCorrectParametersSpyObject()
+            parameters.getKeyColumnsPairsList() >> null
+
+        when:
+            tested.produce(parameters)
+
+        then:
+            def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+            ex.message == "The list of primary key column pairs cannot be null"
     }
 
     @Override
