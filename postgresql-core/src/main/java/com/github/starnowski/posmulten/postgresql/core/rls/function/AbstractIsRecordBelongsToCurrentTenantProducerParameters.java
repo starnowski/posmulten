@@ -21,7 +21,6 @@ public interface AbstractIsRecordBelongsToCurrentTenantProducerParameters extend
 
     String getRecordSchemaName();
 
-    //TODO cannot be null
     IGetCurrentTenantIdFunctionInvocationFactory getIGetCurrentTenantIdFunctionInvocationFactory();
 
     static Pair<String, IFunctionArgument> pairOfColumnWithType(String column, String type)
