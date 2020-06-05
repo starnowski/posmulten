@@ -155,6 +155,21 @@ class IsRecordBelongsToCurrentTenantProducerTest extends AbstractFunctionFactory
             tenantColumn    << ["", " ", "       "]
     }
 
+    def "should throw exception of type 'IllegalArgumentException' when the component of type IGetCurrentTenantIdFunctionInvocationFactory is null" () {
+        given:
+            def parameters = returnCorrectParametersSpyObject()
+            parameters.getIGetCurrentTenantIdFunctionInvocationFactory() >> null
+
+        when:
+            tested.produce(parameters)
+
+        then:
+            def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+            ex.message == "The GetCurrentTenantId function invocation factory cannot be null"
+    }
+
     @Override
     protected returnTestedObject() {
         tested
