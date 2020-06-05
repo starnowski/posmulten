@@ -21,7 +21,6 @@ public class FunctionArgumentBuilder {
 
     private static class InnerFunctionArgument implements IFunctionArgument
     {
-
         public InnerFunctionArgument(String type) {
             this.type = type;
         }
@@ -31,6 +30,13 @@ public class FunctionArgumentBuilder {
         @Override
         public String getType() {
             return type;
+        }
+
+        @Override
+        public String toString() {
+            return "InnerFunctionArgument{" +
+                    "type='" + type + '\'' +
+                    '}';
         }
     }
 }

@@ -73,6 +73,32 @@ WITH (
 )
 TABLESPACE pg_default;
 
+CREATE TABLE public.comments
+(
+id int NOT NULL,
+user_id bigint NOT NULL,
+text text NOT NULL,
+post_id bigint NOT NULL,
+tenant character varying(255),
+
+parent_comment_id int,
+parent_comment_user_id bigint,
+
+CONSTRAINT fk_comments_posts_id FOREIGN KEY (post_id)
+REFERENCES public.posts (id) MATCH SIMPLE,
+CONSTRAINT fk_comments_users_id FOREIGN KEY (user_id)
+REFERENCES public.users (id) MATCH SIMPLE,
+
+CONSTRAINT fk_comments_parent_id FOREIGN KEY (parent_comment_id, parent_comment_user_id)
+REFERENCES public.comments (id, user_id) MATCH SIMPLE,
+
+CONSTRAINT comments_pkey PRIMARY KEY (id, user_id)
+)
+WITH (
+OIDS = FALSE
+)
+TABLESPACE pg_default;
+
 ALTER TABLE public.users
     OWNER to "postgresql-core-owner";
 
@@ -84,6 +110,9 @@ ALTER TABLE public.users_groups
 
 ALTER TABLE public.posts
     OWNER to "postgresql-core-owner";
+
+ALTER TABLE public.comments
+OWNER to "postgresql-core-owner";
 
 -- sequences definition
 CREATE SEQUENCE public.primary_sequence
@@ -153,6 +182,32 @@ OIDS = FALSE
 )
 TABLESPACE pg_default;
 
+CREATE TABLE non_public_schema.comments
+(
+id int NOT NULL,
+user_id bigint NOT NULL,
+text text NOT NULL,
+post_id bigint NOT NULL,
+tenant character varying(255),
+
+parent_comment_id int,
+parent_comment_user_id bigint,
+
+CONSTRAINT fk_comments_posts_id FOREIGN KEY (post_id)
+REFERENCES non_public_schema.posts (id) MATCH SIMPLE,
+CONSTRAINT fk_comments_users_id FOREIGN KEY (user_id)
+REFERENCES non_public_schema.users (id) MATCH SIMPLE,
+
+CONSTRAINT fk_comments_parent_id FOREIGN KEY (parent_comment_id, parent_comment_user_id)
+REFERENCES non_public_schema.comments (id, user_id) MATCH SIMPLE,
+
+CONSTRAINT comments_pkey PRIMARY KEY (id, user_id)
+)
+WITH (
+OIDS = FALSE
+)
+TABLESPACE pg_default;
+
 ALTER TABLE non_public_schema.groups
 OWNER to "postgresql-core-owner";
 
@@ -160,6 +215,9 @@ ALTER TABLE non_public_schema.users_groups
 OWNER to "postgresql-core-owner";
 
 ALTER TABLE non_public_schema.posts
+OWNER to "postgresql-core-owner";
+
+ALTER TABLE non_public_schema.comments
 OWNER to "postgresql-core-owner";
 
 -- sequences definition

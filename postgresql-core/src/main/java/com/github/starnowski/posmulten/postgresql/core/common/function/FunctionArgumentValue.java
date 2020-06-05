@@ -1,7 +1,6 @@
 package com.github.starnowski.posmulten.postgresql.core.common.function;
 
-import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValueEnum.REFERENCE;
-import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValueEnum.STRING;
+import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValueEnum.*;
 
 public interface FunctionArgumentValue {
 
@@ -17,6 +16,11 @@ public interface FunctionArgumentValue {
     static FunctionArgumentValue forReference(String value)
     {
         return new DefaultFunctionArgumentValue(value, REFERENCE);
+    }
+
+    static FunctionArgumentValue forNumeric(String value)
+    {
+        return new DefaultFunctionArgumentValue(value, NUMERIC);
     }
 
     class DefaultFunctionArgumentValue implements FunctionArgumentValue {
