@@ -136,6 +136,25 @@ class IsRecordBelongsToCurrentTenantProducerTest extends AbstractFunctionFactory
             ex.message == "Tenant column cannot be null"
     }
 
+    @Unroll
+    def "should throw exception of type 'IllegalArgumentException' when the tenant column is blank '#tenantColumn'" () {
+        given:
+            def parameters = returnCorrectParametersSpyObject()
+            parameters.getTenantColumn() >> tenantColumn
+
+        when:
+            tested.produce(parameters)
+
+        then:
+            def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+            ex.message == "Tenant column cannot be blank"
+
+        where:
+            tenantColumn    << ["", " ", "       "]
+    }
+
     @Override
     protected returnTestedObject() {
         tested
