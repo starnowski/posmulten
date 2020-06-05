@@ -87,6 +87,25 @@ class IsRecordBelongsToCurrentTenantProducerTest extends AbstractFunctionFactory
             recordSchemaName    << ["", " ", "       "]
     }
 
+    @Unroll
+    def "should throw exception of type 'IllegalArgumentException' when the record table name is blank '#recordTableName'" () {
+        given:
+            def parameters = returnCorrectParametersSpyObject()
+            parameters.getRecordTableName() >> recordTableName
+
+        when:
+            tested.produce(parameters)
+
+        then:
+            def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+            ex.message == "Record table name cannot be blank"
+
+        where:
+            recordTableName    << ["", " ", "       "]
+    }
+
     @Override
     protected returnTestedObject() {
         tested
