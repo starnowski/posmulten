@@ -104,5 +104,13 @@ public class IsRecordBelongsToCurrentTenantProducer extends ExtendedAbstractFunc
         {
             throw new IllegalArgumentException("The list of primary key column pairs cannot be empty");
         }
+        parameters.getKeyColumnsPairsList().stream().forEach(pair ->
+                {
+                    if (pair == null)
+                    {
+                        throw new IllegalArgumentException("The list element of primary key column pairs cannot be null");
+                    }
+                }
+                    );
     }
 }
