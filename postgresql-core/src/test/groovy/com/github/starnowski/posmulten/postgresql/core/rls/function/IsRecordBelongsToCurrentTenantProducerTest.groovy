@@ -121,6 +121,21 @@ class IsRecordBelongsToCurrentTenantProducerTest extends AbstractFunctionFactory
             ex.message == "Record table name cannot be null"
     }
 
+    def "should throw exception of type 'IllegalArgumentException' when the tenant column is null" () {
+        given:
+            def parameters = returnCorrectParametersSpyObject()
+            parameters.getTenantColumn() >> null
+
+        when:
+            tested.produce(parameters)
+
+        then:
+            def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+            ex.message == "Tenant column cannot be null"
+    }
+
     @Override
     protected returnTestedObject() {
         tested
