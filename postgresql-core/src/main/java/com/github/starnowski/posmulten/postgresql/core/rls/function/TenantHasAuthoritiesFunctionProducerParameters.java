@@ -4,7 +4,7 @@ public class TenantHasAuthoritiesFunctionProducerParameters implements ITenantHa
 
     private final String functionName;
     private final String schema;
-    private final EqualsCurrentTenantIdentifierFunctionInvocationFactory equalsCurrentTenantIdentifierFunctionInvocationFactory; // TODO mandatory
+    private final EqualsCurrentTenantIdentifierFunctionInvocationFactory equalsCurrentTenantIdentifierFunctionInvocationFactory;
     private final String tenantIdArgumentType;
     private final String permissionCommandPolicyArgumentType;
     private final String rlsExpressionArgumentType;
