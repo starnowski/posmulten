@@ -40,7 +40,7 @@ class IsRecordBelongsToCurrentTenantFunctionDefinitionTest extends Specification
             def definition = prepareCorrectDefinition()
 
         when:
-            definition.returnIsRecordBelongsToCurrentTenantFunctionInvocation([])
+            definition.returnIsRecordBelongsToCurrentTenantFunctionInvocation([:])
 
         then:
             def ex = thrown(IllegalArgumentException.class)
