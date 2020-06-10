@@ -34,6 +34,21 @@ class IsRecordBelongsToCurrentTenantFunctionDefinitionTest extends Specification
             ex.message == "The primary columns values map cannot be null"
     }
 
+    def "should throw an exception of type 'IllegalArgumentException' when passed parameters list is empty"()
+    {
+        given:
+            def definition = prepareCorrectDefinition()
+
+        when:
+            definition.returnIsRecordBelongsToCurrentTenantFunctionInvocation([])
+
+        then:
+            def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+            ex.message == "The primary columns values map cannot be empty"
+    }
+
     IsRecordBelongsToCurrentTenantFunctionDefinition prepareCorrectDefinition() {
         IFunctionDefinition functionDefinitionMock = Mock(IFunctionDefinition)
         functionDefinitionMock.getFunctionReference() >> "schema222.record_exists_for_tenant"
