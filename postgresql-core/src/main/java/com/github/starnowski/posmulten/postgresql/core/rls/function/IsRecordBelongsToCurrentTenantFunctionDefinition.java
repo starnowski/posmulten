@@ -40,5 +40,9 @@ public class IsRecordBelongsToCurrentTenantFunctionDefinition extends DefaultFun
         {
             throw new IllegalArgumentException("The primary columns values map cannot be null");
         }
+        if (primaryColumnsValuesMap.isEmpty())
+        {
+            throw new IllegalArgumentException("The primary columns values map cannot be empty");
+        }
     }
 }
