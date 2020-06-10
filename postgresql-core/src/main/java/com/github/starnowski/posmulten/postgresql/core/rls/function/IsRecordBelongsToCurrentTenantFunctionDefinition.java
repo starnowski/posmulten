@@ -23,6 +23,7 @@ public class IsRecordBelongsToCurrentTenantFunctionDefinition extends DefaultFun
         //TODO all entries in primaryColumnsValuesMap cannot be null
         //TODO all entries in primaryColumnsValuesMap cannot be blank
         //TODO all items from the keyColumnsPairsList should contains keys in primaryColumnsValuesMap
+        validate(primaryColumnsValuesMap);
         StringBuilder sb = new StringBuilder();
         sb.append(getFunctionReference());
         sb.append("(");
@@ -33,5 +34,12 @@ public class IsRecordBelongsToCurrentTenantFunctionDefinition extends DefaultFun
                 .collect(joining(", ")));
         sb.append(")");
         return sb.toString();
+    }
+
+    private void validate(Map<String, FunctionArgumentValue> primaryColumnsValuesMap) {
+        if (primaryColumnsValuesMap == null)
+        {
+            throw new IllegalArgumentException("The primary columns values map cannot be null");
+        }
     }
 }
