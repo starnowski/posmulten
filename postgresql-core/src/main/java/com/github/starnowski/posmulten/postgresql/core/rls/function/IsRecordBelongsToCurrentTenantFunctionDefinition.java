@@ -6,6 +6,7 @@ import javafx.util.Pair;
 import java.util.List;
 import java.util.Map;
 
+import static java.lang.String.format;
 import static java.util.stream.Collectors.joining;
 
 public class IsRecordBelongsToCurrentTenantFunctionDefinition extends DefaultFunctionDefinition implements IsRecordBelongsToCurrentTenantFunctionInvocationFactory{
@@ -44,6 +45,10 @@ public class IsRecordBelongsToCurrentTenantFunctionDefinition extends DefaultFun
         if (primaryColumnsValuesMap.isEmpty())
         {
             throw new IllegalArgumentException("The primary columns values map cannot be empty");
+        }
+        if (keyColumnsPairsList.size() != primaryColumnsValuesMap.size())
+        {
+            throw new IllegalArgumentException(format("The primary columns values map has invalid size, expected %s elements but has %s elements", keyColumnsPairsList.size(), primaryColumnsValuesMap.size()));
         }
     }
 }
