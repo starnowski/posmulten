@@ -76,6 +76,31 @@ class IsRecordBelongsToCurrentTenantFunctionDefinitionTest extends Specification
             [pairOfColumnWithType("id", "UUID")]    |   [id: forReference("user_id"), post_id: forReference("post_fk_id")]                              |   1               |   2
     }
 
+    @Unroll
+    def "should throw an exception of type 'IllegalArgumentException' when any of passed parameters values has empty key for function parameters #functionParameters and passed arguments #passedArguments"()
+    {
+        given:
+            def definition = prepareCorrectDefinition(functionParameters)
+
+        when:
+            definition.returnIsRecordBelongsToCurrentTenantFunctionInvocation(passedArguments)
+
+        then:
+            def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+            ex.message == "The primary columns values map contains an entry with an empty key"
+
+        where:
+            functionParameters                      |   passedArguments
+            prepareKeyColumnsPairsList()            |   ["": forReference("fk_col1"), id2: forReference("fk_id2")]
+            prepareKeyColumnsPairsList()            |   ["      ": forReference("fk_col1"), id2: forReference("fk_id2")]
+            prepareKeyColumnsPairsList()            |   ["      ": forReference("fk_col1"), "": forReference("fk_id2")]
+            prepareKeyColumnsPairsList()            |   ["      ": forReference("fk_col1"), "     ": forReference("fk_id2")]
+            prepareKeyColumnsPairsList()            |   [col1: forReference("fk_col1"), "": forReference("fk_id2")]
+            prepareKeyColumnsPairsList()            |   [col1: forReference("fk_col1"), "      ": forReference("fk_id2")]
+    }
+
     IsRecordBelongsToCurrentTenantFunctionDefinition prepareCorrectDefinition() {
         IFunctionDefinition functionDefinitionMock = Mock(IFunctionDefinition)
         functionDefinitionMock.getFunctionReference() >> "schema222.record_exists_for_tenant"
