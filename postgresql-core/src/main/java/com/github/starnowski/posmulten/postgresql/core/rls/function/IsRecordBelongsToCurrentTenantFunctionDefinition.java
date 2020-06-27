@@ -49,5 +49,11 @@ public class IsRecordBelongsToCurrentTenantFunctionDefinition extends DefaultFun
         {
             throw new IllegalArgumentException(format("The primary columns values map has invalid size, expected %s elements but has %s elements", keyColumnsPairsList.size(), primaryColumnsValuesMap.size()));
         }
+        primaryColumnsValuesMap.entrySet().forEach(entry -> {
+            if (entry.getKey().trim().isEmpty())
+            {
+                throw new IllegalArgumentException("The primary columns values map contains an entry with an empty key");
+            }
+        });
     }
 }
