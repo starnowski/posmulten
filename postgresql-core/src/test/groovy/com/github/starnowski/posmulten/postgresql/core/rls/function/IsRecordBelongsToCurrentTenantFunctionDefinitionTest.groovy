@@ -69,10 +69,11 @@ class IsRecordBelongsToCurrentTenantFunctionDefinitionTest extends Specification
             ex.message == expectedExceptionMessage
 
         where:
-            functionParameters              |   passedArguments                                                                                 |   expectedSize    |   currentSize
-            prepareKeyColumnsPairsList()    |   [id2: forReference("fk_id2")]                                                                   |   2               |   1
-            prepareKeyColumnsPairsList()    |   [col1: forReference("fk_col1")]                                                                 |   2               |   1
-            prepareKeyColumnsPairsList()    |   [col1: forReference("fk_col1"), id2: forReference("fk_id2"), uuid: forReference("fk_uuid")]     |   2               |   3
+            functionParameters                      |   passedArguments                                                                                 |   expectedSize    |   currentSize
+            prepareKeyColumnsPairsList()            |   [id2: forReference("fk_id2")]                                                                   |   2               |   1
+            prepareKeyColumnsPairsList()            |   [col1: forReference("fk_col1")]                                                                 |   2               |   1
+            prepareKeyColumnsPairsList()            |   [col1: forReference("fk_col1"), id2: forReference("fk_id2"), uuid: forReference("fk_uuid")]     |   2               |   3
+            [pairOfColumnWithType("id", "UUID")]    |   [id: forReference("user_id"), post_id: forReference("post_fk_id")]                              |   1               |   2
     }
 
     IsRecordBelongsToCurrentTenantFunctionDefinition prepareCorrectDefinition() {
