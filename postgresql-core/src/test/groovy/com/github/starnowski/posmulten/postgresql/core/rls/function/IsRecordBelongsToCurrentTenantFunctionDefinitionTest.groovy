@@ -101,6 +101,30 @@ class IsRecordBelongsToCurrentTenantFunctionDefinitionTest extends Specification
             prepareKeyColumnsPairsList()            |   [col1: forReference("fk_col1"), "      ": forReference("fk_id2")]
     }
 
+    @Unroll
+    def "should throw an exception of type 'IllegalArgumentException' when passed parameters values does not contains keys for all function parameters for function parameters #functionParameters and passed arguments #passedArguments"()
+    {
+        given:
+            def definition = prepareCorrectDefinition(functionParameters)
+
+        when:
+            definition.returnIsRecordBelongsToCurrentTenantFunctionInvocation(passedArguments)
+
+        then:
+            def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+            ex.message == expectedExceptionMessage
+
+        where:
+            functionParameters                              |   passedArguments                                                     |   expectedExceptionMessage
+            prepareKeyColumnsPairsList()                    |   [gg: forReference("fk_col1"), id2: forReference("fk_id2")]          |   "The primary columns values map does not contains keys for function arguments: col1"
+            prepareKeyColumnsPairsList()                    |   [kk: forReference("fk_col1"), aa: forReference("fk_id2")]           |   "The primary columns values map does not contains keys for function arguments: col1, id2"
+            prepareKeyColumnsPairsList()                    |   [col1: forReference("fk_col1"), zzz: forReference("fk_id2")]        |   "The primary columns values map does not contains keys for function arguments: id2"
+            [pairOfColumnWithType("user_id", "UUID")]       |   [id: forReference("post_fk_id")]                                    |   "The primary columns values map does not contains keys for function arguments: user_id"
+    }
+
+
     IsRecordBelongsToCurrentTenantFunctionDefinition prepareCorrectDefinition() {
         IFunctionDefinition functionDefinitionMock = Mock(IFunctionDefinition)
         functionDefinitionMock.getFunctionReference() >> "schema222.record_exists_for_tenant"
