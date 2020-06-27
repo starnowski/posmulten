@@ -6,7 +6,9 @@ import javafx.util.Pair;
 import java.util.List;
 import java.util.Map;
 
+import static java.lang.String.format;
 import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toList;
 
 public class IsRecordBelongsToCurrentTenantFunctionDefinition extends DefaultFunctionDefinition implements IsRecordBelongsToCurrentTenantFunctionInvocationFactory{
 
@@ -19,12 +21,7 @@ public class IsRecordBelongsToCurrentTenantFunctionDefinition extends DefaultFun
 
     @Override
     public String returnIsRecordBelongsToCurrentTenantFunctionInvocation(Map<String, FunctionArgumentValue> primaryColumnsValuesMap) {
-        //TODO Validate if
-        //TODO tenantFunctionArgument cannot be null
-        //TODO tenantFunctionArgument cannot be blank
-        //TODO all entries in primaryColumnsValuesMap cannot be null
-        //TODO all entries in primaryColumnsValuesMap cannot be blank
-        //TODO all items from the keyColumnsPairsList should contains keys in primaryColumnsValuesMap
+        validate(primaryColumnsValuesMap);
         StringBuilder sb = new StringBuilder();
         sb.append(getFunctionReference());
         sb.append("(");
@@ -35,5 +32,28 @@ public class IsRecordBelongsToCurrentTenantFunctionDefinition extends DefaultFun
                 .collect(joining(", ")));
         sb.append(")");
         return sb.toString();
+    }
+
+    private void validate(Map<String, FunctionArgumentValue> primaryColumnsValuesMap) {
+        if (primaryColumnsValuesMap == null)
+        {
+            throw new IllegalArgumentException("The primary columns values map cannot be null");
+        }
+        if (primaryColumnsValuesMap.isEmpty())
+        {
+            throw new IllegalArgumentException("The primary columns values map cannot be empty");
+        }
+        if (keyColumnsPairsList.size() != primaryColumnsValuesMap.size())
+        {
+            throw new IllegalArgumentException(format("The primary columns values map has invalid size, expected %s elements but has %s elements", keyColumnsPairsList.size(), primaryColumnsValuesMap.size()));
+        }
+        List<String> missingKeys = keyColumnsPairsList.stream()
+                .map(pair -> pair.getKey())
+                .filter(key -> !primaryColumnsValuesMap.containsKey(key))
+                .collect(toList());
+        if (!missingKeys.isEmpty())
+        {
+            throw new IllegalArgumentException(format("The primary columns values map does not contains keys for function arguments: %s", missingKeys.stream().sorted().collect(joining(", "))));
+        }
     }
 }
