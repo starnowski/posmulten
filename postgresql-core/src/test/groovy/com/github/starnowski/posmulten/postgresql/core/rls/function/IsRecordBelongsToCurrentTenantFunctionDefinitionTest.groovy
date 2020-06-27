@@ -57,7 +57,7 @@ class IsRecordBelongsToCurrentTenantFunctionDefinitionTest extends Specification
     {
         given:
             def definition = prepareCorrectDefinition(functionParameters)
-            def expectedExceptionMessage = format("The primary columns values map has invalid size, expected \$1%s elements but has \$2%s elements", expectedSize, currentSize)
+            def expectedExceptionMessage = format("The primary columns values map has invalid size, expected %s elements but has %s elements", expectedSize, currentSize)
 
         when:
             definition.returnIsRecordBelongsToCurrentTenantFunctionInvocation(passedArguments)
@@ -72,7 +72,7 @@ class IsRecordBelongsToCurrentTenantFunctionDefinitionTest extends Specification
             functionParameters              |   passedArguments                                                                                 |   expectedSize    |   currentSize
             prepareKeyColumnsPairsList()    |   [id2: forReference("fk_id2")]                                                                   |   2               |   1
             prepareKeyColumnsPairsList()    |   [col1: forReference("fk_col1")]                                                                 |   2               |   1
-            prepareKeyColumnsPairsList()    |   [col1: forReference("fk_col1"), id2: forReference("fk_id2"), uuid: forReference("fk_uuid")]     |   2               |   1
+            prepareKeyColumnsPairsList()    |   [col1: forReference("fk_col1"), id2: forReference("fk_id2"), uuid: forReference("fk_uuid")]     |   2               |   3
     }
 
     IsRecordBelongsToCurrentTenantFunctionDefinition prepareCorrectDefinition() {
