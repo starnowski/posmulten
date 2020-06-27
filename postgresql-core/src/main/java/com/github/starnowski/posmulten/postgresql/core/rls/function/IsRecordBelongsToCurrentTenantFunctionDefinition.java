@@ -8,6 +8,7 @@ import java.util.Map;
 
 import static java.lang.String.format;
 import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toList;
 
 public class IsRecordBelongsToCurrentTenantFunctionDefinition extends DefaultFunctionDefinition implements IsRecordBelongsToCurrentTenantFunctionInvocationFactory{
 
@@ -54,5 +55,13 @@ public class IsRecordBelongsToCurrentTenantFunctionDefinition extends DefaultFun
                 throw new IllegalArgumentException("The primary columns values map contains an entry with an empty key");
             }
         });
+        List<String> missingKeys = keyColumnsPairsList.stream()
+                .map(pair -> pair.getKey())
+                .filter(key -> !primaryColumnsValuesMap.containsKey(key))
+                .collect(toList());
+        if (!missingKeys.isEmpty())
+        {
+            throw new IllegalArgumentException(format("The primary columns values map does not contains keys for function arguments: %s", missingKeys.stream().sorted().collect(joining(", "))));
+        }
     }
 }
