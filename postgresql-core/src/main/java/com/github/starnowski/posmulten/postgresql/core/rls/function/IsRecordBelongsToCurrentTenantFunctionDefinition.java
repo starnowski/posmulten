@@ -21,7 +21,6 @@ public class IsRecordBelongsToCurrentTenantFunctionDefinition extends DefaultFun
     @Override
     public String returnIsRecordBelongsToCurrentTenantFunctionInvocation(Map<String, FunctionArgumentValue> primaryColumnsValuesMap) {
         //TODO Validate if
-        //TODO primaryColumnsValuesMap - invalid number of keys
         //TODO all entries in primaryColumnsValuesMap cannot be blank
         //TODO all items from the keyColumnsPairsList should contains keys in primaryColumnsValuesMap
         validate(primaryColumnsValuesMap);
