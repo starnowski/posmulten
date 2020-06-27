@@ -47,12 +47,6 @@ public class IsRecordBelongsToCurrentTenantFunctionDefinition extends DefaultFun
         {
             throw new IllegalArgumentException(format("The primary columns values map has invalid size, expected %s elements but has %s elements", keyColumnsPairsList.size(), primaryColumnsValuesMap.size()));
         }
-        primaryColumnsValuesMap.entrySet().forEach(entry -> {
-            if (entry.getKey().trim().isEmpty())
-            {
-                throw new IllegalArgumentException("The primary columns values map contains an entry with an empty key");
-            }
-        });
         List<String> missingKeys = keyColumnsPairsList.stream()
                 .map(pair -> pair.getKey())
                 .filter(key -> !primaryColumnsValuesMap.containsKey(key))
