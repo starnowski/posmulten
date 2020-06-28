@@ -47,6 +47,36 @@ class IsRecordBelongsToCurrentTenantConstraintProducerTest extends Specification
             "user_belongs_tt"   |   "secondary" | "users"   |   "is_tenant_correct(tenant_id)"  ||  "ALTER TABLE \"secondary\".\"users\" ADD CONSTRAINT user_belongs_tt CHECK (is_tenant_correct(tenant_id));"
     }
 
+    @Unroll
+    def "should return statement (#expectedStatement) that drops '#constraintName' constraint for table (#table) and schema (#schema)"()
+    {
+        given:
+            def randomString = new RandomString(5, new Random(), RandomString.lower)
+            IsRecordBelongsToCurrentTenantFunctionInvocationFactory isRecordBelongsToCurrentTenantFunctionInvocationFactory =
+                    {
+                        randomString.nextString()
+                    }
+            Map<String, FunctionArgumentValue> primaryColumnsValuesMap = generateRandomPrimaryColumnsValuesMap()
+            def parameters = DefaultIsRecordBelongsToCurrentTenantConstraintProducerParameters.builder()
+                    .withConstraintName(constraintName)
+                    .withTableName(table)
+                    .withTableSchema(schema)
+                    .withIsRecordBelongsToCurrentTenantFunctionInvocationFactory(isRecordBelongsToCurrentTenantFunctionInvocationFactory)
+                    .withPrimaryColumnsValuesMap(primaryColumnsValuesMap).build()
+        when:
+            def definition = tested.produce(parameters)
+
+        then:
+            definition.getDropScript() == expectedStatement
+
+        where:
+            constraintName      |   schema      | table     ||	expectedStatement
+            "sss"               |   null        | "users"   ||  "ALTER TABLE \"users\" DROP CONSTRAINT sss;"
+            "const_1"           |   "public"    | "users"   ||  "ALTER TABLE \"public\".\"users\" DROP CONSTRAINT const_1;"
+            "sss"               |   "secondary" | "users"   ||  "ALTER TABLE \"secondary\".\"users\" DROP CONSTRAINT sss;"
+            "user_belongs_tt"   |   "secondary" | "users"   ||  "ALTER TABLE \"secondary\".\"users\" DROP CONSTRAINT user_belongs_tt;"
+    }
+
     Map<String, FunctionArgumentValue> generateRandomPrimaryColumnsValuesMap()
     {
         def randomString = new RandomString(5, new Random(), RandomString.lower)
