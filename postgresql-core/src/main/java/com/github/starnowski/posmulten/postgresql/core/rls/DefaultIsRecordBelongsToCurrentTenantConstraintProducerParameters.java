@@ -7,7 +7,7 @@ import java.util.Map;
 
 import static java.util.Collections.unmodifiableMap;
 
-public class DefaultIsRecordBelongsToCurrentTenantConstraintProducerParameters implements IsRecordBelongsToCurrentTenantConstraintProducerParameters{
+public final class DefaultIsRecordBelongsToCurrentTenantConstraintProducerParameters implements IsRecordBelongsToCurrentTenantConstraintProducerParameters{
 
     private final String constraintName;
     private final String tableName;
@@ -41,5 +41,49 @@ public class DefaultIsRecordBelongsToCurrentTenantConstraintProducerParameters i
 
     public IsRecordBelongsToCurrentTenantFunctionInvocationFactory getIsRecordBelongsToCurrentTenantFunctionInvocationFactory() {
         return isRecordBelongsToCurrentTenantFunctionInvocationFactory;
+    }
+
+    public static DefaultIsRecordBelongsToCurrentTenantConstraintProducerParametersBuilder builder()
+    {
+        return new DefaultIsRecordBelongsToCurrentTenantConstraintProducerParametersBuilder();
+    }
+
+    public static class DefaultIsRecordBelongsToCurrentTenantConstraintProducerParametersBuilder
+    {
+        private String constraintName;
+        private String tableName;
+        private String tableSchema;
+        private Map<String, FunctionArgumentValue> primaryColumnsValuesMap;
+        private IsRecordBelongsToCurrentTenantFunctionInvocationFactory isRecordBelongsToCurrentTenantFunctionInvocationFactory;
+
+        public DefaultIsRecordBelongsToCurrentTenantConstraintProducerParametersBuilder withConstraintName(String constraintName) {
+            this.constraintName = constraintName;
+            return this;
+        }
+
+        public DefaultIsRecordBelongsToCurrentTenantConstraintProducerParametersBuilder withTableName(String tableName) {
+            this.tableName = tableName;
+            return this;
+        }
+
+        public DefaultIsRecordBelongsToCurrentTenantConstraintProducerParametersBuilder withTableSchema(String tableSchema) {
+            this.tableSchema = tableSchema;
+            return this;
+        }
+
+        public DefaultIsRecordBelongsToCurrentTenantConstraintProducerParametersBuilder withPrimaryColumnsValuesMap(Map<String, FunctionArgumentValue> primaryColumnsValuesMap) {
+            this.primaryColumnsValuesMap = primaryColumnsValuesMap;
+            return this;
+        }
+
+        public DefaultIsRecordBelongsToCurrentTenantConstraintProducerParametersBuilder withIsRecordBelongsToCurrentTenantFunctionInvocationFactory(IsRecordBelongsToCurrentTenantFunctionInvocationFactory isRecordBelongsToCurrentTenantFunctionInvocationFactory) {
+            this.isRecordBelongsToCurrentTenantFunctionInvocationFactory = isRecordBelongsToCurrentTenantFunctionInvocationFactory;
+            return this;
+        }
+
+        public DefaultIsRecordBelongsToCurrentTenantConstraintProducerParameters build()
+        {
+            return new DefaultIsRecordBelongsToCurrentTenantConstraintProducerParameters(constraintName, tableName, tableSchema, primaryColumnsValuesMap, isRecordBelongsToCurrentTenantFunctionInvocationFactory);
+        }
     }
 }
