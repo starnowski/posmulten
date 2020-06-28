@@ -16,15 +16,13 @@ class IsRecordBelongsToCurrentTenantConstraintProducerTest extends Specification
     def "should return statement (#expectedStatement) that adds '#constraintName' constraint to table (#table) and schema (#schema)"()
     {
         given:
-        def r = new RandomString(5, new Random(), RandomString.lower)
         Map<String, FunctionArgumentValue> capturedPrimaryColumnsValuesMap = null
         IsRecordBelongsToCurrentTenantFunctionInvocationFactory isRecordBelongsToCurrentTenantFunctionInvocationFactory =
                 {arguments ->
                     capturedPrimaryColumnsValuesMap = arguments
                     conditionStatement
                 }
-        Map<String, FunctionArgumentValue> primaryColumnsValuesMap = new HashMap<>()
-        primaryColumnsValuesMap.put(r.nextString(), forReference(r.nextString()))
+        Map<String, FunctionArgumentValue> primaryColumnsValuesMap = generateRandomPrimaryColumnsValuesMap()
         def parameters = DefaultIsRecordBelongsToCurrentTenantConstraintProducerParameters.builder()
                 .withConstraintName(constraintName)
                 .withTableName(table)
@@ -47,5 +45,18 @@ class IsRecordBelongsToCurrentTenantConstraintProducerTest extends Specification
 //            "secondary" | "users"   ||  "ALTER TABLE secondary.\"users\" FORCE ROW LEVEL SECURITY;"
 //            "secondary" | "posts"   ||  "ALTER TABLE secondary.\"posts\" FORCE ROW LEVEL SECURITY;"
 //            "public"    | "posts"   ||  "ALTER TABLE public.\"posts\" FORCE ROW LEVEL SECURITY;"
+    }
+
+    Map<String, FunctionArgumentValue> generateRandomPrimaryColumnsValuesMap()
+    {
+        def randomString = new RandomString(5, new Random(), RandomString.lower)
+        def random = new Random()
+        Map<String, FunctionArgumentValue> primaryColumnsValuesMap = new HashMap<>()
+        def mapSize = random.nextInt(5) + 1
+        for (int i = 0; i < mapSize; i++)
+        {
+            primaryColumnsValuesMap.put(randomString.nextString(), forReference(randomString.nextString()))
+        }
+        primaryColumnsValuesMap
     }
 }
