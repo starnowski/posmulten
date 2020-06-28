@@ -39,12 +39,12 @@ class IsRecordBelongsToCurrentTenantConstraintProducerTest extends Specification
             primaryColumnsValuesMap == capturedPrimaryColumnsValuesMap
 
         where:
-            constraintName  |   schema      | table     |   conditionStatement  ||	expectedStatement
-            "sss"           |   null        | "users"   |   "cccsss"            ||  "ALTER TABLE \"users\" ADD CONSTRAINT sss CHECK (cccsss);"
-//            null        | "posts"   ||  "ALTER TABLE \"posts\" FORCE ROW LEVEL SECURITY;"
-//            "secondary" | "users"   ||  "ALTER TABLE secondary.\"users\" FORCE ROW LEVEL SECURITY;"
-//            "secondary" | "posts"   ||  "ALTER TABLE secondary.\"posts\" FORCE ROW LEVEL SECURITY;"
-//            "public"    | "posts"   ||  "ALTER TABLE public.\"posts\" FORCE ROW LEVEL SECURITY;"
+            constraintName      |   schema      | table     |   conditionStatement              ||	expectedStatement
+            "sss"               |   null        | "users"   |   "cccsss"                        ||  "ALTER TABLE \"users\" ADD CONSTRAINT sss CHECK (cccsss);"
+            "sss"               |   "public"    | "users"   |   "cccsss"                        ||  "ALTER TABLE \"public\".\"users\" ADD CONSTRAINT sss CHECK (cccsss);"
+            "sss"               |   "secondary" | "users"   |   "cccsss"                        ||  "ALTER TABLE \"secondary\".\"users\" ADD CONSTRAINT sss CHECK (cccsss);"
+            "user_belongs_tt"   |   "secondary" | "users"   |   "cccsss"                        ||  "ALTER TABLE \"secondary\".\"users\" ADD CONSTRAINT user_belongs_tt CHECK (cccsss);"
+            "user_belongs_tt"   |   "secondary" | "users"   |   "is_tenant_correct(tenant_id)"  ||  "ALTER TABLE \"secondary\".\"users\" ADD CONSTRAINT user_belongs_tt CHECK (is_tenant_correct(tenant_id));"
     }
 
     Map<String, FunctionArgumentValue> generateRandomPrimaryColumnsValuesMap()
