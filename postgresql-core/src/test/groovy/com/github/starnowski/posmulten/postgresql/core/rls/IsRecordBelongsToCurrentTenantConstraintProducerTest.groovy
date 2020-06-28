@@ -16,19 +16,19 @@ class IsRecordBelongsToCurrentTenantConstraintProducerTest extends Specification
     def "should return statement (#expectedStatement) that adds '#constraintName' constraint to table (#table) and schema (#schema)"()
     {
         given:
-        Map<String, FunctionArgumentValue> capturedPrimaryColumnsValuesMap = null
-        IsRecordBelongsToCurrentTenantFunctionInvocationFactory isRecordBelongsToCurrentTenantFunctionInvocationFactory =
-                {arguments ->
-                    capturedPrimaryColumnsValuesMap = arguments
-                    conditionStatement
-                }
-        Map<String, FunctionArgumentValue> primaryColumnsValuesMap = generateRandomPrimaryColumnsValuesMap()
-        def parameters = DefaultIsRecordBelongsToCurrentTenantConstraintProducerParameters.builder()
-                .withConstraintName(constraintName)
-                .withTableName(table)
-                .withTableSchema(schema)
-                .withIsRecordBelongsToCurrentTenantFunctionInvocationFactory(isRecordBelongsToCurrentTenantFunctionInvocationFactory)
-                .withPrimaryColumnsValuesMap(primaryColumnsValuesMap).build()
+            Map<String, FunctionArgumentValue> capturedPrimaryColumnsValuesMap = null
+            IsRecordBelongsToCurrentTenantFunctionInvocationFactory isRecordBelongsToCurrentTenantFunctionInvocationFactory =
+                    {arguments ->
+                        capturedPrimaryColumnsValuesMap = arguments
+                        conditionStatement
+                    }
+            Map<String, FunctionArgumentValue> primaryColumnsValuesMap = generateRandomPrimaryColumnsValuesMap()
+            def parameters = DefaultIsRecordBelongsToCurrentTenantConstraintProducerParameters.builder()
+                    .withConstraintName(constraintName)
+                    .withTableName(table)
+                    .withTableSchema(schema)
+                    .withIsRecordBelongsToCurrentTenantFunctionInvocationFactory(isRecordBelongsToCurrentTenantFunctionInvocationFactory)
+                    .withPrimaryColumnsValuesMap(primaryColumnsValuesMap).build()
         when:
             def definition = tested.produce(parameters)
 
