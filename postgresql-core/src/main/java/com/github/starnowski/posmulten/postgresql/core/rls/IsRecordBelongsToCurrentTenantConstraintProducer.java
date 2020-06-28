@@ -8,6 +8,7 @@ public class IsRecordBelongsToCurrentTenantConstraintProducer {
     public SQLDefinition produce(IsRecordBelongsToCurrentTenantConstraintProducerParameters parameters)
     {
         //TODO
+        // ALTER TABLE distributors DROP CONSTRAINT zipchk;
         return new DefaultSQLDefinition(prepareCreateScript(parameters), "");
     }
 
