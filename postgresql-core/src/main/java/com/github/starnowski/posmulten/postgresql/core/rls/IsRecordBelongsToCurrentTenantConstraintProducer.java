@@ -8,6 +8,29 @@ public class IsRecordBelongsToCurrentTenantConstraintProducer {
     public SQLDefinition produce(IsRecordBelongsToCurrentTenantConstraintProducerParameters parameters)
     {
         //TODO
-        return new DefaultSQLDefinition("ALTER TABLE \"users\" ADD CONSTRAINT sss CHECK (cccsss);", "");
+        return new DefaultSQLDefinition(prepareCreateScript(parameters), "");
+    }
+
+    protected String prepareCreateScript(IsRecordBelongsToCurrentTenantConstraintProducerParameters parameters)
+    {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("ALTER TABLE ");
+        if (parameters.getTableSchema() != null)
+        {
+            stringBuilder.append("\"");
+            stringBuilder.append(parameters.getTableSchema());
+            stringBuilder.append("\"");
+            stringBuilder.append(".");
+        }
+        stringBuilder.append("\"");
+        stringBuilder.append(parameters.getTableName());
+        stringBuilder.append("\"");
+        stringBuilder.append(" ADD CONSTRAINT ");
+        stringBuilder.append(parameters.getConstraintName());
+        stringBuilder.append(" CHECK ");
+        stringBuilder.append("(");
+        stringBuilder.append(parameters.getIsRecordBelongsToCurrentTenantFunctionInvocationFactory().returnIsRecordBelongsToCurrentTenantFunctionInvocation(parameters.getPrimaryColumnsValuesMap()));
+        stringBuilder.append(");");
+        return stringBuilder.toString();
     }
 }
