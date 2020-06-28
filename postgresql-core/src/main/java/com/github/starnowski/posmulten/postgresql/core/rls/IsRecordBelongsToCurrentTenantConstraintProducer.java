@@ -9,7 +9,7 @@ public class IsRecordBelongsToCurrentTenantConstraintProducer {
     {
         //TODO
         // ALTER TABLE distributors DROP CONSTRAINT zipchk;
-        return new DefaultSQLDefinition(prepareCreateScript(parameters), "");
+        return new DefaultSQLDefinition(prepareCreateScript(parameters), prepareDropScript(parameters));
     }
 
     protected String prepareCreateScript(IsRecordBelongsToCurrentTenantConstraintProducerParameters parameters)
@@ -32,6 +32,26 @@ public class IsRecordBelongsToCurrentTenantConstraintProducer {
         stringBuilder.append("(");
         stringBuilder.append(parameters.getIsRecordBelongsToCurrentTenantFunctionInvocationFactory().returnIsRecordBelongsToCurrentTenantFunctionInvocation(parameters.getPrimaryColumnsValuesMap()));
         stringBuilder.append(");");
+        return stringBuilder.toString();
+    }
+
+    protected String prepareDropScript(IsRecordBelongsToCurrentTenantConstraintProducerParameters parameters)
+    {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("ALTER TABLE ");
+        if (parameters.getTableSchema() != null)
+        {
+            stringBuilder.append("\"");
+            stringBuilder.append(parameters.getTableSchema());
+            stringBuilder.append("\"");
+            stringBuilder.append(".");
+        }
+        stringBuilder.append("\"");
+        stringBuilder.append(parameters.getTableName());
+        stringBuilder.append("\"");
+        stringBuilder.append(" DROP CONSTRAINT ");
+        stringBuilder.append(parameters.getConstraintName());
+        stringBuilder.append(";");
         return stringBuilder.toString();
     }
 }
