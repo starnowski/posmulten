@@ -9,25 +9,25 @@ class IsRecordBelongsToCurrentTenantConstraintProducerTest extends Specification
     def tested = new IsRecordBelongsToCurrentTenantConstraintProducer()
 
     @Unroll
-    def "should return statement (#expectedStatement) that add '#constraintName' constraint to table (#table) and schema (#schema)"()
+    def "should return statement (#expectedStatement) that adds '#constraintName' constraint to table (#table) and schema (#schema)"()
     {
         given:
         IsRecordBelongsToCurrentTenantFunctionInvocationFactory isRecordBelongsToCurrentTenantFunctionInvocationFactory =
                 {
                     "cccsss"
                 }
-        DefaultIsRecordBelongsToCurrentTenantConstraintProducerParameters.builder()
+        def parameters = DefaultIsRecordBelongsToCurrentTenantConstraintProducerParameters.builder()
                 .withConstraintName(constraintName)
                 .withTableName(table)
                 .withTableSchema(schema)
                 .withIsRecordBelongsToCurrentTenantFunctionInvocationFactory(isRecordBelongsToCurrentTenantFunctionInvocationFactory)
-                .withPrimaryColumnsValuesMap()
+                .withPrimaryColumnsValuesMap([:]).build()
         expect:
-            tested.produce(table, schema) == expectedStatement
+            tested.produce(parameters) == expectedStatement
 
         where:
-            schema      | table     ||	expectedStatement
-            null        | "users"   ||  "ALTER TABLE \"users\" ADD CONSTRAINT;"
+            constraintName  |   schema      | table     ||	expectedStatement
+            "sss"           |   null        | "users"   ||  "ALTER TABLE \"users\" ADD CONSTRAINT sss CHECK (cccsss);"
 //            null        | "posts"   ||  "ALTER TABLE \"posts\" FORCE ROW LEVEL SECURITY;"
 //            "secondary" | "users"   ||  "ALTER TABLE secondary.\"users\" FORCE ROW LEVEL SECURITY;"
 //            "secondary" | "posts"   ||  "ALTER TABLE secondary.\"posts\" FORCE ROW LEVEL SECURITY;"
