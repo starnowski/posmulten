@@ -16,16 +16,7 @@ public class IsRecordBelongsToCurrentTenantConstraintProducer {
     {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("ALTER TABLE ");
-        if (parameters.getTableSchema() != null)
-        {
-            stringBuilder.append("\"");
-            stringBuilder.append(parameters.getTableSchema());
-            stringBuilder.append("\"");
-            stringBuilder.append(".");
-        }
-        stringBuilder.append("\"");
-        stringBuilder.append(parameters.getTableName());
-        stringBuilder.append("\"");
+        stringBuilder.append(prepareTableReference(parameters));
         stringBuilder.append(" ADD CONSTRAINT ");
         stringBuilder.append(parameters.getConstraintName());
         stringBuilder.append(" CHECK ");
@@ -35,10 +26,9 @@ public class IsRecordBelongsToCurrentTenantConstraintProducer {
         return stringBuilder.toString();
     }
 
-    protected String prepareDropScript(IsRecordBelongsToCurrentTenantConstraintProducerParameters parameters)
+    private String prepareTableReference(IsRecordBelongsToCurrentTenantConstraintProducerParameters parameters)
     {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("ALTER TABLE ");
         if (parameters.getTableSchema() != null)
         {
             stringBuilder.append("\"");
@@ -49,6 +39,14 @@ public class IsRecordBelongsToCurrentTenantConstraintProducer {
         stringBuilder.append("\"");
         stringBuilder.append(parameters.getTableName());
         stringBuilder.append("\"");
+        return stringBuilder.toString();
+    }
+
+    protected String prepareDropScript(IsRecordBelongsToCurrentTenantConstraintProducerParameters parameters)
+    {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("ALTER TABLE ");
+        stringBuilder.append(prepareTableReference(parameters));
         stringBuilder.append(" DROP CONSTRAINT ");
         stringBuilder.append(parameters.getConstraintName());
         stringBuilder.append(";");
