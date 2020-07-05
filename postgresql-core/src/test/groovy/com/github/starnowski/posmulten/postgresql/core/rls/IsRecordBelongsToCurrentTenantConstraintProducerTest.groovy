@@ -77,6 +77,20 @@ class IsRecordBelongsToCurrentTenantConstraintProducerTest extends Specification
             "user_belongs_tt"   |   "secondary" | "users"   ||  "ALTER TABLE \"secondary\".\"users\" DROP CONSTRAINT IF EXISTS user_belongs_tt;"
     }
 
+    @Unroll
+    def "should return correct definition based on the generic parameters object"()
+    {
+        given:
+            def parameters = returnCorrectParametersMockObject()
+
+        when:
+            def definition = tested.produce(parameters)
+
+        then:
+            definition.getCreateScript() == "ALTER TABLE \"public\".\"users\" ADD CONSTRAINT const_1 CHECK (current_tenant());"
+            definition.getDropScript() == "ALTER TABLE \"public\".\"users\" DROP CONSTRAINT IF EXISTS const_1;"
+    }
+
     Map<String, FunctionArgumentValue> generateRandomPrimaryColumnsValuesMap()
     {
         def randomString = new RandomString(5, new Random(), RandomString.lower)
@@ -90,7 +104,7 @@ class IsRecordBelongsToCurrentTenantConstraintProducerTest extends Specification
         primaryColumnsValuesMap
     }
 
-    IsRecordBelongsToCurrentTenantConstraintProducerParameters returnCorrectParametersSpyObject() {
+    IsRecordBelongsToCurrentTenantConstraintProducerParameters returnCorrectParametersMockObject() {
         IsRecordBelongsToCurrentTenantFunctionInvocationFactory isRecordBelongsToCurrentTenantFunctionInvocationFactory =
                 {
                     "current_tenant()"
@@ -102,5 +116,6 @@ class IsRecordBelongsToCurrentTenantConstraintProducerTest extends Specification
         mock.getTableSchema() >> "public"
         mock.getIsRecordBelongsToCurrentTenantFunctionInvocationFactory() >> isRecordBelongsToCurrentTenantFunctionInvocationFactory
         mock.getPrimaryColumnsValuesMap() >> primaryColumnsValuesMap
+        mock
     }
 }
