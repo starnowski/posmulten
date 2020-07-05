@@ -89,4 +89,18 @@ class IsRecordBelongsToCurrentTenantConstraintProducerTest extends Specification
         }
         primaryColumnsValuesMap
     }
+
+    IsRecordBelongsToCurrentTenantConstraintProducerParameters returnCorrectParametersSpyObject() {
+        IsRecordBelongsToCurrentTenantFunctionInvocationFactory isRecordBelongsToCurrentTenantFunctionInvocationFactory =
+                {
+                    "current_tenant()"
+                }
+        Map<String, FunctionArgumentValue> primaryColumnsValuesMap = generateRandomPrimaryColumnsValuesMap()
+        IsRecordBelongsToCurrentTenantConstraintProducerParameters mock = Mock(IsRecordBelongsToCurrentTenantConstraintProducerParameters)
+        mock.getConstraintName() >> "const_1"
+        mock.getTableName() >> "users"
+        mock.getTableSchema() >> "public"
+        mock.getIsRecordBelongsToCurrentTenantFunctionInvocationFactory() >> isRecordBelongsToCurrentTenantFunctionInvocationFactory
+        mock.getPrimaryColumnsValuesMap() >> primaryColumnsValuesMap
+    }
 }
