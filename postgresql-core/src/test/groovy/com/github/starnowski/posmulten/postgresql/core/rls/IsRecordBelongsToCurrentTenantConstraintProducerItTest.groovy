@@ -1,9 +1,11 @@
 package com.github.starnowski.posmulten.postgresql.core.rls
 
 import com.github.starnowski.posmulten.postgresql.core.RandomString
+import com.github.starnowski.posmulten.postgresql.core.TestApplication
 import com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValue
 import com.github.starnowski.posmulten.postgresql.core.rls.function.IsRecordBelongsToCurrentTenantFunctionInvocationFactory
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.jdbc.core.JdbcTemplate
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -12,6 +14,7 @@ import static com.github.starnowski.posmulten.postgresql.core.TestUtils.isAnyRec
 import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValue.forReference
 import static org.junit.Assert.assertEquals
 
+@SpringBootTest(classes = [TestApplication.class])
 class IsRecordBelongsToCurrentTenantConstraintProducerItTest extends Specification {
 
     def tested = new IsRecordBelongsToCurrentTenantConstraintProducer()
@@ -20,11 +23,17 @@ class IsRecordBelongsToCurrentTenantConstraintProducerItTest extends Specificati
     JdbcTemplate jdbcTemplate
 
     def definition
+    def schema
+    def table
+    def constraintName
 
     @Unroll
-    def "should return statement that adds '#constraintName' constraint to table (#table) and schema (#schema) with condition '#conditionStatement'"()
+    def "should return statement that adds '#testConstraintName' constraint to table (#testTable) and schema (#testSchema) with condition '#conditionStatement'"()
     {
         given:
+            schema = testSchema
+            table = testTable
+            constraintName = testConstraintName
             assertEquals(false, isAnyRecordExists(jdbcTemplate, createSelectStatement(schema, table, constraintName)))
             IsRecordBelongsToCurrentTenantFunctionInvocationFactory isRecordBelongsToCurrentTenantFunctionInvocationFactory =
                     {
@@ -45,12 +54,12 @@ class IsRecordBelongsToCurrentTenantConstraintProducerItTest extends Specificati
             isAnyRecordExists(jdbcTemplate, createSelectStatement(schema, table, constraintName))
 
         where:
-            constraintName      |   schema              | table     |   conditionStatement
-            "sss"               |   null                | "users"   |   "tenant_id = 'dsasdf'"
-            "sss"               |   "public"            | "users"   |   "Cast(current_setting('some.boolean.value') as boolean)"
-            "sss"               |   "non_public_schema" | "users"   |   "tenant = 'dsasdf'"
-            "user_belongs_tt"   |   "non_public_schema" | "users"   |   "Cast(current_setting('boolean.value2') as boolean)"
-            "user_belongs_tt"   |   "non_public_schema" | "users"   |   "tenant_id = 'dsasdf'"
+            testConstraintName      |   testSchema              | testTable     |   conditionStatement
+            "sss"                   |   null                    | "users"       |   "tenant_id = 'dsasdf'"
+            "sss"                   |   "public"                | "users"       |   "Cast(current_setting('some.boolean.value') as boolean)"
+            "sss"                   |   "non_public_schema"     | "users"       |   "tenant_id = 'dsasdf'"
+            "user_belongs_tt"       |   "non_public_schema"     | "users"       |   "Cast(current_setting('boolean.value2') as boolean)"
+            "user_belongs_tt"       |   "non_public_schema"     | "users"       |   "tenant_id = 'dsasdf'"
     }
 
     String createSelectStatement(String schema, String table, String constraintName)
@@ -75,8 +84,7 @@ class IsRecordBelongsToCurrentTenantConstraintProducerItTest extends Specificati
     }
 
     def cleanup() {
-        jdbcTemplate.execute(functionDefinition.getDropScript())
-        //TODO
+        jdbcTemplate.execute(definition.getDropScript())
         assertEquals(false, isAnyRecordExists(jdbcTemplate, createSelectStatement(schema, table, constraintName)))
     }
 }
