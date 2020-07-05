@@ -71,10 +71,10 @@ class IsRecordBelongsToCurrentTenantConstraintProducerTest extends Specification
 
         where:
             constraintName      |   schema      | table     ||	expectedStatement
-            "sss"               |   null        | "users"   ||  "ALTER TABLE \"users\" DROP CONSTRAINT sss;"
-            "const_1"           |   "public"    | "users"   ||  "ALTER TABLE \"public\".\"users\" DROP CONSTRAINT const_1;"
-            "sss"               |   "secondary" | "users"   ||  "ALTER TABLE \"secondary\".\"users\" DROP CONSTRAINT sss;"
-            "user_belongs_tt"   |   "secondary" | "users"   ||  "ALTER TABLE \"secondary\".\"users\" DROP CONSTRAINT user_belongs_tt;"
+            "sss"               |   null        | "users"   ||  "ALTER TABLE \"users\" DROP CONSTRAINT IF EXISTS sss;"
+            "const_1"           |   "public"    | "users"   ||  "ALTER TABLE \"public\".\"users\" DROP CONSTRAINT IF EXISTS const_1;"
+            "sss"               |   "secondary" | "users"   ||  "ALTER TABLE \"secondary\".\"users\" DROP CONSTRAINT IF EXISTS sss;"
+            "user_belongs_tt"   |   "secondary" | "users"   ||  "ALTER TABLE \"secondary\".\"users\" DROP CONSTRAINT IF EXISTS user_belongs_tt;"
     }
 
     Map<String, FunctionArgumentValue> generateRandomPrimaryColumnsValuesMap()
