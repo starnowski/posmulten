@@ -94,12 +94,12 @@ class IsRecordBelongsToCurrentTenantConstraintProducerTest extends Specification
     def "should throw an exception of type 'IllegalArgumentException' when the table name is null" () {
         given:
             def parameters = returnCorrectParametersMockObject()
-            parameters.getTableName() >> null
 
         when:
             tested.produce(parameters)
 
         then:
+            _ * parameters.getTableName() >> null
             def ex = thrown(IllegalArgumentException.class)
 
         and: "exception should have correct message"
