@@ -7,8 +7,7 @@ public class IsRecordBelongsToCurrentTenantConstraintProducer {
 
     public SQLDefinition produce(IsRecordBelongsToCurrentTenantConstraintProducerParameters parameters)
     {
-        //TODO
-        // ALTER TABLE distributors DROP CONSTRAINT zipchk;
+        validate(parameters);
         return new DefaultSQLDefinition(prepareCreateScript(parameters), prepareDropScript(parameters));
     }
 
@@ -24,6 +23,18 @@ public class IsRecordBelongsToCurrentTenantConstraintProducer {
         stringBuilder.append(parameters.getIsRecordBelongsToCurrentTenantFunctionInvocationFactory().returnIsRecordBelongsToCurrentTenantFunctionInvocation(parameters.getPrimaryColumnsValuesMap()));
         stringBuilder.append(");");
         return stringBuilder.toString();
+    }
+
+    protected void validate(IsRecordBelongsToCurrentTenantConstraintProducerParameters parameters)
+    {
+//        if (parameters == null)
+//        {
+//            throw new IllegalArgumentException("The parameters object cannot be null");
+//        }
+        if (parameters.getTableName() == null)
+        {
+            throw new IllegalArgumentException("Table name cannot be null");
+        }
     }
 
     private String prepareTableReference(IsRecordBelongsToCurrentTenantConstraintProducerParameters parameters)
