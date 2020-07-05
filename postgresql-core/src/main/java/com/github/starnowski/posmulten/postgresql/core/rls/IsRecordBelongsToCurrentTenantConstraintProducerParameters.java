@@ -7,13 +7,19 @@ import java.util.Map;
 
 public interface IsRecordBelongsToCurrentTenantConstraintProducerParameters {
 
+    //TODO not null
+    //TODO not empty
     String getConstraintName();
 
+    //TODO not null
+    //TODO not empty
     String getTableName();
 
+    //TODO not empty
     String getTableSchema();
 
     Map<String, FunctionArgumentValue> getPrimaryColumnsValuesMap();
 
+    //TODO not null
     IsRecordBelongsToCurrentTenantFunctionInvocationFactory getIsRecordBelongsToCurrentTenantFunctionInvocationFactory();
 }
