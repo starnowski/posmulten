@@ -47,7 +47,7 @@ public class IsRecordBelongsToCurrentTenantConstraintProducer {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("ALTER TABLE ");
         stringBuilder.append(prepareTableReference(parameters));
-        stringBuilder.append(" DROP CONSTRAINT ");
+        stringBuilder.append(" DROP CONSTRAINT IF EXISTS ");
         stringBuilder.append(parameters.getConstraintName());
         stringBuilder.append(";");
         return stringBuilder.toString();
