@@ -91,6 +91,21 @@ class IsRecordBelongsToCurrentTenantConstraintProducerTest extends Specification
             definition.getDropScript() == "ALTER TABLE \"public\".\"users\" DROP CONSTRAINT IF EXISTS const_1;"
     }
 
+    def "should throw an exception of type 'IllegalArgumentException' when the table name is null" () {
+        given:
+            def parameters = returnCorrectParametersMockObject()
+            parameters.getTableName() >> null
+
+        when:
+            tested.produce(parameters)
+
+        then:
+            def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+            ex.message == "Table name cannot be null"
+    }
+
     Map<String, FunctionArgumentValue> generateRandomPrimaryColumnsValuesMap()
     {
         def randomString = new RandomString(5, new Random(), RandomString.lower)
