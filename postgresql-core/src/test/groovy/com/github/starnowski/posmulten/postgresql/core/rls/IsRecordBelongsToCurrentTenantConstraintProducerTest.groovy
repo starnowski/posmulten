@@ -159,6 +159,25 @@ class IsRecordBelongsToCurrentTenantConstraintProducerTest extends Specification
             ex.message == "Constraint name cannot be null"
     }
 
+    @Unroll
+    def "should throw an exception of type 'IllegalArgumentException' when the constraint nameis empty (#constraintName()" () {
+        given:
+            def parameters = returnCorrectParametersMockObject()
+
+        when:
+            tested.produce(parameters)
+
+        then:
+            _ * parameters.getConstraintName() >> constraintName
+            def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+            ex.message == "Constraint name cannot be empty"
+
+        where:
+            constraintName << ["", " ", "          "]
+    }
+
     Map<String, FunctionArgumentValue> generateRandomPrimaryColumnsValuesMap()
     {
         def randomString = new RandomString(5, new Random(), RandomString.lower)
