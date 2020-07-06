@@ -144,6 +144,21 @@ class IsRecordBelongsToCurrentTenantConstraintProducerTest extends Specification
             tableSchema << ["", " ", "          "]
     }
 
+    def "should throw an exception of type 'IllegalArgumentException' when the constraint name is null" () {
+        given:
+            def parameters = returnCorrectParametersMockObject()
+
+        when:
+            tested.produce(parameters)
+
+        then:
+            _ * parameters.getConstraintName() >> null
+            def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+            ex.message == "Constraint name cannot be null"
+    }
+
     Map<String, FunctionArgumentValue> generateRandomPrimaryColumnsValuesMap()
     {
         def randomString = new RandomString(5, new Random(), RandomString.lower)
