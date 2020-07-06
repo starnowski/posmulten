@@ -39,6 +39,10 @@ public class IsRecordBelongsToCurrentTenantConstraintProducer {
         {
             throw new IllegalArgumentException("Table name cannot be empty");
         }
+        if (parameters.getTableSchema() != null && parameters.getTableSchema().trim().isEmpty())
+        {
+            throw new IllegalArgumentException("Table schema cannot be empty");
+        }
     }
 
     private String prepareTableReference(IsRecordBelongsToCurrentTenantConstraintProducerParameters parameters)
