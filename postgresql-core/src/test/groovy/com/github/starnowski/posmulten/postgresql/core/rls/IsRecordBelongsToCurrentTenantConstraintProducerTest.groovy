@@ -115,7 +115,7 @@ class IsRecordBelongsToCurrentTenantConstraintProducerTest extends Specification
             tested.produce(parameters)
 
         then:
-            _ * parameters.getTableName() >> null
+            _ * parameters.getTableName() >> tableName
             def ex = thrown(IllegalArgumentException.class)
 
         and: "exception should have correct message"
