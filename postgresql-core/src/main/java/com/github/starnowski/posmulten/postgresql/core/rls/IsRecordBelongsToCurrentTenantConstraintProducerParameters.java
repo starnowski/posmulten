@@ -11,8 +11,6 @@ public interface IsRecordBelongsToCurrentTenantConstraintProducerParameters {
     //TODO not empty
     String getConstraintName();
 
-    //TODO not null
-    //TODO not empty
     String getTableName();
 
     //TODO not empty
