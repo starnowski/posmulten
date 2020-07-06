@@ -7,7 +7,6 @@ import java.util.Map;
 
 public interface IsRecordBelongsToCurrentTenantConstraintProducerParameters {
 
-    //TODO not empty
     String getConstraintName();
 
     String getTableName();
