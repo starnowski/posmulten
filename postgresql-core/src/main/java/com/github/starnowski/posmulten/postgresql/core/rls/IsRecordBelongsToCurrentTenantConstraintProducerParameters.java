@@ -13,7 +13,6 @@ public interface IsRecordBelongsToCurrentTenantConstraintProducerParameters {
 
     String getTableName();
 
-    //TODO not empty
     String getTableSchema();
 
     Map<String, FunctionArgumentValue> getPrimaryColumnsValuesMap();
