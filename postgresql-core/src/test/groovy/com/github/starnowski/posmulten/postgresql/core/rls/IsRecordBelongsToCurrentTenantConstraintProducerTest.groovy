@@ -106,6 +106,25 @@ class IsRecordBelongsToCurrentTenantConstraintProducerTest extends Specification
             ex.message == "Table name cannot be null"
     }
 
+    @Unroll
+    def "should throw an exception of type 'IllegalArgumentException' when the table name is empty (#tableName)" () {
+        given:
+            def parameters = returnCorrectParametersMockObject()
+
+        when:
+            tested.produce(parameters)
+
+        then:
+            _ * parameters.getTableName() >> null
+            def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+            ex.message == "Table name cannot be empty"
+
+        where:
+            tableName << ["", " ", "          "]
+    }
+
     Map<String, FunctionArgumentValue> generateRandomPrimaryColumnsValuesMap()
     {
         def randomString = new RandomString(5, new Random(), RandomString.lower)
