@@ -15,6 +15,5 @@ public interface IsRecordBelongsToCurrentTenantConstraintProducerParameters {
 
     Map<String, FunctionArgumentValue> getPrimaryColumnsValuesMap();
 
-    //TODO not null
     IsRecordBelongsToCurrentTenantFunctionInvocationFactory getIsRecordBelongsToCurrentTenantFunctionInvocationFactory();
 }
