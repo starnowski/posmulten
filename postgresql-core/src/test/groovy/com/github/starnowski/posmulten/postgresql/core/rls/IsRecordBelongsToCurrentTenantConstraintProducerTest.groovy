@@ -125,6 +125,25 @@ class IsRecordBelongsToCurrentTenantConstraintProducerTest extends Specification
             tableName << ["", " ", "          "]
     }
 
+    @Unroll
+    def "should throw an exception of type 'IllegalArgumentException' when the table schema is empty (#tableSchema)" () {
+        given:
+            def parameters = returnCorrectParametersMockObject()
+
+        when:
+            tested.produce(parameters)
+
+        then:
+            _ * parameters.getTableSchema() >> tableSchema
+            def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+            ex.message == "Table schema cannot be empty"
+
+        where:
+            tableSchema << ["", " ", "          "]
+    }
+
     Map<String, FunctionArgumentValue> generateRandomPrimaryColumnsValuesMap()
     {
         def randomString = new RandomString(5, new Random(), RandomString.lower)
