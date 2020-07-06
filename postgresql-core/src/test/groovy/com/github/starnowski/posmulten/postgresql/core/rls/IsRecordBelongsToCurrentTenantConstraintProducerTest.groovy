@@ -178,6 +178,21 @@ class IsRecordBelongsToCurrentTenantConstraintProducerTest extends Specification
             constraintName << ["", " ", "          "]
     }
 
+    def "should throw an exception of type 'IllegalArgumentException' when the object of type IsRecordBelongsToCurrentTenantFunctionInvocationFactory is null" () {
+        given:
+            def parameters = returnCorrectParametersMockObject()
+
+        when:
+            tested.produce(parameters)
+
+        then:
+            _ * parameters.getIsRecordBelongsToCurrentTenantFunctionInvocationFactory() >> null
+            def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+            ex.message == "Object of type IsRecordBelongsToCurrentTenantFunctionInvocationFactory cannot be null"
+    }
+
     Map<String, FunctionArgumentValue> generateRandomPrimaryColumnsValuesMap()
     {
         def randomString = new RandomString(5, new Random(), RandomString.lower)
