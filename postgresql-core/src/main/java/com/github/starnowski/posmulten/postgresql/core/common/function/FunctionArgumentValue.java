@@ -23,7 +23,7 @@ public interface FunctionArgumentValue {
         return new DefaultFunctionArgumentValue(value, NUMERIC);
     }
 
-    class DefaultFunctionArgumentValue implements FunctionArgumentValue {
+    final class DefaultFunctionArgumentValue implements FunctionArgumentValue {
 
         private final String value;
         private final FunctionArgumentValueEnum type;
