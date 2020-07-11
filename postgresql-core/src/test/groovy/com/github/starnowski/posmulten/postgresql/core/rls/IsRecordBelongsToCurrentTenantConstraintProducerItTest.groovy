@@ -1,6 +1,6 @@
 package com.github.starnowski.posmulten.postgresql.core.rls
 
-import com.github.starnowski.posmulten.postgresql.core.RandomString
+import com.github.starnowski.posmulten.postgresql.test.utils.RandomString
 import com.github.starnowski.posmulten.postgresql.core.TestApplication
 import com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValue
 import com.github.starnowski.posmulten.postgresql.core.rls.function.IsRecordBelongsToCurrentTenantFunctionInvocationFactory

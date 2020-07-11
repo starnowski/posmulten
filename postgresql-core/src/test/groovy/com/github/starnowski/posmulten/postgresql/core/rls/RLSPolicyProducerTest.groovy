@@ -1,6 +1,6 @@
 package com.github.starnowski.posmulten.postgresql.core.rls
 
-import com.github.starnowski.posmulten.postgresql.core.RandomString
+import com.github.starnowski.posmulten.postgresql.test.utils.RandomString
 import com.github.starnowski.posmulten.postgresql.core.rls.function.EqualsCurrentTenantIdentifierFunctionInvocationFactory
 import com.github.starnowski.posmulten.postgresql.core.rls.function.TenantHasAuthoritiesFunctionProducer
 import com.github.starnowski.posmulten.postgresql.core.rls.function.TenantHasAuthoritiesFunctionProducerParameters

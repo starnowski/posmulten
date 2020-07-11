@@ -1,6 +1,6 @@
 package com.github.starnowski.posmulten.postgresql.core.rls.function
 
-import com.github.starnowski.posmulten.postgresql.core.RandomString
+import com.github.starnowski.posmulten.postgresql.test.utils.RandomString
 import com.github.starnowski.posmulten.postgresql.core.TestApplication
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest

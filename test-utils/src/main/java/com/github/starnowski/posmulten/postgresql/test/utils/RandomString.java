@@ -1,4 +1,4 @@
-package com.github.starnowski.posmulten.postgresql.core;
+package com.github.starnowski.posmulten.postgresql.test.utils;
 
 import java.security.SecureRandom;
 import java.util.Locale;
