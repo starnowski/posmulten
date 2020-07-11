@@ -19,6 +19,12 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>com.github.starnowski.posmulten</groupId>
+            <artifactId>test-utils</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
             <version>7.1.0</version>
