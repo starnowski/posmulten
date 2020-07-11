@@ -13,6 +13,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>com.github.starnowski.posmulten</groupId>
             <artifactId>postgresql-core</artifactId>
             <version>${project.version}</version>
