@@ -17,8 +17,8 @@ import java.sql.ResultSet
 import java.sql.SQLException
 import java.sql.Statement
 
-import static com.github.starnowski.posmulten.postgresql.core.TestUtils.CLEAR_DATABASE_SCRIPT_PATH
-import static com.github.starnowski.posmulten.postgresql.core.TestUtils.isFunctionExists
+import static com.github.starnowski.posmulten.postgresql.test.utils.TestUtils.CLEAR_DATABASE_SCRIPT_PATH
+import static com.github.starnowski.posmulten.postgresql.test.utils.TestUtils.isFunctionExists
 import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValue.forNumeric
 import static com.github.starnowski.posmulten.postgresql.core.rls.function.AbstractIsRecordBelongsToCurrentTenantProducerParameters.pairOfColumnWithType
 import static org.junit.Assert.assertEquals

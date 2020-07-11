@@ -14,8 +14,8 @@ import java.sql.ResultSet
 import java.sql.SQLException
 import java.sql.Statement
 
-import static com.github.starnowski.posmulten.postgresql.core.TestUtils.dropFunction
-import static com.github.starnowski.posmulten.postgresql.core.TestUtils.isFunctionExists
+import static com.github.starnowski.posmulten.postgresql.test.utils.TestUtils.dropFunction
+import static com.github.starnowski.posmulten.postgresql.test.utils.TestUtils.isFunctionExists
 import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValue.forString
 import static com.github.starnowski.posmulten.postgresql.core.rls.PermissionCommandPolicyEnum.ALL
 import static com.github.starnowski.posmulten.postgresql.core.rls.RLSExpressionTypeEnum.USING

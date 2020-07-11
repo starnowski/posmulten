@@ -15,8 +15,8 @@ import java.sql.SQLException
 import java.sql.Statement
 import java.util.logging.Logger
 
-import static com.github.starnowski.posmulten.postgresql.core.TestUtils.dropFunction
-import static com.github.starnowski.posmulten.postgresql.core.TestUtils.isFunctionExists
+import static com.github.starnowski.posmulten.postgresql.test.utils.TestUtils.dropFunction
+import static com.github.starnowski.posmulten.postgresql.test.utils.TestUtils.isFunctionExists
 import static org.junit.Assert.assertEquals
 
 @SpringBootTest(classes = [TestApplication.class])
