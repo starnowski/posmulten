@@ -22,7 +22,13 @@ public class CurrentTenantForeignKeyConstraintTest extends AbstractTestNGSpringC
     private List<SQLDefinition> sqlDefinitions;
 
     @Test
-    public void constraintShouldNotExists()
+    public void constraintShouldNotExistsBeforeTests()
+    {
+        assertFalse(isAnyRecordExists(jdbcTemplate, createSelectStatement("public", "posts", "posts_user_info_fk_current_tenant_con")), "Constraint should not exists");
+    }
+
+    @Test(dependsOnMethods = {"constraintShouldNotExistsBeforeTests"})
+    public void constraintShouldNotExistsAfterTests()
     {
         assertFalse(isAnyRecordExists(jdbcTemplate, createSelectStatement("public", "posts", "posts_user_info_fk_current_tenant_con")), "Constraint should not exists");
     }
