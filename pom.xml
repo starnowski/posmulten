@@ -12,6 +12,7 @@
         <module>core</module>
         <module>postgresql-core</module>
         <module>postgresql-core-functional-tests</module>
+        <module>test-utils</module>
     </modules>
 
     <properties>
