@@ -1,14 +1,19 @@
 package com.github.starnowski.posmulten.postgresql.core.functional.tests;
 
 import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition;
+import com.github.starnowski.posmulten.postgresql.core.rls.function.GetCurrentTenantIdFunctionDefinition;
+import com.github.starnowski.posmulten.postgresql.core.rls.function.GetCurrentTenantIdFunctionProducer;
+import com.github.starnowski.posmulten.postgresql.core.rls.function.GetCurrentTenantIdFunctionProducerParameters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.annotations.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import static com.github.starnowski.posmulten.postgresql.test.utils.TestUtils.VALID_CURRENT_TENANT_ID_PROPERTY_NAME;
 import static com.github.starnowski.posmulten.postgresql.test.utils.TestUtils.isAnyRecordExists;
 import static java.lang.String.format;
 import static org.testng.Assert.assertFalse;
@@ -22,7 +27,7 @@ public class CurrentTenantForeignKeyConstraintTest extends AbstractTestNGSpringC
     @Autowired
     JdbcTemplate jdbcTemplate;
 
-    private List<SQLDefinition> sqlDefinitions;
+    private List<SQLDefinition> sqlDefinitions = new ArrayList<>();
 
     @Test
     public void constraintShouldNotExistsBeforeTests()
@@ -33,7 +38,11 @@ public class CurrentTenantForeignKeyConstraintTest extends AbstractTestNGSpringC
     @Test(dependsOnMethods = {"constraintShouldNotExistsBeforeTests"})
     public void createConstraint()
     {
-        //TODO Get current tenant function
+        //Create function that returns current tenant function
+        GetCurrentTenantIdFunctionProducer getCurrentTenantIdFunctionProducer = new GetCurrentTenantIdFunctionProducer();
+        GetCurrentTenantIdFunctionDefinition getCurrentTenantIdFunctionDefinition = getCurrentTenantIdFunctionProducer.produce(new GetCurrentTenantIdFunctionProducerParameters("rls_get_current_tenant", VALID_CURRENT_TENANT_ID_PROPERTY_NAME, null, null));
+        sqlDefinitions.add(getCurrentTenantIdFunctionDefinition);
+
         //TODO Does record belongs to current tenant
         //TODO Constraint
     }
