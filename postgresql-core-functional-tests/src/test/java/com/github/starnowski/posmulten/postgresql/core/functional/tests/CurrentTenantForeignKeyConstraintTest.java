@@ -1,9 +1,8 @@
 package com.github.starnowski.posmulten.postgresql.core.functional.tests;
 
 import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition;
-import com.github.starnowski.posmulten.postgresql.core.rls.function.GetCurrentTenantIdFunctionDefinition;
-import com.github.starnowski.posmulten.postgresql.core.rls.function.GetCurrentTenantIdFunctionProducer;
-import com.github.starnowski.posmulten.postgresql.core.rls.function.GetCurrentTenantIdFunctionProducerParameters;
+import com.github.starnowski.posmulten.postgresql.core.rls.function.*;
+import com.google.common.collect.ImmutableList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -13,6 +12,7 @@ import org.testng.annotations.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.github.starnowski.posmulten.postgresql.core.rls.function.AbstractIsRecordBelongsToCurrentTenantProducerParameters.pairOfColumnWithType;
 import static com.github.starnowski.posmulten.postgresql.test.utils.TestUtils.VALID_CURRENT_TENANT_ID_PROPERTY_NAME;
 import static com.github.starnowski.posmulten.postgresql.test.utils.TestUtils.isAnyRecordExists;
 import static java.lang.String.format;
@@ -43,7 +43,19 @@ public class CurrentTenantForeignKeyConstraintTest extends AbstractTestNGSpringC
         GetCurrentTenantIdFunctionDefinition getCurrentTenantIdFunctionDefinition = getCurrentTenantIdFunctionProducer.produce(new GetCurrentTenantIdFunctionProducerParameters("rls_get_current_tenant", VALID_CURRENT_TENANT_ID_PROPERTY_NAME, null, null));
         sqlDefinitions.add(getCurrentTenantIdFunctionDefinition);
 
-        //TODO Does record belongs to current tenant
+        // Does record belongs to current tenant
+        AbstractIsRecordBelongsToCurrentTenantProducerParameters isRecordBelongsToCurrentTenantProducerParameters = new IsRecordBelongsToCurrentTenantProducerParameters.Builder()
+                .withSchema(null)
+                .withFunctionName("is_user_belongs_to_current_tenant")
+                .withRecordTableName("users")
+                .withRecordSchemaName(null)
+                .withiGetCurrentTenantIdFunctionInvocationFactory(getCurrentTenantIdFunctionDefinition)
+                .withTenantColumn("tenant_id")
+                .withKeyColumnsPairsList(ImmutableList.of(pairOfColumnWithType("id", "bigint"))).build();
+        IsRecordBelongsToCurrentTenantProducer isRecordBelongsToCurrentTenantProducer = new IsRecordBelongsToCurrentTenantProducer();
+        IsRecordBelongsToCurrentTenantFunctionDefinition isRecordBelongsToCurrentTenantFunctionDefinition = isRecordBelongsToCurrentTenantProducer.produce(isRecordBelongsToCurrentTenantProducerParameters);
+        sqlDefinitions.add(getCurrentTenantIdFunctionDefinition);
+
         //TODO Constraint
     }
 
