@@ -33,7 +33,9 @@ public class CurrentTenantForeignKeyConstraintTest extends AbstractTestNGSpringC
     @Test(dependsOnMethods = {"constraintShouldNotExistsBeforeTests"})
     public void createConstraint()
     {
-        //TODO
+        //TODO Get current tenant function
+        //TODO Does record belongs to current tenant
+        //TODO Constraint
     }
 
     @Test(dependsOnMethods = {"createConstraint"})
