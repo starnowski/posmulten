@@ -12,9 +12,12 @@ import java.util.List;
 import static com.github.starnowski.posmulten.postgresql.test.utils.TestUtils.isAnyRecordExists;
 import static java.lang.String.format;
 import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertTrue;
 
 @SpringBootTest(classes = TestApplication.class)
 public class CurrentTenantForeignKeyConstraintTest extends AbstractTestNGSpringContextTests {
+
+    private static final String CONSTRAINT_NAME = "posts_user_info_fk_current_tenant_con";
 
     @Autowired
     JdbcTemplate jdbcTemplate;
@@ -24,13 +27,31 @@ public class CurrentTenantForeignKeyConstraintTest extends AbstractTestNGSpringC
     @Test
     public void constraintShouldNotExistsBeforeTests()
     {
-        assertFalse(isAnyRecordExists(jdbcTemplate, createSelectStatement("public", "posts", "posts_user_info_fk_current_tenant_con")), "Constraint should not exists");
+        assertFalse(isAnyRecordExists(jdbcTemplate, createSelectStatement("public", "posts", CONSTRAINT_NAME)), "Constraint should not exists");
     }
 
     @Test(dependsOnMethods = {"constraintShouldNotExistsBeforeTests"})
+    public void createConstraint()
+    {
+        //TODO
+    }
+
+    @Test(dependsOnMethods = {"createConstraint"})
+    public void constraintNameShouldExistAfterCreation()
+    {
+        assertTrue(isAnyRecordExists(jdbcTemplate, createSelectStatement("public", "posts", CONSTRAINT_NAME)), "Constraint should exists");
+    }
+
+    @Test(dependsOnMethods = {"constraintNameShouldExistAfterCreation"})
+    public void dropAllSQLDefinitions()
+    {
+        //TODO
+    }
+
+    @Test(dependsOnMethods = {"dropAllSQLDefinitions"})
     public void constraintShouldNotExistsAfterTests()
     {
-        assertFalse(isAnyRecordExists(jdbcTemplate, createSelectStatement("public", "posts", "posts_user_info_fk_current_tenant_con")), "Constraint should not exists");
+        assertFalse(isAnyRecordExists(jdbcTemplate, createSelectStatement("public", "posts", CONSTRAINT_NAME)), "Constraint should not exists");
     }
 
     private String createSelectStatement(String schema, String table, String constraintName)
