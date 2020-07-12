@@ -13,10 +13,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.annotations.Test;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValue.forReference;
 import static com.github.starnowski.posmulten.postgresql.core.rls.function.AbstractIsRecordBelongsToCurrentTenantProducerParameters.pairOfColumnWithType;
@@ -92,7 +89,10 @@ public class CurrentTenantForeignKeyConstraintTest extends AbstractTestNGSpringC
     @Test(dependsOnMethods = {"constraintNameShouldExistAfterCreation"}, alwaysRun = true)
     public void dropAllSQLDefinitions()
     {
-        sqlDefinitions.forEach(sqlDefinition ->
+        //Run sql statements in reverse order
+        LinkedList<SQLDefinition> stack = new LinkedList<>();
+        sqlDefinitions.forEach(stack::push);
+        stack.forEach(sqlDefinition ->
         {
             jdbcTemplate.execute(sqlDefinition.getDropScript());
         });
