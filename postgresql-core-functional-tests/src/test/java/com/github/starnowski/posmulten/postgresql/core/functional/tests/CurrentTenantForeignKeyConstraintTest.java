@@ -1,6 +1,10 @@
 package com.github.starnowski.posmulten.postgresql.core.functional.tests;
 
 import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition;
+import com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValue;
+import com.github.starnowski.posmulten.postgresql.core.rls.DefaultIsRecordBelongsToCurrentTenantConstraintProducerParameters;
+import com.github.starnowski.posmulten.postgresql.core.rls.IsRecordBelongsToCurrentTenantConstraintProducer;
+import com.github.starnowski.posmulten.postgresql.core.rls.IsRecordBelongsToCurrentTenantConstraintProducerParameters;
 import com.github.starnowski.posmulten.postgresql.core.rls.function.*;
 import com.google.common.collect.ImmutableList;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +14,11 @@ import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValue.forReference;
 import static com.github.starnowski.posmulten.postgresql.core.rls.function.AbstractIsRecordBelongsToCurrentTenantProducerParameters.pairOfColumnWithType;
 import static com.github.starnowski.posmulten.postgresql.test.utils.TestUtils.VALID_CURRENT_TENANT_ID_PROPERTY_NAME;
 import static com.github.starnowski.posmulten.postgresql.test.utils.TestUtils.isAnyRecordExists;
@@ -22,7 +29,7 @@ import static org.testng.Assert.assertTrue;
 @SpringBootTest(classes = TestApplication.class)
 public class CurrentTenantForeignKeyConstraintTest extends AbstractTestNGSpringContextTests {
 
-    private static final String CONSTRAINT_NAME = "posts_user_info_fk_current_tenant_con";
+    private static final String CONSTRAINT_NAME = "posts_user_info_fk_cu";
 
     @Autowired
     JdbcTemplate jdbcTemplate;
@@ -54,9 +61,26 @@ public class CurrentTenantForeignKeyConstraintTest extends AbstractTestNGSpringC
                 .withKeyColumnsPairsList(ImmutableList.of(pairOfColumnWithType("id", "bigint"))).build();
         IsRecordBelongsToCurrentTenantProducer isRecordBelongsToCurrentTenantProducer = new IsRecordBelongsToCurrentTenantProducer();
         IsRecordBelongsToCurrentTenantFunctionDefinition isRecordBelongsToCurrentTenantFunctionDefinition = isRecordBelongsToCurrentTenantProducer.produce(isRecordBelongsToCurrentTenantProducerParameters);
-        sqlDefinitions.add(getCurrentTenantIdFunctionDefinition);
+        sqlDefinitions.add(isRecordBelongsToCurrentTenantFunctionDefinition);
 
-        //TODO Constraint
+        // Constraint
+        IsRecordBelongsToCurrentTenantConstraintProducer isRecordBelongsToCurrentTenantConstraintProducer = new IsRecordBelongsToCurrentTenantConstraintProducer();
+        //user_id
+        Map<String, FunctionArgumentValue> primaryColumnsValuesMap = new HashMap<>();
+        primaryColumnsValuesMap.put("id", forReference("user_id"));
+        IsRecordBelongsToCurrentTenantConstraintProducerParameters isRecordBelongsToCurrentTenantConstraintProducerParameters = DefaultIsRecordBelongsToCurrentTenantConstraintProducerParameters.builder()
+                .withConstraintName(CONSTRAINT_NAME)
+                .withTableName("posts")
+                .withTableSchema(null)
+                .withIsRecordBelongsToCurrentTenantFunctionInvocationFactory(isRecordBelongsToCurrentTenantFunctionDefinition)
+                .withPrimaryColumnsValuesMap(primaryColumnsValuesMap).build();
+        SQLDefinition recordBelongsToCurrentTenantConstrainSqlDefinition = isRecordBelongsToCurrentTenantConstraintProducer.produce(isRecordBelongsToCurrentTenantConstraintProducerParameters);
+        sqlDefinitions.add(recordBelongsToCurrentTenantConstrainSqlDefinition);
+
+        sqlDefinitions.forEach(sqlDefinition ->
+        {
+            jdbcTemplate.execute(sqlDefinition.getCreateScript());
+        });
     }
 
     @Test(dependsOnMethods = {"createConstraint"})
@@ -65,10 +89,13 @@ public class CurrentTenantForeignKeyConstraintTest extends AbstractTestNGSpringC
         assertTrue(isAnyRecordExists(jdbcTemplate, createSelectStatement("public", "posts", CONSTRAINT_NAME)), "Constraint should exists");
     }
 
-    @Test(dependsOnMethods = {"constraintNameShouldExistAfterCreation"})
+    @Test(dependsOnMethods = {"constraintNameShouldExistAfterCreation"}, alwaysRun = true)
     public void dropAllSQLDefinitions()
     {
-        //TODO
+        sqlDefinitions.forEach(sqlDefinition ->
+        {
+            jdbcTemplate.execute(sqlDefinition.getDropScript());
+        });
     }
 
     @Test(dependsOnMethods = {"dropAllSQLDefinitions"})
