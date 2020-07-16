@@ -47,6 +47,11 @@ public class CurrentTenantForeignKeyConstraintTest extends AbstractTestNGSpringC
         GetCurrentTenantIdFunctionDefinition getCurrentTenantIdFunctionDefinition = getCurrentTenantIdFunctionProducer.produce(new GetCurrentTenantIdFunctionProducerParameters("rls_get_current_tenant", VALID_CURRENT_TENANT_ID_PROPERTY_NAME, null, null));
         sqlDefinitions.add(getCurrentTenantIdFunctionDefinition);
 
+        //Create function that sets current tenant function
+        SetCurrentTenantIdFunctionProducer setCurrentTenantIdFunctionProducer = new SetCurrentTenantIdFunctionProducer();
+        SetCurrentTenantIdFunctionDefinition setCurrentTenantIdFunctionDefinition = setCurrentTenantIdFunctionProducer.produce(new SetCurrentTenantIdFunctionProducerParameters("rls_set_current_tenant", VALID_CURRENT_TENANT_ID_PROPERTY_NAME, null, null));
+        sqlDefinitions.add(setCurrentTenantIdFunctionDefinition);
+
         // Does record belongs to current tenant
         AbstractIsRecordBelongsToCurrentTenantProducerParameters isRecordBelongsToCurrentTenantProducerParameters = new IsRecordBelongsToCurrentTenantProducerParameters.Builder()
                 .withSchema(null)
