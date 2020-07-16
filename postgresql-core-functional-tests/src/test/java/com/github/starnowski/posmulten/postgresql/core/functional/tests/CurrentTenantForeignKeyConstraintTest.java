@@ -10,16 +10,23 @@ import com.google.common.collect.ImmutableList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.jdbc.SqlConfig;
+import org.springframework.test.context.jdbc.SqlGroup;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.annotations.Test;
 
 import java.util.*;
 
 import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValue.forReference;
+import static com.github.starnowski.posmulten.postgresql.core.functional.tests.TestApplication.CLEAR_DATABASE_SCRIPT_PATH;
 import static com.github.starnowski.posmulten.postgresql.core.rls.function.AbstractIsRecordBelongsToCurrentTenantProducerParameters.pairOfColumnWithType;
 import static com.github.starnowski.posmulten.postgresql.test.utils.TestUtils.VALID_CURRENT_TENANT_ID_PROPERTY_NAME;
 import static com.github.starnowski.posmulten.postgresql.test.utils.TestUtils.isAnyRecordExists;
 import static java.lang.String.format;
+import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
+import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
+import static org.springframework.test.context.jdbc.SqlConfig.TransactionMode.ISOLATED;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
@@ -30,6 +37,8 @@ public class CurrentTenantForeignKeyConstraintTest extends AbstractTestNGSpringC
 
     @Autowired
     JdbcTemplate jdbcTemplate;
+
+    SetCurrentTenantIdFunctionDefinition setCurrentTenantIdFunctionDefinition;
 
     private List<SQLDefinition> sqlDefinitions = new ArrayList<>();
 
@@ -49,7 +58,7 @@ public class CurrentTenantForeignKeyConstraintTest extends AbstractTestNGSpringC
 
         //Create function that sets current tenant function
         SetCurrentTenantIdFunctionProducer setCurrentTenantIdFunctionProducer = new SetCurrentTenantIdFunctionProducer();
-        SetCurrentTenantIdFunctionDefinition setCurrentTenantIdFunctionDefinition = setCurrentTenantIdFunctionProducer.produce(new SetCurrentTenantIdFunctionProducerParameters("rls_set_current_tenant", VALID_CURRENT_TENANT_ID_PROPERTY_NAME, null, null));
+        setCurrentTenantIdFunctionDefinition = setCurrentTenantIdFunctionProducer.produce(new SetCurrentTenantIdFunctionProducerParameters("rls_set_current_tenant", VALID_CURRENT_TENANT_ID_PROPERTY_NAME, null, null));
         sqlDefinitions.add(setCurrentTenantIdFunctionDefinition);
 
         // Does record belongs to current tenant
@@ -91,7 +100,21 @@ public class CurrentTenantForeignKeyConstraintTest extends AbstractTestNGSpringC
         assertTrue(isAnyRecordExists(jdbcTemplate, createSelectStatement("public", "posts", CONSTRAINT_NAME)), "Constraint should exists");
     }
 
-    @Test(dependsOnMethods = {"constraintNameShouldExistAfterCreation"}, alwaysRun = true)
+    @SqlGroup({
+            @Sql(value = CLEAR_DATABASE_SCRIPT_PATH,
+                    config = @SqlConfig(transactionMode = ISOLATED),
+                    executionPhase = BEFORE_TEST_METHOD),
+            @Sql(value = CLEAR_DATABASE_SCRIPT_PATH,
+                    config = @SqlConfig(transactionMode = ISOLATED),
+                    executionPhase = AFTER_TEST_METHOD)})
+    @Test(dependsOnMethods = {"constraintNameShouldExistAfterCreation"})
+    public void insertUserTestData()
+    {
+        jdbcTemplate.execute("INSERT INTO public.users (id, name, tenant_id) VALUES (1, 'Szymon Tarnowski', 'primary_tenant');");
+        assertTrue(isAnyRecordExists(jdbcTemplate, "SELECT * FROM users WHERE id = 1 AND name = 'Szymon Tarnowski' AND tenant_id = 'primary_tenant'"), "The tests user should exists");
+    }
+
+    @Test(dependsOnMethods = {"insertUserTestData"}, alwaysRun = true)
     public void dropAllSQLDefinitions()
     {
         //Run sql statements in reverse order
