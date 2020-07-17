@@ -103,7 +103,7 @@ public class CurrentTenantForeignKeyConstraintTest extends AbstractTransactional
         });
     }
 
-    @Test(dependsOnMethods = {"executeSQLDefinitions"})
+    @Test(dependsOnMethods = {"executeSQLDefinitions"}, testName = "constraint should exist after SQL definitions executed", description = "check if constraint exist after executing SQL definitions")
     public void constraintNameShouldExistAfterCreation()
     {
         assertTrue(isAnyRecordExists(jdbcTemplate, createSelectStatement("public", "posts", CONSTRAINT_NAME)), "Constraint should exists");
