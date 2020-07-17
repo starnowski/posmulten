@@ -47,7 +47,7 @@ public class CurrentTenantForeignKeyConstraintTest extends AbstractTransactional
 
     private List<SQLDefinition> sqlDefinitions = new ArrayList<>();
 
-    @Test(description = "Create SQL function that creates statements that set current tenant value, retrieve current tenant value and create a constraint for a foreign key for a table that is multi-tenant aware")
+    @Test(testName = "create SQL definitions", description = "Create SQL function that creates statements that set current tenant value, retrieve current tenant value and create a constraint for a foreign key for a table that is multi-tenant aware")
     public void createSQLDefinitions()
     {
         //Create function that returns current tenant function
@@ -88,14 +88,14 @@ public class CurrentTenantForeignKeyConstraintTest extends AbstractTransactional
         sqlDefinitions.add(recordBelongsToCurrentTenantConstrainSqlDefinition);
     }
 
-    @Test(dependsOnMethods = {"createSQLDefinitions"})
+    @Test(dependsOnMethods = {"createSQLDefinitions"}, testName = "constraint should not exists before tests execution", description = "check if constraint does not exist before executing SQL definitions")
     public void constraintShouldNotExistsBeforeTests()
     {
         assertFalse(isAnyRecordExists(jdbcTemplate, createSelectStatement("public", "posts", CONSTRAINT_NAME)), "Constraint should not exists");
     }
 
-    @Test(dependsOnMethods = {"constraintShouldNotExistsBeforeTests"})
-    public void createConstraint()
+    @Test(dependsOnMethods = {"constraintShouldNotExistsBeforeTests"}, testName = "execute SQL definitions")
+    public void executeSQLDefinitions()
     {
         sqlDefinitions.forEach(sqlDefinition ->
         {
@@ -103,7 +103,7 @@ public class CurrentTenantForeignKeyConstraintTest extends AbstractTransactional
         });
     }
 
-    @Test(dependsOnMethods = {"createConstraint"})
+    @Test(dependsOnMethods = {"executeSQLDefinitions"})
     public void constraintNameShouldExistAfterCreation()
     {
         assertTrue(isAnyRecordExists(jdbcTemplate, createSelectStatement("public", "posts", CONSTRAINT_NAME)), "Constraint should exists");
