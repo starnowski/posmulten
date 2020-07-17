@@ -13,7 +13,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.jdbc.SqlGroup;
-import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
+import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.testng.annotations.Test;
 
 import java.util.*;
@@ -31,9 +33,11 @@ import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
 @SpringBootTest(classes = TestApplication.class)
-public class CurrentTenantForeignKeyConstraintTest extends AbstractTestNGSpringContextTests {
+@Transactional(propagation = Propagation.NOT_SUPPORTED)
+public class CurrentTenantForeignKeyConstraintTest extends AbstractTransactionalTestNGSpringContextTests {
 
     private static final String CONSTRAINT_NAME = "posts_user_info_fk_cu";
+    private static final String USER_TENANT = "primary_tenant";
 
     @Autowired
     JdbcTemplate jdbcTemplate;
@@ -110,8 +114,8 @@ public class CurrentTenantForeignKeyConstraintTest extends AbstractTestNGSpringC
     @Test(dependsOnMethods = {"constraintNameShouldExistAfterCreation"})
     public void insertUserTestData()
     {
-        jdbcTemplate.execute("INSERT INTO public.users (id, name, tenant_id) VALUES (1, 'Szymon Tarnowski', 'primary_tenant');");
-        assertTrue(isAnyRecordExists(jdbcTemplate, "SELECT * FROM users WHERE id = 1 AND name = 'Szymon Tarnowski' AND tenant_id = 'primary_tenant'"), "The tests user should exists");
+        jdbcTemplate.execute(String.format("INSERT INTO public.users (id, name, tenant_id) VALUES (1, 'Szymon Tarnowski', '%s');", USER_TENANT));
+        assertTrue(isAnyRecordExists(jdbcTemplate, String.format("SELECT * FROM users WHERE id = 1 AND name = 'Szymon Tarnowski' AND tenant_id = '%s'", USER_TENANT)), "The tests user should exists");
     }
 
     @Test(dependsOnMethods = {"insertUserTestData"}, alwaysRun = true)
@@ -124,6 +128,12 @@ public class CurrentTenantForeignKeyConstraintTest extends AbstractTestNGSpringC
         {
             jdbcTemplate.execute(sqlDefinition.getDropScript());
         });
+    }
+
+    @Test(dependsOnMethods = {"dropAllSQLDefinitions"}, alwaysRun = true)
+    public void deleteTestData()
+    {
+        deleteFromTables("posts", "users");
     }
 
     @Test(dependsOnMethods = {"dropAllSQLDefinitions"})
