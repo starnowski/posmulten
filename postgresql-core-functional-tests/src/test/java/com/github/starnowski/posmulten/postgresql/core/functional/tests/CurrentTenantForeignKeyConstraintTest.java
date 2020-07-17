@@ -47,7 +47,7 @@ public class CurrentTenantForeignKeyConstraintTest extends AbstractTransactional
 
     private List<SQLDefinition> sqlDefinitions = new ArrayList<>();
 
-    @Test
+    @Test(description = "Create SQL function that creates statements that set current tenant value, retrieve current tenant value and create a constraint for a foreign key for a table that is multi-tenant aware")
     public void createSQLDefinitions()
     {
         //Create function that returns current tenant function
