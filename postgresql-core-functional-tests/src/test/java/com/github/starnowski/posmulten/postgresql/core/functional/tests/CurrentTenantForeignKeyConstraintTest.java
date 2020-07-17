@@ -113,14 +113,14 @@ public class CurrentTenantForeignKeyConstraintTest extends AbstractTransactional
             @Sql(value = CLEAR_DATABASE_SCRIPT_PATH,
                     config = @SqlConfig(transactionMode = ISOLATED),
                     executionPhase = BEFORE_TEST_METHOD)})
-    @Test(dependsOnMethods = {"constraintNameShouldExistAfterCreation"})
+    @Test(dependsOnMethods = {"constraintNameShouldExistAfterCreation"}, testName = "insert data into to user table")
     public void insertUserTestData()
     {
         jdbcTemplate.execute(format("INSERT INTO public.users (id, name, tenant_id) VALUES (1, 'Szymon Tarnowski', '%s');", USER_TENANT));
         assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM users WHERE id = 1 AND name = 'Szymon Tarnowski' AND tenant_id = '%s'", USER_TENANT)), "The tests user should exists");
     }
 
-    @Test(dependsOnMethods = {"insertUserTestData"})
+    @Test(dependsOnMethods = {"insertUserTestData"}, testName = "insert data into the post table related to primary tests tenant as the primary tenant")
     public void insertPostForUserFromSameTenant()
     {
         assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM users WHERE id = 1 AND name = 'Szymon Tarnowski' AND tenant_id = '%s'", USER_TENANT)), "The tests user should exists");
@@ -128,7 +128,7 @@ public class CurrentTenantForeignKeyConstraintTest extends AbstractTransactional
         assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM posts WHERE id = 8 AND text = 'Some phrase' AND tenant_id = '%s'", USER_TENANT)), "The tests post should exists");
     }
 
-    @Test(dependsOnMethods = {"insertUserTestData"})
+    @Test(dependsOnMethods = {"insertUserTestData"}, testName = "try to insert data into the post table related to primary tests tenant as different tenant", description = "test case assumes that constraint is not going to allow to insert data into the post table related to the primary tenant when a current tenant is different")
     public void tryToInsertPostForUserFromDifferentTenant()
     {
         assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM users WHERE id = 1 AND name = 'Szymon Tarnowski' AND tenant_id = '%s'", USER_TENANT)), "The tests user should exists");
