@@ -47,13 +47,7 @@ public class CurrentTenantForeignKeyConstraintTest extends AbstractTransactional
     private List<SQLDefinition> sqlDefinitions = new ArrayList<>();
 
     @Test
-    public void constraintShouldNotExistsBeforeTests()
-    {
-        assertFalse(isAnyRecordExists(jdbcTemplate, createSelectStatement("public", "posts", CONSTRAINT_NAME)), "Constraint should not exists");
-    }
-
-    @Test(dependsOnMethods = {"constraintShouldNotExistsBeforeTests"})
-    public void createConstraint()
+    public void createSQLDefinitions()
     {
         //Create function that returns current tenant function
         GetCurrentTenantIdFunctionProducer getCurrentTenantIdFunctionProducer = new GetCurrentTenantIdFunctionProducer();
@@ -91,7 +85,17 @@ public class CurrentTenantForeignKeyConstraintTest extends AbstractTransactional
                 .withPrimaryColumnsValuesMap(primaryColumnsValuesMap).build();
         SQLDefinition recordBelongsToCurrentTenantConstrainSqlDefinition = isRecordBelongsToCurrentTenantConstraintProducer.produce(isRecordBelongsToCurrentTenantConstraintProducerParameters);
         sqlDefinitions.add(recordBelongsToCurrentTenantConstrainSqlDefinition);
+    }
 
+    @Test(dependsOnMethods = {"createSQLDefinitions"})
+    public void constraintShouldNotExistsBeforeTests()
+    {
+        assertFalse(isAnyRecordExists(jdbcTemplate, createSelectStatement("public", "posts", CONSTRAINT_NAME)), "Constraint should not exists");
+    }
+
+    @Test(dependsOnMethods = {"constraintShouldNotExistsBeforeTests"})
+    public void createConstraint()
+    {
         sqlDefinitions.forEach(sqlDefinition ->
         {
             jdbcTemplate.execute(sqlDefinition.getCreateScript());
