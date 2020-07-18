@@ -138,6 +138,9 @@ public class CurrentTenantForeignKeyConstraintTest extends AbstractTransactional
         assertFalse(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM posts WHERE id = 7", "Second_tenant")), "The tests post should not exists");
     }
 
+    //TODO Insert data into the post table for different tenant
+    //TODO Insert data into the
+
     @Test(dependsOnMethods = {"insertUserTestData", "insertPostForUserFromSameTenant", "tryToInsertPostForUserFromDifferentTenant"}, alwaysRun = true)
     public void dropAllSQLDefinitions()
     {
