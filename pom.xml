@@ -9,13 +9,13 @@
     <packaging>pom</packaging>
     <version>0.1.0-SNAPSHOT</version>
     <modules>
-        <module>core</module>
         <module>postgresql-core</module>
+        <module>postgresql-core-functional-tests</module>
+        <module>test-utils</module>
     </modules>
 
     <properties>
         <maven.surefire.plugin.version>2.22.1</maven.surefire.plugin.version>
-        <org.hibernate.version>5.1.12.Final</org.hibernate.version>
         <spock.core.version>1.1-groovy-2.4</spock.core.version>
         <org.codehaus.groovy.groovy-all.version>2.4.12</org.codehaus.groovy.groovy-all.version>
         <org.postgresql.postgresql.version>42.2.5</org.postgresql.postgresql.version>
@@ -23,6 +23,7 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <org.springframework.boot.version>1.5.8.RELEASE</org.springframework.boot.version>
     </properties>
 
     <issueManagement>
@@ -51,11 +52,6 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>org.hibernate</groupId>
-                <artifactId>hibernate-core</artifactId>
-                <version>${org.hibernate.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>org.spockframework</groupId>
                 <artifactId>spock-core</artifactId>
                 <version>${spock.core.version}</version>
@@ -65,6 +61,18 @@
                 <groupId>org.spockframework</groupId>
                 <artifactId>spock-spring</artifactId>
                 <version>${spock.core.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-test</artifactId>
+                <version>${org.springframework.boot.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-data-jpa</artifactId>
+                <version>${org.springframework.boot.version}</version>
                 <scope>test</scope>
             </dependency>
             <dependency>

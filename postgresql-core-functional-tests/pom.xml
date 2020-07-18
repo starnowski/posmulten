@@ -9,56 +9,36 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>postgresql-core</artifactId>
-
-    <properties>
-        <org.springframework.boot.version>1.5.8.RELEASE</org.springframework.boot.version>
-        <net.bytebuddy.byte.buddy.version>1.6.4</net.bytebuddy.byte.buddy.version>
-        <easy.random.core.org.jeasy.version>4.2.0</easy.random.core.org.jeasy.version>
-    </properties>
+    <artifactId>postgresql-core-functional-tests</artifactId>
 
     <dependencies>
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>org.spockframework</groupId>
-            <artifactId>spock-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.spockframework</groupId>
-            <artifactId>spock-spring</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.codehaus.groovy</groupId>
-            <artifactId>groovy-all</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>net.bytebuddy</groupId>
-            <artifactId>byte-buddy</artifactId>
-            <version>${net.bytebuddy.byte.buddy.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.jeasy</groupId>
-            <artifactId>easy-random-core</artifactId>
-            <version>${easy.random.core.org.jeasy.version}</version>
+            <groupId>com.github.starnowski.posmulten</groupId>
+            <artifactId>postgresql-core</artifactId>
+            <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.github.starnowski.posmulten</groupId>
             <artifactId>test-utils</artifactId>
             <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>7.1.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>3.16.1</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -90,7 +70,7 @@
                         <version>2.22.1</version>
                         <configuration>
                             <excludes>
-                                <exclude>**/*ItTest.java</exclude>
+                                <exclude>**/*.java</exclude>
                             </excludes>
                         </configuration>
                     </plugin>
@@ -98,42 +78,7 @@
             </build>
         </profile>
         <profile>
-            <id>pitest</id>
-            <activation>
-                <activeByDefault>false</activeByDefault>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.pitest</groupId>
-                        <artifactId>pitest-maven</artifactId>
-                        <version>1.5.1</version>
-                        <configuration>
-                            <mutators>
-                                <!-- default group -->
-                                <mutator>CONSTRUCTOR_CALLS</mutator>
-                                <mutator>FALSE_RETURNS</mutator>
-                                <mutator>TRUE_RETURNS</mutator>
-                                <mutator>CONDITIONALS_BOUNDARY</mutator>
-                                <mutator>EMPTY_RETURNS</mutator>
-                                <mutator>INCREMENTS</mutator>
-                                <mutator>INVERT_NEGS</mutator>
-                                <mutator>MATH</mutator>
-                                <mutator>NEGATE_CONDITIONALS</mutator>
-                                <mutator>NULL_RETURNS</mutator>
-                                <mutator>PRIMITIVE_RETURNS</mutator>
-                                <mutator>VOID_METHOD_CALLS</mutator>
-                                <!-- extended -->
-                                <mutator>EXPERIMENTAL_ARGUMENT_PROPAGATION</mutator>
-                                <mutator>EXPERIMENTAL_NAKED_RECEIVER</mutator>
-                            </mutators>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <id>integration-tests</id>
+            <id>functional-tests</id>
             <activation>
                 <activeByDefault>false</activeByDefault>
             </activation>
@@ -158,7 +103,7 @@
                         <version>2.22.1</version>
                         <configuration>
                             <includes>
-                                <include>**/*ItTest.java</include>
+                                <include>**/*Test.java</include>
                             </includes>
                         </configuration>
                     </plugin>
@@ -194,5 +139,4 @@
             </build>
         </profile>
     </profiles>
-
 </project>

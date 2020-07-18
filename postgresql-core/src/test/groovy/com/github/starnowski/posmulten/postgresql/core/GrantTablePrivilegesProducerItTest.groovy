@@ -6,7 +6,7 @@ import org.springframework.jdbc.core.JdbcTemplate
 import spock.lang.Specification
 import spock.lang.Unroll
 
-import static com.github.starnowski.posmulten.postgresql.core.TestUtils.isAnyRecordExists
+import static com.github.starnowski.posmulten.postgresql.test.utils.TestUtils.isAnyRecordExists
 import static org.junit.Assert.assertEquals
 
 @SpringBootTest(classes = [TestApplication.class])

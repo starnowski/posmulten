@@ -26,8 +26,8 @@ jobs:
         - docker
       script: export PATH="$TRAVIS_BUILD_DIR/.travis/bats/bats-core/bin:$PATH" && bats/run_bats_test.sh
 
-    - stage: "integration tests"
-      name: "Integration tests in postgresql-core module"
+    - stage: "integration and functional tests"
+      name: "Integration and functional tests in postgresql-core module"
       dist: trusty # https://docs.travis-ci.com/user/reference/trusty/#jvm-clojure-groovy-java-scala-images - Trusty supports java 8
       language: java
       jdk: oraclejdk8
@@ -41,5 +41,5 @@ jobs:
       cache:
         directories:
           - $HOME/.m2
-      script: mvn -DskipTests clean install && mvn -pl :postgresql-core -P !unit-tests,integration-tests test
+      script: mvn -DskipTests clean install && mvn -pl :postgresql-core -P !unit-tests,integration-tests test && mvn -pl :postgresql-core-functional-tests -P !unit-tests,functional-tests test
 
