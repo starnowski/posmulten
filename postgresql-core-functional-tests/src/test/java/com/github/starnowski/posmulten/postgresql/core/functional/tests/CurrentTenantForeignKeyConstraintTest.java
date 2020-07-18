@@ -27,6 +27,7 @@ import static com.github.starnowski.posmulten.postgresql.core.rls.function.Abstr
 import static com.github.starnowski.posmulten.postgresql.test.utils.TestUtils.VALID_CURRENT_TENANT_ID_PROPERTY_NAME;
 import static com.github.starnowski.posmulten.postgresql.test.utils.TestUtils.isAnyRecordExists;
 import static java.lang.String.format;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
 import static org.springframework.test.context.jdbc.SqlConfig.TransactionMode.ISOLATED;
@@ -116,6 +117,7 @@ public class CurrentTenantForeignKeyConstraintTest extends AbstractTransactional
     @Test(dependsOnMethods = {"constraintNameShouldExistAfterCreation"}, testName = "insert data into to user table")
     public void insertUserTestData()
     {
+        assertThat(countRowsInTableWhere("users", "id = 1")).isEqualTo(0);
         jdbcTemplate.execute(format("INSERT INTO public.users (id, name, tenant_id) VALUES (1, 'Szymon Tarnowski', '%s');", USER_TENANT));
         assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM users WHERE id = 1 AND name = 'Szymon Tarnowski' AND tenant_id = '%s'", USER_TENANT)), "The tests user should exists");
     }
@@ -124,6 +126,7 @@ public class CurrentTenantForeignKeyConstraintTest extends AbstractTransactional
     public void insertPostForUserFromSameTenant()
     {
         assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM users WHERE id = 1 AND name = 'Szymon Tarnowski' AND tenant_id = '%s'", USER_TENANT)), "The tests user should exists");
+        assertThat(countRowsInTableWhere("posts", "id = 8")).isEqualTo(0);
         jdbcTemplate.execute(format("%s INSERT INTO posts (id, user_id, text, tenant_id) VALUES (8, 1, 'Some phrase', '%s');", setCurrentTenantIdFunctionDefinition.generateStatementThatSetTenant(USER_TENANT), USER_TENANT));
         assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM posts WHERE id = 8 AND text = 'Some phrase' AND tenant_id = '%s'", USER_TENANT)), "The tests post should exists");
     }
@@ -132,6 +135,7 @@ public class CurrentTenantForeignKeyConstraintTest extends AbstractTransactional
     public void tryToInsertPostForUserFromDifferentTenant()
     {
         assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM users WHERE id = 1 AND name = 'Szymon Tarnowski' AND tenant_id = '%s'", USER_TENANT)), "The tests user should exists");
+        assertThat(countRowsInTableWhere("posts", "id = 7")).isEqualTo(0);
         assertThatThrownBy(() ->
                 jdbcTemplate.execute(format("%s INSERT INTO posts (id, user_id, text, tenant_id) VALUES (7, 1, 'Some phrase', '%s');", setCurrentTenantIdFunctionDefinition.generateStatementThatSetTenant("Second_tenant"), USER_TENANT)))
         .isInstanceOf(DataIntegrityViolationException.class);
