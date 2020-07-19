@@ -13,15 +13,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.jdbc.SqlGroup;
-import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -40,9 +36,7 @@ import static org.springframework.test.context.jdbc.SqlConfig.TransactionMode.IS
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
-@SpringBootTest(classes = TestApplication.class)
-@Transactional(propagation = Propagation.NOT_SUPPORTED)
-public class CreateCurrentTenantForeignKeyConstraintForPostsTableTest extends AbstractTransactionalTestNGSpringContextTests {
+public class CreateCurrentTenantForeignKeyConstraintForPostsTableTest extends TestNGSpringContextWithoutGenericTransactionalSupportTests {
 
     private static final String CONSTRAINT_NAME = "posts_user_info_fk_cu";
     private static final String USER_TENANT = "primary_tenant";
