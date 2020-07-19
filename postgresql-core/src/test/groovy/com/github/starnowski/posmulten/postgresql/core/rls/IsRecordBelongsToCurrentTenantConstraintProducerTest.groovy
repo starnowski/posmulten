@@ -39,12 +39,12 @@ class IsRecordBelongsToCurrentTenantConstraintProducerTest extends Specification
             primaryColumnsValuesMap == capturedPrimaryColumnsValuesMap
 
         where:
-            constraintName      |   schema      | table     |   conditionStatement              ||	expectedStatement
-            "sss"               |   null        | "users"   |   "cccsss"                        ||  "ALTER TABLE \"users\" ADD CONSTRAINT sss CHECK (cccsss);"
-            "sss"               |   "public"    | "users"   |   "cccsss"                        ||  "ALTER TABLE \"public\".\"users\" ADD CONSTRAINT sss CHECK (cccsss);"
-            "sss"               |   "secondary" | "users"   |   "cccsss"                        ||  "ALTER TABLE \"secondary\".\"users\" ADD CONSTRAINT sss CHECK (cccsss);"
-            "user_belongs_tt"   |   "secondary" | "users"   |   "cccsss"                        ||  "ALTER TABLE \"secondary\".\"users\" ADD CONSTRAINT user_belongs_tt CHECK (cccsss);"
-            "user_belongs_tt"   |   "secondary" | "users"   |   "is_tenant_correct(tenant_id)"  ||  "ALTER TABLE \"secondary\".\"users\" ADD CONSTRAINT user_belongs_tt CHECK (is_tenant_correct(tenant_id));"
+            constraintName      |   schema      | table     |   conditionStatement              |   idColumns                                           ||	expectedStatement
+            "sss"               |   null        | "users"   |   "cccsss"                        |   [id : randomFAV()]                                  ||  "ALTER TABLE \"users\" ADD CONSTRAINT sss CHECK ((id IS NULL) OR (cccsss));"
+            "sss"               |   "public"    | "users"   |   "cccsss"                        |   [id : randomFAV(), abc_user_id: randomFAV()]        ||  "ALTER TABLE \"public\".\"users\" ADD CONSTRAINT sss CHECK ((abc_user_id IS NULL AND id IS NULL) OR (cccsss));"
+            "sss"               |   "secondary" | "users"   |   "cccsss"                        |   [userId : randomFAV(), abc_user_id: randomFAV()]    ||  "ALTER TABLE \"secondary\".\"users\" ADD CONSTRAINT sss CHECK ((abc_user_id IS NULL AND userId IS NULL) OR (cccsss));"
+            "user_belongs_tt"   |   "secondary" | "users"   |   "cccsss"                        |   [uuid : randomFAV()]                                ||  "ALTER TABLE \"secondary\".\"users\" ADD CONSTRAINT user_belongs_tt CHECK ((uuid IS NULL AND userId IS NULL) OR (cccsss));"
+            "user_belongs_tt"   |   "secondary" | "users"   |   "is_tenant_correct(tenant_id)"  |   [secondary_colId: randomFAV(), uuid : randomFAV()]  ||  "ALTER TABLE \"secondary\".\"users\" ADD CONSTRAINT user_belongs_tt CHECK ((uuid IS NULL AND userId IS NULL AND secondary_colId IS NULL) OR (is_tenant_correct(tenant_id)));"
     }
 
     @Unroll
@@ -92,9 +92,6 @@ class IsRecordBelongsToCurrentTenantConstraintProducerTest extends Specification
     }
 
     def "should throw an exception of type 'IllegalArgumentException' when the parameters object is null" () {
-        given:
-            def parameters = returnCorrectParametersMockObject()
-
         when:
             tested.produce(null)
 
@@ -218,6 +215,12 @@ class IsRecordBelongsToCurrentTenantConstraintProducerTest extends Specification
             primaryColumnsValuesMap.put(randomString.nextString(), forReference(randomString.nextString()))
         }
         primaryColumnsValuesMap
+    }
+
+    FunctionArgumentValue randomFAV()
+    {
+        def randomString = new RandomString(5, new Random(), RandomString.lower)
+        forReference(randomString.nextString())
     }
 
     IsRecordBelongsToCurrentTenantConstraintProducerParameters returnCorrectParametersMockObject() {
