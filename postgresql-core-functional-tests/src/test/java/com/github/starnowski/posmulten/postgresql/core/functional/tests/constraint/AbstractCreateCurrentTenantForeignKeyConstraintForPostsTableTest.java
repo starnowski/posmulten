@@ -19,10 +19,12 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.jdbc.SqlGroup;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValue.forReference;
 import static com.github.starnowski.posmulten.postgresql.core.functional.tests.TestApplication.CLEAR_DATABASE_SCRIPT_PATH;
@@ -39,9 +41,9 @@ import static org.testng.Assert.assertTrue;
 
 public abstract class AbstractCreateCurrentTenantForeignKeyConstraintForPostsTableTest extends TestNGSpringContextWithoutGenericTransactionalSupportTests {
 
-    private static final String CONSTRAINT_NAME = "posts_user_info_fk_cu";
-    private static final String USER_TENANT = "primary_tenant";
-    private static final String SECONDARY_USER_TENANT = "someXDAFAS_id";
+    protected static final String CONSTRAINT_NAME = "posts_user_info_fk_cu";
+    protected static final String USER_TENANT = "primary_tenant";
+    protected static final String SECONDARY_USER_TENANT = "someXDAFAS_id";
 
     abstract protected String getSchema();
 
@@ -56,11 +58,9 @@ public abstract class AbstractCreateCurrentTenantForeignKeyConstraintForPostsTab
     }
 
     @Autowired
-    JdbcTemplate jdbcTemplate;
+    protected JdbcTemplate jdbcTemplate;
 
     SetCurrentTenantIdFunctionDefinition setCurrentTenantIdFunctionDefinition;
-
-    private List<SQLDefinition> sqlDefinitions = new ArrayList<>();
 
     @DataProvider(name = "userData")
     protected static Object[][] userData()
@@ -178,24 +178,12 @@ public abstract class AbstractCreateCurrentTenantForeignKeyConstraintForPostsTab
     }
 
     @Test(dependsOnMethods = {"insertUserTestData", "insertPostForUserFromSameTenant", "tryToInsertPostForUserFromDifferentTenant"}, alwaysRun = true)
-    public void dropAllSQLDefinitions()
-    {
-        //Run sql statements in reverse order
-        LinkedList<SQLDefinition> stack = new LinkedList<>();
-        sqlDefinitions.forEach(stack::push);
-        stack.forEach(sqlDefinition ->
-        {
-            jdbcTemplate.execute(sqlDefinition.getDropScript());
-        });
-    }
-
-    @Test(dependsOnMethods = {"dropAllSQLDefinitions"}, alwaysRun = true)
     public void deleteTestData()
     {
         deleteFromTables("posts", "users");
     }
 
-    @Test(dependsOnMethods = {"dropAllSQLDefinitions"})
+    @AfterClass(dependsOnMethods = "dropAllSQLDefinitions", alwaysRun = true)
     public void constraintShouldNotExistsAfterTests()
     {
         assertFalse(isAnyRecordExists(jdbcTemplate, createSelectStatement("public", "posts", CONSTRAINT_NAME)), "Constraint should not exists");
