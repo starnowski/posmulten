@@ -37,11 +37,23 @@ import static org.springframework.test.context.jdbc.SqlConfig.TransactionMode.IS
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
-public class CreateCurrentTenantForeignKeyConstraintForPostsTableTest extends TestNGSpringContextWithoutGenericTransactionalSupportTests {
+public abstract class CreateCurrentTenantForeignKeyConstraintForPostsTableTest extends TestNGSpringContextWithoutGenericTransactionalSupportTests {
 
     private static final String CONSTRAINT_NAME = "posts_user_info_fk_cu";
     private static final String USER_TENANT = "primary_tenant";
     private static final String SECONDARY_USER_TENANT = "someXDAFAS_id";
+
+    abstract protected String getSchema();
+
+    protected String getUserTableReference()
+    {
+        return (getSchema() == null ? getSchema() + "." : "" ) + "users";
+    }
+
+    protected String getPostsTableReference()
+    {
+        return (getSchema() == null ? getSchema() + "." : "" ) + "posts";
+    }
 
     @Autowired
     JdbcTemplate jdbcTemplate;
@@ -51,7 +63,7 @@ public class CreateCurrentTenantForeignKeyConstraintForPostsTableTest extends Te
     private List<SQLDefinition> sqlDefinitions = new ArrayList<>();
 
     @DataProvider(name = "userData")
-    private static Object[][] userData()
+    protected static Object[][] userData()
     {
         return new Object[][]{
                 {new User(1L, "Szymon Tarnowski", USER_TENANT)},
@@ -60,7 +72,7 @@ public class CreateCurrentTenantForeignKeyConstraintForPostsTableTest extends Te
     }
 
     @DataProvider(name = "postData")
-    private static Object[][] postData()
+    protected static Object[][] postData()
     {
         return new Object[][]{
                 {new PostData(new Post(8L, "Some phrase", 1L, USER_TENANT), USER_TENANT, SECONDARY_USER_TENANT, 2L)},
