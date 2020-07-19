@@ -22,7 +22,6 @@ class IsRecordBelongsToCurrentTenantConstraintProducerTest extends Specification
                         capturedPrimaryColumnsValuesMap = arguments
                         conditionStatement
                     }
-            Map<String, FunctionArgumentValue> primaryColumnsValuesMap = generateRandomPrimaryColumnsValuesMap()
             def parameters = DefaultIsRecordBelongsToCurrentTenantConstraintProducerParameters.builder()
                     .withConstraintName(constraintName)
                     .withTableName(table)
@@ -39,12 +38,12 @@ class IsRecordBelongsToCurrentTenantConstraintProducerTest extends Specification
             primaryColumnsValuesMap == capturedPrimaryColumnsValuesMap
 
         where:
-            constraintName      |   schema      | table     |   conditionStatement              |   idColumns                                           ||	expectedStatement
+            constraintName      |   schema      | table     |   conditionStatement              |   primaryColumnsValuesMap                             ||	expectedStatement
             "sss"               |   null        | "users"   |   "cccsss"                        |   [id : randomFAV()]                                  ||  "ALTER TABLE \"users\" ADD CONSTRAINT sss CHECK ((id IS NULL) OR (cccsss));"
             "sss"               |   "public"    | "users"   |   "cccsss"                        |   [id : randomFAV(), abc_user_id: randomFAV()]        ||  "ALTER TABLE \"public\".\"users\" ADD CONSTRAINT sss CHECK ((abc_user_id IS NULL AND id IS NULL) OR (cccsss));"
             "sss"               |   "secondary" | "users"   |   "cccsss"                        |   [userId : randomFAV(), abc_user_id: randomFAV()]    ||  "ALTER TABLE \"secondary\".\"users\" ADD CONSTRAINT sss CHECK ((abc_user_id IS NULL AND userId IS NULL) OR (cccsss));"
-            "user_belongs_tt"   |   "secondary" | "users"   |   "cccsss"                        |   [uuid : randomFAV()]                                ||  "ALTER TABLE \"secondary\".\"users\" ADD CONSTRAINT user_belongs_tt CHECK ((uuid IS NULL AND userId IS NULL) OR (cccsss));"
-            "user_belongs_tt"   |   "secondary" | "users"   |   "is_tenant_correct(tenant_id)"  |   [secondary_colId: randomFAV(), uuid : randomFAV()]  ||  "ALTER TABLE \"secondary\".\"users\" ADD CONSTRAINT user_belongs_tt CHECK ((uuid IS NULL AND userId IS NULL AND secondary_colId IS NULL) OR (is_tenant_correct(tenant_id)));"
+            "user_belongs_tt"   |   "secondary" | "users"   |   "cccsss"                        |   [uuid : randomFAV()]                                ||  "ALTER TABLE \"secondary\".\"users\" ADD CONSTRAINT user_belongs_tt CHECK ((uuid IS NULL) OR (cccsss));"
+            "user_belongs_tt"   |   "secondary" | "users"   |   "is_tenant_correct(tenant_id)"  |   [secondary_colId: randomFAV(), uuid : randomFAV()]  ||  "ALTER TABLE \"secondary\".\"users\" ADD CONSTRAINT user_belongs_tt CHECK ((secondary_colId IS NULL AND userId IS NULL AND uuid IS NULL) OR (is_tenant_correct(tenant_id)));"
     }
 
     @Unroll
