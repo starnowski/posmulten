@@ -68,8 +68,8 @@ public class CurrentTenantForeignKeyConstraintTest extends AbstractTransactional
     private static Object[][] postData()
     {
         return new Object[][]{
-                {new PostData(new Post(8L, "Some phrase", 1L, USER_TENANT), USER_TENANT, SECONDARY_USER_TENANT)},
-                {new PostData(new Post(13L, "Some text", 2L, SECONDARY_USER_TENANT), SECONDARY_USER_TENANT, USER_TENANT)}
+                {new PostData(new Post(8L, "Some phrase", 1L, USER_TENANT), USER_TENANT, SECONDARY_USER_TENANT, 2L)},
+                {new PostData(new Post(13L, "Some text", 2L, SECONDARY_USER_TENANT), SECONDARY_USER_TENANT, USER_TENANT, 1L)}
         };
     }
 
@@ -80,7 +80,8 @@ public class CurrentTenantForeignKeyConstraintTest extends AbstractTransactional
     {
         private Post post;
         private String correctTenantId;
-        private String invalidTenantId;
+        private String differentTenantId;
+        private Long userIdThatBelongsToDifferentTenant;
     }
 
     @Test(testName = "create SQL definitions", description = "Create SQL function that creates statements that set current tenant value, retrieve current tenant value and create a constraint for a foreign key for a table that is multi-tenant aware")
@@ -157,7 +158,20 @@ public class CurrentTenantForeignKeyConstraintTest extends AbstractTransactional
         assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM users WHERE id = %1$d AND name = '%2$s' AND tenant_id = '%3$s'", user.getId(), user.getName(), user.getTenantId())), "The tests user should exists");
     }
 
-    @Test(dataProvider = "postData", dependsOnMethods = {"insertUserTestData"}, testName = "insert data into the post table related to primary tests tenant as the primary tenant")
+    @Test(dataProvider = "postData", dependsOnMethods = {"insertUserTestData"}, testName = "try to insert data into the post table related to primary tests tenant as different tenant", description = "test case assumes that constraint is not going to allow to insert data into the post table related to the primary tenant when a current tenant is different")
+    public void tryToInsertPostForUserFromDifferentTenant(PostData postData)
+    {
+        Post post = postData.getPost();
+        assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM users WHERE id = %1$d AND tenant_id = '%2$s'", postData.getUserIdThatBelongsToDifferentTenant(), postData.getDifferentTenantId())), "The tests user should exists");
+        assertThat(countRowsInTableWhere("posts", "id = " + post.getUserId())).isEqualTo(0);
+        assertThatThrownBy(() ->
+            jdbcTemplate.execute(format("%1$s INSERT INTO posts (id, user_id, text, tenant_id) VALUES (%2$d, %3$d, '%4$s', '%5$s');", setCurrentTenantIdFunctionDefinition.generateStatementThatSetTenant(postData.getCorrectTenantId()), post.getId(), postData.getUserIdThatBelongsToDifferentTenant(), post.getText(), postData.getCorrectTenantId()))
+        )
+        .isInstanceOf(DataIntegrityViolationException.class);
+        assertFalse(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM posts WHERE id = %1$d AND text = '%2$s' AND tenant_id = '%3$s'", post.getId(), post.getText(), postData.getCorrectTenantId())), "The tests post should not exists");
+    }
+
+    @Test(dataProvider = "postData", dependsOnMethods = {"insertUserTestData", "tryToInsertPostForUserFromDifferentTenant"}, testName = "insert data into the post table related to primary tests tenant as the primary tenant")
     public void insertPostForUserFromSameTenant(PostData postData)
     {
         Post post = postData.getPost();
@@ -165,18 +179,6 @@ public class CurrentTenantForeignKeyConstraintTest extends AbstractTransactional
         assertThat(countRowsInTableWhere("posts", "id = " + post.getUserId())).isEqualTo(0);
         jdbcTemplate.execute(format("%1$s INSERT INTO posts (id, user_id, text, tenant_id) VALUES (%2$d, %3$d, '%4$s', '%5$s');", setCurrentTenantIdFunctionDefinition.generateStatementThatSetTenant(postData.getCorrectTenantId()), post.getId(), post.getUserId(), post.getText(), postData.getCorrectTenantId()));
         assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM posts WHERE id = %1$d AND text = '%2$s' AND tenant_id = '%3$s'", post.getId(), post.getText(), postData.getCorrectTenantId())), "The tests post should exists");
-    }
-
-    @Test(dependsOnMethods = {"insertUserTestData"}, testName = "try to insert data into the post table related to primary tests tenant as different tenant", description = "test case assumes that constraint is not going to allow to insert data into the post table related to the primary tenant when a current tenant is different")
-    public void tryToInsertPostForUserFromDifferentTenant()
-    {
-        //TODO
-        assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM users WHERE id = 1 AND name = 'Szymon Tarnowski' AND tenant_id = '%s'", USER_TENANT)), "The tests user should exists");
-        assertThat(countRowsInTableWhere("posts", "id = 7")).isEqualTo(0);
-        assertThatThrownBy(() ->
-                jdbcTemplate.execute(format("%s INSERT INTO posts (id, user_id, text, tenant_id) VALUES (7, 1, 'Some phrase', '%s');", setCurrentTenantIdFunctionDefinition.generateStatementThatSetTenant("Second_tenant"), USER_TENANT)))
-        .isInstanceOf(DataIntegrityViolationException.class);
-        assertFalse(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM posts WHERE id = 7", "Second_tenant")), "The tests post should not exists");
     }
 
     @Test(dependsOnMethods = {"insertUserTestData", "insertPostForUserFromSameTenant", "tryToInsertPostForUserFromDifferentTenant"}, alwaysRun = true)
