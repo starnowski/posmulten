@@ -91,6 +91,20 @@ class IsRecordBelongsToCurrentTenantConstraintProducerTest extends Specification
             definition.getDropScript() == "ALTER TABLE \"public\".\"users\" DROP CONSTRAINT IF EXISTS const_1;"
     }
 
+    def "should throw an exception of type 'IllegalArgumentException' when the parameters object is null" () {
+        given:
+            def parameters = returnCorrectParametersMockObject()
+
+        when:
+            tested.produce(null)
+
+        then:
+            def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+            ex.message == "The parameters object cannot be null"
+    }
+
     def "should throw an exception of type 'IllegalArgumentException' when the table name is null" () {
         given:
             def parameters = returnCorrectParametersMockObject()
