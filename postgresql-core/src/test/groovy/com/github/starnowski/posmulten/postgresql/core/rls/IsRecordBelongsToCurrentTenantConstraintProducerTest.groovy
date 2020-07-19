@@ -87,7 +87,7 @@ class IsRecordBelongsToCurrentTenantConstraintProducerTest extends Specification
             def definition = tested.produce(parameters)
 
         then:
-            definition.getCreateScript() ==~ /ALTER TABLE "public"\."users" ADD CONSTRAINT const_1 CHECK \(\(.*\) OR \(current_tenant\(\)\)\);/
+            definition.getCreateScript() ==~ /ALTER TABLE "public"\."users" ADD CONSTRAINT const_1 CHECK \(\((.* IS NULL)+( AND )*\) OR \(current_tenant\(\)\)\);/
             definition.getDropScript() == "ALTER TABLE \"public\".\"users\" DROP CONSTRAINT IF EXISTS const_1;"
     }
 
