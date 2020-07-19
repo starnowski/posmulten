@@ -2,14 +2,18 @@ package com.github.starnowski.posmulten.postgresql.core.functional.tests;
 
 import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition;
 import com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValue;
+import com.github.starnowski.posmulten.postgresql.core.functional.tests.pojos.Post;
+import com.github.starnowski.posmulten.postgresql.core.functional.tests.pojos.User;
 import com.github.starnowski.posmulten.postgresql.core.rls.DefaultIsRecordBelongsToCurrentTenantConstraintProducerParameters;
 import com.github.starnowski.posmulten.postgresql.core.rls.IsRecordBelongsToCurrentTenantConstraintProducer;
 import com.github.starnowski.posmulten.postgresql.core.rls.IsRecordBelongsToCurrentTenantConstraintProducerParameters;
 import com.github.starnowski.posmulten.postgresql.core.rls.function.*;
 import com.google.common.collect.ImmutableList;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.ToString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
@@ -17,6 +21,7 @@ import org.springframework.test.context.jdbc.SqlGroup;
 import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import java.util.*;
@@ -28,7 +33,6 @@ import static com.github.starnowski.posmulten.postgresql.test.utils.TestUtils.VA
 import static com.github.starnowski.posmulten.postgresql.test.utils.TestUtils.isAnyRecordExists;
 import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
 import static org.springframework.test.context.jdbc.SqlConfig.TransactionMode.ISOLATED;
 import static org.testng.Assert.assertFalse;
@@ -40,6 +44,7 @@ public class CurrentTenantForeignKeyConstraintTest extends AbstractTransactional
 
     private static final String CONSTRAINT_NAME = "posts_user_info_fk_cu";
     private static final String USER_TENANT = "primary_tenant";
+    private static final String SECONDARY_USER_TENANT = "someXDAFAS_id";
 
     @Autowired
     JdbcTemplate jdbcTemplate;
@@ -47,6 +52,34 @@ public class CurrentTenantForeignKeyConstraintTest extends AbstractTransactional
     SetCurrentTenantIdFunctionDefinition setCurrentTenantIdFunctionDefinition;
 
     private List<SQLDefinition> sqlDefinitions = new ArrayList<>();
+
+    @DataProvider(name = "userData")
+    private static Object[][] userData()
+    {
+        return new Object[][]{
+                {new User(1L, "Szymon Tarnowski", USER_TENANT)},
+                {new User(2L, "John Doe", SECONDARY_USER_TENANT)}
+        };
+    }
+
+    @DataProvider(name = "postData")
+    private static Object[][] postData()
+    {
+        return new Object[][]{
+                {new PostData(new Post(8L, "Some phrase", 1L, USER_TENANT), USER_TENANT, SECONDARY_USER_TENANT)},
+                {new PostData(new Post(13L, "Some text", 2L, SECONDARY_USER_TENANT), SECONDARY_USER_TENANT, USER_TENANT)}
+        };
+    }
+
+    @Getter
+    @AllArgsConstructor
+    @ToString
+    protected static class PostData
+    {
+        private Post post;
+        private String correctTenantId;
+        private String invalidTenantId;
+    }
 
     @Test(testName = "create SQL definitions", description = "Create SQL function that creates statements that set current tenant value, retrieve current tenant value and create a constraint for a foreign key for a table that is multi-tenant aware")
     public void createSQLDefinitions()
@@ -114,16 +147,16 @@ public class CurrentTenantForeignKeyConstraintTest extends AbstractTransactional
             @Sql(value = CLEAR_DATABASE_SCRIPT_PATH,
                     config = @SqlConfig(transactionMode = ISOLATED),
                     executionPhase = BEFORE_TEST_METHOD)})
-    @Test(dependsOnMethods = {"constraintNameShouldExistAfterCreation"}, testName = "insert data into to user table")
-    public void insertUserTestData()
+    @Test(dataProvider = "postData", dependsOnMethods = {"constraintNameShouldExistAfterCreation"}, testName = "insert data into to user table")
+    public void insertUserTestData(User user)
     {
-        assertThat(countRowsInTableWhere("users", "id = 1")).isEqualTo(0);
+        assertThat(countRowsInTableWhere("users", "id = " + user.getId())).isEqualTo(0);
         jdbcTemplate.execute(format("INSERT INTO public.users (id, name, tenant_id) VALUES (1, 'Szymon Tarnowski', '%s');", USER_TENANT));
         assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM users WHERE id = 1 AND name = 'Szymon Tarnowski' AND tenant_id = '%s'", USER_TENANT)), "The tests user should exists");
     }
 
-    @Test(dependsOnMethods = {"insertUserTestData"}, testName = "insert data into the post table related to primary tests tenant as the primary tenant")
-    public void insertPostForUserFromSameTenant()
+    @Test(dataProvider = "postData", dependsOnMethods = {"insertUserTestData"}, testName = "insert data into the post table related to primary tests tenant as the primary tenant")
+    public void insertPostForUserFromSameTenant(PostData postData)
     {
         assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM users WHERE id = 1 AND name = 'Szymon Tarnowski' AND tenant_id = '%s'", USER_TENANT)), "The tests user should exists");
         assertThat(countRowsInTableWhere("posts", "id = 8")).isEqualTo(0);
@@ -131,16 +164,16 @@ public class CurrentTenantForeignKeyConstraintTest extends AbstractTransactional
         assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM posts WHERE id = 8 AND text = 'Some phrase' AND tenant_id = '%s'", USER_TENANT)), "The tests post should exists");
     }
 
-    @Test(dependsOnMethods = {"insertUserTestData"}, testName = "try to insert data into the post table related to primary tests tenant as different tenant", description = "test case assumes that constraint is not going to allow to insert data into the post table related to the primary tenant when a current tenant is different")
-    public void tryToInsertPostForUserFromDifferentTenant()
-    {
-        assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM users WHERE id = 1 AND name = 'Szymon Tarnowski' AND tenant_id = '%s'", USER_TENANT)), "The tests user should exists");
-        assertThat(countRowsInTableWhere("posts", "id = 7")).isEqualTo(0);
-        assertThatThrownBy(() ->
-                jdbcTemplate.execute(format("%s INSERT INTO posts (id, user_id, text, tenant_id) VALUES (7, 1, 'Some phrase', '%s');", setCurrentTenantIdFunctionDefinition.generateStatementThatSetTenant("Second_tenant"), USER_TENANT)))
-        .isInstanceOf(DataIntegrityViolationException.class);
-        assertFalse(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM posts WHERE id = 7", "Second_tenant")), "The tests post should not exists");
-    }
+//    @Test(dependsOnMethods = {"insertUserTestData"}, testName = "try to insert data into the post table related to primary tests tenant as different tenant", description = "test case assumes that constraint is not going to allow to insert data into the post table related to the primary tenant when a current tenant is different")
+//    public void tryToInsertPostForUserFromDifferentTenant()
+//    {
+//        assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM users WHERE id = 1 AND name = 'Szymon Tarnowski' AND tenant_id = '%s'", USER_TENANT)), "The tests user should exists");
+//        assertThat(countRowsInTableWhere("posts", "id = 7")).isEqualTo(0);
+//        assertThatThrownBy(() ->
+//                jdbcTemplate.execute(format("%s INSERT INTO posts (id, user_id, text, tenant_id) VALUES (7, 1, 'Some phrase', '%s');", setCurrentTenantIdFunctionDefinition.generateStatementThatSetTenant("Second_tenant"), USER_TENANT)))
+//        .isInstanceOf(DataIntegrityViolationException.class);
+//        assertFalse(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM posts WHERE id = 7", "Second_tenant")), "The tests post should not exists");
+//    }
 
     //TODO Insert data into the post table for different tenant
     //TODO Insert data into the
