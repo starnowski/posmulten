@@ -13,9 +13,7 @@ import com.google.common.collect.ImmutableList;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.jdbc.SqlGroup;
@@ -56,9 +54,6 @@ public abstract class AbstractCreateCurrentTenantForeignKeyConstraintForPostsTab
     {
         return (getSchema() == null ? "" : getSchema() + ".") + "posts";
     }
-
-    @Autowired
-    protected JdbcTemplate jdbcTemplate;
 
     SetCurrentTenantIdFunctionDefinition setCurrentTenantIdFunctionDefinition;
 
