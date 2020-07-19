@@ -42,7 +42,7 @@ import static org.testng.Assert.assertTrue;
 
 @SpringBootTest(classes = TestApplication.class)
 @Transactional(propagation = Propagation.NOT_SUPPORTED)
-public class CurrentTenantForeignKeyConstraintTest extends AbstractTransactionalTestNGSpringContextTests {
+public class CreateCurrentTenantForeignKeyConstraintForPostsTableTest extends AbstractTransactionalTestNGSpringContextTests {
 
     private static final String CONSTRAINT_NAME = "posts_user_info_fk_cu";
     private static final String USER_TENANT = "primary_tenant";
