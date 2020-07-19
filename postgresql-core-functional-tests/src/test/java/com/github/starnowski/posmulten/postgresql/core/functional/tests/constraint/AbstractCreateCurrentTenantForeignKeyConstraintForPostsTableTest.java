@@ -47,12 +47,12 @@ public abstract class AbstractCreateCurrentTenantForeignKeyConstraintForPostsTab
 
     protected String getUsersTableReference()
     {
-        return (getSchema() == null ? getSchema() + "." : "" ) + "users";
+        return (getSchema() == null ? "" : getSchema() + ".") + "users";
     }
 
     protected String getPostsTableReference()
     {
-        return (getSchema() == null ? getSchema() + "." : "" ) + "posts";
+        return (getSchema() == null ? "" : getSchema() + ".") + "posts";
     }
 
     @Autowired
@@ -171,10 +171,10 @@ public abstract class AbstractCreateCurrentTenantForeignKeyConstraintForPostsTab
     public void insertPostForUserFromSameTenant(PostData postData)
     {
         Post post = postData.getPost();
-        assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM users WHERE id = %1$d AND tenant_id = '%2$s'", post.getUserId(), postData.getCorrectTenantId())), "The tests user should exists");
-        assertThat(countRowsInTableWhere("posts", "id = " + post.getUserId())).isEqualTo(0);
-        jdbcTemplate.execute(format("%1$s INSERT INTO posts (id, user_id, text, tenant_id) VALUES (%2$d, %3$d, '%4$s', '%5$s');", setCurrentTenantIdFunctionDefinition.generateStatementThatSetTenant(postData.getCorrectTenantId()), post.getId(), post.getUserId(), post.getText(), postData.getCorrectTenantId()));
-        assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM posts WHERE id = %1$d AND text = '%2$s' AND tenant_id = '%3$s'", post.getId(), post.getText(), postData.getCorrectTenantId())), "The tests post should exists");
+        assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %3$s WHERE id = %1$d AND tenant_id = '%2$s'", post.getUserId(), postData.getCorrectTenantId(), getUsersTableReference())), "The tests user should exists");
+        assertThat(countRowsInTableWhere(getPostsTableReference(), "id = " + post.getUserId())).isEqualTo(0);
+        jdbcTemplate.execute(format("%1$s INSERT INTO %6$s (id, user_id, text, tenant_id) VALUES (%2$d, %3$d, '%4$s', '%5$s');", setCurrentTenantIdFunctionDefinition.generateStatementThatSetTenant(postData.getCorrectTenantId()), post.getId(), post.getUserId(), post.getText(), postData.getCorrectTenantId(), getPostsTableReference()));
+        assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %4$s WHERE id = %1$d AND text = '%2$s' AND tenant_id = '%3$s'", post.getId(), post.getText(), postData.getCorrectTenantId(), getPostsTableReference())), "The tests post should exists");
     }
 
     @Test(dependsOnMethods = {"insertUserTestData", "insertPostForUserFromSameTenant", "tryToInsertPostForUserFromDifferentTenant"}, alwaysRun = true)
