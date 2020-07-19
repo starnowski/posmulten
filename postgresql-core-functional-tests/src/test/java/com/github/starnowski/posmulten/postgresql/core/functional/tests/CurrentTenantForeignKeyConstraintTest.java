@@ -73,17 +73,6 @@ public class CurrentTenantForeignKeyConstraintTest extends AbstractTransactional
         };
     }
 
-    @Getter
-    @AllArgsConstructor
-    @ToString
-    protected static class PostData
-    {
-        private Post post;
-        private String correctTenantId;
-        private String differentTenantId;
-        private Long userIdThatBelongsToDifferentTenant;
-    }
-
     @Test(testName = "create SQL definitions", description = "Create SQL function that creates statements that set current tenant value, retrieve current tenant value and create a constraint for a foreign key for a table that is multi-tenant aware")
     public void createSQLDefinitions()
     {
@@ -211,5 +200,16 @@ public class CurrentTenantForeignKeyConstraintTest extends AbstractTransactional
                 "\t\tFROM information_schema.table_constraints\n" +
                 "\t\tWHERE table_schema = '%s' AND table_name = '%s' AND constraint_name = '%s'";
         return format(template, schema == null ? "public" : schema, table, constraintName);
+    }
+
+    @Getter
+    @AllArgsConstructor
+    @ToString
+    protected static class PostData
+    {
+        private Post post;
+        private String correctTenantId;
+        private String differentTenantId;
+        private Long userIdThatBelongsToDifferentTenant;
     }
 }
