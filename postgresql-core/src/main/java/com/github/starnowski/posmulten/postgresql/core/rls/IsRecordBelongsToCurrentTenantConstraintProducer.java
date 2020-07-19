@@ -27,10 +27,10 @@ public class IsRecordBelongsToCurrentTenantConstraintProducer {
 
     protected void validate(IsRecordBelongsToCurrentTenantConstraintProducerParameters parameters)
     {
-//        if (parameters == null)
-//        {
-//            throw new IllegalArgumentException("The parameters object cannot be null");
-//        }
+        if (parameters == null)
+        {
+            throw new IllegalArgumentException("The parameters object cannot be null");
+        }
         if (parameters.getTableName() == null)
         {
             throw new IllegalArgumentException("Table name cannot be null");
