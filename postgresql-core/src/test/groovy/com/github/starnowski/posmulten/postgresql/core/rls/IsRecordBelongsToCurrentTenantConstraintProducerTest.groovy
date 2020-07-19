@@ -43,7 +43,7 @@ class IsRecordBelongsToCurrentTenantConstraintProducerTest extends Specification
             "sss"               |   "public"    | "users"   |   "cccsss"                        |   [id : randomFAV(), abc_user_id: randomFAV()]        ||  "ALTER TABLE \"public\".\"users\" ADD CONSTRAINT sss CHECK ((abc_user_id IS NULL AND id IS NULL) OR (cccsss));"
             "sss"               |   "secondary" | "users"   |   "cccsss"                        |   [userId : randomFAV(), abc_user_id: randomFAV()]    ||  "ALTER TABLE \"secondary\".\"users\" ADD CONSTRAINT sss CHECK ((abc_user_id IS NULL AND userId IS NULL) OR (cccsss));"
             "user_belongs_tt"   |   "secondary" | "users"   |   "cccsss"                        |   [uuid : randomFAV()]                                ||  "ALTER TABLE \"secondary\".\"users\" ADD CONSTRAINT user_belongs_tt CHECK ((uuid IS NULL) OR (cccsss));"
-            "user_belongs_tt"   |   "secondary" | "users"   |   "is_tenant_correct(tenant_id)"  |   [secondary_colId: randomFAV(), uuid : randomFAV()]  ||  "ALTER TABLE \"secondary\".\"users\" ADD CONSTRAINT user_belongs_tt CHECK ((secondary_colId IS NULL AND userId IS NULL AND uuid IS NULL) OR (is_tenant_correct(tenant_id)));"
+            "user_belongs_tt"   |   "secondary" | "users"   |   "is_tenant_correct(tenant_id)"  |   [secondary_colId: randomFAV(), uuid : randomFAV()]  ||  "ALTER TABLE \"secondary\".\"users\" ADD CONSTRAINT user_belongs_tt CHECK ((secondary_colId IS NULL AND uuid IS NULL) OR (is_tenant_correct(tenant_id)));"
     }
 
     @Unroll
