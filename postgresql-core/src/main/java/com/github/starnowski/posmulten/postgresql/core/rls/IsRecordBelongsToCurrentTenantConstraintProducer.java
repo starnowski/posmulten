@@ -3,6 +3,8 @@ package com.github.starnowski.posmulten.postgresql.core.rls;
 import com.github.starnowski.posmulten.postgresql.core.common.DefaultSQLDefinition;
 import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition;
 
+import static java.util.stream.Collectors.joining;
+
 public class IsRecordBelongsToCurrentTenantConstraintProducer {
 
     public SQLDefinition produce(IsRecordBelongsToCurrentTenantConstraintProducerParameters parameters)
@@ -20,7 +22,13 @@ public class IsRecordBelongsToCurrentTenantConstraintProducer {
         stringBuilder.append(parameters.getConstraintName());
         stringBuilder.append(" CHECK ");
         stringBuilder.append("(");
+        stringBuilder.append("(");
+        stringBuilder.append(parameters.getPrimaryColumnsValuesMap().keySet().stream().sorted().map(s -> s + " IS NULL").collect(joining(" AND ")));
+        stringBuilder.append(")");
+        stringBuilder.append(" OR ");
+        stringBuilder.append("(");
         stringBuilder.append(parameters.getIsRecordBelongsToCurrentTenantFunctionInvocationFactory().returnIsRecordBelongsToCurrentTenantFunctionInvocation(parameters.getPrimaryColumnsValuesMap()));
+        stringBuilder.append(")");
         stringBuilder.append(");");
         return stringBuilder.toString();
     }
