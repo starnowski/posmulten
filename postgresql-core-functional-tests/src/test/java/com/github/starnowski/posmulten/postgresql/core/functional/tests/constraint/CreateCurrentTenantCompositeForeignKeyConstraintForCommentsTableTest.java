@@ -54,20 +54,11 @@ public class CreateCurrentTenantCompositeForeignKeyConstraintForCommentsTableTes
         setCurrentTenantIdFunctionDefinition = setCurrentTenantIdFunctionProducer.produce(new SetCurrentTenantIdFunctionProducerParameters("rls_set_current_tenant", VALID_CURRENT_TENANT_ID_PROPERTY_NAME, getSchema(), null));
         sqlDefinitions.add(setCurrentTenantIdFunctionDefinition);
 
-        // Does record belongs to current tenant
-        AbstractIsRecordBelongsToCurrentTenantProducerParameters isRecordBelongsToCurrentTenantProducerParameters = new IsRecordBelongsToCurrentTenantProducerParameters.Builder()
-                .withSchema(getSchema())
-                .withFunctionName("is_user_belongs_to_current_tenant")
-                .withRecordTableName("users")
-                .withRecordSchemaName(getSchema())
-                .withiGetCurrentTenantIdFunctionInvocationFactory(getCurrentTenantIdFunctionDefinition)
-                .withTenantColumn("tenant_id")
-                .withKeyColumnsPairsList(ImmutableList.of(pairOfColumnWithType("id", "bigint"))).build();
-        IsRecordBelongsToCurrentTenantProducer isRecordBelongsToCurrentTenantProducer = new IsRecordBelongsToCurrentTenantProducer();
-        IsRecordBelongsToCurrentTenantFunctionDefinition isRecordBelongsToCurrentTenantFunctionDefinition = isRecordBelongsToCurrentTenantProducer.produce(isRecordBelongsToCurrentTenantProducerParameters);
+        // Does record belongs to current tenant (users table)
+        IsRecordBelongsToCurrentTenantFunctionDefinition isRecordBelongsToCurrentTenantFunctionDefinition = getIsUsersRecordBelongsToCurrentTenantFunctionDefinition(getCurrentTenantIdFunctionDefinition);
         sqlDefinitions.add(isRecordBelongsToCurrentTenantFunctionDefinition);
 
-        // Constraint
+        // Constraint - post - fk - users
         IsRecordBelongsToCurrentTenantConstraintProducer isRecordBelongsToCurrentTenantConstraintProducer = new IsRecordBelongsToCurrentTenantConstraintProducer();
         //user_id
         Map<String, FunctionArgumentValue> primaryColumnsValuesMap = new HashMap<>();
@@ -80,5 +71,18 @@ public class CreateCurrentTenantCompositeForeignKeyConstraintForCommentsTableTes
                 .withPrimaryColumnsValuesMap(primaryColumnsValuesMap).build();
         SQLDefinition recordBelongsToCurrentTenantConstrainSqlDefinition = isRecordBelongsToCurrentTenantConstraintProducer.produce(isRecordBelongsToCurrentTenantConstraintProducerParameters);
         sqlDefinitions.add(recordBelongsToCurrentTenantConstrainSqlDefinition);
+    }
+
+    private IsRecordBelongsToCurrentTenantFunctionDefinition getIsUsersRecordBelongsToCurrentTenantFunctionDefinition(GetCurrentTenantIdFunctionDefinition getCurrentTenantIdFunctionDefinition) {
+        AbstractIsRecordBelongsToCurrentTenantProducerParameters isRecordBelongsToCurrentTenantProducerParameters = new IsRecordBelongsToCurrentTenantProducerParameters.Builder()
+                .withSchema(getSchema())
+                .withFunctionName("is_user_belongs_to_current_tenant")
+                .withRecordTableName("users")
+                .withRecordSchemaName(getSchema())
+                .withiGetCurrentTenantIdFunctionInvocationFactory(getCurrentTenantIdFunctionDefinition)
+                .withTenantColumn("tenant_id")
+                .withKeyColumnsPairsList(ImmutableList.of(pairOfColumnWithType("id", "bigint"))).build();
+        IsRecordBelongsToCurrentTenantProducer isRecordBelongsToCurrentTenantProducer = new IsRecordBelongsToCurrentTenantProducer();
+        return isRecordBelongsToCurrentTenantProducer.produce(isRecordBelongsToCurrentTenantProducerParameters);
     }
 }
