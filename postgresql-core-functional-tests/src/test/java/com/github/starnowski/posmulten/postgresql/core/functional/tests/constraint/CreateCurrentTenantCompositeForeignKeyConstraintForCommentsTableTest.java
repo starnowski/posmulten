@@ -20,7 +20,7 @@ import static com.github.starnowski.posmulten.postgresql.test.utils.TestUtils.VA
 public class CreateCurrentTenantCompositeForeignKeyConstraintForCommentsTableTest extends TestNGSpringContextWithoutGenericTransactionalSupportTests {
     //TODO
 
-    protected static final String CONSTRAINT_NAME = "posts_user_info_fk_cu";
+    protected static final String POSTS_USERS_FK_CONSTRAINT_NAME = "posts_user_info_fk_cu";
     protected static final String USER_TENANT = "primary_tenant";
     protected static final String SECONDARY_USER_TENANT = "someXDAFAS_id";
 
@@ -69,16 +69,20 @@ public class CreateCurrentTenantCompositeForeignKeyConstraintForCommentsTableTes
         // Constraint - post - fk - users
         IsRecordBelongsToCurrentTenantConstraintProducer isRecordBelongsToCurrentTenantConstraintProducer = new IsRecordBelongsToCurrentTenantConstraintProducer();
         //user_id
+        SQLDefinition recordBelongsToCurrentTenantConstrainSqlDefinition = getSqlDefinitionOfConstraintForUsersForeignKeyInPostsTable(isUsersRecordBelongsToCurrentTenantFunctionDefinition, isRecordBelongsToCurrentTenantConstraintProducer);
+        sqlDefinitions.add(recordBelongsToCurrentTenantConstrainSqlDefinition);
+    }
+
+    private SQLDefinition getSqlDefinitionOfConstraintForUsersForeignKeyInPostsTable(IsRecordBelongsToCurrentTenantFunctionDefinition isUsersRecordBelongsToCurrentTenantFunctionDefinition, IsRecordBelongsToCurrentTenantConstraintProducer isRecordBelongsToCurrentTenantConstraintProducer) {
         Map<String, FunctionArgumentValue> primaryColumnsValuesMap = new HashMap<>();
         primaryColumnsValuesMap.put("id", forReference("user_id"));
         IsRecordBelongsToCurrentTenantConstraintProducerParameters isRecordBelongsToCurrentTenantConstraintProducerParameters = DefaultIsRecordBelongsToCurrentTenantConstraintProducerParameters.builder()
-                .withConstraintName(CONSTRAINT_NAME)
+                .withConstraintName(POSTS_USERS_FK_CONSTRAINT_NAME)
                 .withTableName("posts")
                 .withTableSchema(getSchema())
                 .withIsRecordBelongsToCurrentTenantFunctionInvocationFactory(isUsersRecordBelongsToCurrentTenantFunctionDefinition)
                 .withPrimaryColumnsValuesMap(primaryColumnsValuesMap).build();
-        SQLDefinition recordBelongsToCurrentTenantConstrainSqlDefinition = isRecordBelongsToCurrentTenantConstraintProducer.produce(isRecordBelongsToCurrentTenantConstraintProducerParameters);
-        sqlDefinitions.add(recordBelongsToCurrentTenantConstrainSqlDefinition);
+        return isRecordBelongsToCurrentTenantConstraintProducer.produce(isRecordBelongsToCurrentTenantConstraintProducerParameters);
     }
 
     private IsRecordBelongsToCurrentTenantFunctionDefinition getIsUsersRecordBelongsToCurrentTenantFunctionDefinition(GetCurrentTenantIdFunctionDefinition getCurrentTenantIdFunctionDefinition) {
