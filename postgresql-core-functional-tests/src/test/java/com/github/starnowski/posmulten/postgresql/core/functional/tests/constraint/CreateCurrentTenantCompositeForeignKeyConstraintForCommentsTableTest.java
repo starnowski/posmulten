@@ -21,6 +21,7 @@ public class CreateCurrentTenantCompositeForeignKeyConstraintForCommentsTableTes
     //TODO
 
     protected static final String POSTS_USERS_FK_CONSTRAINT_NAME = "posts_user_info_fk_cu";
+    protected static final String COMMENTS_USERS_FK_CONSTRAINT_NAME = "comments_user_info_fk_cu";
     protected static final String USER_TENANT = "primary_tenant";
     protected static final String SECONDARY_USER_TENANT = "someXDAFAS_id";
 
@@ -67,16 +68,25 @@ public class CreateCurrentTenantCompositeForeignKeyConstraintForCommentsTableTes
         sqlDefinitions.add(isCommentsRecordBelongsToCurrentTenantFunctionDefinition);
 
         // Constraint - post - fk - users
-        IsRecordBelongsToCurrentTenantConstraintProducer isRecordBelongsToCurrentTenantConstraintProducer = new IsRecordBelongsToCurrentTenantConstraintProducer();
         //user_id
-        SQLDefinition recordBelongsToCurrentTenantConstrainSqlDefinition = getSqlDefinitionOfConstraintForUsersForeignKeyInPostsTable(isUsersRecordBelongsToCurrentTenantFunctionDefinition, isRecordBelongsToCurrentTenantConstraintProducer);
+        SQLDefinition recordBelongsToCurrentTenantConstrainSqlDefinition = getSqlDefinitionOfConstraintForUsersForeignKeyInPostsTable(isUsersRecordBelongsToCurrentTenantFunctionDefinition);
         sqlDefinitions.add(recordBelongsToCurrentTenantConstrainSqlDefinition);
+
+        //getSqlDefinitionOfConstraintForUsersForeignKeyInCommentsTable
+        SQLDefinition usersBelongsToCurrentTenantConstraintForCommentsTableSqlDefinition = getSqlDefinitionOfConstraintForUsersForeignKeyInCommentsTable(isUsersRecordBelongsToCurrentTenantFunctionDefinition);
+        sqlDefinitions.add(usersBelongsToCurrentTenantConstraintForCommentsTableSqlDefinition);
     }
 
-    private SQLDefinition getSqlDefinitionOfConstraintForUsersForeignKeyInPostsTable(IsRecordBelongsToCurrentTenantFunctionDefinition isUsersRecordBelongsToCurrentTenantFunctionDefinition, IsRecordBelongsToCurrentTenantConstraintProducer isRecordBelongsToCurrentTenantConstraintProducer) {
+    private SQLDefinition getSqlDefinitionOfConstraintForUsersForeignKeyInPostsTable(IsRecordBelongsToCurrentTenantFunctionDefinition isUsersRecordBelongsToCurrentTenantFunctionDefinition) {
         Map<String, FunctionArgumentValue> primaryColumnsValuesMap = new HashMap<>();
         primaryColumnsValuesMap.put("id", forReference("user_id"));
         return getSqlDefinitionOfConstraintForMultiTenantTableForeignKey(isUsersRecordBelongsToCurrentTenantFunctionDefinition, POSTS_USERS_FK_CONSTRAINT_NAME, "posts", primaryColumnsValuesMap);
+    }
+
+    private SQLDefinition getSqlDefinitionOfConstraintForUsersForeignKeyInCommentsTable(IsRecordBelongsToCurrentTenantFunctionDefinition isUsersRecordBelongsToCurrentTenantFunctionDefinition) {
+        Map<String, FunctionArgumentValue> primaryColumnsValuesMap = new HashMap<>();
+        primaryColumnsValuesMap.put("id", forReference("user_id"));
+        return getSqlDefinitionOfConstraintForMultiTenantTableForeignKey(isUsersRecordBelongsToCurrentTenantFunctionDefinition, COMMENTS_USERS_FK_CONSTRAINT_NAME, "comments", primaryColumnsValuesMap);
     }
 
     private SQLDefinition getSqlDefinitionOfConstraintForMultiTenantTableForeignKey(IsRecordBelongsToCurrentTenantFunctionDefinition isUsersRecordBelongsToCurrentTenantFunctionDefinition, String constraintName, String tableName, Map<String, FunctionArgumentValue> primaryColumnsValuesMap) {
