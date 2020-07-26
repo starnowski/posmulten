@@ -76,9 +76,14 @@ public class CreateCurrentTenantCompositeForeignKeyConstraintForCommentsTableTes
     private SQLDefinition getSqlDefinitionOfConstraintForUsersForeignKeyInPostsTable(IsRecordBelongsToCurrentTenantFunctionDefinition isUsersRecordBelongsToCurrentTenantFunctionDefinition, IsRecordBelongsToCurrentTenantConstraintProducer isRecordBelongsToCurrentTenantConstraintProducer) {
         Map<String, FunctionArgumentValue> primaryColumnsValuesMap = new HashMap<>();
         primaryColumnsValuesMap.put("id", forReference("user_id"));
+        return getSqlDefinitionOfConstraintForMultiTenantTableForeignKey(isUsersRecordBelongsToCurrentTenantFunctionDefinition, POSTS_USERS_FK_CONSTRAINT_NAME, "posts", primaryColumnsValuesMap);
+    }
+
+    private SQLDefinition getSqlDefinitionOfConstraintForMultiTenantTableForeignKey(IsRecordBelongsToCurrentTenantFunctionDefinition isUsersRecordBelongsToCurrentTenantFunctionDefinition, String constraintName, String tableName, Map<String, FunctionArgumentValue> primaryColumnsValuesMap) {
+        IsRecordBelongsToCurrentTenantConstraintProducer isRecordBelongsToCurrentTenantConstraintProducer = new IsRecordBelongsToCurrentTenantConstraintProducer();
         IsRecordBelongsToCurrentTenantConstraintProducerParameters isRecordBelongsToCurrentTenantConstraintProducerParameters = DefaultIsRecordBelongsToCurrentTenantConstraintProducerParameters.builder()
-                .withConstraintName(POSTS_USERS_FK_CONSTRAINT_NAME)
-                .withTableName("posts")
+                .withConstraintName(constraintName)
+                .withTableName(tableName)
                 .withTableSchema(getSchema())
                 .withIsRecordBelongsToCurrentTenantFunctionInvocationFactory(isUsersRecordBelongsToCurrentTenantFunctionDefinition)
                 .withPrimaryColumnsValuesMap(primaryColumnsValuesMap).build();
