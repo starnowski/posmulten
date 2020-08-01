@@ -72,13 +72,18 @@ public class CreateCurrentTenantCompositeForeignKeyConstraintForCommentsTableTes
         //getSqlDefinitionOfConstraintForUsersForeignKeyInCommentsTable
         SQLDefinition usersBelongsToCurrentTenantConstraintForCommentsTableSqlDefinition = getSqlDefinitionOfConstraintForUsersForeignKeyInCommentsTable(isUsersRecordBelongsToCurrentTenantFunctionDefinition);
         sqlDefinitions.add(usersBelongsToCurrentTenantConstraintForCommentsTableSqlDefinition);
+
+        //getSqlDefinitionOfConstraintForPostsForeignKeyInCommentsTable commets - posts fk
+        SQLDefinition postsBelongsToCurrentTenantConstraintForCommentsTableSqlDefinition = getSqlDefinitionOfConstraintForPostsForeignKeyInCommentsTable(isPostsRecordBelongsToCurrentTenantFunctionDefinition);
+        sqlDefinitions.add(postsBelongsToCurrentTenantConstraintForCommentsTableSqlDefinition);
     }
 
     @Test(dependsOnMethods = {"createSQLDefinitions"}, testName = "constraint should not exists before tests execution", description = "check if constraint does not exist before executing SQL definitions")
     public void constraintShouldNotExistsBeforeTests()
     {
         assertFalse(isAnyRecordExists(jdbcTemplate, createSelectStatementForConstraintName(getSchema(), "posts", POSTS_USERS_FK_CONSTRAINT_NAME)), "Constraint for users for foreign key in posts table should not exists");
-        assertFalse(isAnyRecordExists(jdbcTemplate, createSelectStatementForConstraintName(getSchema(), "posts", COMMENTS_USERS_FK_CONSTRAINT_NAME)), "Constraint for users for foreign key in comments table should not exists");
+        assertFalse(isAnyRecordExists(jdbcTemplate, createSelectStatementForConstraintName(getSchema(), "comments", COMMENTS_USERS_FK_CONSTRAINT_NAME)), "Constraint for users for foreign key in comments table should not exists");
+        assertFalse(isAnyRecordExists(jdbcTemplate, createSelectStatementForConstraintName(getSchema(), "comments", COMMENTS_POSTS_FK_CONSTRAINT_NAME)), "Constraint for posts for foreign key in comments table should not exists");
     }
 
     @SqlGroup({
@@ -99,13 +104,14 @@ public class CreateCurrentTenantCompositeForeignKeyConstraintForCommentsTableTes
     {
         assertTrue(isAnyRecordExists(jdbcTemplate, createSelectStatementForConstraintName(getSchema(), "posts", POSTS_USERS_FK_CONSTRAINT_NAME)), "Constraint for users for foreign key in posts table should exists");
         assertTrue(isAnyRecordExists(jdbcTemplate, createSelectStatementForConstraintName(getSchema(), "comments", COMMENTS_USERS_FK_CONSTRAINT_NAME)), "Constraint for users for foreign key in comments table should exists");
+        assertTrue(isAnyRecordExists(jdbcTemplate, createSelectStatementForConstraintName(getSchema(), "comments", COMMENTS_POSTS_FK_CONSTRAINT_NAME)), "Constraint for posts for foreign key in comments table should exists");
     }
 
     @AfterClass(dependsOnMethods = "dropAllSQLDefinitions", alwaysRun = true)
     public void constraintShouldNotExistsAfterTests()
     {
         assertFalse(isAnyRecordExists(jdbcTemplate, createSelectStatementForConstraintName(getSchema(), "posts", POSTS_USERS_FK_CONSTRAINT_NAME)), "Constraint for users for foreign key in posts table should not exists");
-        assertFalse(isAnyRecordExists(jdbcTemplate, createSelectStatementForConstraintName(getSchema(), "posts", COMMENTS_USERS_FK_CONSTRAINT_NAME)), "Constraint for users for foreign key in comments table should not exists");
-
+        assertFalse(isAnyRecordExists(jdbcTemplate, createSelectStatementForConstraintName(getSchema(), "comments", COMMENTS_USERS_FK_CONSTRAINT_NAME)), "Constraint for users for foreign key in comments table should not exists");
+        assertFalse(isAnyRecordExists(jdbcTemplate, createSelectStatementForConstraintName(getSchema(), "comments", COMMENTS_POSTS_FK_CONSTRAINT_NAME)), "Constraint for posts for foreign key in comments table should not exists");
     }
 }

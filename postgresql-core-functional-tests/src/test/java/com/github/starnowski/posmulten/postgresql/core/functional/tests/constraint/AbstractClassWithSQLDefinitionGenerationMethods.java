@@ -19,6 +19,7 @@ public abstract class AbstractClassWithSQLDefinitionGenerationMethods extends Te
 
     protected static final String POSTS_USERS_FK_CONSTRAINT_NAME = "posts_users_fk_cu";
     protected static final String COMMENTS_USERS_FK_CONSTRAINT_NAME = "comments_users_fk_cu";
+    protected static final String COMMENTS_POSTS_FK_CONSTRAINT_NAME = "comments_posts_fk_cu";
 
     abstract protected String getSchema();
 
@@ -32,6 +33,12 @@ public abstract class AbstractClassWithSQLDefinitionGenerationMethods extends Te
         Map<String, FunctionArgumentValue> primaryColumnsValuesMap = new HashMap<>();
         primaryColumnsValuesMap.put("id", forReference("user_id"));
         return getSqlDefinitionOfConstraintForMultiTenantTableForeignKey(isUsersRecordBelongsToCurrentTenantFunctionDefinition, COMMENTS_USERS_FK_CONSTRAINT_NAME, "comments", primaryColumnsValuesMap);
+    }
+
+    protected SQLDefinition getSqlDefinitionOfConstraintForPostsForeignKeyInCommentsTable(IsRecordBelongsToCurrentTenantFunctionDefinition isPostsRecordBelongsToCurrentTenantFunctionDefinition) {
+        Map<String, FunctionArgumentValue> primaryColumnsValuesMap = new HashMap<>();
+        primaryColumnsValuesMap.put("id", forReference("post_id"));
+        return getSqlDefinitionOfConstraintForMultiTenantTableForeignKey(isPostsRecordBelongsToCurrentTenantFunctionDefinition, COMMENTS_POSTS_FK_CONSTRAINT_NAME, "comments", primaryColumnsValuesMap);
     }
 
     protected SQLDefinition getSqlDefinitionOfConstraintForMultiTenantTableForeignKey(IsRecordBelongsToCurrentTenantFunctionDefinition isUsersRecordBelongsToCurrentTenantFunctionDefinition, String constraintName, String tableName, Map<String, FunctionArgumentValue> primaryColumnsValuesMap) {
