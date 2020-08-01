@@ -1,11 +1,14 @@
 package com.github.starnowski.posmulten.postgresql.core.functional.tests.constraint;
 
 import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition;
+import com.github.starnowski.posmulten.postgresql.core.functional.tests.pojos.Post;
+import com.github.starnowski.posmulten.postgresql.core.functional.tests.pojos.User;
 import com.github.starnowski.posmulten.postgresql.core.rls.function.*;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.jdbc.SqlGroup;
 import org.testng.annotations.AfterClass;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import static com.github.starnowski.posmulten.postgresql.core.functional.tests.TestApplication.CLEAR_DATABASE_SCRIPT_PATH;
@@ -35,6 +38,24 @@ public class CreateCurrentTenantCompositeForeignKeyConstraintForCommentsTableTes
     protected String getPostsTableReference()
     {
         return (getSchema() == null ? "" : getSchema() + ".") + "posts";
+    }
+
+    @DataProvider(name = "userData")
+    protected static Object[][] userData()
+    {
+        return new Object[][]{
+                {new User(1L, "Szymon Tarnowski", USER_TENANT)},
+                {new User(2L, "John Doe", SECONDARY_USER_TENANT)}
+        };
+    }
+
+    @DataProvider(name = "postData")
+    protected static Object[][] postData()
+    {
+        return new Object[][]{
+                {new AbstractCreateCurrentTenantForeignKeyConstraintForPostsTableTest.PostData(new Post(8L, "Some phrase", 1L, USER_TENANT), USER_TENANT, SECONDARY_USER_TENANT, 2L)},
+                {new AbstractCreateCurrentTenantForeignKeyConstraintForPostsTableTest.PostData(new Post(13L, "Some text", 2L, SECONDARY_USER_TENANT), SECONDARY_USER_TENANT, USER_TENANT, 1L)}
+        };
     }
 
     SetCurrentTenantIdFunctionDefinition setCurrentTenantIdFunctionDefinition;
