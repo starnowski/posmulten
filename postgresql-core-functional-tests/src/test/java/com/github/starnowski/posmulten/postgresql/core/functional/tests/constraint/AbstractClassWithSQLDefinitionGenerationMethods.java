@@ -17,8 +17,8 @@ import static com.github.starnowski.posmulten.postgresql.core.rls.function.Abstr
 
 public abstract class AbstractClassWithSQLDefinitionGenerationMethods extends TestNGSpringContextWithoutGenericTransactionalSupportTests {
 
-    protected static final String POSTS_USERS_FK_CONSTRAINT_NAME = "posts_user_info_fk_cu";
-    protected static final String COMMENTS_USERS_FK_CONSTRAINT_NAME = "comments_user_info_fk_cu";
+    protected static final String POSTS_USERS_FK_CONSTRAINT_NAME = "posts_users_fk_cu";
+    protected static final String COMMENTS_USERS_FK_CONSTRAINT_NAME = "comments_users_fk_cu";
 
     abstract protected String getSchema();
 
