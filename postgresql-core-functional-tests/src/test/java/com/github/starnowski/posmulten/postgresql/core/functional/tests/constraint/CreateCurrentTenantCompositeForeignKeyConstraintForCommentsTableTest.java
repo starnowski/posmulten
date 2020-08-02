@@ -207,6 +207,17 @@ public class CreateCurrentTenantCompositeForeignKeyConstraintForCommentsTableTes
         assertFalse(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %5$s WHERE id = %1$d AND text = '%2$s' AND user_id = %3$d AND tenant = '%4$s'", comment.getId(), comment.getText(), comment.getUserId(), comment.getTenantId(), getCommentsTableReference())), "The tests comment should not exists");
     }
 
+    @Test(dataProvider = "commentsWithParentsData", dependsOnMethods = {"tryToInsertCommentWithParentCommentWhenParentBelongsToDifferentTenant"}, testName = "try to insert data into the comments table with reference to parent comment that belongs to same tenant", description = "test case assumes that constraint is not going to allow to insert data into the comments table with reference to parent comment that belongs to same tenant")
+    public void insertCommentWithParentCommentWhenParentBelongsToSameTenant(Object[] array)
+    {
+        Comment comment = (Comment) array[0];
+        Comment commentWithSameTenant = (Comment) array[2];
+        assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %3$s WHERE id = %1$d AND user_id = %2$d", commentWithSameTenant.getId(), commentWithSameTenant.getUserId(), getCommentsTableReference())), "The tests parent comment should exists");
+        assertThat(countRowsInTableWhere(getCommentsTableReference(), "id = " + comment.getId() + " AND user_id = " + comment.getUserId())).isEqualTo(0);
+        jdbcTemplate.execute(format("%1$s INSERT INTO %9$s (id, user_id, text, post_id, tenant, parent_comment_id, parent_comment_user_id) VALUES (%2$d, %3$d, '%4$s', '%5$s', '%6$s', %7$d, %8$d);", setCurrentTenantIdFunctionDefinition.generateStatementThatSetTenant(comment.getTenantId()), comment.getId(), comment.getUserId(), comment.getText(), comment.getPostId(), comment.getTenantId(), commentWithSameTenant.getId(), commentWithSameTenant.getUserId(), getCommentsTableReference()));
+        assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %5$s WHERE id = %1$d AND text = '%2$s' AND user_id = %3$d AND tenant = '%4$s'", comment.getId(), comment.getText(), comment.getUserId(), comment.getTenantId(), getCommentsTableReference())), "The tests comment should exists");
+    }
+
     @AfterClass(dependsOnMethods = "dropAllSQLDefinitions", alwaysRun = true)
     public void constraintShouldNotExistsAfterTests()
     {
