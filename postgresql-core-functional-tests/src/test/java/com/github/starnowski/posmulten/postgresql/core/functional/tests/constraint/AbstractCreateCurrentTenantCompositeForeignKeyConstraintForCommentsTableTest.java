@@ -24,16 +24,12 @@ import static org.springframework.test.context.jdbc.SqlConfig.TransactionMode.IS
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
-public class CreateCurrentTenantCompositeForeignKeyConstraintForCommentsTableTest extends AbstractClassWithSQLDefinitionGenerationMethods {
-    //TODO
+public abstract class AbstractCreateCurrentTenantCompositeForeignKeyConstraintForCommentsTableTest extends AbstractClassWithSQLDefinitionGenerationMethods {
 
     protected static final String USER_TENANT = "primary_tenant";
     protected static final String SECONDARY_USER_TENANT = "someXDAFAS_id";
 
-    protected String getSchema()
-    {
-        return null;
-    }
+    abstract  protected String getSchema();
 
     protected String getUsersTableReference()
     {
