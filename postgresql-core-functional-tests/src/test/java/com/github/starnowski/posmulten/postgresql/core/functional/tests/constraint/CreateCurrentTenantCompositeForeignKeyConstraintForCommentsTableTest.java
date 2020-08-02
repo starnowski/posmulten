@@ -1,6 +1,7 @@
 package com.github.starnowski.posmulten.postgresql.core.functional.tests.constraint;
 
 import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition;
+import com.github.starnowski.posmulten.postgresql.core.functional.tests.pojos.Comment;
 import com.github.starnowski.posmulten.postgresql.core.functional.tests.pojos.Post;
 import com.github.starnowski.posmulten.postgresql.core.functional.tests.pojos.User;
 import com.github.starnowski.posmulten.postgresql.core.rls.function.*;
@@ -42,6 +43,11 @@ public class CreateCurrentTenantCompositeForeignKeyConstraintForCommentsTableTes
         return (getSchema() == null ? "" : getSchema() + ".") + "posts";
     }
 
+    protected String getCommentsTableReference()
+    {
+        return (getSchema() == null ? "" : getSchema() + ".") + "comments";
+    }
+
     @DataProvider(name = "userData")
     protected static Object[][] userData()
     {
@@ -57,6 +63,15 @@ public class CreateCurrentTenantCompositeForeignKeyConstraintForCommentsTableTes
         return new Object[][]{
                 {new Post(57L, "Some phrase", 1L, USER_TENANT)},
                 {new Post(73L, "Some text", 2L, SECONDARY_USER_TENANT)}
+        };
+    }
+
+    @DataProvider(name = "parentCommentsData")
+    protected static Object[][] parentCommentsData()
+    {
+        return new Object[][]{
+                {new Comment(113, 1L, "Comment one for primary tenant", 57L, USER_TENANT, null, null)},
+                {new Comment(79, 2L, "Comment one for primary tenant", 73L, SECONDARY_USER_TENANT, null, null)}
         };
     }
 
@@ -151,6 +166,16 @@ public class CreateCurrentTenantCompositeForeignKeyConstraintForCommentsTableTes
         assertThat(countRowsInTableWhere(getPostsTableReference(), "id = " + post.getUserId())).isEqualTo(0);
         jdbcTemplate.execute(format("%1$s INSERT INTO %6$s (id, user_id, text, tenant_id) VALUES (%2$d, %3$d, '%4$s', '%5$s');", setCurrentTenantIdFunctionDefinition.generateStatementThatSetTenant(post.getTenantId()), post.getId(), post.getUserId(), post.getText(), post.getTenantId(), getPostsTableReference()));
         assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %4$s WHERE id = %1$d AND text = '%2$s' AND tenant_id = '%3$s'", post.getId(), post.getText(), post.getTenantId(), getPostsTableReference())), "The tests post should exists");
+    }
+
+    @Test(dataProvider = "parentCommentsData", dependsOnMethods = {"insertPostForUserFromSameTenant"}, testName = "insert data into the comments table that do not have reference to the comment parent")
+    public void insertCommentsWithoutParentCommentReference(Comment comment)
+    {
+        assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %3$s WHERE id = %1$d AND tenant_id = '%2$s'", comment.getUserId(), comment.getTenantId(), getUsersTableReference())), "The tests user should exists");
+        assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %3$s WHERE id = %1$d AND tenant_id = '%2$s'", comment.getPostId(), comment.getTenantId(), getPostsTableReference())), "The tests post should exists");
+        assertThat(countRowsInTableWhere(getCommentsTableReference(), "id = " + comment.getId())).isEqualTo(0);
+        jdbcTemplate.execute(format("%1$s INSERT INTO %7$s (id, user_id, text, post_id, tenant) VALUES (%2$d, %3$d, '%4$s', '%5$s', '%6$s');", setCurrentTenantIdFunctionDefinition.generateStatementThatSetTenant(comment.getTenantId()), comment.getId(), comment.getUserId(), comment.getText(), comment.getPostId(), comment.getTenantId(), getCommentsTableReference()));
+        assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %4$s WHERE id = %1$d AND text = '%2$s' AND tenant = '%3$s'", comment.getId(), comment.getText(), comment.getTenantId(), getCommentsTableReference())), "The tests comment should exists");
     }
 
     @AfterClass(dependsOnMethods = "dropAllSQLDefinitions", alwaysRun = true)
