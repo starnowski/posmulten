@@ -35,7 +35,7 @@ public class TestNGSpringContextWithoutGenericTransactionalSupportTests extends 
     {
         sqlDefinitions.forEach(sqlDefinition ->
         {
-            log.info("Executing creation script: " + sqlDefinition.getDropScript());
+            log.info("Executing creation script: " + sqlDefinition.getCreateScript());
             jdbcTemplate.execute(sqlDefinition.getCreateScript());
         });
     }
