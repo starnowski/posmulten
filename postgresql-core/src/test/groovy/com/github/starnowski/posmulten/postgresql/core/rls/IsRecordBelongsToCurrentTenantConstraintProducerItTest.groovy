@@ -53,15 +53,15 @@ class IsRecordBelongsToCurrentTenantConstraintProducerItTest extends Specificati
             isAnyRecordExists(jdbcTemplate, createSelectStatement(schema, table, constraintName))
 
         where:
-            testConstraintName      |   testSchema              | testTable     |   primaryColumnsValuesMap                                                     |   conditionStatement
-            "sss"                   |   null                    | "users"       |   [id : randomFAV()]                                                          |   "tenant_id = 'dsasdf'"
-            "sss"                   |   "public"                | "users"       |   [id : randomFAV()]                                                          |   "Cast(current_setting('some.boolean.value') as boolean)"
-            "sss"                   |   "non_public_schema"     | "users"       |   [id : randomFAV()]                                                          |   "tenant_id = 'dsasdf'"
-            "user_belongs_tt"       |   "non_public_schema"     | "users"       |   [id : randomFAV()]                                                          |   "Cast(current_setting('boolean.value2') as boolean)"
-            "user_belongs_tt"       |   "non_public_schema"     | "users"       |   [id : randomFAV()]                                                          |   "tenant_id = 'dsasdf'"
-            "user_belongs_tt"       |   "non_public_schema"     | "posts"       |   [user_id : randomFAV()]                                                     |   "Cast(current_setting('bool.value2') as boolean)"
-            "user_belongs_tt"       |   "non_public_schema"     | "posts"       |   [user_id : randomFAV()]                                                     |   "tenant_id = 'dsasdf'"
-            "does_comment_from_t"   |   "non_public_schema"     | "comments"    |   [parent_comment_id : randomFAV(), parent_comment_user_id: randomFAV()]      |   "tenant = 'dsasdf'"
+            testConstraintName      |   testSchema              | testTable     |   primaryColumnsValuesMap                                                                     |   conditionStatement
+            "sss"                   |   null                    | "users"       |   [id : forReference("id")]                                                                   |   "tenant_id = 'dsasdf'"
+            "sss"                   |   "public"                | "users"       |   [id : forReference("id")]                                                                   |   "Cast(current_setting('some.boolean.value') as boolean)"
+            "sss"                   |   "non_public_schema"     | "users"       |   [id : forReference("id")]                                                                   |   "tenant_id = 'dsasdf'"
+            "user_belongs_tt"       |   "non_public_schema"     | "users"       |   [id : forReference("id")]                                                                   |   "Cast(current_setting('boolean.value2') as boolean)"
+            "user_belongs_tt"       |   "non_public_schema"     | "users"       |   [id : forReference("id")]                                                                   |   "tenant_id = 'dsasdf'"
+            "user_belongs_tt"       |   "non_public_schema"     | "posts"       |   [id : forReference("user_id")]                                                              |   "Cast(current_setting('bool.value2') as boolean)"
+            "user_belongs_tt"       |   "non_public_schema"     | "posts"       |   [id : forReference("user_id")]                                                              |   "tenant_id = 'dsasdf'"
+            "does_comment_from_t"   |   "non_public_schema"     | "comments"    |   [id : forReference("parent_comment_id"), user_id: forReference("parent_comment_user_id")]   |   "tenant = 'dsasdf'"
     }
 
     String createSelectStatement(String schema, String table, String constraintName)
