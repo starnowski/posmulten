@@ -214,6 +214,18 @@ public abstract class AbstractCreateCurrentTenantCompositeForeignKeyConstraintFo
         assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %5$s WHERE id = %1$d AND text = '%2$s' AND user_id = %3$d AND tenant = '%4$s'", comment.getId(), comment.getText(), comment.getUserId(), comment.getTenantId(), getCommentsTableReference())), "The tests comment should exists");
     }
 
+    @Test(dependsOnMethods = {"insertCommentsWithoutParentCommentReference", "tryToInsertCommentWithParentCommentWhenParentBelongsToDifferentTenant", "insertCommentWithParentCommentWhenParentBelongsToSameTenant"}, alwaysRun = true)
+    @SqlGroup({
+            @Sql(value = CLEAR_DATABASE_SCRIPT_PATH,
+                    config = @SqlConfig(transactionMode = ISOLATED),
+                    executionPhase = BEFORE_TEST_METHOD)})
+    public void deleteTestData()
+    {
+        assertThat(countRowsInTable(getUsersTableReference())).isEqualTo(0);
+        assertThat(countRowsInTable(getPostsTableReference())).isEqualTo(0);
+        assertThat(countRowsInTable(getCommentsTableReference())).isEqualTo(0);
+    }
+
     @AfterClass(dependsOnMethods = "dropAllSQLDefinitions", alwaysRun = true)
     public void constraintShouldNotExistsAfterTests()
     {
