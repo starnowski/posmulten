@@ -1,6 +1,8 @@
 package com.github.starnowski.posmulten.postgresql.core.functional.tests;
 
 import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
 import org.springframework.transaction.annotation.Propagation;
@@ -16,6 +18,8 @@ import static java.lang.String.format;
 @SpringBootTest(classes = TestApplication.class)
 @Transactional(propagation = Propagation.NOT_SUPPORTED)
 public class TestNGSpringContextWithoutGenericTransactionalSupportTests extends AbstractTransactionalTestNGSpringContextTests {
+
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     protected List<SQLDefinition> sqlDefinitions = new ArrayList<>();
 
@@ -37,6 +41,7 @@ public class TestNGSpringContextWithoutGenericTransactionalSupportTests extends 
             sqlDefinitions.forEach(stack::push);
             stack.forEach(sqlDefinition ->
             {
+                log.info("Executing drop script: " + sqlDefinition.getDropScript());
                 jdbcTemplate.execute(sqlDefinition.getDropScript());
             });
         }
