@@ -194,7 +194,7 @@ public class CreateCurrentTenantCompositeForeignKeyConstraintForCommentsTableTes
     }
 
     @Test(dataProvider = "commentsWithParentsData", dependsOnMethods = {"insertCommentsWithoutParentCommentReference"}, testName = "try to insert data into the comments table with reference to parent comment that belongs to different tenant", description = "test case assumes that constraint is not going to allow to insert data into the comments table with reference to parent comment that belongs to different tenant")
-    public void tryToInsertPostForUserFromDifferentTenant(Object[] array)
+    public void tryToInsertCommentWithParentCommentWhenParentBelongsToDifferentTenant(Object[] array)
     {
         Comment comment = (Comment) array[0];
         Comment differentTenantComment = (Comment) array[1];
