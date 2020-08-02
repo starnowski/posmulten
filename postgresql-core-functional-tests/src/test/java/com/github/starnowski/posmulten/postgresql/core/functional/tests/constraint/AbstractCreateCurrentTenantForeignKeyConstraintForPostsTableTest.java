@@ -173,9 +173,14 @@ public abstract class AbstractCreateCurrentTenantForeignKeyConstraintForPostsTab
     }
 
     @Test(dependsOnMethods = {"insertUserTestData", "insertPostForUserFromSameTenant", "tryToInsertPostForUserFromDifferentTenant"}, alwaysRun = true)
+    @SqlGroup({
+            @Sql(value = CLEAR_DATABASE_SCRIPT_PATH,
+                    config = @SqlConfig(transactionMode = ISOLATED),
+                    executionPhase = BEFORE_TEST_METHOD)})
     public void deleteTestData()
     {
-        deleteFromTables("posts", "users");
+        assertThat(countRowsInTable(getUsersTableReference())).isEqualTo(0);
+        assertThat(countRowsInTable(getPostsTableReference())).isEqualTo(0);
     }
 
     @AfterClass(dependsOnMethods = "dropAllSQLDefinitions", alwaysRun = true)
