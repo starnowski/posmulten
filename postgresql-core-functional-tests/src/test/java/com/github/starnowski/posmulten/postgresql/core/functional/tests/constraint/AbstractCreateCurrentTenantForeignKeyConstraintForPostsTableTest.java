@@ -2,7 +2,6 @@ package com.github.starnowski.posmulten.postgresql.core.functional.tests.constra
 
 import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition;
 import com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValue;
-import com.github.starnowski.posmulten.postgresql.core.functional.tests.TestNGSpringContextWithoutGenericTransactionalSupportTests;
 import com.github.starnowski.posmulten.postgresql.core.functional.tests.pojos.Post;
 import com.github.starnowski.posmulten.postgresql.core.functional.tests.pojos.User;
 import com.github.starnowski.posmulten.postgresql.core.rls.DefaultIsRecordBelongsToCurrentTenantConstraintProducerParameters;
@@ -36,7 +35,7 @@ import static org.springframework.test.context.jdbc.SqlConfig.TransactionMode.IS
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
-public abstract class AbstractCreateCurrentTenantForeignKeyConstraintForPostsTableTest extends TestNGSpringContextWithoutGenericTransactionalSupportTests {
+public abstract class AbstractCreateCurrentTenantForeignKeyConstraintForPostsTableTest extends AbstractClassWithSQLDefinitionGenerationMethods {
 
     protected static final String CONSTRAINT_NAME = "posts_user_info_fk_cu";
     protected static final String USER_TENANT = "primary_tenant";
