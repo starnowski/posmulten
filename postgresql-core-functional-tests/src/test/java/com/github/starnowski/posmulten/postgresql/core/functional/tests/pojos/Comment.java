@@ -1,9 +1,6 @@
 package com.github.starnowski.posmulten.postgresql.core.functional.tests.pojos;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.Accessors;
 
 @ToString
@@ -11,6 +8,7 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Setter
 public class Comment {
 
     private Integer id;
