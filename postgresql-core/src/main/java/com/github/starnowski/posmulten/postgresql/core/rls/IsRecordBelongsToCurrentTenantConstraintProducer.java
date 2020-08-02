@@ -2,6 +2,11 @@ package com.github.starnowski.posmulten.postgresql.core.rls;
 
 import com.github.starnowski.posmulten.postgresql.core.common.DefaultSQLDefinition;
 import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition;
+import com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValueToStringMapper;
+
+import java.util.Map;
+
+import static java.util.stream.Collectors.joining;
 
 public class IsRecordBelongsToCurrentTenantConstraintProducer {
 
@@ -20,17 +25,23 @@ public class IsRecordBelongsToCurrentTenantConstraintProducer {
         stringBuilder.append(parameters.getConstraintName());
         stringBuilder.append(" CHECK ");
         stringBuilder.append("(");
+        stringBuilder.append("(");
+        stringBuilder.append(parameters.getPrimaryColumnsValuesMap().entrySet().stream().map(Map.Entry::getValue).map(FunctionArgumentValueToStringMapper::mapToString).sorted().map(s -> s + " IS NULL").collect(joining(" AND ")));
+        stringBuilder.append(")");
+        stringBuilder.append(" OR ");
+        stringBuilder.append("(");
         stringBuilder.append(parameters.getIsRecordBelongsToCurrentTenantFunctionInvocationFactory().returnIsRecordBelongsToCurrentTenantFunctionInvocation(parameters.getPrimaryColumnsValuesMap()));
+        stringBuilder.append(")");
         stringBuilder.append(");");
         return stringBuilder.toString();
     }
 
     protected void validate(IsRecordBelongsToCurrentTenantConstraintProducerParameters parameters)
     {
-//        if (parameters == null)
-//        {
-//            throw new IllegalArgumentException("The parameters object cannot be null");
-//        }
+        if (parameters == null)
+        {
+            throw new IllegalArgumentException("The parameters object cannot be null");
+        }
         if (parameters.getTableName() == null)
         {
             throw new IllegalArgumentException("Table name cannot be null");

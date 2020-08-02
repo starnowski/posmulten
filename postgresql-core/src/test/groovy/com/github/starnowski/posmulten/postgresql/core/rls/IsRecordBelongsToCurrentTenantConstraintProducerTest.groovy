@@ -22,7 +22,6 @@ class IsRecordBelongsToCurrentTenantConstraintProducerTest extends Specification
                         capturedPrimaryColumnsValuesMap = arguments
                         conditionStatement
                     }
-            Map<String, FunctionArgumentValue> primaryColumnsValuesMap = generateRandomPrimaryColumnsValuesMap()
             def parameters = DefaultIsRecordBelongsToCurrentTenantConstraintProducerParameters.builder()
                     .withConstraintName(constraintName)
                     .withTableName(table)
@@ -39,12 +38,13 @@ class IsRecordBelongsToCurrentTenantConstraintProducerTest extends Specification
             primaryColumnsValuesMap == capturedPrimaryColumnsValuesMap
 
         where:
-            constraintName      |   schema      | table     |   conditionStatement              ||	expectedStatement
-            "sss"               |   null        | "users"   |   "cccsss"                        ||  "ALTER TABLE \"users\" ADD CONSTRAINT sss CHECK (cccsss);"
-            "sss"               |   "public"    | "users"   |   "cccsss"                        ||  "ALTER TABLE \"public\".\"users\" ADD CONSTRAINT sss CHECK (cccsss);"
-            "sss"               |   "secondary" | "users"   |   "cccsss"                        ||  "ALTER TABLE \"secondary\".\"users\" ADD CONSTRAINT sss CHECK (cccsss);"
-            "user_belongs_tt"   |   "secondary" | "users"   |   "cccsss"                        ||  "ALTER TABLE \"secondary\".\"users\" ADD CONSTRAINT user_belongs_tt CHECK (cccsss);"
-            "user_belongs_tt"   |   "secondary" | "users"   |   "is_tenant_correct(tenant_id)"  ||  "ALTER TABLE \"secondary\".\"users\" ADD CONSTRAINT user_belongs_tt CHECK (is_tenant_correct(tenant_id));"
+            constraintName      |   schema      | table     |   conditionStatement              |   primaryColumnsValuesMap                                                             ||	expectedStatement
+            "sss"               |   null        | "users"   |   "cccsss"                        |   [z2 : forReference("id")]                                                           ||  "ALTER TABLE \"users\" ADD CONSTRAINT sss CHECK ((id IS NULL) OR (cccsss));"
+            "sss"               |   "public"    | "users"   |   "cccsss"                        |   [ff : forReference("id"), hggf: forReference("abc_user_id")]                        ||  "ALTER TABLE \"public\".\"users\" ADD CONSTRAINT sss CHECK ((abc_user_id IS NULL AND id IS NULL) OR (cccsss));"
+            "sss"               |   "secondary" | "users"   |   "cccsss"                        |   [x1 : forReference("userId"), asdf: forReference("abc_user_id")]                    ||  "ALTER TABLE \"secondary\".\"users\" ADD CONSTRAINT sss CHECK ((abc_user_id IS NULL AND userId IS NULL) OR (cccsss));"
+            "user_belongs_tt"   |   "secondary" | "users"   |   "cccsss"                        |   [ss : forReference("uuid")]                                                         ||  "ALTER TABLE \"secondary\".\"users\" ADD CONSTRAINT user_belongs_tt CHECK ((uuid IS NULL) OR (cccsss));"
+            "user_belongs_tt"   |   "secondary" | "users"   |   "is_tenant_correct(tenant_id)"  |   [v : forReference("secondary_colId"), rv : forReference("uuid")]         ||  "ALTER TABLE \"secondary\".\"users\" ADD CONSTRAINT user_belongs_tt CHECK ((secondary_colId IS NULL AND uuid IS NULL) OR (is_tenant_correct(tenant_id)));"
+            "user_belongs_tt"   |   "secondary" | "users"   |   "is_it_really_my_tenant(t)"     |   [x1 : forReference("c"), uuu : forReference("a"), ranV : forReference("b")]         ||  "ALTER TABLE \"secondary\".\"users\" ADD CONSTRAINT user_belongs_tt CHECK ((a IS NULL AND b IS NULL AND c IS NULL) OR (is_it_really_my_tenant(t)));"
     }
 
     @Unroll
@@ -87,8 +87,19 @@ class IsRecordBelongsToCurrentTenantConstraintProducerTest extends Specification
             def definition = tested.produce(parameters)
 
         then:
-            definition.getCreateScript() == "ALTER TABLE \"public\".\"users\" ADD CONSTRAINT const_1 CHECK (current_tenant());"
+            definition.getCreateScript() ==~ /ALTER TABLE "public"\."users" ADD CONSTRAINT const_1 CHECK \(\((.* IS NULL)+( AND )*\) OR \(current_tenant\(\)\)\);/
             definition.getDropScript() == "ALTER TABLE \"public\".\"users\" DROP CONSTRAINT IF EXISTS const_1;"
+    }
+
+    def "should throw an exception of type 'IllegalArgumentException' when the parameters object is null" () {
+        when:
+            tested.produce(null)
+
+        then:
+            def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+            ex.message == "The parameters object cannot be null"
     }
 
     def "should throw an exception of type 'IllegalArgumentException' when the table name is null" () {
@@ -204,6 +215,12 @@ class IsRecordBelongsToCurrentTenantConstraintProducerTest extends Specification
             primaryColumnsValuesMap.put(randomString.nextString(), forReference(randomString.nextString()))
         }
         primaryColumnsValuesMap
+    }
+
+    static FunctionArgumentValue randomFAV()
+    {
+        def randomString = new RandomString(5, new Random(), RandomString.lower)
+        forReference(randomString.nextString())
     }
 
     IsRecordBelongsToCurrentTenantConstraintProducerParameters returnCorrectParametersMockObject() {

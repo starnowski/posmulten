@@ -39,7 +39,6 @@ class IsRecordBelongsToCurrentTenantConstraintProducerItTest extends Specificati
                     {
                         conditionStatement
                     }
-            Map<String, FunctionArgumentValue> primaryColumnsValuesMap = generateRandomPrimaryColumnsValuesMap()
             def parameters = DefaultIsRecordBelongsToCurrentTenantConstraintProducerParameters.builder()
                     .withConstraintName(constraintName)
                     .withTableName(table)
@@ -54,12 +53,15 @@ class IsRecordBelongsToCurrentTenantConstraintProducerItTest extends Specificati
             isAnyRecordExists(jdbcTemplate, createSelectStatement(schema, table, constraintName))
 
         where:
-            testConstraintName      |   testSchema              | testTable     |   conditionStatement
-            "sss"                   |   null                    | "users"       |   "tenant_id = 'dsasdf'"
-            "sss"                   |   "public"                | "users"       |   "Cast(current_setting('some.boolean.value') as boolean)"
-            "sss"                   |   "non_public_schema"     | "users"       |   "tenant_id = 'dsasdf'"
-            "user_belongs_tt"       |   "non_public_schema"     | "users"       |   "Cast(current_setting('boolean.value2') as boolean)"
-            "user_belongs_tt"       |   "non_public_schema"     | "users"       |   "tenant_id = 'dsasdf'"
+            testConstraintName      |   testSchema              | testTable     |   primaryColumnsValuesMap                                                                     |   conditionStatement
+            "sss"                   |   null                    | "users"       |   [id : forReference("id")]                                                                   |   "tenant_id = 'dsasdf'"
+            "sss"                   |   "public"                | "users"       |   [id : forReference("id")]                                                                   |   "Cast(current_setting('some.boolean.value') as boolean)"
+            "sss"                   |   "non_public_schema"     | "users"       |   [id : forReference("id")]                                                                   |   "tenant_id = 'dsasdf'"
+            "user_belongs_tt"       |   "non_public_schema"     | "users"       |   [id : forReference("id")]                                                                   |   "Cast(current_setting('boolean.value2') as boolean)"
+            "user_belongs_tt"       |   "non_public_schema"     | "users"       |   [id : forReference("id")]                                                                   |   "tenant_id = 'dsasdf'"
+            "user_belongs_tt"       |   "non_public_schema"     | "posts"       |   [id : forReference("user_id")]                                                              |   "Cast(current_setting('bool.value2') as boolean)"
+            "user_belongs_tt"       |   "non_public_schema"     | "posts"       |   [id : forReference("user_id")]                                                              |   "tenant_id = 'dsasdf'"
+            "does_comment_from_t"   |   "non_public_schema"     | "comments"    |   [id : forReference("parent_comment_id"), user_id: forReference("parent_comment_user_id")]   |   "tenant = 'dsasdf'"
     }
 
     String createSelectStatement(String schema, String table, String constraintName)
@@ -70,17 +72,10 @@ class IsRecordBelongsToCurrentTenantConstraintProducerItTest extends Specificati
         String.format(template, schema == null ? "public" : schema, table, constraintName)
     }
 
-    Map<String, FunctionArgumentValue> generateRandomPrimaryColumnsValuesMap()
+    FunctionArgumentValue randomFAV()
     {
         def randomString = new RandomString(5, new Random(), RandomString.lower)
-        def random = new Random()
-        Map<String, FunctionArgumentValue> primaryColumnsValuesMap = new HashMap<>()
-        def mapSize = random.nextInt(5) + 1
-        for (int i = 0; i < mapSize; i++)
-        {
-            primaryColumnsValuesMap.put(randomString.nextString(), forReference(randomString.nextString()))
-        }
-        primaryColumnsValuesMap
+        forReference(randomString.nextString())
     }
 
     def cleanup() {
