@@ -183,6 +183,12 @@ public abstract class AbstractCreateCurrentTenantForeignKeyConstraintForPostsTab
         assertThat(countRowsInTable(getPostsTableReference())).isEqualTo(0);
     }
 
+    @Override
+    @Test(dependsOnMethods = {"deleteTestData"}, alwaysRun = true)
+    public void dropAllSQLDefinitions() {
+        super.dropAllSQLDefinitions();
+    }
+
     @AfterClass(dependsOnMethods = "dropAllSQLDefinitions", alwaysRun = true)
     public void constraintShouldNotExistsAfterTests()
     {
