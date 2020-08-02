@@ -147,10 +147,7 @@ public abstract class AbstractCreateCurrentTenantCompositeForeignKeyConstraintFo
     @Test(dependsOnMethods = {"constraintShouldNotExistsBeforeTests"}, testName = "execute SQL definitions")
     public void executeSQLDefinitions()
     {
-        sqlDefinitions.forEach(sqlDefinition ->
-        {
-            jdbcTemplate.execute(sqlDefinition.getCreateScript());
-        });
+        super.executeSQLDefinitions();
     }
 
     @Test(dependsOnMethods = {"executeSQLDefinitions"}, testName = "constraint should exist after SQL definitions executed", description = "check if constraint exist after executing SQL definitions")

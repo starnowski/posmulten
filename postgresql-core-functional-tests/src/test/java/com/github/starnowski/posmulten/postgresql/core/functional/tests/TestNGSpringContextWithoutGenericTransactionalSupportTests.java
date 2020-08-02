@@ -31,6 +31,15 @@ public class TestNGSpringContextWithoutGenericTransactionalSupportTests extends 
         return format(template, schema == null ? "public" : schema, table, constraintName);
     }
 
+    public void executeSQLDefinitions()
+    {
+        sqlDefinitions.forEach(sqlDefinition ->
+        {
+            log.info("Executing creation script: " + sqlDefinition.getDropScript());
+            jdbcTemplate.execute(sqlDefinition.getCreateScript());
+        });
+    }
+
 //    @AfterTest(alwaysRun = true, inheritGroups = false)
     @AfterClass(alwaysRun = true)
     public void dropAllSQLDefinitions()
