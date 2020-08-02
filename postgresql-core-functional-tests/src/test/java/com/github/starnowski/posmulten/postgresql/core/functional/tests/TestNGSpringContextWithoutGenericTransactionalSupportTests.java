@@ -7,7 +7,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.testng.annotations.AfterClass;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -41,7 +40,7 @@ public class TestNGSpringContextWithoutGenericTransactionalSupportTests extends 
     }
 
 //    @AfterTest(alwaysRun = true, inheritGroups = false)
-    @AfterClass(alwaysRun = true)
+//    @AfterClass(alwaysRun = true)
     public void dropAllSQLDefinitions()
     {
         if (sqlDefinitions != null) {

@@ -17,7 +17,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.jdbc.SqlGroup;
-import org.testng.annotations.AfterClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -180,7 +179,13 @@ public abstract class AbstractCreateCurrentTenantForeignKeyConstraintForPostsTab
         assertThat(countRowsInTable(getPostsTableReference())).isEqualTo(0);
     }
 
-    @AfterClass(dependsOnMethods = "dropAllSQLDefinitions", alwaysRun = true)
+    @Override
+    @Test(dependsOnMethods = "deleteTestData", alwaysRun = true)
+    public void dropAllSQLDefinitions() {
+        super.dropAllSQLDefinitions();
+    }
+
+    @Test(dependsOnMethods = "dropAllSQLDefinitions", alwaysRun = true)
     public void constraintShouldNotExistsAfterTests()
     {
         assertFalse(isAnyRecordExists(jdbcTemplate, createSelectStatement("public", "posts", CONSTRAINT_NAME)), "Constraint should not exists");
