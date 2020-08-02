@@ -14,7 +14,7 @@ import lombok.experimental.Accessors;
 public class Comment {
 
     private Integer id;
-    private Long user_id;
+    private Long userId;
     private String text;
     private Long postId;
     private String tenantId;
