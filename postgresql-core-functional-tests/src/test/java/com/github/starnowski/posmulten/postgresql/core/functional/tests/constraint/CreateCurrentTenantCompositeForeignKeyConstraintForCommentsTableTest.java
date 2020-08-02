@@ -5,6 +5,7 @@ import com.github.starnowski.posmulten.postgresql.core.functional.tests.pojos.Co
 import com.github.starnowski.posmulten.postgresql.core.functional.tests.pojos.Post;
 import com.github.starnowski.posmulten.postgresql.core.functional.tests.pojos.User;
 import com.github.starnowski.posmulten.postgresql.core.rls.function.*;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.jdbc.SqlGroup;
@@ -17,6 +18,7 @@ import static com.github.starnowski.posmulten.postgresql.test.utils.TestUtils.VA
 import static com.github.starnowski.posmulten.postgresql.test.utils.TestUtils.isAnyRecordExists;
 import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
 import static org.springframework.test.context.jdbc.SqlConfig.TransactionMode.ISOLATED;
 import static org.testng.Assert.assertFalse;
@@ -72,6 +74,19 @@ public class CreateCurrentTenantCompositeForeignKeyConstraintForCommentsTableTes
         return new Object[][]{
                 {new Comment(113, 1L, "Comment one for primary tenant", 57L, USER_TENANT, null, null)},
                 {new Comment(79, 2L, "Comment one for primary tenant", 73L, SECONDARY_USER_TENANT, null, null)}
+        };
+    }
+
+    /**
+     * Produce data with comment pojo, comment identifier that belongs to different tenant, comment identifier that belongs to same tenant
+     * @return
+     */
+    @DataProvider(name = "commentsWithParentsData")
+    protected static Object[][] commentsWithParentsData()
+    {
+        return new Object[][] {
+                {new Comment(209, 1L, "Comment one for primary tenant - child", 57L, USER_TENANT, null, null), new Comment().setId(79).setUserId(2L), new Comment().setId(113).setUserId(1L)},
+                {new Comment(67, 2L, "Comment one for primary tenant - child", 73L, SECONDARY_USER_TENANT, null, null), new Comment().setId(113).setUserId(1L), new Comment().setId(79).setUserId(2L)}
         };
     }
 
@@ -176,6 +191,20 @@ public class CreateCurrentTenantCompositeForeignKeyConstraintForCommentsTableTes
         assertThat(countRowsInTableWhere(getCommentsTableReference(), "id = " + comment.getId())).isEqualTo(0);
         jdbcTemplate.execute(format("%1$s INSERT INTO %7$s (id, user_id, text, post_id, tenant) VALUES (%2$d, %3$d, '%4$s', '%5$s', '%6$s');", setCurrentTenantIdFunctionDefinition.generateStatementThatSetTenant(comment.getTenantId()), comment.getId(), comment.getUserId(), comment.getText(), comment.getPostId(), comment.getTenantId(), getCommentsTableReference()));
         assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %4$s WHERE id = %1$d AND text = '%2$s' AND tenant = '%3$s'", comment.getId(), comment.getText(), comment.getTenantId(), getCommentsTableReference())), "The tests comment should exists");
+    }
+
+    @Test(dataProvider = "commentsWithParentsData", dependsOnMethods = {"insertCommentsWithoutParentCommentReference"}, testName = "try to insert data into the comments table with reference to parent comment that belongs to different tenant", description = "test case assumes that constraint is not going to allow to insert data into the comments table with reference to parent comment that belongs to different tenant")
+    public void tryToInsertPostForUserFromDifferentTenant(Object[] array)
+    {
+        Comment comment = (Comment) array[0];
+        Comment differentTenantComment = (Comment) array[1];
+        assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %3$s WHERE id = %1$d AND user_id = %2$d", differentTenantComment.getId(), differentTenantComment.getUserId(), getCommentsTableReference())), "The tests parent comment should exists");
+        assertThat(countRowsInTableWhere(getCommentsTableReference(), "id = " + comment.getId() + " AND user_id = " + comment.getUserId())).isEqualTo(0);
+        assertThatThrownBy(() ->
+                jdbcTemplate.execute(format("%1$s INSERT INTO %9$s (id, user_id, text, post_id, tenant, parent_comment_id, parent_comment_user_id) VALUES (%2$d, %3$d, '%4$s', '%5$s', '%6$s', %7$d, %8$d);", setCurrentTenantIdFunctionDefinition.generateStatementThatSetTenant(comment.getTenantId()), comment.getId(), comment.getUserId(), comment.getText(), comment.getPostId(), comment.getTenantId(), differentTenantComment.getId(), differentTenantComment.getUserId(), getCommentsTableReference()))
+        )
+                .isInstanceOf(DataIntegrityViolationException.class);
+        assertFalse(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %5$s WHERE id = %1$d AND text = '%2$s' AND user_id = %3$d AND tenant = '%4$s'", comment.getId(), comment.getText(), comment.getUserId(), comment.getTenantId(), getCommentsTableReference())), "The tests comment should not exists");
     }
 
     @AfterClass(dependsOnMethods = "dropAllSQLDefinitions", alwaysRun = true)
