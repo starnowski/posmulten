@@ -2,11 +2,18 @@ package com.github.starnowski.posmulten.postgresql.core.functional.tests.rls;
 
 import com.github.starnowski.posmulten.postgresql.core.functional.tests.TestNGSpringContextWithoutGenericTransactionalSupportTests;
 import com.github.starnowski.posmulten.postgresql.core.functional.tests.pojos.User;
+import com.github.starnowski.posmulten.postgresql.core.rls.EnableRowLevelSecurityProducer;
 import com.github.starnowski.posmulten.postgresql.core.rls.function.*;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.jdbc.SqlConfig;
+import org.springframework.test.context.jdbc.SqlGroup;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import static com.github.starnowski.posmulten.postgresql.core.functional.tests.TestApplication.CLEAR_DATABASE_SCRIPT_PATH;
 import static com.github.starnowski.posmulten.postgresql.test.utils.TestUtils.VALID_CURRENT_TENANT_ID_PROPERTY_NAME;
+import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
+import static org.springframework.test.context.jdbc.SqlConfig.TransactionMode.ISOLATED;
 
 public class CreateRLSForSingleTableInPublicSchemaTest extends TestNGSpringContextWithoutGenericTransactionalSupportTests {
 
@@ -48,8 +55,26 @@ public class CreateRLSForSingleTableInPublicSchemaTest extends TestNGSpringConte
         sqlDefinitions.add(setCurrentTenantIdFunctionDefinition);
 
         //TODO EnableRowLevelSecurityProducer
+        EnableRowLevelSecurityProducer enableRowLevelSecurityProducer = new EnableRowLevelSecurityProducer();
+        sqlDefinitions.add(enableRowLevelSecurityProducer.produce("users", getSchema()));
         //TODO ForceRowLevelSecurityProducer - table owner
         //TODO RLSPolicyProducer
         //TODO TenantHasAuthoritiesFunctionProducer
+    }
+
+    @SqlGroup({
+            @Sql(value = CLEAR_DATABASE_SCRIPT_PATH,
+                    config = @SqlConfig(transactionMode = ISOLATED),
+                    executionPhase = BEFORE_TEST_METHOD)})
+    @Test(dependsOnMethods = {"createSQLDefinitions"}, testName = "execute SQL definitions")
+    public void executeSQLDefinitions()
+    {
+        super.executeSQLDefinitions();
+    }
+
+    @Override
+    @Test(dependsOnMethods = "executeSQLDefinitions", alwaysRun = true)
+    public void dropAllSQLDefinitions() {
+        super.dropAllSQLDefinitions();
     }
 }
