@@ -11,7 +11,7 @@ class ForceRowLevelSecurityProducerTest extends Specification {
     def "should return statement (#expectedStatement) that forces row level security mode for table (#table) and schema (#schema)"()
     {
         expect:
-            tested.produce(table, schema) == expectedStatement
+            tested.produce(table, schema).getCreateScript() == expectedStatement
 
         where:
             schema      | table     ||	expectedStatement
@@ -20,6 +20,21 @@ class ForceRowLevelSecurityProducerTest extends Specification {
             "secondary" | "users"   ||  "ALTER TABLE secondary.\"users\" FORCE ROW LEVEL SECURITY;"
             "secondary" | "posts"   ||  "ALTER TABLE secondary.\"posts\" FORCE ROW LEVEL SECURITY;"
             "public"    | "posts"   ||  "ALTER TABLE public.\"posts\" FORCE ROW LEVEL SECURITY;"
+    }
+
+    @Unroll
+    def "should return statement (#expectedStatement) that drops row level security mode for table (#table) and schema (#schema)"()
+    {
+        expect:
+            tested.produce(table, schema).getDropScript() == expectedStatement
+
+        where:
+            schema      | table     ||	expectedStatement
+            null        | "users"   ||  "ALTER TABLE \"users\" NO FORCE ROW LEVEL SECURITY;"
+            null        | "posts"   ||  "ALTER TABLE \"posts\" NO FORCE ROW LEVEL SECURITY;"
+            "secondary" | "users"   ||  "ALTER TABLE secondary.\"users\" NO FORCE ROW LEVEL SECURITY;"
+            "secondary" | "posts"   ||  "ALTER TABLE secondary.\"posts\" NO FORCE ROW LEVEL SECURITY;"
+            "public"    | "posts"   ||  "ALTER TABLE public.\"posts\" NO FORCE ROW LEVEL SECURITY;"
     }
 
     @Unroll
