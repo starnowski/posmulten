@@ -3,6 +3,7 @@ package com.github.starnowski.posmulten.postgresql.core.functional.tests.rls;
 import com.github.starnowski.posmulten.postgresql.core.functional.tests.TestNGSpringContextWithoutGenericTransactionalSupportTests;
 import com.github.starnowski.posmulten.postgresql.core.functional.tests.pojos.User;
 import com.github.starnowski.posmulten.postgresql.core.rls.EnableRowLevelSecurityProducer;
+import com.github.starnowski.posmulten.postgresql.core.rls.ForceRowLevelSecurityProducer;
 import com.github.starnowski.posmulten.postgresql.core.rls.function.*;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
@@ -54,10 +55,14 @@ public class CreateRLSForSingleTableInPublicSchemaTest extends TestNGSpringConte
         setCurrentTenantIdFunctionDefinition = setCurrentTenantIdFunctionProducer.produce(new SetCurrentTenantIdFunctionProducerParameters("rls_set_current_tenant", VALID_CURRENT_TENANT_ID_PROPERTY_NAME, getSchema(), null));
         sqlDefinitions.add(setCurrentTenantIdFunctionDefinition);
 
-        //TODO EnableRowLevelSecurityProducer
+        // EnableRowLevelSecurityProducer
         EnableRowLevelSecurityProducer enableRowLevelSecurityProducer = new EnableRowLevelSecurityProducer();
         sqlDefinitions.add(enableRowLevelSecurityProducer.produce("users", getSchema()));
-        //TODO ForceRowLevelSecurityProducer - table owner
+
+        // ForceRowLevelSecurityProducer - forcing the row level security policy for table owner
+        ForceRowLevelSecurityProducer forceRowLevelSecurityProducer = new ForceRowLevelSecurityProducer();
+        sqlDefinitions.add(forceRowLevelSecurityProducer.produce("users", getSchema()));
+
         //TODO RLSPolicyProducer
         //TODO TenantHasAuthoritiesFunctionProducer
     }
