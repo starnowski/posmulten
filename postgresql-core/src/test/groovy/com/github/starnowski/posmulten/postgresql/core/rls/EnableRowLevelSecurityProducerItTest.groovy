@@ -1,6 +1,7 @@
 package com.github.starnowski.posmulten.postgresql.core.rls
 
 import com.github.starnowski.posmulten.postgresql.core.TestApplication
+import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.jdbc.core.JdbcTemplate
@@ -20,6 +21,7 @@ class EnableRowLevelSecurityProducerItTest extends Specification {
 
     String table
     String schema
+    SQLDefinition sqlDefinition
 
     @Unroll
     def "should enable row level security for table #testTable and schema #testSchema" () {
@@ -29,7 +31,8 @@ class EnableRowLevelSecurityProducerItTest extends Specification {
             assertEquals("Table " + testTable + " has enabled row level security", "f", selectAndReturnFirstRecordAsString(jdbcTemplate, selectStatement(table, schema)))
 
         when:
-            jdbcTemplate.execute(tested.produce(testTable, testSchema))
+            sqlDefinition = tested.produce(testTable, testSchema)
+            jdbcTemplate.execute(sqlDefinition.getCreateScript())
 
         then:
             assertEquals("Table " + testTable + " does not have enabled row level security", "t", selectAndReturnFirstRecordAsString(jdbcTemplate, selectStatement(table, schema)))
@@ -49,7 +52,7 @@ class EnableRowLevelSecurityProducerItTest extends Specification {
 
     def cleanup() {
         String alteredTable = (schema == null ? "" : schema + ".") + "\"" + table + "\""
-        jdbcTemplate.execute("ALTER TABLE " + alteredTable + " DISABLE ROW LEVEL SECURITY;")
+        jdbcTemplate.execute(sqlDefinition.getDropScript())
         assertEquals("Table " + table + " still has enabled row level security", "f", selectAndReturnFirstRecordAsString(jdbcTemplate, selectStatement(table, schema)))
     }
 
