@@ -51,7 +51,6 @@ class EnableRowLevelSecurityProducerItTest extends Specification {
     }
 
     def cleanup() {
-        String alteredTable = (schema == null ? "" : schema + ".") + "\"" + table + "\""
         jdbcTemplate.execute(sqlDefinition.getDropScript())
         assertEquals("Table " + table + " still has enabled row level security", "f", selectAndReturnFirstRecordAsString(jdbcTemplate, selectStatement(table, schema)))
     }
