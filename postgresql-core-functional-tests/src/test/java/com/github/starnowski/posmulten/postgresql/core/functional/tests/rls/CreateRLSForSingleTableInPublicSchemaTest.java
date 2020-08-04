@@ -63,8 +63,16 @@ public class CreateRLSForSingleTableInPublicSchemaTest extends TestNGSpringConte
         ForceRowLevelSecurityProducer forceRowLevelSecurityProducer = new ForceRowLevelSecurityProducer();
         sqlDefinitions.add(forceRowLevelSecurityProducer.produce("users", getSchema()));
 
-        //TODO RLSPolicyProducer
+        // EqualsCurrentTenantIdentifierFunctionProducer
+        EqualsCurrentTenantIdentifierFunctionProducer equalsCurrentTenantIdentifierFunctionProducer = new EqualsCurrentTenantIdentifierFunctionProducer();
+        EqualsCurrentTenantIdentifierFunctionDefinition equalsCurrentTenantIdentifierFunctionDefinition = equalsCurrentTenantIdentifierFunctionProducer.produce(new EqualsCurrentTenantIdentifierFunctionProducerParameters("is_id_equals_current_tenant_id", getSchema(), null, getCurrentTenantIdFunctionDefinition));
+        sqlDefinitions.add(equalsCurrentTenantIdentifierFunctionDefinition);
+
         //TODO TenantHasAuthoritiesFunctionProducer
+
+        //TODO RLSPolicyProducer
+//        RLSPolicyProducer rlsPolicyProducer = new RLSPolicyProducer();
+//        rlsPolicyProducer.produce();
     }
 
     @SqlGroup({
