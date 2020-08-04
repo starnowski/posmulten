@@ -39,6 +39,18 @@ public class TestUtils {
         });
     }
 
+    public static Boolean selectAndReturnFirstRecordAsBoolean(JdbcTemplate jdbcTemplate, final String sql)
+    {
+        return jdbcTemplate.execute(new StatementCallback<Boolean>() {
+            public Boolean doInStatement(Statement statement) throws SQLException, DataAccessException {
+                StringBuilder sb = new StringBuilder();
+                sb.append(sql);
+                ResultSet rs = statement.executeQuery(sb.toString());rs.next();
+                return rs.getBoolean(1);
+            }
+        });
+    }
+
     public static boolean isFunctionExists(JdbcTemplate jdbcTemplate, String functionName, String schema)
     {
         StringBuilder sb = new StringBuilder();
