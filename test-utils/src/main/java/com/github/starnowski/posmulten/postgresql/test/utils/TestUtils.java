@@ -71,6 +71,19 @@ public class TestUtils {
         return isAnyRecordExists(jdbcTemplate, sb.toString());
     }
 
+    public static boolean  selectAndReturnFirstRecordAsBooleanWithSettingCurrentTenantId(JdbcTemplate jdbcTemplate, String selectStatement, String setCurrentTenantIdStatement)
+    {
+        return jdbcTemplate.execute(new StatementCallback<Boolean>() {
+            @Override
+            public Boolean doInStatement(Statement statement) throws SQLException, DataAccessException {
+                statement.execute(setCurrentTenantIdStatement);
+                ResultSet rs = statement.executeQuery(selectStatement);
+                rs.next();
+                return rs.getBoolean(1);
+            }
+        });
+    }
+
     public static void dropFunction(JdbcTemplate jdbcTemplate, String functionName, String schema, String... argumentsTypes)
     {
         String functionReference = returnFunctionReference(functionName, schema);
