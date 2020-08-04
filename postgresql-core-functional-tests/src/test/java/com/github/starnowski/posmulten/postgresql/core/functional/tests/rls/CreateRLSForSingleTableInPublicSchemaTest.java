@@ -1,9 +1,11 @@
 package com.github.starnowski.posmulten.postgresql.core.functional.tests.rls;
 
+import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition;
 import com.github.starnowski.posmulten.postgresql.core.functional.tests.TestNGSpringContextWithoutGenericTransactionalSupportTests;
 import com.github.starnowski.posmulten.postgresql.core.functional.tests.pojos.User;
 import com.github.starnowski.posmulten.postgresql.core.rls.EnableRowLevelSecurityProducer;
 import com.github.starnowski.posmulten.postgresql.core.rls.ForceRowLevelSecurityProducer;
+import com.github.starnowski.posmulten.postgresql.core.rls.RLSPolicyProducer;
 import com.github.starnowski.posmulten.postgresql.core.rls.function.*;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
@@ -12,6 +14,8 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import static com.github.starnowski.posmulten.postgresql.core.functional.tests.TestApplication.CLEAR_DATABASE_SCRIPT_PATH;
+import static com.github.starnowski.posmulten.postgresql.core.rls.DefaultRLSPolicyProducerParameters.builder;
+import static com.github.starnowski.posmulten.postgresql.core.rls.PermissionCommandPolicyEnum.ALL;
 import static com.github.starnowski.posmulten.postgresql.test.utils.TestUtils.VALID_CURRENT_TENANT_ID_PROPERTY_NAME;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
 import static org.springframework.test.context.jdbc.SqlConfig.TransactionMode.ISOLATED;
@@ -73,9 +77,17 @@ public class CreateRLSForSingleTableInPublicSchemaTest extends TestNGSpringConte
         TenantHasAuthoritiesFunctionDefinition tenantHasAuthoritiesFunctionDefinition = tenantHasAuthoritiesFunctionProducer.produce(new TenantHasAuthoritiesFunctionProducerParameters("tenant_has_authorities", getSchema(), equalsCurrentTenantIdentifierFunctionDefinition));
         sqlDefinitions.add(tenantHasAuthoritiesFunctionDefinition);
 
-        //TODO RLSPolicyProducer
-//        RLSPolicyProducer rlsPolicyProducer = new RLSPolicyProducer();
-//        rlsPolicyProducer.produce();
+        // RLSPolicyProducer
+        RLSPolicyProducer rlsPolicyProducer = new RLSPolicyProducer();
+        SQLDefinition usersRLSPolicySQLDefinition = rlsPolicyProducer.produce(builder().withPolicyName("users_table_rls_policy")
+                .withPolicySchema(getSchema())
+                .withPolicyTable("users")
+                .withGrantee(CORE_OWNER_USER)
+                .withPermissionCommandPolicy(ALL)
+                .withUsingExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionDefinition)
+                .withWithCheckExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionDefinition)
+                .build());
+        sqlDefinitions.add(usersRLSPolicySQLDefinition);
     }
 
     @SqlGroup({
