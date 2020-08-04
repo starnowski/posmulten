@@ -135,6 +135,13 @@ public class CreateRLSForSingleTableInPublicSchemaTest extends TestNGSpringConte
         assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %4$s WHERE id = %1$d AND name = '%2$s' AND tenant_id = '%3$s'", user.getId(), user.getName(), user.getTenantId(), getUsersTableReference())), "The tests user should exists");
     }
 
+    // TODO SELECT by different tenant
+    // TODO SELECT by current tenant
+    // TODO UPDATE by different tenant
+    // TODO UPDATE by current tenant
+    // TODO DELETE by different tenant
+    // TODO DELETE by current tenant
+
     @Override
     @Test(dependsOnMethods = { "tryToInsertPostForUserFromDifferentTenant", "insertUserTestData" }, alwaysRun = true)
     public void dropAllSQLDefinitions() {
