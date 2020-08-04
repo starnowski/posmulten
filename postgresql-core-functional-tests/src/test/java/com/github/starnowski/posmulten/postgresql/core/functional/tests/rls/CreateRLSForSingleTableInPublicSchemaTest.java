@@ -112,14 +112,14 @@ public class CreateRLSForSingleTableInPublicSchemaTest extends TestNGSpringConte
     public void executeSQLDefinitions()
     {
         super.executeSQLDefinitions();
+        //TODO
+//        jdbcTemplate.execute("GRANT EXECUTE ON FUNCTION " + setCurrentTenantIdFunctionDefinition.getFunctionReference() + "(text) TO \"" + CORE_OWNER_USER + "\"");
     }
 
     @Test(dataProvider = "userData", dependsOnMethods = {"executeSQLDefinitions"}, testName = "try to insert data into the users table assigned to the different tenant than currently set", description = "test case assumes that row level security for users table is not going to allow to insert data into the users table assigned to the different tenant than currently set")
     public void tryToInsertPostForUserFromDifferentTenant(User user, String differentTenant)
     {
         assertThat(countRowsInTableWhere(getUsersTableReference(), "id = " + user.getId())).isEqualTo(0);
-        //TODO
-//        jdbcTemplate.execute("GRANT EXECUTE ON FUNCTION " + setCurrentTenantIdFunctionDefinition.getFunctionReference() + "(text) TO \"" + CORE_OWNER_USER + "\"");
         assertThatThrownBy(() ->
                 ownerJdbcTemplate.execute(format("%5$s INSERT INTO %4$s (id, name, tenant_id) VALUES (%1$d, '%2$s', '%3$s');", user.getId(), user.getName(), user.getTenantId(), getUsersTableReference(), setCurrentTenantIdFunctionDefinition.generateStatementThatSetTenant(differentTenant)))
         ).isInstanceOf(BadSqlGrammarException.class).getRootCause().isInstanceOf(PSQLException.class);
