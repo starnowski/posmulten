@@ -7,6 +7,10 @@ import com.github.starnowski.posmulten.postgresql.core.rls.EnableRowLevelSecurit
 import com.github.starnowski.posmulten.postgresql.core.rls.ForceRowLevelSecurityProducer;
 import com.github.starnowski.posmulten.postgresql.core.rls.RLSPolicyProducer;
 import com.github.starnowski.posmulten.postgresql.core.rls.function.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.jdbc.SqlGroup;
@@ -17,6 +21,9 @@ import static com.github.starnowski.posmulten.postgresql.core.functional.tests.T
 import static com.github.starnowski.posmulten.postgresql.core.rls.DefaultRLSPolicyProducerParameters.builder;
 import static com.github.starnowski.posmulten.postgresql.core.rls.PermissionCommandPolicyEnum.ALL;
 import static com.github.starnowski.posmulten.postgresql.test.utils.TestUtils.VALID_CURRENT_TENANT_ID_PROPERTY_NAME;
+import static java.lang.String.format;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
 import static org.springframework.test.context.jdbc.SqlConfig.TransactionMode.ISOLATED;
 
@@ -36,6 +43,10 @@ public class CreateRLSForSingleTableInPublicSchemaTest extends TestNGSpringConte
     }
 
     protected SetCurrentTenantIdFunctionDefinition setCurrentTenantIdFunctionDefinition;
+
+    @Autowired
+    @Qualifier("ownerJdbcTemplate")
+    protected JdbcTemplate ownerJdbcTemplate;
 
     @DataProvider(name = "userData")
     protected static Object[][] userData()
@@ -98,6 +109,16 @@ public class CreateRLSForSingleTableInPublicSchemaTest extends TestNGSpringConte
     public void executeSQLDefinitions()
     {
         super.executeSQLDefinitions();
+    }
+
+    @Test(dataProvider = "userData", dependsOnMethods = {"executeSQLDefinitions"}, testName = "try to insert data into the users table assigned to the different tenant than currently set", description = "test case assumes that row level security for users table is not going to allow to insert data into the users table assigned to the different tenant than currently set")
+    public void tryToInsertPostForUserFromDifferentTenant(User user, String differentTenant)
+    {
+        assertThat(countRowsInTableWhere(getUsersTableReference(), "id = " + user.getId())).isEqualTo(0);
+        assertThatThrownBy(() ->
+                ownerJdbcTemplate.execute(format("%5$s INSERT INTO %4$s (id, name, tenant_id) VALUES (%1$d, '%2$s', '%3$s');", user.getId(), user.getName(), user.getTenantId(), getUsersTableReference(), setCurrentTenantIdFunctionDefinition.generateStatementThatSetTenant(differentTenant)))
+        ).isInstanceOf(DataIntegrityViolationException.class);
+        assertThat(countRowsInTableWhere(getUsersTableReference(), "id = " + user.getId())).isEqualTo(0);
     }
 
     @Override
