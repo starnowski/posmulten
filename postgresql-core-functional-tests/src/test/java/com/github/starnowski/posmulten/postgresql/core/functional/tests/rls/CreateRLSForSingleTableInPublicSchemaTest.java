@@ -68,7 +68,10 @@ public class CreateRLSForSingleTableInPublicSchemaTest extends TestNGSpringConte
         EqualsCurrentTenantIdentifierFunctionDefinition equalsCurrentTenantIdentifierFunctionDefinition = equalsCurrentTenantIdentifierFunctionProducer.produce(new EqualsCurrentTenantIdentifierFunctionProducerParameters("is_id_equals_current_tenant_id", getSchema(), null, getCurrentTenantIdFunctionDefinition));
         sqlDefinitions.add(equalsCurrentTenantIdentifierFunctionDefinition);
 
-        //TODO TenantHasAuthoritiesFunctionProducer
+        // TenantHasAuthoritiesFunctionProducer
+        TenantHasAuthoritiesFunctionProducer tenantHasAuthoritiesFunctionProducer = new TenantHasAuthoritiesFunctionProducer();
+        TenantHasAuthoritiesFunctionDefinition tenantHasAuthoritiesFunctionDefinition = tenantHasAuthoritiesFunctionProducer.produce(new TenantHasAuthoritiesFunctionProducerParameters("tenant_has_authorities", getSchema(), equalsCurrentTenantIdentifierFunctionDefinition));
+        sqlDefinitions.add(tenantHasAuthoritiesFunctionDefinition);
 
         //TODO RLSPolicyProducer
 //        RLSPolicyProducer rlsPolicyProducer = new RLSPolicyProducer();
