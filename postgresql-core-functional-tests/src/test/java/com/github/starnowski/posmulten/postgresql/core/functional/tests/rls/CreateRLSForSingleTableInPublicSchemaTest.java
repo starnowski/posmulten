@@ -139,10 +139,7 @@ public class CreateRLSForSingleTableInPublicSchemaTest extends TestNGSpringConte
     public void tryToSelectDataFromUserTableAsDifferentTenant(User user, String differentTenant)
     {
         assertThat(countRowsInTableWhere(getUsersTableReference(), "id = " + user.getId())).isEqualTo(1);
-//        assertThatThrownBy(() ->
-//                ownerJdbcTemplate.execute(format("%3$s SELECT * FROM %2$s WHERE id = %1$d;", user.getId(), getUsersTableReference(), setCurrentTenantIdFunctionDefinition.generateStatementThatSetTenant(differentTenant)))
-//        ).isInstanceOf(BadSqlGrammarException.class).getRootCause().isInstanceOf(PSQLException.class);
-        assertFalse(selectAndReturnFirstRecordAsBoolean(ownerJdbcTemplate, format("%3$s SELECT EXISTS ( SELECT 1 FROM %2$s WHERE id = %1$d ) ;", user.getId(), getUsersTableReference(), setCurrentTenantIdFunctionDefinition.generateStatementThatSetTenant(differentTenant))), "The SELECT statement should not return any records for different tenant then currently set");
+        assertFalse(selectAndReturnFirstRecordAsBooleanWithSettingCurrentTenantId(ownerJdbcTemplate, format("SELECT EXISTS ( SELECT 1 FROM %2$s WHERE id = %1$d ) ;", user.getId(), getUsersTableReference()), setCurrentTenantIdFunctionDefinition.generateStatementThatSetTenant(differentTenant)), "The SELECT statement should not return any records for different tenant then currently set");
     }
 
     @Test(dataProvider = "userData", dependsOnMethods = {"tryToSelectDataFromUserTableAsDifferentTenant"}, testName = "try to select data from the users table assigned to the current tenant", description = "test case assumes that row level security for users table is not going to allow to select data from the users table assigned to the current tenant")
@@ -150,12 +147,9 @@ public class CreateRLSForSingleTableInPublicSchemaTest extends TestNGSpringConte
     {
         User user = (User) parameters[0];
         assertThat(countRowsInTableWhere(getUsersTableReference(), "id = " + user.getId())).isEqualTo(1);
-//        ownerJdbcTemplate.execute(format("%3$s SELECT * FROM %2$s WHERE id = %1$d;", user.getId(), getUsersTableReference(), setCurrentTenantIdFunctionDefinition.generateStatementThatSetTenant(user.getTenantId())));
-        assertTrue(selectAndReturnFirstRecordAsBoolean(ownerJdbcTemplate, format("%3$s SELECT EXISTS ( SELECT 1 FROM %2$s WHERE id = %1$d ) ;", user.getId(), getUsersTableReference(), setCurrentTenantIdFunctionDefinition.generateStatementThatSetTenant(user.getTenantId()))), "The SELECT statement should return records for current tenant");
+        assertTrue(selectAndReturnFirstRecordAsBooleanWithSettingCurrentTenantId(ownerJdbcTemplate, format("SELECT EXISTS ( SELECT 1 FROM %2$s WHERE id = %1$d ) ;", user.getId(), getUsersTableReference()), setCurrentTenantIdFunctionDefinition.generateStatementThatSetTenant(user.getTenantId())), "The SELECT statement should return records for current tenant");
     }
 
-    // TODO SELECT by different tenant
-    // TODO SELECT by current tenant
     // TODO UPDATE by different tenant
     // TODO UPDATE by current tenant
     // TODO DELETE by different tenant
