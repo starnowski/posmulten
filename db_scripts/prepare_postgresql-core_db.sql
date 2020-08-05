@@ -208,6 +208,9 @@ OIDS = FALSE
 )
 TABLESPACE pg_default;
 
+ALTER TABLE non_public_schema.users
+    OWNER to "postgresql-core-owner";
+
 ALTER TABLE non_public_schema.groups
 OWNER to "postgresql-core-owner";
 
