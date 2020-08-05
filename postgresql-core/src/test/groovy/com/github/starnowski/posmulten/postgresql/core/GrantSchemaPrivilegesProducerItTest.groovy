@@ -1,5 +1,6 @@
 package com.github.starnowski.posmulten.postgresql.core
 
+import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.jdbc.core.JdbcTemplate
@@ -21,6 +22,7 @@ class GrantSchemaPrivilegesProducerItTest extends Specification {
     String schema
     String[] privileges
     String[] expectedPrivileges
+    SQLDefinition sqlDefinition
 
     @Unroll
     def "should add \"#testPrivileges\" privileges to \"#testUser\" user for \"#testSchema\" schema" () {
@@ -34,7 +36,8 @@ class GrantSchemaPrivilegesProducerItTest extends Specification {
             }
 
         when:
-            jdbcTemplate.execute(tested.produce(testSchema, testUser, testPrivileges))
+            sqlDefinition = tested.produce(testSchema, testUser, testPrivileges)
+            jdbcTemplate.execute(sqlDefinition.getCreateScript())
 
         then:
             for (String privilege : testExpectedPrivileges) {
@@ -51,8 +54,8 @@ class GrantSchemaPrivilegesProducerItTest extends Specification {
     }
 
     def cleanup() {
+        jdbcTemplate.execute(sqlDefinition.getDropScript())
         for (String privilege : expectedPrivileges) {
-            jdbcTemplate.execute("REVOKE " + privilege + " ON SCHEMA " + schema + " FROM  \"" + user + "\";")
             assertEquals("User " + user + " still has privilege " + privilege + " after cleanup", "f", selectAndReturnFirstRecordAsString(jdbcTemplate, selectStatement(user, schema, privilege)))
         }
     }
