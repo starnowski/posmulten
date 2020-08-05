@@ -1,5 +1,6 @@
 package com.github.starnowski.posmulten.postgresql.core.functional.tests.rls;
 
+import com.github.starnowski.posmulten.postgresql.core.GrantSchemaPrivilegesProducer;
 import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition;
 import com.github.starnowski.posmulten.postgresql.core.functional.tests.TestNGSpringContextWithoutGenericTransactionalSupportTests;
 import com.github.starnowski.posmulten.postgresql.core.functional.tests.pojos.User;
@@ -25,6 +26,7 @@ import static com.github.starnowski.posmulten.postgresql.test.utils.TestUtils.VA
 import static com.github.starnowski.posmulten.postgresql.test.utils.TestUtils.isAnyRecordExists;
 import static com.github.starnowski.posmulten.postgresql.test.utils.TestUtils.selectAndReturnFirstRecordAsBooleanWithSettingCurrentTenantId;
 import static java.lang.String.format;
+import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
@@ -91,6 +93,10 @@ public class CreateRLSForSingleTableInNonPublicSchemaForNonPrivilegedUserTest ex
         TenantHasAuthoritiesFunctionProducer tenantHasAuthoritiesFunctionProducer = new TenantHasAuthoritiesFunctionProducer();
         TenantHasAuthoritiesFunctionDefinition tenantHasAuthoritiesFunctionDefinition = tenantHasAuthoritiesFunctionProducer.produce(new TenantHasAuthoritiesFunctionProducerParameters("tenant_has_authorities", getSchema(), equalsCurrentTenantIdentifierFunctionDefinition));
         sqlDefinitions.add(tenantHasAuthoritiesFunctionDefinition);
+
+        // Grant privileges on schema to user
+        GrantSchemaPrivilegesProducer grantSchemaPrivilegesProducer = new GrantSchemaPrivilegesProducer();
+        sqlDefinitions.add(grantSchemaPrivilegesProducer.produce(getSchema(), NON_PRIVILEGED_USER, asList("USAGE")));
 
         // RLSPolicyProducer
         RLSPolicyProducer rlsPolicyProducer = new RLSPolicyProducer();
