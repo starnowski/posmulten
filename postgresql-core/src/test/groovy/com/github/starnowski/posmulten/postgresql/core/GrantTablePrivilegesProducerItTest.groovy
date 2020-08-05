@@ -1,5 +1,6 @@
 package com.github.starnowski.posmulten.postgresql.core
 
+import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.jdbc.core.JdbcTemplate
@@ -22,6 +23,7 @@ class GrantTablePrivilegesProducerItTest extends Specification {
     String schema
     String[] privileges
     String[] expectedPrivileges
+    SQLDefinition sqlDefinition
 
     @Unroll
     def "should add \"#testPrivileges\" privileges to \"#testUser\" user for \"#testTable\" table, \"#testSchema\" schema" () {
@@ -36,7 +38,8 @@ class GrantTablePrivilegesProducerItTest extends Specification {
             }
 
         when:
-            jdbcTemplate.execute(tested.produce(testSchema, testTable, testUser, testPrivileges))
+            sqlDefinition = tested.produce(testSchema, testTable, testUser, testPrivileges)
+            jdbcTemplate.execute(sqlDefinition.getCreateScript())
 
         then:
             for (String privilege : testExpectedPrivileges) {
@@ -54,9 +57,8 @@ class GrantTablePrivilegesProducerItTest extends Specification {
     }
 
     def cleanup() {
+        jdbcTemplate.execute(sqlDefinition.getDropScript())
         for (String privilege : expectedPrivileges) {
-            def tableId = "\"" + schema + "\".\"" + table + "\""
-            jdbcTemplate.execute("REVOKE " + privilege + " ON " + tableId + " FROM  \"" + user + "\";")
             assertEquals("User " + user + " has privilege " + privilege, false, isAnyRecordExists(jdbcTemplate, selectStatement(user, table, schema, privilege)))
         }
     }
