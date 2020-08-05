@@ -22,6 +22,7 @@ public class TestNGSpringContextWithoutGenericTransactionalSupportTests extends 
 
     protected static final String CORE_OWNER_USER = "postgresql-core-owner";
     protected static final String NON_PRIVILEGED_USER = "postgresql-core-user";
+    protected static final String USERS_TABLE_NAME = "users";
 
     protected List<SQLDefinition> sqlDefinitions = new ArrayList<>();
 

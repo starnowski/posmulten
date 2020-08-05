@@ -1,6 +1,7 @@
 package com.github.starnowski.posmulten.postgresql.core.functional.tests.rls;
 
 import com.github.starnowski.posmulten.postgresql.core.GrantSchemaPrivilegesProducer;
+import com.github.starnowski.posmulten.postgresql.core.GrantTablePrivilegesProducer;
 import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition;
 import com.github.starnowski.posmulten.postgresql.core.functional.tests.TestNGSpringContextWithoutGenericTransactionalSupportTests;
 import com.github.starnowski.posmulten.postgresql.core.functional.tests.pojos.User;
@@ -80,10 +81,6 @@ public class CreateRLSForSingleTableInNonPublicSchemaForNonPrivilegedUserTest ex
         EnableRowLevelSecurityProducer enableRowLevelSecurityProducer = new EnableRowLevelSecurityProducer();
         sqlDefinitions.add(enableRowLevelSecurityProducer.produce("users", getSchema()));
 
-        // ForceRowLevelSecurityProducer - forcing the row level security policy for table owner
-        ForceRowLevelSecurityProducer forceRowLevelSecurityProducer = new ForceRowLevelSecurityProducer();
-        sqlDefinitions.add(forceRowLevelSecurityProducer.produce("users", getSchema()));
-
         // EqualsCurrentTenantIdentifierFunctionProducer
         EqualsCurrentTenantIdentifierFunctionProducer equalsCurrentTenantIdentifierFunctionProducer = new EqualsCurrentTenantIdentifierFunctionProducer();
         EqualsCurrentTenantIdentifierFunctionDefinition equalsCurrentTenantIdentifierFunctionDefinition = equalsCurrentTenantIdentifierFunctionProducer.produce(new EqualsCurrentTenantIdentifierFunctionProducerParameters("is_id_equals_current_tenant_id", getSchema(), null, getCurrentTenantIdFunctionDefinition));
@@ -98,12 +95,16 @@ public class CreateRLSForSingleTableInNonPublicSchemaForNonPrivilegedUserTest ex
         GrantSchemaPrivilegesProducer grantSchemaPrivilegesProducer = new GrantSchemaPrivilegesProducer();
         sqlDefinitions.add(grantSchemaPrivilegesProducer.produce(getSchema(), NON_PRIVILEGED_USER, asList("USAGE")));
 
+        // Grant privileges on table to user
+        GrantTablePrivilegesProducer grantTablePrivilegesProducer = new GrantTablePrivilegesProducer();
+        sqlDefinitions.add(grantTablePrivilegesProducer.produce(getSchema(), USERS_TABLE_NAME,  NON_PRIVILEGED_USER, asList("INSERT", "SELECT", "UPDATE", "DELETE")));
+
         // RLSPolicyProducer
         RLSPolicyProducer rlsPolicyProducer = new RLSPolicyProducer();
         SQLDefinition usersRLSPolicySQLDefinition = rlsPolicyProducer.produce(builder().withPolicyName("users_table_rls_policy")
                 .withPolicySchema(getSchema())
-                .withPolicyTable("users")
-                .withGrantee(CORE_OWNER_USER)
+                .withPolicyTable(USERS_TABLE_NAME)
+                .withGrantee(NON_PRIVILEGED_USER)
                 .withPermissionCommandPolicy(ALL)
                 .withUsingExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionDefinition)
                 .withWithCheckExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionDefinition)
@@ -119,8 +120,6 @@ public class CreateRLSForSingleTableInNonPublicSchemaForNonPrivilegedUserTest ex
     public void executeSQLDefinitions()
     {
         super.executeSQLDefinitions();
-        //TODO
-//        jdbcTemplate.execute("GRANT EXECUTE ON FUNCTION " + setCurrentTenantIdFunctionDefinition.getFunctionReference() + "(text) TO \"" + CORE_OWNER_USER + "\"");
     }
 
     @Test(dataProvider = "userData", dependsOnMethods = {"executeSQLDefinitions"}, testName = "try to insert data into the users table assigned to the different tenant than currently set", description = "test case assumes that row level security for users table is not going to allow to insert data into the users table assigned to the different tenant than currently set")
