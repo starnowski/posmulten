@@ -17,4 +17,10 @@
             <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.rls.CreateRLSForSingleTableInNonPublicSchemaTest" />
         </classes>
     </test>
+    <test name="Row Level Security Policy for single table and non privileged user">
+        <classes>
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.rls.CreateRLSForSingleTableInNonPublicSchemaForNonPrivilegedUserTest" />
+            <!--TODO-->
+        </classes>
+    </test>
 </suite>
