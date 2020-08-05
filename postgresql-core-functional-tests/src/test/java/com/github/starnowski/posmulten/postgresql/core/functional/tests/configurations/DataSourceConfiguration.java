@@ -49,4 +49,22 @@ public class DataSourceConfiguration {
     public JdbcTemplate ownerJdbcTemplate() {
         return new JdbcTemplate(ownerDataSource());
     }
+
+    //spring.datasource.user
+    @Bean
+    @ConfigurationProperties("spring.datasource.user")
+    public DataSourceProperties userDataSourceProperties() {
+        return new DataSourceProperties();
+    }
+
+    @Bean
+    @ConfigurationProperties("spring.datasource.user.configuration")
+    public DataSource userDataSource() {
+        return userDataSourceProperties().initializeDataSourceBuilder().build();
+    }
+
+    @Bean(name = "userJdbcTemplate")
+    public JdbcTemplate userJdbcTemplate() {
+        return new JdbcTemplate(userDataSource());
+    }
 }
