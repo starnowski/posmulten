@@ -8,7 +8,13 @@
     <test name="Foreign key constraint for composite key">
         <classes>
             <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.constraint.CreateCurrentTenantCompositeForeignKeyConstraintForCommentsTableFromPublicSchemaTest" />
-            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.constraint.CreateCurrentTenantForeignKeyConstraintForPostsTableFromNonPublicSchemaTest" />
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.constraint.CreateCurrentTenantCompositeForeignKeyConstraintForCommentsTableFromNonPublicSchemaTest" />
+        </classes>
+    </test>
+    <test name="Row Level Security Policy for single table">
+        <classes>
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.rls.CreateRLSForSingleTableInPublicSchemaTest" />
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.rls.CreateRLSForSingleTableInNonPublicSchemaTest" />
         </classes>
     </test>
 </suite>
