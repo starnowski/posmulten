@@ -32,7 +32,7 @@ import static org.springframework.test.context.jdbc.SqlConfig.TransactionMode.IS
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
-public class RLSWithSettingReferenceWithoutConstraintForCurrentTenantForeignKeyTest extends TestNGSpringContextWithoutGenericTransactionalSupportTests {
+public abstract class AbstractRLSWithSettingReferenceWithoutConstraintForCurrentTenantForeignKeyTest extends TestNGSpringContextWithoutGenericTransactionalSupportTests {
 
     protected static final String USER_TENANT = "primary_tenant";
     protected static final String SECONDARY_USER_TENANT = "someXDAFAS_id";
@@ -41,10 +41,7 @@ public class RLSWithSettingReferenceWithoutConstraintForCurrentTenantForeignKeyT
     @Qualifier("ownerJdbcTemplate")
     protected JdbcTemplate ownerJdbcTemplate;
 
-    //TODO Add tests for the 'public' schema
-    protected String getSchema() {
-        return "non_public_schema";
-    }
+    abstract protected String getSchema();
 
     protected String getUsersTableReference()
     {
