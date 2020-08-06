@@ -146,7 +146,7 @@ public class RLSWithSettingReferenceWithoutConstraintForCurrentTenantForeignKeyT
     }
 
     @Test(dataProvider = "postWithUserReferenceFromOtherTenantData", dependsOnMethods = {"insertUserTestData"}, testName = "insert data into the post table with reference to users table that belongs to different tenant")
-    public void insertPostWithReferenceToUserFromSameTenant(Post post)
+    public void insertPostWithReferenceToUserFromDifferentTenant(Post post)
     {
         assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %2$s WHERE id = %1$d", post.getUserId(), getUsersTableReference())), "The tests user should exists");
         assertFalse(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %2$s WHERE id = %1$d AND tenant_id = '%3$s'", post.getUserId(), getUsersTableReference(), post.getTenantId())), "The tests user should not belong to same tenant as posts record");
@@ -154,10 +154,21 @@ public class RLSWithSettingReferenceWithoutConstraintForCurrentTenantForeignKeyT
         jdbcTemplate.execute(format("%1$s INSERT INTO %6$s (id, user_id, text, tenant_id) VALUES (%2$d, %3$d, '%4$s', '%5$s');", setCurrentTenantIdFunctionDefinition.generateStatementThatSetTenant(post.getTenantId()), post.getId(), post.getUserId(), post.getText(), post.getTenantId(), getPostsTableReference()));
         assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %5$s WHERE id = %1$d AND text = '%2$s' AND tenant_id = '%3$s' AND user_id = %4$d", post.getId(), post.getText(), post.getTenantId(), post.getUserId(), getPostsTableReference())), "The tests post should exists");
     }
-    //TODO insert posts with reference to user for same tenant
+
+    @Test(dataProvider = "postWithUserReferenceForSameTenantData", dependsOnMethods = {"insertPostWithReferenceToUserFromDifferentTenant"}, testName = "insert data into the post table with reference to users table that belongs to same tenant")
+    public void insertPostWithReferenceToUserFromSameTenant(Object[] parameters)
+    {
+        Post post = (Post) parameters[0];
+        assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %2$s WHERE id = %1$d", post.getUserId(), getUsersTableReference())), "The tests user should exists");
+        assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %2$s WHERE id = %1$d AND tenant_id = '%3$s'", post.getUserId(), getUsersTableReference(), post.getTenantId())), "The tests user should belong to same tenant as posts record");
+        assertThat(countRowsInTableWhere(getPostsTableReference(), "id = " + post.getUserId())).isEqualTo(0);
+        jdbcTemplate.execute(format("%1$s INSERT INTO %6$s (id, user_id, text, tenant_id) VALUES (%2$d, %3$d, '%4$s', '%5$s');", setCurrentTenantIdFunctionDefinition.generateStatementThatSetTenant(post.getTenantId()), post.getId(), post.getUserId(), post.getText(), post.getTenantId(), getPostsTableReference()));
+        assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %5$s WHERE id = %1$d AND text = '%2$s' AND tenant_id = '%3$s' AND user_id = %4$d", post.getId(), post.getText(), post.getTenantId(), post.getUserId(), getPostsTableReference())), "The tests post should exists");
+    }
+
     //TODO update posts with reference to user that belongs to other tenant
 
-    @Test(dependsOnMethods = {"insertPostWithReferenceToUserFromSameTenant"}, alwaysRun = true)
+    @Test(dependsOnMethods = {"insertPostWithReferenceToUserFromDifferentTenant", "insertPostWithReferenceToUserFromSameTenant"}, alwaysRun = true)
     @SqlGroup({
             @Sql(value = CLEAR_DATABASE_SCRIPT_PATH,
                     config = @SqlConfig(transactionMode = ISOLATED),
