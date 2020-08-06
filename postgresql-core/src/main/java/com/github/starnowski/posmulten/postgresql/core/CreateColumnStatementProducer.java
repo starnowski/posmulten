@@ -1,8 +1,11 @@
 package com.github.starnowski.posmulten.postgresql.core;
 
+import com.github.starnowski.posmulten.postgresql.core.common.DefaultSQLDefinition;
+import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition;
+
 public class CreateColumnStatementProducer {
 
-        public String produce(ICreateColumnStatementProducerParameters parameters){
+        public SQLDefinition produce(ICreateColumnStatementProducerParameters parameters){
             if (parameters == null)
             {
                 throw new IllegalArgumentException("The parameters object cannot be null");
@@ -28,8 +31,23 @@ public class CreateColumnStatementProducer {
             if (columnType.trim().isEmpty()) {
                 throw new IllegalArgumentException("Statement for column type cannot be blank");
             }
-            String schema = parameters.getSchema();
-            String tableReference = schema == null ? table : schema + "." + table;
-            return "ALTER TABLE " + tableReference + " ADD COLUMN " + column + " " + columnType + ";";
+            return new DefaultSQLDefinition(prepareCreateScript(parameters), prepareDropScript(parameters));
         }
+
+    private String prepareDropScript(ICreateColumnStatementProducerParameters parameters) {
+        String table = parameters.getTable();
+        String column = parameters.getColumn();
+        String schema = parameters.getSchema();
+        String tableReference = schema == null ? table : schema + "." + table;
+        return "ALTER TABLE " + tableReference + " DROP COLUMN " + column + ";";
+    }
+
+    private String prepareCreateScript(ICreateColumnStatementProducerParameters parameters) {
+        String table = parameters.getTable();
+        String column = parameters.getColumn();
+        String columnType = parameters.getColumnType();
+        String schema = parameters.getSchema();
+        String tableReference = schema == null ? table : schema + "." + table;
+        return "ALTER TABLE " + tableReference + " ADD COLUMN " + column + " " + columnType + ";";
+    }
 }
