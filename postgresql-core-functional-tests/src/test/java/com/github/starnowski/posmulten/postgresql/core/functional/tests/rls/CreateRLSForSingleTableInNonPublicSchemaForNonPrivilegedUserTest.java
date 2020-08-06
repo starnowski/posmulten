@@ -6,7 +6,6 @@ import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition;
 import com.github.starnowski.posmulten.postgresql.core.functional.tests.TestNGSpringContextWithoutGenericTransactionalSupportTests;
 import com.github.starnowski.posmulten.postgresql.core.functional.tests.pojos.User;
 import com.github.starnowski.posmulten.postgresql.core.rls.EnableRowLevelSecurityProducer;
-import com.github.starnowski.posmulten.postgresql.core.rls.ForceRowLevelSecurityProducer;
 import com.github.starnowski.posmulten.postgresql.core.rls.RLSPolicyProducer;
 import com.github.starnowski.posmulten.postgresql.core.rls.function.*;
 import org.postgresql.util.PSQLException;
