@@ -1,5 +1,6 @@
 package com.github.starnowski.posmulten.postgresql.core
 
+import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.jdbc.core.JdbcTemplate
@@ -20,6 +21,7 @@ class SetDefaultStatementProducerItTest extends Specification {
     String table
     String column
     String schema
+    SQLDefinition sqlDefinition
 
     @Unroll
     def "should change #testColumn column definition and set default value \"#defaultValue\" in table #testTable and schema '#testSchema' when column does not has any default value before test execution" () {
@@ -30,7 +32,8 @@ class SetDefaultStatementProducerItTest extends Specification {
             assertEquals("NO_DEFAULT", selectAndReturnFirstRecordAsString(jdbcTemplate, selectStatement(table, column, schema)))
 
         when:
-            jdbcTemplate.execute((String)tested.produce(new SetDefaultStatementProducerParameters(testTable, testColumn, defaultValue, testSchema)))
+            sqlDefinition = tested.produce(new SetDefaultStatementProducerParameters(testTable, testColumn, defaultValue, testSchema))
+            jdbcTemplate.execute(sqlDefinition.getCreateScript())
 
         then:
             selectAndReturnFirstRecordAsString(jdbcTemplate, selectStatement(table, column, schema)) == expectedDefaultValue
@@ -50,8 +53,7 @@ class SetDefaultStatementProducerItTest extends Specification {
     }
 
     def cleanup() {
-        def tableReference = schema == null ? table : schema + "." + table
-        jdbcTemplate.execute("ALTER TABLE " + tableReference + " ALTER COLUMN " + column + " DROP DEFAULT;")
+        jdbcTemplate.execute(sqlDefinition.getDropScript())
         assertEquals("NO_DEFAULT", selectAndReturnFirstRecordAsString(jdbcTemplate, selectStatement(table, column, schema)))
     }
 
