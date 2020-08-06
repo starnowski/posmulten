@@ -10,7 +10,7 @@ class GrantSequencePrivilegesProducerTest extends Specification {
     @Unroll
     def "should return granting access statement '#expectedStatement' for sequence #sequence, user '#user', schema '#schema' with 'ALL PRIVILGES'" () {
         expect:
-            tested.produce(schema, sequence, user) == expectedStatement
+            tested.produce(schema, sequence, user).getCreateScript() == expectedStatement
 
         where:
             schema                  | user          | sequence      ||	expectedStatement
@@ -18,6 +18,19 @@ class GrantSequencePrivilegesProducerTest extends Specification {
             "public"                | "user1"       | "primary"     || "GRANT ALL PRIVILEGES ON SEQUENCE public.\"primary\" TO \"user1\";"
             "non_public_schema"     | "johndoe"     | "primary"     || "GRANT ALL PRIVILEGES ON SEQUENCE non_public_schema.\"primary\" TO \"johndoe\";"
             "non_public_schema"     | "johndoe"     | "secondary"   || "GRANT ALL PRIVILEGES ON SEQUENCE non_public_schema.\"secondary\" TO \"johndoe\";"
+    }
+
+    @Unroll
+    def "should return revoking access statement '#expectedStatement' for sequence #sequence, user '#user', schema '#schema' with 'ALL PRIVILGES'" () {
+        expect:
+            tested.produce(schema, sequence, user).getDropScript() == expectedStatement
+
+        where:
+            schema                  | user          | sequence      ||	expectedStatement
+            null                    | "user1"       | "primary"     || "REVOKE ALL PRIVILEGES ON SEQUENCE public.\"primary\" FROM \"user1\";"
+            "public"                | "user1"       | "primary"     || "REVOKE ALL PRIVILEGES ON SEQUENCE public.\"primary\" FROM \"user1\";"
+            "non_public_schema"     | "johndoe"     | "primary"     || "REVOKE ALL PRIVILEGES ON SEQUENCE non_public_schema.\"primary\" FROM \"johndoe\";"
+            "non_public_schema"     | "johndoe"     | "secondary"   || "REVOKE ALL PRIVILEGES ON SEQUENCE non_public_schema.\"secondary\" FROM \"johndoe\";"
     }
 
     @Unroll

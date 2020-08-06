@@ -1,5 +1,6 @@
 package com.github.starnowski.posmulten.postgresql.core
 
+import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.jdbc.core.JdbcTemplate
@@ -22,6 +23,7 @@ class GrantSequencePrivilegesProducerItTest extends Specification {
     String schema
     String sequence
     String[] expectedPrivileges
+    SQLDefinition sqlDefinition
 
     @Unroll
     def "should grant all privileges for sequence #testSequence in schema '#testSchema' to user '#testUser''" () {
@@ -35,7 +37,8 @@ class GrantSequencePrivilegesProducerItTest extends Specification {
             }
 
         when:
-            jdbcTemplate.execute(tested.produce(schema, sequence, user))
+            sqlDefinition = tested.produce(schema, sequence, user)
+            jdbcTemplate.execute(sqlDefinition.getCreateScript())
 
         then:
             for (String privilege : testExpectedPrivileges) {
@@ -51,7 +54,7 @@ class GrantSequencePrivilegesProducerItTest extends Specification {
     }
 
     def cleanup() {
-        jdbcTemplate.execute("REVOKE ALL PRIVILEGES ON SEQUENCE " + schema + ".\"" + sequence + "\" FROM \"" + user + "\";")
+        jdbcTemplate.execute(sqlDefinition.getDropScript())
         for (String privilege : expectedPrivileges) {
             assertEquals("User " + user + " still has privilege " + privilege + " after cleanup", "f", selectAndReturnFirstRecordAsString(jdbcTemplate, selectStatement(user, schema, privilege, sequence)))
         }
