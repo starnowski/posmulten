@@ -26,6 +26,7 @@ import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
 import static org.springframework.test.context.jdbc.SqlConfig.TransactionMode.ISOLATED;
+import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
 public class RLSWithSettingReferenceWithoutConstraintForCurrentTenantForeignKeyTest extends TestNGSpringContextWithoutGenericTransactionalSupportTests {
@@ -43,14 +44,19 @@ public class RLSWithSettingReferenceWithoutConstraintForCurrentTenantForeignKeyT
         return (getSchema() == null ? "" : getSchema() + ".") + "users";
     }
 
+    protected String getPostsTableReference()
+    {
+        return (getSchema() == null ? "" : getSchema() + ".") + "posts";
+    }
+
     protected SetCurrentTenantIdFunctionDefinition setCurrentTenantIdFunctionDefinition;
 
     @DataProvider(name = "userData")
     protected static Object[][] userData()
     {
         return new Object[][]{
-                {new User(1L, "Szymon Tarnowski", USER_TENANT), SECONDARY_USER_TENANT},
-                {new User(2L, "John Doe", SECONDARY_USER_TENANT), USER_TENANT}
+                {new User(1L, "Szymon Tarnowski", USER_TENANT)},
+                {new User(2L, "John Doe", SECONDARY_USER_TENANT)}
         };
     }
 
@@ -67,8 +73,8 @@ public class RLSWithSettingReferenceWithoutConstraintForCurrentTenantForeignKeyT
     protected static Object[][] postWithUserReferenceForSameTenantData()
     {
         return new Object[][]{
-                {new Post(79L, "Some phrase", 1L, USER_TENANT)},
-                {new Post(197L, "Some text", 2L, SECONDARY_USER_TENANT)}
+                {new Post(79L, "Some phrase", 1L, USER_TENANT), 2L},
+                {new Post(197L, "Some text", 2L, SECONDARY_USER_TENANT), 1L}
         };
     }
 
@@ -139,7 +145,32 @@ public class RLSWithSettingReferenceWithoutConstraintForCurrentTenantForeignKeyT
         assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %4$s WHERE id = %1$d AND name = '%2$s' AND tenant_id = '%3$s'", user.getId(), user.getName(), user.getTenantId(), getUsersTableReference())), "The tests user should exists");
     }
 
-    //TODO insert posts with reference to user that belongs to other tenant
+    @Test(dataProvider = "postWithUserReferenceFromOtherTenantData", dependsOnMethods = {"insertUserTestData"}, testName = "insert data into the post table with reference to users table that belongs to different tenant")
+    public void insertPostWithReferenceToUserFromSameTenant(Post post)
+    {
+        assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %2$s WHERE id = %1$d", post.getUserId(), getUsersTableReference())), "The tests user should exists");
+        assertFalse(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %2$s WHERE id = %1$d AND tenant_id = '%3$s'", post.getUserId(), getUsersTableReference(), post.getTenantId())), "The tests user should not belong to same tenant as posts record");
+        assertThat(countRowsInTableWhere(getPostsTableReference(), "id = " + post.getUserId())).isEqualTo(0);
+        jdbcTemplate.execute(format("%1$s INSERT INTO %6$s (id, user_id, text, tenant_id) VALUES (%2$d, %3$d, '%4$s', '%5$s');", setCurrentTenantIdFunctionDefinition.generateStatementThatSetTenant(post.getTenantId()), post.getId(), post.getUserId(), post.getText(), post.getTenantId(), getPostsTableReference()));
+        assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %5$s WHERE id = %1$d AND text = '%2$s' AND tenant_id = '%3$s' AND user_id = %4$d", post.getId(), post.getText(), post.getTenantId(), post.getUserId(), getPostsTableReference())), "The tests post should exists");
+    }
     //TODO insert posts with reference to user for same tenant
     //TODO update posts with reference to user that belongs to other tenant
+
+    @Test(dependsOnMethods = {"insertPostWithReferenceToUserFromSameTenant"}, alwaysRun = true)
+    @SqlGroup({
+            @Sql(value = CLEAR_DATABASE_SCRIPT_PATH,
+                    config = @SqlConfig(transactionMode = ISOLATED),
+                    executionPhase = BEFORE_TEST_METHOD)})
+    public void deleteTestData()
+    {
+        assertThat(countRowsInTable(getUsersTableReference())).isEqualTo(0);
+        assertThat(countRowsInTable(getPostsTableReference())).isEqualTo(0);
+    }
+
+    @Override
+    @Test(dependsOnMethods = "deleteTestData", alwaysRun = true)
+    public void dropAllSQLDefinitions() {
+        super.dropAllSQLDefinitions();
+    }
 }
