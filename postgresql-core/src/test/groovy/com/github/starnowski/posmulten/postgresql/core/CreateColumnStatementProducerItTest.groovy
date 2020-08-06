@@ -1,5 +1,6 @@
 package com.github.starnowski.posmulten.postgresql.core
 
+import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.jdbc.core.JdbcTemplate
@@ -21,6 +22,7 @@ class CreateColumnStatementProducerItTest extends Specification {
     String table
     String column
     String schema
+    SQLDefinition sqlDefinition
 
     @Unroll
     def "should add \"#testColumn\" column with type \"#columnType\" in table \"#testTable\" and schema \"#testSchema\" when column does not exists before test execution" () {
@@ -31,7 +33,8 @@ class CreateColumnStatementProducerItTest extends Specification {
             assertEquals(false, isAnyRecordExists(jdbcTemplate, selectStatement(table, column, schema)))
 
         when:
-            jdbcTemplate.execute((String)tested.produce(new CreateColumnStatementProducerParameters(testTable, testColumn, columnType, testSchema)))
+            sqlDefinition = tested.produce(new CreateColumnStatementProducerParameters(testTable, testColumn, columnType, testSchema))
+            jdbcTemplate.execute(sqlDefinition.getCreateScript())
 
         then:
             isAnyRecordExists(jdbcTemplate, selectStatement(table, column, schema))
@@ -60,8 +63,7 @@ class CreateColumnStatementProducerItTest extends Specification {
     }
 
     def cleanup() {
-        def tableReference = schema == null ? table : schema + "." + table
-        jdbcTemplate.execute("ALTER TABLE " + tableReference + " DROP COLUMN " + column + ";")
+        jdbcTemplate.execute(sqlDefinition.getDropScript())
         assertEquals(false, isAnyRecordExists(jdbcTemplate, selectStatement(table, column, schema)))
     }
 
