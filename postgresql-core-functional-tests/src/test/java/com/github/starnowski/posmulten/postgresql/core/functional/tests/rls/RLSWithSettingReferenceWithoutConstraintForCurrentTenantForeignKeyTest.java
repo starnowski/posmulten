@@ -188,9 +188,19 @@ public class RLSWithSettingReferenceWithoutConstraintForCurrentTenantForeignKeyT
         assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %5$s WHERE id = %1$d AND text = '%2$s' AND tenant_id = '%3$s' AND user_id = %4$d", post.getId(), post.getText(), post.getTenantId(), post.getUserId(), getPostsTableReference())), "The tests post should exists");
     }
 
-    //TODO update posts with reference to user that belongs to other tenant
+    @Test(dataProvider = "postWithUserReferenceForSameTenantData", dependsOnMethods = {"insertPostWithReferenceToUserFromSameTenant"}, testName = "update data in the post table with reference to users table that belongs to different tenant")
+    public void updatePostWithReferenceToUserFromDifferentTenant(Object[] parameters)
+    {
+        Post post = (Post) parameters[0];
+        Long userIdForDifferentTenant = (Long) parameters[1];
+        assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %2$s WHERE id = %1$d", userIdForDifferentTenant, getUsersTableReference())), "The tests user should exists");
+        assertFalse(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %2$s WHERE id = %1$d AND tenant_id = '%3$s'", userIdForDifferentTenant, getUsersTableReference(), post.getTenantId())), "The tests user should not belong to same tenant as posts record");
+        assertThat(countRowsInTableWhere(getPostsTableReference(), "id = " + post.getUserId())).isEqualTo(0);
+        ownerJdbcTemplate.execute(format("%1$s UPDATE %2$s SET user_id = %4$d WHERE id = %3$d;", setCurrentTenantIdFunctionDefinition.generateStatementThatSetTenant(post.getTenantId()), getPostsTableReference(), post.getId(), userIdForDifferentTenant));
+        assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %5$s WHERE id = %1$d AND text = '%2$s' AND tenant_id = '%3$s' AND user_id = %4$d", post.getId(), post.getText(), post.getTenantId(), userIdForDifferentTenant, getPostsTableReference())), "The tests post should exists with reference to user that belongs to different tenant");
+    }
 
-    @Test(dependsOnMethods = {"insertPostWithReferenceToUserFromDifferentTenant", "insertPostWithReferenceToUserFromSameTenant"}, alwaysRun = true)
+    @Test(dependsOnMethods = {"insertPostWithReferenceToUserFromDifferentTenant", "insertPostWithReferenceToUserFromSameTenant", "updatePostWithReferenceToUserFromDifferentTenant"}, alwaysRun = true)
     @SqlGroup({
             @Sql(value = CLEAR_DATABASE_SCRIPT_PATH,
                     config = @SqlConfig(transactionMode = ISOLATED),
