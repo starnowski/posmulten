@@ -22,7 +22,7 @@ function setup {
   export PGPASSWORD=postgres_posmulten
 
   #when
-  run psql -qtAX -d postgresql_core -U "postgres" --host="$DOCKER_DB_IP" -p $DATABASE_PORT -c "SELECT EXISTS (SELECT 1 FROM information_schema.tables t JOIN pg_catalog.pg_class c ON (t.table_name = c.relname) JOIN pg_catalog.pg_user u ON (c.relowner = u.usesysid) WHERE t.table_schema='$DATABASE_TESTS_SCHEMA_NAME' AND t.table_name='users' AND u.usename = 'postgresql-core-owner');" >&3
+  run psql -qtAX -d postgresql_core -U "postgres" --host="$DOCKER_DB_IP" -p $DATABASE_PORT -c "SELECT EXISTS (SELECT 1 FROM pg_catalog.pg_namespace sch JOIN pg_catalog.pg_class tab ON ( sch.oid = tab.relnamespace ) JOIN pg_catalog.pg_user us ON ( tab.relowner = us.usesysid ) WHERE sch.nspname='$DATABASE_TESTS_SCHEMA_NAME' AND tab.relname='users' AND us.usename = 'postgresql-core-owner');" >&3
 
   #then
   echo "output is --> $output <--"  >&3
@@ -48,7 +48,7 @@ function setup {
   export PGPASSWORD=postgres_posmulten
 
   #when
-  run psql -qtAX -d postgresql_core -U "postgres" --host="$DOCKER_DB_IP" -p $DATABASE_PORT -c "SELECT EXISTS (SELECT 1 FROM information_schema.tables t JOIN pg_catalog.pg_class c ON (t.table_name = c.relname) JOIN pg_catalog.pg_user u ON (c.relowner = u.usesysid) WHERE t.table_schema='$DATABASE_TESTS_SCHEMA_NAME' AND t.table_name='groups' AND u.usename = 'postgresql-core-owner');" >&3
+  run psql -qtAX -d postgresql_core -U "postgres" --host="$DOCKER_DB_IP" -p $DATABASE_PORT -c "SELECT EXISTS (SELECT 1 FROM pg_catalog.pg_namespace sch JOIN pg_catalog.pg_class tab ON ( sch.oid = tab.relnamespace ) JOIN pg_catalog.pg_user us ON ( tab.relowner = us.usesysid ) WHERE sch.nspname='$DATABASE_TESTS_SCHEMA_NAME' AND tab.relname='groups' AND us.usename = 'postgresql-core-owner');" >&3
 
   #then
   echo "output is --> $output <--"  >&3
@@ -74,7 +74,7 @@ function setup {
   export PGPASSWORD=postgres_posmulten
 
   #when
-  run psql -qtAX -d postgresql_core -U "postgres" --host="$DOCKER_DB_IP" -p $DATABASE_PORT -c "SELECT EXISTS (SELECT 1 FROM information_schema.tables t JOIN pg_catalog.pg_class c ON (t.table_name = c.relname) JOIN pg_catalog.pg_user u ON (c.relowner = u.usesysid) WHERE t.table_schema='$DATABASE_TESTS_SCHEMA_NAME' AND t.table_name='users_groups' AND u.usename = 'postgresql-core-owner');" >&3
+  run psql -qtAX -d postgresql_core -U "postgres" --host="$DOCKER_DB_IP" -p $DATABASE_PORT -c "SELECT EXISTS (SELECT 1 FROM pg_catalog.pg_namespace sch JOIN pg_catalog.pg_class tab ON ( sch.oid = tab.relnamespace ) JOIN pg_catalog.pg_user us ON ( tab.relowner = us.usesysid ) WHERE sch.nspname='$DATABASE_TESTS_SCHEMA_NAME' AND tab.relname='users_groups' AND us.usename = 'postgresql-core-owner');" >&3
 
   #then
   echo "output is --> $output <--"  >&3
@@ -100,7 +100,7 @@ function setup {
   export PGPASSWORD=postgres_posmulten
 
   #when
-  run psql -qtAX -d postgresql_core -U "postgres" --host="$DOCKER_DB_IP" -p $DATABASE_PORT -c "SELECT EXISTS (SELECT 1 FROM information_schema.tables t JOIN pg_catalog.pg_class c ON (t.table_name = c.relname) JOIN pg_catalog.pg_user u ON (c.relowner = u.usesysid) WHERE t.table_schema='$DATABASE_TESTS_SCHEMA_NAME' AND t.table_name='posts' AND u.usename = 'postgresql-core-owner');" >&3
+  run psql -qtAX -d postgresql_core -U "postgres" --host="$DOCKER_DB_IP" -p $DATABASE_PORT -c "SELECT EXISTS (SELECT 1 FROM pg_catalog.pg_namespace sch JOIN pg_catalog.pg_class tab ON ( sch.oid = tab.relnamespace ) JOIN pg_catalog.pg_user us ON ( tab.relowner = us.usesysid ) WHERE sch.nspname='$DATABASE_TESTS_SCHEMA_NAME' AND tab.relname='posts' AND us.usename = 'postgresql-core-owner');" >&3
 
   #then
   echo "output is --> $output <--"  >&3
@@ -126,7 +126,7 @@ function setup {
   export PGPASSWORD=postgres_posmulten
 
   #when
-  run psql -qtAX -d postgresql_core -U "postgres" --host="$DOCKER_DB_IP" -p $DATABASE_PORT -c "SELECT EXISTS (SELECT 1 FROM information_schema.tables t JOIN pg_catalog.pg_class c ON (t.table_name = c.relname) JOIN pg_catalog.pg_user u ON (c.relowner = u.usesysid) WHERE t.table_schema='$DATABASE_TESTS_SCHEMA_NAME' AND t.table_name='comments' AND u.usename = 'postgresql-core-owner');" >&3
+  run psql -qtAX -d postgresql_core -U "postgres" --host="$DOCKER_DB_IP" -p $DATABASE_PORT -c "SELECT EXISTS (SELECT 1 FROM pg_catalog.pg_namespace sch JOIN pg_catalog.pg_class tab ON ( sch.oid = tab.relnamespace ) JOIN pg_catalog.pg_user us ON ( tab.relowner = us.usesysid ) WHERE sch.nspname='$DATABASE_TESTS_SCHEMA_NAME' AND tab.relname='comments' AND us.usename = 'postgresql-core-owner');" >&3
 
   #then
   echo "output is --> $output <--"  >&3

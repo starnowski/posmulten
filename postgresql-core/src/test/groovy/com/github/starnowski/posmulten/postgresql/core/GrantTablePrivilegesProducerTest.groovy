@@ -10,7 +10,7 @@ class GrantTablePrivilegesProducerTest extends Specification {
     @Unroll
     def "should return granting access statement '#expectedStatement' for table '#table', user '#user', schema '#schema' with specified privileges '#privileges'" () {
         expect:
-            tested.produce(schema, table, user, privileges) == expectedStatement
+            tested.produce(schema, table, user, privileges).getCreateScript() == expectedStatement
 
         where:
             schema      | user          | table         | privileges                                                                        ||	expectedStatement
@@ -25,6 +25,26 @@ class GrantTablePrivilegesProducerTest extends Specification {
             "public"    | "user1"       | "players"     | ["INSERT"]                                                                        || "GRANT INSERT ON public.\"players\" TO \"user1\";"
             "other_she" | "user1"       | "players"     | ["INSERT"]                                                                        || "GRANT INSERT ON other_she.\"players\" TO \"user1\";"
             "other_she" | "bro"         | "posts"       | ["UPDATE", "SELECT"]                                                              || "GRANT UPDATE, SELECT ON other_she.\"posts\" TO \"bro\";"
+    }
+
+    @Unroll
+    def "should return revoking access statement '#expectedStatement' for table '#table', user '#user', schema '#schema' with specified privileges '#privileges'" () {
+        expect:
+        tested.produce(schema, table, user, privileges).getDropScript() == expectedStatement
+
+        where:
+        schema      | user          | table         | privileges                                                                        ||	expectedStatement
+        null        | "user1"       | "players"     | ["INSERT"]                                                                        || "REVOKE INSERT ON \"players\" FROM \"user1\";"
+        null        | "john_doe"    | "players"     | ["INSERT"]                                                                        || "REVOKE INSERT ON \"players\" FROM \"john_doe\";"
+        null        | "user1"       | "users"       | ["INSERT"]                                                                        || "REVOKE INSERT ON \"users\" FROM \"user1\";"
+        null        | "user1"       | "players"     | ["UPDATE"]                                                                        || "REVOKE UPDATE ON \"players\" FROM \"user1\";"
+        null        | "user1"       | "players"     | ["SELECT", "INSERT", "UPDATE", "DELETE", "TRUNCATE", "REFERENCES", "TRIGGER"]     || "REVOKE SELECT, INSERT, UPDATE, DELETE, TRUNCATE, REFERENCES, TRIGGER ON \"players\" FROM \"user1\";"
+        null        | "user1"       | "players"     | ["SELECT", "TRIGGER"]                                                             || "REVOKE SELECT, TRIGGER ON \"players\" FROM \"user1\";"
+        null        | "user1"       | "players"     | ["ALL"]                                                                           || "REVOKE ALL ON \"players\" FROM \"user1\";"
+        null        | "user1"       | "players"     | ["ALL PRIVILEGES"]                                                                || "REVOKE ALL PRIVILEGES ON \"players\" FROM \"user1\";"
+        "public"    | "user1"       | "players"     | ["INSERT"]                                                                        || "REVOKE INSERT ON public.\"players\" FROM \"user1\";"
+        "other_she" | "user1"       | "players"     | ["INSERT"]                                                                        || "REVOKE INSERT ON other_she.\"players\" FROM \"user1\";"
+        "other_she" | "bro"         | "posts"       | ["UPDATE", "SELECT"]                                                              || "REVOKE UPDATE, SELECT ON other_she.\"posts\" FROM \"bro\";"
     }
 
     @Unroll

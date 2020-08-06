@@ -20,6 +20,11 @@ public class TestNGSpringContextWithoutGenericTransactionalSupportTests extends 
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
+    protected static final String CORE_OWNER_USER = "postgresql-core-owner";
+    protected static final String NON_PRIVILEGED_USER = "postgresql-core-user";
+    protected static final String USERS_TABLE_NAME = "users";
+    protected static final String POSTS_TABLE_NAME = "posts";
+
     protected List<SQLDefinition> sqlDefinitions = new ArrayList<>();
 
     protected String createSelectStatementForConstraintName(String schema, String table, String constraintName)

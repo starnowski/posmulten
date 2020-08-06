@@ -1,6 +1,7 @@
 package com.github.starnowski.posmulten.postgresql.core.functional.tests.constraint;
 
 import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition;
+import com.github.starnowski.posmulten.postgresql.core.functional.tests.AbstractClassWithSQLDefinitionGenerationMethods;
 import com.github.starnowski.posmulten.postgresql.core.functional.tests.pojos.Comment;
 import com.github.starnowski.posmulten.postgresql.core.functional.tests.pojos.Post;
 import com.github.starnowski.posmulten.postgresql.core.functional.tests.pojos.User;

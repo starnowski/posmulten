@@ -39,6 +39,18 @@ public class TestUtils {
         });
     }
 
+    public static Boolean selectAndReturnFirstRecordAsBoolean(JdbcTemplate jdbcTemplate, final String sql)
+    {
+        return jdbcTemplate.execute(new StatementCallback<Boolean>() {
+            public Boolean doInStatement(Statement statement) throws SQLException, DataAccessException {
+                StringBuilder sb = new StringBuilder();
+                sb.append(sql);
+                ResultSet rs = statement.executeQuery(sb.toString());rs.next();
+                return rs.getBoolean(1);
+            }
+        });
+    }
+
     public static boolean isFunctionExists(JdbcTemplate jdbcTemplate, String functionName, String schema)
     {
         StringBuilder sb = new StringBuilder();
@@ -57,6 +69,19 @@ public class TestUtils {
         sb.append(" AND ");
         sb.append("pg.pronamespace =  pgn.oid");
         return isAnyRecordExists(jdbcTemplate, sb.toString());
+    }
+
+    public static boolean  selectAndReturnFirstRecordAsBooleanWithSettingCurrentTenantId(JdbcTemplate jdbcTemplate, String selectStatement, String setCurrentTenantIdStatement)
+    {
+        return jdbcTemplate.execute(new StatementCallback<Boolean>() {
+            @Override
+            public Boolean doInStatement(Statement statement) throws SQLException, DataAccessException {
+                statement.execute(setCurrentTenantIdStatement);
+                ResultSet rs = statement.executeQuery(selectStatement);
+                rs.next();
+                return rs.getBoolean(1);
+            }
+        });
     }
 
     public static void dropFunction(JdbcTemplate jdbcTemplate, String functionName, String schema, String... argumentsTypes)

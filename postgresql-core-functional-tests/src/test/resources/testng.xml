@@ -8,7 +8,24 @@
     <test name="Foreign key constraint for composite key">
         <classes>
             <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.constraint.CreateCurrentTenantCompositeForeignKeyConstraintForCommentsTableFromPublicSchemaTest" />
-            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.constraint.CreateCurrentTenantForeignKeyConstraintForPostsTableFromNonPublicSchemaTest" />
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.constraint.CreateCurrentTenantCompositeForeignKeyConstraintForCommentsTableFromNonPublicSchemaTest" />
+        </classes>
+    </test>
+    <test name="Row Level Security Policy for single table">
+        <classes>
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.rls.CreateRLSForSingleTableInPublicSchemaTest" />
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.rls.CreateRLSForSingleTableInNonPublicSchemaTest" />
+        </classes>
+    </test>
+    <test name="Row Level Security Policy for single table and non privileged user">
+        <classes>
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.rls.CreateRLSForSingleTableInNonPublicSchemaForNonPrivilegedUserTest" />
+        </classes>
+    </test>
+    <test name="Setting reference to records that belongs to different tenant with Row Level Security Policy set but without constraints for foreign keys">
+        <classes>
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.rls.RLSWithSettingReferenceWithoutConstraintForCurrentTenantForeignKeyInNonPublicSchemaTest" />
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.rls.RLSWithSettingReferenceWithoutConstraintForCurrentTenantForeignKeyInPublicSchemaTest" />
         </classes>
     </test>
 </suite>
