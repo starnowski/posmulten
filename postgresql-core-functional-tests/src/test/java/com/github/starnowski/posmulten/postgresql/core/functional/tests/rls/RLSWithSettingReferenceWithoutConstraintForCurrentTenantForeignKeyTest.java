@@ -8,8 +8,12 @@ import com.github.starnowski.posmulten.postgresql.core.functional.tests.constrai
 import com.github.starnowski.posmulten.postgresql.core.functional.tests.pojos.Post;
 import com.github.starnowski.posmulten.postgresql.core.functional.tests.pojos.User;
 import com.github.starnowski.posmulten.postgresql.core.rls.EnableRowLevelSecurityProducer;
+import com.github.starnowski.posmulten.postgresql.core.rls.ForceRowLevelSecurityProducer;
 import com.github.starnowski.posmulten.postgresql.core.rls.RLSPolicyProducer;
 import com.github.starnowski.posmulten.postgresql.core.rls.function.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.jdbc.SqlGroup;
@@ -22,7 +26,6 @@ import static com.github.starnowski.posmulten.postgresql.core.rls.PermissionComm
 import static com.github.starnowski.posmulten.postgresql.test.utils.TestUtils.VALID_CURRENT_TENANT_ID_PROPERTY_NAME;
 import static com.github.starnowski.posmulten.postgresql.test.utils.TestUtils.isAnyRecordExists;
 import static java.lang.String.format;
-import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
 import static org.springframework.test.context.jdbc.SqlConfig.TransactionMode.ISOLATED;
@@ -33,6 +36,10 @@ public class RLSWithSettingReferenceWithoutConstraintForCurrentTenantForeignKeyT
 
     protected static final String USER_TENANT = "primary_tenant";
     protected static final String SECONDARY_USER_TENANT = "someXDAFAS_id";
+
+    @Autowired
+    @Qualifier("ownerJdbcTemplate")
+    protected JdbcTemplate ownerJdbcTemplate;
 
     //TODO Add tests for the 'public' schema
     protected String getSchema() {
@@ -94,7 +101,18 @@ public class RLSWithSettingReferenceWithoutConstraintForCurrentTenantForeignKeyT
 
         // EnableRowLevelSecurityProducer
         EnableRowLevelSecurityProducer enableRowLevelSecurityProducer = new EnableRowLevelSecurityProducer();
-        sqlDefinitions.add(enableRowLevelSecurityProducer.produce("users", getSchema()));
+        sqlDefinitions.add(enableRowLevelSecurityProducer.produce(USERS_TABLE_NAME, getSchema()));
+
+        // ForceRowLevelSecurityProducer - forcing the row level security policy for table owner
+        ForceRowLevelSecurityProducer forceRowLevelSecurityProducer = new ForceRowLevelSecurityProducer();
+        sqlDefinitions.add(forceRowLevelSecurityProducer.produce(USERS_TABLE_NAME, getSchema()));
+
+        // EnableRowLevelSecurityProducer
+        sqlDefinitions.add(enableRowLevelSecurityProducer.produce(POSTS_TABLE_NAME, getSchema()));
+
+        // ForceRowLevelSecurityProducer - forcing the row level security policy for table owner
+        sqlDefinitions.add(forceRowLevelSecurityProducer.produce(POSTS_TABLE_NAME, getSchema()));
+
 
         // EqualsCurrentTenantIdentifierFunctionProducer
         EqualsCurrentTenantIdentifierFunctionProducer equalsCurrentTenantIdentifierFunctionProducer = new EqualsCurrentTenantIdentifierFunctionProducer();
@@ -106,25 +124,27 @@ public class RLSWithSettingReferenceWithoutConstraintForCurrentTenantForeignKeyT
         TenantHasAuthoritiesFunctionDefinition tenantHasAuthoritiesFunctionDefinition = tenantHasAuthoritiesFunctionProducer.produce(new TenantHasAuthoritiesFunctionProducerParameters("tenant_has_authorities", getSchema(), equalsCurrentTenantIdentifierFunctionDefinition));
         sqlDefinitions.add(tenantHasAuthoritiesFunctionDefinition);
 
-        // Grant privileges on schema to user
-        GrantSchemaPrivilegesProducer grantSchemaPrivilegesProducer = new GrantSchemaPrivilegesProducer();
-        sqlDefinitions.add(grantSchemaPrivilegesProducer.produce(getSchema(), NON_PRIVILEGED_USER, asList("USAGE")));
-
-        // Grant privileges on table to user
-        GrantTablePrivilegesProducer grantTablePrivilegesProducer = new GrantTablePrivilegesProducer();
-        sqlDefinitions.add(grantTablePrivilegesProducer.produce(getSchema(), USERS_TABLE_NAME,  NON_PRIVILEGED_USER, asList("INSERT", "SELECT", "UPDATE", "DELETE")));
-
         // RLSPolicyProducer
         RLSPolicyProducer rlsPolicyProducer = new RLSPolicyProducer();
         SQLDefinition usersRLSPolicySQLDefinition = rlsPolicyProducer.produce(builder().withPolicyName("users_table_rls_policy")
                 .withPolicySchema(getSchema())
                 .withPolicyTable(USERS_TABLE_NAME)
-                .withGrantee(NON_PRIVILEGED_USER)
+                .withGrantee(CORE_OWNER_USER)
                 .withPermissionCommandPolicy(ALL)
                 .withUsingExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionDefinition)
                 .withWithCheckExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionDefinition)
                 .build());
         sqlDefinitions.add(usersRLSPolicySQLDefinition);
+
+        SQLDefinition postsRLSPolicySQLDefinition = rlsPolicyProducer.produce(builder().withPolicyName("posts_table_rls_policy")
+                .withPolicySchema(getSchema())
+                .withPolicyTable(POSTS_TABLE_NAME)
+                .withGrantee(CORE_OWNER_USER)
+                .withPermissionCommandPolicy(ALL)
+                .withUsingExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionDefinition)
+                .withWithCheckExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionDefinition)
+                .build());
+        sqlDefinitions.add(postsRLSPolicySQLDefinition);
     }
 
     @SqlGroup({
@@ -137,11 +157,13 @@ public class RLSWithSettingReferenceWithoutConstraintForCurrentTenantForeignKeyT
         super.executeSQLDefinitions();
     }
 
+    //TODO Add assertion for RLS policy
+
     @Test(dataProvider = "userData", dependsOnMethods = {"executeSQLDefinitions"}, testName = "insert data into to user table")
     public void insertUserTestData(User user)
     {
         assertThat(countRowsInTableWhere(getUsersTableReference(), "id = " + user.getId())).isEqualTo(0);
-        jdbcTemplate.execute(format("INSERT INTO %4$s (id, name, tenant_id) VALUES (%1$d, '%2$s', '%3$s');", user.getId(), user.getName(), user.getTenantId(), getUsersTableReference()));
+        ownerJdbcTemplate.execute(format("%5$s INSERT INTO %4$s (id, name, tenant_id) VALUES (%1$d, '%2$s', '%3$s');", user.getId(), user.getName(), user.getTenantId(), getUsersTableReference(), setCurrentTenantIdFunctionDefinition.generateStatementThatSetTenant(user.getTenantId())));
         assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %4$s WHERE id = %1$d AND name = '%2$s' AND tenant_id = '%3$s'", user.getId(), user.getName(), user.getTenantId(), getUsersTableReference())), "The tests user should exists");
     }
 
@@ -151,7 +173,7 @@ public class RLSWithSettingReferenceWithoutConstraintForCurrentTenantForeignKeyT
         assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %2$s WHERE id = %1$d", post.getUserId(), getUsersTableReference())), "The tests user should exists");
         assertFalse(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %2$s WHERE id = %1$d AND tenant_id = '%3$s'", post.getUserId(), getUsersTableReference(), post.getTenantId())), "The tests user should not belong to same tenant as posts record");
         assertThat(countRowsInTableWhere(getPostsTableReference(), "id = " + post.getUserId())).isEqualTo(0);
-        jdbcTemplate.execute(format("%1$s INSERT INTO %6$s (id, user_id, text, tenant_id) VALUES (%2$d, %3$d, '%4$s', '%5$s');", setCurrentTenantIdFunctionDefinition.generateStatementThatSetTenant(post.getTenantId()), post.getId(), post.getUserId(), post.getText(), post.getTenantId(), getPostsTableReference()));
+        ownerJdbcTemplate.execute(format("%1$s INSERT INTO %6$s (id, user_id, text, tenant_id) VALUES (%2$d, %3$d, '%4$s', '%5$s');", setCurrentTenantIdFunctionDefinition.generateStatementThatSetTenant(post.getTenantId()), post.getId(), post.getUserId(), post.getText(), post.getTenantId(), getPostsTableReference()));
         assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %5$s WHERE id = %1$d AND text = '%2$s' AND tenant_id = '%3$s' AND user_id = %4$d", post.getId(), post.getText(), post.getTenantId(), post.getUserId(), getPostsTableReference())), "The tests post should exists");
     }
 
@@ -162,7 +184,7 @@ public class RLSWithSettingReferenceWithoutConstraintForCurrentTenantForeignKeyT
         assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %2$s WHERE id = %1$d", post.getUserId(), getUsersTableReference())), "The tests user should exists");
         assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %2$s WHERE id = %1$d AND tenant_id = '%3$s'", post.getUserId(), getUsersTableReference(), post.getTenantId())), "The tests user should belong to same tenant as posts record");
         assertThat(countRowsInTableWhere(getPostsTableReference(), "id = " + post.getUserId())).isEqualTo(0);
-        jdbcTemplate.execute(format("%1$s INSERT INTO %6$s (id, user_id, text, tenant_id) VALUES (%2$d, %3$d, '%4$s', '%5$s');", setCurrentTenantIdFunctionDefinition.generateStatementThatSetTenant(post.getTenantId()), post.getId(), post.getUserId(), post.getText(), post.getTenantId(), getPostsTableReference()));
+        ownerJdbcTemplate.execute(format("%1$s INSERT INTO %6$s (id, user_id, text, tenant_id) VALUES (%2$d, %3$d, '%4$s', '%5$s');", setCurrentTenantIdFunctionDefinition.generateStatementThatSetTenant(post.getTenantId()), post.getId(), post.getUserId(), post.getText(), post.getTenantId(), getPostsTableReference()));
         assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %5$s WHERE id = %1$d AND text = '%2$s' AND tenant_id = '%3$s' AND user_id = %4$d", post.getId(), post.getText(), post.getTenantId(), post.getUserId(), getPostsTableReference())), "The tests post should exists");
     }
 
