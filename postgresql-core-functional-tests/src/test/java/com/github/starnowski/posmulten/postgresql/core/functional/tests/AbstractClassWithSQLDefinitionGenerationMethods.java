@@ -97,4 +97,30 @@ public abstract class AbstractClassWithSQLDefinitionGenerationMethods extends Te
         IsRecordBelongsToCurrentTenantProducer isRecordBelongsToCurrentTenantProducer = new IsRecordBelongsToCurrentTenantProducer();
         return isRecordBelongsToCurrentTenantProducer.produce(isRecordBelongsToCurrentTenantProducerParameters);
     }
+
+    protected IsRecordBelongsToCurrentTenantFunctionDefinition getIsNotificationsRecordBelongsToCurrentTenantFunctionDefinition(GetCurrentTenantIdFunctionDefinition getCurrentTenantIdFunctionDefinition) {
+        AbstractIsRecordBelongsToCurrentTenantProducerParameters isRecordBelongsToCurrentTenantProducerParameters = new IsRecordBelongsToCurrentTenantProducerParameters.Builder()
+                .withSchema(getSchema())
+                .withFunctionName("is_notification_belongs_to_current_tenant")
+                .withRecordTableName(NOTIFICATIONS_TABLE_NAME)
+                .withRecordSchemaName(getSchema())
+                .withiGetCurrentTenantIdFunctionInvocationFactory(getCurrentTenantIdFunctionDefinition)
+                .withTenantColumn("tenant")
+                .withKeyColumnsPairsList(ImmutableList.of(pairOfColumnWithType("uuid", "uuid"))).build();
+        IsRecordBelongsToCurrentTenantProducer isRecordBelongsToCurrentTenantProducer = new IsRecordBelongsToCurrentTenantProducer();
+        return isRecordBelongsToCurrentTenantProducer.produce(isRecordBelongsToCurrentTenantProducerParameters);
+    }
+
+    protected IsRecordBelongsToCurrentTenantFunctionDefinition getIsGroupsRecordBelongsToCurrentTenantFunctionDefinition(GetCurrentTenantIdFunctionDefinition getCurrentTenantIdFunctionDefinition) {
+        AbstractIsRecordBelongsToCurrentTenantProducerParameters isRecordBelongsToCurrentTenantProducerParameters = new IsRecordBelongsToCurrentTenantProducerParameters.Builder()
+                .withSchema(getSchema())
+                .withFunctionName("is_group_belongs_to_current_tenant")
+                .withRecordTableName(GROUPS_TABLE_NAME)
+                .withRecordSchemaName(getSchema())
+                .withiGetCurrentTenantIdFunctionInvocationFactory(getCurrentTenantIdFunctionDefinition)
+                .withTenantColumn("tenant_id")
+                .withKeyColumnsPairsList(ImmutableList.of(pairOfColumnWithType("uuid", "uuid"))).build();
+        IsRecordBelongsToCurrentTenantProducer isRecordBelongsToCurrentTenantProducer = new IsRecordBelongsToCurrentTenantProducer();
+        return isRecordBelongsToCurrentTenantProducer.produce(isRecordBelongsToCurrentTenantProducerParameters);
+    }
 }

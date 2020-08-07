@@ -2,6 +2,7 @@ package com.github.starnowski.posmulten.postgresql.core.functional.tests.combine
 
 import com.github.starnowski.posmulten.postgresql.core.*;
 import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition;
+import com.github.starnowski.posmulten.postgresql.core.functional.tests.AbstractClassWithSQLDefinitionGenerationMethods;
 import com.github.starnowski.posmulten.postgresql.core.functional.tests.TestNGSpringContextWithoutGenericTransactionalSupportTests;
 import com.github.starnowski.posmulten.postgresql.core.rls.EnableRowLevelSecurityProducer;
 import com.github.starnowski.posmulten.postgresql.core.rls.ForceRowLevelSecurityProducer;
@@ -22,7 +23,7 @@ import static com.github.starnowski.posmulten.postgresql.test.utils.TestUtils.VA
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
 import static org.springframework.test.context.jdbc.SqlConfig.TransactionMode.ISOLATED;
 
-public abstract class FullStackTest extends TestNGSpringContextWithoutGenericTransactionalSupportTests {
+public abstract class FullStackTest extends AbstractClassWithSQLDefinitionGenerationMethods {
 
     protected static final String USER_TENANT = "primary_tenant";
     protected static final String SECONDARY_USER_TENANT = "someXDAFAS_id";
@@ -196,7 +197,25 @@ public abstract class FullStackTest extends TestNGSpringContextWithoutGenericTra
                 .build());
         sqlDefinitions.add(commentsGroupsRLSPolicySQLDefinition);
 
+        // Does record belongs to current tenant (users table)
+        IsRecordBelongsToCurrentTenantFunctionDefinition isUsersRecordBelongsToCurrentTenantFunctionDefinition = getIsUsersRecordBelongsToCurrentTenantFunctionDefinition(getCurrentTenantIdFunctionDefinition);
+        sqlDefinitions.add(isUsersRecordBelongsToCurrentTenantFunctionDefinition);
 
+        // Does record belongs to current tenant (posts table)
+        IsRecordBelongsToCurrentTenantFunctionDefinition isPostsRecordBelongsToCurrentTenantFunctionDefinition = getIsPostsRecordBelongsToCurrentTenantFunctionDefinition(getCurrentTenantIdFunctionDefinition);
+        sqlDefinitions.add(isPostsRecordBelongsToCurrentTenantFunctionDefinition);
+
+        // Does record belongs to current tenant (comments table)
+        IsRecordBelongsToCurrentTenantFunctionDefinition isCommentsRecordBelongsToCurrentTenantFunctionDefinition = getIsCommentsRecordBelongsToCurrentTenantFunctionDefinition(getCurrentTenantIdFunctionDefinition);
+        sqlDefinitions.add(isCommentsRecordBelongsToCurrentTenantFunctionDefinition);
+
+        // Does record belongs to current tenant (notifications table)
+        IsRecordBelongsToCurrentTenantFunctionDefinition isNotificationsRecordBelongsToCurrentTenantFunctionDefinition = getIsNotificationsRecordBelongsToCurrentTenantFunctionDefinition(getCurrentTenantIdFunctionDefinition);
+        sqlDefinitions.add(isNotificationsRecordBelongsToCurrentTenantFunctionDefinition);
+
+        // Does record belongs to current tenant (groups table)
+        IsRecordBelongsToCurrentTenantFunctionDefinition isGroupsRecordBelongsToCurrentTenantFunctionDefinition = getIsGroupsRecordBelongsToCurrentTenantFunctionDefinition(getCurrentTenantIdFunctionDefinition);
+        sqlDefinitions.add(isGroupsRecordBelongsToCurrentTenantFunctionDefinition);
     }
 
     @SqlGroup({
