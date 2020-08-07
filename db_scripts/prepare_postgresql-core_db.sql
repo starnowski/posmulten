@@ -107,7 +107,7 @@ CREATE TABLE public.notifications
     user_id bigint NOT NULL,
     CONSTRAINT fk_posts_user_id FOREIGN KEY (user_id)
               REFERENCES users (id) MATCH SIMPLE,
-    CONSTRAINT notifications_pkey PRIMARY KEY (id)
+    CONSTRAINT notifications_pkey PRIMARY KEY (uuid)
 )
 WITH (
     OIDS = FALSE
@@ -234,7 +234,7 @@ CREATE TABLE non_public_schema.notifications
     user_id bigint NOT NULL,
     CONSTRAINT fk_posts_user_id FOREIGN KEY (user_id)
               REFERENCES non_public_schema.users (id) MATCH SIMPLE,
-    CONSTRAINT notifications_pkey PRIMARY KEY (id)
+    CONSTRAINT notifications_pkey PRIMARY KEY (uuid)
 )
 WITH (
     OIDS = FALSE
