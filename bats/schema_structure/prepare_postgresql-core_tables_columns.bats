@@ -147,6 +147,19 @@ function setup {
   [ "$output" = "t" ]
 }
 
+@test "Database table 'notifications' should not have column 'tenant_id'" {
+  #given
+  export PGPASSWORD=postgres_posmulten
+
+  #when
+  run psql -qtAX -d postgresql_core -U "postgres" --host="$DOCKER_DB_IP" -p $DATABASE_PORT -c "SELECT EXISTS (SELECT 1 FROM information_schema.columns WHERE  table_schema = '$DATABASE_TESTS_SCHEMA_NAME' AND table_name = 'notifications' and column_name = 'tenant_id');" >&3
+
+  #then
+  echo "output is --> $output <--"  >&3
+  [ "$status" -eq 0 ]
+  [ "$output" = "t" ]
+}
+
 function teardown {
   #Restore previous password
   PGPASSWORD="$PREVIOUS_PGPASSWORD"
