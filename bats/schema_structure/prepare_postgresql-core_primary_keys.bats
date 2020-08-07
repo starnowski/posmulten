@@ -151,6 +151,35 @@ SQL
   [ "$output" = "t" ]
 }
 
+@test "Table 'notifications' should have primary key for column 'uuid'" {
+  #given
+  export PGPASSWORD=postgres_posmulten
+  cat << SQL > "$BATS_TMPDIR/$TMP_SQL_FILE"
+    SELECT EXISTS (
+    SELECT 1
+    FROM INFORMATION_SCHEMA.CONSTRAINT_COLUMN_USAGE U
+    INNER JOIN INFORMATION_SCHEMA.TABLE_CONSTRAINTS R
+        ON R.CONSTRAINT_NAME = U.CONSTRAINT_NAME
+		AND R.TABLE_SCHEMA = U.TABLE_SCHEMA
+		AND R.TABLE_NAME = U.TABLE_NAME
+		AND R.TABLE_CATALOG = U.TABLE_CATALOG
+	WHERE R.CONSTRAINT_TYPE = 'PRIMARY KEY'
+    	AND U.COLUMN_NAME = 'uuid'
+    	AND U.TABLE_NAME = 'notifications'
+    	AND U.TABLE_SCHEMA = '$DATABASE_TESTS_SCHEMA_NAME'
+    );
+SQL
+
+
+  #when
+  run psql -qtAX -d postgresql_core -U "postgres" --host="$DOCKER_DB_IP" -p $DATABASE_PORT -f "$BATS_TMPDIR/$TMP_SQL_FILE"
+
+  #then
+  echo "output is --> $output <--"  >&3
+  [ "$status" -eq 0 ]
+  [ "$output" = "t" ]
+}
+
 function teardown {
   #Restore previous password
   PGPASSWORD="$PREVIOUS_PGPASSWORD"
