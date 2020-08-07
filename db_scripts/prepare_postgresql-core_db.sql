@@ -99,6 +99,21 @@ OIDS = FALSE
 )
 TABLESPACE pg_default;
 
+CREATE TABLE public.notifications
+(
+    uuid uuid NOT NULL,
+    title character varying(255),
+    content text,
+    user_id bigint NOT NULL,
+    CONSTRAINT fk_posts_user_id FOREIGN KEY (user_id)
+              REFERENCES users (id) MATCH SIMPLE,
+    CONSTRAINT notifications_pkey PRIMARY KEY (uuid)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
 ALTER TABLE public.users
     OWNER to "postgresql-core-owner";
 
@@ -112,6 +127,9 @@ ALTER TABLE public.posts
     OWNER to "postgresql-core-owner";
 
 ALTER TABLE public.comments
+OWNER to "postgresql-core-owner";
+
+ALTER TABLE public.notifications
 OWNER to "postgresql-core-owner";
 
 -- sequences definition
@@ -208,6 +226,21 @@ OIDS = FALSE
 )
 TABLESPACE pg_default;
 
+CREATE TABLE non_public_schema.notifications
+(
+    uuid uuid NOT NULL,
+    title character varying(255),
+    content text,
+    user_id bigint NOT NULL,
+    CONSTRAINT fk_posts_user_id FOREIGN KEY (user_id)
+              REFERENCES non_public_schema.users (id) MATCH SIMPLE,
+    CONSTRAINT notifications_pkey PRIMARY KEY (uuid)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
 ALTER TABLE non_public_schema.users
     OWNER to "postgresql-core-owner";
 
@@ -221,6 +254,9 @@ ALTER TABLE non_public_schema.posts
 OWNER to "postgresql-core-owner";
 
 ALTER TABLE non_public_schema.comments
+OWNER to "postgresql-core-owner";
+
+ALTER TABLE non_public_schema.notifications
 OWNER to "postgresql-core-owner";
 
 -- sequences definition
