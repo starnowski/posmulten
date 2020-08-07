@@ -1,9 +1,6 @@
 package com.github.starnowski.posmulten.postgresql.core.functional.tests.rls;
 
-import com.github.starnowski.posmulten.postgresql.core.CreateColumnStatementProducer;
-import com.github.starnowski.posmulten.postgresql.core.CreateColumnStatementProducerParameters;
-import com.github.starnowski.posmulten.postgresql.core.SetDefaultStatementProducer;
-import com.github.starnowski.posmulten.postgresql.core.SetDefaultStatementProducerParameters;
+import com.github.starnowski.posmulten.postgresql.core.*;
 import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition;
 import com.github.starnowski.posmulten.postgresql.core.functional.tests.TestNGSpringContextWithoutGenericTransactionalSupportTests;
 import com.github.starnowski.posmulten.postgresql.core.functional.tests.pojos.Notification;
@@ -132,6 +129,11 @@ public class AbstractCreateRLSForSingleTableForWhichTenantColumnWasJustAddedTest
         // Setting default value
         SetDefaultStatementProducer setDefaultStatementProducer = new SetDefaultStatementProducer();
         sqlDefinitions.add(setDefaultStatementProducer.produce(new SetDefaultStatementProducerParameters(NOTIFICATIONS_TABLE_NAME, TENANT_COLUMN_NAME, getCurrentTenantIdFunctionDefinition.returnGetCurrentTenantIdFunctionInvocation(), getSchema())));
+
+        // Setting NOT NULL declaration
+        SetNotNullStatementProducer setNotNullStatementProducer = new SetNotNullStatementProducer();
+        sqlDefinitions.add(setNotNullStatementProducer.produce(new SetNotNullStatementProducerParameters(NOTIFICATIONS_TABLE_NAME, TENANT_COLUMN_NAME, getSchema())));
+
     }
 
     @SqlGroup({
