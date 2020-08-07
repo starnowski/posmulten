@@ -16,17 +16,14 @@ import static com.github.starnowski.posmulten.postgresql.core.rls.DefaultRLSPoli
 import static com.github.starnowski.posmulten.postgresql.core.rls.PermissionCommandPolicyEnum.ALL;
 import static com.github.starnowski.posmulten.postgresql.test.utils.TestUtils.VALID_CURRENT_TENANT_ID_PROPERTY_NAME;
 
-public class FullStackTest extends TestNGSpringContextWithoutGenericTransactionalSupportTests {
+public abstract class FullStackTest extends TestNGSpringContextWithoutGenericTransactionalSupportTests {
 
     protected static final String USER_TENANT = "primary_tenant";
     protected static final String SECONDARY_USER_TENANT = "someXDAFAS_id";
     protected static final String CUSTOM_TENANT_COLUMN_NAME = "tenant";
     protected static final String TENANT_COLUMN_NAME = "tenant";
 
-    protected String getSchema()
-    {
-        return null;
-    }
+    abstract protected String getSchema();
 
     protected ISetCurrentTenantIdFunctionInvocationFactory setCurrentTenantIdFunctionInvocationFactory;
 
