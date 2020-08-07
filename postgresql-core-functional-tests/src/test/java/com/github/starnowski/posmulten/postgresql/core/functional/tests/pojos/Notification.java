@@ -10,7 +10,7 @@ import lombok.experimental.Accessors;
 @Getter
 @Setter
 public class Notification {
-    private Long id;
+    private String uuid;
     private String title;
     private String content;
     private Long userId;
