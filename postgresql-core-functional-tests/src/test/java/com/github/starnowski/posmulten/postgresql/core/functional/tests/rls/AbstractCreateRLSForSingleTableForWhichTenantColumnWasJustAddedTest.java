@@ -74,8 +74,8 @@ public class AbstractCreateRLSForSingleTableForWhichTenantColumnWasJustAddedTest
     protected static Object[][] notificationData()
     {
         return new Object[][]{
-                {new Notification("SDFASD", "Szymon's notification", "Test", 1L, USER_TENANT), SECONDARY_USER_TENANT},
-                {new Notification("asdfasdfsa", "John's notification", "Test", 2L, SECONDARY_USER_TENANT), USER_TENANT}
+                {new Notification("40e6215d-b5c6-4896-987c-f30f3678f608", "Notification content", "Test", 1L, USER_TENANT), SECONDARY_USER_TENANT},
+                {new Notification("3f333df6-90a4-4fda-8dd3-9485d27cee36", "Notification content", "Test", 2L, SECONDARY_USER_TENANT), USER_TENANT}
         };
     }
 
