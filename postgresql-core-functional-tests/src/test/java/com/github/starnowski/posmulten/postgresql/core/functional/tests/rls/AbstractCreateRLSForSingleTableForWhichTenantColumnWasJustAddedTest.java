@@ -53,7 +53,7 @@ public class AbstractCreateRLSForSingleTableForWhichTenantColumnWasJustAddedTest
     {
         return (getSchema() == null ? "" : getSchema() + ".") + "notifications";
     }
-
+//TODO Fix tests descriptions
 
     protected SetCurrentTenantIdFunctionDefinition setCurrentTenantIdFunctionDefinition;
 
@@ -146,8 +146,17 @@ public class AbstractCreateRLSForSingleTableForWhichTenantColumnWasJustAddedTest
         super.executeSQLDefinitions();
     }
 
-    @Test(dataProvider = "notificationData", dependsOnMethods = {"executeSQLDefinitions"}, testName = "try to insert data into the users table assigned to the different tenant than currently set", description = "test case assumes that row level security for users table is not going to allow to insert data into the users table assigned to the different tenant than currently set")
-    public void tryToInsertDataIntoUserTableAsDifferentTenant(Notification notification, String differentTenant)
+
+    @Test(dataProvider = "userData", dependsOnMethods = {"executeSQLDefinitions"}, testName = "insert data into the users table assigned to the currently set", description = "test case assumes that row level security for users table is going to allow to insert data into the users table assigned to the current tenant")
+    public void insertDataIntoUserTableAsCurrentTenant(User user)
+    {
+        assertThat(countRowsInTableWhere(getUsersTableReference(), "id = " + user.getId())).isEqualTo(0);
+        ownerJdbcTemplate.execute(format("%5$s INSERT INTO %4$s (id, name, tenant_id) VALUES (%1$d, '%2$s', '%3$s');", user.getId(), user.getName(), user.getTenantId(), getUsersTableReference(), setCurrentTenantIdFunctionDefinition.generateStatementThatSetTenant(user.getTenantId())));
+        assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %4$s WHERE id = %1$d AND name = '%2$s' AND tenant_id = '%3$s'", user.getId(), user.getName(), user.getTenantId(), getUsersTableReference())), "The tests user should exists");
+    }
+
+    @Test(dataProvider = "notificationData", dependsOnMethods = {"insertDataIntoUserTableAsCurrentTenant"}, testName = "try to insert data into the users table assigned to the different tenant than currently set", description = "test case assumes that row level security for users table is not going to allow to insert data into the users table assigned to the different tenant than currently set")
+    public void tryToInsertDataIntoNotificationTableAsDifferentTenant(Notification notification, String differentTenant)
     {
         assertThat(countRowsInTableWhere(getUsersTableReference(), "id = " + notification.getId())).isEqualTo(0);
         assertThatThrownBy(() ->
@@ -156,8 +165,8 @@ public class AbstractCreateRLSForSingleTableForWhichTenantColumnWasJustAddedTest
         assertThat(countRowsInTableWhere(getUsersTableReference(), "id = " + notification.getId())).isEqualTo(0);
     }
 
-    @Test(dataProvider = "notificationData", dependsOnMethods = {"tryToInsertDataIntoUserTableAsDifferentTenant"}, testName = "insert data into the users table assigned to the currently set", description = "test case assumes that row level security for users table is going to allow to insert data into the users table assigned to the current tenant")
-    public void insertDataIntoUserTableAsDifferentTenant(Object[] parameters)
+    @Test(dataProvider = "notificationData", dependsOnMethods = {"tryToInsertDataIntoNotificationTableAsDifferentTenant"}, testName = "insert data into the users table assigned to the currently set", description = "test case assumes that row level security for users table is going to allow to insert data into the users table assigned to the current tenant")
+    public void insertDataIntoNotificationTableAsDifferentTenant(Object[] parameters)
     {
         Notification notification = (Notification) parameters[0];
         assertThat(countRowsInTableWhere(getUsersTableReference(), "id = " + notification.getId())).isEqualTo(0);
@@ -165,23 +174,23 @@ public class AbstractCreateRLSForSingleTableForWhichTenantColumnWasJustAddedTest
         assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %4$s WHERE id = %1$d AND name = '%2$s' AND tenant_id = '%3$s'", notification.getId(), notification.getTitle(), notification.getTenantId(), getUsersTableReference())), "The tests user should exists");
     }
 
-    @Test(dataProvider = "notificationData", dependsOnMethods = {"insertDataIntoUserTableAsDifferentTenant"}, testName = "try to select data from the users table assigned to the different tenant than currently set", description = "test case assumes that row level security for users table is not going to allow to select data from the users table assigned to the different tenant than currently set")
-    public void tryToSelectDataFromUserTableAsDifferentTenant(Notification notification, String differentTenant)
+    @Test(dataProvider = "notificationData", dependsOnMethods = {"insertDataIntoNotificationTableAsDifferentTenant"}, testName = "try to select data from the users table assigned to the different tenant than currently set", description = "test case assumes that row level security for users table is not going to allow to select data from the users table assigned to the different tenant than currently set")
+    public void tryToSelectDataFromNotificationTableAsDifferentTenant(Notification notification, String differentTenant)
     {
         assertThat(countRowsInTableWhere(getUsersTableReference(), "id = " + notification.getId())).isEqualTo(1);
         assertFalse(selectAndReturnFirstRecordAsBooleanWithSettingCurrentTenantId(ownerJdbcTemplate, format("SELECT EXISTS ( SELECT 1 FROM %2$s WHERE id = %1$d ) ;", notification.getId(), getUsersTableReference()), setCurrentTenantIdFunctionDefinition.generateStatementThatSetTenant(differentTenant)), "The SELECT statement should not return any records for different tenant then currently set");
     }
 
-    @Test(dataProvider = "notificationData", dependsOnMethods = {"tryToSelectDataFromUserTableAsDifferentTenant"}, testName = "try to select data from the users table assigned to the current tenant", description = "test case assumes that row level security for users table is not going to allow to select data from the users table assigned to the current tenant")
-    public void tryToSelectDataFromUserTableAsSameTenant(Object[] parameters)
+    @Test(dataProvider = "notificationData", dependsOnMethods = {"tryToSelectDataFromNotificationTableAsDifferentTenant"}, testName = "try to select data from the users table assigned to the current tenant", description = "test case assumes that row level security for users table is not going to allow to select data from the users table assigned to the current tenant")
+    public void tryToSelectDataFromNotificationTableAsSameTenant(Object[] parameters)
     {
         Notification notification = (Notification) parameters[0];
         assertThat(countRowsInTableWhere(getUsersTableReference(), "id = " + notification.getId())).isEqualTo(1);
         assertTrue(selectAndReturnFirstRecordAsBooleanWithSettingCurrentTenantId(ownerJdbcTemplate, format("SELECT EXISTS ( SELECT 1 FROM %2$s WHERE id = %1$d ) ;", notification.getId(), getUsersTableReference()), setCurrentTenantIdFunctionDefinition.generateStatementThatSetTenant(notification.getTenantId())), "The SELECT statement should return records for current tenant");
     }
 
-    @Test(dataProvider = "notificationData", dependsOnMethods = {"tryToSelectDataFromUserTableAsSameTenant"}, testName = "try to update data in the users table assigned to the different tenant than currently set", description = "test case assumes that row level security for users table is not going to allow to update data in the users table assigned to the different tenant than currently set")
-    public void tryToUpdateDataInUserTableAsDifferentTenant(Notification notification, String differentTenant)
+    @Test(dataProvider = "notificationData", dependsOnMethods = {"tryToSelectDataFromNotificationTableAsSameTenant"}, testName = "try to update data in the users table assigned to the different tenant than currently set", description = "test case assumes that row level security for users table is not going to allow to update data in the users table assigned to the different tenant than currently set")
+    public void tryToUpdateDataInNotificationTableAsDifferentTenant(Notification notification, String differentTenant)
     {
         String updatedTitle = "[UPDATE_NAME]" + notification.getTitle();
         assertThat(countRowsInTableWhere(getUsersTableReference(), format("id = %1$d AND title = '%2$s'", notification.getId(), notification.getTitle()))).isEqualTo(1);
@@ -191,8 +200,8 @@ public class AbstractCreateRLSForSingleTableForWhichTenantColumnWasJustAddedTest
         assertThat(countRowsInTableWhere(getUsersTableReference(), format("id = %1$d AND title = '%2$s'", notification.getId(), updatedTitle))).isEqualTo(0);
     }
 
-    @Test(dataProvider = "notificationData", dependsOnMethods = {"tryToUpdateDataInUserTableAsDifferentTenant"}, testName = "update data in the users table assigned to the currently set", description = "test case assumes that row level security for users table is going to allow to update data in the users table assigned to the current tenant")
-    public void updateDataInUserTableAsDifferentTenant(Object[] parameters)
+    @Test(dataProvider = "notificationData", dependsOnMethods = {"tryToUpdateDataInNotificationTableAsDifferentTenant"}, testName = "update data in the users table assigned to the currently set", description = "test case assumes that row level security for users table is going to allow to update data in the users table assigned to the current tenant")
+    public void updateDataInNotificationTableAsDifferentTenant(Object[] parameters)
     {
         Notification notification = (Notification) parameters[0];
         String updatedTitle = "[UPDATE_NAME]" + notification.getTitle();
@@ -203,16 +212,16 @@ public class AbstractCreateRLSForSingleTableForWhichTenantColumnWasJustAddedTest
         assertThat(countRowsInTableWhere(getUsersTableReference(), format("id = %1$d AND title = '%2$s'", notification.getId(), updatedTitle))).isEqualTo(1);
     }
 
-    @Test(dataProvider = "notificationData", dependsOnMethods = {"updateDataInUserTableAsDifferentTenant"}, testName = "try to delete data from the users table assigned to the different tenant than currently set", description = "test case assumes that row level security for users table is not going to allow to delete data from the users table assigned to the different tenant than currently set")
-    public void tryToDeleteDataFromUserTableAsDifferentTenant(Notification notification, String differentTenant)
+    @Test(dataProvider = "notificationData", dependsOnMethods = {"updateDataInNotificationTableAsDifferentTenant"}, testName = "try to delete data from the users table assigned to the different tenant than currently set", description = "test case assumes that row level security for users table is not going to allow to delete data from the users table assigned to the different tenant than currently set")
+    public void tryToDeleteDataFromNotificationTableAsDifferentTenant(Notification notification, String differentTenant)
     {
         assertThat(countRowsInTableWhere(getUsersTableReference(), "id = " + notification.getId())).isEqualTo(1);
         ownerJdbcTemplate.execute(format("%1$s DELETE FROM  %2$s WHERE id = %3$d;", setCurrentTenantIdFunctionDefinition.generateStatementThatSetTenant(differentTenant), getUsersTableReference(), notification.getId()));
         assertThat(countRowsInTableWhere(getUsersTableReference(), "id = " + notification.getId())).isEqualTo(1);
     }
 
-    @Test(dataProvider = "notificationData", dependsOnMethods = {"tryToDeleteDataFromUserTableAsDifferentTenant"}, testName = "delete data from the users table assigned to the currently set", description = "test case assumes that row level security for users table is going to allow to delete data from the users table assigned to the current tenant")
-    public void deleteDataFromUserTableAsDifferentTenant(Object[] parameters)
+    @Test(dataProvider = "notificationData", dependsOnMethods = {"tryToDeleteDataFromNotificationTableAsDifferentTenant"}, testName = "delete data from the users table assigned to the currently set", description = "test case assumes that row level security for users table is going to allow to delete data from the users table assigned to the current tenant")
+    public void deleteDataFromNotificationTableAsDifferentTenant(Object[] parameters)
     {
         Notification notification = (Notification) parameters[0];
         assertThat(countRowsInTableWhere(getUsersTableReference(), "id = " + notification.getId())).isEqualTo(1);
@@ -221,7 +230,7 @@ public class AbstractCreateRLSForSingleTableForWhichTenantColumnWasJustAddedTest
     }
 
     @Override
-    @Test(dependsOnMethods = { "tryToInsertDataIntoUserTableAsDifferentTenant", "insertDataIntoUserTableAsDifferentTenant", "tryToSelectDataFromUserTableAsDifferentTenant", "tryToSelectDataFromUserTableAsSameTenant", "tryToUpdateDataInUserTableAsDifferentTenant", "updateDataInUserTableAsDifferentTenant", "tryToDeleteDataFromUserTableAsDifferentTenant", "deleteDataFromUserTableAsDifferentTenant" }, alwaysRun = true)
+    @Test(dependsOnMethods = { "tryToInsertDataIntoNotificationTableAsDifferentTenant", "insertDataIntoNotificationTableAsDifferentTenant", "tryToSelectDataFromNotificationTableAsDifferentTenant", "tryToSelectDataFromNotificationTableAsSameTenant", "tryToUpdateDataInNotificationTableAsDifferentTenant", "updateDataInNotificationTableAsDifferentTenant", "tryToDeleteDataFromNotificationTableAsDifferentTenant", "deleteDataFromNotificationTableAsDifferentTenant" }, alwaysRun = true)
     public void dropAllSQLDefinitions() {
         super.dropAllSQLDefinitions();
     }
