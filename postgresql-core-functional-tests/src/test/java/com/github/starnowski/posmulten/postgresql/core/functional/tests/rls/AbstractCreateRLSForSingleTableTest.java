@@ -111,8 +111,6 @@ public abstract class AbstractCreateRLSForSingleTableTest extends TestNGSpringCo
     public void executeSQLDefinitions()
     {
         super.executeSQLDefinitions();
-        //TODO
-//        jdbcTemplate.execute("GRANT EXECUTE ON FUNCTION " + setCurrentTenantIdFunctionDefinition.getFunctionReference() + "(text) TO \"" + CORE_OWNER_USER + "\"");
     }
 
     @Test(dataProvider = "userData", dependsOnMethods = {"executeSQLDefinitions"}, testName = "try to insert data into the users table assigned to the different tenant than currently set", description = "test case assumes that row level security for users table is not going to allow to insert data into the users table assigned to the different tenant than currently set")
