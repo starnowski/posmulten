@@ -9,7 +9,7 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Notifications {
+public class Notification {
     private Long id;
     private String title;
     private String content;
