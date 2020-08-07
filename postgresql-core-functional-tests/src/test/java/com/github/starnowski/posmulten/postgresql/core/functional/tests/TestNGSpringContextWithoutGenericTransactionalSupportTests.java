@@ -24,6 +24,9 @@ public class TestNGSpringContextWithoutGenericTransactionalSupportTests extends 
     protected static final String NON_PRIVILEGED_USER = "postgresql-core-user";
     protected static final String USERS_TABLE_NAME = "users";
     protected static final String POSTS_TABLE_NAME = "posts";
+    protected static final String GROUPS_TABLE_NAME = "groups";
+    protected static final String USERS_GROUPS_TABLE_NAME = "users_groups";
+    protected static final String COMMENTS_TABLE_NAME = "comments";
     protected static final String NOTIFICATIONS_TABLE_NAME = "notifications";
 
     protected List<SQLDefinition> sqlDefinitions = new ArrayList<>();
