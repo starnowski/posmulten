@@ -124,7 +124,7 @@ public abstract class AbstractCreateRLSForSingleTableTest extends TestNGSpringCo
     }
 
     @Test(dataProvider = "userData", dependsOnMethods = {"tryToInsertDataIntoUserTableAsDifferentTenant"}, testName = "insert data into the users table assigned to the currently set", description = "test case assumes that row level security for users table is going to allow to insert data into the users table assigned to the current tenant")
-    public void insertDataIntoUserTableAsDifferentTenant(Object[] parameters)
+    public void insertDataIntoUserTableAsCurrentTenant(Object[] parameters)
     {
         User user = (User) parameters[0];
         assertThat(countRowsInTableWhere(getUsersTableReference(), "id = " + user.getId())).isEqualTo(0);
