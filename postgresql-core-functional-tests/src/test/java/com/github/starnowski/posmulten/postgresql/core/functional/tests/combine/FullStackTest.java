@@ -10,22 +10,36 @@ import com.github.starnowski.posmulten.postgresql.core.rls.function.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.jdbc.SqlConfig;
+import org.springframework.test.context.jdbc.SqlGroup;
 import org.testng.annotations.Test;
 
+import static com.github.starnowski.posmulten.postgresql.core.functional.tests.TestApplication.CLEAR_DATABASE_SCRIPT_PATH;
 import static com.github.starnowski.posmulten.postgresql.core.rls.DefaultRLSPolicyProducerParameters.builder;
 import static com.github.starnowski.posmulten.postgresql.core.rls.PermissionCommandPolicyEnum.ALL;
 import static com.github.starnowski.posmulten.postgresql.test.utils.TestUtils.VALID_CURRENT_TENANT_ID_PROPERTY_NAME;
+import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
+import static org.springframework.test.context.jdbc.SqlConfig.TransactionMode.ISOLATED;
 
 public abstract class FullStackTest extends TestNGSpringContextWithoutGenericTransactionalSupportTests {
 
     protected static final String USER_TENANT = "primary_tenant";
     protected static final String SECONDARY_USER_TENANT = "someXDAFAS_id";
     protected static final String CUSTOM_TENANT_COLUMN_NAME = "tenant";
-    protected static final String TENANT_COLUMN_NAME = "tenant";
 
     abstract protected String getSchema();
 
     protected ISetCurrentTenantIdFunctionInvocationFactory setCurrentTenantIdFunctionInvocationFactory;
+
+    protected String getUsersTableReference()
+    {
+        return (getSchema() == null ? "" : getSchema() + ".") + "users";
+    }
+    protected String getNotificationsTableReference()
+    {
+        return (getSchema() == null ? "" : getSchema() + ".") + "notifications";
+    }
 
     @Autowired
     @Qualifier("ownerJdbcTemplate")
@@ -178,10 +192,21 @@ public abstract class FullStackTest extends TestNGSpringContextWithoutGenericTra
                 .withPermissionCommandPolicy(ALL)
                 .withUsingExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionDefinition)
                 .withWithCheckExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionDefinition)
+                .withTenantIdColumn(CUSTOM_TENANT_COLUMN_NAME)
                 .build());
         sqlDefinitions.add(commentsGroupsRLSPolicySQLDefinition);
 
 
+    }
+
+    @SqlGroup({
+            @Sql(value = CLEAR_DATABASE_SCRIPT_PATH,
+                    config = @SqlConfig(transactionMode = ISOLATED),
+                    executionPhase = BEFORE_TEST_METHOD)})
+    @Test(dependsOnMethods = {"createSQLDefinitions"}, testName = "execute SQL definitions")
+    public void executeSQLDefinitions()
+    {
+        super.executeSQLDefinitions();
     }
 
 }
