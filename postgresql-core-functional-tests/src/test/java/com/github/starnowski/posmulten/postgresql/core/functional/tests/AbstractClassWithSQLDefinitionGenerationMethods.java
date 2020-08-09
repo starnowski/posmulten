@@ -20,32 +20,39 @@ public abstract class AbstractClassWithSQLDefinitionGenerationMethods extends Te
     protected static final String COMMENTS_USERS_FK_CONSTRAINT_NAME = "comments_users_fk_cu";
     protected static final String COMMENTS_POSTS_FK_CONSTRAINT_NAME = "comments_posts_fk_cu";
     protected static final String COMMENTS_PARENT_COMMENTS_FK_CONSTRAINT_NAME = "comments_parent_comments_fk_cu";
+    protected static final String NOTIFICATIONS_USERS_COMMENTS_FK_CONSTRAINT_NAME = "notifications_users_fk_cu";
 
     abstract protected String getSchema();
 
     protected SQLDefinition getSqlDefinitionOfConstraintForUsersForeignKeyInPostsTable(IsRecordBelongsToCurrentTenantFunctionDefinition isUsersRecordBelongsToCurrentTenantFunctionDefinition) {
         Map<String, FunctionArgumentValue> primaryColumnsValuesMap = new HashMap<>();
         primaryColumnsValuesMap.put("id", forReference("user_id"));
-        return getSqlDefinitionOfConstraintForMultiTenantTableForeignKey(isUsersRecordBelongsToCurrentTenantFunctionDefinition, POSTS_USERS_FK_CONSTRAINT_NAME, "posts", primaryColumnsValuesMap);
+        return getSqlDefinitionOfConstraintForMultiTenantTableForeignKey(isUsersRecordBelongsToCurrentTenantFunctionDefinition, POSTS_USERS_FK_CONSTRAINT_NAME, POSTS_TABLE_NAME, primaryColumnsValuesMap);
     }
 
     protected SQLDefinition getSqlDefinitionOfConstraintForUsersForeignKeyInCommentsTable(IsRecordBelongsToCurrentTenantFunctionDefinition isUsersRecordBelongsToCurrentTenantFunctionDefinition) {
         Map<String, FunctionArgumentValue> primaryColumnsValuesMap = new HashMap<>();
         primaryColumnsValuesMap.put("id", forReference("user_id"));
-        return getSqlDefinitionOfConstraintForMultiTenantTableForeignKey(isUsersRecordBelongsToCurrentTenantFunctionDefinition, COMMENTS_USERS_FK_CONSTRAINT_NAME, "comments", primaryColumnsValuesMap);
+        return getSqlDefinitionOfConstraintForMultiTenantTableForeignKey(isUsersRecordBelongsToCurrentTenantFunctionDefinition, COMMENTS_USERS_FK_CONSTRAINT_NAME, COMMENTS_TABLE_NAME, primaryColumnsValuesMap);
+    }
+
+    protected SQLDefinition getSqlDefinitionOfConstraintForUsersForeignKeyInNotificationsTable(IsRecordBelongsToCurrentTenantFunctionDefinition isNotificationsRecordBelongsToCurrentTenantFunctionDefinition) {
+        Map<String, FunctionArgumentValue> primaryColumnsValuesMap = new HashMap<>();
+        primaryColumnsValuesMap.put("id", forReference("user_id"));
+        return getSqlDefinitionOfConstraintForMultiTenantTableForeignKey(isNotificationsRecordBelongsToCurrentTenantFunctionDefinition, NOTIFICATIONS_USERS_COMMENTS_FK_CONSTRAINT_NAME, NOTIFICATIONS_TABLE_NAME, primaryColumnsValuesMap);
     }
 
     protected SQLDefinition getSqlDefinitionOfConstraintForPostsForeignKeyInCommentsTable(IsRecordBelongsToCurrentTenantFunctionDefinition isPostsRecordBelongsToCurrentTenantFunctionDefinition) {
         Map<String, FunctionArgumentValue> primaryColumnsValuesMap = new HashMap<>();
         primaryColumnsValuesMap.put("id", forReference("post_id"));
-        return getSqlDefinitionOfConstraintForMultiTenantTableForeignKey(isPostsRecordBelongsToCurrentTenantFunctionDefinition, COMMENTS_POSTS_FK_CONSTRAINT_NAME, "comments", primaryColumnsValuesMap);
+        return getSqlDefinitionOfConstraintForMultiTenantTableForeignKey(isPostsRecordBelongsToCurrentTenantFunctionDefinition, COMMENTS_POSTS_FK_CONSTRAINT_NAME, COMMENTS_TABLE_NAME, primaryColumnsValuesMap);
     }
 
     protected SQLDefinition getSqlDefinitionOfConstraintForParentCommentForeignKeyInCommentsTable(IsRecordBelongsToCurrentTenantFunctionDefinition isPostsRecordBelongsToCurrentTenantFunctionDefinition) {
         Map<String, FunctionArgumentValue> primaryColumnsValuesMap = new HashMap<>();
         primaryColumnsValuesMap.put("id", forReference("parent_comment_id"));
         primaryColumnsValuesMap.put("user_id", forReference("parent_comment_user_id"));
-        return getSqlDefinitionOfConstraintForMultiTenantTableForeignKey(isPostsRecordBelongsToCurrentTenantFunctionDefinition, COMMENTS_PARENT_COMMENTS_FK_CONSTRAINT_NAME, "comments", primaryColumnsValuesMap);
+        return getSqlDefinitionOfConstraintForMultiTenantTableForeignKey(isPostsRecordBelongsToCurrentTenantFunctionDefinition, COMMENTS_PARENT_COMMENTS_FK_CONSTRAINT_NAME, COMMENTS_TABLE_NAME, primaryColumnsValuesMap);
     }
 
     protected SQLDefinition getSqlDefinitionOfConstraintForMultiTenantTableForeignKey(IsRecordBelongsToCurrentTenantFunctionDefinition isUsersRecordBelongsToCurrentTenantFunctionDefinition, String constraintName, String tableName, Map<String, FunctionArgumentValue> primaryColumnsValuesMap) {

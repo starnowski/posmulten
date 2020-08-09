@@ -215,6 +215,26 @@ public abstract class FullStackTest extends AbstractClassWithSQLDefinitionGenera
         // Does record belongs to current tenant (groups table)
         IsRecordBelongsToCurrentTenantFunctionDefinition isGroupsRecordBelongsToCurrentTenantFunctionDefinition = getIsGroupsRecordBelongsToCurrentTenantFunctionDefinition(getCurrentTenantIdFunctionDefinition);
         sqlDefinitions.add(isGroupsRecordBelongsToCurrentTenantFunctionDefinition);
+
+        // Constraint - post - fk - users
+        //user_id
+        SQLDefinition recordBelongsToCurrentTenantConstrainSqlDefinition = getSqlDefinitionOfConstraintForUsersForeignKeyInPostsTable(isUsersRecordBelongsToCurrentTenantFunctionDefinition);
+        sqlDefinitions.add(recordBelongsToCurrentTenantConstrainSqlDefinition);
+
+        //getSqlDefinitionOfConstraintForUsersForeignKeyInCommentsTable
+        SQLDefinition usersBelongsToCurrentTenantConstraintForCommentsTableSqlDefinition = getSqlDefinitionOfConstraintForUsersForeignKeyInCommentsTable(isUsersRecordBelongsToCurrentTenantFunctionDefinition);
+        sqlDefinitions.add(usersBelongsToCurrentTenantConstraintForCommentsTableSqlDefinition);
+
+        //getSqlDefinitionOfConstraintForPostsForeignKeyInCommentsTable commets - posts fk
+        SQLDefinition postsBelongsToCurrentTenantConstraintForCommentsTableSqlDefinition = getSqlDefinitionOfConstraintForPostsForeignKeyInCommentsTable(isPostsRecordBelongsToCurrentTenantFunctionDefinition);
+        sqlDefinitions.add(postsBelongsToCurrentTenantConstraintForCommentsTableSqlDefinition);
+
+        //getSqlDefinitionOfConstraintForParentCommentForeignKeyInCommentsTable comments - parent comment fk
+        SQLDefinition parentCommentBelongsToCurrentTenantConstraintForCommentsTableSqlDefinition = getSqlDefinitionOfConstraintForParentCommentForeignKeyInCommentsTable(isCommentsRecordBelongsToCurrentTenantFunctionDefinition);
+        sqlDefinitions.add(parentCommentBelongsToCurrentTenantConstraintForCommentsTableSqlDefinition);
+
+        SQLDefinition userBelongsToCurrentTenantConstraintForNotificationsTableSqlDefinition = getSqlDefinitionOfConstraintForUsersForeignKeyInNotificationsTable(isUsersRecordBelongsToCurrentTenantFunctionDefinition);
+        sqlDefinitions.add(userBelongsToCurrentTenantConstraintForNotificationsTableSqlDefinition);
     }
 
     @SqlGroup({
