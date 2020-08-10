@@ -8,17 +8,6 @@ public class EnableRowLevelSecurityProducer {
     public SQLDefinition produce(String table, String schema)
     {
         validateParameters(table, schema);
-        StringBuilder sb = new StringBuilder();
-        sb.append("ALTER TABLE ");
-        if (schema != null)
-        {
-            sb.append(schema);
-            sb.append(".");
-        }
-        sb.append("\"");
-        sb.append(table);
-        sb.append("\"");
-        sb.append(" ENABLE ROW LEVEL SECURITY;");
         return new DefaultSQLDefinition(prepareCreateScript(table, schema), prepareDropScript(table, schema));
     }
 
