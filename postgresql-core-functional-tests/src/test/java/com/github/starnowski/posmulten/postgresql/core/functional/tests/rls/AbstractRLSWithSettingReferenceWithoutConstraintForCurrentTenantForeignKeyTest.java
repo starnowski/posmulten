@@ -1,14 +1,12 @@
 package com.github.starnowski.posmulten.postgresql.core.functional.tests.rls;
 
-import com.github.starnowski.posmulten.postgresql.core.GrantSchemaPrivilegesProducer;
-import com.github.starnowski.posmulten.postgresql.core.GrantTablePrivilegesProducer;
 import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition;
 import com.github.starnowski.posmulten.postgresql.core.functional.tests.TestNGSpringContextWithoutGenericTransactionalSupportTests;
-import com.github.starnowski.posmulten.postgresql.core.functional.tests.constraint.AbstractCreateCurrentTenantForeignKeyConstraintForPostsTableTest;
 import com.github.starnowski.posmulten.postgresql.core.functional.tests.pojos.Post;
 import com.github.starnowski.posmulten.postgresql.core.functional.tests.pojos.User;
 import com.github.starnowski.posmulten.postgresql.core.rls.EnableRowLevelSecurityProducer;
 import com.github.starnowski.posmulten.postgresql.core.rls.ForceRowLevelSecurityProducer;
+import com.github.starnowski.posmulten.postgresql.core.rls.PermissionCommandPolicyEnum;
 import com.github.starnowski.posmulten.postgresql.core.rls.RLSPolicyProducer;
 import com.github.starnowski.posmulten.postgresql.core.rls.function.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +34,8 @@ public abstract class AbstractRLSWithSettingReferenceWithoutConstraintForCurrent
 
     protected static final String USER_TENANT = "primary_tenant";
     protected static final String SECONDARY_USER_TENANT = "someXDAFAS_id";
+    protected static final String USERS_RLS_POLICY_NAME = "users_table_rls_policy";
+    protected static final String POSTS_RLS_POLICY_NAME = "posts_table_rls_policy";
 
     @Autowired
     @Qualifier("ownerJdbcTemplate")
@@ -123,7 +123,7 @@ public abstract class AbstractRLSWithSettingReferenceWithoutConstraintForCurrent
 
         // RLSPolicyProducer
         RLSPolicyProducer rlsPolicyProducer = new RLSPolicyProducer();
-        SQLDefinition usersRLSPolicySQLDefinition = rlsPolicyProducer.produce(builder().withPolicyName("users_table_rls_policy")
+        SQLDefinition usersRLSPolicySQLDefinition = rlsPolicyProducer.produce(builder().withPolicyName(USERS_RLS_POLICY_NAME)
                 .withPolicySchema(getSchema())
                 .withPolicyTable(USERS_TABLE_NAME)
                 .withGrantee(CORE_OWNER_USER)
@@ -133,7 +133,7 @@ public abstract class AbstractRLSWithSettingReferenceWithoutConstraintForCurrent
                 .build());
         sqlDefinitions.add(usersRLSPolicySQLDefinition);
 
-        SQLDefinition postsRLSPolicySQLDefinition = rlsPolicyProducer.produce(builder().withPolicyName("posts_table_rls_policy")
+        SQLDefinition postsRLSPolicySQLDefinition = rlsPolicyProducer.produce(builder().withPolicyName(POSTS_RLS_POLICY_NAME)
                 .withPolicySchema(getSchema())
                 .withPolicyTable(POSTS_TABLE_NAME)
                 .withGrantee(CORE_OWNER_USER)
@@ -154,9 +154,15 @@ public abstract class AbstractRLSWithSettingReferenceWithoutConstraintForCurrent
         super.executeSQLDefinitions();
     }
 
-    //TODO Add assertion for RLS policy
+    @Test(dependsOnMethods = {"executeSQLDefinitions"}, testName = "Confirm that RLS policy exists for the users and posts table")
+    public void policyShouldExists()
+    {
+        // prepareStatementThatSelectPolicyWithSpecifiedCmdExists
+        assertTrue(isAnyRecordExists(jdbcTemplate, prepareStatementThatSelectPolicyWithSpecifiedCmdExists(USERS_RLS_POLICY_NAME, USERS_TABLE_NAME, getSchema(), ALL)), "The RLS policy should exists for the users table");
+        assertTrue(isAnyRecordExists(jdbcTemplate, prepareStatementThatSelectPolicyWithSpecifiedCmdExists(POSTS_RLS_POLICY_NAME, POSTS_TABLE_NAME, getSchema(), ALL)), "The RLS policy should exists for the posts table");
+    }
 
-    @Test(dataProvider = "userData", dependsOnMethods = {"executeSQLDefinitions"}, testName = "insert data into to user table")
+    @Test(dataProvider = "userData", dependsOnMethods = {"policyShouldExists"}, testName = "insert data into to user table")
     public void insertUserTestData(User user)
     {
         assertThat(countRowsInTableWhere(getUsersTableReference(), "id = " + user.getId())).isEqualTo(0);
@@ -212,5 +218,29 @@ public abstract class AbstractRLSWithSettingReferenceWithoutConstraintForCurrent
     @Test(dependsOnMethods = "deleteTestData", alwaysRun = true)
     public void dropAllSQLDefinitions() {
         super.dropAllSQLDefinitions();
+    }
+
+    private String prepareStatementThatSelectPolicyWithSpecifiedCmdExists(String name, String table, String schema, PermissionCommandPolicyEnum permissionCommandPolicy)
+    {
+        String schemaName = schema == null ? "public" : schema;
+        String cmd = null;
+        switch (permissionCommandPolicy)
+        {
+            case ALL:
+                cmd = "*";
+                break;
+            case SELECT:
+                cmd = "r";
+                break;
+            case INSERT:
+                cmd = "a";
+                break;
+            case UPDATE:
+                cmd = "w";
+                break;
+            case DELETE:
+                cmd = "d";
+        }
+        return format("SELECT pg.polname, pg.polcmd, pc.relname, pn.nspname FROM pg_catalog.pg_policy pg, pg_class pc, pg_catalog.pg_namespace pn WHERE pg.polrelid = pc.oid AND pc.relnamespace = pn.oid AND pg.polname = '%1$s' AND pc.relname = '%2$s' AND pn.nspname = '%3$s' AND pg.polcmd = '%4$s'", name, table, schemaName, cmd);
     }
 }
