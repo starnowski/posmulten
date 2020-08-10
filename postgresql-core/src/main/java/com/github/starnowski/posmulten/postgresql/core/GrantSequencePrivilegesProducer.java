@@ -1,9 +1,35 @@
 package com.github.starnowski.posmulten.postgresql.core;
 
+import com.github.starnowski.posmulten.postgresql.core.common.DefaultSQLDefinition;
+import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition;
+
 public class GrantSequencePrivilegesProducer {
 
-    public String produce(String schema, String sequence, String user) {
+    public SQLDefinition produce(String schema, String sequence, String user) {
         validateParameters(schema, sequence, user);
+        return new DefaultSQLDefinition(prepareCreateScript(schema, sequence, user), prepareDropScript(schema, sequence, user));
+    }
+
+    private String prepareDropScript(String schema, String sequence, String user) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("REVOKE ALL PRIVILEGES ON SEQUENCE ");
+        if (schema == null)
+        {
+            sb.append("public");
+        } else {
+            sb.append(schema);
+        }
+        sb.append(".");
+        sb.append("\"");
+        sb.append(sequence);
+        sb.append("\"");
+        sb.append(" FROM \"");
+        sb.append(user);
+        sb.append("\";");
+        return sb.toString();
+    }
+
+    private String prepareCreateScript(String schema, String sequence, String user) {
         StringBuilder sb = new StringBuilder();
         sb.append("GRANT ALL PRIVILEGES ON SEQUENCE ");
         if (schema == null)

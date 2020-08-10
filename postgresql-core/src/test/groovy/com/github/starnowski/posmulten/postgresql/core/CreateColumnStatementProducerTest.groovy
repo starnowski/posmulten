@@ -10,7 +10,7 @@ class CreateColumnStatementProducerTest extends Specification {
     @Unroll
     def "should return statement '#expectedStatement' for table '#table' and column '#column' and type '#columnType'" () {
         expect:
-            tested.produce(new CreateColumnStatementProducerParameters(table, column, columnType, schema)) == expectedStatement
+            tested.produce(new CreateColumnStatementProducerParameters(table, column, columnType, schema)).getCreateScript() == expectedStatement
 
         where:
             table       |   column      |   columnType                  | schema            ||  expectedStatement
@@ -26,6 +26,27 @@ class CreateColumnStatementProducerTest extends Specification {
             "groups"    |   "tenant_id" |   "text"                      | "secondary"       ||  "ALTER TABLE secondary.groups ADD COLUMN tenant_id text;"
             "users"     |   "col1"      |   "character varying(255)"    | "secondary"       ||  "ALTER TABLE secondary.users ADD COLUMN col1 character varying(255);"
             "groups"    |   "col1"      |   "text"                      | "secondary"       ||  "ALTER TABLE secondary.groups ADD COLUMN col1 text;"
+    }
+
+    @Unroll
+    def "should return statement '#expectedStatement' that drops column for table '#table' and column '#column' and type '#columnType'" () {
+        expect:
+            tested.produce(new CreateColumnStatementProducerParameters(table, column, columnType, schema)).getDropScript() == expectedStatement
+
+        where:
+            table       |   column      |   columnType                  | schema            ||  expectedStatement
+            "users"     |   "tenant_id" |   "character varying(255)"    | null              ||  "ALTER TABLE users DROP COLUMN tenant_id;"
+            "groups"    |   "tenant_id" |   "text"                      | null              ||  "ALTER TABLE groups DROP COLUMN tenant_id;"
+            "users"     |   "col1"      |   "character varying(255)"    | null              ||  "ALTER TABLE users DROP COLUMN col1;"
+            "groups"    |   "col1"      |   "text"                      | null              ||  "ALTER TABLE groups DROP COLUMN col1;"
+            "users"     |   "tenant_id" |   "character varying(255)"    | "public"          ||  "ALTER TABLE public.users DROP COLUMN tenant_id;"
+            "groups"    |   "tenant_id" |   "text"                      | "public"          ||  "ALTER TABLE public.groups DROP COLUMN tenant_id;"
+            "users"     |   "col1"      |   "character varying(255)"    | "public"          ||  "ALTER TABLE public.users DROP COLUMN col1;"
+            "groups"    |   "col1"      |   "text"                      | "public"          ||  "ALTER TABLE public.groups DROP COLUMN col1;"
+            "users"     |   "tenant_id" |   "character varying(255)"    | "secondary"       ||  "ALTER TABLE secondary.users DROP COLUMN tenant_id;"
+            "groups"    |   "tenant_id" |   "text"                      | "secondary"       ||  "ALTER TABLE secondary.groups DROP COLUMN tenant_id;"
+            "users"     |   "col1"      |   "character varying(255)"    | "secondary"       ||  "ALTER TABLE secondary.users DROP COLUMN col1;"
+            "groups"    |   "col1"      |   "text"                      | "secondary"       ||  "ALTER TABLE secondary.groups DROP COLUMN col1;"
     }
 
     def "should throw exception of type 'IllegalArgumentException' when parameters object is null" ()

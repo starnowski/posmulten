@@ -1,5 +1,6 @@
 package com.github.starnowski.posmulten.postgresql.core
 
+import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.jdbc.core.JdbcTemplate
@@ -20,6 +21,7 @@ class SetNotNullStatementProducerItTest extends Specification {
     String table
     String column
     String schema
+    SQLDefinition sqlDefinition
 
     @Unroll
     def "should change #testColumn column definition and set column as 'not null' in table #testTable and schema #testSchema when column value can be null before test execution" () {
@@ -30,7 +32,8 @@ class SetNotNullStatementProducerItTest extends Specification {
             assertEquals(true, isAnyRecordExists(jdbcTemplate, selectStatement(table, column, schema, true)))
 
         when:
-            jdbcTemplate.execute((String)tested.produce(new SetNotNullStatementProducerParameters(testTable, testColumn, testSchema)))
+            sqlDefinition = tested.produce(new SetNotNullStatementProducerParameters(testTable, testColumn, testSchema))
+            jdbcTemplate.execute(sqlDefinition.getCreateScript())
 
         then:
             isAnyRecordExists(jdbcTemplate, selectStatement(table, column, schema, false))
@@ -58,8 +61,7 @@ class SetNotNullStatementProducerItTest extends Specification {
     }
 
     def cleanup() {
-        def tableReference = schema == null ? table : schema + "." + table
-        jdbcTemplate.execute("ALTER TABLE " + tableReference + " ALTER COLUMN " + column + " DROP NOT NULL;")
+        jdbcTemplate.execute(sqlDefinition.getDropScript())
         assertEquals(true, isAnyRecordExists(jdbcTemplate, selectStatement(table, column, schema, true)))
     }
 

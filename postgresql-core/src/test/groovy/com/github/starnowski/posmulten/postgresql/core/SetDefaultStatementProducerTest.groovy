@@ -10,7 +10,7 @@ class SetDefaultStatementProducerTest extends Specification {
     @Unroll
     def "should return statement '#expectedStatement' for table '#table' and column '#column', schema '#schema' and default value '#defaultValue'" () {
         expect:
-            tested.produce(new SetDefaultStatementProducerParameters(table, column, defaultValue, schema)) == expectedStatement
+            tested.produce(new SetDefaultStatementProducerParameters(table, column, defaultValue, schema)).getCreateScript() == expectedStatement
 
         where:
             table       |   column      |   defaultValue                                    | schema            ||  expectedStatement
@@ -26,6 +26,27 @@ class SetDefaultStatementProducerTest extends Specification {
             "groups"    |   "tenant_id" |   "'value'"                                       | "secondary"       ||  "ALTER TABLE secondary.groups ALTER COLUMN tenant_id SET DEFAULT 'value';"
             "users"     |   "col1"      |   "current_setting('posmulten.current_tenant')"   | "secondary"       ||  "ALTER TABLE secondary.users ALTER COLUMN col1 SET DEFAULT current_setting('posmulten.current_tenant');"
             "groups"    |   "col1"      |   "'xxx1'"                                        | "secondary"       ||  "ALTER TABLE secondary.groups ALTER COLUMN col1 SET DEFAULT 'xxx1';"
+    }
+
+    @Unroll
+    def "should return statement '#expectedStatement' for table '#table' and column '#column', schema '#schema' and default value '#defaultValue' drops that value" () {
+        expect:
+            tested.produce(new SetDefaultStatementProducerParameters(table, column, defaultValue, schema)).getDropScript() == expectedStatement
+
+        where:
+            table       |   column      |   defaultValue                                    | schema            ||  expectedStatement
+            "users"     |   "tenant_id" |   "current_setting('posmulten.current_tenant')"   | null              ||  "ALTER TABLE users ALTER COLUMN tenant_id DROP DEFAULT;"
+            "groups"    |   "tenant_id" |   "'value'"                                       | null              ||  "ALTER TABLE groups ALTER COLUMN tenant_id DROP DEFAULT;"
+            "users"     |   "col1"      |   "current_setting('posmulten.current_tenant')"   | null              ||  "ALTER TABLE users ALTER COLUMN col1 DROP DEFAULT;"
+            "groups"    |   "col1"      |   "'xxx1'"                                        | null              ||  "ALTER TABLE groups ALTER COLUMN col1 DROP DEFAULT;"
+            "users"     |   "tenant_id" |   "current_setting('posmulten.current_tenant')"   | "public"          ||  "ALTER TABLE public.users ALTER COLUMN tenant_id DROP DEFAULT;"
+            "groups"    |   "tenant_id" |   "'value'"                                       | "public"          ||  "ALTER TABLE public.groups ALTER COLUMN tenant_id DROP DEFAULT;"
+            "users"     |   "col1"      |   "current_setting('posmulten.current_tenant')"   | "public"          ||  "ALTER TABLE public.users ALTER COLUMN col1 DROP DEFAULT;"
+            "groups"    |   "col1"      |   "'xxx1'"                                        | "public"          ||  "ALTER TABLE public.groups ALTER COLUMN col1 DROP DEFAULT;"
+            "users"     |   "tenant_id" |   "current_setting('posmulten.current_tenant')"   | "secondary"       ||  "ALTER TABLE secondary.users ALTER COLUMN tenant_id DROP DEFAULT;"
+            "groups"    |   "tenant_id" |   "'value'"                                       | "secondary"       ||  "ALTER TABLE secondary.groups ALTER COLUMN tenant_id DROP DEFAULT;"
+            "users"     |   "col1"      |   "current_setting('posmulten.current_tenant')"   | "secondary"       ||  "ALTER TABLE secondary.users ALTER COLUMN col1 DROP DEFAULT;"
+            "groups"    |   "col1"      |   "'xxx1'"                                        | "secondary"       ||  "ALTER TABLE secondary.groups ALTER COLUMN col1 DROP DEFAULT;"
     }
 
     def "should throw exception of type 'IllegalArgumentException' when parameters object is null" ()
