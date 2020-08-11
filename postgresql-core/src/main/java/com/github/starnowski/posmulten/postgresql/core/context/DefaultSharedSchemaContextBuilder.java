@@ -11,7 +11,6 @@ public class DefaultSharedSchemaContextBuilder {
 
     public AbstractSharedSchemaContext build()
     {
-        //TODO
         AbstractSharedSchemaContext context = new SharedSchemaContext();
         List<AbstractSharedSchemaContextEnricher> enrichers  = getEnrichers();
         //TODO Consider of copy request
