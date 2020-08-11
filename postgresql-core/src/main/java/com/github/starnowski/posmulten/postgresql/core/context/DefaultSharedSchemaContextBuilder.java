@@ -7,10 +7,20 @@ public class DefaultSharedSchemaContextBuilder {
 
     private List<AbstractSharedSchemaContextEnricher> enrichers;
 
+    private SharedSchemaContextRequest sharedSchemaContextRequest = new SharedSchemaContextRequest();
+
     public AbstractSharedSchemaContext build()
     {
         //TODO
-        return null;
+        AbstractSharedSchemaContext context = new SharedSchemaContext();
+        List<AbstractSharedSchemaContextEnricher> enrichers  = getEnrichers();
+        //TODO Consider of copy request
+        for (AbstractSharedSchemaContextEnricher enricher : enrichers)
+        {
+            //TODO Consider of copy request (in loop also)
+            context = enricher.enrich(context, sharedSchemaContextRequest);
+        }
+        return context;
     }
 
     public List<AbstractSharedSchemaContextEnricher> getEnrichers() {
