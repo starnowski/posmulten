@@ -1,7 +1,9 @@
 package com.github.starnowski.posmulten.postgresql.core.context
 
-
+import com.github.starnowski.posmulten.postgresql.core.context.enrichers.GetCurrentTenantIdFunctionDefinitionEnricher
 import spock.lang.Specification
+
+import static java.util.stream.Collectors.toList
 
 class DefaultSharedSchemaContextBuilderTest extends Specification {
 
@@ -31,5 +33,18 @@ class DefaultSharedSchemaContextBuilderTest extends Specification {
 
         and: "result should match to the result of the last enricher"
             result.is(thirdSharedSchemaContext)
+    }
+
+    def "should have configured the list of enrichers with correct order"()
+    {
+        given:
+            def expectedEnrichersTypeInOrder = [GetCurrentTenantIdFunctionDefinitionEnricher.class]
+            DefaultSharedSchemaContextBuilder builder = new DefaultSharedSchemaContextBuilder()
+
+        when:
+            def enrichers = builder.getEnrichers()
+
+        then:
+            enrichers.stream().map({enricher -> enricher.getClass()}).collect(toList()) == expectedEnrichersTypeInOrder
     }
 }
