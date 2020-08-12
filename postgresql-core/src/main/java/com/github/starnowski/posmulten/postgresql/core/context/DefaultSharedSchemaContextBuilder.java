@@ -30,5 +30,9 @@ public class DefaultSharedSchemaContextBuilder {
         this.enrichers = enrichers;
     }
 
+    public SharedSchemaContextRequest getSharedSchemaContextRequest() {
+        return sharedSchemaContextRequest;
+    }
+
 
 }
