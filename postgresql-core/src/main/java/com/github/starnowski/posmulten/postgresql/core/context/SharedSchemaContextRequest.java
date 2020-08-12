@@ -4,7 +4,7 @@ public class SharedSchemaContextRequest {
 
     private String defaultSchema;
     private String currentTenantIdProperty = "posmulten.tenant_id";
-    private String currentTenantIdPropertyType = "posmulten.tenant_id";
+    private String currentTenantIdPropertyType = "VARCHAR(255)";
     private String getCurrentTenantIdFunctionName;
 
     public String getGetCurrentTenantIdFunctionName() {
