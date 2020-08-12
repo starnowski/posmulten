@@ -26,7 +26,7 @@ class GetCurrentTenantIdFunctionDefinitionEnricherTest extends Specification {
         then:
             1 * producer.produce(_) >>  {
                 parameters ->
-                    capturedParameters = parameters
+                    capturedParameters = parameters[0]
                     mockedSQLDefinition
             }
             result.getSqlDefinitions().contains(mockedSQLDefinition)
