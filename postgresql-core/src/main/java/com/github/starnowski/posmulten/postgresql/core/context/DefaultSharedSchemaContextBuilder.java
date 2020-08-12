@@ -49,4 +49,8 @@ public class DefaultSharedSchemaContextBuilder {
     public void setDefaultSchema(String defaultSchema) {
         sharedSchemaContextRequest.setDefaultSchema(defaultSchema);
     }
+
+    public void setGetCurrentTenantIdFunctionName(String getCurrentTenantIdFunctionName) {
+        sharedSchemaContextRequest.setGetCurrentTenantIdFunctionName(getCurrentTenantIdFunctionName);
+    }
 }
