@@ -3,6 +3,7 @@ package com.github.starnowski.posmulten.postgresql.core.context.enrichers
 import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder
 import com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContext
 import com.github.starnowski.posmulten.postgresql.core.rls.function.GetCurrentTenantIdFunctionDefinition
+import com.github.starnowski.posmulten.postgresql.core.rls.function.GetCurrentTenantIdFunctionProducer
 import spock.lang.Specification
 
 class GetCurrentTenantIdFunctionDefinitionEnricherTest extends Specification {
@@ -16,17 +17,18 @@ class GetCurrentTenantIdFunctionDefinitionEnricherTest extends Specification {
             def context = new SharedSchemaContext()
             def capturedParameters = null
             def mockedSQLDefinition = Mock(GetCurrentTenantIdFunctionDefinition)
-            def producer = {
-                parameters ->
-                    capturedParameters = parameters
-                    mockedSQLDefinition
-            }
+            def producer = Mock(GetCurrentTenantIdFunctionProducer)
             tested.setGetCurrentTenantIdFunctionProducer(producer)
 
         when:
             def result = tested.enrich(context, sharedSchemaContextRequest)
 
         then:
+            1 * producer.produce(_) >>  {
+                parameters ->
+                    capturedParameters = parameters
+                    mockedSQLDefinition
+            }
             result.getSqlDefinitions().contains(mockedSQLDefinition)
             result.getIGetCurrentTenantIdFunctionInvocationFactory().is(mockedSQLDefinition)
 
