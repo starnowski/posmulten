@@ -29,5 +29,11 @@ class GetCurrentTenantIdFunctionDefinitionEnricherTest extends Specification {
         then:
             result.getSqlDefinitions().contains(mockedSQLDefinition)
             result.getIGetCurrentTenantIdFunctionInvocationFactory().is(mockedSQLDefinition)
+
+        and: "passed parameters should match default values"
+            capturedParameters.getSchema() == sharedSchemaContextRequest.getDefaultSchema()
+            capturedParameters.getCurrentTenantIdProperty() == sharedSchemaContextRequest.getCurrentTenantIdProperty()
+            capturedParameters.getFunctionReturnType() == sharedSchemaContextRequest.getCurrentTenantIdPropertyType()
+            capturedParameters.getFunctionName() == "get_current_tenant_id"
     }
 }
