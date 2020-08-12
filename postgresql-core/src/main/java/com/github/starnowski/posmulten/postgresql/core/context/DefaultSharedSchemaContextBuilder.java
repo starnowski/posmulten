@@ -1,11 +1,15 @@
 package com.github.starnowski.posmulten.postgresql.core.context;
 
+import com.github.starnowski.posmulten.postgresql.core.context.enrichers.GetCurrentTenantIdFunctionDefinitionEnricher;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.util.Arrays.asList;
+
 public class DefaultSharedSchemaContextBuilder {
 
-    private List<AbstractSharedSchemaContextEnricher> enrichers;
+    private List<AbstractSharedSchemaContextEnricher> enrichers = asList(new GetCurrentTenantIdFunctionDefinitionEnricher());
 
     private SharedSchemaContextRequest sharedSchemaContextRequest = new SharedSchemaContextRequest();
 
