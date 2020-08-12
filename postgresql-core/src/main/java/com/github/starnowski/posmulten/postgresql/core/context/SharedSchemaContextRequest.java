@@ -4,6 +4,15 @@ public class SharedSchemaContextRequest {
 
     private String defaultSchema;
     private String currentTenantIdProperty = "posmulten.tenant_id";
+    private String currentTenantIdPropertyType = "posmulten.tenant_id";
+
+    public String getCurrentTenantIdPropertyType() {
+        return currentTenantIdPropertyType;
+    }
+
+    public void setCurrentTenantIdPropertyType(String currentTenantIdPropertyType) {
+        this.currentTenantIdPropertyType = currentTenantIdPropertyType;
+    }
 
 
     public String getCurrentTenantIdProperty() {
