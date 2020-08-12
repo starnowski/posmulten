@@ -66,7 +66,7 @@ public abstract class AbstractClassWithSQLDefinitionGenerationMethods extends Te
         return isRecordBelongsToCurrentTenantConstraintProducer.produce(isRecordBelongsToCurrentTenantConstraintProducerParameters);
     }
 
-    protected IsRecordBelongsToCurrentTenantFunctionDefinition getIsUsersRecordBelongsToCurrentTenantFunctionDefinition(GetCurrentTenantIdFunctionDefinition getCurrentTenantIdFunctionDefinition) {
+    protected IsRecordBelongsToCurrentTenantFunctionDefinition getIsUsersRecordBelongsToCurrentTenantFunctionDefinition(IGetCurrentTenantIdFunctionInvocationFactory getCurrentTenantIdFunctionDefinition) {
         AbstractIsRecordBelongsToCurrentTenantProducerParameters isRecordBelongsToCurrentTenantProducerParameters = new IsRecordBelongsToCurrentTenantProducerParameters.Builder()
                 .withSchema(getSchema())
                 .withFunctionName("is_user_belongs_to_current_tenant")
@@ -79,7 +79,7 @@ public abstract class AbstractClassWithSQLDefinitionGenerationMethods extends Te
         return isRecordBelongsToCurrentTenantProducer.produce(isRecordBelongsToCurrentTenantProducerParameters);
     }
 
-    protected IsRecordBelongsToCurrentTenantFunctionDefinition getIsPostsRecordBelongsToCurrentTenantFunctionDefinition(GetCurrentTenantIdFunctionDefinition getCurrentTenantIdFunctionDefinition) {
+    protected IsRecordBelongsToCurrentTenantFunctionDefinition getIsPostsRecordBelongsToCurrentTenantFunctionDefinition(IGetCurrentTenantIdFunctionInvocationFactory getCurrentTenantIdFunctionDefinition) {
         AbstractIsRecordBelongsToCurrentTenantProducerParameters isRecordBelongsToCurrentTenantProducerParameters = new IsRecordBelongsToCurrentTenantProducerParameters.Builder()
                 .withSchema(getSchema())
                 .withFunctionName("is_post_belongs_to_current_tenant")
@@ -92,7 +92,7 @@ public abstract class AbstractClassWithSQLDefinitionGenerationMethods extends Te
         return isRecordBelongsToCurrentTenantProducer.produce(isRecordBelongsToCurrentTenantProducerParameters);
     }
 
-    protected IsRecordBelongsToCurrentTenantFunctionDefinition getIsCommentsRecordBelongsToCurrentTenantFunctionDefinition(GetCurrentTenantIdFunctionDefinition getCurrentTenantIdFunctionDefinition) {
+    protected IsRecordBelongsToCurrentTenantFunctionDefinition getIsCommentsRecordBelongsToCurrentTenantFunctionDefinition(IGetCurrentTenantIdFunctionInvocationFactory getCurrentTenantIdFunctionDefinition) {
         AbstractIsRecordBelongsToCurrentTenantProducerParameters isRecordBelongsToCurrentTenantProducerParameters = new IsRecordBelongsToCurrentTenantProducerParameters.Builder()
                 .withSchema(getSchema())
                 .withFunctionName("is_comment_belongs_to_current_tenant")
@@ -105,7 +105,7 @@ public abstract class AbstractClassWithSQLDefinitionGenerationMethods extends Te
         return isRecordBelongsToCurrentTenantProducer.produce(isRecordBelongsToCurrentTenantProducerParameters);
     }
 
-    protected IsRecordBelongsToCurrentTenantFunctionDefinition getIsNotificationsRecordBelongsToCurrentTenantFunctionDefinition(GetCurrentTenantIdFunctionDefinition getCurrentTenantIdFunctionDefinition) {
+    protected IsRecordBelongsToCurrentTenantFunctionDefinition getIsNotificationsRecordBelongsToCurrentTenantFunctionDefinition(IGetCurrentTenantIdFunctionInvocationFactory getCurrentTenantIdFunctionDefinition) {
         AbstractIsRecordBelongsToCurrentTenantProducerParameters isRecordBelongsToCurrentTenantProducerParameters = new IsRecordBelongsToCurrentTenantProducerParameters.Builder()
                 .withSchema(getSchema())
                 .withFunctionName("is_notification_belongs_to_current_tenant")
@@ -118,7 +118,7 @@ public abstract class AbstractClassWithSQLDefinitionGenerationMethods extends Te
         return isRecordBelongsToCurrentTenantProducer.produce(isRecordBelongsToCurrentTenantProducerParameters);
     }
 
-    protected IsRecordBelongsToCurrentTenantFunctionDefinition getIsGroupsRecordBelongsToCurrentTenantFunctionDefinition(GetCurrentTenantIdFunctionDefinition getCurrentTenantIdFunctionDefinition) {
+    protected IsRecordBelongsToCurrentTenantFunctionDefinition getIsGroupsRecordBelongsToCurrentTenantFunctionDefinition(IGetCurrentTenantIdFunctionInvocationFactory getCurrentTenantIdFunctionDefinition) {
         AbstractIsRecordBelongsToCurrentTenantProducerParameters isRecordBelongsToCurrentTenantProducerParameters = new IsRecordBelongsToCurrentTenantProducerParameters.Builder()
                 .withSchema(getSchema())
                 .withFunctionName("is_group_belongs_to_current_tenant")

@@ -10,21 +10,6 @@ public class GrantSchemaPrivilegesProducer {
 
     public SQLDefinition produce(String schema, String user, List<String> privileges) {
         validateParameters(schema, user, privileges);
-        StringBuilder sb = new StringBuilder();
-        sb.append("GRANT ");
-        Iterator<String> it = privileges.iterator();
-        while (it.hasNext()){
-            sb.append(it.next());
-            if (it.hasNext())
-            {
-                sb.append(", ");
-            }
-        }
-        sb.append(" ON SCHEMA ");
-        sb.append(schema);
-        sb.append(" TO \"");
-        sb.append(user);
-        sb.append("\";");
         return new DefaultSQLDefinition(prepareCreateScript(schema, user, privileges), prepareDropScript(schema, user, privileges));
     }
 

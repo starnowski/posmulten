@@ -2,6 +2,8 @@ package com.github.starnowski.posmulten.postgresql.core.functional.tests.combine
 
 import com.github.starnowski.posmulten.postgresql.core.*;
 import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition;
+import com.github.starnowski.posmulten.postgresql.core.context.AbstractSharedSchemaContext;
+import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder;
 import com.github.starnowski.posmulten.postgresql.core.functional.tests.AbstractClassWithSQLDefinitionGenerationMethods;
 import com.github.starnowski.posmulten.postgresql.core.rls.EnableRowLevelSecurityProducer;
 import com.github.starnowski.posmulten.postgresql.core.rls.ForceRowLevelSecurityProducer;
@@ -48,11 +50,17 @@ public abstract class FullStackTest extends AbstractClassWithSQLDefinitionGenera
     @Test(testName = "create SQL definitions", description = "Create SQL function that creates statements that set current tenant value, retrieve current tenant value and create the row level security policy for a table that is multi-tenant aware")
     public void createSQLDefinitions()
     {
-        //Create function that returns current tenant function
-        GetCurrentTenantIdFunctionProducer getCurrentTenantIdFunctionProducer = new GetCurrentTenantIdFunctionProducer();
-        GetCurrentTenantIdFunctionDefinition getCurrentTenantIdFunctionDefinition = getCurrentTenantIdFunctionProducer.produce(new GetCurrentTenantIdFunctionProducerParameters("rls_get_current_tenant", VALID_CURRENT_TENANT_ID_PROPERTY_NAME, getSchema(), null));
-        sqlDefinitions.add(getCurrentTenantIdFunctionDefinition);
+        DefaultSharedSchemaContextBuilder defaultSharedSchemaContextBuilder = new DefaultSharedSchemaContextBuilder();
+        defaultSharedSchemaContextBuilder.setCurrentTenantIdProperty(VALID_CURRENT_TENANT_ID_PROPERTY_NAME);
+        defaultSharedSchemaContextBuilder.setDefaultSchema(getSchema());
 
+        AbstractSharedSchemaContext sharedSchemaContext = defaultSharedSchemaContextBuilder.build();
+
+        IGetCurrentTenantIdFunctionInvocationFactory getCurrentTenantIdFunctionDefinition = sharedSchemaContext.getIGetCurrentTenantIdFunctionInvocationFactory();
+
+        sqlDefinitions.addAll(sharedSchemaContext.getSqlDefinitions());
+
+        // TODO Use the DefaultSharedSchemaContextBuilder to create all SQL definitions
         //Create function that sets current tenant function
         SetCurrentTenantIdFunctionProducer setCurrentTenantIdFunctionProducer = new SetCurrentTenantIdFunctionProducer();
         SetCurrentTenantIdFunctionDefinition setCurrentTenantIdFunctionDefinition = setCurrentTenantIdFunctionProducer.produce(new SetCurrentTenantIdFunctionProducerParameters("rls_set_current_tenant", VALID_CURRENT_TENANT_ID_PROPERTY_NAME, getSchema(), null));
