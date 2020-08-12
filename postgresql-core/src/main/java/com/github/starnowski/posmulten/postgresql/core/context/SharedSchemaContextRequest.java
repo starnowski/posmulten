@@ -3,7 +3,7 @@ package com.github.starnowski.posmulten.postgresql.core.context;
 public class SharedSchemaContextRequest {
 
     private String defaultSchema;
-    private String currentTenantIdProperty = "posmulten.tenant_Id";
+    private String currentTenantIdProperty = "posmulten.tenant_id";
 
 
     public String getCurrentTenantIdProperty() {
