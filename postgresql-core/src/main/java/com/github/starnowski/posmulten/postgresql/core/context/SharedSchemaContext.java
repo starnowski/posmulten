@@ -8,6 +8,9 @@ import com.github.starnowski.posmulten.postgresql.core.rls.function.ISetCurrentT
 import java.util.List;
 
 public class SharedSchemaContext implements AbstractSharedSchemaContext {
+
+    private IGetCurrentTenantIdFunctionInvocationFactory iGetCurrentTenantIdFunctionInvocationFactory;
+
     @Override
     public List<SQLDefinition> getSqlDefinitions() {
         return null;
@@ -25,7 +28,12 @@ public class SharedSchemaContext implements AbstractSharedSchemaContext {
 
     @Override
     public IGetCurrentTenantIdFunctionInvocationFactory getIGetCurrentTenantIdFunctionInvocationFactory() {
-        return null;
+        return iGetCurrentTenantIdFunctionInvocationFactory;
+    }
+
+    @Override
+    public void setIGetCurrentTenantIdFunctionInvocationFactory(IGetCurrentTenantIdFunctionInvocationFactory factory) {
+        this.iGetCurrentTenantIdFunctionInvocationFactory = factory;
     }
 
     @Override
