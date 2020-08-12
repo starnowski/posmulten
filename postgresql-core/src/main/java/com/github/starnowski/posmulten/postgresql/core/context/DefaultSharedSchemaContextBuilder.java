@@ -38,5 +38,15 @@ public class DefaultSharedSchemaContextBuilder {
         return sharedSchemaContextRequest;
     }
 
+    public void setCurrentTenantIdPropertyType(String currentTenantIdPropertyType) {
+        sharedSchemaContextRequest.setCurrentTenantIdPropertyType(currentTenantIdPropertyType);
+    }
 
+    public void setCurrentTenantIdProperty(String currentTenantIdProperty) {
+        sharedSchemaContextRequest.setCurrentTenantIdProperty(currentTenantIdProperty);
+    }
+
+    public void setDefaultSchema(String defaultSchema) {
+        sharedSchemaContextRequest.setDefaultSchema(defaultSchema);
+    }
 }
