@@ -5,20 +5,22 @@ import com.github.starnowski.posmulten.postgresql.core.rls.function.EqualsCurren
 import com.github.starnowski.posmulten.postgresql.core.rls.function.IGetCurrentTenantIdFunctionInvocationFactory;
 import com.github.starnowski.posmulten.postgresql.core.rls.function.ISetCurrentTenantIdFunctionInvocationFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SharedSchemaContext implements AbstractSharedSchemaContext {
 
     private IGetCurrentTenantIdFunctionInvocationFactory iGetCurrentTenantIdFunctionInvocationFactory;
+    private List<SQLDefinition> sqlDefinitions = new ArrayList<>();
 
     @Override
     public List<SQLDefinition> getSqlDefinitions() {
-        return null;
+        return new ArrayList<>(sqlDefinitions);
     }
 
     @Override
     public void addSQLDefinition(SQLDefinition sqlDefinition) {
-
+        sqlDefinitions.add(sqlDefinition);
     }
 
     @Override
