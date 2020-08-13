@@ -4,6 +4,7 @@ import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSche
 import com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContext
 import com.github.starnowski.posmulten.postgresql.core.rls.function.EqualsCurrentTenantIdentifierFunctionDefinition
 import com.github.starnowski.posmulten.postgresql.core.rls.function.EqualsCurrentTenantIdentifierFunctionProducer
+import com.github.starnowski.posmulten.postgresql.core.rls.function.IGetCurrentTenantIdFunctionInvocationFactory
 import com.github.starnowski.posmulten.postgresql.core.rls.function.TenantHasAuthoritiesFunctionDefinition
 import com.github.starnowski.posmulten.postgresql.core.rls.function.TenantHasAuthoritiesFunctionProducer
 import spock.lang.Specification
@@ -55,7 +56,16 @@ class TenantHasAuthoritiesFunctionDefinitionEnricherTest extends Specification {
             capturedEqualsCurrentTenantIdentifierFunctionProducerParameters.getSchema() == sharedSchemaContextRequest.getDefaultSchema()
             capturedEqualsCurrentTenantIdentifierFunctionProducerParameters.getArgumentType() == sharedSchemaContextRequest.getCurrentTenantIdPropertyType()
             capturedEqualsCurrentTenantIdentifierFunctionProducerParameters.getCurrentTenantIdFunctionInvocationFactory() == getCurrentTenantIdFunctionInvocationFactory
-            capturedEqualsCurrentTenantIdentifierFunctionProducerParameters.getFunctionName() == "set_current_tenant_id"
+            capturedEqualsCurrentTenantIdentifierFunctionProducerParameters.getFunctionName() == "is_id_equals_current_tenant_id"
+
+            capturedTenantHasAuthoritiesFunctionProducerParameters.getSchema() == sharedSchemaContextRequest.getDefaultSchema()
+            capturedTenantHasAuthoritiesFunctionProducerParameters.getFunctionName() == "tenant_has_authorities"
+            capturedTenantHasAuthoritiesFunctionProducerParameters.getEqualsCurrentTenantIdentifierFunctionInvocationFactory() == mockedEqualsCurrentTenantIdentifierFunctionDefinition
+            capturedTenantHasAuthoritiesFunctionProducerParameters.getTenantIdArgumentType() == null
+            capturedTenantHasAuthoritiesFunctionProducerParameters.getPermissionCommandPolicyArgumentType() == null
+            capturedTenantHasAuthoritiesFunctionProducerParameters.getRLSExpressionArgumentType() == null
+            capturedTenantHasAuthoritiesFunctionProducerParameters.getTableArgumentType() == null
+            capturedTenantHasAuthoritiesFunctionProducerParameters.getSchemaArgumentType() == null
     }
 
 //    @Unroll
