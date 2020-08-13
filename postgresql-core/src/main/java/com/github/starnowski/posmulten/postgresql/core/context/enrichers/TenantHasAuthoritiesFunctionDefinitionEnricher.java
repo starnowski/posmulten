@@ -16,11 +16,11 @@ public class TenantHasAuthoritiesFunctionDefinitionEnricher implements AbstractS
         return null;
     }
 
-    public void setEqualsCurrentTenantIdentifierFunctionProducer(EqualsCurrentTenantIdentifierFunctionProducer equalsCurrentTenantIdentifierFunctionProducer) {
+    void setEqualsCurrentTenantIdentifierFunctionProducer(EqualsCurrentTenantIdentifierFunctionProducer equalsCurrentTenantIdentifierFunctionProducer) {
         this.equalsCurrentTenantIdentifierFunctionProducer = equalsCurrentTenantIdentifierFunctionProducer;
     }
 
-    public void setTenantHasAuthoritiesFunctionProducer(TenantHasAuthoritiesFunctionProducer tenantHasAuthoritiesFunctionProducer) {
+    void setTenantHasAuthoritiesFunctionProducer(TenantHasAuthoritiesFunctionProducer tenantHasAuthoritiesFunctionProducer) {
         this.tenantHasAuthoritiesFunctionProducer = tenantHasAuthoritiesFunctionProducer;
     }
 }
