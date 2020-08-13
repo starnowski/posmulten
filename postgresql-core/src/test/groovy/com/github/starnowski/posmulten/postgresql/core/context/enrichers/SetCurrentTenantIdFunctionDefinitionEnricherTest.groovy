@@ -3,6 +3,7 @@ package com.github.starnowski.posmulten.postgresql.core.context.enrichers
 import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder
 import com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContext
 import com.github.starnowski.posmulten.postgresql.core.rls.function.SetCurrentTenantIdFunctionDefinition
+import com.github.starnowski.posmulten.postgresql.core.rls.function.SetCurrentTenantIdFunctionProducer
 import spock.lang.Specification
 import spock.lang.Unroll
 
