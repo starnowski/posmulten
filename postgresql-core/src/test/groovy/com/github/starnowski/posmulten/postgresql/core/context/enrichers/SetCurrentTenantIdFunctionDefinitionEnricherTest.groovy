@@ -36,7 +36,7 @@ class SetCurrentTenantIdFunctionDefinitionEnricherTest extends Specification {
         and: "passed parameters should match default values"
                 capturedParameters.getSchema() == sharedSchemaContextRequest.getDefaultSchema()
                 capturedParameters.getCurrentTenantIdProperty() == sharedSchemaContextRequest.getCurrentTenantIdProperty()
-                capturedParameters.getFunctionReturnType() == sharedSchemaContextRequest.getCurrentTenantIdPropertyType()
+                capturedParameters.getArgumentType() == sharedSchemaContextRequest.getCurrentTenantIdPropertyType()
                 capturedParameters.getFunctionName() == "set_current_tenant_id"
     }
 
@@ -71,7 +71,7 @@ class SetCurrentTenantIdFunctionDefinitionEnricherTest extends Specification {
         and: "passed parameters should match default values"
             capturedParameters.getSchema() == sharedSchemaContextRequest.getDefaultSchema()
             capturedParameters.getCurrentTenantIdProperty() == sharedSchemaContextRequest.getCurrentTenantIdProperty()
-            capturedParameters.getFunctionReturnType() == sharedSchemaContextRequest.getCurrentTenantIdPropertyType()
+            capturedParameters.getArgumentType() == sharedSchemaContextRequest.getCurrentTenantIdPropertyType()
             capturedParameters.getFunctionName() == functionName
 
         where:
