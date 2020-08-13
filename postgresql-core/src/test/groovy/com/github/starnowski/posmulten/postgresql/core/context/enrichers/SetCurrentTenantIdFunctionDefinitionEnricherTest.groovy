@@ -31,7 +31,7 @@ class SetCurrentTenantIdFunctionDefinitionEnricherTest extends Specification {
                     mockedSQLDefinition
             }
             result.getSqlDefinitions().contains(mockedSQLDefinition)
-            result.getIGetCurrentTenantIdFunctionInvocationFactory().is(mockedSQLDefinition)
+            result.getISetCurrentTenantIdFunctionInvocationFactory().is(mockedSQLDefinition)
 
         and: "passed parameters should match default values"
                 capturedParameters.getSchema() == sharedSchemaContextRequest.getDefaultSchema()
@@ -66,7 +66,7 @@ class SetCurrentTenantIdFunctionDefinitionEnricherTest extends Specification {
                     mockedSQLDefinition
             }
             result.getSqlDefinitions().contains(mockedSQLDefinition)
-            result.getIGetCurrentTenantIdFunctionInvocationFactory().is(mockedSQLDefinition)
+            result.getISetCurrentTenantIdFunctionInvocationFactory().is(mockedSQLDefinition)
 
         and: "passed parameters should match default values"
             capturedParameters.getSchema() == sharedSchemaContextRequest.getDefaultSchema()
