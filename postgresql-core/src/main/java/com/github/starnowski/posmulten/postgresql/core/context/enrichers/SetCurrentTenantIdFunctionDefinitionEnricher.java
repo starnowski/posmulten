@@ -11,7 +11,7 @@ public class SetCurrentTenantIdFunctionDefinitionEnricher implements AbstractSha
 
     @Override
     public AbstractSharedSchemaContext enrich(AbstractSharedSchemaContext context, SharedSchemaContextRequest request) {
-        String functionName = request.getGetCurrentTenantIdFunctionName() == null ? "set_current_tenant_id" : request.getGetCurrentTenantIdFunctionName();
+        String functionName = request.getSetCurrentTenantIdFunctionName() == null ? "set_current_tenant_id" : request.getSetCurrentTenantIdFunctionName();
         SetCurrentTenantIdFunctionDefinition sqlDefinition = setCurrentTenantIdFunctionProducer.produce(new SetCurrentTenantIdFunctionProducerParameters(functionName, request.getCurrentTenantIdProperty(), request.getDefaultSchema(), request.getCurrentTenantIdPropertyType()));
         context.addSQLDefinition(sqlDefinition);
         context.setISetCurrentTenantIdFunctionInvocationFactory(sqlDefinition);
