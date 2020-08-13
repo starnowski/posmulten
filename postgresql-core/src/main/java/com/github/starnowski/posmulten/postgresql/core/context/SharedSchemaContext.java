@@ -11,6 +11,7 @@ import java.util.List;
 public class SharedSchemaContext implements AbstractSharedSchemaContext {
 
     private IGetCurrentTenantIdFunctionInvocationFactory iGetCurrentTenantIdFunctionInvocationFactory;
+    private ISetCurrentTenantIdFunctionInvocationFactory iSetCurrentTenantIdFunctionInvocationFactory;
     private List<SQLDefinition> sqlDefinitions = new ArrayList<>();
 
     @Override
@@ -39,7 +40,12 @@ public class SharedSchemaContext implements AbstractSharedSchemaContext {
     }
 
     @Override
+    public void setISetCurrentTenantIdFunctionInvocationFactory(ISetCurrentTenantIdFunctionInvocationFactory factory) {
+        this.iSetCurrentTenantIdFunctionInvocationFactory = factory;
+    }
+
+    @Override
     public ISetCurrentTenantIdFunctionInvocationFactory getISetCurrentTenantIdFunctionInvocationFactory() {
-        return null;
+        return iSetCurrentTenantIdFunctionInvocationFactory;
     }
 }

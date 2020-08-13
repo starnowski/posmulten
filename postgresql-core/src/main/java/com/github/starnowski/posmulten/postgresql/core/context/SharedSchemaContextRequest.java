@@ -6,6 +6,15 @@ public class SharedSchemaContextRequest {
     private String currentTenantIdProperty = "posmulten.tenant_id";
     private String currentTenantIdPropertyType = "VARCHAR(255)";
     private String getCurrentTenantIdFunctionName;
+    private String setCurrentTenantIdFunctionName;
+
+    public String getSetCurrentTenantIdFunctionName() {
+        return setCurrentTenantIdFunctionName;
+    }
+
+    public void setSetCurrentTenantIdFunctionName(String setCurrentTenantIdFunctionName) {
+        this.setCurrentTenantIdFunctionName = setCurrentTenantIdFunctionName;
+    }
 
     public String getGetCurrentTenantIdFunctionName() {
         return getCurrentTenantIdFunctionName;
@@ -22,7 +31,6 @@ public class SharedSchemaContextRequest {
     public void setCurrentTenantIdPropertyType(String currentTenantIdPropertyType) {
         this.currentTenantIdPropertyType = currentTenantIdPropertyType;
     }
-
 
     public String getCurrentTenantIdProperty() {
         return currentTenantIdProperty;

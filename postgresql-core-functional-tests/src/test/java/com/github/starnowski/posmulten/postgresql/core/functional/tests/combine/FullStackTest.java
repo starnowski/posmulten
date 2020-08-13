@@ -57,15 +57,10 @@ public abstract class FullStackTest extends AbstractClassWithSQLDefinitionGenera
         AbstractSharedSchemaContext sharedSchemaContext = defaultSharedSchemaContextBuilder.build();
 
         IGetCurrentTenantIdFunctionInvocationFactory getCurrentTenantIdFunctionDefinition = sharedSchemaContext.getIGetCurrentTenantIdFunctionInvocationFactory();
+        setCurrentTenantIdFunctionInvocationFactory = sharedSchemaContext.getISetCurrentTenantIdFunctionInvocationFactory();
 
         sqlDefinitions.addAll(sharedSchemaContext.getSqlDefinitions());
-
         // TODO Use the DefaultSharedSchemaContextBuilder to create all SQL definitions
-        //Create function that sets current tenant function
-        SetCurrentTenantIdFunctionProducer setCurrentTenantIdFunctionProducer = new SetCurrentTenantIdFunctionProducer();
-        SetCurrentTenantIdFunctionDefinition setCurrentTenantIdFunctionDefinition = setCurrentTenantIdFunctionProducer.produce(new SetCurrentTenantIdFunctionProducerParameters("rls_set_current_tenant", VALID_CURRENT_TENANT_ID_PROPERTY_NAME, getSchema(), null));
-        setCurrentTenantIdFunctionInvocationFactory = setCurrentTenantIdFunctionDefinition;
-        sqlDefinitions.add(setCurrentTenantIdFunctionDefinition);
 
         // EqualsCurrentTenantIdentifierFunctionProducer
         EqualsCurrentTenantIdentifierFunctionProducer equalsCurrentTenantIdentifierFunctionProducer = new EqualsCurrentTenantIdentifierFunctionProducer();
