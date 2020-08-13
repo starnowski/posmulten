@@ -7,7 +7,7 @@ import com.github.starnowski.posmulten.postgresql.core.rls.function.*;
 
 public class SetCurrentTenantIdFunctionDefinitionEnricher implements AbstractSharedSchemaContextEnricher {
 
-    private SetCurrentTenantIdFunctionProducer setCurrentTenantIdFunctionProducer;
+    private SetCurrentTenantIdFunctionProducer setCurrentTenantIdFunctionProducer = new SetCurrentTenantIdFunctionProducer();
 
     @Override
     public AbstractSharedSchemaContext enrich(AbstractSharedSchemaContext context, SharedSchemaContextRequest request) {
