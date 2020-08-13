@@ -48,6 +48,9 @@ class TenantHasAuthoritiesFunctionDefinitionEnricherTest extends Specification {
             result.getSqlDefinitions().contains(mockedTenantHasAuthoritiesFunctionDefinition)
             result.getTenantHasAuthoritiesFunctionInvocationFactory().is(mockedTenantHasAuthoritiesFunctionDefinition)
 
+        and: "generated sql definitions should be added in correct order"
+            result.getSqlDefinitions() == [mockedEqualsCurrentTenantIdentifierFunctionDefinition, mockedTenantHasAuthoritiesFunctionDefinition]
+
         and: "passed parameters should match default values"
             capturedEqualsCurrentTenantIdentifierFunctionProducerParameters.getSchema() == sharedSchemaContextRequest.getDefaultSchema()
             capturedEqualsCurrentTenantIdentifierFunctionProducerParameters.getArgumentType() == sharedSchemaContextRequest.getCurrentTenantIdPropertyType()
