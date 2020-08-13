@@ -7,6 +7,24 @@ public class SharedSchemaContextRequest {
     private String currentTenantIdPropertyType = "VARCHAR(255)";
     private String getCurrentTenantIdFunctionName;
     private String setCurrentTenantIdFunctionName;
+    private String equalsCurrentTenantIdentifierFunctionName;
+    private String tenantHasAuthoritiesFunctionName;
+
+    public String getEqualsCurrentTenantIdentifierFunctionName() {
+        return equalsCurrentTenantIdentifierFunctionName;
+    }
+
+    public void setEqualsCurrentTenantIdentifierFunctionName(String equalsCurrentTenantIdentifierFunctionName) {
+        this.equalsCurrentTenantIdentifierFunctionName = equalsCurrentTenantIdentifierFunctionName;
+    }
+
+    public String getTenantHasAuthoritiesFunctionName() {
+        return tenantHasAuthoritiesFunctionName;
+    }
+
+    public void setTenantHasAuthoritiesFunctionName(String tenantHasAuthoritiesFunctionName) {
+        this.tenantHasAuthoritiesFunctionName = tenantHasAuthoritiesFunctionName;
+    }
 
     public String getSetCurrentTenantIdFunctionName() {
         return setCurrentTenantIdFunctionName;

@@ -8,6 +8,7 @@ import com.github.starnowski.posmulten.postgresql.core.functional.tests.Abstract
 import com.github.starnowski.posmulten.postgresql.core.rls.EnableRowLevelSecurityProducer;
 import com.github.starnowski.posmulten.postgresql.core.rls.ForceRowLevelSecurityProducer;
 import com.github.starnowski.posmulten.postgresql.core.rls.RLSPolicyProducer;
+import com.github.starnowski.posmulten.postgresql.core.rls.TenantHasAuthoritiesFunctionInvocationFactory;
 import com.github.starnowski.posmulten.postgresql.core.rls.function.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -58,20 +59,10 @@ public abstract class FullStackTest extends AbstractClassWithSQLDefinitionGenera
 
         IGetCurrentTenantIdFunctionInvocationFactory getCurrentTenantIdFunctionDefinition = sharedSchemaContext.getIGetCurrentTenantIdFunctionInvocationFactory();
         setCurrentTenantIdFunctionInvocationFactory = sharedSchemaContext.getISetCurrentTenantIdFunctionInvocationFactory();
+        TenantHasAuthoritiesFunctionInvocationFactory tenantHasAuthoritiesFunctionInvocationFactory = sharedSchemaContext.getTenantHasAuthoritiesFunctionInvocationFactory();
 
         sqlDefinitions.addAll(sharedSchemaContext.getSqlDefinitions());
         // TODO Use the DefaultSharedSchemaContextBuilder to create all SQL definitions
-
-        // EqualsCurrentTenantIdentifierFunctionProducer
-        EqualsCurrentTenantIdentifierFunctionProducer equalsCurrentTenantIdentifierFunctionProducer = new EqualsCurrentTenantIdentifierFunctionProducer();
-        EqualsCurrentTenantIdentifierFunctionDefinition equalsCurrentTenantIdentifierFunctionDefinition = equalsCurrentTenantIdentifierFunctionProducer.produce(new EqualsCurrentTenantIdentifierFunctionProducerParameters("is_id_equals_current_tenant_id", getSchema(), null, getCurrentTenantIdFunctionDefinition));
-        sqlDefinitions.add(equalsCurrentTenantIdentifierFunctionDefinition);
-
-        // TenantHasAuthoritiesFunctionProducer
-        TenantHasAuthoritiesFunctionProducer tenantHasAuthoritiesFunctionProducer = new TenantHasAuthoritiesFunctionProducer();
-        TenantHasAuthoritiesFunctionDefinition tenantHasAuthoritiesFunctionDefinition = tenantHasAuthoritiesFunctionProducer.produce(new TenantHasAuthoritiesFunctionProducerParameters("tenant_has_authorities", getSchema(), equalsCurrentTenantIdentifierFunctionDefinition));
-        sqlDefinitions.add(tenantHasAuthoritiesFunctionDefinition);
-
 
         // Custom tenant column
         // Create tenant column in the notifications table
@@ -102,8 +93,8 @@ public abstract class FullStackTest extends AbstractClassWithSQLDefinitionGenera
                 .withPolicyTable(USERS_TABLE_NAME)
                 .withGrantee(CORE_OWNER_USER)
                 .withPermissionCommandPolicy(ALL)
-                .withUsingExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionDefinition)
-                .withWithCheckExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionDefinition)
+                .withUsingExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory)
+                .withWithCheckExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory)
                 .build());
         sqlDefinitions.add(usersRLSPolicySQLDefinition);
 
@@ -120,8 +111,8 @@ public abstract class FullStackTest extends AbstractClassWithSQLDefinitionGenera
                 .withPolicyTable(NOTIFICATIONS_TABLE_NAME)
                 .withGrantee(CORE_OWNER_USER)
                 .withPermissionCommandPolicy(ALL)
-                .withUsingExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionDefinition)
-                .withWithCheckExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionDefinition)
+                .withUsingExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory)
+                .withWithCheckExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory)
                 .withTenantIdColumn(CUSTOM_TENANT_COLUMN_NAME)
                 .build());
         sqlDefinitions.add(notificationsRLSPolicySQLDefinition);
@@ -139,8 +130,8 @@ public abstract class FullStackTest extends AbstractClassWithSQLDefinitionGenera
                 .withPolicyTable(POSTS_TABLE_NAME)
                 .withGrantee(CORE_OWNER_USER)
                 .withPermissionCommandPolicy(ALL)
-                .withUsingExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionDefinition)
-                .withWithCheckExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionDefinition)
+                .withUsingExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory)
+                .withWithCheckExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory)
                 .build());
         sqlDefinitions.add(postsRLSPolicySQLDefinition);
 
@@ -157,8 +148,8 @@ public abstract class FullStackTest extends AbstractClassWithSQLDefinitionGenera
                 .withPolicyTable(GROUPS_TABLE_NAME)
                 .withGrantee(CORE_OWNER_USER)
                 .withPermissionCommandPolicy(ALL)
-                .withUsingExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionDefinition)
-                .withWithCheckExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionDefinition)
+                .withUsingExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory)
+                .withWithCheckExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory)
                 .build());
         sqlDefinitions.add(groupsRLSPolicySQLDefinition);
 
@@ -175,8 +166,8 @@ public abstract class FullStackTest extends AbstractClassWithSQLDefinitionGenera
                 .withPolicyTable(USERS_GROUPS_TABLE_NAME)
                 .withGrantee(CORE_OWNER_USER)
                 .withPermissionCommandPolicy(ALL)
-                .withUsingExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionDefinition)
-                .withWithCheckExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionDefinition)
+                .withUsingExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory)
+                .withWithCheckExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory)
                 .build());
         sqlDefinitions.add(usersGroupsRLSPolicySQLDefinition);
 
@@ -193,8 +184,8 @@ public abstract class FullStackTest extends AbstractClassWithSQLDefinitionGenera
                 .withPolicyTable(COMMENTS_TABLE_NAME)
                 .withGrantee(CORE_OWNER_USER)
                 .withPermissionCommandPolicy(ALL)
-                .withUsingExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionDefinition)
-                .withWithCheckExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionDefinition)
+                .withUsingExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory)
+                .withWithCheckExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory)
                 .withTenantIdColumn(CUSTOM_TENANT_COLUMN_NAME)
                 .build());
         sqlDefinitions.add(commentsGroupsRLSPolicySQLDefinition);

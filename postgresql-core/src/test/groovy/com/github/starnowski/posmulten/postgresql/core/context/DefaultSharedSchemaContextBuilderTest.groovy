@@ -2,6 +2,7 @@ package com.github.starnowski.posmulten.postgresql.core.context
 
 import com.github.starnowski.posmulten.postgresql.core.context.enrichers.GetCurrentTenantIdFunctionDefinitionEnricher
 import com.github.starnowski.posmulten.postgresql.core.context.enrichers.SetCurrentTenantIdFunctionDefinitionEnricher
+import com.github.starnowski.posmulten.postgresql.core.context.enrichers.TenantHasAuthoritiesFunctionDefinitionEnricher
 import spock.lang.Specification
 
 import static java.util.stream.Collectors.toList
@@ -39,7 +40,7 @@ class DefaultSharedSchemaContextBuilderTest extends Specification {
     def "should have configured the list of enrichers with correct order"()
     {
         given:
-            def expectedEnrichersTypeInOrder = [GetCurrentTenantIdFunctionDefinitionEnricher.class, SetCurrentTenantIdFunctionDefinitionEnricher.class]
+            def expectedEnrichersTypeInOrder = [GetCurrentTenantIdFunctionDefinitionEnricher.class, SetCurrentTenantIdFunctionDefinitionEnricher.class, TenantHasAuthoritiesFunctionDefinitionEnricher.class]
             DefaultSharedSchemaContextBuilder builder = new DefaultSharedSchemaContextBuilder()
 
         when:

@@ -1,7 +1,7 @@
 package com.github.starnowski.posmulten.postgresql.core.context;
 
 import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition;
-import com.github.starnowski.posmulten.postgresql.core.rls.function.EqualsCurrentTenantIdentifierFunctionInvocationFactory;
+import com.github.starnowski.posmulten.postgresql.core.rls.TenantHasAuthoritiesFunctionInvocationFactory;
 import com.github.starnowski.posmulten.postgresql.core.rls.function.IGetCurrentTenantIdFunctionInvocationFactory;
 import com.github.starnowski.posmulten.postgresql.core.rls.function.ISetCurrentTenantIdFunctionInvocationFactory;
 
@@ -12,6 +12,7 @@ public class SharedSchemaContext implements AbstractSharedSchemaContext {
 
     private IGetCurrentTenantIdFunctionInvocationFactory iGetCurrentTenantIdFunctionInvocationFactory;
     private ISetCurrentTenantIdFunctionInvocationFactory iSetCurrentTenantIdFunctionInvocationFactory;
+    private TenantHasAuthoritiesFunctionInvocationFactory tenantHasAuthoritiesFunctionInvocationFactory;
     private List<SQLDefinition> sqlDefinitions = new ArrayList<>();
 
     @Override
@@ -25,8 +26,13 @@ public class SharedSchemaContext implements AbstractSharedSchemaContext {
     }
 
     @Override
-    public EqualsCurrentTenantIdentifierFunctionInvocationFactory getEqualsCurrentTenantIdentifierFunctionInvocationFactory() {
-        return null;
+    public TenantHasAuthoritiesFunctionInvocationFactory getTenantHasAuthoritiesFunctionInvocationFactory() {
+        return tenantHasAuthoritiesFunctionInvocationFactory;
+    }
+
+    @Override
+    public void setTenantHasAuthoritiesFunctionInvocationFactory(TenantHasAuthoritiesFunctionInvocationFactory tenantHasAuthoritiesFunctionInvocationFactory) {
+        this.tenantHasAuthoritiesFunctionInvocationFactory = tenantHasAuthoritiesFunctionInvocationFactory;
     }
 
     @Override
