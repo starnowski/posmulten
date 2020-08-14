@@ -114,12 +114,12 @@ class TenantHasAuthoritiesFunctionDefinitionEnricherTest extends Specification {
             result.getSqlDefinitions() == [mockedEqualsCurrentTenantIdentifierFunctionDefinition, mockedTenantHasAuthoritiesFunctionDefinition]
 
         and: "passed parameters should match default values"
-            capturedEqualsCurrentTenantIdentifierFunctionProducerParameters.getSchema() == sharedSchemaContextRequest.getDefaultSchema()
+            capturedEqualsCurrentTenantIdentifierFunctionProducerParameters.getSchema() == defaultSchema
             capturedEqualsCurrentTenantIdentifierFunctionProducerParameters.getArgumentType() == currentTenantIdPropertyType
             capturedEqualsCurrentTenantIdentifierFunctionProducerParameters.getCurrentTenantIdFunctionInvocationFactory() == getCurrentTenantIdFunctionInvocationFactory
             capturedEqualsCurrentTenantIdentifierFunctionProducerParameters.getFunctionName() == expectedEqualsCurrentTenantIdentifierFunctionName
 
-            capturedTenantHasAuthoritiesFunctionProducerParameters.getSchema() == sharedSchemaContextRequest.getDefaultSchema()
+            capturedTenantHasAuthoritiesFunctionProducerParameters.getSchema() == defaultSchema
             capturedTenantHasAuthoritiesFunctionProducerParameters.getFunctionName() == expectedTenantHasAuthoritiesFunctionName
             capturedTenantHasAuthoritiesFunctionProducerParameters.getEqualsCurrentTenantIdentifierFunctionInvocationFactory() == mockedEqualsCurrentTenantIdentifierFunctionDefinition
             capturedTenantHasAuthoritiesFunctionProducerParameters.getTenantIdArgumentType() == currentTenantIdPropertyType
