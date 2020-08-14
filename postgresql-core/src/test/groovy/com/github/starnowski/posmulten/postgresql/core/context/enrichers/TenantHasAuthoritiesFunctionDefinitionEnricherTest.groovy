@@ -62,7 +62,7 @@ class TenantHasAuthoritiesFunctionDefinitionEnricherTest extends Specification {
             capturedTenantHasAuthoritiesFunctionProducerParameters.getSchema() == sharedSchemaContextRequest.getDefaultSchema()
             capturedTenantHasAuthoritiesFunctionProducerParameters.getFunctionName() == "tenant_has_authorities"
             capturedTenantHasAuthoritiesFunctionProducerParameters.getEqualsCurrentTenantIdentifierFunctionInvocationFactory() == mockedEqualsCurrentTenantIdentifierFunctionDefinition
-            capturedTenantHasAuthoritiesFunctionProducerParameters.getTenantIdArgumentType() == null
+            capturedTenantHasAuthoritiesFunctionProducerParameters.getTenantIdArgumentType() == sharedSchemaContextRequest.getCurrentTenantIdPropertyType()
             capturedTenantHasAuthoritiesFunctionProducerParameters.getPermissionCommandPolicyArgumentType() == null
             capturedTenantHasAuthoritiesFunctionProducerParameters.getRLSExpressionArgumentType() == null
             capturedTenantHasAuthoritiesFunctionProducerParameters.getTableArgumentType() == null
