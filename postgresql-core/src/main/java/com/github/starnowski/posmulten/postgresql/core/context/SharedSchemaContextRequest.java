@@ -9,6 +9,15 @@ public class SharedSchemaContextRequest {
     private String setCurrentTenantIdFunctionName;
     private String equalsCurrentTenantIdentifierFunctionName;
     private String tenantHasAuthoritiesFunctionName;
+    private String defaultTenantIdColumn = "tenant_id";
+
+    public String getDefaultTenantIdColumn() {
+        return defaultTenantIdColumn;
+    }
+
+    public void setDefaultTenantIdColumn(String defaultTenantIdColumn) {
+        this.defaultTenantIdColumn = defaultTenantIdColumn;
+    }
 
     public String getEqualsCurrentTenantIdentifierFunctionName() {
         return equalsCurrentTenantIdentifierFunctionName;

@@ -71,4 +71,12 @@ public class DefaultSharedSchemaContextBuilder {
     public void setTenantHasAuthoritiesFunctionName(String tenantHasAuthoritiesFunctionName) {
         sharedSchemaContextRequest.setTenantHasAuthoritiesFunctionName(tenantHasAuthoritiesFunctionName);
     }
+
+    public String getDefaultTenantIdColumn() {
+        return sharedSchemaContextRequest.getDefaultTenantIdColumn();
+    }
+
+    public void setDefaultTenantIdColumn(String defaultTenantIdColumn) {
+        sharedSchemaContextRequest.setDefaultTenantIdColumn(defaultTenantIdColumn);
+    }
 }
