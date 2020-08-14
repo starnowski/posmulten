@@ -2,7 +2,7 @@ package com.github.starnowski.posmulten.postgresql.core.context;
 
 import java.util.Objects;
 
-public class TableKey {
+public final class TableKey {
 
     private final String table;
     private final String schema;
