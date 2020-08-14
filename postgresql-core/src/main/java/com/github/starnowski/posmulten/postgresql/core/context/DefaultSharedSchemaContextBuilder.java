@@ -15,6 +15,7 @@ public class DefaultSharedSchemaContextBuilder {
 
     public DefaultSharedSchemaContextBuilder(String defaultSchema) {
         this.defaultSchema = defaultSchema;
+        this.sharedSchemaContextRequest.setDefaultSchema(defaultSchema);
     }
 
     private List<AbstractSharedSchemaContextEnricher> enrichers = asList(new GetCurrentTenantIdFunctionDefinitionEnricher(), new SetCurrentTenantIdFunctionDefinitionEnricher(), new TenantHasAuthoritiesFunctionDefinitionEnricher());
