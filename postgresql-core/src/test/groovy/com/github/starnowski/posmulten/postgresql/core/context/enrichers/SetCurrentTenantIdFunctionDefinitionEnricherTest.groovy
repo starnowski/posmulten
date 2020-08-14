@@ -44,8 +44,7 @@ class SetCurrentTenantIdFunctionDefinitionEnricherTest extends Specification {
     def "should enrich shared schema context with sql definition for function that sets current tenant id based on defined values for builder, defaultSchema: #defaultSchema, currentTenantIdProperty #urrentTenantIdProperty, currentTenantIdPropertyType #currentTenantIdPropertyType, function name: #functionName"()
     {
         given:
-            def builder = new DefaultSharedSchemaContextBuilder()
-            builder.setDefaultSchema(defaultSchema)
+            def builder = new DefaultSharedSchemaContextBuilder(defaultSchema)
             builder.setCurrentTenantIdProperty(currentTenantIdProperty)
             builder.setCurrentTenantIdPropertyType(currentTenantIdPropertyType)
             builder.setSetCurrentTenantIdFunctionName(functionName)

@@ -73,7 +73,7 @@ class TenantHasAuthoritiesFunctionDefinitionEnricherTest extends Specification {
     def "should enrich shared schema context with sql definition for function that passed tenant id is equal to current tenant id based on defined values for builder, defaultSchema: #defaultSchema, currentTenantIdProperty #urrentTenantIdProperty, currentTenantIdPropertyType #currentTenantIdPropertyType, equalsCurrentTenantIdentifierFunctionName: #equalsCurrentTenantIdentifierFunctionName, tenantHasAuthoritiesFunctionName: #tenantHasAuthoritiesFunctionName"()
     {
         given:
-            def sharedSchemaContextRequest = new DefaultSharedSchemaContextBuilder().getSharedSchemaContextRequest()
+            def sharedSchemaContextRequest = new DefaultSharedSchemaContextBuilder(defaultSchema).getSharedSchemaContextRequest()
             def context = new SharedSchemaContext()
             def capturedEqualsCurrentTenantIdentifierFunctionProducerParameters = null
             def capturedTenantHasAuthoritiesFunctionProducerParameters = null
