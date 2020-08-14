@@ -62,7 +62,7 @@ class TenantHasAuthoritiesFunctionDefinitionEnricherTest extends Specification {
             capturedTenantHasAuthoritiesFunctionProducerParameters.getSchema() == sharedSchemaContextRequest.getDefaultSchema()
             capturedTenantHasAuthoritiesFunctionProducerParameters.getFunctionName() == "tenant_has_authorities"
             capturedTenantHasAuthoritiesFunctionProducerParameters.getEqualsCurrentTenantIdentifierFunctionInvocationFactory() == mockedEqualsCurrentTenantIdentifierFunctionDefinition
-            capturedTenantHasAuthoritiesFunctionProducerParameters.getTenantIdArgumentType() == null
+            capturedTenantHasAuthoritiesFunctionProducerParameters.getTenantIdArgumentType() == sharedSchemaContextRequest.getCurrentTenantIdPropertyType()
             capturedTenantHasAuthoritiesFunctionProducerParameters.getPermissionCommandPolicyArgumentType() == null
             capturedTenantHasAuthoritiesFunctionProducerParameters.getRLSExpressionArgumentType() == null
             capturedTenantHasAuthoritiesFunctionProducerParameters.getTableArgumentType() == null
@@ -73,7 +73,11 @@ class TenantHasAuthoritiesFunctionDefinitionEnricherTest extends Specification {
     def "should enrich shared schema context with sql definition for function that passed tenant id is equal to current tenant id based on defined values for builder, defaultSchema: #defaultSchema, currentTenantIdProperty #urrentTenantIdProperty, currentTenantIdPropertyType #currentTenantIdPropertyType, equalsCurrentTenantIdentifierFunctionName: #equalsCurrentTenantIdentifierFunctionName, tenantHasAuthoritiesFunctionName: #tenantHasAuthoritiesFunctionName"()
     {
         given:
-            def sharedSchemaContextRequest = new DefaultSharedSchemaContextBuilder().getSharedSchemaContextRequest()
+            def builder = new DefaultSharedSchemaContextBuilder(defaultSchema)
+            builder.setCurrentTenantIdPropertyType(currentTenantIdPropertyType)
+            builder.setEqualsCurrentTenantIdentifierFunctionName(equalsCurrentTenantIdentifierFunctionName)
+            builder.setTenantHasAuthoritiesFunctionName(tenantHasAuthoritiesFunctionName)
+            def sharedSchemaContextRequest = builder.getSharedSchemaContextRequest()
             def context = new SharedSchemaContext()
             def capturedEqualsCurrentTenantIdentifierFunctionProducerParameters = null
             def capturedTenantHasAuthoritiesFunctionProducerParameters = null
@@ -111,14 +115,14 @@ class TenantHasAuthoritiesFunctionDefinitionEnricherTest extends Specification {
 
         and: "passed parameters should match default values"
             capturedEqualsCurrentTenantIdentifierFunctionProducerParameters.getSchema() == sharedSchemaContextRequest.getDefaultSchema()
-            capturedEqualsCurrentTenantIdentifierFunctionProducerParameters.getArgumentType() == sharedSchemaContextRequest.getCurrentTenantIdPropertyType()
+            capturedEqualsCurrentTenantIdentifierFunctionProducerParameters.getArgumentType() == currentTenantIdPropertyType
             capturedEqualsCurrentTenantIdentifierFunctionProducerParameters.getCurrentTenantIdFunctionInvocationFactory() == getCurrentTenantIdFunctionInvocationFactory
-            capturedEqualsCurrentTenantIdentifierFunctionProducerParameters.getFunctionName() == "is_id_equals_current_tenant_id"
+            capturedEqualsCurrentTenantIdentifierFunctionProducerParameters.getFunctionName() == expectedEqualsCurrentTenantIdentifierFunctionName
 
             capturedTenantHasAuthoritiesFunctionProducerParameters.getSchema() == sharedSchemaContextRequest.getDefaultSchema()
-            capturedTenantHasAuthoritiesFunctionProducerParameters.getFunctionName() == "tenant_has_authorities"
+            capturedTenantHasAuthoritiesFunctionProducerParameters.getFunctionName() == expectedTenantHasAuthoritiesFunctionName
             capturedTenantHasAuthoritiesFunctionProducerParameters.getEqualsCurrentTenantIdentifierFunctionInvocationFactory() == mockedEqualsCurrentTenantIdentifierFunctionDefinition
-            capturedTenantHasAuthoritiesFunctionProducerParameters.getTenantIdArgumentType() == null
+            capturedTenantHasAuthoritiesFunctionProducerParameters.getTenantIdArgumentType() == currentTenantIdPropertyType
             capturedTenantHasAuthoritiesFunctionProducerParameters.getPermissionCommandPolicyArgumentType() == null
             capturedTenantHasAuthoritiesFunctionProducerParameters.getRLSExpressionArgumentType() == null
             capturedTenantHasAuthoritiesFunctionProducerParameters.getTableArgumentType() == null

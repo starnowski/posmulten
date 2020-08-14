@@ -11,6 +11,12 @@ import static java.util.Arrays.asList;
 
 public class DefaultSharedSchemaContextBuilder {
 
+    private String defaultSchema;
+
+    public DefaultSharedSchemaContextBuilder(String defaultSchema) {
+        this.defaultSchema = defaultSchema;
+    }
+
     private List<AbstractSharedSchemaContextEnricher> enrichers = asList(new GetCurrentTenantIdFunctionDefinitionEnricher(), new SetCurrentTenantIdFunctionDefinitionEnricher(), new TenantHasAuthoritiesFunctionDefinitionEnricher());
 
     private SharedSchemaContextRequest sharedSchemaContextRequest = new SharedSchemaContextRequest();
@@ -19,7 +25,8 @@ public class DefaultSharedSchemaContextBuilder {
     {
         AbstractSharedSchemaContext context = new SharedSchemaContext();
         List<AbstractSharedSchemaContextEnricher> enrichers  = getEnrichers();
-        //TODO Consider of copy request
+        //TODO Copy request
+        sharedSchemaContextRequest.setDefaultSchema(defaultSchema);
         for (AbstractSharedSchemaContextEnricher enricher : enrichers)
         {
             //TODO Consider of copy request (in loop also)
@@ -46,10 +53,6 @@ public class DefaultSharedSchemaContextBuilder {
 
     public void setCurrentTenantIdProperty(String currentTenantIdProperty) {
         sharedSchemaContextRequest.setCurrentTenantIdProperty(currentTenantIdProperty);
-    }
-
-    public void setDefaultSchema(String defaultSchema) {
-        sharedSchemaContextRequest.setDefaultSchema(defaultSchema);
     }
 
     public void setGetCurrentTenantIdFunctionName(String getCurrentTenantIdFunctionName) {
