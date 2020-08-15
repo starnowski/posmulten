@@ -72,4 +72,10 @@ public class DefaultSharedSchemaContextBuilder {
         sharedSchemaContextRequest.setTenantHasAuthoritiesFunctionName(tenantHasAuthoritiesFunctionName);
     }
 
+    public void createTenantColumnForTable(String table)
+    {
+        TableKey tableKey = new TableKey(table, this.defaultSchema);
+        sharedSchemaContextRequest.getCreateTenantColumnTableLists().add(tableKey);
+    }
+
 }
