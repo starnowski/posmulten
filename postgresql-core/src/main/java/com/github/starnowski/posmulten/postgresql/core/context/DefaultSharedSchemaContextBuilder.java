@@ -40,42 +40,50 @@ public class DefaultSharedSchemaContextBuilder {
         return enrichers == null ? new ArrayList<>() : new ArrayList<>(enrichers);
     }
 
-    public void setEnrichers(List<AbstractSharedSchemaContextEnricher> enrichers) {
+    public DefaultSharedSchemaContextBuilder setEnrichers(List<AbstractSharedSchemaContextEnricher> enrichers) {
         this.enrichers = enrichers;
+        return this;
     }
 
     public SharedSchemaContextRequest getSharedSchemaContextRequest() {
         return sharedSchemaContextRequest;
     }
 
-    public void setCurrentTenantIdPropertyType(String currentTenantIdPropertyType) {
+    public DefaultSharedSchemaContextBuilder setCurrentTenantIdPropertyType(String currentTenantIdPropertyType) {
         sharedSchemaContextRequest.setCurrentTenantIdPropertyType(currentTenantIdPropertyType);
+        return this;
     }
 
-    public void setCurrentTenantIdProperty(String currentTenantIdProperty) {
+    public DefaultSharedSchemaContextBuilder setCurrentTenantIdProperty(String currentTenantIdProperty) {
         sharedSchemaContextRequest.setCurrentTenantIdProperty(currentTenantIdProperty);
+        return this;
     }
 
-    public void setGetCurrentTenantIdFunctionName(String getCurrentTenantIdFunctionName) {
+    public DefaultSharedSchemaContextBuilder setGetCurrentTenantIdFunctionName(String getCurrentTenantIdFunctionName) {
         sharedSchemaContextRequest.setGetCurrentTenantIdFunctionName(getCurrentTenantIdFunctionName);
+        return this;
     }
 
-    public void setSetCurrentTenantIdFunctionName(String setCurrentTenantIdFunctionName) {
+    public DefaultSharedSchemaContextBuilder setSetCurrentTenantIdFunctionName(String setCurrentTenantIdFunctionName) {
         sharedSchemaContextRequest.setSetCurrentTenantIdFunctionName(setCurrentTenantIdFunctionName);
+        return this;
     }
 
-    public void setEqualsCurrentTenantIdentifierFunctionName(String equalsCurrentTenantIdentifierFunctionName) {
+    public DefaultSharedSchemaContextBuilder setEqualsCurrentTenantIdentifierFunctionName(String equalsCurrentTenantIdentifierFunctionName) {
         sharedSchemaContextRequest.setEqualsCurrentTenantIdentifierFunctionName(equalsCurrentTenantIdentifierFunctionName);
+        return this;
     }
 
-    public void setTenantHasAuthoritiesFunctionName(String tenantHasAuthoritiesFunctionName) {
+    public DefaultSharedSchemaContextBuilder setTenantHasAuthoritiesFunctionName(String tenantHasAuthoritiesFunctionName) {
         sharedSchemaContextRequest.setTenantHasAuthoritiesFunctionName(tenantHasAuthoritiesFunctionName);
+        return this;
     }
 
-    public void createTenantColumnForTable(String table)
+    public DefaultSharedSchemaContextBuilder createTenantColumnForTable(String table)
     {
         TableKey tableKey = new TableKey(table, this.defaultSchema);
         sharedSchemaContextRequest.getCreateTenantColumnTableLists().add(tableKey);
+        return this;
     }
 
 }
