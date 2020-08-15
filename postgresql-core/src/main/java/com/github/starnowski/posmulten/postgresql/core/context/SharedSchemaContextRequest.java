@@ -81,4 +81,12 @@ public class SharedSchemaContextRequest {
     public void setDefaultSchema(String defaultSchema) {
         this.defaultSchema = defaultSchema;
     }
+
+    public Map<TableKey, AbstractTableColumns> getTenantIdColumnCreationRequest() {
+        return tenantIdColumnCreationRequest;
+    }
+
+    public Set<TableKey> getCreateTenantColumnTableLists() {
+        return createTenantColumnTableLists;
+    }
 }
