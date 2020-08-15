@@ -15,7 +15,7 @@ public class SharedSchemaContextRequest {
     private String equalsCurrentTenantIdentifierFunctionName;
     private String tenantHasAuthoritiesFunctionName;
     private String defaultTenantIdColumn = "tenant_id";
-    private Map<TableKey, AbstractTableColumns> tenantIdColumnCreationRequest = new HashMap<>();
+    private Map<TableKey, AbstractTableColumns> tableColumnsList = new HashMap<>();
     private Set<TableKey> createTenantColumnTableLists = new HashSet<>();
 
     public String getDefaultTenantIdColumn() {
@@ -82,8 +82,8 @@ public class SharedSchemaContextRequest {
         this.defaultSchema = defaultSchema;
     }
 
-    public Map<TableKey, AbstractTableColumns> getTenantIdColumnCreationRequest() {
-        return tenantIdColumnCreationRequest;
+    public Map<TableKey, AbstractTableColumns> getTableColumnsList() {
+        return tableColumnsList;
     }
 
     public Set<TableKey> getCreateTenantColumnTableLists() {

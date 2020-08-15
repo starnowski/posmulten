@@ -6,21 +6,20 @@ import com.github.starnowski.posmulten.postgresql.core.context.enrichers.TenantH
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static java.util.Arrays.asList;
 
 public class DefaultSharedSchemaContextBuilder {
 
     private String defaultSchema;
+    private List<AbstractSharedSchemaContextEnricher> enrichers = asList(new GetCurrentTenantIdFunctionDefinitionEnricher(), new SetCurrentTenantIdFunctionDefinitionEnricher(), new TenantHasAuthoritiesFunctionDefinitionEnricher());
+    private SharedSchemaContextRequest sharedSchemaContextRequest = new SharedSchemaContextRequest();
 
     public DefaultSharedSchemaContextBuilder(String defaultSchema) {
         this.defaultSchema = defaultSchema;
         this.sharedSchemaContextRequest.setDefaultSchema(defaultSchema);
     }
-
-    private List<AbstractSharedSchemaContextEnricher> enrichers = asList(new GetCurrentTenantIdFunctionDefinitionEnricher(), new SetCurrentTenantIdFunctionDefinitionEnricher(), new TenantHasAuthoritiesFunctionDefinitionEnricher());
-
-    private SharedSchemaContextRequest sharedSchemaContextRequest = new SharedSchemaContextRequest();
 
     public AbstractSharedSchemaContext build()
     {
@@ -83,6 +82,13 @@ public class DefaultSharedSchemaContextBuilder {
     {
         TableKey tableKey = new TableKey(table, this.defaultSchema);
         sharedSchemaContextRequest.getCreateTenantColumnTableLists().add(tableKey);
+        return this;
+    }
+
+    public DefaultSharedSchemaContextBuilder createRLSPolicyForColumn(String table, Map<String, String> primaryKeyColumnsList, String tenantColumnName, String rlsPolicyName)
+    {
+        TableKey tableKey = new TableKey(table, this.defaultSchema);
+        sharedSchemaContextRequest.getTableColumnsList().put(tableKey, new DefaultTableColumns(tenantColumnName, primaryKeyColumnsList));
         return this;
     }
 
