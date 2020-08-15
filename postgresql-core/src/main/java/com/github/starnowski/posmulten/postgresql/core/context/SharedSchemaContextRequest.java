@@ -1,5 +1,10 @@
 package com.github.starnowski.posmulten.postgresql.core.context;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
 public class SharedSchemaContextRequest {
 
     private String defaultSchema;
@@ -10,6 +15,8 @@ public class SharedSchemaContextRequest {
     private String equalsCurrentTenantIdentifierFunctionName;
     private String tenantHasAuthoritiesFunctionName;
     private String defaultTenantIdColumn = "tenant_id";
+    private Map<TableKey, AbstractTableColumns> tenantIdColumnCreationRequest = new HashMap<>();
+    private Set<TableKey> createTenantColumnTableLists = new HashSet<>();
 
     public String getDefaultTenantIdColumn() {
         return defaultTenantIdColumn;
