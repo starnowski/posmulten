@@ -7,6 +7,7 @@ import com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaConte
 public class TenantColumnSQLDefinitionsEnrichers implements AbstractSharedSchemaContextEnricher {
     @Override
     public AbstractSharedSchemaContext enrich(AbstractSharedSchemaContext context, SharedSchemaContextRequest request) {
+        //TODO Add exception for non-existed table declaration for which rls policy should be created
         return null;
     }
 }
