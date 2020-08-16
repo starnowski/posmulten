@@ -22,8 +22,9 @@ class TenantColumnSQLDefinitionsEnricherTest extends Specification {
         given:
         def sharedSchemaContextRequest = new DefaultSharedSchemaContextBuilder().getSharedSchemaContextRequest()
         def context = new SharedSchemaContext()
-        def capturedEqualsCurrentTenantIdentifierFunctionProducerParameters = null
-        def capturedTenantHasAuthoritiesFunctionProducerParameters = null
+        def capturedICreateColumnStatementProducerParameters = null
+        def capturedISetDefaultStatementProducerParameters = null
+        def capturedISetNotNullStatementProducerParameters = null
         def getCurrentTenantIdFunctionInvocationFactory = Mock(IGetCurrentTenantIdFunctionInvocationFactory)
         def createColumnStatementProducerSQLDefinition = Mock(SQLDefinition)
         def setDefaultStatementProducerSQLDefinition = Mock(SQLDefinition)
