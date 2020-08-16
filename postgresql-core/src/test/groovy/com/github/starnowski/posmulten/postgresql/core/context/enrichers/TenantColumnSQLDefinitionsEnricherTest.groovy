@@ -1,5 +1,8 @@
 package com.github.starnowski.posmulten.postgresql.core.context.enrichers
 
+import com.github.starnowski.posmulten.postgresql.core.CreateColumnStatementProducer
+import com.github.starnowski.posmulten.postgresql.core.SetDefaultStatementProducer
+import com.github.starnowski.posmulten.postgresql.core.SetNotNullStatementProducer
 import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder
 import com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContext
 import com.github.starnowski.posmulten.postgresql.core.rls.function.EqualsCurrentTenantIdentifierFunctionDefinition
@@ -23,10 +26,12 @@ class TenantColumnSQLDefinitionsEnricherTest extends Specification {
         def getCurrentTenantIdFunctionInvocationFactory = Mock(IGetCurrentTenantIdFunctionInvocationFactory)
         def mockedEqualsCurrentTenantIdentifierFunctionDefinition = Mock(EqualsCurrentTenantIdentifierFunctionDefinition)
         def mockedTenantHasAuthoritiesFunctionDefinition = Mock(TenantHasAuthoritiesFunctionDefinition)
-        def equalsCurrentTenantIdentifierFunctionProducer = Mock(EqualsCurrentTenantIdentifierFunctionProducer)
-        def tenantHasAuthoritiesFunctionProducer = Mock(TenantHasAuthoritiesFunctionProducer)
-        tested.setEqualsCurrentTenantIdentifierFunctionProducer(equalsCurrentTenantIdentifierFunctionProducer)
-        tested.setTenantHasAuthoritiesFunctionProducer(tenantHasAuthoritiesFunctionProducer)
+        def createColumnStatementProducer = Mock(CreateColumnStatementProducer)
+        def setDefaultStatementProducer = Mock(SetDefaultStatementProducer)
+        def setNotNullStatementProducer = Mock(SetNotNullStatementProducer)
+        tested.setCreateColumnStatementProducer(createColumnStatementProducer)
+        tested.setSetDefaultStatementProducer(setDefaultStatementProducer)
+        tested.setSetNotNullStatementProducer(setNotNullStatementProducer)
         context.setIGetCurrentTenantIdFunctionInvocationFactory(getCurrentTenantIdFunctionInvocationFactory)
 
         when:
