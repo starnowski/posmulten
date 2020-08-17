@@ -2,6 +2,7 @@ package com.github.starnowski.posmulten.postgresql.core.context
 
 import com.github.starnowski.posmulten.postgresql.core.CreateColumnStatementProducer
 import com.github.starnowski.posmulten.postgresql.core.CreateColumnStatementProducerParameters
+import com.github.starnowski.posmulten.postgresql.core.ISetDefaultStatementProducerParameters
 import com.github.starnowski.posmulten.postgresql.core.SetDefaultStatementProducer
 import com.github.starnowski.posmulten.postgresql.core.SetNotNullStatementProducer
 import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition
@@ -54,6 +55,11 @@ class SingleTenantColumnSQLDefinitionsProducerTest extends Specification {
                     setDefaultStatementProducerSQLDefinition
             }
             results.contains(setDefaultStatementProducerSQLDefinition)
+            ISetDefaultStatementProducerParameters iSetDefaultStatementProducerParameters = capturedSetDefaultStatementProducerParameters
+            columnStatementProducerParameters.getTable() == tenantTable.getTable()
+            columnStatementProducerParameters.getSchema() == tenantTable.getSchema()
+            columnStatementProducerParameters.getColumn() == expectedTenantColumn
+            columnStatementProducerParameters.getColumnType() == expectedTenantColumnType
 
         then:
             1 * setNotNullStatementProducer.produce(_) >>  {
@@ -67,8 +73,8 @@ class SingleTenantColumnSQLDefinitionsProducerTest extends Specification {
             results == [createColumnStatementProducerSQLDefinition, setDefaultStatementProducerSQLDefinition, setNotNullStatementProducerSQLDefinition]
 
         where:
-            tenantTable             |   tenantColumn    |   defaultTenantColumn |   defaultTenantColumnType ||  expectedTenantColumn    |   expectedTenantColumnType
-            tk("users", null)       |   "tenant_id"     |   "tenant"            |   "VARCHAR(255)"          ||  "tenant_id"             |   "VARCHAR(255)"
+            tenantTable             |   tenantColumn    |   defaultTenantColumn |   defaultTenantColumnType |   defaultTenantColumnValue    ||  expectedTenantColumn    |   expectedTenantColumnType
+            tk("users", null)       |   "tenant_id"     |   "tenant"            |   "VARCHAR(255)"          |   "XXX_TT"                    ||  "tenant_id"             |   "VARCHAR(255)"
 
     }
 
