@@ -39,7 +39,7 @@ class TableRLSSettingsSQLDefinitionsEnricherTest extends Specification {
         then:
             1 * tableRLSSettingsSQLDefinitionsProducer.produce(usersTableKey, false) >> [usersTableSQLDefinition1, usersTableSQLDefinition2]
             1 * tableRLSSettingsSQLDefinitionsProducer.produce(commentsTableKey, false) >> [commentsTableSQLDefinition1]
-            0 * tableRLSSettingsSQLDefinitionsProducer.produce(someTableKey, false) >> [someTableSQLDefinition1, someTableSQLDefinition2]
+            1 * tableRLSSettingsSQLDefinitionsProducer.produce(someTableKey, false) >> [someTableSQLDefinition1, someTableSQLDefinition2]
 
             result.getSqlDefinitions().contains(usersTableSQLDefinition1)
             result.getSqlDefinitions().contains(usersTableSQLDefinition2)
