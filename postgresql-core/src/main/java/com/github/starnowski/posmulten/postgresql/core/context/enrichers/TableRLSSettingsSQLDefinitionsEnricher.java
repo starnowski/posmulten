@@ -11,7 +11,11 @@ public class TableRLSSettingsSQLDefinitionsEnricher implements AbstractSharedSch
 
     @Override
     public AbstractSharedSchemaContext enrich(AbstractSharedSchemaContext context, SharedSchemaContextRequest request) {
-        return null;
+        request.getTableColumnsList().keySet().forEach(tableKey ->
+        {
+            tableRLSSettingsSQLDefinitionsProducer.produce(tableKey, false).forEach(context::addSQLDefinition);
+        });
+        return context;
     }
 
     void setTableRLSSettingsSQLDefinitionsProducer(TableRLSSettingsSQLDefinitionsProducer tableRLSSettingsSQLDefinitionsProducer) {
