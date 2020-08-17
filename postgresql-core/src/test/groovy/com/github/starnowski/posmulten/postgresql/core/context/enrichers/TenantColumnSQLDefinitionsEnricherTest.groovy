@@ -12,32 +12,32 @@ class TenantColumnSQLDefinitionsEnricherTest extends Specification {
     def "should enrich shared schema context with sql definition that creates column for storing record tenant id"()
     {
         given:
-        def randomString = new RandomString(5, new Random(), RandomString.lower)
-        def builder = new DefaultSharedSchemaContextBuilder()
-        builder.createRLSPolicyForColumn("users", [:], "tenant", "user_policy")
-        builder.createTenantColumnForTable("users")
-        builder.createRLSPolicyForColumn("comments", [:], "tenant_id", "comments_policy")
-        builder.createTenantColumnForTable("comments")
-        builder.createRLSPolicyForColumn("some_table", [:], "tenant_xxx_id", "some_table_policy")
-        def sharedSchemaContextRequest = builder.getSharedSchemaContextRequest()
-        def context = new SharedSchemaContext()
-        def currentTenantInvocation = randomString.nextString()
-        def getCurrentTenantIdFunctionInvocationFactory = {
-            currentTenantInvocation
-        }
-        def usersTableSQLDefinition1 = Mock(SQLDefinition)
-        def usersTableSQLDefinition2 = Mock(SQLDefinition)
-        def commentsTableSQLDefinition1 = Mock(SQLDefinition)
-        def singleTenantColumnSQLDefinitionsProducer = Mock(SingleTenantColumnSQLDefinitionsProducer)
-        tested.setSingleTenantColumnSQLDefinitionsProducer(singleTenantColumnSQLDefinitionsProducer)
-        context.setIGetCurrentTenantIdFunctionInvocationFactory(getCurrentTenantIdFunctionInvocationFactory)
-        def usersTableKey = tk("users", null)
-        def commentsTableKey = tk("comments", null)
-        def someTableKey = tk("some_table", null)
+            def randomString = new RandomString(5, new Random(), RandomString.lower)
+            def builder = new DefaultSharedSchemaContextBuilder()
+            builder.createRLSPolicyForColumn("users", [:], "tenant", "user_policy")
+            builder.createTenantColumnForTable("users")
+            builder.createRLSPolicyForColumn("comments", [:], "tenant_id", "comments_policy")
+            builder.createTenantColumnForTable("comments")
+            builder.createRLSPolicyForColumn("some_table", [:], "tenant_xxx_id", "some_table_policy")
+            def sharedSchemaContextRequest = builder.getSharedSchemaContextRequest()
+            def context = new SharedSchemaContext()
+            def currentTenantInvocation = randomString.nextString()
+            def getCurrentTenantIdFunctionInvocationFactory = {
+                currentTenantInvocation
+            }
+            def usersTableSQLDefinition1 = Mock(SQLDefinition)
+            def usersTableSQLDefinition2 = Mock(SQLDefinition)
+            def commentsTableSQLDefinition1 = Mock(SQLDefinition)
+            def singleTenantColumnSQLDefinitionsProducer = Mock(SingleTenantColumnSQLDefinitionsProducer)
+            tested.setSingleTenantColumnSQLDefinitionsProducer(singleTenantColumnSQLDefinitionsProducer)
+            context.setIGetCurrentTenantIdFunctionInvocationFactory(getCurrentTenantIdFunctionInvocationFactory)
+            def usersTableKey = tk("users", null)
+            def commentsTableKey = tk("comments", null)
+            def someTableKey = tk("some_table", null)
 
-        AbstractTableColumns usersTableColumns = sharedSchemaContextRequest.getTableColumnsList().get(usersTableKey)
-        AbstractTableColumns commentsTableColumns = sharedSchemaContextRequest.getTableColumnsList().get(commentsTableKey)
-        AbstractTableColumns someTableColumns = sharedSchemaContextRequest.getTableColumnsList().get(commentsTableKey)
+            AbstractTableColumns usersTableColumns = sharedSchemaContextRequest.getTableColumnsList().get(usersTableKey)
+            AbstractTableColumns commentsTableColumns = sharedSchemaContextRequest.getTableColumnsList().get(commentsTableKey)
+            AbstractTableColumns someTableColumns = sharedSchemaContextRequest.getTableColumnsList().get(commentsTableKey)
 
         when:
             def result = tested.enrich(context, sharedSchemaContextRequest)
