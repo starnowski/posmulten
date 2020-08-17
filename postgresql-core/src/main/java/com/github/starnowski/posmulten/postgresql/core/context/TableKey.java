@@ -21,6 +21,14 @@ public final class TableKey {
     }
 
     @Override
+    public String toString() {
+        return "TableKey{" +
+                "table='" + table + '\'' +
+                ", schema='" + schema + '\'' +
+                '}';
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
