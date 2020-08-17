@@ -3,6 +3,7 @@ package com.github.starnowski.posmulten.postgresql.core.context
 import com.github.starnowski.posmulten.postgresql.core.CreateColumnStatementProducer
 import com.github.starnowski.posmulten.postgresql.core.SetDefaultStatementProducer
 import com.github.starnowski.posmulten.postgresql.core.SetNotNullStatementProducer
+import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition
 import groovy.model.DefaultTableColumn
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -18,6 +19,12 @@ class SingleTenantColumnSQLDefinitionsProducerTest extends Specification {
             def createColumnStatementProducer = Mock(CreateColumnStatementProducer)
             def setDefaultStatementProducer = Mock(SetDefaultStatementProducer)
             def setNotNullStatementProducer = Mock(SetNotNullStatementProducer)
+            def createColumnStatementProducerSQLDefinition = Mock(SQLDefinition)
+            def setDefaultStatementProducerSQLDefinition = Mock(SQLDefinition)
+            def setNotNullStatementProducerSQLDefinition = Mock(SQLDefinition)
+            def capturedCreateColumnStatementProducerParameters = null
+            def capturedSetDefaultStatementProducerParameters = null
+            def capturedSetNotNullStatementProducerParameters = null
             tested.setCreateColumnStatementProducer(createColumnStatementProducer)
             tested.setSetDefaultStatementProducer(setDefaultStatementProducer)
             tested.setSetNotNullStatementProducer(setNotNullStatementProducer)
@@ -27,7 +34,12 @@ class SingleTenantColumnSQLDefinitionsProducerTest extends Specification {
             def results = tested.produce(tenantTable, tableColumns, defaultTenantColumn, defaultTenantColumnType)
 
         then:
-
+            1 * createColumnStatementProducer.produce(_) >>  {
+                parameters ->
+                    capturedCreateColumnStatementProducerParameters = parameters[0]
+                    createColumnStatementProducerSQLDefinition
+            }
+            results.contains(createColumnStatementProducerSQLDefinition)
 
         where:
             tenantTable             |   tenantColumn    |   defaultTenantColumn |   defaultTenantColumnType ||  expectedTenantColumn    |   expectedTenantColumnType
