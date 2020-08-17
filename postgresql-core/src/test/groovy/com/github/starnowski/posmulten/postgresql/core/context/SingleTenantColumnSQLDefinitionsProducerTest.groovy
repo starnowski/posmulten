@@ -1,6 +1,7 @@
 package com.github.starnowski.posmulten.postgresql.core.context
 
 import com.github.starnowski.posmulten.postgresql.core.CreateColumnStatementProducer
+import com.github.starnowski.posmulten.postgresql.core.CreateColumnStatementProducerParameters
 import com.github.starnowski.posmulten.postgresql.core.SetDefaultStatementProducer
 import com.github.starnowski.posmulten.postgresql.core.SetNotNullStatementProducer
 import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition
@@ -40,6 +41,11 @@ class SingleTenantColumnSQLDefinitionsProducerTest extends Specification {
                     createColumnStatementProducerSQLDefinition
             }
             results.contains(createColumnStatementProducerSQLDefinition)
+            CreateColumnStatementProducerParameters columnStatementProducerParameters = capturedCreateColumnStatementProducerParameters
+            columnStatementProducerParameters.getTable() == tenantTable.getTable()
+            columnStatementProducerParameters.getSchema() == tenantTable.getSchema()
+            columnStatementProducerParameters.getColumn() == expectedTenantColumn
+            columnStatementProducerParameters.getColumnType() == expectedTenantColumnType
 
         then:
             1 * setDefaultStatementProducer.produce(_) >>  {
@@ -48,6 +54,9 @@ class SingleTenantColumnSQLDefinitionsProducerTest extends Specification {
                     setDefaultStatementProducerSQLDefinition
             }
             results.contains(setDefaultStatementProducerSQLDefinition)
+
+        and: "pass SQL definition in correct order"
+            results == [createColumnStatementProducerSQLDefinition, setDefaultStatementProducerSQLDefinition, setNotNullStatementProducerSQLDefinition]
 
         where:
             tenantTable             |   tenantColumn    |   defaultTenantColumn |   defaultTenantColumnType ||  expectedTenantColumn    |   expectedTenantColumnType
