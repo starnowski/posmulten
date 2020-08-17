@@ -13,7 +13,7 @@ public class SingleTenantColumnSQLDefinitionsProducer {
     private SetDefaultStatementProducer setDefaultStatementProducer = new SetDefaultStatementProducer();
     private SetNotNullStatementProducer setNotNullStatementProducer = new SetNotNullStatementProducer();
 
-    public List<SQLDefinition> produce(TableKey tableKey, AbstractTableColumns tableColumns, String defaultTenantColumn, String defaultTenantColumnType)
+    public List<SQLDefinition> produce(TableKey tableKey, AbstractTableColumns tableColumns, String defaultTenantColumnValue, String defaultTenantColumn, String defaultTenantColumnType)
     {
         //TODO
         return null;
