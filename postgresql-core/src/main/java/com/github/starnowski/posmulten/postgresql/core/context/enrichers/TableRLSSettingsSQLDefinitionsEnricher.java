@@ -13,7 +13,7 @@ public class TableRLSSettingsSQLDefinitionsEnricher implements AbstractSharedSch
     public AbstractSharedSchemaContext enrich(AbstractSharedSchemaContext context, SharedSchemaContextRequest request) {
         request.getTableColumnsList().keySet().forEach(tableKey ->
         {
-            tableRLSSettingsSQLDefinitionsProducer.produce(tableKey, false).forEach(context::addSQLDefinition);
+            tableRLSSettingsSQLDefinitionsProducer.produce(tableKey, request.isForceRowLevelSecurityForTableOwner()).forEach(context::addSQLDefinition);
         });
         return context;
     }
