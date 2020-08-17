@@ -1,6 +1,5 @@
 package com.github.starnowski.posmulten.postgresql.core.functional.tests.combine;
 
-import com.github.starnowski.posmulten.postgresql.core.*;
 import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition;
 import com.github.starnowski.posmulten.postgresql.core.context.AbstractSharedSchemaContext;
 import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder;
@@ -9,7 +8,9 @@ import com.github.starnowski.posmulten.postgresql.core.rls.EnableRowLevelSecurit
 import com.github.starnowski.posmulten.postgresql.core.rls.ForceRowLevelSecurityProducer;
 import com.github.starnowski.posmulten.postgresql.core.rls.RLSPolicyProducer;
 import com.github.starnowski.posmulten.postgresql.core.rls.TenantHasAuthoritiesFunctionInvocationFactory;
-import com.github.starnowski.posmulten.postgresql.core.rls.function.*;
+import com.github.starnowski.posmulten.postgresql.core.rls.function.IGetCurrentTenantIdFunctionInvocationFactory;
+import com.github.starnowski.posmulten.postgresql.core.rls.function.ISetCurrentTenantIdFunctionInvocationFactory;
+import com.github.starnowski.posmulten.postgresql.core.rls.function.IsRecordBelongsToCurrentTenantFunctionDefinition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -17,6 +18,9 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.jdbc.SqlGroup;
 import org.testng.annotations.Test;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.github.starnowski.posmulten.postgresql.core.functional.tests.TestApplication.CLEAR_DATABASE_SCRIPT_PATH;
 import static com.github.starnowski.posmulten.postgresql.core.rls.DefaultRLSPolicyProducerParameters.builder;
@@ -53,7 +57,10 @@ public abstract class FullStackTest extends AbstractClassWithSQLDefinitionGenera
     {
         DefaultSharedSchemaContextBuilder defaultSharedSchemaContextBuilder = new DefaultSharedSchemaContextBuilder(getSchema());
         defaultSharedSchemaContextBuilder.setCurrentTenantIdProperty(VALID_CURRENT_TENANT_ID_PROPERTY_NAME);
-
+        Map<String, String> notificationsIdColumns = new HashMap<>();
+        notificationsIdColumns.put("uuid", "uuid");
+        defaultSharedSchemaContextBuilder.createRLSPolicyForColumn(NOTIFICATIONS_TABLE_NAME, notificationsIdColumns, CUSTOM_TENANT_COLUMN_NAME, "notifications_table_rls_policy");
+        defaultSharedSchemaContextBuilder.createTenantColumnForTable(NOTIFICATIONS_TABLE_NAME);
         AbstractSharedSchemaContext sharedSchemaContext = defaultSharedSchemaContextBuilder.build();
 
         IGetCurrentTenantIdFunctionInvocationFactory getCurrentTenantIdFunctionDefinition = sharedSchemaContext.getIGetCurrentTenantIdFunctionInvocationFactory();
@@ -62,19 +69,6 @@ public abstract class FullStackTest extends AbstractClassWithSQLDefinitionGenera
 
         sqlDefinitions.addAll(sharedSchemaContext.getSqlDefinitions());
         // TODO Use the DefaultSharedSchemaContextBuilder to create all SQL definitions
-
-        // Custom tenant column
-        // Create tenant column in the notifications table
-        CreateColumnStatementProducer createColumnStatementProducer = new CreateColumnStatementProducer();
-        sqlDefinitions.add(createColumnStatementProducer.produce(new CreateColumnStatementProducerParameters(NOTIFICATIONS_TABLE_NAME, CUSTOM_TENANT_COLUMN_NAME, "character varying(255)", getSchema())));
-
-        // Setting default value
-        SetDefaultStatementProducer setDefaultStatementProducer = new SetDefaultStatementProducer();
-        sqlDefinitions.add(setDefaultStatementProducer.produce(new SetDefaultStatementProducerParameters(NOTIFICATIONS_TABLE_NAME, CUSTOM_TENANT_COLUMN_NAME, getCurrentTenantIdFunctionDefinition.returnGetCurrentTenantIdFunctionInvocation(), getSchema())));
-
-        // Setting NOT NULL declaration
-        SetNotNullStatementProducer setNotNullStatementProducer = new SetNotNullStatementProducer();
-        sqlDefinitions.add(setNotNullStatementProducer.produce(new SetNotNullStatementProducerParameters(NOTIFICATIONS_TABLE_NAME, CUSTOM_TENANT_COLUMN_NAME, getSchema())));
 
         // RLS - users
         // EnableRowLevelSecurityProducer
