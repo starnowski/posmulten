@@ -54,7 +54,7 @@ class TableRLSSettingsSQLDefinitionsProducerTest extends Specification {
 
         then:
             1 * enableRowLevelSecurityProducer.produce(tableKey.getTable(), tableKey.getSchema()) >> enableRowLevelSecurityProducerSQLDefinition
-            1 * forceRowLevelSecurityProducer.produce(tableKey.getTable(), tableKey.getSchema()) >> enableRowLevelSecurityProducerSQLDefinition
+            1 * forceRowLevelSecurityProducer.produce(tableKey.getTable(), tableKey.getSchema()) >> forceRowLevelSecurityProducerSQLDefinition
             results == [enableRowLevelSecurityProducerSQLDefinition, forceRowLevelSecurityProducerSQLDefinition]
 
         where:
