@@ -55,6 +55,14 @@ class SingleTenantColumnSQLDefinitionsProducerTest extends Specification {
             }
             results.contains(setDefaultStatementProducerSQLDefinition)
 
+        then:
+            1 * setNotNullStatementProducer.produce(_) >>  {
+                parameters ->
+                    capturedSetNotNullStatementProducerParameters = parameters[0]
+                    setNotNullStatementProducerSQLDefinition
+            }
+            results.contains(setNotNullStatementProducerSQLDefinition)
+
         and: "pass SQL definition in correct order"
             results == [createColumnStatementProducerSQLDefinition, setDefaultStatementProducerSQLDefinition, setNotNullStatementProducerSQLDefinition]
 
