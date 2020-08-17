@@ -56,10 +56,10 @@ class SingleTenantColumnSQLDefinitionsProducerTest extends Specification {
             }
             results.contains(setDefaultStatementProducerSQLDefinition)
             ISetDefaultStatementProducerParameters iSetDefaultStatementProducerParameters = capturedSetDefaultStatementProducerParameters
-            columnStatementProducerParameters.getTable() == tenantTable.getTable()
-            columnStatementProducerParameters.getSchema() == tenantTable.getSchema()
-            columnStatementProducerParameters.getColumn() == expectedTenantColumn
-            columnStatementProducerParameters.getColumnType() == expectedTenantColumnType
+            iSetDefaultStatementProducerParameters.getTable() == tenantTable.getTable()
+            iSetDefaultStatementProducerParameters.getSchema() == tenantTable.getSchema()
+            iSetDefaultStatementProducerParameters.getColumn() == expectedTenantColumn
+            iSetDefaultStatementProducerParameters.getDefaultValueDefinition() == defaultTenantColumnValue
 
         then:
             1 * setNotNullStatementProducer.produce(_) >>  {
