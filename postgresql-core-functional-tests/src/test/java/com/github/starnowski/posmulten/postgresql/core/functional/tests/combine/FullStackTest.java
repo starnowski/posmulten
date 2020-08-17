@@ -63,6 +63,7 @@ public abstract class FullStackTest extends AbstractClassWithSQLDefinitionGenera
         defaultSharedSchemaContextBuilder.createRLSPolicyForColumn(USERS_TABLE_NAME, prepareIdColumnTypeForSingleColumnKey("id", "bigint"), "tenant_id", "users_table_rls_policy");
         defaultSharedSchemaContextBuilder.createRLSPolicyForColumn(POSTS_TABLE_NAME, prepareIdColumnTypeForSingleColumnKey("id", "bigint"), "tenant_id", "posts_table_rls_policy");
         defaultSharedSchemaContextBuilder.createRLSPolicyForColumn(GROUPS_TABLE_NAME, prepareIdColumnTypeForSingleColumnKey("uuid", "uuid"), "tenant_id", "groups_table_rls_policy");
+        defaultSharedSchemaContextBuilder.createRLSPolicyForColumn(USERS_GROUPS_TABLE_NAME, new HashMap<>(), "tenant_id", "users_groups_table_rls_policy");
         AbstractSharedSchemaContext sharedSchemaContext = defaultSharedSchemaContextBuilder.build();
 
         IGetCurrentTenantIdFunctionInvocationFactory getCurrentTenantIdFunctionDefinition = sharedSchemaContext.getIGetCurrentTenantIdFunctionInvocationFactory();
@@ -117,12 +118,6 @@ public abstract class FullStackTest extends AbstractClassWithSQLDefinitionGenera
         sqlDefinitions.add(postsRLSPolicySQLDefinition);
 
         // RLS - groups
-        // Enable Row Level Security for groups table
-        sqlDefinitions.add(enableRowLevelSecurityProducer.produce(GROUPS_TABLE_NAME, getSchema()));
-
-        // forcing the row level security policy for groups table
-        sqlDefinitions.add(forceRowLevelSecurityProducer.produce(GROUPS_TABLE_NAME, getSchema()));
-
         // Adding RLS for the groups table
         SQLDefinition groupsRLSPolicySQLDefinition = rlsPolicyProducer.produce(builder().withPolicyName("groups_table_rls_policy")
                 .withPolicySchema(getSchema())
@@ -135,12 +130,6 @@ public abstract class FullStackTest extends AbstractClassWithSQLDefinitionGenera
         sqlDefinitions.add(groupsRLSPolicySQLDefinition);
 
         // RLS - users_groups
-        // Enable Row Level Security for users_groups table
-        sqlDefinitions.add(enableRowLevelSecurityProducer.produce(USERS_GROUPS_TABLE_NAME, getSchema()));
-
-        // forcing the row level security policy for groups table
-        sqlDefinitions.add(forceRowLevelSecurityProducer.produce(USERS_GROUPS_TABLE_NAME, getSchema()));
-
         // Adding RLS for the groups table
         SQLDefinition usersGroupsRLSPolicySQLDefinition = rlsPolicyProducer.produce(builder().withPolicyName("users_groups_table_rls_policy")
                 .withPolicySchema(getSchema())
