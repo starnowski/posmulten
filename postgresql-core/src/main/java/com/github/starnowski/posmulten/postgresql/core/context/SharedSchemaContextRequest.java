@@ -17,6 +17,7 @@ public class SharedSchemaContextRequest {
     private String defaultTenantIdColumn = "tenant_id";
     private Map<TableKey, AbstractTableColumns> tableColumnsList = new HashMap<>();
     private Set<TableKey> createTenantColumnTableLists = new HashSet<>();
+    private boolean forceRowLevelSecurityForTableOwner;
 
     public String getDefaultTenantIdColumn() {
         return defaultTenantIdColumn;
@@ -88,5 +89,13 @@ public class SharedSchemaContextRequest {
 
     public Set<TableKey> getCreateTenantColumnTableLists() {
         return createTenantColumnTableLists;
+    }
+
+    public boolean isForceRowLevelSecurityForTableOwner() {
+        return forceRowLevelSecurityForTableOwner;
+    }
+
+    public void setForceRowLevelSecurityForTableOwner(boolean forceRowLevelSecurityForTableOwner) {
+        this.forceRowLevelSecurityForTableOwner = forceRowLevelSecurityForTableOwner;
     }
 }
