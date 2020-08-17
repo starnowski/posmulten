@@ -57,10 +57,17 @@ public abstract class FullStackTest extends AbstractClassWithSQLDefinitionGenera
     {
         DefaultSharedSchemaContextBuilder defaultSharedSchemaContextBuilder = new DefaultSharedSchemaContextBuilder(getSchema());
         defaultSharedSchemaContextBuilder.setCurrentTenantIdProperty(VALID_CURRENT_TENANT_ID_PROPERTY_NAME);
-        Map<String, String> notificationsIdColumns = new HashMap<>();
-        notificationsIdColumns.put("uuid", "uuid");
-        defaultSharedSchemaContextBuilder.createRLSPolicyForColumn(NOTIFICATIONS_TABLE_NAME, notificationsIdColumns, CUSTOM_TENANT_COLUMN_NAME, "notifications_table_rls_policy");
+        defaultSharedSchemaContextBuilder.setForceRowLevelSecurityForTableOwner(true);
+        defaultSharedSchemaContextBuilder.createRLSPolicyForColumn(NOTIFICATIONS_TABLE_NAME, prepareIdColumnTypeForSingleColumnKey("uuid", "uuid"), CUSTOM_TENANT_COLUMN_NAME, "notifications_table_rls_policy");
         defaultSharedSchemaContextBuilder.createTenantColumnForTable(NOTIFICATIONS_TABLE_NAME);
+        defaultSharedSchemaContextBuilder.createRLSPolicyForColumn(USERS_TABLE_NAME, prepareIdColumnTypeForSingleColumnKey("id", "bigint"), "tenant_id", "users_table_rls_policy");
+        defaultSharedSchemaContextBuilder.createRLSPolicyForColumn(POSTS_TABLE_NAME, prepareIdColumnTypeForSingleColumnKey("id", "bigint"), "tenant_id", "posts_table_rls_policy");
+        defaultSharedSchemaContextBuilder.createRLSPolicyForColumn(GROUPS_TABLE_NAME, prepareIdColumnTypeForSingleColumnKey("uuid", "uuid"), "tenant_id", "groups_table_rls_policy");
+        defaultSharedSchemaContextBuilder.createRLSPolicyForColumn(USERS_GROUPS_TABLE_NAME, new HashMap<>(), "tenant_id", "users_groups_table_rls_policy");
+        HashMap<String, String> commentsIdColumnNameAndType = new HashMap<>();
+        commentsIdColumnNameAndType.put("id", "int");
+        commentsIdColumnNameAndType.put("user_id", "bigint");
+        defaultSharedSchemaContextBuilder.createRLSPolicyForColumn(COMMENTS_TABLE_NAME, commentsIdColumnNameAndType, CUSTOM_TENANT_COLUMN_NAME, "comments_table_rls_policy");
         AbstractSharedSchemaContext sharedSchemaContext = defaultSharedSchemaContextBuilder.build();
 
         IGetCurrentTenantIdFunctionInvocationFactory getCurrentTenantIdFunctionDefinition = sharedSchemaContext.getIGetCurrentTenantIdFunctionInvocationFactory();
@@ -73,11 +80,9 @@ public abstract class FullStackTest extends AbstractClassWithSQLDefinitionGenera
         // RLS - users
         // EnableRowLevelSecurityProducer
         EnableRowLevelSecurityProducer enableRowLevelSecurityProducer = new EnableRowLevelSecurityProducer();
-        sqlDefinitions.add(enableRowLevelSecurityProducer.produce(USERS_TABLE_NAME, getSchema()));
 
         // ForceRowLevelSecurityProducer - forcing the row level security policy for table owner
         ForceRowLevelSecurityProducer forceRowLevelSecurityProducer = new ForceRowLevelSecurityProducer();
-        sqlDefinitions.add(forceRowLevelSecurityProducer.produce(USERS_TABLE_NAME, getSchema()));
 
         // RLSPolicyProducer
         RLSPolicyProducer rlsPolicyProducer = new RLSPolicyProducer();
@@ -92,12 +97,6 @@ public abstract class FullStackTest extends AbstractClassWithSQLDefinitionGenera
         sqlDefinitions.add(usersRLSPolicySQLDefinition);
 
         // RLS - notifications
-        // Enable Row Level Security for notifications table
-        sqlDefinitions.add(enableRowLevelSecurityProducer.produce(NOTIFICATIONS_TABLE_NAME, getSchema()));
-
-        // forcing the row level security policy for notifications table
-        sqlDefinitions.add(forceRowLevelSecurityProducer.produce(NOTIFICATIONS_TABLE_NAME, getSchema()));
-
         // Adding RLS for the notifications table
         SQLDefinition notificationsRLSPolicySQLDefinition = rlsPolicyProducer.produce(builder().withPolicyName("notifications_table_rls_policy")
                 .withPolicySchema(getSchema())
@@ -111,12 +110,6 @@ public abstract class FullStackTest extends AbstractClassWithSQLDefinitionGenera
         sqlDefinitions.add(notificationsRLSPolicySQLDefinition);
 
         // RLS - posts
-        // Enable Row Level Security for posts table
-        sqlDefinitions.add(enableRowLevelSecurityProducer.produce(POSTS_TABLE_NAME, getSchema()));
-
-        // forcing the row level security policy for posts table
-        sqlDefinitions.add(forceRowLevelSecurityProducer.produce(POSTS_TABLE_NAME, getSchema()));
-
         // Adding RLS for the posts table
         SQLDefinition postsRLSPolicySQLDefinition = rlsPolicyProducer.produce(builder().withPolicyName("posts_table_rls_policy")
                 .withPolicySchema(getSchema())
@@ -129,12 +122,6 @@ public abstract class FullStackTest extends AbstractClassWithSQLDefinitionGenera
         sqlDefinitions.add(postsRLSPolicySQLDefinition);
 
         // RLS - groups
-        // Enable Row Level Security for groups table
-        sqlDefinitions.add(enableRowLevelSecurityProducer.produce(GROUPS_TABLE_NAME, getSchema()));
-
-        // forcing the row level security policy for groups table
-        sqlDefinitions.add(forceRowLevelSecurityProducer.produce(GROUPS_TABLE_NAME, getSchema()));
-
         // Adding RLS for the groups table
         SQLDefinition groupsRLSPolicySQLDefinition = rlsPolicyProducer.produce(builder().withPolicyName("groups_table_rls_policy")
                 .withPolicySchema(getSchema())
@@ -147,12 +134,6 @@ public abstract class FullStackTest extends AbstractClassWithSQLDefinitionGenera
         sqlDefinitions.add(groupsRLSPolicySQLDefinition);
 
         // RLS - users_groups
-        // Enable Row Level Security for users_groups table
-        sqlDefinitions.add(enableRowLevelSecurityProducer.produce(USERS_GROUPS_TABLE_NAME, getSchema()));
-
-        // forcing the row level security policy for groups table
-        sqlDefinitions.add(forceRowLevelSecurityProducer.produce(USERS_GROUPS_TABLE_NAME, getSchema()));
-
         // Adding RLS for the groups table
         SQLDefinition usersGroupsRLSPolicySQLDefinition = rlsPolicyProducer.produce(builder().withPolicyName("users_groups_table_rls_policy")
                 .withPolicySchema(getSchema())
@@ -165,12 +146,6 @@ public abstract class FullStackTest extends AbstractClassWithSQLDefinitionGenera
         sqlDefinitions.add(usersGroupsRLSPolicySQLDefinition);
 
         // RLS - comments
-        // Enable Row Level Security for comments table
-        sqlDefinitions.add(enableRowLevelSecurityProducer.produce(COMMENTS_TABLE_NAME, getSchema()));
-
-        // forcing the row level security policy for groups table
-        sqlDefinitions.add(forceRowLevelSecurityProducer.produce(COMMENTS_TABLE_NAME, getSchema()));
-
         // Adding RLS for the groups table
         SQLDefinition commentsGroupsRLSPolicySQLDefinition = rlsPolicyProducer.produce(builder().withPolicyName("comments_table_rls_policy")
                 .withPolicySchema(getSchema())
@@ -222,6 +197,13 @@ public abstract class FullStackTest extends AbstractClassWithSQLDefinitionGenera
 
         SQLDefinition userBelongsToCurrentTenantConstraintForNotificationsTableSqlDefinition = getSqlDefinitionOfConstraintForUsersForeignKeyInNotificationsTable(isUsersRecordBelongsToCurrentTenantFunctionDefinition);
         sqlDefinitions.add(userBelongsToCurrentTenantConstraintForNotificationsTableSqlDefinition);
+    }
+
+    private Map<String, String> prepareIdColumnTypeForSingleColumnKey(String columnName, String columnType)
+    {
+        Map<String, String> map = new HashMap<>();
+        map.put(columnName, columnType);
+        return map;
     }
 
     @SqlGroup({
