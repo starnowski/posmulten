@@ -15,6 +15,7 @@ public class TableRLSSettingsSQLDefinitionsProducer {
     public List<SQLDefinition> produce(TableKey tableKey, boolean forceRowLevelSecurity)
     {
         List<SQLDefinition> results = new ArrayList<>();
+        results.add(enableRowLevelSecurityProducer.produce(tableKey.getTable(), tableKey.getSchema()));
         return results;
     }
 
