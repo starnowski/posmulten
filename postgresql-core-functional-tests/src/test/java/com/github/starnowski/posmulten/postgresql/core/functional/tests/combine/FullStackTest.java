@@ -62,6 +62,7 @@ public abstract class FullStackTest extends AbstractClassWithSQLDefinitionGenera
         defaultSharedSchemaContextBuilder.createTenantColumnForTable(NOTIFICATIONS_TABLE_NAME);
         defaultSharedSchemaContextBuilder.createRLSPolicyForColumn(USERS_TABLE_NAME, prepareIdColumnTypeForSingleColumnKey("id", "bigint"), "tenant_id", "users_table_rls_policy");
         defaultSharedSchemaContextBuilder.createRLSPolicyForColumn(POSTS_TABLE_NAME, prepareIdColumnTypeForSingleColumnKey("id", "bigint"), "tenant_id", "posts_table_rls_policy");
+        defaultSharedSchemaContextBuilder.createRLSPolicyForColumn(GROUPS_TABLE_NAME, prepareIdColumnTypeForSingleColumnKey("uuid", "uuid"), "tenant_id", "groups_table_rls_policy");
         AbstractSharedSchemaContext sharedSchemaContext = defaultSharedSchemaContextBuilder.build();
 
         IGetCurrentTenantIdFunctionInvocationFactory getCurrentTenantIdFunctionDefinition = sharedSchemaContext.getIGetCurrentTenantIdFunctionInvocationFactory();
@@ -91,12 +92,6 @@ public abstract class FullStackTest extends AbstractClassWithSQLDefinitionGenera
         sqlDefinitions.add(usersRLSPolicySQLDefinition);
 
         // RLS - notifications
-        // Enable Row Level Security for notifications table
-        sqlDefinitions.add(enableRowLevelSecurityProducer.produce(NOTIFICATIONS_TABLE_NAME, getSchema()));
-
-        // forcing the row level security policy for notifications table
-        sqlDefinitions.add(forceRowLevelSecurityProducer.produce(NOTIFICATIONS_TABLE_NAME, getSchema()));
-
         // Adding RLS for the notifications table
         SQLDefinition notificationsRLSPolicySQLDefinition = rlsPolicyProducer.produce(builder().withPolicyName("notifications_table_rls_policy")
                 .withPolicySchema(getSchema())
@@ -110,12 +105,6 @@ public abstract class FullStackTest extends AbstractClassWithSQLDefinitionGenera
         sqlDefinitions.add(notificationsRLSPolicySQLDefinition);
 
         // RLS - posts
-        // Enable Row Level Security for posts table
-        sqlDefinitions.add(enableRowLevelSecurityProducer.produce(POSTS_TABLE_NAME, getSchema()));
-
-        // forcing the row level security policy for posts table
-        sqlDefinitions.add(forceRowLevelSecurityProducer.produce(POSTS_TABLE_NAME, getSchema()));
-
         // Adding RLS for the posts table
         SQLDefinition postsRLSPolicySQLDefinition = rlsPolicyProducer.produce(builder().withPolicyName("posts_table_rls_policy")
                 .withPolicySchema(getSchema())
