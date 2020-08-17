@@ -41,6 +41,14 @@ class SingleTenantColumnSQLDefinitionsProducerTest extends Specification {
             }
             results.contains(createColumnStatementProducerSQLDefinition)
 
+        then:
+            1 * setDefaultStatementProducer.produce(_) >>  {
+                parameters ->
+                    capturedSetDefaultStatementProducerParameters = parameters[0]
+                    setDefaultStatementProducerSQLDefinition
+            }
+            results.contains(setDefaultStatementProducerSQLDefinition)
+
         where:
             tenantTable             |   tenantColumn    |   defaultTenantColumn |   defaultTenantColumnType ||  expectedTenantColumn    |   expectedTenantColumnType
             tk("users", null)       |   "tenant_id"     |   "tenant"            |   "VARCHAR(255)"          ||  "tenant_id"             |   "VARCHAR(255)"
