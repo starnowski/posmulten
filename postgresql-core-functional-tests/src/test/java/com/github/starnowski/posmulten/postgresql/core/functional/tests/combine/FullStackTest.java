@@ -64,6 +64,10 @@ public abstract class FullStackTest extends AbstractClassWithSQLDefinitionGenera
         defaultSharedSchemaContextBuilder.createRLSPolicyForColumn(POSTS_TABLE_NAME, prepareIdColumnTypeForSingleColumnKey("id", "bigint"), "tenant_id", "posts_table_rls_policy");
         defaultSharedSchemaContextBuilder.createRLSPolicyForColumn(GROUPS_TABLE_NAME, prepareIdColumnTypeForSingleColumnKey("uuid", "uuid"), "tenant_id", "groups_table_rls_policy");
         defaultSharedSchemaContextBuilder.createRLSPolicyForColumn(USERS_GROUPS_TABLE_NAME, new HashMap<>(), "tenant_id", "users_groups_table_rls_policy");
+        HashMap<String, String> commentsIdColumnNameAndType = new HashMap<>();
+        commentsIdColumnNameAndType.put("id", "int");
+        commentsIdColumnNameAndType.put("user_id", "bigint");
+        defaultSharedSchemaContextBuilder.createRLSPolicyForColumn(COMMENTS_TABLE_NAME, commentsIdColumnNameAndType, CUSTOM_TENANT_COLUMN_NAME, "comments_table_rls_policy");
         AbstractSharedSchemaContext sharedSchemaContext = defaultSharedSchemaContextBuilder.build();
 
         IGetCurrentTenantIdFunctionInvocationFactory getCurrentTenantIdFunctionDefinition = sharedSchemaContext.getIGetCurrentTenantIdFunctionInvocationFactory();
@@ -142,12 +146,6 @@ public abstract class FullStackTest extends AbstractClassWithSQLDefinitionGenera
         sqlDefinitions.add(usersGroupsRLSPolicySQLDefinition);
 
         // RLS - comments
-        // Enable Row Level Security for comments table
-        sqlDefinitions.add(enableRowLevelSecurityProducer.produce(COMMENTS_TABLE_NAME, getSchema()));
-
-        // forcing the row level security policy for groups table
-        sqlDefinitions.add(forceRowLevelSecurityProducer.produce(COMMENTS_TABLE_NAME, getSchema()));
-
         // Adding RLS for the groups table
         SQLDefinition commentsGroupsRLSPolicySQLDefinition = rlsPolicyProducer.produce(builder().withPolicyName("comments_table_rls_policy")
                 .withPolicySchema(getSchema())
