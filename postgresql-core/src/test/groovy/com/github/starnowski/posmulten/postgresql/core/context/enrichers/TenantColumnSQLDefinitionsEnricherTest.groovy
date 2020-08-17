@@ -35,15 +35,13 @@ class TenantColumnSQLDefinitionsEnricherTest extends Specification {
         def result = tested.enrich(context, sharedSchemaContextRequest)
 
         then:
-        1 * equalsCurrentTenantIdentifierFunctionProducer.produce(_) >>  {
-            parameters ->
-                capturedEqualsCurrentTenantIdentifierFunctionProducerParameters = parameters[0]
-                mockedEqualsCurrentTenantIdentifierFunctionDefinition
-        }
-        result.getSqlDefinitions().contains(mockedEqualsCurrentTenantIdentifierFunctionDefinition)
+        1 * singleTenantColumnSQLDefinitionsProducer >> [usersTableSQLDefinition1, usersTableSQLDefinition2]
 
-        and: "generated sql definitions should be added in correct order"
-        result.getSqlDefinitions() == [usersTableSQLDefinition1, usersTableSQLDefinition2, commentsTableSQLDefinition1]
+        result.getSqlDefinitions().contains(usersTableSQLDefinition1)
+        result.getSqlDefinitions().contains(usersTableSQLDefinition2)
+        result.getSqlDefinitions().contains(commentsTableSQLDefinition1)
 
+        and: "sql definitions are added in order returned by component of type SingleTenantColumnSQLDefinitionsProducer"
+            result.getSqlDefinitions().indexOf(usersTableSQLDefinition1) < result.getSqlDefinitions().indexOf(usersTableSQLDefinition2)
     }
 }
