@@ -57,9 +57,8 @@ public abstract class FullStackTest extends AbstractClassWithSQLDefinitionGenera
     {
         DefaultSharedSchemaContextBuilder defaultSharedSchemaContextBuilder = new DefaultSharedSchemaContextBuilder(getSchema());
         defaultSharedSchemaContextBuilder.setCurrentTenantIdProperty(VALID_CURRENT_TENANT_ID_PROPERTY_NAME);
-        Map<String, String> notificationsIdColumns = new HashMap<>();
-        notificationsIdColumns.put("uuid", "uuid");
-        defaultSharedSchemaContextBuilder.createRLSPolicyForColumn(NOTIFICATIONS_TABLE_NAME, notificationsIdColumns, CUSTOM_TENANT_COLUMN_NAME, "notifications_table_rls_policy");
+        defaultSharedSchemaContextBuilder.setForceRowLevelSecurityForTableOwner(true);
+        defaultSharedSchemaContextBuilder.createRLSPolicyForColumn(NOTIFICATIONS_TABLE_NAME, prepareIdColumnTypeForSingleColumnKey("uuid", "uuid"), CUSTOM_TENANT_COLUMN_NAME, "notifications_table_rls_policy");
         defaultSharedSchemaContextBuilder.createTenantColumnForTable(NOTIFICATIONS_TABLE_NAME);
         AbstractSharedSchemaContext sharedSchemaContext = defaultSharedSchemaContextBuilder.build();
 
@@ -222,6 +221,13 @@ public abstract class FullStackTest extends AbstractClassWithSQLDefinitionGenera
 
         SQLDefinition userBelongsToCurrentTenantConstraintForNotificationsTableSqlDefinition = getSqlDefinitionOfConstraintForUsersForeignKeyInNotificationsTable(isUsersRecordBelongsToCurrentTenantFunctionDefinition);
         sqlDefinitions.add(userBelongsToCurrentTenantConstraintForNotificationsTableSqlDefinition);
+    }
+
+    private Map<String, String> prepareIdColumnTypeForSingleColumnKey(String columnName, String columnType)
+    {
+        Map<String, String> map = new HashMap<>();
+        map.put(columnName, columnType);
+        return map;
     }
 
     @SqlGroup({
