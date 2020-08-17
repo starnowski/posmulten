@@ -2,6 +2,7 @@ package com.github.starnowski.posmulten.postgresql.core.context;
 
 import com.github.starnowski.posmulten.postgresql.core.context.enrichers.GetCurrentTenantIdFunctionDefinitionEnricher;
 import com.github.starnowski.posmulten.postgresql.core.context.enrichers.SetCurrentTenantIdFunctionDefinitionEnricher;
+import com.github.starnowski.posmulten.postgresql.core.context.enrichers.TenantColumnSQLDefinitionsEnricher;
 import com.github.starnowski.posmulten.postgresql.core.context.enrichers.TenantHasAuthoritiesFunctionDefinitionEnricher;
 
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ import static java.util.Arrays.asList;
 public class DefaultSharedSchemaContextBuilder {
 
     private String defaultSchema;
-    private List<AbstractSharedSchemaContextEnricher> enrichers = asList(new GetCurrentTenantIdFunctionDefinitionEnricher(), new SetCurrentTenantIdFunctionDefinitionEnricher(), new TenantHasAuthoritiesFunctionDefinitionEnricher());
+    private List<AbstractSharedSchemaContextEnricher> enrichers = asList(new GetCurrentTenantIdFunctionDefinitionEnricher(), new SetCurrentTenantIdFunctionDefinitionEnricher(), new TenantHasAuthoritiesFunctionDefinitionEnricher(), new TenantColumnSQLDefinitionsEnricher());
     private SharedSchemaContextRequest sharedSchemaContextRequest = new SharedSchemaContextRequest();
 
     public DefaultSharedSchemaContextBuilder(String defaultSchema) {
