@@ -1,9 +1,6 @@
 package com.github.starnowski.posmulten.postgresql.core.context.enrichers;
 
-import com.github.starnowski.posmulten.postgresql.core.context.AbstractSharedSchemaContext;
-import com.github.starnowski.posmulten.postgresql.core.context.AbstractSharedSchemaContextEnricher;
-import com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContextRequest;
-import com.github.starnowski.posmulten.postgresql.core.context.SingleTenantColumnSQLDefinitionsProducer;
+import com.github.starnowski.posmulten.postgresql.core.context.*;
 
 public class TenantColumnSQLDefinitionsEnricher implements AbstractSharedSchemaContextEnricher {
 
@@ -12,7 +9,14 @@ public class TenantColumnSQLDefinitionsEnricher implements AbstractSharedSchemaC
     @Override
     public AbstractSharedSchemaContext enrich(AbstractSharedSchemaContext context, SharedSchemaContextRequest request) {
         //TODO Add exception for non-existed table declaration for which rls policy should be created
-        return null;
+        String getCurrentTenantIdFunctionInvocation = context.getIGetCurrentTenantIdFunctionInvocationFactory().returnGetCurrentTenantIdFunctionInvocation();
+        for (TableKey tableKey: request.getCreateTenantColumnTableLists())
+        {
+            AbstractTableColumns tableColumns = request.getTableColumnsList().get(tableKey);
+            singleTenantColumnSQLDefinitionsProducer.produce(tableKey, tableColumns, getCurrentTenantIdFunctionInvocation, request.getCurrentTenantIdProperty(), request.getCurrentTenantIdPropertyType())
+                .forEach(context::addSQLDefinition);
+        }
+        return context;
     }
 
     void setSingleTenantColumnSQLDefinitionsProducer(SingleTenantColumnSQLDefinitionsProducer singleTenantColumnSQLDefinitionsProducer) {
