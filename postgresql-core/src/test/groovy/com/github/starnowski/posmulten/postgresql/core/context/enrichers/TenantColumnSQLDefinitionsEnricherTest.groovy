@@ -12,7 +12,7 @@ class TenantColumnSQLDefinitionsEnricherTest extends Specification {
 
     def tested = new TenantColumnSQLDefinitionsEnricher()
 
-    def "should enrich shared schema context with sql definition for function that passed tenant id is equal to current tenant id based on default values for shares schema context builder"()
+    def "should enrich shared schema context with sql definition that creates column for storing record tenant id"()
     {
         given:
         def builder = new DefaultSharedSchemaContextBuilder()
@@ -20,6 +20,7 @@ class TenantColumnSQLDefinitionsEnricherTest extends Specification {
         builder.createTenantColumnForTable("users")
         builder.createRLSPolicyForColumn("comments", [:], "tenant_id", "comments_policy")
         builder.createTenantColumnForTable("comments")
+        builder.createRLSPolicyForColumn("some_table", [:], "tenant_id", "comments_policy")
         def sharedSchemaContextRequest = builder.getSharedSchemaContextRequest()
         def context = new SharedSchemaContext()
         def getCurrentTenantIdFunctionInvocationFactory = Mock(IGetCurrentTenantIdFunctionInvocationFactory)
