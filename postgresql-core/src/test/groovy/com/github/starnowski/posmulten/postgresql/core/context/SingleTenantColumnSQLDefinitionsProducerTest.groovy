@@ -1,13 +1,7 @@
 package com.github.starnowski.posmulten.postgresql.core.context
 
-import com.github.starnowski.posmulten.postgresql.core.CreateColumnStatementProducer
-import com.github.starnowski.posmulten.postgresql.core.CreateColumnStatementProducerParameters
-import com.github.starnowski.posmulten.postgresql.core.ISetDefaultStatementProducerParameters
-import com.github.starnowski.posmulten.postgresql.core.ISetNotNullStatementProducerParameters
-import com.github.starnowski.posmulten.postgresql.core.SetDefaultStatementProducer
-import com.github.starnowski.posmulten.postgresql.core.SetNotNullStatementProducer
+import com.github.starnowski.posmulten.postgresql.core.*
 import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition
-import groovy.model.DefaultTableColumn
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -34,7 +28,7 @@ class SingleTenantColumnSQLDefinitionsProducerTest extends Specification {
             def tableColumns = dtc(tenantColumn)
 
         when:
-            def results = tested.produce(tenantTable, tableColumns, defaultTenantColumn, defaultTenantColumnType)
+            def results = tested.produce(tenantTable, tableColumns, defaultTenantColumnValue, defaultTenantColumn, defaultTenantColumnType)
 
         then:
             1 * createColumnStatementProducer.produce(_) >>  {
@@ -90,6 +84,6 @@ class SingleTenantColumnSQLDefinitionsProducerTest extends Specification {
 
     DefaultTableColumns dtc(table)
     {
-        new DefaultTableColumn(table, null)
+        new DefaultTableColumns(table, [:])
     }
 }
