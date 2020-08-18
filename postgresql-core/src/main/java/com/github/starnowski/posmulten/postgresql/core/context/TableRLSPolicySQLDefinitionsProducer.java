@@ -23,7 +23,7 @@ public class TableRLSPolicySQLDefinitionsProducer {
                 .withPermissionCommandPolicy(ALL)
                 .withUsingExpressionTenantHasAuthoritiesFunctionInvocationFactory(parameters.getTenantHasAuthoritiesFunctionInvocationFactory())
                 .withWithCheckExpressionTenantHasAuthoritiesFunctionInvocationFactory(parameters.getTenantHasAuthoritiesFunctionInvocationFactory())
-                .withTenantIdColumn(parameters.getTenantIdColumn())
+                .withTenantIdColumn(parameters.getTenantIdColumn() == null ? parameters.getDefaultTenantIdColumn() : parameters.getTenantIdColumn())
                 .build());
         results.add(sqlDefinition);
         return results;

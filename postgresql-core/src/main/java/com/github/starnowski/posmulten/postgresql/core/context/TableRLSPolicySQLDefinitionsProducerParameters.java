@@ -9,13 +9,15 @@ public class TableRLSPolicySQLDefinitionsProducerParameters implements AbstractT
     private final String policyName;
     private final TenantHasAuthoritiesFunctionInvocationFactory tenantHasAuthoritiesFunctionInvocationFactory;
     private final String tenantIdColumn;
+    private final String defaultTenantIdColumn;
 
-    public TableRLSPolicySQLDefinitionsProducerParameters(String grantee, TableKey tableKey, String policyName, TenantHasAuthoritiesFunctionInvocationFactory tenantHasAuthoritiesFunctionInvocationFactory, String tenantIdColumn) {
+    public TableRLSPolicySQLDefinitionsProducerParameters(String grantee, TableKey tableKey, String policyName, TenantHasAuthoritiesFunctionInvocationFactory tenantHasAuthoritiesFunctionInvocationFactory, String tenantIdColumn, String defaultTenantIdColumn) {
         this.grantee = grantee;
         this.tableKey = tableKey;
         this.policyName = policyName;
         this.tenantHasAuthoritiesFunctionInvocationFactory = tenantHasAuthoritiesFunctionInvocationFactory;
         this.tenantIdColumn = tenantIdColumn;
+        this.defaultTenantIdColumn = defaultTenantIdColumn;
     }
 
     public String getGrantee() {
@@ -39,14 +41,18 @@ public class TableRLSPolicySQLDefinitionsProducerParameters implements AbstractT
         return tenantIdColumn;
     }
 
+    public String getDefaultTenantIdColumn() {
+        return defaultTenantIdColumn;
+    }
+
     public static class TableRLSPolicySQLDefinitionsProducerParametersBuilder
     {
         private String grantee;
         private TableKey tableKey;
         private String policyName;
         private TenantHasAuthoritiesFunctionInvocationFactory tenantHasAuthoritiesFunctionInvocationFactory;
-
         private String tenantIdColumn;
+        private String defaultTenantIdColumn;
 
         public TableRLSPolicySQLDefinitionsProducerParametersBuilder withGrantee(String grantee) {
             this.grantee = grantee;
@@ -73,9 +79,14 @@ public class TableRLSPolicySQLDefinitionsProducerParameters implements AbstractT
             return this;
         }
 
+        public TableRLSPolicySQLDefinitionsProducerParametersBuilder withDefaultTenantIdColumn(String defaultTenantIdColumn) {
+            this.defaultTenantIdColumn = defaultTenantIdColumn;
+            return this;
+        }
+
         public TableRLSPolicySQLDefinitionsProducerParameters build()
         {
-            return new TableRLSPolicySQLDefinitionsProducerParameters(grantee, tableKey, policyName, tenantHasAuthoritiesFunctionInvocationFactory, tenantIdColumn);
+            return new TableRLSPolicySQLDefinitionsProducerParameters(grantee, tableKey, policyName, tenantHasAuthoritiesFunctionInvocationFactory, tenantIdColumn, defaultTenantIdColumn);
         }
     }
 }
