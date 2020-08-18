@@ -4,6 +4,7 @@ import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition
 import com.github.starnowski.posmulten.postgresql.core.rls.PermissionCommandPolicyEnum
 import com.github.starnowski.posmulten.postgresql.core.rls.RLSPolicyProducer
 import com.github.starnowski.posmulten.postgresql.core.rls.RLSPolicyProducerParameters
+import com.github.starnowski.posmulten.postgresql.core.rls.TenantHasAuthoritiesFunctionInvocationFactory
 import spock.lang.Specification
 import spock.lang.Unroll
 
