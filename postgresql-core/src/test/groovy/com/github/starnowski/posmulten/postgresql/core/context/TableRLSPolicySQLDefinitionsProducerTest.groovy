@@ -13,7 +13,7 @@ class TableRLSPolicySQLDefinitionsProducerTest extends Specification {
     def tested = new TableRLSPolicySQLDefinitionsProducer()
 
     @Unroll
-    def "should create all required SQL definition that creates RLS policy for table #tableKey, grantee #grantee with policy name #policyName"()
+    def "should create all required SQL definition that creates RLS policy for table #tableKey, grantee #grantee with policy name #policyName and expected tenant column #expectedTenantIdColumn"()
     {
         given:
             RLSPolicyProducerParameters capturedParameters = null
@@ -27,6 +27,7 @@ class TableRLSPolicySQLDefinitionsProducerTest extends Specification {
                     .withPolicyName(policyName)
                     .withTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory)
                     .withTenantIdColumn(tenantIdColumn)
+                    .withDefaultTenantIdColumn(defaultTenantIdColumn)
                     .build()
 
         when:
@@ -48,14 +49,14 @@ class TableRLSPolicySQLDefinitionsProducerTest extends Specification {
             capturedParameters.getUsingExpressionTenantHasAuthoritiesFunctionInvocationFactory() == tenantHasAuthoritiesFunctionInvocationFactory
             capturedParameters.getWithCheckExpressionTenantHasAuthoritiesFunctionInvocationFactory() == tenantHasAuthoritiesFunctionInvocationFactory
             capturedParameters.getPermissionCommandPolicy() == PermissionCommandPolicyEnum.ALL
-            capturedParameters.getTenantIdColumn() == tenantIdColumn
+            capturedParameters.getTenantIdColumn() == expectedTenantIdColumn
 
         where:
-            tableKey                |   grantee     |   policyName          |   tenantIdColumn
-            tk("users", null)       |   "core-user" |   "some_rls_policy"   |   null
-            tk("users", "public")   |   "owner"     |   "some_rls_policy"   |   "tenant_id"
-            tk("posts", "public")   |   "owner"     |   "posts_policy"      |   "tenant"
-            tk("posts", "some_sh")  |   "owner"     |   "posts_policy"      |   "col_ten_"
+            tableKey                |   grantee     |   policyName          |   tenantIdColumn  |   defaultTenantIdColumn   ||  expectedTenantIdColumn
+            tk("users", null)       |   "core-user" |   "some_rls_policy"   |   null            |   "tenant"                ||  "tenant"
+            tk("users", "public")   |   "owner"     |   "some_rls_policy"   |   "tenant_id"     |   "tenant"                ||  "tenant_id"
+            tk("posts", "public")   |   "owner"     |   "posts_policy"      |   "tenant"        |   "some_name"             ||  "tenant"
+            tk("posts", "some_sh")  |   "owner"     |   "posts_policy"      |   "col_ten_"      |   "tenant"                ||  "col_ten_"
     }
 
     TableKey tk(String table, String schema)
