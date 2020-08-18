@@ -35,7 +35,7 @@ class TableRLSPolicySQLDefinitionsProducerTest extends Specification {
         then:
             1 * rlsPolicyProducer.produce(_) >>  {
                     passedParameters ->
-                    capturedParameters = parameters[0]
+                    capturedParameters = passedParameters[0]
                     rlsPolicyProducerSQLDefinition
             }
             results == [rlsPolicyProducerSQLDefinition]
