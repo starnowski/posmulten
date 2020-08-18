@@ -16,6 +16,7 @@ class TableRLSPolicyEnricherTest extends Specification {
         given:
             def builder = new DefaultSharedSchemaContextBuilder(schema)
             builder.setDefaultTenantIdColumn(defaultTenantIdColumn)
+            builder.setGrantee(grantee)
             builder.createRLSPolicyForColumn("posts", [:], "tenant", "posts_policy")
             builder.createRLSPolicyForColumn("comments", [:], "tenant_id", "comments_policy")
             def sharedSchemaContextRequest = builder.getSharedSchemaContextRequest()
@@ -26,6 +27,7 @@ class TableRLSPolicyEnricherTest extends Specification {
             def tableRLSPolicySQLDefinitionsProducer = Mock(TableRLSPolicySQLDefinitionsProducer)
             def tenantHasAuthoritiesFunctionInvocationFactory = Mock(TenantHasAuthoritiesFunctionInvocationFactory)
             tested.setTableRLSPolicySQLDefinitionsProducer(tableRLSPolicySQLDefinitionsProducer)
+            context.setTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory)
             def postsTableKey = tk("posts", schema)
             def commentsTableKey = tk("comments", schema)
             def parametersBuilder = new TableRLSPolicySQLDefinitionsProducerParameters.TableRLSPolicySQLDefinitionsProducerParametersBuilder()
