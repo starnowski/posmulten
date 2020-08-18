@@ -21,8 +21,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.github.starnowski.posmulten.postgresql.core.functional.tests.TestApplication.CLEAR_DATABASE_SCRIPT_PATH;
-import static com.github.starnowski.posmulten.postgresql.core.rls.DefaultRLSPolicyProducerParameters.builder;
-import static com.github.starnowski.posmulten.postgresql.core.rls.PermissionCommandPolicyEnum.ALL;
 import static com.github.starnowski.posmulten.postgresql.test.utils.TestUtils.VALID_CURRENT_TENANT_ID_PROPERTY_NAME;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
 import static org.springframework.test.context.jdbc.SqlConfig.TransactionMode.ISOLATED;
@@ -56,6 +54,7 @@ public abstract class FullStackTest extends AbstractClassWithSQLDefinitionGenera
         DefaultSharedSchemaContextBuilder defaultSharedSchemaContextBuilder = new DefaultSharedSchemaContextBuilder(getSchema());
         defaultSharedSchemaContextBuilder.setCurrentTenantIdProperty(VALID_CURRENT_TENANT_ID_PROPERTY_NAME);
         defaultSharedSchemaContextBuilder.setForceRowLevelSecurityForTableOwner(true);
+        defaultSharedSchemaContextBuilder.setGrantee(CORE_OWNER_USER);
         defaultSharedSchemaContextBuilder.createRLSPolicyForColumn(NOTIFICATIONS_TABLE_NAME, prepareIdColumnTypeForSingleColumnKey("uuid", "uuid"), CUSTOM_TENANT_COLUMN_NAME, "notifications_table_rls_policy");
         defaultSharedSchemaContextBuilder.createTenantColumnForTable(NOTIFICATIONS_TABLE_NAME);
         defaultSharedSchemaContextBuilder.createRLSPolicyForColumn(USERS_TABLE_NAME, prepareIdColumnTypeForSingleColumnKey("id", "bigint"), "tenant_id", "users_table_rls_policy");
@@ -78,77 +77,77 @@ public abstract class FullStackTest extends AbstractClassWithSQLDefinitionGenera
         // RLS - users
         // RLSPolicyProducer
         RLSPolicyProducer rlsPolicyProducer = new RLSPolicyProducer();
-        SQLDefinition usersRLSPolicySQLDefinition = rlsPolicyProducer.produce(builder().withPolicyName("users_table_rls_policy")
-                .withPolicySchema(getSchema())
-                .withPolicyTable(USERS_TABLE_NAME)
-                .withGrantee(CORE_OWNER_USER)
-                .withPermissionCommandPolicy(ALL)
-                .withUsingExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory)
-                .withWithCheckExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory)
-                .build());
-        sqlDefinitions.add(usersRLSPolicySQLDefinition);
+//        SQLDefinition usersRLSPolicySQLDefinition = rlsPolicyProducer.produce(builder().withPolicyName("users_table_rls_policy")
+//                .withPolicySchema(getSchema())
+//                .withPolicyTable(USERS_TABLE_NAME)
+//                .withGrantee(CORE_OWNER_USER)
+//                .withPermissionCommandPolicy(ALL)
+//                .withUsingExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory)
+//                .withWithCheckExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory)
+//                .build());
+//        sqlDefinitions.add(usersRLSPolicySQLDefinition);
 
         // RLS - notifications
         // Adding RLS for the notifications table
-        SQLDefinition notificationsRLSPolicySQLDefinition = rlsPolicyProducer.produce(builder().withPolicyName("notifications_table_rls_policy")
-                .withPolicySchema(getSchema())
-                .withPolicyTable(NOTIFICATIONS_TABLE_NAME)
-                .withGrantee(CORE_OWNER_USER)
-                .withPermissionCommandPolicy(ALL)
-                .withUsingExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory)
-                .withWithCheckExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory)
-                .withTenantIdColumn(CUSTOM_TENANT_COLUMN_NAME)
-                .build());
-        sqlDefinitions.add(notificationsRLSPolicySQLDefinition);
+//        SQLDefinition notificationsRLSPolicySQLDefinition = rlsPolicyProducer.produce(builder().withPolicyName("notifications_table_rls_policy")
+//                .withPolicySchema(getSchema())
+//                .withPolicyTable(NOTIFICATIONS_TABLE_NAME)
+//                .withGrantee(CORE_OWNER_USER)
+//                .withPermissionCommandPolicy(ALL)
+//                .withUsingExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory)
+//                .withWithCheckExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory)
+//                .withTenantIdColumn(CUSTOM_TENANT_COLUMN_NAME)
+//                .build());
+//        sqlDefinitions.add(notificationsRLSPolicySQLDefinition);
 
         // RLS - posts
         // Adding RLS for the posts table
-        SQLDefinition postsRLSPolicySQLDefinition = rlsPolicyProducer.produce(builder().withPolicyName("posts_table_rls_policy")
-                .withPolicySchema(getSchema())
-                .withPolicyTable(POSTS_TABLE_NAME)
-                .withGrantee(CORE_OWNER_USER)
-                .withPermissionCommandPolicy(ALL)
-                .withUsingExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory)
-                .withWithCheckExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory)
-                .build());
-        sqlDefinitions.add(postsRLSPolicySQLDefinition);
+//        SQLDefinition postsRLSPolicySQLDefinition = rlsPolicyProducer.produce(builder().withPolicyName("posts_table_rls_policy")
+//                .withPolicySchema(getSchema())
+//                .withPolicyTable(POSTS_TABLE_NAME)
+//                .withGrantee(CORE_OWNER_USER)
+//                .withPermissionCommandPolicy(ALL)
+//                .withUsingExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory)
+//                .withWithCheckExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory)
+//                .build());
+//        sqlDefinitions.add(postsRLSPolicySQLDefinition);
 
         // RLS - groups
         // Adding RLS for the groups table
-        SQLDefinition groupsRLSPolicySQLDefinition = rlsPolicyProducer.produce(builder().withPolicyName("groups_table_rls_policy")
-                .withPolicySchema(getSchema())
-                .withPolicyTable(GROUPS_TABLE_NAME)
-                .withGrantee(CORE_OWNER_USER)
-                .withPermissionCommandPolicy(ALL)
-                .withUsingExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory)
-                .withWithCheckExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory)
-                .build());
-        sqlDefinitions.add(groupsRLSPolicySQLDefinition);
+//        SQLDefinition groupsRLSPolicySQLDefinition = rlsPolicyProducer.produce(builder().withPolicyName("groups_table_rls_policy")
+//                .withPolicySchema(getSchema())
+//                .withPolicyTable(GROUPS_TABLE_NAME)
+//                .withGrantee(CORE_OWNER_USER)
+//                .withPermissionCommandPolicy(ALL)
+//                .withUsingExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory)
+//                .withWithCheckExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory)
+//                .build());
+//        sqlDefinitions.add(groupsRLSPolicySQLDefinition);
 
         // RLS - users_groups
         // Adding RLS for the groups table
-        SQLDefinition usersGroupsRLSPolicySQLDefinition = rlsPolicyProducer.produce(builder().withPolicyName("users_groups_table_rls_policy")
-                .withPolicySchema(getSchema())
-                .withPolicyTable(USERS_GROUPS_TABLE_NAME)
-                .withGrantee(CORE_OWNER_USER)
-                .withPermissionCommandPolicy(ALL)
-                .withUsingExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory)
-                .withWithCheckExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory)
-                .build());
-        sqlDefinitions.add(usersGroupsRLSPolicySQLDefinition);
+//        SQLDefinition usersGroupsRLSPolicySQLDefinition = rlsPolicyProducer.produce(builder().withPolicyName("users_groups_table_rls_policy")
+//                .withPolicySchema(getSchema())
+//                .withPolicyTable(USERS_GROUPS_TABLE_NAME)
+//                .withGrantee(CORE_OWNER_USER)
+//                .withPermissionCommandPolicy(ALL)
+//                .withUsingExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory)
+//                .withWithCheckExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory)
+//                .build());
+//        sqlDefinitions.add(usersGroupsRLSPolicySQLDefinition);
 
         // RLS - comments
         // Adding RLS for the groups table
-        SQLDefinition commentsGroupsRLSPolicySQLDefinition = rlsPolicyProducer.produce(builder().withPolicyName("comments_table_rls_policy")
-                .withPolicySchema(getSchema())
-                .withPolicyTable(COMMENTS_TABLE_NAME)
-                .withGrantee(CORE_OWNER_USER)
-                .withPermissionCommandPolicy(ALL)
-                .withUsingExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory)
-                .withWithCheckExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory)
-                .withTenantIdColumn(CUSTOM_TENANT_COLUMN_NAME)
-                .build());
-        sqlDefinitions.add(commentsGroupsRLSPolicySQLDefinition);
+//        SQLDefinition commentsGroupsRLSPolicySQLDefinition = rlsPolicyProducer.produce(builder().withPolicyName("comments_table_rls_policy")
+//                .withPolicySchema(getSchema())
+//                .withPolicyTable(COMMENTS_TABLE_NAME)
+//                .withGrantee(CORE_OWNER_USER)
+//                .withPermissionCommandPolicy(ALL)
+//                .withUsingExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory)
+//                .withWithCheckExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory)
+//                .withTenantIdColumn(CUSTOM_TENANT_COLUMN_NAME)
+//                .build());
+//        sqlDefinitions.add(commentsGroupsRLSPolicySQLDefinition);
 
         // Does record belongs to current tenant (users table)
         IsRecordBelongsToCurrentTenantFunctionDefinition isUsersRecordBelongsToCurrentTenantFunctionDefinition = getIsUsersRecordBelongsToCurrentTenantFunctionDefinition(getCurrentTenantIdFunctionDefinition);
