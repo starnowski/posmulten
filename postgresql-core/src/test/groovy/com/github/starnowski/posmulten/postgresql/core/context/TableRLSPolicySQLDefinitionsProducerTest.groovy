@@ -25,7 +25,7 @@ class TableRLSPolicySQLDefinitionsProducerTest extends Specification {
                     .build()
 
         when:
-            def results = tested.produce(tableKey, false)
+            def results = tested.produce(parameters)
 
         then:
             1 * rlsPolicyProducer.produce(tableKey.getTable(), tableKey.getSchema()) >> rlsPolicyProducerSQLDefinition
