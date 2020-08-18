@@ -4,16 +4,18 @@ import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition
 import com.github.starnowski.posmulten.postgresql.core.context.*
 import com.github.starnowski.posmulten.postgresql.test.utils.RandomString
 import spock.lang.Specification
+import spock.lang.Unroll
 
 class TenantColumnSQLDefinitionsEnricherTest extends Specification {
 
     def tested = new TenantColumnSQLDefinitionsEnricher()
 
-    def "should enrich shared schema context with sql definition that creates column for storing record tenant id"()
+    @Unroll
+    def "should enrich shared schema context with sql definition that creates column for storing record tenant id with schema #schema"()
     {
         given:
             def randomString = new RandomString(5, new Random(), RandomString.lower)
-            def builder = new DefaultSharedSchemaContextBuilder()
+            def builder = new DefaultSharedSchemaContextBuilder(schema)
             builder.createRLSPolicyForColumn("users", [:], "tenant", "user_policy")
             builder.createTenantColumnForTable("users")
             builder.createRLSPolicyForColumn("comments", [:], "tenant_id", "comments_policy")
@@ -31,9 +33,9 @@ class TenantColumnSQLDefinitionsEnricherTest extends Specification {
             def singleTenantColumnSQLDefinitionsProducer = Mock(SingleTenantColumnSQLDefinitionsProducer)
             tested.setSingleTenantColumnSQLDefinitionsProducer(singleTenantColumnSQLDefinitionsProducer)
             context.setIGetCurrentTenantIdFunctionInvocationFactory(getCurrentTenantIdFunctionInvocationFactory)
-            def usersTableKey = tk("users", null)
-            def commentsTableKey = tk("comments", null)
-            def someTableKey = tk("some_table", null)
+            def usersTableKey = tk("users", schema)
+            def commentsTableKey = tk("comments", schema)
+            def someTableKey = tk("some_table", schema)
 
             AbstractTableColumns usersTableColumns = sharedSchemaContextRequest.getTableColumnsList().get(usersTableKey)
             AbstractTableColumns commentsTableColumns = sharedSchemaContextRequest.getTableColumnsList().get(commentsTableKey)
@@ -53,6 +55,9 @@ class TenantColumnSQLDefinitionsEnricherTest extends Specification {
 
         and: "sql definitions are added in order returned by component of type SingleTenantColumnSQLDefinitionsProducer"
             result.getSqlDefinitions().indexOf(usersTableSQLDefinition1) < result.getSqlDefinitions().indexOf(usersTableSQLDefinition2)
+
+        where:
+            schema << [null, "public", "some_schema"]
     }
 
     TableKey tk(String table, String schema)
