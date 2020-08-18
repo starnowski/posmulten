@@ -95,4 +95,9 @@ public class DefaultSharedSchemaContextBuilder {
         return this;
     }
 
+    public DefaultSharedSchemaContextBuilder setDefaultTenantIdColumn(String defaultTenantIdColumn) {
+        sharedSchemaContextRequest.setDefaultTenantIdColumn(defaultTenantIdColumn);
+        return this;
+    }
+
 }
