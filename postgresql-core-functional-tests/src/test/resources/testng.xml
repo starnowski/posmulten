@@ -34,4 +34,9 @@
             <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.rls.CreateRLSForSingleTableForWhichTenantColumnWasJustAddedInPublicSchemaTest" />
         </classes>
     </test>
+    <test name="Full tests with Shared Schema Builder">
+        <packages>
+            <package name="com.github.starnowski.posmulten.postgresql.core.functional.tests.combine"/>
+        </packages>
+    </test>
 </suite>
