@@ -2,15 +2,18 @@ package com.github.starnowski.posmulten.postgresql.core.context;
 
 import com.github.starnowski.posmulten.postgresql.core.rls.TenantHasAuthoritiesFunctionInvocationFactory;
 
+import java.util.Objects;
+
 public class TableRLSPolicySQLDefinitionsProducerParameters implements AbstractTableRLSPolicySQLDefinitionsProducerParameters{
 
     private final String grantee;
+
     private final TableKey tableKey;
+
     private final String policyName;
     private final TenantHasAuthoritiesFunctionInvocationFactory tenantHasAuthoritiesFunctionInvocationFactory;
     private final String tenantIdColumn;
     private final String defaultTenantIdColumn;
-
     public TableRLSPolicySQLDefinitionsProducerParameters(String grantee, TableKey tableKey, String policyName, TenantHasAuthoritiesFunctionInvocationFactory tenantHasAuthoritiesFunctionInvocationFactory, String tenantIdColumn, String defaultTenantIdColumn) {
         this.grantee = grantee;
         this.tableKey = tableKey;
@@ -18,6 +21,24 @@ public class TableRLSPolicySQLDefinitionsProducerParameters implements AbstractT
         this.tenantHasAuthoritiesFunctionInvocationFactory = tenantHasAuthoritiesFunctionInvocationFactory;
         this.tenantIdColumn = tenantIdColumn;
         this.defaultTenantIdColumn = defaultTenantIdColumn;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TableRLSPolicySQLDefinitionsProducerParameters that = (TableRLSPolicySQLDefinitionsProducerParameters) o;
+        return Objects.equals(grantee, that.grantee) &&
+                Objects.equals(tableKey, that.tableKey) &&
+                Objects.equals(policyName, that.policyName) &&
+                Objects.equals(tenantHasAuthoritiesFunctionInvocationFactory, that.tenantHasAuthoritiesFunctionInvocationFactory) &&
+                Objects.equals(tenantIdColumn, that.tenantIdColumn) &&
+                Objects.equals(defaultTenantIdColumn, that.defaultTenantIdColumn);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(grantee, tableKey, policyName, tenantHasAuthoritiesFunctionInvocationFactory, tenantIdColumn, defaultTenantIdColumn);
     }
 
     public String getGrantee() {
