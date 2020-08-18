@@ -34,4 +34,28 @@
             <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.rls.CreateRLSForSingleTableForWhichTenantColumnWasJustAddedInPublicSchemaTest" />
         </classes>
     </test>
+    <test name="Full tests with Shared Schema Builder 1">
+        <classes>
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.combine.CreateCurrentTenantCompositeForeignKeyConstraintForCommentsTableInNonPublicSchemaTest" />
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.combine.CreateCurrentTenantCompositeForeignKeyConstraintForCommentsTableInPublicSchemaTest" />
+        </classes>
+    </test>
+    <test name="Full tests with Shared Schema Builder 2">
+        <classes>
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.combine.RLSForSingleTableForWhichTenantColumnWasJustAddedInNonPublicSchemaTest" />
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.combine.RLSForSingleTableForWhichTenantColumnWasJustAddedInPublicSchemaTest" />
+        </classes>
+    </test>
+    <test name="Full tests with Shared Schema Builder 3">
+        <classes>
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.combine.RLSForSingleTableInNonPublicSchemaTest" />
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.combine.RLSForSingleTableInPublicSchemaTest" />
+        </classes>
+    </test>
+    <test name="Full tests with Shared Schema Builder 4">
+        <classes>
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.combine.RLSWithSettingReferenceWithConstraintForCurrentTenantForeignKeyInNonPublicSchemaTest" />
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.combine.RLSWithSettingReferenceWithConstraintForCurrentTenantForeignKeyInPublicSchemaTest" />
+        </classes>
+    </test>
 </suite>
