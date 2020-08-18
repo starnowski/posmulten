@@ -11,7 +11,7 @@ import static java.util.Arrays.asList;
 public class DefaultSharedSchemaContextBuilder {
 
     private String defaultSchema;
-    private List<AbstractSharedSchemaContextEnricher> enrichers = asList(new GetCurrentTenantIdFunctionDefinitionEnricher(), new SetCurrentTenantIdFunctionDefinitionEnricher(), new TenantHasAuthoritiesFunctionDefinitionEnricher(), new TenantColumnSQLDefinitionsEnricher(), new TableRLSSettingsSQLDefinitionsEnricher());
+    private List<AbstractSharedSchemaContextEnricher> enrichers = asList(new GetCurrentTenantIdFunctionDefinitionEnricher(), new SetCurrentTenantIdFunctionDefinitionEnricher(), new TenantHasAuthoritiesFunctionDefinitionEnricher(), new TenantColumnSQLDefinitionsEnricher(), new TableRLSSettingsSQLDefinitionsEnricher(), new TableRLSPolicyEnricher());
     private SharedSchemaContextRequest sharedSchemaContextRequest = new SharedSchemaContextRequest();
 
     public DefaultSharedSchemaContextBuilder(String defaultSchema) {
@@ -87,6 +87,7 @@ public class DefaultSharedSchemaContextBuilder {
     {
         TableKey tableKey = new TableKey(table, this.defaultSchema);
         sharedSchemaContextRequest.getTableColumnsList().put(tableKey, new DefaultTableColumns(tenantColumnName, primaryKeyColumnsList));
+        sharedSchemaContextRequest.getTableRLSPolicies().put(tableKey, new DefaultTableRLSPolicyProperties(rlsPolicyName));
         return this;
     }
 
@@ -95,4 +96,13 @@ public class DefaultSharedSchemaContextBuilder {
         return this;
     }
 
+    public DefaultSharedSchemaContextBuilder setDefaultTenantIdColumn(String defaultTenantIdColumn) {
+        sharedSchemaContextRequest.setDefaultTenantIdColumn(defaultTenantIdColumn);
+        return this;
+    }
+
+    public DefaultSharedSchemaContextBuilder setGrantee(String grantee) {
+        sharedSchemaContextRequest.setGrantee(grantee);
+        return this;
+    }
 }
