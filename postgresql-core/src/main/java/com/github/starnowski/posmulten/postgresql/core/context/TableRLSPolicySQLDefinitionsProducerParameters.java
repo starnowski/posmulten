@@ -2,7 +2,7 @@ package com.github.starnowski.posmulten.postgresql.core.context;
 
 import com.github.starnowski.posmulten.postgresql.core.rls.TenantHasAuthoritiesFunctionInvocationFactory;
 
-public class TableRLSPolicySQLDefinitionsProducerParameters {
+public class TableRLSPolicySQLDefinitionsProducerParameters implements AbstractTableRLSPolicySQLDefinitionsProducerParameters{
 
     private final String grantee;
     private final TableKey tableKey;
