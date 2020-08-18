@@ -87,6 +87,7 @@ public class DefaultSharedSchemaContextBuilder {
     {
         TableKey tableKey = new TableKey(table, this.defaultSchema);
         sharedSchemaContextRequest.getTableColumnsList().put(tableKey, new DefaultTableColumns(tenantColumnName, primaryKeyColumnsList));
+        sharedSchemaContextRequest.getTableRLSPolicies().put(tableKey, new DefaultTableRLSPolicyProperties(rlsPolicyName));
         return this;
     }
 
