@@ -26,6 +26,7 @@ class TableRLSPolicySQLDefinitionsProducerTest extends Specification {
                     .withTableKey(tableKey)
                     .withPolicyName(policyName)
                     .withTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory)
+                    .withTenantIdColumn(tenantIdColumn)
                     .build()
 
         when:
@@ -47,13 +48,14 @@ class TableRLSPolicySQLDefinitionsProducerTest extends Specification {
             capturedParameters.getUsingExpressionTenantHasAuthoritiesFunctionInvocationFactory() == tenantHasAuthoritiesFunctionInvocationFactory
             capturedParameters.getWithCheckExpressionTenantHasAuthoritiesFunctionInvocationFactory() == tenantHasAuthoritiesFunctionInvocationFactory
             capturedParameters.getPermissionCommandPolicy() == PermissionCommandPolicyEnum.ALL
+            capturedParameters.getTenantIdColumn() == tenantIdColumn
 
         where:
-            tableKey                |   grantee     |   policyName
-            tk("users", null)       |   "core-user" |   "some_rls_policy"
-            tk("users", "public")   |   "owner"     |   "some_rls_policy"
-            tk("posts", "public")   |   "owner"     |   "posts_policy"
-            tk("posts", "some_sh")  |   "owner"     |   "posts_policy"
+            tableKey                |   grantee     |   policyName          |   tenantIdColumn
+            tk("users", null)       |   "core-user" |   "some_rls_policy"   |   null
+            tk("users", "public")   |   "owner"     |   "some_rls_policy"   |   "tenant_id"
+            tk("posts", "public")   |   "owner"     |   "posts_policy"      |   "tenant"
+            tk("posts", "some_sh")  |   "owner"     |   "posts_policy"      |   "col_ten_"
     }
 
     TableKey tk(String table, String schema)
