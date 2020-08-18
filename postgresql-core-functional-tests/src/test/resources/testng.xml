@@ -1,4 +1,9 @@
 <suite name="Group of group Suite" verbose="1">
+    <test name="Full tests with Shared Schema Builder">
+        <packages>
+            <package name="com.github.starnowski.posmulten.postgresql.core.functional.tests.combine"/>
+        </packages>
+    </test>
     <test name="Foreign key constraint for single column">
         <classes>
             <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.constraint.CreateCurrentTenantForeignKeyConstraintForPostsTableFromPublicSchemaTest" />
@@ -33,10 +38,5 @@
             <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.rls.CreateRLSForSingleTableForWhichTenantColumnWasJustAddedInNonPublicSchemaTest" />
             <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.rls.CreateRLSForSingleTableForWhichTenantColumnWasJustAddedInPublicSchemaTest" />
         </classes>
-    </test>
-    <test name="Full tests with Shared Schema Builder">
-        <packages>
-            <package name="com.github.starnowski.posmulten.postgresql.core.functional.tests.combine"/>
-        </packages>
     </test>
 </suite>
