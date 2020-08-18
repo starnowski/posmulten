@@ -16,7 +16,7 @@ class TableRLSSettingsSQLDefinitionsEnricherTest extends Specification {
     def "should create all required SQL definition that enables RLS policy but not force policy for schema #schema"()
     {
         given:
-            def builder = new DefaultSharedSchemaContextBuilder()
+            def builder = new DefaultSharedSchemaContextBuilder(schema)
             builder.createRLSPolicyForColumn("users", [:], "tenant", "user_policy")
             builder.createRLSPolicyForColumn("comments", [:], "tenant_id", "comments_policy")
             builder.createRLSPolicyForColumn("some_table", [:], "tenant_xxx_id", "some_table_policy")
@@ -29,9 +29,9 @@ class TableRLSSettingsSQLDefinitionsEnricherTest extends Specification {
             def someTableSQLDefinition2 = Mock(SQLDefinition)
             def tableRLSSettingsSQLDefinitionsProducer = Mock(TableRLSSettingsSQLDefinitionsProducer)
             tested.setTableRLSSettingsSQLDefinitionsProducer(tableRLSSettingsSQLDefinitionsProducer)
-            def usersTableKey = tk("users", null)
-            def commentsTableKey = tk("comments", null)
-            def someTableKey = tk("some_table", null)
+            def usersTableKey = tk("users", schema)
+            def commentsTableKey = tk("comments", schema)
+            def someTableKey = tk("some_table", schema)
 
         when:
             def result = tested.enrich(context, sharedSchemaContextRequest)
@@ -59,7 +59,7 @@ class TableRLSSettingsSQLDefinitionsEnricherTest extends Specification {
     def "should create all required SQL definition that enables RLS policy and force policy for schema #schema"()
     {
         given:
-            def builder = new DefaultSharedSchemaContextBuilder()
+            def builder = new DefaultSharedSchemaContextBuilder(schema)
             builder.createRLSPolicyForColumn("users", [:], "tenant", "user_policy")
             builder.createRLSPolicyForColumn("comments", [:], "tenant_id", "comments_policy")
             builder.createRLSPolicyForColumn("some_table", [:], "tenant_xxx_id", "some_table_policy")
@@ -73,9 +73,9 @@ class TableRLSSettingsSQLDefinitionsEnricherTest extends Specification {
             def someTableSQLDefinition2 = Mock(SQLDefinition)
             def tableRLSSettingsSQLDefinitionsProducer = Mock(TableRLSSettingsSQLDefinitionsProducer)
             tested.setTableRLSSettingsSQLDefinitionsProducer(tableRLSSettingsSQLDefinitionsProducer)
-            def usersTableKey = tk("users", null)
-            def commentsTableKey = tk("comments", null)
-            def someTableKey = tk("some_table", null)
+            def usersTableKey = tk("users", schema)
+            def commentsTableKey = tk("comments", schema)
+            def someTableKey = tk("some_table", schema)
 
         when:
             def result = tested.enrich(context, sharedSchemaContextRequest)
