@@ -19,6 +19,8 @@ public class SharedSchemaContextRequest {
     private Set<TableKey> createTenantColumnTableLists = new HashSet<>();
     private boolean forceRowLevelSecurityForTableOwner;
 
+    private String grantee;
+
     public String getDefaultTenantIdColumn() {
         return defaultTenantIdColumn;
     }
@@ -97,5 +99,13 @@ public class SharedSchemaContextRequest {
 
     public void setForceRowLevelSecurityForTableOwner(boolean forceRowLevelSecurityForTableOwner) {
         this.forceRowLevelSecurityForTableOwner = forceRowLevelSecurityForTableOwner;
+    }
+
+    public String getGrantee() {
+        return grantee;
+    }
+
+    public void setGrantee(String grantee) {
+        this.grantee = grantee;
     }
 }

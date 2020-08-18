@@ -100,4 +100,8 @@ public class DefaultSharedSchemaContextBuilder {
         return this;
     }
 
+    public DefaultSharedSchemaContextBuilder setGrantee(String grantee) {
+        sharedSchemaContextRequest.setGrantee(grantee);
+        return this;
+    }
 }
