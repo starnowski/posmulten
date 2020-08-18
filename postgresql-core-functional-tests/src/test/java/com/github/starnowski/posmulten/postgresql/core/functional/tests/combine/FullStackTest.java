@@ -4,7 +4,6 @@ import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition;
 import com.github.starnowski.posmulten.postgresql.core.context.AbstractSharedSchemaContext;
 import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder;
 import com.github.starnowski.posmulten.postgresql.core.functional.tests.AbstractClassWithSQLDefinitionGenerationMethods;
-import com.github.starnowski.posmulten.postgresql.core.rls.RLSPolicyProducer;
 import com.github.starnowski.posmulten.postgresql.core.rls.TenantHasAuthoritiesFunctionInvocationFactory;
 import com.github.starnowski.posmulten.postgresql.core.rls.function.IGetCurrentTenantIdFunctionInvocationFactory;
 import com.github.starnowski.posmulten.postgresql.core.rls.function.ISetCurrentTenantIdFunctionInvocationFactory;
@@ -73,81 +72,6 @@ public abstract class FullStackTest extends AbstractClassWithSQLDefinitionGenera
 
         sqlDefinitions.addAll(sharedSchemaContext.getSqlDefinitions());
         // TODO Use the DefaultSharedSchemaContextBuilder to create all SQL definitions
-
-        // RLS - users
-        // RLSPolicyProducer
-        RLSPolicyProducer rlsPolicyProducer = new RLSPolicyProducer();
-//        SQLDefinition usersRLSPolicySQLDefinition = rlsPolicyProducer.produce(builder().withPolicyName("users_table_rls_policy")
-//                .withPolicySchema(getSchema())
-//                .withPolicyTable(USERS_TABLE_NAME)
-//                .withGrantee(CORE_OWNER_USER)
-//                .withPermissionCommandPolicy(ALL)
-//                .withUsingExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory)
-//                .withWithCheckExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory)
-//                .build());
-//        sqlDefinitions.add(usersRLSPolicySQLDefinition);
-
-        // RLS - notifications
-        // Adding RLS for the notifications table
-//        SQLDefinition notificationsRLSPolicySQLDefinition = rlsPolicyProducer.produce(builder().withPolicyName("notifications_table_rls_policy")
-//                .withPolicySchema(getSchema())
-//                .withPolicyTable(NOTIFICATIONS_TABLE_NAME)
-//                .withGrantee(CORE_OWNER_USER)
-//                .withPermissionCommandPolicy(ALL)
-//                .withUsingExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory)
-//                .withWithCheckExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory)
-//                .withTenantIdColumn(CUSTOM_TENANT_COLUMN_NAME)
-//                .build());
-//        sqlDefinitions.add(notificationsRLSPolicySQLDefinition);
-
-        // RLS - posts
-        // Adding RLS for the posts table
-//        SQLDefinition postsRLSPolicySQLDefinition = rlsPolicyProducer.produce(builder().withPolicyName("posts_table_rls_policy")
-//                .withPolicySchema(getSchema())
-//                .withPolicyTable(POSTS_TABLE_NAME)
-//                .withGrantee(CORE_OWNER_USER)
-//                .withPermissionCommandPolicy(ALL)
-//                .withUsingExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory)
-//                .withWithCheckExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory)
-//                .build());
-//        sqlDefinitions.add(postsRLSPolicySQLDefinition);
-
-        // RLS - groups
-        // Adding RLS for the groups table
-//        SQLDefinition groupsRLSPolicySQLDefinition = rlsPolicyProducer.produce(builder().withPolicyName("groups_table_rls_policy")
-//                .withPolicySchema(getSchema())
-//                .withPolicyTable(GROUPS_TABLE_NAME)
-//                .withGrantee(CORE_OWNER_USER)
-//                .withPermissionCommandPolicy(ALL)
-//                .withUsingExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory)
-//                .withWithCheckExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory)
-//                .build());
-//        sqlDefinitions.add(groupsRLSPolicySQLDefinition);
-
-        // RLS - users_groups
-        // Adding RLS for the groups table
-//        SQLDefinition usersGroupsRLSPolicySQLDefinition = rlsPolicyProducer.produce(builder().withPolicyName("users_groups_table_rls_policy")
-//                .withPolicySchema(getSchema())
-//                .withPolicyTable(USERS_GROUPS_TABLE_NAME)
-//                .withGrantee(CORE_OWNER_USER)
-//                .withPermissionCommandPolicy(ALL)
-//                .withUsingExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory)
-//                .withWithCheckExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory)
-//                .build());
-//        sqlDefinitions.add(usersGroupsRLSPolicySQLDefinition);
-
-        // RLS - comments
-        // Adding RLS for the groups table
-//        SQLDefinition commentsGroupsRLSPolicySQLDefinition = rlsPolicyProducer.produce(builder().withPolicyName("comments_table_rls_policy")
-//                .withPolicySchema(getSchema())
-//                .withPolicyTable(COMMENTS_TABLE_NAME)
-//                .withGrantee(CORE_OWNER_USER)
-//                .withPermissionCommandPolicy(ALL)
-//                .withUsingExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory)
-//                .withWithCheckExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory)
-//                .withTenantIdColumn(CUSTOM_TENANT_COLUMN_NAME)
-//                .build());
-//        sqlDefinitions.add(commentsGroupsRLSPolicySQLDefinition);
 
         // Does record belongs to current tenant (users table)
         IsRecordBelongsToCurrentTenantFunctionDefinition isUsersRecordBelongsToCurrentTenantFunctionDefinition = getIsUsersRecordBelongsToCurrentTenantFunctionDefinition(getCurrentTenantIdFunctionDefinition);
