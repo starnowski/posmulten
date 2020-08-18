@@ -11,4 +11,6 @@ public interface AbstractTableRLSPolicySQLDefinitionsProducerParameters {
     String getPolicyName();
 
     TenantHasAuthoritiesFunctionInvocationFactory getTenantHasAuthoritiesFunctionInvocationFactory();
+
+    String getTenantIdColumn();
 }

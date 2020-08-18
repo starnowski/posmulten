@@ -8,12 +8,14 @@ public class TableRLSPolicySQLDefinitionsProducerParameters implements AbstractT
     private final TableKey tableKey;
     private final String policyName;
     private final TenantHasAuthoritiesFunctionInvocationFactory tenantHasAuthoritiesFunctionInvocationFactory;
+    private final String tenantIdColumn;
 
-    public TableRLSPolicySQLDefinitionsProducerParameters(String grantee, TableKey tableKey, String policyName, TenantHasAuthoritiesFunctionInvocationFactory tenantHasAuthoritiesFunctionInvocationFactory) {
+    public TableRLSPolicySQLDefinitionsProducerParameters(String grantee, TableKey tableKey, String policyName, TenantHasAuthoritiesFunctionInvocationFactory tenantHasAuthoritiesFunctionInvocationFactory, String tenantIdColumn) {
         this.grantee = grantee;
         this.tableKey = tableKey;
         this.policyName = policyName;
         this.tenantHasAuthoritiesFunctionInvocationFactory = tenantHasAuthoritiesFunctionInvocationFactory;
+        this.tenantIdColumn = tenantIdColumn;
     }
 
     public String getGrantee() {
@@ -32,12 +34,19 @@ public class TableRLSPolicySQLDefinitionsProducerParameters implements AbstractT
         return tenantHasAuthoritiesFunctionInvocationFactory;
     }
 
+    @Override
+    public String getTenantIdColumn() {
+        return tenantIdColumn;
+    }
+
     public static class TableRLSPolicySQLDefinitionsProducerParametersBuilder
     {
         private String grantee;
         private TableKey tableKey;
         private String policyName;
         private TenantHasAuthoritiesFunctionInvocationFactory tenantHasAuthoritiesFunctionInvocationFactory;
+
+        private String tenantIdColumn;
 
         public TableRLSPolicySQLDefinitionsProducerParametersBuilder withGrantee(String grantee) {
             this.grantee = grantee;
@@ -59,9 +68,14 @@ public class TableRLSPolicySQLDefinitionsProducerParameters implements AbstractT
             return this;
         }
 
+        public TableRLSPolicySQLDefinitionsProducerParametersBuilder withTenantIdColumn(String tenantIdColumn) {
+            this.tenantIdColumn = tenantIdColumn;
+            return this;
+        }
+
         public TableRLSPolicySQLDefinitionsProducerParameters build()
         {
-            return new TableRLSPolicySQLDefinitionsProducerParameters(grantee, tableKey, policyName, tenantHasAuthoritiesFunctionInvocationFactory);
+            return new TableRLSPolicySQLDefinitionsProducerParameters(grantee, tableKey, policyName, tenantHasAuthoritiesFunctionInvocationFactory, tenantIdColumn);
         }
     }
 }
