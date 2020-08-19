@@ -1,9 +1,9 @@
 package com.github.starnowski.posmulten.postgresql.core.context.enrichers
 
-
 import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder
 import com.github.starnowski.posmulten.postgresql.core.context.IsRecordBelongsToCurrentTenantFunctionDefinitionProducer
 import com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContext
+import com.github.starnowski.posmulten.postgresql.core.context.TableKey
 import com.github.starnowski.posmulten.postgresql.core.rls.function.IGetCurrentTenantIdFunctionInvocationFactory
 import com.github.starnowski.posmulten.postgresql.core.rls.function.IsRecordBelongsToCurrentTenantFunctionDefinition
 import spock.lang.Specification
@@ -24,7 +24,7 @@ class IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricherTest extends Spec
             def sharedSchemaContextRequest = builder.getSharedSchemaContextRequest()
             def context = new SharedSchemaContext()
             def iGetCurrentTenantIdFunctionInvocationFactory = Mock(IGetCurrentTenantIdFunctionInvocationFactory)
-            context.setISetCurrentTenantIdFunctionInvocationFactory(iGetCurrentTenantIdFunctionInvocationFactory)
+            context.setIGetCurrentTenantIdFunctionInvocationFactory(iGetCurrentTenantIdFunctionInvocationFactory)
             def usersTableSQLDefinition = Mock(IsRecordBelongsToCurrentTenantFunctionDefinition)
             def commentsTableSQLDefinition = Mock(IsRecordBelongsToCurrentTenantFunctionDefinition)
             def isRecordBelongsToCurrentTenantFunctionDefinitionProducer = Mock(IsRecordBelongsToCurrentTenantFunctionDefinitionProducer)
@@ -47,5 +47,10 @@ class IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricherTest extends Spec
 
         where:
             schema << [null, "public", "some_schema"]
+    }
+
+    TableKey tk(String table, String schema)
+    {
+        new TableKey(table, schema)
     }
 }
