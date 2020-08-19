@@ -9,6 +9,8 @@ import com.github.starnowski.posmulten.postgresql.core.rls.function.IsRecordBelo
 import spock.lang.Specification
 import spock.lang.Unroll
 
+import static com.github.starnowski.posmulten.postgresql.core.MapBuilder.mapBuilder
+
 class IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricherTest extends Specification {
 
     def tested = new IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricher()
@@ -18,9 +20,14 @@ class IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricherTest extends Spec
     {
         given:
             def builder = new DefaultSharedSchemaContextBuilder(schema)
-            builder.createRLSPolicyForColumn("users", [id: "bigint"], "tenant", "user_policy")
-            builder.createRLSPolicyForColumn("comments", [uuid: "uuid"], "tenant_id", "comments_policy")
-            builder.createRLSPolicyForColumn("some_table", [somedid: "bigint"], "tenant_xxx_id", "some_table_policy")
+            builder.createRLSPolicyForColumn("users", [id: "N/A"], "tenant", "N/A")
+            builder.createRLSPolicyForColumn("comments", [uuid: "N/A"], "tenant_id", "N/A")
+            builder.createRLSPolicyForColumn("some_table", [somedid: "N/A"], "tenant_xxx_id", "some_table_policy")
+            builder.createSameTenantConstraintForForeignKey("comments", "users", mapBuilder().put("N/A", "N/A").build(), "N/A")
+            builder.createSameTenantConstraintForForeignKey("some_table", "users", mapBuilder().put("N/A", "N/A").build(), "N/A")
+            builder.createSameTenantConstraintForForeignKey("some_table", "comments", mapBuilder().put("N/A", "N/A").build(), "N/A")
+            builder.setNameForFunctionThatChecksIfRecordExistsInTable("users", "is_user_exists")
+            builder.setNameForFunctionThatChecksIfRecordExistsInTable("comments", "is_comment_exists")
             def sharedSchemaContextRequest = builder.getSharedSchemaContextRequest()
             def context = new SharedSchemaContext()
             def iGetCurrentTenantIdFunctionInvocationFactory = Mock(IGetCurrentTenantIdFunctionInvocationFactory)
