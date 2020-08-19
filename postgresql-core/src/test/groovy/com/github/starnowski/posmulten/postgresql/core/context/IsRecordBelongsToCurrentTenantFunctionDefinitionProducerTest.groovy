@@ -41,7 +41,8 @@ class IsRecordBelongsToCurrentTenantFunctionDefinitionProducerTest extends Speci
             capturedParameters.getTenantColumn() == tenantId
             capturedParameters.getRecordSchemaName() == tableKey.getSchema()
             capturedParameters.getRecordTableName() == tableKey.getTable()
-            capturedParameters.getKeyColumnsPairsList() == expectedKeyColumnsPairsList
+            capturedParameters.getKeyColumnsPairsList().containsAll(expectedKeyColumnsPairsList)
+            capturedParameters.getKeyColumnsPairsList().size() == expectedKeyColumnsPairsList.size()
 
         where:
             tableKey                        |   tenantId                |   idColumns                                                           |   functionName        |   schema                  ||  expectedKeyColumnsPairsList
