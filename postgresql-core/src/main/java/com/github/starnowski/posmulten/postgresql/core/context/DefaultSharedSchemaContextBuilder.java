@@ -10,8 +10,8 @@ import static java.util.Arrays.asList;
 
 public class DefaultSharedSchemaContextBuilder {
 
-    private String defaultSchema;
-    private List<AbstractSharedSchemaContextEnricher> enrichers = asList(new GetCurrentTenantIdFunctionDefinitionEnricher(), new SetCurrentTenantIdFunctionDefinitionEnricher(), new TenantHasAuthoritiesFunctionDefinitionEnricher(), new TenantColumnSQLDefinitionsEnricher(), new TableRLSSettingsSQLDefinitionsEnricher(), new TableRLSPolicyEnricher());
+    private final String defaultSchema;
+    private List<AbstractSharedSchemaContextEnricher> enrichers = asList(new GetCurrentTenantIdFunctionDefinitionEnricher(), new SetCurrentTenantIdFunctionDefinitionEnricher(), new TenantHasAuthoritiesFunctionDefinitionEnricher(), new TenantColumnSQLDefinitionsEnricher(), new TableRLSSettingsSQLDefinitionsEnricher(), new TableRLSPolicyEnricher(), new IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricher());
     private SharedSchemaContextRequest sharedSchemaContextRequest = new SharedSchemaContextRequest();
 
     public DefaultSharedSchemaContextBuilder(String defaultSchema) {
@@ -103,6 +103,17 @@ public class DefaultSharedSchemaContextBuilder {
 
     public DefaultSharedSchemaContextBuilder setGrantee(String grantee) {
         sharedSchemaContextRequest.setGrantee(grantee);
+        return this;
+    }
+
+    public DefaultSharedSchemaContextBuilder createSameTenantConstraintForForeignKey(String mainTable, String foreignKeyTable, Map<String, String> foreignKeyPrimaryKeyColumnsMappings, String constraintName) {
+        sharedSchemaContextRequest.getSameTenantConstraintForForeignKeyProperties().put(new SameTenantConstraintForForeignKey(new TableKey(mainTable, defaultSchema), new TableKey(foreignKeyTable, defaultSchema), foreignKeyPrimaryKeyColumnsMappings.keySet()), null);
+        //TODO
+        return this;
+    }
+
+    public DefaultSharedSchemaContextBuilder setNameForFunctionThatChecksIfRecordExistsInTable(String recordTable, String functionName) {
+        sharedSchemaContextRequest.getFunctionThatChecksIfRecordExistsInTableNames().put(new TableKey(recordTable, defaultSchema), functionName);
         return this;
     }
 }

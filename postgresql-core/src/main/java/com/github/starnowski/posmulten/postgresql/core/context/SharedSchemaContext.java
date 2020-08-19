@@ -4,9 +4,12 @@ import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition;
 import com.github.starnowski.posmulten.postgresql.core.rls.TenantHasAuthoritiesFunctionInvocationFactory;
 import com.github.starnowski.posmulten.postgresql.core.rls.function.IGetCurrentTenantIdFunctionInvocationFactory;
 import com.github.starnowski.posmulten.postgresql.core.rls.function.ISetCurrentTenantIdFunctionInvocationFactory;
+import com.github.starnowski.posmulten.postgresql.core.rls.function.IsRecordBelongsToCurrentTenantFunctionInvocationFactory;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SharedSchemaContext implements AbstractSharedSchemaContext {
 
@@ -14,6 +17,7 @@ public class SharedSchemaContext implements AbstractSharedSchemaContext {
     private ISetCurrentTenantIdFunctionInvocationFactory iSetCurrentTenantIdFunctionInvocationFactory;
     private TenantHasAuthoritiesFunctionInvocationFactory tenantHasAuthoritiesFunctionInvocationFactory;
     private List<SQLDefinition> sqlDefinitions = new ArrayList<>();
+    private Map<TableKey, IsRecordBelongsToCurrentTenantFunctionInvocationFactory> tableKeysIsRecordBelongsToCurrentTenantFunctionInvocationFactoryMap = new HashMap();
 
     @Override
     public List<SQLDefinition> getSqlDefinitions() {
@@ -53,5 +57,10 @@ public class SharedSchemaContext implements AbstractSharedSchemaContext {
     @Override
     public ISetCurrentTenantIdFunctionInvocationFactory getISetCurrentTenantIdFunctionInvocationFactory() {
         return iSetCurrentTenantIdFunctionInvocationFactory;
+    }
+
+    @Override
+    public Map<TableKey, IsRecordBelongsToCurrentTenantFunctionInvocationFactory> getTableKeysIsRecordBelongsToCurrentTenantFunctionInvocationFactoryMap() {
+        return tableKeysIsRecordBelongsToCurrentTenantFunctionInvocationFactoryMap;
     }
 }
