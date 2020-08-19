@@ -8,6 +8,8 @@ import spock.lang.Specification
 import spock.lang.Unroll
 
 import static com.github.starnowski.posmulten.postgresql.core.MapBuilder.mapBuilder
+import static com.github.starnowski.posmulten.postgresql.core.rls.function.AbstractIsRecordBelongsToCurrentTenantProducerParameters.pairOfColumnWithType
+import static java.util.Arrays.asList
 
 class IsRecordBelongsToCurrentTenantFunctionDefinitionProducerTest extends Specification {
 
@@ -40,13 +42,13 @@ class IsRecordBelongsToCurrentTenantFunctionDefinitionProducerTest extends Speci
             capturedParameters.getTenantColumn() == tenantId
             capturedParameters.getRecordSchemaName() == tableKey.getSchema()
             capturedParameters.getRecordTableName() == tableKey.getTable()
-            //TODO
+            capturedParameters.getKeyColumnsPairsList() == expectedKeyColumnsPairsList
 
         where:
-            tableKey                        |   tenantId                |   idColumns                                                           |   functionName        |   schema
-            tk("users", null)               |   "ten_ant_id"            |   mapBuilder().put("id", "uuid").build()                              |   "is_u_exists"       |   null
-            tk("users", "public")           |   "tenant"                |   mapBuilder().put("key", "bigint").put("uuid", "uuid").build()       |   "is_users_exists"   |   null
-            tk("posts", "some_schema")      |   "value_of_tenant"       |   mapBuilder().put("uuid", "bigint").build()                          |   "posts_exists"      |   "some_different_schema"
+            tableKey                        |   tenantId                |   idColumns                                                           |   functionName        |   schema                  ||  expectedKeyColumnsPairsList
+            tk("users", null)               |   "ten_ant_id"            |   mapBuilder().put("id", "uuid").build()                              |   "is_u_exists"       |   null                    ||  asList(pairOfColumnWithType("id", "uuid"))
+            tk("users", "public")           |   "tenant"                |   mapBuilder().put("key", "bigint").put("uuid", "uuid").build()       |   "is_users_exists"   |   null                    ||  asList(pairOfColumnWithType("key", "bigint"), pairOfColumnWithType("uuid", "uuid"))
+            tk("posts", "some_schema")      |   "value_of_tenant"       |   mapBuilder().put("uuid", "bigint").build()                          |   "posts_exists"      |   "some_different_schema" ||  asList(pairOfColumnWithType("uuid", "bigint"))
     }
 
     TableKey tk(String table, String schema)
