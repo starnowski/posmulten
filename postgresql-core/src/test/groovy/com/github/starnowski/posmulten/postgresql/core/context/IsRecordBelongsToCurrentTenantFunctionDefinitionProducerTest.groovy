@@ -32,7 +32,7 @@ class IsRecordBelongsToCurrentTenantFunctionDefinitionProducerTest extends Speci
         then:
             1 * isRecordBelongsToCurrentTenantProducer.produce(_) >>
                     {   parameters ->
-                        capturedParameters = parameters
+                        capturedParameters = parameters[0]
                         expectedSQLFunctionDefinition
                     }
         and: "pass correct parameters"
