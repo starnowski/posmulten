@@ -60,10 +60,7 @@ public abstract class FullStackTest extends AbstractClassWithSQLDefinitionGenera
         defaultSharedSchemaContextBuilder.createRLSPolicyForColumn(POSTS_TABLE_NAME, prepareIdColumnTypeForSingleColumnKey("id", "bigint"), "tenant_id", "posts_table_rls_policy");
         defaultSharedSchemaContextBuilder.createRLSPolicyForColumn(GROUPS_TABLE_NAME, prepareIdColumnTypeForSingleColumnKey("uuid", "uuid"), "tenant_id", "groups_table_rls_policy");
         defaultSharedSchemaContextBuilder.createRLSPolicyForColumn(USERS_GROUPS_TABLE_NAME, new HashMap<>(), "tenant_id", "users_groups_table_rls_policy");
-        HashMap<String, String> commentsIdColumnNameAndType = new HashMap<>();
-        commentsIdColumnNameAndType.put("id", "int");
-        commentsIdColumnNameAndType.put("user_id", "bigint");
-        defaultSharedSchemaContextBuilder.createRLSPolicyForColumn(COMMENTS_TABLE_NAME, commentsIdColumnNameAndType, CUSTOM_TENANT_COLUMN_NAME, "comments_table_rls_policy");
+        defaultSharedSchemaContextBuilder.createRLSPolicyForColumn(COMMENTS_TABLE_NAME, mapBuilder().put("id", "int").put("user_id", "bigint").build(), CUSTOM_TENANT_COLUMN_NAME, "comments_table_rls_policy");
         AbstractSharedSchemaContext sharedSchemaContext = defaultSharedSchemaContextBuilder.build();
 
         IGetCurrentTenantIdFunctionInvocationFactory getCurrentTenantIdFunctionDefinition = sharedSchemaContext.getIGetCurrentTenantIdFunctionInvocationFactory();
@@ -116,9 +113,9 @@ public abstract class FullStackTest extends AbstractClassWithSQLDefinitionGenera
 
     private Map<String, String> prepareIdColumnTypeForSingleColumnKey(String columnName, String columnType)
     {
-        Map<String, String> map = new HashMap<>();
-        map.put(columnName, columnType);
-        return map;
+//        Map<String, String> map = new HashMap<>();
+//        map.put(columnName, columnType);
+        return mapBuilder().put(columnName, columnType).build();
     }
 
     @SqlGroup({
@@ -131,4 +128,24 @@ public abstract class FullStackTest extends AbstractClassWithSQLDefinitionGenera
         super.executeSQLDefinitions();
     }
 
+    protected static class MapBuilder <K, V>
+    {
+        private Map<K, V> map = new HashMap<>();
+
+        public MapBuilder put(K key, V value)
+        {
+            map.put(key, value);
+            return this;
+        }
+
+        public Map<K, V> build()
+        {
+            return map;
+        }
+    }
+
+    protected static <K, V> MapBuilder<K, V> mapBuilder()
+    {
+        return new MapBuilder<>();
+    }
 }
