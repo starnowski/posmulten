@@ -1,5 +1,7 @@
 package com.github.starnowski.posmulten.postgresql.core.context
 
+import com.github.starnowski.posmulten.postgresql.core.rls.function.IGetCurrentTenantIdFunctionInvocationFactory
+import com.github.starnowski.posmulten.postgresql.core.rls.function.IsRecordBelongsToCurrentTenantProducer
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -12,7 +14,15 @@ class IsRecordBelongsToCurrentTenantFunctionDefinitionProducerTest extends Speci
     @Unroll
     def "should generate sql definition that creates function with name #functionName in schema #schema which determines if record for specified table (#tableKey) exists, for tenant column #tenantId and id columns #idColumns"()
     {
-        //new DefaultTableColumns("ten_ant_id", mapBuilder().put("id", "uuid").build())
+        given:
+            def isRecordBelongsToCurrentTenantProducer = Mock(IsRecordBelongsToCurrentTenantProducer)
+            tested.setIsRecordBelongsToCurrentTenantProducer(isRecordBelongsToCurrentTenantProducer)
+            def tableColumns = new DefaultTableColumns(tenantId, idColumns)
+            def iGetCurrentTenantIdFunctionInvocationFactory = Mock(IGetCurrentTenantIdFunctionInvocationFactory)
+
+        when:
+            def result = tested.produce(tableKey, tableColumns, iGetCurrentTenantIdFunctionInvocationFactory, functionName, schema)
+
         where:
             tableKey                        |   tenantId                |   idColumns                                                           |   functionName        |   schema
             tk("users", null)               |   "ten_ant_id"            |   mapBuilder().put("id", "uuid").build()                              |   "is_u_exists"       |   null
