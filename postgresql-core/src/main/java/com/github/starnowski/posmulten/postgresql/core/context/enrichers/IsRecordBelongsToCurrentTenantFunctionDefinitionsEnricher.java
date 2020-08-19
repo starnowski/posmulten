@@ -12,7 +12,7 @@ public class IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricher implement
 
     @Override
     public AbstractSharedSchemaContext enrich(AbstractSharedSchemaContext context, SharedSchemaContextRequest request) {
-        List<TableKey> tableRequiredFunction = request.getSameTenantConstraintForForeignKeyProperties().keySet().stream().map(constraintKey -> constraintKey.getForeignKeyTable()).collect(toList());
+        List<TableKey> tableRequiredFunction = request.getSameTenantConstraintForForeignKeyProperties().keySet().stream().map(constraintKey -> constraintKey.getForeignKeyTable()).distinct().collect(toList());
         for (TableKey tableKey : tableRequiredFunction)
         {
             //TODO Throw exception when no name was defined
