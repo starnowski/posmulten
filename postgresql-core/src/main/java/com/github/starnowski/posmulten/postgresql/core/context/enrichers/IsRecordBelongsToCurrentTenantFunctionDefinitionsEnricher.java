@@ -1,6 +1,7 @@
 package com.github.starnowski.posmulten.postgresql.core.context.enrichers;
 
 import com.github.starnowski.posmulten.postgresql.core.context.*;
+import com.github.starnowski.posmulten.postgresql.core.rls.function.IsRecordBelongsToCurrentTenantFunctionDefinition;
 
 import java.util.List;
 
@@ -17,7 +18,9 @@ public class IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricher implement
         {
             //TODO Throw exception when no name was defined
             String functionName = request.getFunctionThatChecksIfRecordExistsInTableNames().get(tableKey);
-            context.addSQLDefinition(isRecordBelongsToCurrentTenantFunctionDefinitionProducer.produce(tableKey, request.getTableColumnsList().get(tableKey), context.getIGetCurrentTenantIdFunctionInvocationFactory(), functionName, request.getDefaultSchema() ));
+            IsRecordBelongsToCurrentTenantFunctionDefinition functionDefinition = isRecordBelongsToCurrentTenantFunctionDefinitionProducer.produce(tableKey, request.getTableColumnsList().get(tableKey), context.getIGetCurrentTenantIdFunctionInvocationFactory(), functionName, request.getDefaultSchema());
+            context.addSQLDefinition(functionDefinition);
+            context.getTableKeysIsRecordBelongsToCurrentTenantFunctionInvocationFactoryMap().put(tableKey, functionDefinition);
         }
         return context;
     }
