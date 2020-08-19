@@ -16,13 +16,13 @@ class IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricherTest extends Spec
     def tested = new IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricher()
 
     @Unroll
-    def "should create all required SQL definition that enables RLS policy but not force policy for schema #schema"()
+    def "should create all required SQL definition that creates functions that checks if records from specified tables exists for schema #schema"()
     {
         given:
             def builder = new DefaultSharedSchemaContextBuilder(schema)
             builder.createRLSPolicyForColumn("users", [id: "N/A"], "tenant", "N/A")
             builder.createRLSPolicyForColumn("comments", [uuid: "N/A"], "tenant_id", "N/A")
-            builder.createRLSPolicyForColumn("some_table", [somedid: "N/A"], "tenant_xxx_id", "some_table_policy")
+            builder.createRLSPolicyForColumn("some_table", [somedid: "N/A"], "tenant_xxx_id", "N/A")
             builder.createSameTenantConstraintForForeignKey("comments", "users", mapBuilder().put("N/A", "N/A").build(), "N/A")
             builder.createSameTenantConstraintForForeignKey("some_table", "users", mapBuilder().put("N/A", "N/A").build(), "N/A")
             builder.createSameTenantConstraintForForeignKey("some_table", "comments", mapBuilder().put("N/A", "N/A").build(), "N/A")
