@@ -5,21 +5,21 @@ import java.util.Set;
 
 public class SameTenantConstraintForForeignKey {
 
-    private final String mainTable;
-    private final String foreignKeyTable;
+    private final TableKey mainTable;
+    private final TableKey foreignKeyTable;
     private final Set<String> foreignKeyColumns;
 
-    public SameTenantConstraintForForeignKey(String mainTable, String foreignKeyTable, Set<String> foreignKeyColumns) {
+    public SameTenantConstraintForForeignKey(TableKey mainTable, TableKey foreignKeyTable, Set<String> foreignKeyColumns) {
         this.mainTable = mainTable;
         this.foreignKeyTable = foreignKeyTable;
         this.foreignKeyColumns = foreignKeyColumns;
     }
 
-    public String getMainTable() {
+    public TableKey getMainTable() {
         return mainTable;
     }
 
-    public String getForeignKeyTable() {
+    public TableKey getForeignKeyTable() {
         return foreignKeyTable;
     }
 
