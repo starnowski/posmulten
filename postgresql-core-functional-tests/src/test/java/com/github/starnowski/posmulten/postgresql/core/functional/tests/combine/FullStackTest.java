@@ -81,26 +81,6 @@ public abstract class FullStackTest extends AbstractClassWithSQLDefinitionGenera
         sqlDefinitions.addAll(sharedSchemaContext.getSqlDefinitions());
         // TODO Use the DefaultSharedSchemaContextBuilder to create all SQL definitions
 
-        // Does record belongs to current tenant (users table)
-//        IsRecordBelongsToCurrentTenantFunctionDefinition isUsersRecordBelongsToCurrentTenantFunctionDefinition = getIsUsersRecordBelongsToCurrentTenantFunctionDefinition(getCurrentTenantIdFunctionDefinition);
-//        sqlDefinitions.add(isUsersRecordBelongsToCurrentTenantFunctionDefinition);
-
-        // Does record belongs to current tenant (posts table)
-//        IsRecordBelongsToCurrentTenantFunctionDefinition isPostsRecordBelongsToCurrentTenantFunctionDefinition = getIsPostsRecordBelongsToCurrentTenantFunctionDefinition(getCurrentTenantIdFunctionDefinition);
-//        sqlDefinitions.add(isPostsRecordBelongsToCurrentTenantFunctionDefinition);
-
-        // Does record belongs to current tenant (comments table)
-//        IsRecordBelongsToCurrentTenantFunctionDefinition isCommentsRecordBelongsToCurrentTenantFunctionDefinition = getIsCommentsRecordBelongsToCurrentTenantFunctionDefinition(getCurrentTenantIdFunctionDefinition);
-//        sqlDefinitions.add(isCommentsRecordBelongsToCurrentTenantFunctionDefinition);
-
-        // Does record belongs to current tenant (notifications table)
-//        IsRecordBelongsToCurrentTenantFunctionDefinition isNotificationsRecordBelongsToCurrentTenantFunctionDefinition = getIsNotificationsRecordBelongsToCurrentTenantFunctionDefinition(getCurrentTenantIdFunctionDefinition);
-//        sqlDefinitions.add(isNotificationsRecordBelongsToCurrentTenantFunctionDefinition);
-
-        // Does record belongs to current tenant (groups table)
-//        IsRecordBelongsToCurrentTenantFunctionDefinition isGroupsRecordBelongsToCurrentTenantFunctionDefinition = getIsGroupsRecordBelongsToCurrentTenantFunctionDefinition(getCurrentTenantIdFunctionDefinition);
-//        sqlDefinitions.add(isGroupsRecordBelongsToCurrentTenantFunctionDefinition);
-
         // Constraint - post - fk - users
         //user_id
         SQLDefinition recordBelongsToCurrentTenantConstrainSqlDefinition = getSqlDefinitionOfConstraintForUsersForeignKeyInPostsTable(sharedSchemaContext.getTableKeysIsRecordBelongsToCurrentTenantFunctionInvocationFactoryMap().get(tk(USERS_TABLE_NAME)));
