@@ -113,8 +113,6 @@ public abstract class FullStackTest extends AbstractClassWithSQLDefinitionGenera
 
     private Map<String, String> prepareIdColumnTypeForSingleColumnKey(String columnName, String columnType)
     {
-//        Map<String, String> map = new HashMap<>();
-//        map.put(columnName, columnType);
         return mapBuilder().put(columnName, columnType).build();
     }
 
