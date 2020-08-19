@@ -1,6 +1,7 @@
 package com.github.starnowski.posmulten.postgresql.core.context
 
 import com.github.starnowski.posmulten.postgresql.core.rls.function.IGetCurrentTenantIdFunctionInvocationFactory
+import com.github.starnowski.posmulten.postgresql.core.rls.function.IsRecordBelongsToCurrentTenantFunctionDefinition
 import com.github.starnowski.posmulten.postgresql.core.rls.function.IsRecordBelongsToCurrentTenantProducer
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -19,9 +20,19 @@ class IsRecordBelongsToCurrentTenantFunctionDefinitionProducerTest extends Speci
             tested.setIsRecordBelongsToCurrentTenantProducer(isRecordBelongsToCurrentTenantProducer)
             def tableColumns = new DefaultTableColumns(tenantId, idColumns)
             def iGetCurrentTenantIdFunctionInvocationFactory = Mock(IGetCurrentTenantIdFunctionInvocationFactory)
+            def expectedSQLFunctionDefinition = Mock(IsRecordBelongsToCurrentTenantFunctionDefinition)
+            def capturedParameters = null;
 
         when:
             def result = tested.produce(tableKey, tableColumns, iGetCurrentTenantIdFunctionInvocationFactory, functionName, schema)
+
+        then:
+            1 * isRecordBelongsToCurrentTenantProducer.produce(_) >>
+                    {   parameters ->
+                        capturedParameters = parameters
+                        expectedSQLFunctionDefinition
+                    }
+        and: "pass correct parameters"
 
         where:
             tableKey                        |   tenantId                |   idColumns                                                           |   functionName        |   schema
