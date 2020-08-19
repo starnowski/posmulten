@@ -1,5 +1,7 @@
 package com.github.starnowski.posmulten.postgresql.core.common.function;
 
+import java.util.Objects;
+
 public class FunctionArgumentBuilder {
 
     private String type;
@@ -37,6 +39,19 @@ public class FunctionArgumentBuilder {
             return "InnerFunctionArgument{" +
                     "type='" + type + '\'' +
                     '}';
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            InnerFunctionArgument that = (InnerFunctionArgument) o;
+            return Objects.equals(type, that.type);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(type);
         }
     }
 }
