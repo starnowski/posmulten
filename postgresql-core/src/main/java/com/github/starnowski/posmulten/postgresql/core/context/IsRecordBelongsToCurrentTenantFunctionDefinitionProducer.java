@@ -8,7 +8,7 @@ public class IsRecordBelongsToCurrentTenantFunctionDefinitionProducer {
 
     private IsRecordBelongsToCurrentTenantProducer isRecordBelongsToCurrentTenantProducer = new IsRecordBelongsToCurrentTenantProducer();
 
-    public IsRecordBelongsToCurrentTenantFunctionDefinition produce(TableKey tableKey, AbstractTableColumns tableColumns, IGetCurrentTenantIdFunctionInvocationFactory iGetCurrentTenantIdFunctionInvocationFactory, String funtionName)
+    public IsRecordBelongsToCurrentTenantFunctionDefinition produce(TableKey tableKey, AbstractTableColumns tableColumns, IGetCurrentTenantIdFunctionInvocationFactory iGetCurrentTenantIdFunctionInvocationFactory, String functionName)
     {
         //TODO
         return null;
