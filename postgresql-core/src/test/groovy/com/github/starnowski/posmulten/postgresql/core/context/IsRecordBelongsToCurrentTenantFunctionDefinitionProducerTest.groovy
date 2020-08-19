@@ -10,7 +10,7 @@ class IsRecordBelongsToCurrentTenantFunctionDefinitionProducerTest extends Speci
     def tested = new IsRecordBelongsToCurrentTenantFunctionDefinitionProducer()
 
     @Unroll
-    def "should generate sql definition that creates function which determines if record for specified table (#tableKey) exists"()
+    def "should generate sql definition that creates function with name #functionName in schema #schema which determines if record for specified table (#tableKey) exists, for tenant column #tenantId and id columns #idColumns"()
     {
         //new DefaultTableColumns("ten_ant_id", mapBuilder().put("id", "uuid").build())
         where:
