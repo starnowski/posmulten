@@ -1,5 +1,6 @@
 package com.github.starnowski.posmulten.postgresql.core.context
 
+import com.github.starnowski.posmulten.postgresql.core.rls.function.AbstractIsRecordBelongsToCurrentTenantProducerParameters
 import com.github.starnowski.posmulten.postgresql.core.rls.function.IGetCurrentTenantIdFunctionInvocationFactory
 import com.github.starnowski.posmulten.postgresql.core.rls.function.IsRecordBelongsToCurrentTenantFunctionDefinition
 import com.github.starnowski.posmulten.postgresql.core.rls.function.IsRecordBelongsToCurrentTenantProducer
@@ -21,7 +22,7 @@ class IsRecordBelongsToCurrentTenantFunctionDefinitionProducerTest extends Speci
             def tableColumns = new DefaultTableColumns(tenantId, idColumns)
             def iGetCurrentTenantIdFunctionInvocationFactory = Mock(IGetCurrentTenantIdFunctionInvocationFactory)
             def expectedSQLFunctionDefinition = Mock(IsRecordBelongsToCurrentTenantFunctionDefinition)
-            def capturedParameters = null;
+            AbstractIsRecordBelongsToCurrentTenantProducerParameters capturedParameters = null;
 
         when:
             def result = tested.produce(tableKey, tableColumns, iGetCurrentTenantIdFunctionInvocationFactory, functionName, schema)
@@ -33,6 +34,13 @@ class IsRecordBelongsToCurrentTenantFunctionDefinitionProducerTest extends Speci
                         expectedSQLFunctionDefinition
                     }
         and: "pass correct parameters"
+            capturedParameters.getSchema() == schema
+            capturedParameters.getIGetCurrentTenantIdFunctionInvocationFactory() == iGetCurrentTenantIdFunctionInvocationFactory
+            capturedParameters.getFunctionName() == functionName
+            capturedParameters.getTenantColumn() == tenantId
+            capturedParameters.getRecordSchemaName() == tableKey.getSchema()
+            capturedParameters.getRecordTableName() == tableKey.getTable()
+            //TODO
 
         where:
             tableKey                        |   tenantId                |   idColumns                                                           |   functionName        |   schema
