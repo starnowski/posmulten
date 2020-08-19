@@ -10,7 +10,7 @@ import static java.util.Arrays.asList;
 
 public class DefaultSharedSchemaContextBuilder {
 
-    private String defaultSchema;
+    private final String defaultSchema;
     private List<AbstractSharedSchemaContextEnricher> enrichers = asList(new GetCurrentTenantIdFunctionDefinitionEnricher(), new SetCurrentTenantIdFunctionDefinitionEnricher(), new TenantHasAuthoritiesFunctionDefinitionEnricher(), new TenantColumnSQLDefinitionsEnricher(), new TableRLSSettingsSQLDefinitionsEnricher(), new TableRLSPolicyEnricher());
     private SharedSchemaContextRequest sharedSchemaContextRequest = new SharedSchemaContextRequest();
 
@@ -107,13 +107,13 @@ public class DefaultSharedSchemaContextBuilder {
     }
 
     public DefaultSharedSchemaContextBuilder createSameTenantConstraintForForeignKey(String mainTable, String foreignKeyTable, Map<String, String> foreignKeyPrimaryKeyColumnsMappings, String constraintName) {
-        sharedSchemaContextRequest.getSameTenantConstraintForForeignKeyProperties().put(new SameTenantConstraintForForeignKey(mainTable, foreignKeyTable, foreignKeyPrimaryKeyColumnsMappings.keySet()), null);
+        sharedSchemaContextRequest.getSameTenantConstraintForForeignKeyProperties().put(new SameTenantConstraintForForeignKey(new TableKey(mainTable, defaultSchema), new TableKey(mainTable, foreignKeyTable), foreignKeyPrimaryKeyColumnsMappings.keySet()), null);
         //TODO
         return this;
     }
 
     public DefaultSharedSchemaContextBuilder setNameForFunctionThatChecksIfRecordExistsInTable(String recordTable, String functionName) {
-        sharedSchemaContextRequest.getFunctionThatChecksIfRecordExistsInTableNames().put(recordTable, functionName);
+        sharedSchemaContextRequest.getFunctionThatChecksIfRecordExistsInTableNames().put(new TableKey(recordTable, defaultSchema), functionName);
         return this;
     }
 }

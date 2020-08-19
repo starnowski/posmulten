@@ -21,7 +21,7 @@ public class SharedSchemaContextRequest {
     private Map<TableKey, AbstractTableRLSPolicyProperties> tableRLSPolicies = new HashMap<>();
     private Map<SameTenantConstraintForForeignKey, Object> sameTenantConstraintForForeignKeyProperties = new HashMap<>();
     private String grantee;
-    private Map<String, String> functionThatChecksIfRecordExistsInTableNames = new HashMap<>();
+    private Map<TableKey, String> functionThatChecksIfRecordExistsInTableNames = new HashMap<>();
 
     public String getDefaultTenantIdColumn() {
         return defaultTenantIdColumn;
@@ -119,7 +119,7 @@ public class SharedSchemaContextRequest {
         return sameTenantConstraintForForeignKeyProperties;
     }
 
-    public Map<String, String> getFunctionThatChecksIfRecordExistsInTableNames() {
+    public Map<TableKey, String> getFunctionThatChecksIfRecordExistsInTableNames() {
         return functionThatChecksIfRecordExistsInTableNames;
     }
 }
