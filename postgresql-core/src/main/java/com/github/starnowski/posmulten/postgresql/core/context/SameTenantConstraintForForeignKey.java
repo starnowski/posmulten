@@ -9,7 +9,6 @@ public class SameTenantConstraintForForeignKey {
     private final String foreignKeyTable;
     private final Set<String> foreignKeyColumns;
 
-
     public SameTenantConstraintForForeignKey(String mainTable, String foreignKeyTable, Set<String> foreignKeyColumns) {
         this.mainTable = mainTable;
         this.foreignKeyTable = foreignKeyTable;
