@@ -113,7 +113,7 @@ public class DefaultSharedSchemaContextBuilder {
     }
 
     public DefaultSharedSchemaContextBuilder setNameForFunctionThatChecksIfRecordExistsInTable(String recordTable, String functionName) {
-        //TODO
+        sharedSchemaContextRequest.getFunctionThatChecksIfRecordExistsInTableNames().put(recordTable, functionName);
         return this;
     }
 }
