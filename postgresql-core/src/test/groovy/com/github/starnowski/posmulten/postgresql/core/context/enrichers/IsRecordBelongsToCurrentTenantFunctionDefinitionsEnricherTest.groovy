@@ -52,6 +52,10 @@ class IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricherTest extends Spec
             result.getSqlDefinitions().contains(usersTableSQLDefinition)
             result.getSqlDefinitions().contains(commentsTableSQLDefinition)
 
+        and: "put function objects into map"
+            result.getTableKeysIsRecordBelongsToCurrentTenantFunctionInvocationFactoryMap().get(usersTableKey) == usersTableSQLDefinition
+            result.getTableKeysIsRecordBelongsToCurrentTenantFunctionInvocationFactoryMap().get(commentsTableKey) == commentsTableSQLDefinition
+
         where:
             schema << [null, "public", "some_schema"]
     }
