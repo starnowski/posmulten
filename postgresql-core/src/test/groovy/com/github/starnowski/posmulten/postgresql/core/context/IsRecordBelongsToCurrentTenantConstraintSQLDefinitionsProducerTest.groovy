@@ -25,8 +25,11 @@ class IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducerTest extends
             def sqlDefinition = Mock(SQLDefinition)
             def isRecordBelongsToCurrentTenantFunctionInvocationFactory = Mock(IsRecordBelongsToCurrentTenantFunctionInvocationFactory)
             AbstractIsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducerParameters parameters =
-                    builder().withIsRecordBelongsToCurrentTenantFunctionInvocationFactory(isRecordBelongsToCurrentTenantFunctionInvocationFactory)
-                    .build()
+                    builder()
+                            .withTableKey(tableKey)
+                            .withConstraintName(constraintName)
+                            .withIsRecordBelongsToCurrentTenantFunctionInvocationFactory(isRecordBelongsToCurrentTenantFunctionInvocationFactory)
+                            .build()
 
         when:
             def results = tested.produce(tableKey, false)
@@ -40,10 +43,10 @@ class IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducerTest extends
             results == [sqlDefinition]
 
         where:
-        tableKey                        |   tenantId                |   idColumns                                                           |   functionName        |   schema                  ||  expectedKeyColumnsPairsList
-        tk("users", null)               |   "ten_ant_id"            |   mapBuilder().put("id", "uuid").build()                              |   "is_u_exists"       |   null                    ||  [pairOfColumnWithType("id", "uuid")]
-        tk("users", "public")           |   "tenant"                |   mapBuilder().put("key", "bigint").put("uuid", "uuid").build()       |   "is_users_exists"   |   null                    ||  [pairOfColumnWithType("key", "bigint"), pairOfColumnWithType("uuid", "uuid")]
-        tk("posts", "some_schema")      |   "value_of_tenant"       |   mapBuilder().put("uuid", "bigint").build()                          |   "posts_exists"      |   "some_different_schema" ||  [pairOfColumnWithType("uuid", "bigint")]
+            tableKey                        |   tenantId                |   idColumns                                                           |   constraintName      ||  expectedKeyColumnsPairsList
+            tk("users", null)               |   "ten_ant_id"            |   mapBuilder().put("id", "uuid").build()                              |   "is_u_exists"       ||  [pairOfColumnWithType("id", "uuid")]
+            tk("users", "public")           |   "tenant"                |   mapBuilder().put("key", "bigint").put("uuid", "uuid").build()       |   "is_users_exists"   ||  [pairOfColumnWithType("key", "bigint"), pairOfColumnWithType("uuid", "uuid")]
+            tk("posts", "some_schema")      |   "value_of_tenant"       |   mapBuilder().put("uuid", "bigint").build()                          |   "posts_exists"      ||  [pairOfColumnWithType("uuid", "bigint")]
     }
 
     TableKey tk(String table, String schema)
