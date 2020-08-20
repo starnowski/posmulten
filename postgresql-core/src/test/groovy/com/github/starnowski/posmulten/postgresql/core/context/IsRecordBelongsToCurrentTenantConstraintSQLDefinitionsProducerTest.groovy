@@ -28,11 +28,12 @@ class IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducerTest extends
                     builder()
                             .withTableKey(tableKey)
                             .withConstraintName(constraintName)
+                            .withForeignKeyPrimaryKeyMappings(foreignKeyPrimaryKeyMappings)
                             .withIsRecordBelongsToCurrentTenantFunctionInvocationFactory(isRecordBelongsToCurrentTenantFunctionInvocationFactory)
                             .build()
 
         when:
-            def results = tested.produce(tableKey, false)
+            def results = tested.produce(parameters)
 
         then:
             1 * isRecordBelongsToCurrentTenantConstraintProducer.produce(_) >> 
@@ -43,10 +44,10 @@ class IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducerTest extends
             results == [sqlDefinition]
 
         where:
-            tableKey                        |   tenantId                |   idColumns                                                           |   constraintName      ||  expectedKeyColumnsPairsList
-            tk("users", null)               |   "ten_ant_id"            |   mapBuilder().put("id", "uuid").build()                              |   "is_u_exists"       ||  [pairOfColumnWithType("id", "uuid")]
-            tk("users", "public")           |   "tenant"                |   mapBuilder().put("key", "bigint").put("uuid", "uuid").build()       |   "is_users_exists"   ||  [pairOfColumnWithType("key", "bigint"), pairOfColumnWithType("uuid", "uuid")]
-            tk("posts", "some_schema")      |   "value_of_tenant"       |   mapBuilder().put("uuid", "bigint").build()                          |   "posts_exists"      ||  [pairOfColumnWithType("uuid", "bigint")]
+            tableKey                        |   foreignKeyPrimaryKeyMappings                                        |   constraintName      ||  expectedKeyColumnsPairsList
+            tk("users", null)               |   mapBuilder().put("id", "uuid").build()                              |   "fk_constraint"     ||  [pairOfColumnWithType("id", "uuid")]
+            tk("users", "public")           |   mapBuilder().put("key", "bigint").put("uuid", "uuid").build()       |   "fk_user_public"    ||  [pairOfColumnWithType("key", "bigint"), pairOfColumnWithType("uuid", "uuid")]
+            tk("posts", "some_schema")      |   mapBuilder().put("uuid", "bigint").build()                          |   "posts_fk_"         ||  [pairOfColumnWithType("uuid", "bigint")]
     }
 
     TableKey tk(String table, String schema)
