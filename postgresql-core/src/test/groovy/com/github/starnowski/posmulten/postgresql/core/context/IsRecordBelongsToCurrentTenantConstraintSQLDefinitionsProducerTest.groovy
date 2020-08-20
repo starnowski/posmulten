@@ -43,6 +43,13 @@ class IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducerTest extends
                     }
             results == [sqlDefinition]
 
+        and: "pass correct parameters to inner component"
+            capturedParameters.getConstraintName() == constraintName
+            capturedParameters.getPrimaryColumnsValuesMap() == expectedKeyColumnsPairsList
+            capturedParameters.getTableSchema() == tableKey.getSchema()
+            capturedParameters.getTableName() == tableKey.getTable()
+            capturedParameters.getIsRecordBelongsToCurrentTenantFunctionInvocationFactory() == isRecordBelongsToCurrentTenantFunctionInvocationFactory
+
         where:
             tableKey                        |   foreignKeyPrimaryKeyMappings                                        |   constraintName      ||  expectedKeyColumnsPairsList
             tk("users", null)               |   mapBuilder().put("id", "uuid").build()                              |   "fk_constraint"     ||  [pairOfColumnWithType("id", "uuid")]
