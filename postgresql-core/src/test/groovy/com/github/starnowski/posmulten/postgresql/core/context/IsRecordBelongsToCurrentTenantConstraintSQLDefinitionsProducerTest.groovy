@@ -1,5 +1,6 @@
 package com.github.starnowski.posmulten.postgresql.core.context
 
+
 import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition
 import com.github.starnowski.posmulten.postgresql.core.rls.IsRecordBelongsToCurrentTenantConstraintProducer
 import com.github.starnowski.posmulten.postgresql.core.rls.IsRecordBelongsToCurrentTenantConstraintProducerParameters
@@ -8,6 +9,7 @@ import spock.lang.Specification
 import spock.lang.Unroll
 
 import static com.github.starnowski.posmulten.postgresql.core.MapBuilder.mapBuilder
+import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValue.forReference
 import static com.github.starnowski.posmulten.postgresql.core.context.IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducerParameters.builder
 import static com.github.starnowski.posmulten.postgresql.core.rls.function.AbstractIsRecordBelongsToCurrentTenantProducerParameters.pairOfColumnWithType
 
@@ -52,7 +54,7 @@ class IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducerTest extends
 
         where:
             tableKey                        |   foreignKeyPrimaryKeyMappings                                        |   constraintName      ||  expectedKeyColumnsPairsList
-            tk("users", null)               |   mapBuilder().put("id", "uuid").build()                              |   "fk_constraint"     ||  [pairOfColumnWithType("id", "uuid")]
+            tk("users", null)               |   mapBuilder().put("id", "uuid").build()                              |   "fk_constraint"     ||  [id:forReference("uuid")]
             tk("users", "public")           |   mapBuilder().put("key", "bigint").put("uuid", "uuid").build()       |   "fk_user_public"    ||  [pairOfColumnWithType("key", "bigint"), pairOfColumnWithType("uuid", "uuid")]
             tk("posts", "some_schema")      |   mapBuilder().put("uuid", "bigint").build()                          |   "posts_fk_"         ||  [pairOfColumnWithType("uuid", "bigint")]
     }
