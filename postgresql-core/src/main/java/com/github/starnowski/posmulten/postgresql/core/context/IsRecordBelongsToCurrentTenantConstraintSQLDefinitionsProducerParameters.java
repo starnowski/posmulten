@@ -7,29 +7,24 @@ import java.util.Map;
 public class IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducerParameters implements AbstractIsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducerParameters{
 
     private final String constraintName;
-    private final String tableName;
-    private final String  schema;
+    private final TableKey tableKey;
     private final IsRecordBelongsToCurrentTenantFunctionInvocationFactory isRecordBelongsToCurrentTenantFunctionInvocationFactory;
     private final Map<String, String> foreignKeyPrimaryKeyMappings;
 
-    public IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducerParameters(String constraintName, String tableName, String schema, IsRecordBelongsToCurrentTenantFunctionInvocationFactory isRecordBelongsToCurrentTenantFunctionInvocationFactory, Map<String, String> foreignKeyPrimaryKeyMappings) {
+    public IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducerParameters(String constraintName, TableKey tableKey, IsRecordBelongsToCurrentTenantFunctionInvocationFactory isRecordBelongsToCurrentTenantFunctionInvocationFactory, Map<String, String> foreignKeyPrimaryKeyMappings) {
         this.constraintName = constraintName;
-        this.tableName = tableName;
-        this.schema = schema;
+        this.tableKey = tableKey;
         this.isRecordBelongsToCurrentTenantFunctionInvocationFactory = isRecordBelongsToCurrentTenantFunctionInvocationFactory;
         this.foreignKeyPrimaryKeyMappings = foreignKeyPrimaryKeyMappings;
     }
 
+    @Override
+    public TableKey getTableKey() {
+        return tableKey;
+    }
+
     public String getConstraintName() {
         return constraintName;
-    }
-
-    public String getTableName() {
-        return tableName;
-    }
-
-    public String getSchema() {
-        return schema;
     }
 
     public IsRecordBelongsToCurrentTenantFunctionInvocationFactory getIsRecordBelongsToCurrentTenantFunctionInvocationFactory() {
@@ -48,8 +43,7 @@ public class IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducerParam
     public static class IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducerParametersBuilder
     {
         private String constraintName;
-        private String tableName;
-        private String  schema;
+        private TableKey tableKey;
         private IsRecordBelongsToCurrentTenantFunctionInvocationFactory isRecordBelongsToCurrentTenantFunctionInvocationFactory;
         private Map<String, String> foreignKeyPrimaryKeyMappings;
 
@@ -58,13 +52,8 @@ public class IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducerParam
             return this;
         }
 
-        public IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducerParametersBuilder withTableName(String tableName) {
-            this.tableName = tableName;
-            return this;
-        }
-
-        public IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducerParametersBuilder withSchema(String schema) {
-            this.schema = schema;
+        public IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducerParametersBuilder withTableKey(TableKey tableKey) {
+            this.tableKey = tableKey;
             return this;
         }
 
@@ -80,7 +69,7 @@ public class IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducerParam
 
         public IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducerParameters build()
         {
-            return new IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducerParameters(constraintName, tableName, schema, isRecordBelongsToCurrentTenantFunctionInvocationFactory, foreignKeyPrimaryKeyMappings);
+            return new IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducerParameters(constraintName, tableKey, isRecordBelongsToCurrentTenantFunctionInvocationFactory, foreignKeyPrimaryKeyMappings);
         }
     }
 }

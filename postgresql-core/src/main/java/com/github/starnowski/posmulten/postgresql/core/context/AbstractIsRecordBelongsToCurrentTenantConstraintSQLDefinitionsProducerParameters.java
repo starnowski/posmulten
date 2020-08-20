@@ -8,9 +8,7 @@ public interface AbstractIsRecordBelongsToCurrentTenantConstraintSQLDefinitionsP
 
     String getConstraintName();
 
-    String getTableName();
-
-    String  getSchema();
+    TableKey getTableKey();
 
     IsRecordBelongsToCurrentTenantFunctionInvocationFactory getIsRecordBelongsToCurrentTenantFunctionInvocationFactory();
 
