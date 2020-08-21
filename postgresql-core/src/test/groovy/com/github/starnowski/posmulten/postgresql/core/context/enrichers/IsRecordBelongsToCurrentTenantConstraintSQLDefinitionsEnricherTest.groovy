@@ -1,7 +1,7 @@
 package com.github.starnowski.posmulten.postgresql.core.context.enrichers
 
 import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder
-import com.github.starnowski.posmulten.postgresql.core.context.IsRecordBelongsToCurrentTenantFunctionDefinitionProducer
+import com.github.starnowski.posmulten.postgresql.core.context.IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer
 import com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContext
 import com.github.starnowski.posmulten.postgresql.core.rls.function.IGetCurrentTenantIdFunctionInvocationFactory
 import com.github.starnowski.posmulten.postgresql.core.rls.function.IsRecordBelongsToCurrentTenantFunctionDefinition
@@ -33,27 +33,24 @@ class IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricherTest extends
         context.setIGetCurrentTenantIdFunctionInvocationFactory(iGetCurrentTenantIdFunctionInvocationFactory)
         def usersTableSQLDefinition = Mock(IsRecordBelongsToCurrentTenantFunctionDefinition)
         def commentsTableSQLDefinition = Mock(IsRecordBelongsToCurrentTenantFunctionDefinition)
-        def isRecordBelongsToCurrentTenantFunctionDefinitionProducer = Mock(IsRecordBelongsToCurrentTenantFunctionDefinitionProducer)
-        tested.setIsRecordBelongsToCurrentTenantFunctionDefinitionProducer(isRecordBelongsToCurrentTenantFunctionDefinitionProducer)
+        def isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer = Mock(IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer)
+        tested.setIsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer(isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer)
         def usersTableKey = tk("users", schema)
         def commentsTableKey = tk("comments", schema)
         def usersTableColumns = sharedSchemaContextRequest.getTableColumnsList().get(usersTableKey)
         def commentsTableColumns = sharedSchemaContextRequest.getTableColumnsList().get(commentsTableKey)
 
         when:
-        def result = tested.enrich(context, sharedSchemaContextRequest)
+            def result = tested.enrich(context, sharedSchemaContextRequest)
 
         then:
-        1 * isRecordBelongsToCurrentTenantFunctionDefinitionProducer.produce(usersTableKey, usersTableColumns, iGetCurrentTenantIdFunctionInvocationFactory, "is_user_exists", schema) >> usersTableSQLDefinition
-        1 * isRecordBelongsToCurrentTenantFunctionDefinitionProducer.produce(commentsTableKey, commentsTableColumns, iGetCurrentTenantIdFunctionInvocationFactory, "is_comment_exists", schema) >> commentsTableSQLDefinition
-        0 * isRecordBelongsToCurrentTenantFunctionDefinitionProducer.produce(_)
+            1 * isRecordBelongsToCurrentTenantFunctionDefinitionProducer.produce(usersTableKey, usersTableColumns, iGetCurrentTenantIdFunctionInvocationFactory, "is_user_exists", schema) >> usersTableSQLDefinition
+            1 * isRecordBelongsToCurrentTenantFunctionDefinitionProducer.produce(commentsTableKey, commentsTableColumns, iGetCurrentTenantIdFunctionInvocationFactory, "is_comment_exists", schema) >> commentsTableSQLDefinition
+            1 * isRecordBelongsToCurrentTenantFunctionDefinitionProducer.produce(commentsTableKey, commentsTableColumns, iGetCurrentTenantIdFunctionInvocationFactory, "is_comment_exists", schema) >> commentsTableSQLDefinition
+            0 * isRecordBelongsToCurrentTenantFunctionDefinitionProducer.produce(_)
 
-        result.getSqlDefinitions().contains(usersTableSQLDefinition)
-        result.getSqlDefinitions().contains(commentsTableSQLDefinition)
-
-        and: "put function objects into map"
-        result.getTableKeysIsRecordBelongsToCurrentTenantFunctionInvocationFactoryMap().get(usersTableKey) == usersTableSQLDefinition
-        result.getTableKeysIsRecordBelongsToCurrentTenantFunctionInvocationFactoryMap().get(commentsTableKey) == commentsTableSQLDefinition
+            result.getSqlDefinitions().contains(usersTableSQLDefinition)
+            result.getSqlDefinitions().contains(commentsTableSQLDefinition)
 
         where:
         schema << [null, "public", "some_schema"]
