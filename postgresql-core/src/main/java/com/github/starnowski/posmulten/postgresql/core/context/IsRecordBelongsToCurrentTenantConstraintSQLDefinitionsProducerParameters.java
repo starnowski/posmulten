@@ -3,6 +3,7 @@ package com.github.starnowski.posmulten.postgresql.core.context;
 import com.github.starnowski.posmulten.postgresql.core.rls.function.IsRecordBelongsToCurrentTenantFunctionInvocationFactory;
 
 import java.util.Map;
+import java.util.Objects;
 
 public class IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducerParameters implements AbstractIsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducerParameters{
 
@@ -33,6 +34,22 @@ public class IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducerParam
 
     public Map<String, String> getForeignKeyPrimaryKeyMappings() {
         return foreignKeyPrimaryKeyMappings;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducerParameters that = (IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducerParameters) o;
+        return Objects.equals(constraintName, that.constraintName) &&
+                Objects.equals(tableKey, that.tableKey) &&
+                Objects.equals(isRecordBelongsToCurrentTenantFunctionInvocationFactory, that.isRecordBelongsToCurrentTenantFunctionInvocationFactory) &&
+                Objects.equals(foreignKeyPrimaryKeyMappings, that.foreignKeyPrimaryKeyMappings);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(constraintName, tableKey, isRecordBelongsToCurrentTenantFunctionInvocationFactory, foreignKeyPrimaryKeyMappings);
     }
 
     public static IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducerParametersBuilder builder()
