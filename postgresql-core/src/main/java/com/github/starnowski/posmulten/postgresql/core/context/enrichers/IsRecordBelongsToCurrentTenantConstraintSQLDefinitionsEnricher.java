@@ -14,7 +14,7 @@ public class IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher impl
 
     @Override
     public AbstractSharedSchemaContext enrich(AbstractSharedSchemaContext context, SharedSchemaContextRequest request) {
-        List<Pair<SameTenantConstraintForForeignKey, SameTenantConstraintForForeignKeyProperties>> constrainsRequests = request.getSameTenantConstraintForForeignKeyProperties().entrySet().stream().map(entry -> new Pair(entry.getKey(), entry.getValue())).collect(toList());
+        List<Pair<SameTenantConstraintForForeignKey, SameTenantConstraintForForeignKeyProperties>> constrainsRequests = request.getSameTenantConstraintForForeignKeyProperties().entrySet().stream().map(entry -> new Pair<SameTenantConstraintForForeignKey, SameTenantConstraintForForeignKeyProperties>(entry.getKey(), entry.getValue())).collect(toList());
         for (Pair<SameTenantConstraintForForeignKey, SameTenantConstraintForForeignKeyProperties> constraintRequest : constrainsRequests)
         {
             SameTenantConstraintForForeignKey key = constraintRequest.getKey();
