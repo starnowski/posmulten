@@ -35,6 +35,6 @@ public class IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer {
 
     private Map<String, FunctionArgumentValue> convertForeignPrimaryKeyMapping(Map<String, String> foreignKeyPrimaryKeyMappings)
     {
-        return foreignKeyPrimaryKeyMappings.entrySet().stream().collect(Collectors.toMap(entry -> entry.getKey(), entry-> forReference(entry.getValue())));
+        return foreignKeyPrimaryKeyMappings.entrySet().stream().collect(Collectors.toMap(entry -> entry.getValue(), entry-> forReference(entry.getKey())));
     }
 }
