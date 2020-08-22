@@ -46,10 +46,10 @@ class IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricherTest extends
             def result = tested.enrich(context, sharedSchemaContextRequest)
 
         then:
-            1 * isRecordBelongsToCurrentTenantFunctionDefinitionProducer.produce(usersTableKey, usersTableColumns, iGetCurrentTenantIdFunctionInvocationFactory, "is_user_exists", schema) >> usersTableSQLDefinition
-            1 * isRecordBelongsToCurrentTenantFunctionDefinitionProducer.produce(commentsTableKey, commentsTableColumns, iGetCurrentTenantIdFunctionInvocationFactory, "is_comment_exists", schema) >> commentsTableSQLDefinition
-            1 * isRecordBelongsToCurrentTenantFunctionDefinitionProducer.produce(commentsTableKey, commentsTableColumns, iGetCurrentTenantIdFunctionInvocationFactory, "is_comment_exists", schema) >> commentsTableSQLDefinition
-            0 * isRecordBelongsToCurrentTenantFunctionDefinitionProducer.produce(_)
+            1 * isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer.produce(usersTableKey, usersTableColumns, iGetCurrentTenantIdFunctionInvocationFactory, "is_user_exists", schema) >> usersTableSQLDefinition
+            1 * isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer.produce(commentsTableKey, commentsTableColumns, iGetCurrentTenantIdFunctionInvocationFactory, "is_comment_exists", schema) >> commentsTableSQLDefinition
+            1 * isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer.produce(commentsTableKey, commentsTableColumns, iGetCurrentTenantIdFunctionInvocationFactory, "is_comment_exists", schema) >> commentsTableSQLDefinition
+            0 * isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer.produce(_)
 
             result.getSqlDefinitions().contains(usersTableSQLDefinition)
             result.getSqlDefinitions().contains(commentsTableSQLDefinition)
