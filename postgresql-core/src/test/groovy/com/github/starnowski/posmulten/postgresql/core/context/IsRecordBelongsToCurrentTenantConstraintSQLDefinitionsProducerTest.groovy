@@ -52,9 +52,9 @@ class IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducerTest extends
 
         where:
             tableKey                        |   foreignKeyPrimaryKeyMappings                                        |   constraintName      ||  expectedKeyColumnsPairsList
-            tk("users", null)               |   mapBuilder().put("id", "uuid").build()                              |   "fk_constraint"     ||  [id:forReference("uuid")]
-            tk("users", "public")           |   mapBuilder().put("key", "bigint").put("uuid", "uuid").build()       |   "fk_user_public"    ||  [key:forReference("bigint"), "uuid":forReference("uuid")]
-            tk("posts", "some_schema")      |   mapBuilder().put("uuid", "bigint").build()                          |   "posts_fk_"         ||  [uuid:forReference("bigint")]
+            tk("users", null)               |   mapBuilder().put("id", "uuid").build()                              |   "fk_constraint"     ||  [uuid:forReference("id")]
+            tk("users", "public")           |   mapBuilder().put("key", "bigint").put("uuid", "uuid").build()       |   "fk_user_public"    ||  [bigint:forReference("key"), "uuid":forReference("uuid")]
+            tk("posts", "some_schema")      |   mapBuilder().put("uuid", "bigint").build()                          |   "posts_fk_"         ||  [bigint:forReference("uuid")]
     }
 
     TableKey tk(String table, String schema)
