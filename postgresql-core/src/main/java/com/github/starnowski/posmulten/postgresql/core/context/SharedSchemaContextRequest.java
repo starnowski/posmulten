@@ -19,7 +19,7 @@ public class SharedSchemaContextRequest {
     private Set<TableKey> createTenantColumnTableLists = new HashSet<>();
     private boolean forceRowLevelSecurityForTableOwner;
     private Map<TableKey, AbstractTableRLSPolicyProperties> tableRLSPolicies = new HashMap<>();
-    private Map<SameTenantConstraintForForeignKey, Object> sameTenantConstraintForForeignKeyProperties = new HashMap<>();
+    private Map<SameTenantConstraintForForeignKey, SameTenantConstraintForForeignKeyProperties> sameTenantConstraintForForeignKeyProperties = new HashMap<>();
     private String grantee;
     private Map<TableKey, String> functionThatChecksIfRecordExistsInTableNames = new HashMap<>();
 
@@ -115,7 +115,7 @@ public class SharedSchemaContextRequest {
         return tableRLSPolicies;
     }
 
-    public Map<SameTenantConstraintForForeignKey, Object> getSameTenantConstraintForForeignKeyProperties() {
+    public Map<SameTenantConstraintForForeignKey, SameTenantConstraintForForeignKeyProperties> getSameTenantConstraintForForeignKeyProperties() {
         return sameTenantConstraintForForeignKeyProperties;
     }
 
