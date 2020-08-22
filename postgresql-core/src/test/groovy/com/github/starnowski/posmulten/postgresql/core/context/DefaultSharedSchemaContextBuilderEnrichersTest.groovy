@@ -12,7 +12,7 @@ import spock.lang.Specification
 
 import static java.util.stream.Collectors.toList
 
-class DefaultSharedSchemaContextBuilderTest extends Specification {
+class DefaultSharedSchemaContextBuilderEnrichersTest extends Specification {
 
     def "should build shared schema context via enrichers with correct order"()
     {
