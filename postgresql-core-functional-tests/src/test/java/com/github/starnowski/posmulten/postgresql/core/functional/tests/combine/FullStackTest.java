@@ -1,6 +1,5 @@
 package com.github.starnowski.posmulten.postgresql.core.functional.tests.combine;
 
-import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition;
 import com.github.starnowski.posmulten.postgresql.core.context.AbstractSharedSchemaContext;
 import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder;
 import com.github.starnowski.posmulten.postgresql.core.context.TableKey;
@@ -63,7 +62,6 @@ public abstract class FullStackTest extends AbstractClassWithSQLDefinitionGenera
         defaultSharedSchemaContextBuilder.createRLSPolicyForColumn(COMMENTS_TABLE_NAME, mapBuilder().put("id", "int").put("user_id", "bigint").build(), CUSTOM_TENANT_COLUMN_NAME, "comments_table_rls_policy");
         defaultSharedSchemaContextBuilder.createSameTenantConstraintForForeignKey(POSTS_TABLE_NAME, USERS_TABLE_NAME, mapBuilder().put("user_id", "id").build(), POSTS_USERS_FK_CONSTRAINT_NAME);
         defaultSharedSchemaContextBuilder.createSameTenantConstraintForForeignKey(COMMENTS_TABLE_NAME, USERS_TABLE_NAME, mapBuilder().put("user_id", "id").build(), COMMENTS_USERS_FK_CONSTRAINT_NAME);
-        defaultSharedSchemaContextBuilder.createSameTenantConstraintForForeignKey(COMMENTS_TABLE_NAME, USERS_TABLE_NAME, mapBuilder().put("user_id", "id").build(), COMMENTS_USERS_FK_CONSTRAINT_NAME);
         defaultSharedSchemaContextBuilder.createSameTenantConstraintForForeignKey(COMMENTS_TABLE_NAME, POSTS_TABLE_NAME, mapBuilder().put("post_id", "id").build(), COMMENTS_POSTS_FK_CONSTRAINT_NAME);
         defaultSharedSchemaContextBuilder.createSameTenantConstraintForForeignKey(COMMENTS_TABLE_NAME, COMMENTS_TABLE_NAME, mapBuilder().put("parent_comment_id", "id").put("parent_comment_user_id", "user_id").build(), COMMENTS_PARENT_COMMENTS_FK_CONSTRAINT_NAME);
         defaultSharedSchemaContextBuilder.createSameTenantConstraintForForeignKey(NOTIFICATIONS_TABLE_NAME, USERS_TABLE_NAME, mapBuilder().put("user_id", "id").build(), NOTIFICATIONS_USERS_COMMENTS_FK_CONSTRAINT_NAME);
@@ -81,25 +79,25 @@ public abstract class FullStackTest extends AbstractClassWithSQLDefinitionGenera
         sqlDefinitions.addAll(sharedSchemaContext.getSqlDefinitions());
         // TODO Use the DefaultSharedSchemaContextBuilder to create all SQL definitions
 
-        // Constraint - post - fk - users
-        //user_id
-        SQLDefinition recordBelongsToCurrentTenantConstrainSqlDefinition = getSqlDefinitionOfConstraintForUsersForeignKeyInPostsTable(sharedSchemaContext.getTableKeysIsRecordBelongsToCurrentTenantFunctionInvocationFactoryMap().get(tk(USERS_TABLE_NAME)));
-        sqlDefinitions.add(recordBelongsToCurrentTenantConstrainSqlDefinition);
-
-        //getSqlDefinitionOfConstraintForUsersForeignKeyInCommentsTable
-        SQLDefinition usersBelongsToCurrentTenantConstraintForCommentsTableSqlDefinition = getSqlDefinitionOfConstraintForUsersForeignKeyInCommentsTable(sharedSchemaContext.getTableKeysIsRecordBelongsToCurrentTenantFunctionInvocationFactoryMap().get(tk(USERS_TABLE_NAME)));
-        sqlDefinitions.add(usersBelongsToCurrentTenantConstraintForCommentsTableSqlDefinition);
-
-        //getSqlDefinitionOfConstraintForPostsForeignKeyInCommentsTable commets - posts fk
-        SQLDefinition postsBelongsToCurrentTenantConstraintForCommentsTableSqlDefinition = getSqlDefinitionOfConstraintForPostsForeignKeyInCommentsTable(sharedSchemaContext.getTableKeysIsRecordBelongsToCurrentTenantFunctionInvocationFactoryMap().get(tk(POSTS_TABLE_NAME)));
-        sqlDefinitions.add(postsBelongsToCurrentTenantConstraintForCommentsTableSqlDefinition);
-
-        //getSqlDefinitionOfConstraintForParentCommentForeignKeyInCommentsTable comments - parent comment fk
-        SQLDefinition parentCommentBelongsToCurrentTenantConstraintForCommentsTableSqlDefinition = getSqlDefinitionOfConstraintForParentCommentForeignKeyInCommentsTable(sharedSchemaContext.getTableKeysIsRecordBelongsToCurrentTenantFunctionInvocationFactoryMap().get(tk(COMMENTS_TABLE_NAME)));
-        sqlDefinitions.add(parentCommentBelongsToCurrentTenantConstraintForCommentsTableSqlDefinition);
-
-        SQLDefinition userBelongsToCurrentTenantConstraintForNotificationsTableSqlDefinition = getSqlDefinitionOfConstraintForUsersForeignKeyInNotificationsTable(sharedSchemaContext.getTableKeysIsRecordBelongsToCurrentTenantFunctionInvocationFactoryMap().get(tk(USERS_TABLE_NAME)));
-        sqlDefinitions.add(userBelongsToCurrentTenantConstraintForNotificationsTableSqlDefinition);
+//        // Constraint - post - fk - users
+//        //user_id
+//        SQLDefinition recordBelongsToCurrentTenantConstrainSqlDefinition = getSqlDefinitionOfConstraintForUsersForeignKeyInPostsTable(sharedSchemaContext.getTableKeysIsRecordBelongsToCurrentTenantFunctionInvocationFactoryMap().get(tk(USERS_TABLE_NAME)));
+//        sqlDefinitions.add(recordBelongsToCurrentTenantConstrainSqlDefinition);
+//
+//        //getSqlDefinitionOfConstraintForUsersForeignKeyInCommentsTable
+//        SQLDefinition usersBelongsToCurrentTenantConstraintForCommentsTableSqlDefinition = getSqlDefinitionOfConstraintForUsersForeignKeyInCommentsTable(sharedSchemaContext.getTableKeysIsRecordBelongsToCurrentTenantFunctionInvocationFactoryMap().get(tk(USERS_TABLE_NAME)));
+//        sqlDefinitions.add(usersBelongsToCurrentTenantConstraintForCommentsTableSqlDefinition);
+//
+//        //getSqlDefinitionOfConstraintForPostsForeignKeyInCommentsTable commets - posts fk
+//        SQLDefinition postsBelongsToCurrentTenantConstraintForCommentsTableSqlDefinition = getSqlDefinitionOfConstraintForPostsForeignKeyInCommentsTable(sharedSchemaContext.getTableKeysIsRecordBelongsToCurrentTenantFunctionInvocationFactoryMap().get(tk(POSTS_TABLE_NAME)));
+//        sqlDefinitions.add(postsBelongsToCurrentTenantConstraintForCommentsTableSqlDefinition);
+//
+//        //getSqlDefinitionOfConstraintForParentCommentForeignKeyInCommentsTable comments - parent comment fk
+//        SQLDefinition parentCommentBelongsToCurrentTenantConstraintForCommentsTableSqlDefinition = getSqlDefinitionOfConstraintForParentCommentForeignKeyInCommentsTable(sharedSchemaContext.getTableKeysIsRecordBelongsToCurrentTenantFunctionInvocationFactoryMap().get(tk(COMMENTS_TABLE_NAME)));
+//        sqlDefinitions.add(parentCommentBelongsToCurrentTenantConstraintForCommentsTableSqlDefinition);
+//
+//        SQLDefinition userBelongsToCurrentTenantConstraintForNotificationsTableSqlDefinition = getSqlDefinitionOfConstraintForUsersForeignKeyInNotificationsTable(sharedSchemaContext.getTableKeysIsRecordBelongsToCurrentTenantFunctionInvocationFactoryMap().get(tk(USERS_TABLE_NAME)));
+//        sqlDefinitions.add(userBelongsToCurrentTenantConstraintForNotificationsTableSqlDefinition);
     }
 
     private Map<String, String> prepareIdColumnTypeForSingleColumnKey(String columnName, String columnType)
