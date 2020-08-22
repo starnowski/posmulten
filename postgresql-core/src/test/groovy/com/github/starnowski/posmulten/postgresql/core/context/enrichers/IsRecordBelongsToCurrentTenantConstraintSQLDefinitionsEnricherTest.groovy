@@ -60,6 +60,7 @@ class IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricherTest extends
             def isCommentsUserBelongsToSameTenantConstraint = Mock(SQLDefinition)
             def isSomeTableUserBelongsToSameTenantConstraint = Mock(SQLDefinition)
             def isSomeTableCommentBelongsToSameTenantConstraint = Mock(SQLDefinition)
+            def isSomeTableCommentBelongsToSameTenantConstraint1 = Mock(SQLDefinition)
 
         when:
             def result = tested.enrich(context, sharedSchemaContextRequest)
@@ -67,11 +68,12 @@ class IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricherTest extends
         then:
             1 * isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer.produce(expectedCommentUserConstraintParameters) >> [isCommentsUserBelongsToSameTenantConstraint]
             1 * isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer.produce(expectedSomeTableUserConstraintParameters) >> [isSomeTableUserBelongsToSameTenantConstraint]
-            1 * isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer.produce(expectedSomeTableCommentConstraintParameters) >> [isSomeTableCommentBelongsToSameTenantConstraint]
+            1 * isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer.produce(expectedSomeTableCommentConstraintParameters) >> [isSomeTableCommentBelongsToSameTenantConstraint, isSomeTableCommentBelongsToSameTenantConstraint1]
+            0 * isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer.produce(_)
             result.getSqlDefinitions().contains(isSomeTableUserBelongsToSameTenantConstraint)
             result.getSqlDefinitions().contains(isSomeTableCommentBelongsToSameTenantConstraint)
             result.getSqlDefinitions().contains(isCommentsUserBelongsToSameTenantConstraint)
-            result.getSqlDefinitions().size() == 3
+            result.getSqlDefinitions().size() == 4
 
         where:
         schema << [null, "public", "some_schema"]
