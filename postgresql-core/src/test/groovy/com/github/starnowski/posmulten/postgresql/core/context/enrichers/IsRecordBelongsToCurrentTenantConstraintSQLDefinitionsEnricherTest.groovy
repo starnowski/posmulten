@@ -3,8 +3,9 @@ package com.github.starnowski.posmulten.postgresql.core.context.enrichers
 import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder
 import com.github.starnowski.posmulten.postgresql.core.context.IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer
 import com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContext
-import com.github.starnowski.posmulten.postgresql.core.rls.function.IGetCurrentTenantIdFunctionInvocationFactory
+import com.github.starnowski.posmulten.postgresql.core.context.TableKey
 import com.github.starnowski.posmulten.postgresql.core.rls.function.IsRecordBelongsToCurrentTenantFunctionDefinition
+import com.github.starnowski.posmulten.postgresql.core.rls.function.IsRecordBelongsToCurrentTenantFunctionInvocationFactory
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -25,18 +26,19 @@ class IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricherTest extends
             builder.createSameTenantConstraintForForeignKey("comments", "users", mapBuilder().put("user_id", "id").build(), "N/A")
             builder.createSameTenantConstraintForForeignKey("some_table", "users", mapBuilder().put("owner_id", "id").build(), "N/A")
             builder.createSameTenantConstraintForForeignKey("some_table", "comments", mapBuilder().put("some_comment_id", "uuid").build(), "N/A")
-    //        builder.setNameForFunctionThatChecksIfRecordExistsInTable("users", "is_user_exists")
-    //        builder.setNameForFunctionThatChecksIfRecordExistsInTable("comments", "is_comment_exists")
             def sharedSchemaContextRequest = builder.getSharedSchemaContextRequest()
             def context = new SharedSchemaContext()
-            def iGetCurrentTenantIdFunctionInvocationFactory = Mock(IGetCurrentTenantIdFunctionInvocationFactory)
-            context.setIGetCurrentTenantIdFunctionInvocationFactory(iGetCurrentTenantIdFunctionInvocationFactory)
+            def usersTableKey = tk("users", schema)
+            def commentsTableKey = tk("comments", schema)
+            def isUserBelongsToCurrentTenantFunctionInvocationFactory = Mock(IsRecordBelongsToCurrentTenantFunctionInvocationFactory)
+            def isCommentBelongsToCurrentTenantFunctionInvocationFactory = Mock(IsRecordBelongsToCurrentTenantFunctionInvocationFactory)
+            context.getTableKeysIsRecordBelongsToCurrentTenantFunctionInvocationFactoryMap().put(usersTableKey, isUserBelongsToCurrentTenantFunctionInvocationFactory)
+            context.getTableKeysIsRecordBelongsToCurrentTenantFunctionInvocationFactoryMap().put(commentsTableKey, isCommentBelongsToCurrentTenantFunctionInvocationFactory)
+
             def usersTableSQLDefinition = Mock(IsRecordBelongsToCurrentTenantFunctionDefinition)
             def commentsTableSQLDefinition = Mock(IsRecordBelongsToCurrentTenantFunctionDefinition)
             def isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer = Mock(IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer)
             tested.setIsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer(isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer)
-            def usersTableKey = tk("users", schema)
-            def commentsTableKey = tk("comments", schema)
             def usersTableColumns = sharedSchemaContextRequest.getTableColumnsList().get(usersTableKey)
             def commentsTableColumns = sharedSchemaContextRequest.getTableColumnsList().get(commentsTableKey)
 
@@ -54,5 +56,10 @@ class IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricherTest extends
 
         where:
         schema << [null, "public", "some_schema"]
+    }
+
+    TableKey tk(String table, String schema)
+    {
+        new TableKey(table, schema)
     }
 }
