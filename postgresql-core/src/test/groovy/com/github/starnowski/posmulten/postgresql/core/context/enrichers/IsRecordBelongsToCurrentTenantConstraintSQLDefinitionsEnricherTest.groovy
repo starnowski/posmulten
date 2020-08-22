@@ -53,7 +53,7 @@ class IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricherTest extends
             def expectedSomeTableCommentConstraintParameters = IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducerParameters.builder()
                     .withConstraintName("some_table_comments_const_ten")
                     .withTableKey(someTableKey)
-                    .withIsRecordBelongsToCurrentTenantFunctionInvocationFactory(isUserBelongsToCurrentTenantFunctionInvocationFactory)
+                    .withIsRecordBelongsToCurrentTenantFunctionInvocationFactory(isCommentBelongsToCurrentTenantFunctionInvocationFactory)
                     .withForeignKeyPrimaryKeyMappings(mapBuilder().put("some_comment_id", "uuid").build())
                     .build()
 
@@ -68,11 +68,10 @@ class IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricherTest extends
             1 * isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer.produce(expectedCommentUserConstraintParameters) >> [isCommentsUserBelongsToSameTenantConstraint]
             1 * isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer.produce(expectedSomeTableUserConstraintParameters) >> [isSomeTableUserBelongsToSameTenantConstraint]
             1 * isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer.produce(expectedSomeTableCommentConstraintParameters) >> [isSomeTableCommentBelongsToSameTenantConstraint]
-            0 * isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer.produce(_)
-
-            result.getSqlDefinitions().contains(isCommentsUserBelongsToSameTenantConstraint)
             result.getSqlDefinitions().contains(isSomeTableUserBelongsToSameTenantConstraint)
             result.getSqlDefinitions().contains(isSomeTableCommentBelongsToSameTenantConstraint)
+            result.getSqlDefinitions().contains(isCommentsUserBelongsToSameTenantConstraint)
+            result.getSqlDefinitions().size() == 3
 
         where:
         schema << [null, "public", "some_schema"]
