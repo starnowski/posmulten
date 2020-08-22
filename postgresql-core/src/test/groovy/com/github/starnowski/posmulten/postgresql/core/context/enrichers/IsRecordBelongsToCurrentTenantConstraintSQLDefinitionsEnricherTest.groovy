@@ -79,6 +79,8 @@ class IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricherTest extends
         schema << [null, "public", "some_schema"]
     }
 
+    //TODO No definition produced
+
     TableKey tk(String table, String schema)
     {
         new TableKey(table, schema)
