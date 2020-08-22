@@ -1,5 +1,6 @@
 package com.github.starnowski.posmulten.postgresql.core.context.enrichers
 
+import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition
 import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder
 import com.github.starnowski.posmulten.postgresql.core.context.IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer
 import com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContext
@@ -35,7 +36,9 @@ class IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricherTest extends
             context.getTableKeysIsRecordBelongsToCurrentTenantFunctionInvocationFactoryMap().put(usersTableKey, isUserBelongsToCurrentTenantFunctionInvocationFactory)
             context.getTableKeysIsRecordBelongsToCurrentTenantFunctionInvocationFactoryMap().put(commentsTableKey, isCommentBelongsToCurrentTenantFunctionInvocationFactory)
 
-            def usersTableSQLDefinition = Mock(IsRecordBelongsToCurrentTenantFunctionDefinition)
+            def isCommentsUserBelongsToSameTenantConstraint = Mock(SQLDefinition)
+            def isSomeTableUserBelongsToSameTenantConstraint = Mock(SQLDefinition)
+            def isSomeTableCommentBelongsToSameTenantConstraint = Mock(SQLDefinition)
             def commentsTableSQLDefinition = Mock(IsRecordBelongsToCurrentTenantFunctionDefinition)
             def isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer = Mock(IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer)
             tested.setIsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer(isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer)
