@@ -41,11 +41,12 @@ class IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricherTest extends
             def usersTableColumns = sharedSchemaContextRequest.getTableColumnsList().get(usersTableKey)
             def commentsTableColumns = sharedSchemaContextRequest.getTableColumnsList().get(commentsTableKey)
 
-            def expectedCommentUserConstraintParematers = IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducerParameters.builder()
+            def expectedCommentUserConstraintParameters = IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducerParameters.builder()
                 .withConstraintName("comments_users_fk_con")
                 .withTableKey(commentsTableKey)
                 .withIsRecordBelongsToCurrentTenantFunctionInvocationFactory(isUserBelongsToCurrentTenantFunctionInvocationFactory)
                 .withForeignKeyPrimaryKeyMappings(mapBuilder().put("user_id", "id"))
+                .build()
 
             def isCommentsUserBelongsToSameTenantConstraint = Mock(SQLDefinition)
             def isSomeTableUserBelongsToSameTenantConstraint = Mock(SQLDefinition)
@@ -55,9 +56,9 @@ class IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricherTest extends
             def result = tested.enrich(context, sharedSchemaContextRequest)
 
         then:
-            1 * isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer.produce(usersTableKey, usersTableColumns, iGetCurrentTenantIdFunctionInvocationFactory, "is_user_exists", schema) >> usersTableSQLDefinition
-            1 * isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer.produce(commentsTableKey, commentsTableColumns, iGetCurrentTenantIdFunctionInvocationFactory, "is_comment_exists", schema) >> commentsTableSQLDefinition
-            1 * isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer.produce(commentsTableKey, commentsTableColumns, iGetCurrentTenantIdFunctionInvocationFactory, "is_comment_exists", schema) >> commentsTableSQLDefinition
+            1 * isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer.produce(expectedCommentUserConstraintParameters) >> isCommentsUserBelongsToSameTenantConstraint
+            1 * isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer.produce(commentsTableKey, commentsTableColumns, iGetCurrentTenantIdFunctionInvocationFactory, "is_comment_exists", schema) >> isSomeTableUserBelongsToSameTenantConstraint
+            1 * isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer.produce(commentsTableKey, commentsTableColumns, iGetCurrentTenantIdFunctionInvocationFactory, "is_comment_exists", schema) >> isSomeTableCommentBelongsToSameTenantConstraint
             0 * isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer.produce(_)
 
             result.getSqlDefinitions().contains(usersTableSQLDefinition)
