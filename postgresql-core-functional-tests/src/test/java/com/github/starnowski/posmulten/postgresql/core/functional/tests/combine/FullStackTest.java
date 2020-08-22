@@ -4,8 +4,6 @@ import com.github.starnowski.posmulten.postgresql.core.context.AbstractSharedSch
 import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder;
 import com.github.starnowski.posmulten.postgresql.core.context.TableKey;
 import com.github.starnowski.posmulten.postgresql.core.functional.tests.AbstractClassWithSQLDefinitionGenerationMethods;
-import com.github.starnowski.posmulten.postgresql.core.rls.TenantHasAuthoritiesFunctionInvocationFactory;
-import com.github.starnowski.posmulten.postgresql.core.rls.function.IGetCurrentTenantIdFunctionInvocationFactory;
 import com.github.starnowski.posmulten.postgresql.core.rls.function.ISetCurrentTenantIdFunctionInvocationFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -71,33 +69,8 @@ public abstract class FullStackTest extends AbstractClassWithSQLDefinitionGenera
         defaultSharedSchemaContextBuilder.setNameForFunctionThatChecksIfRecordExistsInTable(COMMENTS_TABLE_NAME, "is_comment_belongs_to_current_tenant");
         defaultSharedSchemaContextBuilder.setNameForFunctionThatChecksIfRecordExistsInTable(GROUPS_TABLE_NAME, "is_group_belongs_to_current_tenant");
         AbstractSharedSchemaContext sharedSchemaContext = defaultSharedSchemaContextBuilder.build();
-
-        IGetCurrentTenantIdFunctionInvocationFactory getCurrentTenantIdFunctionDefinition = sharedSchemaContext.getIGetCurrentTenantIdFunctionInvocationFactory();
         setCurrentTenantIdFunctionInvocationFactory = sharedSchemaContext.getISetCurrentTenantIdFunctionInvocationFactory();
-        TenantHasAuthoritiesFunctionInvocationFactory tenantHasAuthoritiesFunctionInvocationFactory = sharedSchemaContext.getTenantHasAuthoritiesFunctionInvocationFactory();
-
         sqlDefinitions.addAll(sharedSchemaContext.getSqlDefinitions());
-        // TODO Use the DefaultSharedSchemaContextBuilder to create all SQL definitions
-
-//        // Constraint - post - fk - users
-//        //user_id
-//        SQLDefinition recordBelongsToCurrentTenantConstrainSqlDefinition = getSqlDefinitionOfConstraintForUsersForeignKeyInPostsTable(sharedSchemaContext.getTableKeysIsRecordBelongsToCurrentTenantFunctionInvocationFactoryMap().get(tk(USERS_TABLE_NAME)));
-//        sqlDefinitions.add(recordBelongsToCurrentTenantConstrainSqlDefinition);
-//
-//        //getSqlDefinitionOfConstraintForUsersForeignKeyInCommentsTable
-//        SQLDefinition usersBelongsToCurrentTenantConstraintForCommentsTableSqlDefinition = getSqlDefinitionOfConstraintForUsersForeignKeyInCommentsTable(sharedSchemaContext.getTableKeysIsRecordBelongsToCurrentTenantFunctionInvocationFactoryMap().get(tk(USERS_TABLE_NAME)));
-//        sqlDefinitions.add(usersBelongsToCurrentTenantConstraintForCommentsTableSqlDefinition);
-//
-//        //getSqlDefinitionOfConstraintForPostsForeignKeyInCommentsTable commets - posts fk
-//        SQLDefinition postsBelongsToCurrentTenantConstraintForCommentsTableSqlDefinition = getSqlDefinitionOfConstraintForPostsForeignKeyInCommentsTable(sharedSchemaContext.getTableKeysIsRecordBelongsToCurrentTenantFunctionInvocationFactoryMap().get(tk(POSTS_TABLE_NAME)));
-//        sqlDefinitions.add(postsBelongsToCurrentTenantConstraintForCommentsTableSqlDefinition);
-//
-//        //getSqlDefinitionOfConstraintForParentCommentForeignKeyInCommentsTable comments - parent comment fk
-//        SQLDefinition parentCommentBelongsToCurrentTenantConstraintForCommentsTableSqlDefinition = getSqlDefinitionOfConstraintForParentCommentForeignKeyInCommentsTable(sharedSchemaContext.getTableKeysIsRecordBelongsToCurrentTenantFunctionInvocationFactoryMap().get(tk(COMMENTS_TABLE_NAME)));
-//        sqlDefinitions.add(parentCommentBelongsToCurrentTenantConstraintForCommentsTableSqlDefinition);
-//
-//        SQLDefinition userBelongsToCurrentTenantConstraintForNotificationsTableSqlDefinition = getSqlDefinitionOfConstraintForUsersForeignKeyInNotificationsTable(sharedSchemaContext.getTableKeysIsRecordBelongsToCurrentTenantFunctionInvocationFactoryMap().get(tk(USERS_TABLE_NAME)));
-//        sqlDefinitions.add(userBelongsToCurrentTenantConstraintForNotificationsTableSqlDefinition);
     }
 
     private Map<String, String> prepareIdColumnTypeForSingleColumnKey(String columnName, String columnType)
