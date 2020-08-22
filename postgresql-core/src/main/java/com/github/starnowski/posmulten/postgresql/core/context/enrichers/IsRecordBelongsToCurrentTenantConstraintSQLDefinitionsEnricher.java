@@ -1,7 +1,7 @@
 package com.github.starnowski.posmulten.postgresql.core.context.enrichers;
 
 import com.github.starnowski.posmulten.postgresql.core.context.*;
-import com.github.starnowski.posmulten.postgresql.core.rls.function.IsRecordBelongsToCurrentTenantFunctionDefinition;
+import com.github.starnowski.posmulten.postgresql.core.rls.function.IsRecordBelongsToCurrentTenantFunctionInvocationFactory;
 import javafx.util.Pair;
 
 import java.util.List;
@@ -17,11 +17,17 @@ public class IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher impl
         List<Pair<SameTenantConstraintForForeignKey, SameTenantConstraintForForeignKeyProperties>> constrainsRequests = request.getSameTenantConstraintForForeignKeyProperties().entrySet().stream().map(entry -> new Pair(entry.getKey(), entry.getValue())).collect(toList());
         for (Pair<SameTenantConstraintForForeignKey, SameTenantConstraintForForeignKeyProperties> constraintRequest : constrainsRequests)
         {
-            //TODO Throw exception when no name was defined
-            String functionName = request.getFunctionThatChecksIfRecordExistsInTableNames().get(tableKey);
-            IsRecordBelongsToCurrentTenantFunctionDefinition functionDefinition = isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer.produce(tableKey, request.getTableColumnsList().get(tableKey), context.getIGetCurrentTenantIdFunctionInvocationFactory(), functionName, request.getDefaultSchema());
-            context.addSQLDefinition(functionDefinition);
-            context.getTableKeysIsRecordBelongsToCurrentTenantFunctionInvocationFactoryMap().put(tableKey, functionDefinition);
+            SameTenantConstraintForForeignKey key = constraintRequest.getKey();
+            SameTenantConstraintForForeignKeyProperties requestProperties = constraintRequest.getValue();
+            //TODO Throw exception when no name was defined, for constraint and there is no sql definition 'IsRecordBelongsToCurrentTenantFunctionInvocationFactory'
+            IsRecordBelongsToCurrentTenantFunctionInvocationFactory isRecordBelongsToCurrentTenantFunctionInvocationFactory = context.getTableKeysIsRecordBelongsToCurrentTenantFunctionInvocationFactoryMap().get(key.getForeignKeyTable());
+            AbstractIsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducerParameters parameters = IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducerParameters.builder()
+                    .withConstraintName(requestProperties.getConstraintName())
+                    .withTableKey(key.getMainTable())
+                    .withIsRecordBelongsToCurrentTenantFunctionInvocationFactory(isRecordBelongsToCurrentTenantFunctionInvocationFactory)
+                    .withForeignKeyPrimaryKeyMappings(requestProperties.getForeignKeyPrimaryKeyColumnsMappings())
+                    .build();
+            isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer.produce(parameters).forEach(sqlDefinition -> context.addSQLDefinition(sqlDefinition));
         }
         return context;
     }
