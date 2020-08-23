@@ -3,6 +3,7 @@ package com.github.starnowski.posmulten.postgresql.core.context.enrichers
 import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition
 import com.github.starnowski.posmulten.postgresql.core.context.*
 import com.github.starnowski.posmulten.postgresql.core.context.exceptions.MissingConstraintNameDeclarationForTableException
+import com.github.starnowski.posmulten.postgresql.core.context.exceptions.MissingIsRecordBelongsToCurrentTenantFunctionInvocationFactoryException
 import com.github.starnowski.posmulten.postgresql.core.rls.function.IsRecordBelongsToCurrentTenantFunctionInvocationFactory
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -194,6 +195,41 @@ class IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricherTest extends
             "users"     |   "some_other_schema" |   [uuid: "N/A"]                                           ||  "Missing constraint name that in table users and schema some_other_schema checks  if the foreign key columns (uuid) refers to records that belong to the same tenant"
             "comments"  |   "some_other_schema" |   [comment_id: "N/A", comment_owner_id: "N/A"]            ||  "Missing constraint name that in table comments and schema some_other_schema checks  if the foreign key columns (comment_id, comment_owner_id) refers to records that belong to the same tenant"
             "comments"  |   null                |   [comment_id: "N/A", comment_owner_id: "N/A"]            ||  "Missing constraint name that in table comments and schema null checks  if the foreign key columns (comment_id, comment_owner_id) refers to records that belong to the same tenant"
+    }
+
+    @Unroll
+    def "should throw an exception when there is missing object of IsRecordBelongsToCurrentTenantFunctionInvocationFactory type for table #table and schema #schema"()
+    {
+        given:
+            def builder = new DefaultSharedSchemaContextBuilder(schema)
+            builder.createRLSPolicyForColumn("tab1", [:], "tenant", "N/A")
+            builder.createRLSPolicyForColumn(table, [:], "tenant_xxx_id", "N/A")
+            builder.createSameTenantConstraintForForeignKey("tab1", table, foreignKeyPrimaryKeyColumnsMappings, "fun_1")
+            def sharedSchemaContextRequest = builder.getSharedSchemaContextRequestCopy()
+            def context = new SharedSchemaContext()
+
+            def isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer = Mock(IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer)
+            tested.setIsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer(isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer)
+
+        when:
+            tested.enrich(context, sharedSchemaContextRequest)
+
+        then:
+            def ex = thrown(MissingIsRecordBelongsToCurrentTenantFunctionInvocationFactoryException)
+
+        and: "message should match"
+            ex.message == expectedMessage
+
+        and: "exception object should have correct table key"
+            ex.tableKey == tk(table, schema)
+
+        where:
+            table       |   schema              ||  expectedMessage
+            "users"     |   null                ||  "Missing object of type IsRecordBelongsToCurrentTenantFunctionInvocationFactory for table users and schema null"
+            "users"     |   "public"            ||  "Missing object of type IsRecordBelongsToCurrentTenantFunctionInvocationFactory for table users and schema public"
+            "users"     |   "some_other_schema" ||  "Missing object of type IsRecordBelongsToCurrentTenantFunctionInvocationFactory for table users and schema some_other_schema"
+            "comments"  |   "some_other_schema" ||  "Missing object of type IsRecordBelongsToCurrentTenantFunctionInvocationFactory for table comments and schema some_other_schema"
+            "comments"  |   null                ||  "Missing object of type IsRecordBelongsToCurrentTenantFunctionInvocationFactory for table comments and schema null"
     }
 
     TableKey tk(String table, String schema)
