@@ -69,6 +69,7 @@ public abstract class AbstractRLSPolicyAndForeignKeyConstraintInManyToManyTableT
     //TODO different tenant
     //TODO invalid user
     //TODO invalid group
+    //TODO correct statement
 
     @Test(dependsOnMethods = {"insertUserTestData", "tryToInsertDataIntoNotificationTableAsDifferentTenant", "insertDataIntoNotificationTableAsDifferentTenant"}, alwaysRun = true)
     @SqlGroup({
