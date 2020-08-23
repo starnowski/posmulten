@@ -19,7 +19,7 @@ public class DefaultSharedSchemaContextBuilder {
         this.sharedSchemaContextRequest.setDefaultSchema(defaultSchema);
     }
 
-    public AbstractSharedSchemaContext build()
+    public AbstractSharedSchemaContext build() throws SharedSchemaContextBuilderException
     {
         AbstractSharedSchemaContext context = new SharedSchemaContext();
         List<AbstractSharedSchemaContextEnricher> enrichers  = getEnrichers();

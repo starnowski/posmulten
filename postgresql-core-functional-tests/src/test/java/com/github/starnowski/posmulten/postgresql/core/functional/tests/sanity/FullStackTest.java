@@ -2,6 +2,7 @@ package com.github.starnowski.posmulten.postgresql.core.functional.tests.sanity;
 
 import com.github.starnowski.posmulten.postgresql.core.context.AbstractSharedSchemaContext;
 import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder;
+import com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContextBuilderException;
 import com.github.starnowski.posmulten.postgresql.core.context.TableKey;
 import com.github.starnowski.posmulten.postgresql.core.functional.tests.AbstractClassWithSQLDefinitionGenerationMethods;
 import com.github.starnowski.posmulten.postgresql.core.rls.function.ISetCurrentTenantIdFunctionInvocationFactory;
@@ -45,8 +46,7 @@ public abstract class FullStackTest extends AbstractClassWithSQLDefinitionGenera
     protected JdbcTemplate ownerJdbcTemplate;
 
     @Test(testName = "create SQL definitions", description = "Create SQL function that creates statements that set current tenant value, retrieve current tenant value and create the row level security policy for a table that is multi-tenant aware")
-    public void createSQLDefinitions()
-    {
+    public void createSQLDefinitions() throws SharedSchemaContextBuilderException {
         DefaultSharedSchemaContextBuilder defaultSharedSchemaContextBuilder = new DefaultSharedSchemaContextBuilder(getSchema());
         defaultSharedSchemaContextBuilder.setCurrentTenantIdProperty(VALID_CURRENT_TENANT_ID_PROPERTY_NAME);
         defaultSharedSchemaContextBuilder.setForceRowLevelSecurityForTableOwner(true);
