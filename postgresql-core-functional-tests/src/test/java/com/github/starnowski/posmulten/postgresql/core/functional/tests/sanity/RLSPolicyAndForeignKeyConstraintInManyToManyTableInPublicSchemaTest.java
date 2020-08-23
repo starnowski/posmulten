@@ -13,13 +13,13 @@ import org.testng.annotations.Test;
 import static com.github.starnowski.posmulten.postgresql.core.functional.tests.TestApplication.CLEAR_DATABASE_SCRIPT_PATH;
 import static com.github.starnowski.posmulten.postgresql.test.utils.TestUtils.isAnyRecordExists;
 import static java.lang.String.format;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
 import static org.springframework.test.context.jdbc.SqlConfig.TransactionMode.ISOLATED;
 import static org.testng.Assert.assertTrue;
 
-public class AbstractRLSPolicyAndForeignKeyConstraintInManyToManyTableInPublicSchemaTest extends FullStackTest{
+public class RLSPolicyAndForeignKeyConstraintInManyToManyTableInPublicSchemaTest extends FullStackTest{
 
     @Override
     protected String getSchema() {
@@ -42,16 +42,6 @@ public class AbstractRLSPolicyAndForeignKeyConstraintInManyToManyTableInPublicSc
                 {new Group(1L, "admin_tenant_1", USER_TENANT), SECONDARY_USER_TENANT},
                 {new Group(2L, "admin_tenant_2", SECONDARY_USER_TENANT), USER_TENANT}
         };
-    }
-
-    @SqlGroup({
-            @Sql(value = CLEAR_DATABASE_SCRIPT_PATH,
-                    config = @SqlConfig(transactionMode = ISOLATED),
-                    executionPhase = BEFORE_TEST_METHOD)})
-    @Test(dependsOnMethods = {"createSQLDefinitions"}, testName = "execute SQL definitions")
-    public void executeSQLDefinitions()
-    {
-        super.executeSQLDefinitions();
     }
 
     @Test(dataProvider = "userData", dependsOnMethods = {"executeSQLDefinitions"}, testName = "insert data into to user table")
