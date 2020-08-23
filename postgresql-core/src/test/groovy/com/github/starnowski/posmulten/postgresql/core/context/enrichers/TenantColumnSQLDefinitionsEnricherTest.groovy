@@ -111,7 +111,7 @@ class TenantColumnSQLDefinitionsEnricherTest extends Specification {
             def ex = thrown(MissingRLSPolicyDeclarationForTableException)
 
         and: "message should match"
-            ex.message == format("Missing RLS policy declaration for table %1 in schema %2", table, schema)
+            ex.message == format("Missing RLS policy declaration for table %1\$s in schema %2\$s", table, schema)
 
         and: "exception object should have correct table key"
             ex.tableKey == tk(table, schema)
