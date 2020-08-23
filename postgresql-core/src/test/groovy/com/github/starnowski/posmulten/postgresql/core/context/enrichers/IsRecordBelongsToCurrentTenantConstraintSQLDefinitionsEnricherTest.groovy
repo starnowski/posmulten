@@ -156,7 +156,7 @@ class IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricherTest extends
     }
 
     @Unroll
-    def "should throw an exception when there missing the constraint name declaration for table #table and schema #schema"()
+    def "should throw an exception when there missing the constraint name declaration for table #table and schema #schema and foreign keys #foreignKeyPrimaryKeyColumnsMappings"()
     {
         given:
             def builder = new DefaultSharedSchemaContextBuilder(schema)
