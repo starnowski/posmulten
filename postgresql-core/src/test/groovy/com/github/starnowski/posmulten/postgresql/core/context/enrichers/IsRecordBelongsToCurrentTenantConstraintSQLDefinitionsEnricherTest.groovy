@@ -103,6 +103,57 @@ class IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricherTest extends
             schema << [null, "public", "some_schema"]
     }
 
+    @Unroll
+    def "should create all required SQL definitions that create a constraint that checks if the foreign key reference to the record that belongs to the same tenant even if there are multiple foreign key columns that store a reference to the same table in schema #schema"()
+    {
+        given:
+            def builder = new DefaultSharedSchemaContextBuilder(schema)
+            builder.createRLSPolicyForColumn("users", [:], "tenant", "N/A")
+            builder.createRLSPolicyForColumn("some_table", [:], "tenant_xxx_id", "N/A")
+            builder.createSameTenantConstraintForForeignKey("some_table", "users", mapBuilder().put("owner_id", "id").build(), "some_table_same_tenant_users_owner_con")
+            builder.createSameTenantConstraintForForeignKey("some_table", "users", mapBuilder().put("parent_id", "id").build(), "some_table_same_tenant_users_parent_con")
+            def sharedSchemaContextRequest = builder.getSharedSchemaContextRequestCopy()
+            def context = new SharedSchemaContext()
+            def usersTableKey = tk("users", schema)
+            def someTableKey = tk("some_table", schema)
+            def isUserBelongsToCurrentTenantFunctionInvocationFactory = Mock(IsRecordBelongsToCurrentTenantFunctionInvocationFactory)
+            context.getTableKeysIsRecordBelongsToCurrentTenantFunctionInvocationFactoryMap().put(usersTableKey, isUserBelongsToCurrentTenantFunctionInvocationFactory)
+
+            def isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer = Mock(IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer)
+            tested.setIsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer(isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer)
+
+            def expectedSomeTableUserOwnerConstraintParameters = IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducerParameters.builder()
+                    .withConstraintName("some_table_same_tenant_users_owner_con")
+                    .withTableKey(someTableKey)
+                    .withIsRecordBelongsToCurrentTenantFunctionInvocationFactory(isUserBelongsToCurrentTenantFunctionInvocationFactory)
+                    .withForeignKeyPrimaryKeyMappings(mapBuilder().put("owner_id", "id").build())
+                    .build()
+
+            def expectedSomeTableUserParentConstraintParameters = IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducerParameters.builder()
+                    .withConstraintName("some_table_same_tenant_users_parent_con")
+                    .withTableKey(someTableKey)
+                    .withIsRecordBelongsToCurrentTenantFunctionInvocationFactory(isUserBelongsToCurrentTenantFunctionInvocationFactory)
+                    .withForeignKeyPrimaryKeyMappings(mapBuilder().put("parent_id", "id").build())
+                    .build()
+
+            def isSomeTableUserOwnerBelongsToSameTenantConstraint = Mock(SQLDefinition)
+            def isSomeTableUserParentBelongsToSameTenantConstraint = Mock(SQLDefinition)
+
+        when:
+            def result = tested.enrich(context, sharedSchemaContextRequest)
+
+        then:
+            1 * isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer.produce(expectedSomeTableUserOwnerConstraintParameters) >> [isSomeTableUserOwnerBelongsToSameTenantConstraint]
+            1 * isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer.produce(expectedSomeTableUserParentConstraintParameters) >> [isSomeTableUserParentBelongsToSameTenantConstraint]
+            0 * isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer.produce(_)
+            result.getSqlDefinitions().contains(isSomeTableUserOwnerBelongsToSameTenantConstraint)
+            result.getSqlDefinitions().contains(isSomeTableUserParentBelongsToSameTenantConstraint)
+            result.getSqlDefinitions().size() == 2
+
+        where:
+            schema << [null, "public", "some_schema"]
+    }
+
     TableKey tk(String table, String schema)
     {
         new TableKey(table, schema)
