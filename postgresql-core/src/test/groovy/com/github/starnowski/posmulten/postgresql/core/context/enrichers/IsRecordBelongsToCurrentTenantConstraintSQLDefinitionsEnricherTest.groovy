@@ -161,8 +161,8 @@ class IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricherTest extends
         given:
             def builder = new DefaultSharedSchemaContextBuilder(schema)
             builder.createRLSPolicyForColumn("users", [:], "tenant", "N/A")
-            builder.createRLSPolicyForColumn("some_table", [:], "tenant_xxx_id", "N/A")
-            builder.createSameTenantConstraintForForeignKey("some_table", "users", foreignKeyPrimaryKeyColumnsMappings, null)
+            builder.createRLSPolicyForColumn(table, [:], "tenant_xxx_id", "N/A")
+            builder.createSameTenantConstraintForForeignKey(table, "users", foreignKeyPrimaryKeyColumnsMappings, null)
             def sharedSchemaContextRequest = builder.getSharedSchemaContextRequestCopy()
             def context = new SharedSchemaContext()
             def usersTableKey = tk("users", schema)
