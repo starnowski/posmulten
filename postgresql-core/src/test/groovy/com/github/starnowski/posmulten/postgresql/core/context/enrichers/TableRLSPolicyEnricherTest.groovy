@@ -19,7 +19,7 @@ class TableRLSPolicyEnricherTest extends Specification {
             builder.setGrantee(grantee)
             builder.createRLSPolicyForColumn("posts", [:], "tenant", "posts_policy")
             builder.createRLSPolicyForColumn("comments", [:], "tenant_id", "comments_policy")
-            def sharedSchemaContextRequest = builder.getSharedSchemaContextRequest()
+            def sharedSchemaContextRequest = builder.getSharedSchemaContextRequestCopy()
             def context = new SharedSchemaContext()
             def postsTableSQLDefinition1 = Mock(SQLDefinition)
             def postsTableSQLDefinition2 = Mock(SQLDefinition)

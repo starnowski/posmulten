@@ -42,7 +42,7 @@ public class DefaultSharedSchemaContextBuilder {
         return this;
     }
 
-    public SharedSchemaContextRequest getSharedSchemaContextRequest() {
+    public SharedSchemaContextRequest getSharedSchemaContextRequestCopy() {
         return sharedSchemaContextRequest;
     }
 

@@ -21,7 +21,7 @@ class TenantColumnSQLDefinitionsEnricherTest extends Specification {
             builder.createRLSPolicyForColumn("comments", [:], "tenant_id", "comments_policy")
             builder.createTenantColumnForTable("comments")
             builder.createRLSPolicyForColumn("some_table", [:], "tenant_xxx_id", "some_table_policy")
-            def sharedSchemaContextRequest = builder.getSharedSchemaContextRequest()
+            def sharedSchemaContextRequest = builder.getSharedSchemaContextRequestCopy()
             def context = new SharedSchemaContext()
             def currentTenantInvocation = randomString.nextString()
             def getCurrentTenantIdFunctionInvocationFactory = {

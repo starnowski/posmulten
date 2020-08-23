@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class SharedSchemaContextRequest {
+public class SharedSchemaContextRequest implements Cloneable{
 
     private String defaultSchema;
     private String currentTenantIdProperty = "posmulten.tenant_id";
@@ -121,5 +121,10 @@ public class SharedSchemaContextRequest {
 
     public Map<TableKey, String> getFunctionThatChecksIfRecordExistsInTableNames() {
         return functionThatChecksIfRecordExistsInTableNames;
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 }
