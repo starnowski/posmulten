@@ -13,7 +13,7 @@ class IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricherTest extends
     def tested = new IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher()
 
     @Unroll
-    def "should create all required SQL definition that creates functions that checks if records from specified tables exists for schema #schema"()
+    def "should create all required SQL definitions that create a constraint that checks if the foreign key reference to the record that belongs to the same tenant in schema #schema"()
     {
         given:
             def builder = new DefaultSharedSchemaContextBuilder(schema)
