@@ -79,7 +79,29 @@ class IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricherTest extends
         schema << [null, "public", "some_schema"]
     }
 
-    //TODO No definition produced
+    @Unroll
+    def "should return non sql definition when there is no foreign key constraint request for schema #schema"()
+    {
+        given:
+            def builder = new DefaultSharedSchemaContextBuilder(schema)
+            builder.createRLSPolicyForColumn("users", [:], "tenant", "N/A")
+            builder.createRLSPolicyForColumn("comments", [:], "tenant_id", "N/A")
+            builder.createRLSPolicyForColumn("some_table", [:], "tenant_xxx_id", "N/A")
+            def sharedSchemaContextRequest = builder.getSharedSchemaContextRequestCopy()
+            def context = new SharedSchemaContext()
+            def isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer = Mock(IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer)
+            tested.setIsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer(isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer)
+
+        when:
+            def result = tested.enrich(context, sharedSchemaContextRequest)
+
+        then:
+            0 * isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer.produce(_)
+            result.getSqlDefinitions().size() == 0
+
+        where:
+            schema << [null, "public", "some_schema"]
+    }
 
     TableKey tk(String table, String schema)
     {
