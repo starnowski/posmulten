@@ -52,12 +52,21 @@ public abstract class AbstractRLSPolicyAndForeignKeyConstraintInManyToManyTableT
     {
         assertThat(countRowsInTableWhere(getGroupsTableReference(), "uuid = '" + group.getUuid() + "'")).isEqualTo(0);
         assertThatThrownBy(() ->
-                ownerJdbcTemplate.execute(format("%1$s INSERT INTO %2$s (uuid, name, tenant) VALUES ('%3$s', '%4$s', '%5$s');", setCurrentTenantIdFunctionInvocationFactory.generateStatementThatSetTenant(differentTenant), getGroupsTableReference(), group.getUuid(), group.getName(), group.getTenantId()))
+                ownerJdbcTemplate.execute(format("%1$s INSERT INTO %2$s (uuid, name, tenant_id) VALUES ('%3$s', '%4$s', '%5$s');", setCurrentTenantIdFunctionInvocationFactory.generateStatementThatSetTenant(differentTenant), getGroupsTableReference(), group.getUuid(), group.getName(), group.getTenantId()))
         ).isInstanceOf(BadSqlGrammarException.class).getRootCause().isInstanceOf(PSQLException.class);
         assertThat(countRowsInTableWhere(getGroupsTableReference(), "uuid = '" + group.getUuid() + "'")).isEqualTo(0);
     }
 
-    @Test(dependsOnMethods = {"insertUserTestData", "tryToInsertDataIntoNotificationTableAsDifferentTenant"}, alwaysRun = true)
+    @Test(dataProvider = "groupsData", dependsOnMethods = {"tryToInsertDataIntoNotificationTableAsDifferentTenant"}, testName = "insert data into the groups table assigned to the currently set", description = "test case assumes that row level security for groups table is going to allow to insert data into the groups table assigned to the currently set")
+    public void insertDataIntoNotificationTableAsDifferentTenant(Object[] parameters)
+    {
+        Group group = (Group) parameters[0];
+        assertThat(countRowsInTableWhere(getGroupsTableReference(), "uuid = '" + group.getUuid() + "'")).isEqualTo(0);
+        ownerJdbcTemplate.execute(format("%1$s INSERT INTO %2$s (uuid, name, tenant_id) VALUES ('%3$s', '%4$s', '%5$s');", setCurrentTenantIdFunctionInvocationFactory.generateStatementThatSetTenant(group.getTenantId()), getGroupsTableReference(), group.getUuid(), group.getName(), group.getTenantId()));
+        assertThat(countRowsInTableWhere(getGroupsTableReference(), "uuid = '" + group.getUuid() + "'")).isEqualTo(1);
+    }
+
+    @Test(dependsOnMethods = {"insertUserTestData", "tryToInsertDataIntoNotificationTableAsDifferentTenant", "insertDataIntoNotificationTableAsDifferentTenant"}, alwaysRun = true)
     @SqlGroup({
             @Sql(value = CLEAR_DATABASE_SCRIPT_PATH,
                     config = @SqlConfig(transactionMode = ISOLATED),
