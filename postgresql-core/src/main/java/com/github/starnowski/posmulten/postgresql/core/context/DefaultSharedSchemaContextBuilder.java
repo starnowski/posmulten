@@ -26,12 +26,7 @@ public class DefaultSharedSchemaContextBuilder {
         SharedSchemaContextRequest sharedSchemaContextRequestCopy = getSharedSchemaContextRequestCopy();
         for (AbstractSharedSchemaContextEnricher enricher : enrichers)
         {
-            SharedSchemaContextRequest request = null;
-            try {
-                request = (SharedSchemaContextRequest) sharedSchemaContextRequestCopy.clone();
-            } catch (CloneNotSupportedException e) {
-                e.printStackTrace();
-            }
+            SharedSchemaContextRequest request = getSharedSchemaContextRequestCopyOrNull(sharedSchemaContextRequestCopy);
             context = enricher.enrich(context, request);
         }
         return context;
@@ -47,12 +42,7 @@ public class DefaultSharedSchemaContextBuilder {
     }
 
     public SharedSchemaContextRequest getSharedSchemaContextRequestCopy() {
-        try {
-            return (SharedSchemaContextRequest) sharedSchemaContextRequest.clone();
-        } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return getSharedSchemaContextRequestCopyOrNull(sharedSchemaContextRequest);
     }
 
     public DefaultSharedSchemaContextBuilder setCurrentTenantIdPropertyType(String currentTenantIdPropertyType) {
@@ -124,5 +114,14 @@ public class DefaultSharedSchemaContextBuilder {
     public DefaultSharedSchemaContextBuilder setNameForFunctionThatChecksIfRecordExistsInTable(String recordTable, String functionName) {
         sharedSchemaContextRequest.getFunctionThatChecksIfRecordExistsInTableNames().put(new TableKey(recordTable, defaultSchema), functionName);
         return this;
+    }
+
+    protected SharedSchemaContextRequest getSharedSchemaContextRequestCopyOrNull(SharedSchemaContextRequest request) {
+        try {
+            return (SharedSchemaContextRequest) request.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
