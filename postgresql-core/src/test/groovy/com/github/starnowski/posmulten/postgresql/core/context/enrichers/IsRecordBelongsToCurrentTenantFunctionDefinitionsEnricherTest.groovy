@@ -97,7 +97,7 @@ class IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricherTest extends Spec
             def builder = new DefaultSharedSchemaContextBuilder(schema)
             builder.createRLSPolicyForColumn(table, [id: "N/A"], "tenant", "N/A")
             builder.createRLSPolicyForColumn("comments", [uuid: "N/A"], "tenant_id", "N/A")
-            builder.createSameTenantConstraintForForeignKey("comments", "users", mapBuilder().put("N/A", "N/A").build(), "N/A")
+            builder.createSameTenantConstraintForForeignKey("comments", table, mapBuilder().put("N/A", "N/A").build(), "N/A")
             def sharedSchemaContextRequest = builder.getSharedSchemaContextRequestCopy()
             def context = new SharedSchemaContext()
             def iGetCurrentTenantIdFunctionInvocationFactory = Mock(IGetCurrentTenantIdFunctionInvocationFactory)
@@ -118,7 +118,12 @@ class IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricherTest extends Spec
             ex.tableKey == tk(table, schema)
 
         where:
-            schema << [null, "public", "some_schema"]
+            table       |   schema
+            "users"     |   null
+            "users"     |   "public"
+            "users"     |   "some_other_schema"
+            "comments"  |   "some_other_schema"
+            "comments"  |   null
     }
 
     TableKey tk(String table, String schema)
