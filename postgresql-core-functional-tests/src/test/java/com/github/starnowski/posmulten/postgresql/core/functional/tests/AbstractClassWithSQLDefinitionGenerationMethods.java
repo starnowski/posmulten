@@ -21,6 +21,8 @@ public abstract class AbstractClassWithSQLDefinitionGenerationMethods extends Te
     protected static final String COMMENTS_POSTS_FK_CONSTRAINT_NAME = "comments_posts_fk_cu";
     protected static final String COMMENTS_PARENT_COMMENTS_FK_CONSTRAINT_NAME = "comments_parent_comments_fk_cu";
     protected static final String NOTIFICATIONS_USERS_COMMENTS_FK_CONSTRAINT_NAME = "notifications_users_fk_cu";
+    protected static final String USERS_GROUPS_USERS_FK_CONSTRAINT_NAME = "users_groups_users_fk_cu";
+    protected static final String USERS_GROUPS_GROUPS_FK_CONSTRAINT_NAME = "users_groups_groups_fk_cu";
 
     abstract protected String getSchema();
 

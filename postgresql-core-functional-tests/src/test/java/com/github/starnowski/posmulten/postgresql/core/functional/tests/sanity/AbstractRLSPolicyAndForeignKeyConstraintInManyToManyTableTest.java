@@ -4,6 +4,7 @@ import com.github.starnowski.posmulten.postgresql.core.functional.tests.pojos.Gr
 import com.github.starnowski.posmulten.postgresql.core.functional.tests.pojos.User;
 import com.github.starnowski.posmulten.postgresql.core.functional.tests.pojos.UserGroup;
 import org.postgresql.util.PSQLException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
@@ -99,7 +100,7 @@ public abstract class AbstractRLSPolicyAndForeignKeyConstraintInManyToManyTableT
         assertThat(countRowsInTableWhere(getUsersTableReference(), format("tenant_id = '%1$s' AND id = %2$d", userGroup.getTenantId(), userId))).isEqualTo(0);
         assertThatThrownBy(() ->
                 ownerJdbcTemplate.execute(format("%1$s INSERT INTO %2$s (group_id, user_id, tenant_id) VALUES ('%3$s', %4$d, '%5$s');", setCurrentTenantIdFunctionInvocationFactory.generateStatementThatSetTenant(userGroup.getTenantId()), getUsersGroupsTableReference(), userGroup.getGroupUuid(), userId, userGroup.getTenantId()))
-        ).isInstanceOf(BadSqlGrammarException.class).getRootCause().isInstanceOf(PSQLException.class);
+        ).isInstanceOf(DataIntegrityViolationException.class).getRootCause().isInstanceOf(PSQLException.class);
         assertThat(countRowsInTableWhere(getUsersGroupsTableReference(), format("group_id = '%1$s' AND user_id = %2$d", userGroup.getGroupUuid(), userId))).isEqualTo(0);
     }
 
@@ -113,8 +114,8 @@ public abstract class AbstractRLSPolicyAndForeignKeyConstraintInManyToManyTableT
         assertThat(countRowsInTableWhere(getGroupsTableReference(), format("tenant_id = '%1$s' AND uuid = '%2$s'", differentTenant, groupUuid))).isEqualTo(1);
         assertThat(countRowsInTableWhere(getGroupsTableReference(), format("tenant_id = '%1$s' AND uuid = '%2$s'", userGroup.getTenantId(), groupUuid))).isEqualTo(0);
         assertThatThrownBy(() ->
-                ownerJdbcTemplate.execute(format("%1$s INSERT INTO %2$s (group_id, user_id, tenant_id) VALUES ('%3$s', %4$d, '%5$s');", setCurrentTenantIdFunctionInvocationFactory.generateStatementThatSetTenant(userGroup.getTenantId()), getUsersGroupsTableReference(), groupUuid, userGroup.getGroupUuid(), userGroup.getTenantId()))
-        ).isInstanceOf(BadSqlGrammarException.class).getRootCause().isInstanceOf(PSQLException.class);
+                ownerJdbcTemplate.execute(format("%1$s INSERT INTO %2$s (group_id, user_id, tenant_id) VALUES ('%3$s', %4$d, '%5$s');", setCurrentTenantIdFunctionInvocationFactory.generateStatementThatSetTenant(userGroup.getTenantId()), getUsersGroupsTableReference(), groupUuid, userGroup.getUserId(), userGroup.getTenantId()))
+        ).isInstanceOf(DataIntegrityViolationException.class).getRootCause().isInstanceOf(PSQLException.class);
         assertThat(countRowsInTableWhere(getUsersGroupsTableReference(), format("group_id = '%1$s' AND user_id = '%2$s'", userGroup.getGroupUuid(), groupUuid))).isEqualTo(0);
     }
 
