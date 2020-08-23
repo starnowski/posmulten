@@ -184,6 +184,9 @@ class IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricherTest extends
         and: "exception object should have correct table key"
             ex.tableKey == tk(table, schema)
 
+        and: "exception object should have correct foreign keys set"
+            ex.foreignKeysColumns == foreignKeyPrimaryKeyColumnsMappings.keySet()
+
         where:
             table       |   schema              |   foreignKeyPrimaryKeyColumnsMappings                     ||  expectedMessage
             "users"     |   null                |   [uuid: "N/A"]                                           ||  "Missing constraint name that in table users and schema null checks  if the foreign key columns (uuid) refers to records that belong to the same tenant"
