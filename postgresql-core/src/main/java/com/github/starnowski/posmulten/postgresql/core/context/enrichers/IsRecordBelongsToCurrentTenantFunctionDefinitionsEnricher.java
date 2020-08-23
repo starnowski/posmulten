@@ -18,7 +18,6 @@ public class IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricher implement
         List<TableKey> tableRequiredFunction = request.getSameTenantConstraintForForeignKeyProperties().keySet().stream().map(constraintKey -> constraintKey.getForeignKeyTable()).distinct().collect(toList());
         for (TableKey tableKey : tableRequiredFunction)
         {
-            //TODO Throw exception when no name was defined
             String functionName = request.getFunctionThatChecksIfRecordExistsInTableNames().get(tableKey);
             if (functionName == null)
             {
