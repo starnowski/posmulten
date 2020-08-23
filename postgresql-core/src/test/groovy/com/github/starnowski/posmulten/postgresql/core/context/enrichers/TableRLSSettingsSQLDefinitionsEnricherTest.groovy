@@ -99,6 +99,28 @@ class TableRLSSettingsSQLDefinitionsEnricherTest extends Specification {
             schema << [null, "public", "some_schema"]
     }
 
+    @Unroll
+    def "should not create any sql definitions when there is no request for rls policy in #schema"()
+    {
+        given:
+            def builder = new DefaultSharedSchemaContextBuilder(schema)
+            def sharedSchemaContextRequest = builder.getSharedSchemaContextRequestCopy()
+            def context = new SharedSchemaContext()
+            def tableRLSSettingsSQLDefinitionsProducer = Mock(TableRLSSettingsSQLDefinitionsProducer)
+            tested.setTableRLSSettingsSQLDefinitionsProducer(tableRLSSettingsSQLDefinitionsProducer)
+
+        when:
+            def result = tested.enrich(context, sharedSchemaContextRequest)
+
+        then:
+            0 * tableRLSSettingsSQLDefinitionsProducer.produce(_, _)
+
+            result.getSqlDefinitions().isEmpty()
+
+        where:
+            schema << [null, "public", "some_schema"]
+    }
+
     TableKey tk(String table, String schema)
     {
         new TableKey(table, schema)
