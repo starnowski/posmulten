@@ -2,6 +2,7 @@ package com.github.starnowski.posmulten.postgresql.core.functional.tests.sanity;
 
 import com.github.starnowski.posmulten.postgresql.core.functional.tests.pojos.Group;
 import com.github.starnowski.posmulten.postgresql.core.functional.tests.pojos.User;
+import com.github.starnowski.posmulten.postgresql.core.functional.tests.pojos.UserGroup;
 import org.postgresql.util.PSQLException;
 import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.test.context.jdbc.Sql;
@@ -36,6 +37,15 @@ public abstract class AbstractRLSPolicyAndForeignKeyConstraintInManyToManyTableT
         return new Object[][]{
                 {new Group("40e6215d-b5c6-4896-987c-f30f3678f608", "admin_tenant_1", USER_TENANT), SECONDARY_USER_TENANT},
                 {new Group("3f333df6-90a4-4fda-8dd3-9485d27cee36", "admin_tenant_2", SECONDARY_USER_TENANT), USER_TENANT}
+        };
+    }
+
+    @DataProvider(name = "usersGroupsData")
+    protected static Object[][] usersGroupsData()
+    {
+        return new Object[][]{
+                {new UserGroup(1L, "40e6215d-b5c6-4896-987c-f30f3678f608", USER_TENANT), SECONDARY_USER_TENANT, 2L, "3f333df6-90a4-4fda-8dd3-9485d27cee36"},
+                {new UserGroup(2L, "3f333df6-90a4-4fda-8dd3-9485d27cee36", SECONDARY_USER_TENANT), USER_TENANT, 1L, "40e6215d-b5c6-4896-987c-f30f3678f608"}
         };
     }
 
