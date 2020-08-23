@@ -36,9 +36,15 @@ public abstract class FullStackTest extends AbstractClassWithSQLDefinitionGenera
     {
         return (getSchema() == null ? "" : getSchema() + ".") + "users";
     }
+
     protected String getNotificationsTableReference()
     {
         return (getSchema() == null ? "" : getSchema() + ".") + "notifications";
+    }
+
+    protected String getGroupsTableReference()
+    {
+        return (getSchema() == null ? "" : getSchema() + ".") + "groups";
     }
 
     @Autowired
