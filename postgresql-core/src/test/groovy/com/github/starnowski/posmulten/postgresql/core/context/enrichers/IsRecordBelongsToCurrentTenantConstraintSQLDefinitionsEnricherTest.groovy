@@ -160,14 +160,14 @@ class IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricherTest extends
     {
         given:
             def builder = new DefaultSharedSchemaContextBuilder(schema)
-            builder.createRLSPolicyForColumn("users", [:], "tenant", "N/A")
+            builder.createRLSPolicyForColumn("tab1", [:], "tenant", "N/A")
             builder.createRLSPolicyForColumn(table, [:], "tenant_xxx_id", "N/A")
-            builder.createSameTenantConstraintForForeignKey(table, "users", foreignKeyPrimaryKeyColumnsMappings, null)
+            builder.createSameTenantConstraintForForeignKey(table, "tab1", foreignKeyPrimaryKeyColumnsMappings, null)
             def sharedSchemaContextRequest = builder.getSharedSchemaContextRequestCopy()
             def context = new SharedSchemaContext()
-            def usersTableKey = tk("users", schema)
-            def isUserBelongsToCurrentTenantFunctionInvocationFactory = Mock(IsRecordBelongsToCurrentTenantFunctionInvocationFactory)
-            context.getTableKeysIsRecordBelongsToCurrentTenantFunctionInvocationFactoryMap().put(usersTableKey, isUserBelongsToCurrentTenantFunctionInvocationFactory)
+            def usersTableKey = tk("tab1", schema)
+            def isRecordBelongsToCurrentTenantFunctionInvocationFactory = Mock(IsRecordBelongsToCurrentTenantFunctionInvocationFactory)
+            context.getTableKeysIsRecordBelongsToCurrentTenantFunctionInvocationFactoryMap().put(usersTableKey, isRecordBelongsToCurrentTenantFunctionInvocationFactory)
 
             def isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer = Mock(IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer)
             tested.setIsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer(isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer)
