@@ -11,7 +11,7 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class Groups {
+public class Group {
 
     private Long id;
     private String name;
