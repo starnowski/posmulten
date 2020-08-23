@@ -1,4 +1,4 @@
-package com.github.starnowski.posmulten.postgresql.core.functional.tests.combine;
+package com.github.starnowski.posmulten.postgresql.core.functional.tests.sanity;
 
 import com.github.starnowski.posmulten.postgresql.core.context.AbstractSharedSchemaContext;
 import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder;
