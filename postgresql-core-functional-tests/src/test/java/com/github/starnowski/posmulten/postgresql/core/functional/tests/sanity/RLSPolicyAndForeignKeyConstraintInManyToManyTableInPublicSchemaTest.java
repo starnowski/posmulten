@@ -19,7 +19,7 @@ import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TE
 import static org.springframework.test.context.jdbc.SqlConfig.TransactionMode.ISOLATED;
 import static org.testng.Assert.assertTrue;
 
-public class RLSPolicyAndForeignKeyConstraintInManyToManyTableInPublicSchemaTest extends FullStackTest{
+public abstract class RLSPolicyAndForeignKeyConstraintInManyToManyTableInPublicSchemaTest extends FullStackTest{
 
     @Override
     protected String getSchema() {
