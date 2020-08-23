@@ -116,7 +116,7 @@ public abstract class AbstractRLSPolicyAndForeignKeyConstraintInManyToManyTableT
         assertThatThrownBy(() ->
                 ownerJdbcTemplate.execute(format("%1$s INSERT INTO %2$s (group_id, user_id, tenant_id) VALUES ('%3$s', %4$d, '%5$s');", setCurrentTenantIdFunctionInvocationFactory.generateStatementThatSetTenant(userGroup.getTenantId()), getUsersGroupsTableReference(), groupUuid, userGroup.getUserId(), userGroup.getTenantId()))
         ).isInstanceOf(DataIntegrityViolationException.class).getRootCause().isInstanceOf(PSQLException.class);
-        assertThat(countRowsInTableWhere(getUsersGroupsTableReference(), format("group_id = '%1$s' AND user_id = '%2$s'", userGroup.getGroupUuid(), groupUuid))).isEqualTo(0);
+        assertThat(countRowsInTableWhere(getUsersGroupsTableReference(), format("group_id = '%1$s' AND user_id = %2$d", groupUuid, userGroup.getUserId()))).isEqualTo(0);
     }
 
     @Test(dataProvider = "usersGroupsData", dependsOnMethods = {"tryToInsertDataIntoUsersGroupsTableAsDifferentTenant", "tryToInsertDataIntoUsersGroupsTableWithUserReferenceThatBelongsToDifferentTenant", "tryToInsertDataIntoUsersGroupsTableWithGroupReferenceThatBelongsToDifferentTenant"}, testName = "insert data into the users_groups table with correct data", description = "test case assumes that row level security for users_groups table is going to allow to insert data into the users_groups table with correct data")
