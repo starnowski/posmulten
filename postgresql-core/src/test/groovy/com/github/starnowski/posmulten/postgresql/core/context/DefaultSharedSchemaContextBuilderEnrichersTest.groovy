@@ -54,4 +54,45 @@ class DefaultSharedSchemaContextBuilderEnrichersTest extends Specification {
         then:
             enrichers.stream().map({enricher -> enricher.getClass()}).collect(toList()) == expectedEnrichersTypeInOrder
     }
+
+    def "should pass the copy or request object to each enricher"()
+    {
+        given:
+            AbstractSharedSchemaContext firstSharedSchemaContext = Mock(AbstractSharedSchemaContext)
+            AbstractSharedSchemaContext secondSharedSchemaContext = Mock(AbstractSharedSchemaContext)
+            AbstractSharedSchemaContextEnricher firstSharedSchemaContextEnricher = Mock(AbstractSharedSchemaContextEnricher)
+            AbstractSharedSchemaContextEnricher secondSharedSchemaContextEnricher = Mock(AbstractSharedSchemaContextEnricher)
+            DefaultSharedSchemaContextBuilder builder = new DefaultSharedSchemaContextBuilder()
+            builder.setEnrichers([firstSharedSchemaContextEnricher, secondSharedSchemaContextEnricher])
+            def firstEnricherCapturedRequest = null
+            def secondEnricherCapturedRequest = null
+            def firstEnricherCapturedContext = null
+            def secondEnricherCapturedContext = null
+
+        when:
+            def result = builder.build()
+
+        then:
+            1 * firstSharedSchemaContextEnricher.enrich(_, _) >>
+                    {parameters ->
+                        firstEnricherCapturedContext = parameters[0]
+                        firstEnricherCapturedRequest = parameters[1]
+                        firstSharedSchemaContext
+                    }
+
+        then:
+            1 * secondSharedSchemaContextEnricher.enrich(_, _) >>
+                    {parameters ->
+                        secondEnricherCapturedContext = parameters[0]
+                        secondEnricherCapturedRequest = parameters[1]
+                        secondSharedSchemaContext
+                    }
+            !firstEnricherCapturedRequest.is(secondEnricherCapturedRequest)
+
+        and: "the context passed to second enricher should the same returned by first enricher"
+            secondEnricherCapturedContext.is(firstSharedSchemaContext)
+
+        and: "result should match to the result of the last enricher"
+            result.is(secondSharedSchemaContext)
+    }
 }
