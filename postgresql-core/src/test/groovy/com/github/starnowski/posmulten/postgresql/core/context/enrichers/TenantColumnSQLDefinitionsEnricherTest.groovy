@@ -2,9 +2,12 @@ package com.github.starnowski.posmulten.postgresql.core.context.enrichers
 
 import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition
 import com.github.starnowski.posmulten.postgresql.core.context.*
+import com.github.starnowski.posmulten.postgresql.core.context.exceptions.MissingRLSPolicyDeclarationForTableException
 import com.github.starnowski.posmulten.postgresql.test.utils.RandomString
 import spock.lang.Specification
 import spock.lang.Unroll
+
+import static java.lang.String.format
 
 class TenantColumnSQLDefinitionsEnricherTest extends Specification {
 
@@ -82,6 +85,45 @@ class TenantColumnSQLDefinitionsEnricherTest extends Specification {
 
         where:
             schema << [null, "public", "some_schema"]
+    }
+
+    @Unroll
+    def "should throw an exception when there missing the RLS policy declaration for a table (#table) for which the tenant column should be created with schema #schema"()
+    {
+        given:
+            def randomString = new RandomString(5, new Random(), RandomString.lower)
+            def builder = new DefaultSharedSchemaContextBuilder(schema)
+            builder.createTenantColumnForTable(table)
+            def sharedSchemaContextRequest = builder.getSharedSchemaContextRequestCopy()
+            def context = new SharedSchemaContext()
+            def currentTenantInvocation = randomString.nextString()
+            def getCurrentTenantIdFunctionInvocationFactory = {
+                currentTenantInvocation
+            }
+            def singleTenantColumnSQLDefinitionsProducer = Mock(SingleTenantColumnSQLDefinitionsProducer)
+            tested.setSingleTenantColumnSQLDefinitionsProducer(singleTenantColumnSQLDefinitionsProducer)
+            context.setIGetCurrentTenantIdFunctionInvocationFactory(getCurrentTenantIdFunctionInvocationFactory)
+
+        when:
+            tested.enrich(context, sharedSchemaContextRequest)
+
+        then:
+            def ex = thrown(MissingRLSPolicyDeclarationForTableException)
+
+        and: "message should match"
+            ex.message == format("Missing RLS policy declaration for table %1 in schema %2", table, schema)
+
+        and: "exception object should have correct table key"
+            ex.tableKey == tk(table, schema)
+
+        where:
+            table       |   schema
+            "users"     |   null
+            "users"     |   "public"
+            "users"     |   "some_other_schema"
+            "comments"  |   "some_other_schema"
+            "comments"  |   null
+
     }
 
     TableKey tk(String table, String schema)
