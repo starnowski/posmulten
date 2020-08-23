@@ -20,7 +20,7 @@ class TableRLSSettingsSQLDefinitionsEnricherTest extends Specification {
             builder.createRLSPolicyForColumn("users", [:], "tenant", "user_policy")
             builder.createRLSPolicyForColumn("comments", [:], "tenant_id", "comments_policy")
             builder.createRLSPolicyForColumn("some_table", [:], "tenant_xxx_id", "some_table_policy")
-            def sharedSchemaContextRequest = builder.getSharedSchemaContextRequest()
+            def sharedSchemaContextRequest = builder.getSharedSchemaContextRequestCopy()
             def context = new SharedSchemaContext()
             def usersTableSQLDefinition1 = Mock(SQLDefinition)
             def usersTableSQLDefinition2 = Mock(SQLDefinition)
@@ -64,7 +64,7 @@ class TableRLSSettingsSQLDefinitionsEnricherTest extends Specification {
             builder.createRLSPolicyForColumn("comments", [:], "tenant_id", "comments_policy")
             builder.createRLSPolicyForColumn("some_table", [:], "tenant_xxx_id", "some_table_policy")
             builder.setForceRowLevelSecurityForTableOwner(true)
-            def sharedSchemaContextRequest = builder.getSharedSchemaContextRequest()
+            def sharedSchemaContextRequest = builder.getSharedSchemaContextRequestCopy()
             def context = new SharedSchemaContext()
             def usersTableSQLDefinition1 = Mock(SQLDefinition)
             def usersTableSQLDefinition2 = Mock(SQLDefinition)
@@ -94,6 +94,28 @@ class TableRLSSettingsSQLDefinitionsEnricherTest extends Specification {
         and: "sql definitions are added in order returned by component of type SingleTenantColumnSQLDefinitionsProducer"
             result.getSqlDefinitions().indexOf(usersTableSQLDefinition1) < result.getSqlDefinitions().indexOf(usersTableSQLDefinition2)
             result.getSqlDefinitions().indexOf(someTableSQLDefinition1) < result.getSqlDefinitions().indexOf(someTableSQLDefinition2)
+
+        where:
+            schema << [null, "public", "some_schema"]
+    }
+
+    @Unroll
+    def "should not create any sql definitions when there is no request for rls policy in #schema"()
+    {
+        given:
+            def builder = new DefaultSharedSchemaContextBuilder(schema)
+            def sharedSchemaContextRequest = builder.getSharedSchemaContextRequestCopy()
+            def context = new SharedSchemaContext()
+            def tableRLSSettingsSQLDefinitionsProducer = Mock(TableRLSSettingsSQLDefinitionsProducer)
+            tested.setTableRLSSettingsSQLDefinitionsProducer(tableRLSSettingsSQLDefinitionsProducer)
+
+        when:
+            def result = tested.enrich(context, sharedSchemaContextRequest)
+
+        then:
+            0 * tableRLSSettingsSQLDefinitionsProducer.produce(_, _)
+
+            result.getSqlDefinitions().isEmpty()
 
         where:
             schema << [null, "public", "some_schema"]

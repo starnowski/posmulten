@@ -1,4 +1,4 @@
-package com.github.starnowski.posmulten.postgresql.core.functional.tests.combine;
+package com.github.starnowski.posmulten.postgresql.core.functional.tests.sanity;
 
 import com.github.starnowski.posmulten.postgresql.core.functional.tests.pojos.User;
 import org.postgresql.util.PSQLException;
@@ -6,20 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.jdbc.SqlConfig;
-import org.springframework.test.context.jdbc.SqlGroup;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import static com.github.starnowski.posmulten.postgresql.core.functional.tests.TestApplication.CLEAR_DATABASE_SCRIPT_PATH;
 import static com.github.starnowski.posmulten.postgresql.test.utils.TestUtils.isAnyRecordExists;
 import static com.github.starnowski.posmulten.postgresql.test.utils.TestUtils.selectAndReturnFirstRecordAsBooleanWithSettingCurrentTenantId;
 import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
-import static org.springframework.test.context.jdbc.SqlConfig.TransactionMode.ISOLATED;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
@@ -46,16 +40,6 @@ public abstract class AbstractRLSForSingleTableTest extends FullStackTest{
                 {new User(1L, "Szymon Tarnowski", USER_TENANT), SECONDARY_USER_TENANT},
                 {new User(2L, "John Doe", SECONDARY_USER_TENANT), USER_TENANT}
         };
-    }
-
-    @SqlGroup({
-            @Sql(value = CLEAR_DATABASE_SCRIPT_PATH,
-                    config = @SqlConfig(transactionMode = ISOLATED),
-                    executionPhase = BEFORE_TEST_METHOD)})
-    @Test(dependsOnMethods = {"createSQLDefinitions"}, testName = "execute SQL definitions")
-    public void executeSQLDefinitions()
-    {
-        super.executeSQLDefinitions();
     }
 
     @Test(dataProvider = "userData", dependsOnMethods = {"executeSQLDefinitions"}, testName = "try to insert data into the users table assigned to the different tenant than currently set", description = "test case assumes that row level security for users table is not going to allow to insert data into the users table assigned to the different tenant than currently set")

@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class SharedSchemaContextRequest {
+public class SharedSchemaContextRequest implements Cloneable{
 
     private String defaultSchema;
     private String currentTenantIdProperty = "posmulten.tenant_id";
@@ -19,7 +19,7 @@ public class SharedSchemaContextRequest {
     private Set<TableKey> createTenantColumnTableLists = new HashSet<>();
     private boolean forceRowLevelSecurityForTableOwner;
     private Map<TableKey, AbstractTableRLSPolicyProperties> tableRLSPolicies = new HashMap<>();
-    private Map<SameTenantConstraintForForeignKey, SameTenantConstraintForForeignKeyProperties> sameTenantConstraintForForeignKeyProperties = new HashMap<>();
+    private Map<SameTenantConstraintForForeignKey, AbstractSameTenantConstraintForForeignKeyProperties> sameTenantConstraintForForeignKeyProperties = new HashMap<>();
     private String grantee;
     private Map<TableKey, String> functionThatChecksIfRecordExistsInTableNames = new HashMap<>();
 
@@ -115,11 +115,16 @@ public class SharedSchemaContextRequest {
         return tableRLSPolicies;
     }
 
-    public Map<SameTenantConstraintForForeignKey, SameTenantConstraintForForeignKeyProperties> getSameTenantConstraintForForeignKeyProperties() {
+    public Map<SameTenantConstraintForForeignKey, AbstractSameTenantConstraintForForeignKeyProperties> getSameTenantConstraintForForeignKeyProperties() {
         return sameTenantConstraintForForeignKeyProperties;
     }
 
     public Map<TableKey, String> getFunctionThatChecksIfRecordExistsInTableNames() {
         return functionThatChecksIfRecordExistsInTableNames;
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 }

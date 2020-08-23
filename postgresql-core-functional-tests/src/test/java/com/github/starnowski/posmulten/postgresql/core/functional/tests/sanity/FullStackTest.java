@@ -1,7 +1,8 @@
-package com.github.starnowski.posmulten.postgresql.core.functional.tests.combine;
+package com.github.starnowski.posmulten.postgresql.core.functional.tests.sanity;
 
 import com.github.starnowski.posmulten.postgresql.core.context.AbstractSharedSchemaContext;
 import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder;
+import com.github.starnowski.posmulten.postgresql.core.context.exceptions.SharedSchemaContextBuilderException;
 import com.github.starnowski.posmulten.postgresql.core.context.TableKey;
 import com.github.starnowski.posmulten.postgresql.core.functional.tests.AbstractClassWithSQLDefinitionGenerationMethods;
 import com.github.starnowski.posmulten.postgresql.core.rls.function.ISetCurrentTenantIdFunctionInvocationFactory;
@@ -35,9 +36,20 @@ public abstract class FullStackTest extends AbstractClassWithSQLDefinitionGenera
     {
         return (getSchema() == null ? "" : getSchema() + ".") + "users";
     }
+
     protected String getNotificationsTableReference()
     {
         return (getSchema() == null ? "" : getSchema() + ".") + "notifications";
+    }
+
+    protected String getGroupsTableReference()
+    {
+        return (getSchema() == null ? "" : getSchema() + ".") + "groups";
+    }
+
+    protected String getUsersGroupsTableReference()
+    {
+        return (getSchema() == null ? "" : getSchema() + ".") + "users_groups";
     }
 
     @Autowired
@@ -45,8 +57,7 @@ public abstract class FullStackTest extends AbstractClassWithSQLDefinitionGenera
     protected JdbcTemplate ownerJdbcTemplate;
 
     @Test(testName = "create SQL definitions", description = "Create SQL function that creates statements that set current tenant value, retrieve current tenant value and create the row level security policy for a table that is multi-tenant aware")
-    public void createSQLDefinitions()
-    {
+    public void createSQLDefinitions() throws SharedSchemaContextBuilderException {
         DefaultSharedSchemaContextBuilder defaultSharedSchemaContextBuilder = new DefaultSharedSchemaContextBuilder(getSchema());
         defaultSharedSchemaContextBuilder.setCurrentTenantIdProperty(VALID_CURRENT_TENANT_ID_PROPERTY_NAME);
         defaultSharedSchemaContextBuilder.setForceRowLevelSecurityForTableOwner(true);
@@ -63,6 +74,8 @@ public abstract class FullStackTest extends AbstractClassWithSQLDefinitionGenera
         defaultSharedSchemaContextBuilder.createSameTenantConstraintForForeignKey(COMMENTS_TABLE_NAME, POSTS_TABLE_NAME, mapBuilder().put("post_id", "id").build(), COMMENTS_POSTS_FK_CONSTRAINT_NAME);
         defaultSharedSchemaContextBuilder.createSameTenantConstraintForForeignKey(COMMENTS_TABLE_NAME, COMMENTS_TABLE_NAME, mapBuilder().put("parent_comment_id", "id").put("parent_comment_user_id", "user_id").build(), COMMENTS_PARENT_COMMENTS_FK_CONSTRAINT_NAME);
         defaultSharedSchemaContextBuilder.createSameTenantConstraintForForeignKey(NOTIFICATIONS_TABLE_NAME, USERS_TABLE_NAME, mapBuilder().put("user_id", "id").build(), NOTIFICATIONS_USERS_COMMENTS_FK_CONSTRAINT_NAME);
+        defaultSharedSchemaContextBuilder.createSameTenantConstraintForForeignKey(USERS_GROUPS_TABLE_NAME, USERS_TABLE_NAME, mapBuilder().put("user_id", "id").build(), USERS_GROUPS_USERS_FK_CONSTRAINT_NAME);
+        defaultSharedSchemaContextBuilder.createSameTenantConstraintForForeignKey(USERS_GROUPS_TABLE_NAME, GROUPS_TABLE_NAME, mapBuilder().put("group_id", "uuid").build(), USERS_GROUPS_GROUPS_FK_CONSTRAINT_NAME);
 
         defaultSharedSchemaContextBuilder.setNameForFunctionThatChecksIfRecordExistsInTable(USERS_TABLE_NAME, "is_user_belongs_to_current_tenant");
         defaultSharedSchemaContextBuilder.setNameForFunctionThatChecksIfRecordExistsInTable(POSTS_TABLE_NAME, "is_post_belongs_to_current_tenant");

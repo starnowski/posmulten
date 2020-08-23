@@ -4,12 +4,14 @@ import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSche
 import com.github.starnowski.posmulten.postgresql.core.context.IsRecordBelongsToCurrentTenantFunctionDefinitionProducer
 import com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContext
 import com.github.starnowski.posmulten.postgresql.core.context.TableKey
+import com.github.starnowski.posmulten.postgresql.core.context.exceptions.MissingFunctionNameDeclarationForTableException
 import com.github.starnowski.posmulten.postgresql.core.rls.function.IGetCurrentTenantIdFunctionInvocationFactory
 import com.github.starnowski.posmulten.postgresql.core.rls.function.IsRecordBelongsToCurrentTenantFunctionDefinition
 import spock.lang.Specification
 import spock.lang.Unroll
 
 import static com.github.starnowski.posmulten.postgresql.core.MapBuilder.mapBuilder
+import static java.lang.String.format
 
 class IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricherTest extends Specification {
 
@@ -28,7 +30,7 @@ class IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricherTest extends Spec
             builder.createSameTenantConstraintForForeignKey("some_table", "comments", mapBuilder().put("N/A", "N/A").build(), "N/A")
             builder.setNameForFunctionThatChecksIfRecordExistsInTable("users", "is_user_exists")
             builder.setNameForFunctionThatChecksIfRecordExistsInTable("comments", "is_comment_exists")
-            def sharedSchemaContextRequest = builder.getSharedSchemaContextRequest()
+            def sharedSchemaContextRequest = builder.getSharedSchemaContextRequestCopy()
             def context = new SharedSchemaContext()
             def iGetCurrentTenantIdFunctionInvocationFactory = Mock(IGetCurrentTenantIdFunctionInvocationFactory)
             context.setIGetCurrentTenantIdFunctionInvocationFactory(iGetCurrentTenantIdFunctionInvocationFactory)
@@ -70,7 +72,7 @@ class IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricherTest extends Spec
             builder.createRLSPolicyForColumn("some_table", [somedid: "N/A"], "tenant_xxx_id", "N/A")
             builder.setNameForFunctionThatChecksIfRecordExistsInTable("users", "is_user_exists")
             builder.setNameForFunctionThatChecksIfRecordExistsInTable("comments", "is_comment_exists")
-            def sharedSchemaContextRequest = builder.getSharedSchemaContextRequest()
+            def sharedSchemaContextRequest = builder.getSharedSchemaContextRequestCopy()
             def context = new SharedSchemaContext()
             def iGetCurrentTenantIdFunctionInvocationFactory = Mock(IGetCurrentTenantIdFunctionInvocationFactory)
             context.setIGetCurrentTenantIdFunctionInvocationFactory(iGetCurrentTenantIdFunctionInvocationFactory)
@@ -86,6 +88,42 @@ class IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricherTest extends Spec
 
         where:
             schema << [null, "public", "some_schema"]
+    }
+
+    @Unroll
+    def "should throw an exception when there missing the function name declaration for table #table and schema #schema"()
+    {
+        given:
+            def builder = new DefaultSharedSchemaContextBuilder(schema)
+            builder.createRLSPolicyForColumn(table, [id: "N/A"], "tenant", "N/A")
+            builder.createRLSPolicyForColumn("comments", [uuid: "N/A"], "tenant_id", "N/A")
+            builder.createSameTenantConstraintForForeignKey("comments", table, mapBuilder().put("N/A", "N/A").build(), "N/A")
+            def sharedSchemaContextRequest = builder.getSharedSchemaContextRequestCopy()
+            def context = new SharedSchemaContext()
+            def iGetCurrentTenantIdFunctionInvocationFactory = Mock(IGetCurrentTenantIdFunctionInvocationFactory)
+            context.setIGetCurrentTenantIdFunctionInvocationFactory(iGetCurrentTenantIdFunctionInvocationFactory)
+            def isRecordBelongsToCurrentTenantFunctionDefinitionProducer = Mock(IsRecordBelongsToCurrentTenantFunctionDefinitionProducer)
+            tested.setIsRecordBelongsToCurrentTenantFunctionDefinitionProducer(isRecordBelongsToCurrentTenantFunctionDefinitionProducer)
+
+        when:
+            tested.enrich(context, sharedSchemaContextRequest)
+
+        then:
+            def ex = thrown(MissingFunctionNameDeclarationForTableException)
+
+        and: "message should match"
+            ex.message == format("Missing function name that checks if record exists in table %1\$s and schema %2\$s", table, schema)
+
+        and: "exception object should have correct table key"
+            ex.tableKey == tk(table, schema)
+
+        where:
+            table       |   schema
+            "users"     |   null
+            "users"     |   "public"
+            "users"     |   "some_other_schema"
+            "comments"  |   "some_other_schema"
+            "comments"  |   null
     }
 
     TableKey tk(String table, String schema)

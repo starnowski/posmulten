@@ -2,8 +2,7 @@ package com.github.starnowski.posmulten.postgresql.core.context;
 
 import java.util.Map;
 
-//TODO Create interface
-public class SameTenantConstraintForForeignKeyProperties {
+public class SameTenantConstraintForForeignKeyProperties implements AbstractSameTenantConstraintForForeignKeyProperties{
 
     private final String constraintName;
     private final Map<String, String> foreignKeyPrimaryKeyColumnsMappings;

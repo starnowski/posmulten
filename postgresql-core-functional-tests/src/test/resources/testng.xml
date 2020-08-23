@@ -36,26 +36,32 @@
     </test>
     <test name="Full tests with Shared Schema Builder 1">
         <classes>
-            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.combine.CreateCurrentTenantCompositeForeignKeyConstraintForCommentsTableInNonPublicSchemaTest" />
-            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.combine.CreateCurrentTenantCompositeForeignKeyConstraintForCommentsTableInPublicSchemaTest" />
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.sanity.CreateCurrentTenantCompositeForeignKeyConstraintForCommentsTableInNonPublicSchemaTest" />
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.sanity.CreateCurrentTenantCompositeForeignKeyConstraintForCommentsTableInPublicSchemaTest" />
         </classes>
     </test>
     <test name="Full tests with Shared Schema Builder 2">
         <classes>
-            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.combine.RLSForSingleTableForWhichTenantColumnWasJustAddedInNonPublicSchemaTest" />
-            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.combine.RLSForSingleTableForWhichTenantColumnWasJustAddedInPublicSchemaTest" />
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.sanity.RLSForSingleTableForWhichTenantColumnWasJustAddedInNonPublicSchemaTest" />
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.sanity.RLSForSingleTableForWhichTenantColumnWasJustAddedInPublicSchemaTest" />
         </classes>
     </test>
     <test name="Full tests with Shared Schema Builder 3">
         <classes>
-            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.combine.RLSForSingleTableInNonPublicSchemaTest" />
-            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.combine.RLSForSingleTableInPublicSchemaTest" />
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.sanity.RLSForSingleTableInNonPublicSchemaTest" />
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.sanity.RLSForSingleTableInPublicSchemaTest" />
         </classes>
     </test>
     <test name="Full tests with Shared Schema Builder 4">
         <classes>
-            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.combine.RLSWithSettingReferenceWithConstraintForCurrentTenantForeignKeyInNonPublicSchemaTest" />
-            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.combine.RLSWithSettingReferenceWithConstraintForCurrentTenantForeignKeyInPublicSchemaTest" />
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.sanity.RLSWithSettingReferenceWithConstraintForCurrentTenantForeignKeyInNonPublicSchemaTest" />
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.sanity.RLSWithSettingReferenceWithConstraintForCurrentTenantForeignKeyInPublicSchemaTest" />
+        </classes>
+    </test>
+    <test name="Full tests with Shared Schema Builder 5">
+        <classes>
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.sanity.RLSPolicyAndForeignKeyConstraintInManyToManyTableInNonPublicSchemaTest" />
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.sanity.RLSPolicyAndForeignKeyConstraintInManyToManyTableInPublicSchemaTest" />
         </classes>
     </test>
 </suite>

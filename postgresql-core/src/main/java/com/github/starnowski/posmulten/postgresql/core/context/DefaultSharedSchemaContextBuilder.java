@@ -1,6 +1,7 @@
 package com.github.starnowski.posmulten.postgresql.core.context;
 
 import com.github.starnowski.posmulten.postgresql.core.context.enrichers.*;
+import com.github.starnowski.posmulten.postgresql.core.context.exceptions.SharedSchemaContextBuilderException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,16 +20,15 @@ public class DefaultSharedSchemaContextBuilder {
         this.sharedSchemaContextRequest.setDefaultSchema(defaultSchema);
     }
 
-    public AbstractSharedSchemaContext build()
+    public AbstractSharedSchemaContext build() throws SharedSchemaContextBuilderException
     {
         AbstractSharedSchemaContext context = new SharedSchemaContext();
         List<AbstractSharedSchemaContextEnricher> enrichers  = getEnrichers();
-        //TODO Copy request
-        sharedSchemaContextRequest.setDefaultSchema(defaultSchema);
+        SharedSchemaContextRequest sharedSchemaContextRequestCopy = getSharedSchemaContextRequestCopy();
         for (AbstractSharedSchemaContextEnricher enricher : enrichers)
         {
-            //TODO Consider of copy request (in loop also)
-            context = enricher.enrich(context, sharedSchemaContextRequest);
+            SharedSchemaContextRequest request = getSharedSchemaContextRequestCopyOrNull(sharedSchemaContextRequestCopy);
+            context = enricher.enrich(context, request);
         }
         return context;
     }
@@ -42,8 +42,8 @@ public class DefaultSharedSchemaContextBuilder {
         return this;
     }
 
-    public SharedSchemaContextRequest getSharedSchemaContextRequest() {
-        return sharedSchemaContextRequest;
+    public SharedSchemaContextRequest getSharedSchemaContextRequestCopy() {
+        return getSharedSchemaContextRequestCopyOrNull(sharedSchemaContextRequest);
     }
 
     public DefaultSharedSchemaContextBuilder setCurrentTenantIdPropertyType(String currentTenantIdPropertyType) {
@@ -108,12 +108,20 @@ public class DefaultSharedSchemaContextBuilder {
 
     public DefaultSharedSchemaContextBuilder createSameTenantConstraintForForeignKey(String mainTable, String foreignKeyTable, Map<String, String> foreignKeyPrimaryKeyColumnsMappings, String constraintName) {
         sharedSchemaContextRequest.getSameTenantConstraintForForeignKeyProperties().put(new SameTenantConstraintForForeignKey(new TableKey(mainTable, defaultSchema), new TableKey(foreignKeyTable, defaultSchema), foreignKeyPrimaryKeyColumnsMappings.keySet()), new SameTenantConstraintForForeignKeyProperties(constraintName, foreignKeyPrimaryKeyColumnsMappings));
-        //TODO
         return this;
     }
 
     public DefaultSharedSchemaContextBuilder setNameForFunctionThatChecksIfRecordExistsInTable(String recordTable, String functionName) {
         sharedSchemaContextRequest.getFunctionThatChecksIfRecordExistsInTableNames().put(new TableKey(recordTable, defaultSchema), functionName);
         return this;
+    }
+
+    protected SharedSchemaContextRequest getSharedSchemaContextRequestCopyOrNull(SharedSchemaContextRequest request) {
+        try {
+            return (SharedSchemaContextRequest) request.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

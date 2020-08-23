@@ -1,4 +1,4 @@
-package com.github.starnowski.posmulten.postgresql.core.functional.tests.combine;
+package com.github.starnowski.posmulten.postgresql.core.functional.tests.sanity;
 
 import com.github.starnowski.posmulten.postgresql.core.functional.tests.pojos.Post;
 import com.github.starnowski.posmulten.postgresql.core.functional.tests.pojos.User;
@@ -66,16 +66,6 @@ public abstract class AbstractRLSWithSettingReferenceWithConstraintForCurrentTen
                 {new Post(79L, "Some phrase", 1L, USER_TENANT), 2L},
                 {new Post(197L, "Some text", 2L, SECONDARY_USER_TENANT), 1L}
         };
-    }
-
-    @SqlGroup({
-            @Sql(value = CLEAR_DATABASE_SCRIPT_PATH,
-                    config = @SqlConfig(transactionMode = ISOLATED),
-                    executionPhase = BEFORE_TEST_METHOD)})
-    @Test(dependsOnMethods = {"createSQLDefinitions"}, testName = "execute SQL definitions")
-    public void executeSQLDefinitions()
-    {
-        super.executeSQLDefinitions();
     }
 
     @Test(dataProvider = "userData", dependsOnMethods = {"executeSQLDefinitions"}, testName = "insert data into to user table")
