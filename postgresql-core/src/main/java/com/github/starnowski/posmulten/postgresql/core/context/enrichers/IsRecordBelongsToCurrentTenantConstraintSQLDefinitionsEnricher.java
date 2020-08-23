@@ -14,11 +14,11 @@ public class IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher impl
 
     @Override
     public AbstractSharedSchemaContext enrich(AbstractSharedSchemaContext context, SharedSchemaContextRequest request) {
-        List<Pair<SameTenantConstraintForForeignKey, SameTenantConstraintForForeignKeyProperties>> constrainsRequests = request.getSameTenantConstraintForForeignKeyProperties().entrySet().stream().map(entry -> new Pair<SameTenantConstraintForForeignKey, SameTenantConstraintForForeignKeyProperties>(entry.getKey(), entry.getValue())).collect(toList());
-        for (Pair<SameTenantConstraintForForeignKey, SameTenantConstraintForForeignKeyProperties> constraintRequest : constrainsRequests)
+        List<Pair<SameTenantConstraintForForeignKey, AbstractSameTenantConstraintForForeignKeyProperties>> constrainsRequests = request.getSameTenantConstraintForForeignKeyProperties().entrySet().stream().map(entry -> new Pair<SameTenantConstraintForForeignKey, AbstractSameTenantConstraintForForeignKeyProperties>(entry.getKey(), entry.getValue())).collect(toList());
+        for (Pair<SameTenantConstraintForForeignKey, AbstractSameTenantConstraintForForeignKeyProperties> constraintRequest : constrainsRequests)
         {
             SameTenantConstraintForForeignKey key = constraintRequest.getKey();
-            SameTenantConstraintForForeignKeyProperties requestProperties = constraintRequest.getValue();
+            AbstractSameTenantConstraintForForeignKeyProperties requestProperties = constraintRequest.getValue();
             //TODO Throw exception when no name was defined, for constraint and there is no sql definition 'IsRecordBelongsToCurrentTenantFunctionInvocationFactory'
             IsRecordBelongsToCurrentTenantFunctionInvocationFactory isRecordBelongsToCurrentTenantFunctionInvocationFactory = context.getTableKeysIsRecordBelongsToCurrentTenantFunctionInvocationFactoryMap().get(key.getForeignKeyTable());
             AbstractIsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducerParameters parameters = IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducerParameters.builder()

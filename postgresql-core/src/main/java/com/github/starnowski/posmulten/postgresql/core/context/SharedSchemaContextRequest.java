@@ -19,7 +19,7 @@ public class SharedSchemaContextRequest implements Cloneable{
     private Set<TableKey> createTenantColumnTableLists = new HashSet<>();
     private boolean forceRowLevelSecurityForTableOwner;
     private Map<TableKey, AbstractTableRLSPolicyProperties> tableRLSPolicies = new HashMap<>();
-    private Map<SameTenantConstraintForForeignKey, SameTenantConstraintForForeignKeyProperties> sameTenantConstraintForForeignKeyProperties = new HashMap<>();
+    private Map<SameTenantConstraintForForeignKey, AbstractSameTenantConstraintForForeignKeyProperties> sameTenantConstraintForForeignKeyProperties = new HashMap<>();
     private String grantee;
     private Map<TableKey, String> functionThatChecksIfRecordExistsInTableNames = new HashMap<>();
 
@@ -115,7 +115,7 @@ public class SharedSchemaContextRequest implements Cloneable{
         return tableRLSPolicies;
     }
 
-    public Map<SameTenantConstraintForForeignKey, SameTenantConstraintForForeignKeyProperties> getSameTenantConstraintForForeignKeyProperties() {
+    public Map<SameTenantConstraintForForeignKey, AbstractSameTenantConstraintForForeignKeyProperties> getSameTenantConstraintForForeignKeyProperties() {
         return sameTenantConstraintForForeignKeyProperties;
     }
 
