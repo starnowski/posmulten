@@ -102,10 +102,24 @@ public abstract class AbstractRLSPolicyAndForeignKeyConstraintInManyToManyTableT
         ).isInstanceOf(BadSqlGrammarException.class).getRootCause().isInstanceOf(PSQLException.class);
         assertThat(countRowsInTableWhere(getUsersGroupsTableReference(), format("group_id = '%1$s' AND user_id = %2$d", userGroup.getGroupUuid(), userId))).isEqualTo(0);
     }
-    //TODO invalid group
+
+    @Test(dataProvider = "usersGroupsData", dependsOnMethods = {"insertDataIntoGroupTableAsDifferentTenant"}, testName = "try to insert data into the users_groups table with reference to record from groups table that is assigned to the different tenant than currently set", description = "test case assumes that row level security for users_groups table is not going to allow to insert data into the users_groups table with reference to record from groups table that is assigned to the different tenant than currently set")
+    public void tryToInsertDataIntoUsersGroupsTableWithGroupReferenceThatBelongsToDifferentTenant(Object[] parameters)
+    {
+        UserGroup userGroup = (UserGroup) parameters[0];
+        String differentTenant = (String) parameters[1];
+        String groupUuid = (String) parameters[3];
+        assertThat(countRowsInTableWhere(getUsersGroupsTableReference(), format("group_id = '%1$s' AND user_id = '%2$s'", groupUuid, userGroup.getUserId()))).isEqualTo(0);
+        assertThat(countRowsInTableWhere(getGroupsTableReference(), format("tenant_id = '%1$s' AND uuid = '%2$s'", differentTenant, groupUuid))).isEqualTo(1);
+        assertThat(countRowsInTableWhere(getGroupsTableReference(), format("tenant_id = '%1$s' AND uuid = '%2$s'", userGroup.getTenantId(), groupUuid))).isEqualTo(0);
+        assertThatThrownBy(() ->
+                ownerJdbcTemplate.execute(format("%1$s INSERT INTO %2$s (group_id, user_id, tenant_id) VALUES ('%3$s', %4$d, '%5$s');", setCurrentTenantIdFunctionInvocationFactory.generateStatementThatSetTenant(userGroup.getTenantId()), getUsersGroupsTableReference(), groupUuid, userGroup.getGroupUuid(), userGroup.getTenantId()))
+        ).isInstanceOf(BadSqlGrammarException.class).getRootCause().isInstanceOf(PSQLException.class);
+        assertThat(countRowsInTableWhere(getUsersGroupsTableReference(), format("group_id = '%1$s' AND user_id = '%2$s'", userGroup.getGroupUuid(), groupUuid))).isEqualTo(0);
+    }
     //TODO correct statement
 
-    @Test(dependsOnMethods = {"insertUserTestData", "tryToInsertDataIntoGroupTableAsDifferentTenant", "insertDataIntoGroupTableAsDifferentTenant", "tryToInsertDataIntoUsersGroupsTableAsDifferentTenant", "tryToInsertDataIntoUsersGroupsTableWithUserReferenceThatBelongsToDifferentTenant"}, alwaysRun = true)
+    @Test(dependsOnMethods = {"insertUserTestData", "tryToInsertDataIntoGroupTableAsDifferentTenant", "insertDataIntoGroupTableAsDifferentTenant", "tryToInsertDataIntoUsersGroupsTableAsDifferentTenant", "tryToInsertDataIntoUsersGroupsTableWithUserReferenceThatBelongsToDifferentTenant", "tryToInsertDataIntoUsersGroupsTableWithGroupReferenceThatBelongsToDifferentTenant"}, alwaysRun = true)
     @SqlGroup({
             @Sql(value = CLEAR_DATABASE_SCRIPT_PATH,
                     config = @SqlConfig(transactionMode = ISOLATED),
