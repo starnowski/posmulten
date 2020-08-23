@@ -91,16 +91,6 @@ public abstract class AbstractCreateCurrentTenantCompositeForeignKeyConstraintFo
         assertFalse(isAnyRecordExists(jdbcTemplate, createSelectStatementForConstraintName(getSchema(), "comments", COMMENTS_PARENT_COMMENTS_FK_CONSTRAINT_NAME)), "Constraint for parent comment for foreign key in comments table should not exists");
     }
 
-    @SqlGroup({
-            @Sql(value = CLEAR_DATABASE_SCRIPT_PATH,
-                    config = @SqlConfig(transactionMode = ISOLATED),
-                    executionPhase = BEFORE_TEST_METHOD)})
-    @Test(dependsOnMethods = {"constraintShouldNotExistsBeforeTests"}, testName = "execute SQL definitions")
-    public void executeSQLDefinitions()
-    {
-        super.executeSQLDefinitions();
-    }
-
     @Test(dataProvider = "userData", dependsOnMethods = {"executeSQLDefinitions"}, testName = "insert data into to user table")
     public void insertUserTestData(User user)
     {

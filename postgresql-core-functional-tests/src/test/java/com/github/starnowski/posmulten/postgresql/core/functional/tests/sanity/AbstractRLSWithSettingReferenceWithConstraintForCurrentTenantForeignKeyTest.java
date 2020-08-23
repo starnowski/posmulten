@@ -68,16 +68,6 @@ public abstract class AbstractRLSWithSettingReferenceWithConstraintForCurrentTen
         };
     }
 
-    @SqlGroup({
-            @Sql(value = CLEAR_DATABASE_SCRIPT_PATH,
-                    config = @SqlConfig(transactionMode = ISOLATED),
-                    executionPhase = BEFORE_TEST_METHOD)})
-    @Test(dependsOnMethods = {"createSQLDefinitions"}, testName = "execute SQL definitions")
-    public void executeSQLDefinitions()
-    {
-        super.executeSQLDefinitions();
-    }
-
     @Test(dataProvider = "userData", dependsOnMethods = {"executeSQLDefinitions"}, testName = "insert data into to user table")
     public void insertUserTestData(User user)
     {
