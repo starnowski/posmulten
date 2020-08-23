@@ -69,8 +69,8 @@ class GetCurrentTenantIdFunctionDefinitionEnricherTest extends Specification {
 
         and: "passed parameters should match default values"
             capturedParameters.getSchema() == defaultSchema
-            capturedParameters.getCurrentTenantIdProperty() == sharedSchemaContextRequest.getCurrentTenantIdProperty()
-            capturedParameters.getFunctionReturnType() == sharedSchemaContextRequest.getCurrentTenantIdPropertyType()
+            capturedParameters.getCurrentTenantIdProperty() == currentTenantIdProperty
+            capturedParameters.getFunctionReturnType() == currentTenantIdPropertyType
             capturedParameters.getFunctionName() == functionName
 
         where:
