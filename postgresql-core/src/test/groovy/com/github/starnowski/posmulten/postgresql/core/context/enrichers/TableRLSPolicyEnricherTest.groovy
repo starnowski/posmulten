@@ -66,6 +66,34 @@ class TableRLSPolicyEnricherTest extends Specification {
             "some_schema"   | "t_column"                |   "admin"
     }
 
+    @Unroll
+    def "should not create any sql definitions when there is no request for rls policy in #schema"()
+    {
+        given:
+            def builder = new DefaultSharedSchemaContextBuilder(schema)
+            builder.setDefaultTenantIdColumn(defaultTenantIdColumn)
+            builder.setGrantee(grantee)
+            def sharedSchemaContextRequest = builder.getSharedSchemaContextRequestCopy()
+            def context = new SharedSchemaContext()
+            def tableRLSPolicySQLDefinitionsProducer = Mock(TableRLSPolicySQLDefinitionsProducer)
+            def tenantHasAuthoritiesFunctionInvocationFactory = Mock(TenantHasAuthoritiesFunctionInvocationFactory)
+            tested.setTableRLSPolicySQLDefinitionsProducer(tableRLSPolicySQLDefinitionsProducer)
+            context.setTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory)
+
+        when:
+            def result = tested.enrich(context, sharedSchemaContextRequest)
+
+        then:
+            0 * tableRLSPolicySQLDefinitionsProducer.produce(_)
+            result.getSqlDefinitions().isEmpty()
+
+        where:
+        schema          |   defaultTenantIdColumn   |   grantee
+        null            |   "tenant_id"             |   "core-user"
+        "public"        | "tenant"                  |   "owner"
+        "some_schema"   | "t_column"                |   "admin"
+    }
+
     TableKey tk(String table, String schema)
     {
         new TableKey(table, schema)
