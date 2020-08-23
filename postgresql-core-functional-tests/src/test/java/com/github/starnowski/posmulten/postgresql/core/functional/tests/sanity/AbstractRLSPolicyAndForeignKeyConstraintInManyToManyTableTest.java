@@ -76,7 +76,7 @@ public abstract class AbstractRLSPolicyAndForeignKeyConstraintInManyToManyTableT
         assertThat(countRowsInTableWhere(getGroupsTableReference(), "uuid = '" + group.getUuid() + "'")).isEqualTo(1);
     }
 
-    @Test(dataProvider = "groupsData", dependsOnMethods = {"insertDataIntoGroupTableAsDifferentTenant"}, testName = "try to insert data into the users_groups table assigned to the different tenant than currently set", description = "test case assumes that row level security for users_groups table is not going to allow to insert data into the users_groups table assigned to the different tenant than currently set")
+    @Test(dataProvider = "usersGroupsData", dependsOnMethods = {"insertDataIntoGroupTableAsDifferentTenant"}, testName = "try to insert data into the users_groups table assigned to the different tenant than currently set", description = "test case assumes that row level security for users_groups table is not going to allow to insert data into the users_groups table assigned to the different tenant than currently set")
     public void tryToInsertDataIntoUsersGroupsTableAsDifferentTenant(Object[] parameters)
     {
         UserGroup userGroup = (UserGroup) parameters[0];
