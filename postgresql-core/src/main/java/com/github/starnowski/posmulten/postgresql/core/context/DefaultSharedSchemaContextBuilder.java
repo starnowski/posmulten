@@ -23,12 +23,16 @@ public class DefaultSharedSchemaContextBuilder {
     {
         AbstractSharedSchemaContext context = new SharedSchemaContext();
         List<AbstractSharedSchemaContextEnricher> enrichers  = getEnrichers();
-        //TODO Copy request
-        sharedSchemaContextRequest.setDefaultSchema(defaultSchema);
+        SharedSchemaContextRequest sharedSchemaContextRequestCopy = getSharedSchemaContextRequestCopy();
         for (AbstractSharedSchemaContextEnricher enricher : enrichers)
         {
-            //TODO Consider of copy request (in loop also)
-            context = enricher.enrich(context, sharedSchemaContextRequest);
+            SharedSchemaContextRequest request = null;
+            try {
+                request = (SharedSchemaContextRequest) sharedSchemaContextRequestCopy.clone();
+            } catch (CloneNotSupportedException e) {
+                e.printStackTrace();
+            }
+            context = enricher.enrich(context, request);
         }
         return context;
     }
@@ -43,7 +47,12 @@ public class DefaultSharedSchemaContextBuilder {
     }
 
     public SharedSchemaContextRequest getSharedSchemaContextRequestCopy() {
-        return sharedSchemaContextRequest;
+        try {
+            return (SharedSchemaContextRequest) sharedSchemaContextRequest.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public DefaultSharedSchemaContextBuilder setCurrentTenantIdPropertyType(String currentTenantIdPropertyType) {
