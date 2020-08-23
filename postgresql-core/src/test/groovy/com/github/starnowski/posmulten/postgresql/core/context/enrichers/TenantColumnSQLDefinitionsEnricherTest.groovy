@@ -60,6 +60,30 @@ class TenantColumnSQLDefinitionsEnricherTest extends Specification {
             schema << [null, "public", "some_schema"]
     }
 
+    @Unroll
+    def "should not create any sql definitions when there is no request for creation of the tenant column in #schema"()
+    {
+        given:
+            def builder = new DefaultSharedSchemaContextBuilder(schema)
+            builder.createRLSPolicyForColumn("users", [:], "tenant", "user_policy")
+            builder.createRLSPolicyForColumn("comments", [:], "tenant_id", "comments_policy")
+            builder.createRLSPolicyForColumn("some_table", [:], "tenant_xxx_id", "some_table_policy")
+            def sharedSchemaContextRequest = builder.getSharedSchemaContextRequestCopy()
+            def context = new SharedSchemaContext()
+            def singleTenantColumnSQLDefinitionsProducer = Mock(SingleTenantColumnSQLDefinitionsProducer)
+            tested.setSingleTenantColumnSQLDefinitionsProducer(singleTenantColumnSQLDefinitionsProducer)
+
+        when:
+            def result = tested.enrich(context, sharedSchemaContextRequest)
+
+        then:
+            0 * singleTenantColumnSQLDefinitionsProducer.produce(_, _, _, _, _)
+            result.getSqlDefinitions().isEmpty()
+
+        where:
+            schema << [null, "public", "some_schema"]
+    }
+
     TableKey tk(String table, String schema)
     {
         new TableKey(table, schema)
