@@ -9,7 +9,7 @@ public class MissingConstraintNameDeclarationForTableException extends SharedSch
     private final TableKey tableKey;
     private final Set<String> foreignKeysColumns;
 
-    public MissingConstraintNameDeclarationForTableException(TableKey tableKey, String message, Set<String> foreignKeysColumns) {
+    public MissingConstraintNameDeclarationForTableException(TableKey tableKey,  Set<String> foreignKeysColumns, String message) {
         super(message);
         this.tableKey = tableKey;
         this.foreignKeysColumns = foreignKeysColumns;
