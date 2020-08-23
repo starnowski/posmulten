@@ -47,6 +47,11 @@ public abstract class FullStackTest extends AbstractClassWithSQLDefinitionGenera
         return (getSchema() == null ? "" : getSchema() + ".") + "groups";
     }
 
+    protected String getUsersGroupsTableReference()
+    {
+        return (getSchema() == null ? "" : getSchema() + ".") + "users_groups";
+    }
+
     @Autowired
     @Qualifier("ownerJdbcTemplate")
     protected JdbcTemplate ownerJdbcTemplate;

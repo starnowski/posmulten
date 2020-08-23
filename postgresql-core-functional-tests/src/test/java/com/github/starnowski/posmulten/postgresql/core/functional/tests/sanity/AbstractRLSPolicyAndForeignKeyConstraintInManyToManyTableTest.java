@@ -58,7 +58,7 @@ public abstract class AbstractRLSPolicyAndForeignKeyConstraintInManyToManyTableT
     }
 
     @Test(dataProvider = "groupsData", dependsOnMethods = {"insertUserTestData"}, testName = "try to insert data into the groups table assigned to the different tenant than currently set", description = "test case assumes that row level security for groups table is not going to allow to insert data into the groups table assigned to the different tenant than currently set")
-    public void tryToInsertDataIntoNotificationTableAsDifferentTenant(Group group, String differentTenant)
+    public void tryToInsertDataIntoGroupTableAsDifferentTenant(Group group, String differentTenant)
     {
         assertThat(countRowsInTableWhere(getGroupsTableReference(), "uuid = '" + group.getUuid() + "'")).isEqualTo(0);
         assertThatThrownBy(() ->
@@ -67,8 +67,8 @@ public abstract class AbstractRLSPolicyAndForeignKeyConstraintInManyToManyTableT
         assertThat(countRowsInTableWhere(getGroupsTableReference(), "uuid = '" + group.getUuid() + "'")).isEqualTo(0);
     }
 
-    @Test(dataProvider = "groupsData", dependsOnMethods = {"tryToInsertDataIntoNotificationTableAsDifferentTenant"}, testName = "insert data into the groups table assigned to the currently set", description = "test case assumes that row level security for groups table is going to allow to insert data into the groups table assigned to the currently set")
-    public void insertDataIntoNotificationTableAsDifferentTenant(Object[] parameters)
+    @Test(dataProvider = "groupsData", dependsOnMethods = {"tryToInsertDataIntoGroupTableAsDifferentTenant"}, testName = "insert data into the groups table assigned to the currently set", description = "test case assumes that row level security for groups table is going to allow to insert data into the groups table assigned to the currently set")
+    public void insertDataIntoGroupTableAsDifferentTenant(Object[] parameters)
     {
         Group group = (Group) parameters[0];
         assertThat(countRowsInTableWhere(getGroupsTableReference(), "uuid = '" + group.getUuid() + "'")).isEqualTo(0);
@@ -76,12 +76,23 @@ public abstract class AbstractRLSPolicyAndForeignKeyConstraintInManyToManyTableT
         assertThat(countRowsInTableWhere(getGroupsTableReference(), "uuid = '" + group.getUuid() + "'")).isEqualTo(1);
     }
 
-    //TODO different tenant
+    @Test(dataProvider = "groupsData", dependsOnMethods = {"insertDataIntoGroupTableAsDifferentTenant"}, testName = "try to insert data into the users_groups table assigned to the different tenant than currently set", description = "test case assumes that row level security for users_groups table is not going to allow to insert data into the users_groups table assigned to the different tenant than currently set")
+    public void tryToInsertDataIntoUsersGroupsTableAsDifferentTenant(Object[] parameters)
+    {
+        UserGroup userGroup = (UserGroup) parameters[0];
+        String differentTenant = (String) parameters[1];
+        assertThat(countRowsInTableWhere(getUsersGroupsTableReference(), format("group_id = '%1$s' AND user_id = %2$d", userGroup.getGroupUuid(), userGroup.getUserId()))).isEqualTo(0);
+        assertThatThrownBy(() ->
+                ownerJdbcTemplate.execute(format("%1$s INSERT INTO %2$s (group_id, user_id, tenant_id) VALUES ('%3$s', %4$d, '%5$s');", setCurrentTenantIdFunctionInvocationFactory.generateStatementThatSetTenant(differentTenant), getUsersGroupsTableReference(), userGroup.getGroupUuid(), userGroup.getUserId(), userGroup.getTenantId()))
+        ).isInstanceOf(BadSqlGrammarException.class).getRootCause().isInstanceOf(PSQLException.class);
+        assertThat(countRowsInTableWhere(getUsersGroupsTableReference(), format("group_id = '%1$s' AND user_id = %2$d", userGroup.getGroupUuid(), userGroup.getUserId()))).isEqualTo(0);
+    }
+
     //TODO invalid user
     //TODO invalid group
     //TODO correct statement
 
-    @Test(dependsOnMethods = {"insertUserTestData", "tryToInsertDataIntoNotificationTableAsDifferentTenant", "insertDataIntoNotificationTableAsDifferentTenant"}, alwaysRun = true)
+    @Test(dependsOnMethods = {"insertUserTestData", "tryToInsertDataIntoGroupTableAsDifferentTenant", "insertDataIntoGroupTableAsDifferentTenant", "tryToInsertDataIntoUsersGroupsTableAsDifferentTenant"}, alwaysRun = true)
     @SqlGroup({
             @Sql(value = CLEAR_DATABASE_SCRIPT_PATH,
                     config = @SqlConfig(transactionMode = ISOLATED),
