@@ -34,8 +34,8 @@ public abstract class AbstractRLSPolicyAndForeignKeyConstraintInManyToManyTableT
     protected static Object[][] groupsData()
     {
         return new Object[][]{
-                {new Group(1L, "admin_tenant_1", USER_TENANT), SECONDARY_USER_TENANT},
-                {new Group(2L, "admin_tenant_2", SECONDARY_USER_TENANT), USER_TENANT}
+                {new Group("40e6215d-b5c6-4896-987c-f30f3678f608", "admin_tenant_1", USER_TENANT), SECONDARY_USER_TENANT},
+                {new Group("3f333df6-90a4-4fda-8dd3-9485d27cee36", "admin_tenant_2", SECONDARY_USER_TENANT), USER_TENANT}
         };
     }
 
@@ -50,11 +50,11 @@ public abstract class AbstractRLSPolicyAndForeignKeyConstraintInManyToManyTableT
     @Test(dataProvider = "groupsData", dependsOnMethods = {"insertUserTestData"}, testName = "try to insert data into the groups table assigned to the different tenant than currently set", description = "test case assumes that row level security for groups table is not going to allow to insert data into the groups table assigned to the different tenant than currently set")
     public void tryToInsertDataIntoNotificationTableAsDifferentTenant(Group group, String differentTenant)
     {
-        assertThat(countRowsInTableWhere(getGroupsTableReference(), "id = '" + group.getId() + "'")).isEqualTo(0);
+        assertThat(countRowsInTableWhere(getGroupsTableReference(), "uuid = '" + group.getUuid() + "'")).isEqualTo(0);
         assertThatThrownBy(() ->
-                ownerJdbcTemplate.execute(format("%1$s INSERT INTO %2$s (id, name, tenant) VALUES (%3$d, '%4$s', '%5$s');", setCurrentTenantIdFunctionInvocationFactory.generateStatementThatSetTenant(differentTenant), getGroupsTableReference(), group.getId(), group.getName(), group.getTenantId()))
+                ownerJdbcTemplate.execute(format("%1$s INSERT INTO %2$s (uuid, name, tenant) VALUES ('%3$s', '%4$s', '%5$s');", setCurrentTenantIdFunctionInvocationFactory.generateStatementThatSetTenant(differentTenant), getGroupsTableReference(), group.getUuid(), group.getName(), group.getTenantId()))
         ).isInstanceOf(BadSqlGrammarException.class).getRootCause().isInstanceOf(PSQLException.class);
-        assertThat(countRowsInTableWhere(getGroupsTableReference(), "id = '" + group.getId() + "'")).isEqualTo(0);
+        assertThat(countRowsInTableWhere(getGroupsTableReference(), "uuid = '" + group.getUuid() + "'")).isEqualTo(0);
     }
 
     @Test(dependsOnMethods = {"insertUserTestData", "tryToInsertDataIntoNotificationTableAsDifferentTenant"}, alwaysRun = true)

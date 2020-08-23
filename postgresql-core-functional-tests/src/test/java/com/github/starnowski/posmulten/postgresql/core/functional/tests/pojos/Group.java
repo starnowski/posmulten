@@ -13,7 +13,7 @@ import lombok.experimental.Accessors;
 @Getter
 public class Group {
 
-    private Long id;
+    private String uuid;
     private String name;
     private String tenantId;
 }
