@@ -58,4 +58,10 @@
             <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.sanity.RLSWithSettingReferenceWithConstraintForCurrentTenantForeignKeyInPublicSchemaTest" />
         </classes>
     </test>
+    <test name="Full tests with Shared Schema Builder 5">
+        <classes>
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.sanity.RLSPolicyAndForeignKeyConstraintInManyToManyTableInNonPublicSchemaTest" />
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.sanity.RLSPolicyAndForeignKeyConstraintInManyToManyTableInPublicSchemaTest" />
+        </classes>
+    </test>
 </suite>
