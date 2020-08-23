@@ -8,7 +8,6 @@ import spock.lang.Specification
 import spock.lang.Unroll
 
 import static com.github.starnowski.posmulten.postgresql.core.MapBuilder.mapBuilder
-import static java.lang.String.format
 
 class IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricherTest extends Specification {
 
@@ -180,18 +179,18 @@ class IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricherTest extends
             def ex = thrown(MissingConstraintNameDeclarationForTableException)
 
         and: "message should match"
-            ex.message == format("Missing constraint name that checks in table %1\$s and schema %2\$s that foreign key columns () reference to records that belongs to same tenant", table, schema)
+            ex.message == expectedMessage
 
         and: "exception object should have correct table key"
             ex.tableKey == tk(table, schema)
 
         where:
-            table       |   schema              |   foreignKeyPrimaryKeyColumnsMappings                 ||  expectedMessage
-            "users"     |   null                |   [uuid: "id"]                                        ||  "Missing constraint name that in table users and schema public checks  if the foreign key columns (id, uuid) refers to records that belong to the same tenant"
-            "users"     |   "public"            |   [uuid: "id"]                                        ||  "Missing constraint name that in table users and schema public checks  if the foreign key columns (id, uuid) refers to records that belong to the same tenant
-            "users"     |   "some_other_schema" |   [uuid: "id"]                                        ||  "Missing constraint name that in table users and schema public checks  if the foreign key columns (id, uuid) refers to records that belong to the same tenant
-            "comments"  |   "some_other_schema" |   [comment_id: "some_id", comment_owner_id: "id"]     ||  "Missing constraint name that in table users and schema public checks  if the foreign key columns (id, uuid) refers to records that belong to the same tenant
-            "comments"  |   null                |   [comment_id: "some_id", comment_owner_id: "id"]     ||  "Missing constraint name that in table users and schema public checks  if the foreign key columns (id, uuid) refers to records that belong to the same tenant
+            table       |   schema              |   foreignKeyPrimaryKeyColumnsMappings                     ||  expectedMessage
+            "users"     |   null                |   [uuid: "N/A"]                                           ||  "Missing constraint name that in table users and schema null checks  if the foreign key columns (uuid) refers to records that belong to the same tenant"
+            "users"     |   "public"            |   [uuid: "N/A"]                                           ||  "Missing constraint name that in table users and schema public checks  if the foreign key columns (uuid) refers to records that belong to the same tenant"
+            "users"     |   "some_other_schema" |   [uuid: "N/A"]                                           ||  "Missing constraint name that in table users and schema some_other_schema checks  if the foreign key columns (uuid) refers to records that belong to the same tenant"
+            "comments"  |   "some_other_schema" |   [comment_id: "N/A", comment_owner_id: "N/A"]            ||  "Missing constraint name that in table comments and schema some_other_schema checks  if the foreign key columns (comment_id, comment_owner_id) refers to records that belong to the same tenant"
+            "comments"  |   null                |   [comment_id: "N/A", comment_owner_id: "N/A"]            ||  "Missing constraint name that in table comments and schema null checks  if the foreign key columns (comment_id, comment_owner_id) refers to records that belong to the same tenant"
     }
 
     TableKey tk(String table, String schema)
