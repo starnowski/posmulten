@@ -6,3 +6,5 @@ DELETE FROM public.notifications CASCADE;
 DELETE FROM non_public_schema.notifications CASCADE;
 DELETE FROM public.users CASCADE;
 DELETE FROM non_public_schema.users CASCADE;
+DELETE FROM public.groups CASCADE;
+DELETE FROM non_public_schema.groups CASCADE;
