@@ -40,7 +40,13 @@ import static java.util.Arrays.asList;
  */
 public class DefaultSharedSchemaContextBuilder {
 
+    /**
+     * Name of default schema used during building process
+     */
     private final String defaultSchema;
+    /**
+     * Collection that stores objects of type {@link AbstractSharedSchemaContextEnricher} used for enriching result object ({@link #build()} method).
+     */
     private List<AbstractSharedSchemaContextEnricher> enrichers = asList(new GetCurrentTenantIdFunctionDefinitionEnricher(), new SetCurrentTenantIdFunctionDefinitionEnricher(), new TenantHasAuthoritiesFunctionDefinitionEnricher(), new TenantColumnSQLDefinitionsEnricher(), new TableRLSSettingsSQLDefinitionsEnricher(), new TableRLSPolicyEnricher(), new IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricher(), new IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher());
     private final SharedSchemaContextRequest sharedSchemaContextRequest = new SharedSchemaContextRequest();
 
