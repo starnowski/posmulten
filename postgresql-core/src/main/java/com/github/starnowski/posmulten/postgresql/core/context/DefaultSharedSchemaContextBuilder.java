@@ -32,6 +32,12 @@ import java.util.Map;
 
 import static java.util.Arrays.asList;
 
+/**
+ * The builder component responsible for creation of object of type {@link AbstractSharedSchemaContext}.
+ * Component create result object based on properties {@link #defaultSchema} and {@link #sharedSchemaContextRequest}.
+ * For setting values of results project the builder component use the enricher components of type {@link AbstractSharedSchemaContextEnricher},
+ * specified in {@link #enrichers} collection.
+ */
 public class DefaultSharedSchemaContextBuilder {
 
     private final String defaultSchema;
