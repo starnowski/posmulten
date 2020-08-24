@@ -49,7 +49,7 @@ class DefaultSharedSchemaContextBuilderEnrichersTest extends Specification {
             DefaultSharedSchemaContextBuilder builder = new DefaultSharedSchemaContextBuilder()
 
         when:
-            def enrichers = builder.getEnrichers()
+            def enrichers = builder.getEnrichersCopy()
 
         then:
             enrichers.stream().map({enricher -> enricher.getClass()}).collect(toList()) == expectedEnrichersTypeInOrder

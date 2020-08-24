@@ -62,7 +62,7 @@ public class DefaultSharedSchemaContextBuilder {
     public AbstractSharedSchemaContext build() throws SharedSchemaContextBuilderException
     {
         AbstractSharedSchemaContext context = new SharedSchemaContext();
-        List<AbstractSharedSchemaContextEnricher> enrichers  = getEnrichers();
+        List<AbstractSharedSchemaContextEnricher> enrichers  = getEnrichersCopy();
         SharedSchemaContextRequest sharedSchemaContextRequestCopy = getSharedSchemaContextRequestCopy();
         for (AbstractSharedSchemaContextEnricher enricher : enrichers)
         {
@@ -72,7 +72,7 @@ public class DefaultSharedSchemaContextBuilder {
         return context;
     }
 
-    public List<AbstractSharedSchemaContextEnricher> getEnrichers() {
+    public List<AbstractSharedSchemaContextEnricher> getEnrichersCopy() {
         return enrichers == null ? new ArrayList<>() : new ArrayList<>(enrichers);
     }
 
