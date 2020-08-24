@@ -44,6 +44,10 @@ public class DefaultSharedSchemaContextBuilder {
     private List<AbstractSharedSchemaContextEnricher> enrichers = asList(new GetCurrentTenantIdFunctionDefinitionEnricher(), new SetCurrentTenantIdFunctionDefinitionEnricher(), new TenantHasAuthoritiesFunctionDefinitionEnricher(), new TenantColumnSQLDefinitionsEnricher(), new TableRLSSettingsSQLDefinitionsEnricher(), new TableRLSPolicyEnricher(), new IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricher(), new IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher());
     private final SharedSchemaContextRequest sharedSchemaContextRequest = new SharedSchemaContextRequest();
 
+    /**
+     *
+     * @param defaultSchema name of default schema used during building process
+     */
     public DefaultSharedSchemaContextBuilder(String defaultSchema) {
         this.defaultSchema = defaultSchema;
         this.sharedSchemaContextRequest.setDefaultSchema(defaultSchema);
