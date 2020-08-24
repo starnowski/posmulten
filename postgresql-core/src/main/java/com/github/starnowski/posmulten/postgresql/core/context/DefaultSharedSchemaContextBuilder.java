@@ -59,6 +59,13 @@ public class DefaultSharedSchemaContextBuilder {
         this.sharedSchemaContextRequest.setDefaultSchema(defaultSchema);
     }
 
+    /**
+     * Builds shared schema context based on properties {@link #defaultSchema} and {@link #sharedSchemaContextRequest}.
+     * Context is enricher in the loop by each enricher from {@link #enrichers}  collection by an order which they were
+     * added into the collection.
+     * @return object of type {@link AbstractSharedSchemaContext}
+     * @throws SharedSchemaContextBuilderException
+     */
     public AbstractSharedSchemaContext build() throws SharedSchemaContextBuilderException
     {
         AbstractSharedSchemaContext context = new SharedSchemaContext();
