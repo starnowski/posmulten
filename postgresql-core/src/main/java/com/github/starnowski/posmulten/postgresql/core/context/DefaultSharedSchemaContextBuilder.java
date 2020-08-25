@@ -107,13 +107,13 @@ public class DefaultSharedSchemaContextBuilder {
 
     /**
      * Setting the type of column that stores the tenant identifier
+     * @param currentTenantIdPropertyType type of column that stores the tenant identifier
+     * @return builder object for which method was invoked
      * @see SharedSchemaContextRequest#currentTenantIdPropertyType
      * @see GetCurrentTenantIdFunctionDefinitionEnricher
      * @see SetCurrentTenantIdFunctionDefinitionEnricher
      * @see TenantColumnSQLDefinitionsEnricher
      * @see TenantHasAuthoritiesFunctionDefinitionEnricher
-     * @param currentTenantIdPropertyType type of column that stores the tenant identifier
-     * @return builder object for which method was invoked
      */
     public DefaultSharedSchemaContextBuilder setCurrentTenantIdPropertyType(String currentTenantIdPropertyType) {
         sharedSchemaContextRequest.setCurrentTenantIdPropertyType(currentTenantIdPropertyType);
@@ -122,18 +122,25 @@ public class DefaultSharedSchemaContextBuilder {
 
     /**
      * Setting the name of the property that stores the current tenant identifier
+     * @param currentTenantIdProperty name of the property that stores the current tenant identifier
+     * @return builder object for which method was invoked
      * @see SharedSchemaContextRequest#currentTenantIdProperty
      * @see GetCurrentTenantIdFunctionDefinitionEnricher
      * @see SetCurrentTenantIdFunctionDefinitionEnricher
      * @see TenantColumnSQLDefinitionsEnricher
-     * @param currentTenantIdProperty name of the property that stores the current tenant identifier
-     * @return builder object for which method was invoked
      */
     public DefaultSharedSchemaContextBuilder setCurrentTenantIdProperty(String currentTenantIdProperty) {
         sharedSchemaContextRequest.setCurrentTenantIdProperty(currentTenantIdProperty);
         return this;
     }
 
+    /**
+     * Setting the name of function that returns current tenant identifier
+     * @param getCurrentTenantIdFunctionName name of function that returns current tenant identifier
+     * @return builder object for which method was invoked
+     * @see SharedSchemaContextRequest#getCurrentTenantIdFunctionName
+     * @see GetCurrentTenantIdFunctionDefinitionEnricher
+     */
     public DefaultSharedSchemaContextBuilder setGetCurrentTenantIdFunctionName(String getCurrentTenantIdFunctionName) {
         sharedSchemaContextRequest.setGetCurrentTenantIdFunctionName(getCurrentTenantIdFunctionName);
         return this;
