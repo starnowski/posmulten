@@ -32,6 +32,10 @@ public class SharedSchemaContextRequest implements Cloneable{
 
     private String defaultSchema;
     private String currentTenantIdProperty = "posmulten.tenant_id";
+    /**
+     * Type of column that stores the tenant identifier.
+     * Default value is "VARCHAR(255)".
+     */
     private String currentTenantIdPropertyType = "VARCHAR(255)";
     private String getCurrentTenantIdFunctionName;
     private String setCurrentTenantIdFunctionName;
