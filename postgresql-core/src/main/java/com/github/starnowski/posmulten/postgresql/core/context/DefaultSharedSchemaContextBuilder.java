@@ -116,6 +116,13 @@ public class DefaultSharedSchemaContextBuilder {
         return this;
     }
 
+    /**
+     * Setting the name of the property that stores the current tenant identifier
+     * @see GetCurrentTenantIdFunctionDefinitionEnricher
+     * @see SetCurrentTenantIdFunctionDefinitionEnricher
+     * @param currentTenantIdProperty name of the property that stores the current tenant identifier
+     * @return builder object for which method was invoked
+     */
     public DefaultSharedSchemaContextBuilder setCurrentTenantIdProperty(String currentTenantIdProperty) {
         sharedSchemaContextRequest.setCurrentTenantIdProperty(currentTenantIdProperty);
         return this;
