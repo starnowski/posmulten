@@ -88,7 +88,7 @@ public class DefaultSharedSchemaContextBuilder {
     }
 
     /**
-     * setting the {@link #enrichers} collection
+     * Setting the {@link #enrichers} collection
      * @param enrichers new enrichers lists
      * @return builder object for which method was invoked
      */
@@ -105,6 +105,12 @@ public class DefaultSharedSchemaContextBuilder {
         return getSharedSchemaContextRequestCopyOrNull(sharedSchemaContextRequest);
     }
 
+    /**
+     * Setting the type of column that stores the tenant identifier
+     * @see SharedSchemaContextRequest#currentTenantIdPropertyType
+     * @param currentTenantIdPropertyType type of column that stores the tenant identifier
+     * @return builder object for which method was invoked
+     */
     public DefaultSharedSchemaContextBuilder setCurrentTenantIdPropertyType(String currentTenantIdPropertyType) {
         sharedSchemaContextRequest.setCurrentTenantIdPropertyType(currentTenantIdPropertyType);
         return this;
