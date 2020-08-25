@@ -135,7 +135,7 @@ public class DefaultSharedSchemaContextBuilder {
     }
 
     /**
-     * Setting the name of function that returns current tenant identifier
+     * Setting the name of the function that returns current tenant identifier
      * @param getCurrentTenantIdFunctionName name of function that returns current tenant identifier
      * @return builder object for which method was invoked
      * @see SharedSchemaContextRequest#getCurrentTenantIdFunctionName
@@ -146,6 +146,13 @@ public class DefaultSharedSchemaContextBuilder {
         return this;
     }
 
+    /**
+     * Setting the name of the function that set current tenant identifier
+     * @param setCurrentTenantIdFunctionName name of the function that set current tenant identifier
+     * @return builder object for which method was invoked
+     * @see SharedSchemaContextRequest#setCurrentTenantIdFunctionName
+     * @see SetCurrentTenantIdFunctionDefinitionEnricher
+     */
     public DefaultSharedSchemaContextBuilder setSetCurrentTenantIdFunctionName(String setCurrentTenantIdFunctionName) {
         sharedSchemaContextRequest.setSetCurrentTenantIdFunctionName(setCurrentTenantIdFunctionName);
         return this;
