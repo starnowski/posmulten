@@ -108,6 +108,10 @@ public class DefaultSharedSchemaContextBuilder {
     /**
      * Setting the type of column that stores the tenant identifier
      * @see SharedSchemaContextRequest#currentTenantIdPropertyType
+     * @see GetCurrentTenantIdFunctionDefinitionEnricher
+     * @see SetCurrentTenantIdFunctionDefinitionEnricher
+     * @see TenantColumnSQLDefinitionsEnricher
+     * @see TenantHasAuthoritiesFunctionDefinitionEnricher
      * @param currentTenantIdPropertyType type of column that stores the tenant identifier
      * @return builder object for which method was invoked
      */
@@ -118,8 +122,10 @@ public class DefaultSharedSchemaContextBuilder {
 
     /**
      * Setting the name of the property that stores the current tenant identifier
+     * @see SharedSchemaContextRequest#currentTenantIdProperty
      * @see GetCurrentTenantIdFunctionDefinitionEnricher
      * @see SetCurrentTenantIdFunctionDefinitionEnricher
+     * @see TenantColumnSQLDefinitionsEnricher
      * @param currentTenantIdProperty name of the property that stores the current tenant identifier
      * @return builder object for which method was invoked
      */
