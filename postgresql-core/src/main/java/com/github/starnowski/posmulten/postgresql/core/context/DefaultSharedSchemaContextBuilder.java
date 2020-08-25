@@ -79,15 +79,28 @@ public class DefaultSharedSchemaContextBuilder {
         return context;
     }
 
+    /**
+     *
+     * @return copy of the {@link #enrichers} collection
+     */
     public List<AbstractSharedSchemaContextEnricher> getEnrichersCopy() {
         return enrichers == null ? new ArrayList<>() : new ArrayList<>(enrichers);
     }
 
+    /**
+     * setting the {@link #enrichers} collection
+     * @param enrichers new enrichers lists
+     * @return builder object for which method was invoked
+     */
     public DefaultSharedSchemaContextBuilder setEnrichers(List<AbstractSharedSchemaContextEnricher> enrichers) {
         this.enrichers = enrichers;
         return this;
     }
 
+    /**
+     *
+     * @return copy of the {@link #sharedSchemaContextRequest} property
+     */
     public SharedSchemaContextRequest getSharedSchemaContextRequestCopy() {
         return getSharedSchemaContextRequestCopyOrNull(sharedSchemaContextRequest);
     }
