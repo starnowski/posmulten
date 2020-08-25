@@ -158,6 +158,13 @@ public class DefaultSharedSchemaContextBuilder {
         return this;
     }
 
+    /**
+     * Setting the name of the function that checks if passed identifier is equal to the current tenant identifier
+     * @param equalsCurrentTenantIdentifierFunctionName name of the function that checks if passed identifier is equal to the current tenant identifier
+     * @return builder object for which method was invoked
+     * @see SharedSchemaContextRequest#equalsCurrentTenantIdentifierFunctionName
+     * @see TenantHasAuthoritiesFunctionDefinitionEnricher
+     */
     public DefaultSharedSchemaContextBuilder setEqualsCurrentTenantIdentifierFunctionName(String equalsCurrentTenantIdentifierFunctionName) {
         sharedSchemaContextRequest.setEqualsCurrentTenantIdentifierFunctionName(equalsCurrentTenantIdentifierFunctionName);
         return this;
