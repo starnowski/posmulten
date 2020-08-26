@@ -21,9 +21,7 @@ import org.testng.annotations.Test;
 import static com.github.starnowski.posmulten.postgresql.core.functional.tests.TestApplication.CLEAR_DATABASE_SCRIPT_PATH;
 import static com.github.starnowski.posmulten.postgresql.core.rls.DefaultRLSPolicyProducerParameters.builder;
 import static com.github.starnowski.posmulten.postgresql.core.rls.PermissionCommandPolicyEnum.ALL;
-import static com.github.starnowski.posmulten.postgresql.test.utils.TestUtils.VALID_CURRENT_TENANT_ID_PROPERTY_NAME;
-import static com.github.starnowski.posmulten.postgresql.test.utils.TestUtils.isAnyRecordExists;
-import static com.github.starnowski.posmulten.postgresql.test.utils.TestUtils.selectAndReturnFirstRecordAsBooleanWithSettingCurrentTenantId;
+import static com.github.starnowski.posmulten.postgresql.test.utils.TestUtils.*;
 import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -147,7 +145,16 @@ public abstract class AbstractCreateRLSForSingleTableTest extends TestNGSpringCo
         assertTrue(selectAndReturnFirstRecordAsBooleanWithSettingCurrentTenantId(ownerJdbcTemplate, format("SELECT EXISTS ( SELECT 1 FROM %2$s WHERE id = %1$d ) ;", user.getId(), getUsersTableReference()), setCurrentTenantIdFunctionDefinition.generateStatementThatSetTenant(user.getTenantId())), "The SELECT statement should return records for current tenant");
     }
 
-    @Test(dataProvider = "userData", dependsOnMethods = {"tryToSelectDataFromUserTableAsSameTenant"}, testName = "try to update data in the users table assigned to the different tenant than currently set", description = "test case assumes that row level security for users table is not going to allow to update data in the users table assigned to the different tenant than currently set")
+    @Test(dataProvider = "userData", dependsOnMethods = {"tryToSelectDataFromUserTableAsSameTenant"})
+    public void selectAllShouldReturnOnlyRecordsThatBelongsToCurrentTenant(Object[] parameters)
+    {
+        User user = (User) parameters[0];
+        int numberOfAllRecordsInUserTable = countRowsInTable(getUsersTableReference());
+        Long numberOfAllRecordsInUserTableForCurrentTenant = selectAndReturnFirstRecordAsLongWithSettingCurrentTenantId(ownerJdbcTemplate, format("SELECT COUNT(0) FROM %1$s;", getUsersTableReference()), setCurrentTenantIdFunctionDefinition.generateStatementThatSetTenant(user.getTenantId()));
+        assertThat(numberOfAllRecordsInUserTableForCurrentTenant).isGreaterThan(0).isLessThan(numberOfAllRecordsInUserTable);
+    }
+
+    @Test(dataProvider = "userData", dependsOnMethods = {"selectAllShouldReturnOnlyRecordsThatBelongsToCurrentTenant"}, testName = "try to update data in the users table assigned to the different tenant than currently set", description = "test case assumes that row level security for users table is not going to allow to update data in the users table assigned to the different tenant than currently set")
     public void tryToUpdateDataInUserTableAsDifferentTenant(User user, String differentTenant)
     {
         String updatedName = "[UPDATE_NAME]" + user.getName();
@@ -188,7 +195,7 @@ public abstract class AbstractCreateRLSForSingleTableTest extends TestNGSpringCo
     }
 
     @Override
-    @Test(dependsOnMethods = { "tryToInsertDataIntoUserTableAsDifferentTenant", "insertDataIntoUserTableAsCurrentTenant", "tryToSelectDataFromUserTableAsDifferentTenant", "tryToSelectDataFromUserTableAsSameTenant", "tryToUpdateDataInUserTableAsDifferentTenant", "updateDataInUserTableAsDifferentTenant", "tryToDeleteDataFromUserTableAsDifferentTenant", "deleteDataFromUserTableAsDifferentTenant" }, alwaysRun = true)
+    @Test(dependsOnMethods = { "tryToInsertDataIntoUserTableAsDifferentTenant", "insertDataIntoUserTableAsCurrentTenant", "tryToSelectDataFromUserTableAsDifferentTenant", "tryToSelectDataFromUserTableAsSameTenant", "selectAllShouldReturnOnlyRecordsThatBelongsToCurrentTenant", "tryToUpdateDataInUserTableAsDifferentTenant", "updateDataInUserTableAsDifferentTenant", "tryToDeleteDataFromUserTableAsDifferentTenant", "deleteDataFromUserTableAsDifferentTenant" }, alwaysRun = true)
     public void dropAllSQLDefinitions() {
         super.dropAllSQLDefinitions();
     }
