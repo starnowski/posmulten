@@ -37,7 +37,13 @@ public class SharedSchemaContextRequest implements Cloneable{
      * Default value is "VARCHAR(255)".
      */
     private String currentTenantIdPropertyType = "VARCHAR(255)";
+    /**
+     * Name of the function that returns current tenant identifier.
+     */
     private String getCurrentTenantIdFunctionName;
+    /**
+     * Name of the function that set current tenant identifier.
+     */
     private String setCurrentTenantIdFunctionName;
     private String equalsCurrentTenantIdentifierFunctionName;
     private String tenantHasAuthoritiesFunctionName;
