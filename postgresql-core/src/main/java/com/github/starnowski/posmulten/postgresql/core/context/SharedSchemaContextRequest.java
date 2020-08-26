@@ -38,12 +38,12 @@ public class SharedSchemaContextRequest implements Cloneable{
      */
     private String currentTenantIdPropertyType = "VARCHAR(255)";
     /**
-     * Name of the function that returns current tenant identifier.
+     * Name of the function that returns the current tenant identifier.
      * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.GetCurrentTenantIdFunctionDefinitionEnricher
      */
     private String getCurrentTenantIdFunctionName;
     /**
-     * Name of the function that set current tenant identifier.
+     * Name of the function that set the current tenant identifier.
      * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.SetCurrentTenantIdFunctionDefinitionEnricher
      */
     private String setCurrentTenantIdFunctionName;
