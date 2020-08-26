@@ -145,7 +145,7 @@ public abstract class AbstractCreateRLSForSingleTableTest extends TestNGSpringCo
         assertTrue(selectAndReturnFirstRecordAsBooleanWithSettingCurrentTenantId(ownerJdbcTemplate, format("SELECT EXISTS ( SELECT 1 FROM %2$s WHERE id = %1$d ) ;", user.getId(), getUsersTableReference()), setCurrentTenantIdFunctionDefinition.generateStatementThatSetTenant(user.getTenantId())), "The SELECT statement should return records for current tenant");
     }
 
-    @Test(dataProvider = "userData", dependsOnMethods = {"tryToSelectDataFromUserTableAsSameTenant"})
+    @Test(dataProvider = "userData", dependsOnMethods = {"tryToSelectDataFromUserTableAsSameTenant"}, testName = "counting statement should only proceed records that belongs to current tenant", description = "test case assumes that row level security for users table will cause that the counting statement should only proceed records that belongs to current tenant")
     public void selectAllShouldReturnOnlyRecordsThatBelongsToCurrentTenant(Object[] parameters)
     {
         User user = (User) parameters[0];
