@@ -45,6 +45,9 @@ public class SharedSchemaContextRequest implements Cloneable{
      * Name of the function that set current tenant identifier.
      */
     private String setCurrentTenantIdFunctionName;
+    /**
+     * Name of the function that checks if passed identifier is equal to the current tenant identifier.
+     */
     private String equalsCurrentTenantIdentifierFunctionName;
     private String tenantHasAuthoritiesFunctionName;
     private String defaultTenantIdColumn = "tenant_id";
