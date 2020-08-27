@@ -170,6 +170,13 @@ public class DefaultSharedSchemaContextBuilder {
         return this;
     }
 
+    /**
+     * Setting the name of the function that checks if the current tenant is allowed to process database table row.
+     * @param tenantHasAuthoritiesFunctionName name of the function that checks if the current tenant is allowed to process database table row
+     * @return builder object for which method was invoked
+     * @see SharedSchemaContextRequest#tenantHasAuthoritiesFunctionName
+     * @see TenantHasAuthoritiesFunctionDefinitionEnricher
+     */
     public DefaultSharedSchemaContextBuilder setTenantHasAuthoritiesFunctionName(String tenantHasAuthoritiesFunctionName) {
         sharedSchemaContextRequest.setTenantHasAuthoritiesFunctionName(tenantHasAuthoritiesFunctionName);
         return this;
