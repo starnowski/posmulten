@@ -26,7 +26,7 @@ package com.github.starnowski.posmulten.postgresql.core.context;
 import java.util.Objects;
 import java.util.Set;
 
-public class SameTenantConstraintForForeignKey {
+public final class SameTenantConstraintForForeignKey {
 
     private final TableKey mainTable;
     private final TableKey foreignKeyTable;
