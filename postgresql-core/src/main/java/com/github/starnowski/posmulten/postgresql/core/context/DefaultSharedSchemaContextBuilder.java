@@ -182,6 +182,13 @@ public class DefaultSharedSchemaContextBuilder {
         return this;
     }
 
+    /**
+     * Marking specific table from defined default schema for builder ({@link #defaultSchema}) as table where a column for tenant identifier should be added.
+     * @param table name of table where a column for tenant identifier should be added.
+     * @return builder object for which method was invoked
+     * @see SharedSchemaContextRequest#createTenantColumnTableLists
+     * @see TenantColumnSQLDefinitionsEnricher
+     */
     public DefaultSharedSchemaContextBuilder createTenantColumnForTable(String table)
     {
         TableKey tableKey = new TableKey(table, this.defaultSchema);
