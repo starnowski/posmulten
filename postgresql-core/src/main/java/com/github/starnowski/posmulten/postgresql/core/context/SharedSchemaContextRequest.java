@@ -52,6 +52,10 @@ public class SharedSchemaContextRequest implements Cloneable{
      * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.TenantHasAuthoritiesFunctionDefinitionEnricher
      */
     private String equalsCurrentTenantIdentifierFunctionName;
+    /**
+     * Name of the function that checks if the current tenant is allowed to process database table row.
+     * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.TenantHasAuthoritiesFunctionDefinitionEnricher
+     */
     private String tenantHasAuthoritiesFunctionName;
     private String defaultTenantIdColumn = "tenant_id";
     private Map<TableKey, AbstractTableColumns> tableColumnsList = new HashMap<>();
