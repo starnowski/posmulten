@@ -212,6 +212,13 @@ public class DefaultSharedSchemaContextBuilder {
         return this;
     }
 
+    /**
+     * Setting the default name for the column that stores the tenant identifier for table row.
+     * @param defaultTenantIdColumn name for column that stores the tenant identifier for table row
+     * @return builder object for which method was invoked
+     * @see SharedSchemaContextRequest#defaultTenantIdColumn
+     * @see TableRLSPolicyEnricher
+     */
     public DefaultSharedSchemaContextBuilder setDefaultTenantIdColumn(String defaultTenantIdColumn) {
         sharedSchemaContextRequest.setDefaultTenantIdColumn(defaultTenantIdColumn);
         return this;
