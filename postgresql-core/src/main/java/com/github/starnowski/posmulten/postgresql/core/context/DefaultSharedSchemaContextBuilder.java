@@ -205,6 +205,7 @@ public class DefaultSharedSchemaContextBuilder {
      * @param forceRowLevelSecurityForTableOwner true if builder should force row level security for table owner
      * @return builder object for which method was invoked
      * @see SharedSchemaContextRequest#forceRowLevelSecurityForTableOwner
+     * @see TableRLSSettingsSQLDefinitionsEnricher
      */
     public DefaultSharedSchemaContextBuilder setForceRowLevelSecurityForTableOwner(boolean forceRowLevelSecurityForTableOwner) {
         sharedSchemaContextRequest.setForceRowLevelSecurityForTableOwner(forceRowLevelSecurityForTableOwner);
