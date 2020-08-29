@@ -224,6 +224,13 @@ public class DefaultSharedSchemaContextBuilder {
         return this;
     }
 
+    /**
+     * Setting the default grantee for which the row level security should be added.
+     * @param grantee grantee for which the row level security should be added
+     * @return builder object for which method was invoked
+     * @see SharedSchemaContextRequest#grantee
+     * @see TableRLSPolicyEnricher
+     */
     public DefaultSharedSchemaContextBuilder setGrantee(String grantee) {
         sharedSchemaContextRequest.setGrantee(grantee);
         return this;

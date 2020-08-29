@@ -72,13 +72,17 @@ public class SharedSchemaContextRequest implements Cloneable{
      */
     private Set<TableKey> createTenantColumnTableLists = new HashSet<>();
     /**
-     * Toogle based on which builder is going to <a href="https://www.postgresql.org/docs/9.6/ddl-rowsecurity.html">force row level security for table owner</a>
-     * ({@value true}) or not ({@value false}). Default values is {@value false}.
+     * The toggle, based on which builder is going to <a href="https://www.postgresql.org/docs/9.6/ddl-rowsecurity.html">force row level security for table owner</a>
+     * (true) or not (false). The default value is false.
      * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.TableRLSSettingsSQLDefinitionsEnricher
      */
     private boolean forceRowLevelSecurityForTableOwner;
     private Map<TableKey, AbstractTableRLSPolicyProperties> tableRLSPolicies = new HashMap<>();
     private Map<SameTenantConstraintForForeignKey, AbstractSameTenantConstraintForForeignKeyProperties> sameTenantConstraintForForeignKeyProperties = new HashMap<>();
+    /**
+     * Default grantee for which the row level security should be added.
+     * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.TableRLSPolicyEnricher
+     */
     private String grantee;
     private Map<TableKey, String> functionThatChecksIfRecordExistsInTableNames = new HashMap<>();
 
