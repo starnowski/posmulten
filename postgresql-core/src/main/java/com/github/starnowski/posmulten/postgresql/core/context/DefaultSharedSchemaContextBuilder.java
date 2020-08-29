@@ -34,16 +34,12 @@ import static java.util.Arrays.asList;
 
 /**
  * The builder component responsible for creation of object of type {@link AbstractSharedSchemaContext}.
- * Component create result object based on properties {@link #defaultSchema} and {@link #sharedSchemaContextRequest}.
+ * Component create result object based on property {@link #sharedSchemaContextRequest}.
  * For setting values of results project the builder component use the enricher components of type {@link AbstractSharedSchemaContextEnricher},
  * specified in {@link #enrichers} collection.
  */
 public class DefaultSharedSchemaContextBuilder {
 
-    /**
-     * Name of default schema used during building process
-     */
-    private final String defaultSchema;
     /**
      * Collection that stores objects of type {@link AbstractSharedSchemaContextEnricher} used for enriching result object ({@link #build()} method).
      */
@@ -55,12 +51,11 @@ public class DefaultSharedSchemaContextBuilder {
      * @param defaultSchema name of default schema used during building process
      */
     public DefaultSharedSchemaContextBuilder(String defaultSchema) {
-        this.defaultSchema = defaultSchema;
         this.sharedSchemaContextRequest.setDefaultSchema(defaultSchema);
     }
 
     /**
-     * Builds shared schema context based on properties {@link #defaultSchema} and {@link #sharedSchemaContextRequest}.
+     * Builds shared schema context based on properties {@link SharedSchemaContextRequest#defaultSchema} and {@link #sharedSchemaContextRequest}.
      * Context is enricher in the loop by each enricher from {@link #enrichers}  collection by an order which they were
      * added into the collection.
      * @return object of type {@link AbstractSharedSchemaContext}
@@ -183,7 +178,7 @@ public class DefaultSharedSchemaContextBuilder {
     }
 
     /**
-     * Marking specific table from defined default schema for builder ({@link #defaultSchema}) as table where a column for tenant identifier should be added.
+     * Marking specific table from defined default schema for builder ({@link SharedSchemaContextRequest#defaultSchema}) as table where a column for tenant identifier should be added.
      * @param table name of table where a column for tenant identifier should be added.
      * @return builder object for which method was invoked
      * @see SharedSchemaContextRequest#createTenantColumnTableLists
@@ -191,14 +186,14 @@ public class DefaultSharedSchemaContextBuilder {
      */
     public DefaultSharedSchemaContextBuilder createTenantColumnForTable(String table)
     {
-        TableKey tableKey = new TableKey(table, this.defaultSchema);
+        TableKey tableKey = new TableKey(table, sharedSchemaContextRequest.getDefaultSchema());
         sharedSchemaContextRequest.getCreateTenantColumnTableLists().add(tableKey);
         return this;
     }
 
     public DefaultSharedSchemaContextBuilder createRLSPolicyForColumn(String table, Map<String, String> primaryKeyColumnsList, String tenantColumnName, String rlsPolicyName)
     {
-        TableKey tableKey = new TableKey(table, this.defaultSchema);
+        TableKey tableKey = new TableKey(table, sharedSchemaContextRequest.getDefaultSchema());
         sharedSchemaContextRequest.getTableColumnsList().put(tableKey, new DefaultTableColumns(tenantColumnName, primaryKeyColumnsList));
         sharedSchemaContextRequest.getTableRLSPolicies().put(tableKey, new DefaultTableRLSPolicyProperties(rlsPolicyName));
         return this;
@@ -227,12 +222,12 @@ public class DefaultSharedSchemaContextBuilder {
     }
 
     public DefaultSharedSchemaContextBuilder createSameTenantConstraintForForeignKey(String mainTable, String foreignKeyTable, Map<String, String> foreignKeyPrimaryKeyColumnsMappings, String constraintName) {
-        sharedSchemaContextRequest.getSameTenantConstraintForForeignKeyProperties().put(new SameTenantConstraintForForeignKey(new TableKey(mainTable, defaultSchema), new TableKey(foreignKeyTable, defaultSchema), foreignKeyPrimaryKeyColumnsMappings.keySet()), new SameTenantConstraintForForeignKeyProperties(constraintName, foreignKeyPrimaryKeyColumnsMappings));
+        sharedSchemaContextRequest.getSameTenantConstraintForForeignKeyProperties().put(new SameTenantConstraintForForeignKey(new TableKey(mainTable, sharedSchemaContextRequest.getDefaultSchema()), new TableKey(foreignKeyTable, sharedSchemaContextRequest.getDefaultSchema()), foreignKeyPrimaryKeyColumnsMappings.keySet()), new SameTenantConstraintForForeignKeyProperties(constraintName, foreignKeyPrimaryKeyColumnsMappings));
         return this;
     }
 
     public DefaultSharedSchemaContextBuilder setNameForFunctionThatChecksIfRecordExistsInTable(String recordTable, String functionName) {
-        sharedSchemaContextRequest.getFunctionThatChecksIfRecordExistsInTableNames().put(new TableKey(recordTable, defaultSchema), functionName);
+        sharedSchemaContextRequest.getFunctionThatChecksIfRecordExistsInTableNames().put(new TableKey(recordTable, sharedSchemaContextRequest.getDefaultSchema()), functionName);
         return this;
     }
 
