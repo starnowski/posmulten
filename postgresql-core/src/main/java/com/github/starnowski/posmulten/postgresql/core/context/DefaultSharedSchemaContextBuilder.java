@@ -191,6 +191,19 @@ public class DefaultSharedSchemaContextBuilder {
         return this;
     }
 
+    /**
+     * Register table that should have create row level security policy.
+     * Table belongs to defined default schema for builder ({@link SharedSchemaContextRequest#defaultSchema}).
+     * @param table name of table
+     * @param primaryKeyColumnsList map of primary key columns and their types in table. Column name is the map key and column type is its value
+     * @param tenantColumnName name of column that stores tenant identifier in table
+     * @param rlsPolicyName name of row level security policy
+     * @return builder object for which method was invoked
+     * @see SharedSchemaContextRequest#tableColumnsList
+     * @see SharedSchemaContextRequest#tableRLSPolicies
+     * @see TableRLSPolicyEnricher
+     * @see TableRLSSettingsSQLDefinitionsEnricher
+     */
     public DefaultSharedSchemaContextBuilder createRLSPolicyForColumn(String table, Map<String, String> primaryKeyColumnsList, String tenantColumnName, String rlsPolicyName)
     {
         TableKey tableKey = new TableKey(table, sharedSchemaContextRequest.getDefaultSchema());
