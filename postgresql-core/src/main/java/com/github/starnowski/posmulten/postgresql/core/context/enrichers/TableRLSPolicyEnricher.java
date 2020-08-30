@@ -25,7 +25,7 @@ package com.github.starnowski.posmulten.postgresql.core.context.enrichers;
 
 import com.github.starnowski.posmulten.postgresql.core.context.*;
 
-public class TableRLSPolicyEnricher implements AbstractSharedSchemaContextEnricher {
+public class TableRLSPolicyEnricher implements ISharedSchemaContextEnricher {
 
     private TableRLSPolicySQLDefinitionsProducer tableRLSPolicySQLDefinitionsProducer = new TableRLSPolicySQLDefinitionsProducer();
 

@@ -30,7 +30,7 @@ import java.util.Set;
 
 import static java.lang.String.format;
 
-public class TenantColumnSQLDefinitionsEnricher implements AbstractSharedSchemaContextEnricher {
+public class TenantColumnSQLDefinitionsEnricher implements ISharedSchemaContextEnricher {
 
     private SingleTenantColumnSQLDefinitionsProducer singleTenantColumnSQLDefinitionsProducer = new SingleTenantColumnSQLDefinitionsProducer();
 

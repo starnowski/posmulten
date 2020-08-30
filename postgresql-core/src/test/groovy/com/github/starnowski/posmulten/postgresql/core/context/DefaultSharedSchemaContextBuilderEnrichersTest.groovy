@@ -20,9 +20,9 @@ class DefaultSharedSchemaContextBuilderEnrichersTest extends Specification {
             ISharedSchemaContext firstSharedSchemaContext = Mock(ISharedSchemaContext)
             ISharedSchemaContext secondSharedSchemaContext = Mock(ISharedSchemaContext)
             ISharedSchemaContext thirdSharedSchemaContext = Mock(ISharedSchemaContext)
-            AbstractSharedSchemaContextEnricher firstSharedSchemaContextEnricher = Mock(AbstractSharedSchemaContextEnricher)
-            AbstractSharedSchemaContextEnricher secondSharedSchemaContextEnricher = Mock(AbstractSharedSchemaContextEnricher)
-            AbstractSharedSchemaContextEnricher thirdSharedSchemaContextEnricher = Mock(AbstractSharedSchemaContextEnricher)
+            ISharedSchemaContextEnricher firstSharedSchemaContextEnricher = Mock(ISharedSchemaContextEnricher)
+            ISharedSchemaContextEnricher secondSharedSchemaContextEnricher = Mock(ISharedSchemaContextEnricher)
+            ISharedSchemaContextEnricher thirdSharedSchemaContextEnricher = Mock(ISharedSchemaContextEnricher)
             DefaultSharedSchemaContextBuilder builder = new DefaultSharedSchemaContextBuilder()
             builder.setEnrichers([firstSharedSchemaContextEnricher, secondSharedSchemaContextEnricher, thirdSharedSchemaContextEnricher])
 
@@ -60,8 +60,8 @@ class DefaultSharedSchemaContextBuilderEnrichersTest extends Specification {
         given:
             ISharedSchemaContext firstSharedSchemaContext = Mock(ISharedSchemaContext)
             ISharedSchemaContext secondSharedSchemaContext = Mock(ISharedSchemaContext)
-            AbstractSharedSchemaContextEnricher firstSharedSchemaContextEnricher = Mock(AbstractSharedSchemaContextEnricher)
-            AbstractSharedSchemaContextEnricher secondSharedSchemaContextEnricher = Mock(AbstractSharedSchemaContextEnricher)
+            ISharedSchemaContextEnricher firstSharedSchemaContextEnricher = Mock(ISharedSchemaContextEnricher)
+            ISharedSchemaContextEnricher secondSharedSchemaContextEnricher = Mock(ISharedSchemaContextEnricher)
             DefaultSharedSchemaContextBuilder builder = new DefaultSharedSchemaContextBuilder()
             builder.setEnrichers([firstSharedSchemaContextEnricher, secondSharedSchemaContextEnricher])
             def firstEnricherCapturedRequest = null

@@ -35,15 +35,15 @@ import static java.util.Arrays.asList;
 /**
  * The builder component responsible for creation of object of type {@link ISharedSchemaContext}.
  * Component create result object based on property {@link #sharedSchemaContextRequest}.
- * For setting values of results project the builder component use the enricher components of type {@link AbstractSharedSchemaContextEnricher},
+ * For setting values of results project the builder component use the enricher components of type {@link ISharedSchemaContextEnricher},
  * specified in {@link #enrichers} collection.
  */
 public class DefaultSharedSchemaContextBuilder {
 
     /**
-     * Collection that stores objects of type {@link AbstractSharedSchemaContextEnricher} used for enriching result object ({@link #build()} method).
+     * Collection that stores objects of type {@link ISharedSchemaContextEnricher} used for enriching result object ({@link #build()} method).
      */
-    private List<AbstractSharedSchemaContextEnricher> enrichers = asList(new GetCurrentTenantIdFunctionDefinitionEnricher(), new SetCurrentTenantIdFunctionDefinitionEnricher(), new TenantHasAuthoritiesFunctionDefinitionEnricher(), new TenantColumnSQLDefinitionsEnricher(), new TableRLSSettingsSQLDefinitionsEnricher(), new TableRLSPolicyEnricher(), new IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricher(), new IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher());
+    private List<ISharedSchemaContextEnricher> enrichers = asList(new GetCurrentTenantIdFunctionDefinitionEnricher(), new SetCurrentTenantIdFunctionDefinitionEnricher(), new TenantHasAuthoritiesFunctionDefinitionEnricher(), new TenantColumnSQLDefinitionsEnricher(), new TableRLSSettingsSQLDefinitionsEnricher(), new TableRLSPolicyEnricher(), new IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricher(), new IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher());
     private final SharedSchemaContextRequest sharedSchemaContextRequest = new SharedSchemaContextRequest();
 
     /**
@@ -64,9 +64,9 @@ public class DefaultSharedSchemaContextBuilder {
     public ISharedSchemaContext build() throws SharedSchemaContextBuilderException
     {
         ISharedSchemaContext context = new SharedSchemaContext();
-        List<AbstractSharedSchemaContextEnricher> enrichers  = getEnrichersCopy();
+        List<ISharedSchemaContextEnricher> enrichers  = getEnrichersCopy();
         SharedSchemaContextRequest sharedSchemaContextRequestCopy = getSharedSchemaContextRequestCopy();
-        for (AbstractSharedSchemaContextEnricher enricher : enrichers)
+        for (ISharedSchemaContextEnricher enricher : enrichers)
         {
             SharedSchemaContextRequest request = getSharedSchemaContextRequestCopyOrNull(sharedSchemaContextRequestCopy);
             context = enricher.enrich(context, request);
@@ -78,7 +78,7 @@ public class DefaultSharedSchemaContextBuilder {
      *
      * @return copy of the {@link #enrichers} collection
      */
-    public List<AbstractSharedSchemaContextEnricher> getEnrichersCopy() {
+    public List<ISharedSchemaContextEnricher> getEnrichersCopy() {
         return enrichers == null ? new ArrayList<>() : new ArrayList<>(enrichers);
     }
 
@@ -87,7 +87,7 @@ public class DefaultSharedSchemaContextBuilder {
      * @param enrichers new enrichers lists
      * @return builder object for which method was invoked
      */
-    public DefaultSharedSchemaContextBuilder setEnrichers(List<AbstractSharedSchemaContextEnricher> enrichers) {
+    public DefaultSharedSchemaContextBuilder setEnrichers(List<ISharedSchemaContextEnricher> enrichers) {
         this.enrichers = enrichers;
         return this;
     }
