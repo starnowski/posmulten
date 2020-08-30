@@ -44,7 +44,7 @@ public class TenantColumnSQLDefinitionsEnricher implements ISharedSchemaContextE
         String getCurrentTenantIdFunctionInvocation = context.getIGetCurrentTenantIdFunctionInvocationFactory().returnGetCurrentTenantIdFunctionInvocation();
         for (TableKey tableKey: tableThatRequireCreationOfTheTenantColumn)
         {
-            AbstractTableColumns tableColumns = request.getTableColumnsList().get(tableKey);
+            ITableColumns tableColumns = request.getTableColumnsList().get(tableKey);
             if (tableColumns == null)
             {
                 throw new MissingRLSPolicyDeclarationForTableException(tableKey, format("Missing RLS policy declaration for table %1$s in schema %2$s", tableKey.getTable(), tableKey.getSchema()));

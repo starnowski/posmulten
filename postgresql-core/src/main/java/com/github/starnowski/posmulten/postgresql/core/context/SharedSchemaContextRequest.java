@@ -71,12 +71,12 @@ public class SharedSchemaContextRequest implements Cloneable{
     /**
      * A map that stores information about columns that are required to creation of shared schema multi-tenancy strategy.
      * Information about columns are store for each table that required to have row level security policy.
-     * The table identifier ({@link TableKey}) is the map key and  information ({@link AbstractTableColumns}) about columns are its value.
+     * The table identifier ({@link TableKey}) is the map key and  information ({@link ITableColumns}) about columns are its value.
      * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricher
      * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.TableRLSPolicyEnricher
      * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.TenantColumnSQLDefinitionsEnricher
      */
-    private Map<TableKey, AbstractTableColumns> tableColumnsList = new HashMap<>();
+    private Map<TableKey, ITableColumns> tableColumnsList = new HashMap<>();
     /**
      * Collection that stores table identifiers ({@link TableKey}) for which a column for tenant identifier should be added.
      * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.TenantColumnSQLDefinitionsEnricher
@@ -183,7 +183,7 @@ public class SharedSchemaContextRequest implements Cloneable{
         this.defaultSchema = defaultSchema;
     }
 
-    public Map<TableKey, AbstractTableColumns> getTableColumnsList() {
+    public Map<TableKey, ITableColumns> getTableColumnsList() {
         return tableColumnsList;
     }
 

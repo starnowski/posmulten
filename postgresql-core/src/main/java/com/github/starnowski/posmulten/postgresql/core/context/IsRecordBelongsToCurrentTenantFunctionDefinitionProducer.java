@@ -32,7 +32,7 @@ public class IsRecordBelongsToCurrentTenantFunctionDefinitionProducer {
 
     private IsRecordBelongsToCurrentTenantProducer isRecordBelongsToCurrentTenantProducer = new IsRecordBelongsToCurrentTenantProducer();
 
-    public IsRecordBelongsToCurrentTenantFunctionDefinition produce(TableKey tableKey, AbstractTableColumns tableColumns, IGetCurrentTenantIdFunctionInvocationFactory iGetCurrentTenantIdFunctionInvocationFactory, String functionName, String schema)
+    public IsRecordBelongsToCurrentTenantFunctionDefinition produce(TableKey tableKey, ITableColumns tableColumns, IGetCurrentTenantIdFunctionInvocationFactory iGetCurrentTenantIdFunctionInvocationFactory, String functionName, String schema)
     {
         AbstractIsRecordBelongsToCurrentTenantProducerParameters isRecordBelongsToCurrentTenantProducerParameters = new IsRecordBelongsToCurrentTenantProducerParameters.Builder()
                 .withSchema(schema)

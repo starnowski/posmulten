@@ -28,7 +28,7 @@ import java.util.Map;
 /**
  * Type contains information about table columns required for creation of row level security policy for table.
  */
-public interface AbstractTableColumns {
+public interface ITableColumns {
 
     /**
      * Method returns name of column that stores tenant identifier.
