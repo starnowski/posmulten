@@ -84,6 +84,11 @@ public class SharedSchemaContextRequest implements Cloneable{
      * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.TableRLSPolicyEnricher
      */
     private String grantee;
+    /**
+     * A map that stores the names for a function that checks if there is a record with a specified identifier that is
+     * assigned to the current tenant for the specified table. The map key is a table identifier ({@link TableKey}), and the
+     * value is the function name.
+     */
     private Map<TableKey, String> functionThatChecksIfRecordExistsInTableNames = new HashMap<>();
 
     public String getDefaultTenantIdColumn() {
