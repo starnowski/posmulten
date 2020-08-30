@@ -31,9 +31,12 @@ import java.util.Set;
 public class SharedSchemaContextRequest implements Cloneable{
 
     /**
-     * Name of default schema used during building process
+     * Name of default schema used during building process.
      */
     private String defaultSchema;
+    /**
+     * Name of the property that stores the current tenant identifier.
+     */
     private String currentTenantIdProperty = "posmulten.tenant_id";
     /**
      * Type of column that stores the tenant identifier.
