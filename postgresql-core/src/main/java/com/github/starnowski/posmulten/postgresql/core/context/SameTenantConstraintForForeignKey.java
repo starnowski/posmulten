@@ -26,6 +26,11 @@ package com.github.starnowski.posmulten.postgresql.core.context;
 import java.util.Objects;
 import java.util.Set;
 
+/**
+ * Type used to identifier request for creation of constraint that checks if foreign key in the main table refers to record
+ * that exists in the foreign table and which belongs to the current tenant.
+ * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher
+ */
 public final class SameTenantConstraintForForeignKey {
 
     /**
