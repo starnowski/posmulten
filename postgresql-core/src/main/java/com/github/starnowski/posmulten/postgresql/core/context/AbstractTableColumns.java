@@ -25,9 +25,21 @@ package com.github.starnowski.posmulten.postgresql.core.context;
 
 import java.util.Map;
 
+/**
+ * Type contains information about table columns required for creation of row level security policy for table.
+ */
 public interface AbstractTableColumns {
 
+    /**
+     * Method returns name of column that stores tenant identifier.
+     * @return name of column that stores tenant identifier
+     */
     String getTenantColumnName();
 
+    /**
+     * Method returns map of primary key columns and its types in table.
+     * The column name is the map key and the column type is its value.
+     * @return map of primary key columns and its types in table
+     */
     Map<String, String> getIdentityColumnNameAndTypeMap();
 }
