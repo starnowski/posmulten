@@ -28,8 +28,17 @@ import java.util.Set;
 
 public final class SameTenantConstraintForForeignKey {
 
+    /**
+     * Table identifier that has foreign key columns.
+     */
     private final TableKey mainTable;
+    /**
+     * Table identifier that has primary key columns.
+     */
     private final TableKey foreignKeyTable;
+    /**
+     * The set of columns names of the foreign key.
+     */
     private final Set<String> foreignKeyColumns;
 
     public SameTenantConstraintForForeignKey(TableKey mainTable, TableKey foreignKeyTable, Set<String> foreignKeyColumns) {
