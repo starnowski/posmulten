@@ -23,7 +23,14 @@
  */
 package com.github.starnowski.posmulten.postgresql.core.context;
 
+/**
+ * Type describes the row level security policy properties for table.
+ */
 public interface AbstractTableRLSPolicyProperties {
 
+    /**
+     * The method returns name of the row level security policy for table.
+     * @return name of the row level security policy for table
+     */
     String getPolicyName();
 }

@@ -25,9 +25,18 @@ package com.github.starnowski.posmulten.postgresql.core.context;
 
 import java.util.Objects;
 
+/**
+ * Type represents table object in specific schema.
+ */
 public final class TableKey {
 
+    /**
+     * Name of table.
+     */
     private final String table;
+    /**
+     * Name of schema.
+     */
     private final String schema;
 
     public TableKey(String table, String schema) {
