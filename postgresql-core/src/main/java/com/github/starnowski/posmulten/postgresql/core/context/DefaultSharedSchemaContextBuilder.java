@@ -249,6 +249,15 @@ public class DefaultSharedSchemaContextBuilder {
         return this;
     }
 
+    /**
+     * Register the request for creation of constraint that checks if foreign key in the main table refers to record
+     * that exists in the foreign table and which belongs to the current tenant.
+     * @param mainTable name of the main table that contains columns with foreign key
+     * @param foreignKeyTable name of the foreign table
+     * @param foreignKeyPrimaryKeyColumnsMappings map contains information about which foreign key column refers to specific primary key column. The foreign key column is the map key and the primary key column is its value.
+     * @param constraintName constraint name
+     * @return
+     */
     public DefaultSharedSchemaContextBuilder createSameTenantConstraintForForeignKey(String mainTable, String foreignKeyTable, Map<String, String> foreignKeyPrimaryKeyColumnsMappings, String constraintName) {
         sharedSchemaContextRequest.getSameTenantConstraintForForeignKeyProperties().put(new SameTenantConstraintForForeignKey(new TableKey(mainTable, sharedSchemaContextRequest.getDefaultSchema()), new TableKey(foreignKeyTable, sharedSchemaContextRequest.getDefaultSchema()), foreignKeyPrimaryKeyColumnsMappings.keySet()), new SameTenantConstraintForForeignKeyProperties(constraintName, foreignKeyPrimaryKeyColumnsMappings));
         return this;
