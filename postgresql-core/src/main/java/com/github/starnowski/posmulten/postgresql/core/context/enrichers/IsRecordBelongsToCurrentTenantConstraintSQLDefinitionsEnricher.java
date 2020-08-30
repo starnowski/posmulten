@@ -61,7 +61,7 @@ public class IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher impl
                         key.getForeignKeyTable().getTable(),
                         key.getForeignKeyTable().getSchema()));
             }
-            AbstractIsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducerParameters parameters = IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducerParameters.builder()
+            IIsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducerParameters parameters = IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducerParameters.builder()
                     .withConstraintName(requestProperties.getConstraintName())
                     .withTableKey(key.getMainTable())
                     .withIsRecordBelongsToCurrentTenantFunctionInvocationFactory(isRecordBelongsToCurrentTenantFunctionInvocationFactory)

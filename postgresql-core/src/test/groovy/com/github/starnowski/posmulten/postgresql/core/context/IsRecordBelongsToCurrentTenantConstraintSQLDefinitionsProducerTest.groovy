@@ -24,7 +24,7 @@ class IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducerTest extends
             IsRecordBelongsToCurrentTenantConstraintProducerParameters capturedParameters = null
             def sqlDefinition = Mock(SQLDefinition)
             def isRecordBelongsToCurrentTenantFunctionInvocationFactory = Mock(IsRecordBelongsToCurrentTenantFunctionInvocationFactory)
-            AbstractIsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducerParameters parameters =
+            IIsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducerParameters parameters =
                     builder()
                             .withTableKey(tableKey)
                             .withConstraintName(constraintName)
