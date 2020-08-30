@@ -25,7 +25,7 @@ package com.github.starnowski.posmulten.postgresql.core.context;
 
 import com.github.starnowski.posmulten.postgresql.core.rls.TenantHasAuthoritiesFunctionInvocationFactory;
 
-public interface AbstractTableRLSPolicySQLDefinitionsProducerParameters {
+public interface ITableRLSPolicySQLDefinitionsProducerParameters {
 
     String getGrantee();
 
