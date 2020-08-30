@@ -91,10 +91,10 @@ public class SharedSchemaContextRequest implements Cloneable{
     /**
      * A map that stores information that describes the row level security policy properties for tables.
      * Properties are store for each table that required to have row level security policy.
-     * The table identifier ({@link TableKey}) is the map key and the row level security policy properties ({@link AbstractTableRLSPolicyProperties}) are its value.
+     * The table identifier ({@link TableKey}) is the map key and the row level security policy properties ({@link ITableRLSPolicyProperties}) are its value.
      * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.TableRLSPolicyEnricher
      */
-    private Map<TableKey, AbstractTableRLSPolicyProperties> tableRLSPolicies = new HashMap<>();
+    private Map<TableKey, ITableRLSPolicyProperties> tableRLSPolicies = new HashMap<>();
     /**
      * A map that stores information that are required to the creation of constraint that checks if foreign key in the main table refers to record
      * that exists in the foreign table and which belongs to the current tenant.
@@ -207,7 +207,7 @@ public class SharedSchemaContextRequest implements Cloneable{
         this.grantee = grantee;
     }
 
-    public Map<TableKey, AbstractTableRLSPolicyProperties> getTableRLSPolicies() {
+    public Map<TableKey, ITableRLSPolicyProperties> getTableRLSPolicies() {
         return tableRLSPolicies;
     }
 
