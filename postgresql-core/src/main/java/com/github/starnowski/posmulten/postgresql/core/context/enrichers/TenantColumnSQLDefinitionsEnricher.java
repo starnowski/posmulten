@@ -35,7 +35,7 @@ public class TenantColumnSQLDefinitionsEnricher implements AbstractSharedSchemaC
     private SingleTenantColumnSQLDefinitionsProducer singleTenantColumnSQLDefinitionsProducer = new SingleTenantColumnSQLDefinitionsProducer();
 
     @Override
-    public AbstractSharedSchemaContext enrich(AbstractSharedSchemaContext context, SharedSchemaContextRequest request) throws MissingRLSPolicyDeclarationForTableException {
+    public ISharedSchemaContext enrich(ISharedSchemaContext context, SharedSchemaContextRequest request) throws MissingRLSPolicyDeclarationForTableException {
         Set<TableKey> tableThatRequireCreationOfTheTenantColumn = request.getCreateTenantColumnTableLists();
         if (tableThatRequireCreationOfTheTenantColumn.isEmpty())
         {

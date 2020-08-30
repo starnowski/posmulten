@@ -33,7 +33,7 @@ import java.util.Map;
 import static java.util.Arrays.asList;
 
 /**
- * The builder component responsible for creation of object of type {@link AbstractSharedSchemaContext}.
+ * The builder component responsible for creation of object of type {@link ISharedSchemaContext}.
  * Component create result object based on property {@link #sharedSchemaContextRequest}.
  * For setting values of results project the builder component use the enricher components of type {@link AbstractSharedSchemaContextEnricher},
  * specified in {@link #enrichers} collection.
@@ -58,12 +58,12 @@ public class DefaultSharedSchemaContextBuilder {
      * Builds shared schema context based on properties {@link SharedSchemaContextRequest#defaultSchema} and {@link #sharedSchemaContextRequest}.
      * Context is enricher in the loop by each enricher from {@link #enrichers}  collection by an order which they were
      * added into the collection.
-     * @return object of type {@link AbstractSharedSchemaContext}
+     * @return object of type {@link ISharedSchemaContext}
      * @throws SharedSchemaContextBuilderException
      */
-    public AbstractSharedSchemaContext build() throws SharedSchemaContextBuilderException
+    public ISharedSchemaContext build() throws SharedSchemaContextBuilderException
     {
-        AbstractSharedSchemaContext context = new SharedSchemaContext();
+        ISharedSchemaContext context = new SharedSchemaContext();
         List<AbstractSharedSchemaContextEnricher> enrichers  = getEnrichersCopy();
         SharedSchemaContextRequest sharedSchemaContextRequestCopy = getSharedSchemaContextRequestCopy();
         for (AbstractSharedSchemaContextEnricher enricher : enrichers)

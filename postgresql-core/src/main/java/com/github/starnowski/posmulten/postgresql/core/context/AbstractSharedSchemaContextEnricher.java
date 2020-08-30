@@ -27,5 +27,5 @@ import com.github.starnowski.posmulten.postgresql.core.context.exceptions.Shared
 
 public interface AbstractSharedSchemaContextEnricher {
 
-    AbstractSharedSchemaContext enrich(AbstractSharedSchemaContext context, SharedSchemaContextRequest request) throws SharedSchemaContextBuilderException;
+    ISharedSchemaContext enrich(ISharedSchemaContext context, SharedSchemaContextRequest request) throws SharedSchemaContextBuilderException;
 }

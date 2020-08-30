@@ -17,9 +17,9 @@ class DefaultSharedSchemaContextBuilderEnrichersTest extends Specification {
     def "should build shared schema context via enrichers with correct order"()
     {
         given:
-            AbstractSharedSchemaContext firstSharedSchemaContext = Mock(AbstractSharedSchemaContext)
-            AbstractSharedSchemaContext secondSharedSchemaContext = Mock(AbstractSharedSchemaContext)
-            AbstractSharedSchemaContext thirdSharedSchemaContext = Mock(AbstractSharedSchemaContext)
+            ISharedSchemaContext firstSharedSchemaContext = Mock(ISharedSchemaContext)
+            ISharedSchemaContext secondSharedSchemaContext = Mock(ISharedSchemaContext)
+            ISharedSchemaContext thirdSharedSchemaContext = Mock(ISharedSchemaContext)
             AbstractSharedSchemaContextEnricher firstSharedSchemaContextEnricher = Mock(AbstractSharedSchemaContextEnricher)
             AbstractSharedSchemaContextEnricher secondSharedSchemaContextEnricher = Mock(AbstractSharedSchemaContextEnricher)
             AbstractSharedSchemaContextEnricher thirdSharedSchemaContextEnricher = Mock(AbstractSharedSchemaContextEnricher)
@@ -58,8 +58,8 @@ class DefaultSharedSchemaContextBuilderEnrichersTest extends Specification {
     def "should pass the copy or request object to each enricher"()
     {
         given:
-            AbstractSharedSchemaContext firstSharedSchemaContext = Mock(AbstractSharedSchemaContext)
-            AbstractSharedSchemaContext secondSharedSchemaContext = Mock(AbstractSharedSchemaContext)
+            ISharedSchemaContext firstSharedSchemaContext = Mock(ISharedSchemaContext)
+            ISharedSchemaContext secondSharedSchemaContext = Mock(ISharedSchemaContext)
             AbstractSharedSchemaContextEnricher firstSharedSchemaContextEnricher = Mock(AbstractSharedSchemaContextEnricher)
             AbstractSharedSchemaContextEnricher secondSharedSchemaContextEnricher = Mock(AbstractSharedSchemaContextEnricher)
             DefaultSharedSchemaContextBuilder builder = new DefaultSharedSchemaContextBuilder()

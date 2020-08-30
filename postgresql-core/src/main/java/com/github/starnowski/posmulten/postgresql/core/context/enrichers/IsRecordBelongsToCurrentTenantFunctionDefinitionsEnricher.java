@@ -37,7 +37,7 @@ public class IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricher implement
     private IsRecordBelongsToCurrentTenantFunctionDefinitionProducer isRecordBelongsToCurrentTenantFunctionDefinitionProducer = new IsRecordBelongsToCurrentTenantFunctionDefinitionProducer();
 
     @Override
-    public AbstractSharedSchemaContext enrich(AbstractSharedSchemaContext context, SharedSchemaContextRequest request) throws MissingFunctionNameDeclarationForTableException {
+    public ISharedSchemaContext enrich(ISharedSchemaContext context, SharedSchemaContextRequest request) throws MissingFunctionNameDeclarationForTableException {
         List<TableKey> tableRequiredFunction = request.getSameTenantConstraintForForeignKeyProperties().keySet().stream().map(constraintKey -> constraintKey.getForeignKeyTable()).distinct().collect(toList());
         for (TableKey tableKey : tableRequiredFunction)
         {

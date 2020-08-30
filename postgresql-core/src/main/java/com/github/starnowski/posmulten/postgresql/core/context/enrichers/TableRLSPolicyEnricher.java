@@ -30,7 +30,7 @@ public class TableRLSPolicyEnricher implements AbstractSharedSchemaContextEnrich
     private TableRLSPolicySQLDefinitionsProducer tableRLSPolicySQLDefinitionsProducer = new TableRLSPolicySQLDefinitionsProducer();
 
     @Override
-    public AbstractSharedSchemaContext enrich(AbstractSharedSchemaContext context, SharedSchemaContextRequest request) {
+    public ISharedSchemaContext enrich(ISharedSchemaContext context, SharedSchemaContextRequest request) {
         request.getTableColumnsList().entrySet().forEach(entry ->
         {
             TableRLSPolicySQLDefinitionsProducerParameters.TableRLSPolicySQLDefinitionsProducerParametersBuilder builder = new TableRLSPolicySQLDefinitionsProducerParameters.TableRLSPolicySQLDefinitionsProducerParametersBuilder();

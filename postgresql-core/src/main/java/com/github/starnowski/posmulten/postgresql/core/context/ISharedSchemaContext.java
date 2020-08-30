@@ -32,7 +32,7 @@ import com.github.starnowski.posmulten.postgresql.core.rls.function.IsRecordBelo
 import java.util.List;
 import java.util.Map;
 
-public interface AbstractSharedSchemaContext {
+public interface ISharedSchemaContext {
 
     List<SQLDefinition> getSqlDefinitions();
 

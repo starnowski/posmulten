@@ -40,7 +40,7 @@ public class IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher impl
     private IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer = new IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer();
 
     @Override
-    public AbstractSharedSchemaContext enrich(AbstractSharedSchemaContext context, SharedSchemaContextRequest request) throws MissingConstraintNameDeclarationForTableException, MissingIsRecordBelongsToCurrentTenantFunctionInvocationFactoryException {
+    public ISharedSchemaContext enrich(ISharedSchemaContext context, SharedSchemaContextRequest request) throws MissingConstraintNameDeclarationForTableException, MissingIsRecordBelongsToCurrentTenantFunctionInvocationFactoryException {
         List<Pair<SameTenantConstraintForForeignKey, ISameTenantConstraintForForeignKeyProperties>> constrainsRequests = request.getSameTenantConstraintForForeignKeyProperties().entrySet().stream().map(entry -> new Pair<SameTenantConstraintForForeignKey, ISameTenantConstraintForForeignKeyProperties>(entry.getKey(), entry.getValue())).collect(toList());
         for (Pair<SameTenantConstraintForForeignKey, ISameTenantConstraintForForeignKeyProperties> constraintRequest : constrainsRequests)
         {
