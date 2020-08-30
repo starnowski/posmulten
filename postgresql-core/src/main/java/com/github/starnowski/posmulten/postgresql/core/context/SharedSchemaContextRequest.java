@@ -101,7 +101,7 @@ public class SharedSchemaContextRequest implements Cloneable{
      * The map key is an object of type {@link SameTenantConstraintForForeignKey} that contains table keys ({@link TableKey})
      * for main table ({@link SameTenantConstraintForForeignKey#mainTable}) that has foreign key columns and the foreign
      * table ({@link SameTenantConstraintForForeignKey#foreignKeyTable}) which has primary key columns. The map key also
-     * contains the set of foreign key column names ({@link SameTenantConstraintForForeignKey#foreignKeyColumns}).
+     * contains the set of column names for the foreign key ({@link SameTenantConstraintForForeignKey#foreignKeyColumns}).
      * The object of type {@link AbstractSameTenantConstraintForForeignKeyProperties} is the map value.
      * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricher
      * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher
