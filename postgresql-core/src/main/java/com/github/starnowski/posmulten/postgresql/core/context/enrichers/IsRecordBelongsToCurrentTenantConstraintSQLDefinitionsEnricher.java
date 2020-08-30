@@ -41,11 +41,11 @@ public class IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher impl
 
     @Override
     public AbstractSharedSchemaContext enrich(AbstractSharedSchemaContext context, SharedSchemaContextRequest request) throws MissingConstraintNameDeclarationForTableException, MissingIsRecordBelongsToCurrentTenantFunctionInvocationFactoryException {
-        List<Pair<SameTenantConstraintForForeignKey, AbstractSameTenantConstraintForForeignKeyProperties>> constrainsRequests = request.getSameTenantConstraintForForeignKeyProperties().entrySet().stream().map(entry -> new Pair<SameTenantConstraintForForeignKey, AbstractSameTenantConstraintForForeignKeyProperties>(entry.getKey(), entry.getValue())).collect(toList());
-        for (Pair<SameTenantConstraintForForeignKey, AbstractSameTenantConstraintForForeignKeyProperties> constraintRequest : constrainsRequests)
+        List<Pair<SameTenantConstraintForForeignKey, ISameTenantConstraintForForeignKeyProperties>> constrainsRequests = request.getSameTenantConstraintForForeignKeyProperties().entrySet().stream().map(entry -> new Pair<SameTenantConstraintForForeignKey, ISameTenantConstraintForForeignKeyProperties>(entry.getKey(), entry.getValue())).collect(toList());
+        for (Pair<SameTenantConstraintForForeignKey, ISameTenantConstraintForForeignKeyProperties> constraintRequest : constrainsRequests)
         {
             SameTenantConstraintForForeignKey key = constraintRequest.getKey();
-            AbstractSameTenantConstraintForForeignKeyProperties requestProperties = constraintRequest.getValue();
+            ISameTenantConstraintForForeignKeyProperties requestProperties = constraintRequest.getValue();
             if (requestProperties.getConstraintName() == null)
             {
                 throw new MissingConstraintNameDeclarationForTableException(key.getMainTable(), key.getForeignKeyColumns(),

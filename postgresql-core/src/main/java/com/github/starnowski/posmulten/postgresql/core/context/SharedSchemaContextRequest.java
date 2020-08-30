@@ -102,11 +102,11 @@ public class SharedSchemaContextRequest implements Cloneable{
      * for main table ({@link SameTenantConstraintForForeignKey#mainTable}) that has foreign key columns and the foreign
      * table ({@link SameTenantConstraintForForeignKey#foreignKeyTable}) which has primary key columns. The map key also
      * contains the set of column names for the foreign key ({@link SameTenantConstraintForForeignKey#foreignKeyColumns}).
-     * The object of type {@link AbstractSameTenantConstraintForForeignKeyProperties} is the map value.
+     * The object of type {@link ISameTenantConstraintForForeignKeyProperties} is the map value.
      * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricher
      * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher
      */
-    private Map<SameTenantConstraintForForeignKey, AbstractSameTenantConstraintForForeignKeyProperties> sameTenantConstraintForForeignKeyProperties = new HashMap<>();
+    private Map<SameTenantConstraintForForeignKey, ISameTenantConstraintForForeignKeyProperties> sameTenantConstraintForForeignKeyProperties = new HashMap<>();
     /**
      * Default grantee for which the row level security should be added.
      * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.TableRLSPolicyEnricher
@@ -211,7 +211,7 @@ public class SharedSchemaContextRequest implements Cloneable{
         return tableRLSPolicies;
     }
 
-    public Map<SameTenantConstraintForForeignKey, AbstractSameTenantConstraintForForeignKeyProperties> getSameTenantConstraintForForeignKeyProperties() {
+    public Map<SameTenantConstraintForForeignKey, ISameTenantConstraintForForeignKeyProperties> getSameTenantConstraintForForeignKeyProperties() {
         return sameTenantConstraintForForeignKeyProperties;
     }
 
