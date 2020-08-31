@@ -23,7 +23,7 @@
  */
 package com.github.starnowski.posmulten.postgresql.core.context;
 
-public class TenantColumnRequest implements AbstractTenantColumnRequest{
+public class TenantColumnRequest implements ITenantColumnRequest {
 
     private final String name;
 
