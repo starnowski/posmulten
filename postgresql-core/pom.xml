@@ -11,6 +11,35 @@
 
     <artifactId>postgresql-core</artifactId>
 
+    <url>https://github.com/starnowski/posmulten</url>
+    <name>posmulten</name>
+    <description>
+        Posmulten library is an open-source project for the generation of SQL DDL statements that make it easy for implementation of Shared Schema Multi-tenancy strategy via the Row Security Policies in the Postgres database.
+    </description>
+
+    <licenses>
+        <license>
+            <name>LGPL 2.1</name>
+            <url>http://www.gnu.org/licenses/lgpl-2.1.html</url>
+        </license>
+    </licenses>
+    <developers>
+        <developer>
+            <name>Szymon Tarnowski</name>
+            <url>www.linkedin.com/in/szymon-tarnowski-a104b4150</url>
+        </developer>
+    </developers>
+
+    <issueManagement>
+        <url>https://github.com/starnowski/posmulten/issues</url>
+        <system>GitHub Issues</system>
+    </issueManagement>
+
+    <scm>
+        <url>https://github.com/starnowski/posmulten</url>
+        <connection>scm:git:git://github.com/starnowski/posmulten.git</connection>
+    </scm>
+
     <properties>
         <org.springframework.boot.version>1.5.8.RELEASE</org.springframework.boot.version>
         <net.bytebuddy.byte.buddy.version>1.6.4</net.bytebuddy.byte.buddy.version>
@@ -221,5 +250,38 @@
             </build>
         </profile>
     </profiles>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>cobertura-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
