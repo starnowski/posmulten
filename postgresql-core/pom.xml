@@ -11,6 +11,8 @@
 
     <artifactId>postgresql-core</artifactId>
 
+    <url>https://github.com/starnowski/posmulten</url>
+
     <properties>
         <org.springframework.boot.version>1.5.8.RELEASE</org.springframework.boot.version>
         <net.bytebuddy.byte.buddy.version>1.6.4</net.bytebuddy.byte.buddy.version>
