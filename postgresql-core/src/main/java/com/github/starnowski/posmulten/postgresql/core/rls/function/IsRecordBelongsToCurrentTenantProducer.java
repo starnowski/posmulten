@@ -39,22 +39,22 @@ import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.IntStream.range;
 
-public class IsRecordBelongsToCurrentTenantProducer extends ExtendedAbstractFunctionFactory<AbstractIsRecordBelongsToCurrentTenantProducerParameters, IsRecordBelongsToCurrentTenantFunctionDefinition> {
+public class IsRecordBelongsToCurrentTenantProducer extends ExtendedAbstractFunctionFactory<IIsRecordBelongsToCurrentTenantProducerParameters, IsRecordBelongsToCurrentTenantFunctionDefinition> {
 
     public static final String RECORD_TABLE_ALIAS = "rt";
 
     @Override
-    protected String prepareReturnType(AbstractIsRecordBelongsToCurrentTenantProducerParameters parameters) {
+    protected String prepareReturnType(IIsRecordBelongsToCurrentTenantProducerParameters parameters) {
         return "BOOLEAN";
     }
 
     @Override
-    protected void enrichMetadataPhraseBuilder(AbstractIsRecordBelongsToCurrentTenantProducerParameters parameters, MetadataPhraseBuilder metadataPhraseBuilder) {
+    protected void enrichMetadataPhraseBuilder(IIsRecordBelongsToCurrentTenantProducerParameters parameters, MetadataPhraseBuilder metadataPhraseBuilder) {
         metadataPhraseBuilder.withParallelModeSupplier(SAFE).withVolatilityCategorySupplier(STABLE);
     }
 
     @Override
-    protected String buildBody(AbstractIsRecordBelongsToCurrentTenantProducerParameters parameters) {
+    protected String buildBody(IIsRecordBelongsToCurrentTenantProducerParameters parameters) {
         StringBuilder sb = new StringBuilder();
         sb.append("SELECT EXISTS (");
         sb.append("\n");
@@ -83,17 +83,17 @@ public class IsRecordBelongsToCurrentTenantProducer extends ExtendedAbstractFunc
     }
 
     @Override
-    protected IsRecordBelongsToCurrentTenantFunctionDefinition returnFunctionDefinition(AbstractIsRecordBelongsToCurrentTenantProducerParameters parameters, IFunctionDefinition functionDefinition) {
+    protected IsRecordBelongsToCurrentTenantFunctionDefinition returnFunctionDefinition(IIsRecordBelongsToCurrentTenantProducerParameters parameters, IFunctionDefinition functionDefinition) {
         return new IsRecordBelongsToCurrentTenantFunctionDefinition(functionDefinition, unmodifiableList(parameters.getKeyColumnsPairsList()));
     }
 
     @Override
-    protected List<IFunctionArgument> prepareFunctionArguments(AbstractIsRecordBelongsToCurrentTenantProducerParameters parameters) {
+    protected List<IFunctionArgument> prepareFunctionArguments(IIsRecordBelongsToCurrentTenantProducerParameters parameters) {
         return parameters.getKeyColumnsPairsList().stream().map(Pair::getValue).collect(toList());
     }
 
     @Override
-    protected void validate(AbstractIsRecordBelongsToCurrentTenantProducerParameters parameters) {
+    protected void validate(IIsRecordBelongsToCurrentTenantProducerParameters parameters) {
         super.validate(parameters);
         if (parameters.getRecordSchemaName() != null && parameters.getRecordSchemaName().trim().isEmpty())
         {

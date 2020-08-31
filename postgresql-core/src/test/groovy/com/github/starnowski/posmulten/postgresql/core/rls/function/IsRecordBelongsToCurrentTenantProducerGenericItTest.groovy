@@ -2,7 +2,7 @@ package com.github.starnowski.posmulten.postgresql.core.rls.function
 
 import com.github.starnowski.posmulten.postgresql.core.common.function.AbstractFunctionFactoryGenericItTest
 
-import static com.github.starnowski.posmulten.postgresql.core.rls.function.AbstractIsRecordBelongsToCurrentTenantProducerParameters.pairOfColumnWithType
+import static IIsRecordBelongsToCurrentTenantProducerParameters.pairOfColumnWithType
 
 class IsRecordBelongsToCurrentTenantProducerGenericItTest extends AbstractFunctionFactoryGenericItTest{
 

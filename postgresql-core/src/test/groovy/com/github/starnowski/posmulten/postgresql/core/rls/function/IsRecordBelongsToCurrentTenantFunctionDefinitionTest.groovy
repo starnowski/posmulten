@@ -8,7 +8,7 @@ import spock.lang.Specification
 import spock.lang.Unroll
 
 import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValue.forReference
-import static com.github.starnowski.posmulten.postgresql.core.rls.function.AbstractIsRecordBelongsToCurrentTenantProducerParameters.pairOfColumnWithType
+import static IIsRecordBelongsToCurrentTenantProducerParameters.pairOfColumnWithType
 import static java.lang.String.format
 
 class IsRecordBelongsToCurrentTenantFunctionDefinitionTest extends Specification {
