@@ -6,7 +6,7 @@ import spock.lang.Unroll
 
 import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValue.forNumeric
 import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValue.forReference
-import static com.github.starnowski.posmulten.postgresql.core.rls.function.AbstractIsRecordBelongsToCurrentTenantProducerParameters.pairOfColumnWithType
+import static IIsRecordBelongsToCurrentTenantProducerParameters.pairOfColumnWithType
 
 class IsRecordBelongsToCurrentTenantProducerTest extends AbstractFunctionFactoryTest {
 

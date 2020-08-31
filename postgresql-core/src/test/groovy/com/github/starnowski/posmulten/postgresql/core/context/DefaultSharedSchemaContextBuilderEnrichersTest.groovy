@@ -17,12 +17,12 @@ class DefaultSharedSchemaContextBuilderEnrichersTest extends Specification {
     def "should build shared schema context via enrichers with correct order"()
     {
         given:
-            AbstractSharedSchemaContext firstSharedSchemaContext = Mock(AbstractSharedSchemaContext)
-            AbstractSharedSchemaContext secondSharedSchemaContext = Mock(AbstractSharedSchemaContext)
-            AbstractSharedSchemaContext thirdSharedSchemaContext = Mock(AbstractSharedSchemaContext)
-            AbstractSharedSchemaContextEnricher firstSharedSchemaContextEnricher = Mock(AbstractSharedSchemaContextEnricher)
-            AbstractSharedSchemaContextEnricher secondSharedSchemaContextEnricher = Mock(AbstractSharedSchemaContextEnricher)
-            AbstractSharedSchemaContextEnricher thirdSharedSchemaContextEnricher = Mock(AbstractSharedSchemaContextEnricher)
+            ISharedSchemaContext firstSharedSchemaContext = Mock(ISharedSchemaContext)
+            ISharedSchemaContext secondSharedSchemaContext = Mock(ISharedSchemaContext)
+            ISharedSchemaContext thirdSharedSchemaContext = Mock(ISharedSchemaContext)
+            ISharedSchemaContextEnricher firstSharedSchemaContextEnricher = Mock(ISharedSchemaContextEnricher)
+            ISharedSchemaContextEnricher secondSharedSchemaContextEnricher = Mock(ISharedSchemaContextEnricher)
+            ISharedSchemaContextEnricher thirdSharedSchemaContextEnricher = Mock(ISharedSchemaContextEnricher)
             DefaultSharedSchemaContextBuilder builder = new DefaultSharedSchemaContextBuilder()
             builder.setEnrichers([firstSharedSchemaContextEnricher, secondSharedSchemaContextEnricher, thirdSharedSchemaContextEnricher])
 
@@ -58,10 +58,10 @@ class DefaultSharedSchemaContextBuilderEnrichersTest extends Specification {
     def "should pass the copy or request object to each enricher"()
     {
         given:
-            AbstractSharedSchemaContext firstSharedSchemaContext = Mock(AbstractSharedSchemaContext)
-            AbstractSharedSchemaContext secondSharedSchemaContext = Mock(AbstractSharedSchemaContext)
-            AbstractSharedSchemaContextEnricher firstSharedSchemaContextEnricher = Mock(AbstractSharedSchemaContextEnricher)
-            AbstractSharedSchemaContextEnricher secondSharedSchemaContextEnricher = Mock(AbstractSharedSchemaContextEnricher)
+            ISharedSchemaContext firstSharedSchemaContext = Mock(ISharedSchemaContext)
+            ISharedSchemaContext secondSharedSchemaContext = Mock(ISharedSchemaContext)
+            ISharedSchemaContextEnricher firstSharedSchemaContextEnricher = Mock(ISharedSchemaContextEnricher)
+            ISharedSchemaContextEnricher secondSharedSchemaContextEnricher = Mock(ISharedSchemaContextEnricher)
             DefaultSharedSchemaContextBuilder builder = new DefaultSharedSchemaContextBuilder()
             builder.setEnrichers([firstSharedSchemaContextEnricher, secondSharedSchemaContextEnricher])
             def firstEnricherCapturedRequest = null

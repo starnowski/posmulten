@@ -40,7 +40,7 @@ public class IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer {
 
     private IsRecordBelongsToCurrentTenantConstraintProducer isRecordBelongsToCurrentTenantConstraintProducer = new IsRecordBelongsToCurrentTenantConstraintProducer();
 
-    public List<SQLDefinition> produce(AbstractIsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducerParameters parameters)
+    public List<SQLDefinition> produce(IIsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducerParameters parameters)
     {
         IsRecordBelongsToCurrentTenantConstraintProducerParameters isRecordBelongsToCurrentTenantConstraintProducerParameters = DefaultIsRecordBelongsToCurrentTenantConstraintProducerParameters.builder()
                 .withConstraintName(parameters.getConstraintName())

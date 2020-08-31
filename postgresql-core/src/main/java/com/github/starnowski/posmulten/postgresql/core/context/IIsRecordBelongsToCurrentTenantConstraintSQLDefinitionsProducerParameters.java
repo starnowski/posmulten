@@ -27,7 +27,7 @@ import com.github.starnowski.posmulten.postgresql.core.rls.function.IsRecordBelo
 
 import java.util.Map;
 
-public interface AbstractIsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducerParameters {
+public interface IIsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducerParameters {
 
     String getConstraintName();
 

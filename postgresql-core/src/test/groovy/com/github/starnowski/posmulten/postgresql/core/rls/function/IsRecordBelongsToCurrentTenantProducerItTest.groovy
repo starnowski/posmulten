@@ -20,7 +20,7 @@ import java.sql.Statement
 import static com.github.starnowski.posmulten.postgresql.test.utils.TestUtils.CLEAR_DATABASE_SCRIPT_PATH
 import static com.github.starnowski.posmulten.postgresql.test.utils.TestUtils.isFunctionExists
 import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValue.forNumeric
-import static com.github.starnowski.posmulten.postgresql.core.rls.function.AbstractIsRecordBelongsToCurrentTenantProducerParameters.pairOfColumnWithType
+import static IIsRecordBelongsToCurrentTenantProducerParameters.pairOfColumnWithType
 import static org.junit.Assert.assertEquals
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD

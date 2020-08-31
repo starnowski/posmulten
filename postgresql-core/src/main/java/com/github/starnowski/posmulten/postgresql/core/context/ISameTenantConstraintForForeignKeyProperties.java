@@ -23,7 +23,24 @@
  */
 package com.github.starnowski.posmulten.postgresql.core.context;
 
-public interface AbstractTenantColumnRequest {
+import java.util.Map;
 
-    String getName();
+/**
+ * Type contains information that are required to the creation of constraint that checks if foreign key in the main table refers to record
+ * that exists in the foreign table and which belongs to the current tenant.
+ */
+public interface ISameTenantConstraintForForeignKeyProperties {
+
+    /**
+     * The method returns map contains information about which foreign key column refers to specific primary key column.
+     * The foreign key column is the map key and the primary key column is its value.
+     * @return map contains information about which foreign key column refers to specific primary key column. The foreign key column is the map key and the primary key column is its value.
+     */
+    Map<String, String> getForeignKeyPrimaryKeyColumnsMappings();
+
+    /**
+     * The method returns the name of the constraint.
+     * @return name of the constraint
+     */
+    String getConstraintName();
 }

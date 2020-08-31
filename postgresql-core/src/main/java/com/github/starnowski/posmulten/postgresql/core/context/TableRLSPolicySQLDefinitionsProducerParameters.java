@@ -27,7 +27,7 @@ import com.github.starnowski.posmulten.postgresql.core.rls.TenantHasAuthoritiesF
 
 import java.util.Objects;
 
-public class TableRLSPolicySQLDefinitionsProducerParameters implements AbstractTableRLSPolicySQLDefinitionsProducerParameters{
+public class TableRLSPolicySQLDefinitionsProducerParameters implements ITableRLSPolicySQLDefinitionsProducerParameters {
 
     private final String grantee;
 

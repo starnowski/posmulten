@@ -1,6 +1,6 @@
 package com.github.starnowski.posmulten.postgresql.core.functional.tests.sanity;
 
-import com.github.starnowski.posmulten.postgresql.core.context.AbstractSharedSchemaContext;
+import com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaContext;
 import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder;
 import com.github.starnowski.posmulten.postgresql.core.context.exceptions.SharedSchemaContextBuilderException;
 import com.github.starnowski.posmulten.postgresql.core.context.TableKey;
@@ -81,7 +81,7 @@ public abstract class FullStackTest extends AbstractClassWithSQLDefinitionGenera
         defaultSharedSchemaContextBuilder.setNameForFunctionThatChecksIfRecordExistsInTable(POSTS_TABLE_NAME, "is_post_belongs_to_current_tenant");
         defaultSharedSchemaContextBuilder.setNameForFunctionThatChecksIfRecordExistsInTable(COMMENTS_TABLE_NAME, "is_comment_belongs_to_current_tenant");
         defaultSharedSchemaContextBuilder.setNameForFunctionThatChecksIfRecordExistsInTable(GROUPS_TABLE_NAME, "is_group_belongs_to_current_tenant");
-        AbstractSharedSchemaContext sharedSchemaContext = defaultSharedSchemaContextBuilder.build();
+        ISharedSchemaContext sharedSchemaContext = defaultSharedSchemaContextBuilder.build();
         setCurrentTenantIdFunctionInvocationFactory = sharedSchemaContext.getISetCurrentTenantIdFunctionInvocationFactory();
         sqlDefinitions.addAll(sharedSchemaContext.getSqlDefinitions());
     }

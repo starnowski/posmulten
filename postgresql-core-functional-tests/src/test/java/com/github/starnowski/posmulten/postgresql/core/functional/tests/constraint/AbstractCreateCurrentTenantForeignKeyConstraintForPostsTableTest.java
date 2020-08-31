@@ -25,7 +25,7 @@ import java.util.Map;
 
 import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValue.forReference;
 import static com.github.starnowski.posmulten.postgresql.core.functional.tests.TestApplication.CLEAR_DATABASE_SCRIPT_PATH;
-import static com.github.starnowski.posmulten.postgresql.core.rls.function.AbstractIsRecordBelongsToCurrentTenantProducerParameters.pairOfColumnWithType;
+import static com.github.starnowski.posmulten.postgresql.core.rls.function.IIsRecordBelongsToCurrentTenantProducerParameters.pairOfColumnWithType;
 import static com.github.starnowski.posmulten.postgresql.test.utils.TestUtils.VALID_CURRENT_TENANT_ID_PROPERTY_NAME;
 import static com.github.starnowski.posmulten.postgresql.test.utils.TestUtils.isAnyRecordExists;
 import static java.lang.String.format;
@@ -88,7 +88,7 @@ public abstract class AbstractCreateCurrentTenantForeignKeyConstraintForPostsTab
         sqlDefinitions.add(setCurrentTenantIdFunctionDefinition);
 
         // Does record belongs to current tenant
-        AbstractIsRecordBelongsToCurrentTenantProducerParameters isRecordBelongsToCurrentTenantProducerParameters = new IsRecordBelongsToCurrentTenantProducerParameters.Builder()
+        IIsRecordBelongsToCurrentTenantProducerParameters isRecordBelongsToCurrentTenantProducerParameters = new IsRecordBelongsToCurrentTenantProducerParameters.Builder()
                 .withSchema(getSchema())
                 .withFunctionName("is_user_belongs_to_current_tenant")
                 .withRecordTableName("users")

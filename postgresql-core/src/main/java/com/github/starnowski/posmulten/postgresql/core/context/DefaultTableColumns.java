@@ -27,7 +27,7 @@ import java.util.Map;
 
 import static java.util.Collections.unmodifiableMap;
 
-public class DefaultTableColumns implements AbstractTableColumns{
+public class DefaultTableColumns implements ITableColumns {
 
     private final String tenantColumnName;
     private final Map<String, String> identityColumnNameAndTypeMap;

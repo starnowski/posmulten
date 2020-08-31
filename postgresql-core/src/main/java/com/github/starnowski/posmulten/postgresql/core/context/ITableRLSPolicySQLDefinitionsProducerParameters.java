@@ -23,14 +23,19 @@
  */
 package com.github.starnowski.posmulten.postgresql.core.context;
 
-/**
- * Type describes the row level security policy properties for table.
- */
-public interface AbstractTableRLSPolicyProperties {
+import com.github.starnowski.posmulten.postgresql.core.rls.TenantHasAuthoritiesFunctionInvocationFactory;
 
-    /**
-     * The method returns name of the row level security policy for table.
-     * @return name of the row level security policy for table
-     */
+public interface ITableRLSPolicySQLDefinitionsProducerParameters {
+
+    String getGrantee();
+
+    TableKey getTableKey();
+
     String getPolicyName();
+
+    TenantHasAuthoritiesFunctionInvocationFactory getTenantHasAuthoritiesFunctionInvocationFactory();
+
+    String getTenantIdColumn();
+
+    String getDefaultTenantIdColumn();
 }

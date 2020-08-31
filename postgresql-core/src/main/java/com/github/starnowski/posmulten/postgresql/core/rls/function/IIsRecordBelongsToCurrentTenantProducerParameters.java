@@ -31,7 +31,7 @@ import java.util.List;
 
 import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentBuilder.forType;
 
-public interface AbstractIsRecordBelongsToCurrentTenantProducerParameters extends IFunctionFactoryParameters {
+public interface IIsRecordBelongsToCurrentTenantProducerParameters extends IFunctionFactoryParameters {
 
     List<Pair<String, IFunctionArgument>> getKeyColumnsPairsList();
 

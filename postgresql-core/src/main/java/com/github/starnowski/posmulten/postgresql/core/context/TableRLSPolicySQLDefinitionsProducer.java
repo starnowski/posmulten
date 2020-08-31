@@ -36,7 +36,7 @@ public class TableRLSPolicySQLDefinitionsProducer {
 
     private RLSPolicyProducer rlsPolicyProducer = new RLSPolicyProducer();
 
-    public List<SQLDefinition> produce(AbstractTableRLSPolicySQLDefinitionsProducerParameters parameters)
+    public List<SQLDefinition> produce(ITableRLSPolicySQLDefinitionsProducerParameters parameters)
     {
         List<SQLDefinition> results = new ArrayList<>();
         SQLDefinition sqlDefinition = rlsPolicyProducer.produce(builder().withPolicyName(parameters.getPolicyName())

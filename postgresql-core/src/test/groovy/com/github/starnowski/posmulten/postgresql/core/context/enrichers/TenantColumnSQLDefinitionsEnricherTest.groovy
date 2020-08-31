@@ -40,9 +40,9 @@ class TenantColumnSQLDefinitionsEnricherTest extends Specification {
             def commentsTableKey = tk("comments", schema)
             def someTableKey = tk("some_table", schema)
 
-            AbstractTableColumns usersTableColumns = sharedSchemaContextRequest.getTableColumnsList().get(usersTableKey)
-            AbstractTableColumns commentsTableColumns = sharedSchemaContextRequest.getTableColumnsList().get(commentsTableKey)
-            AbstractTableColumns someTableColumns = sharedSchemaContextRequest.getTableColumnsList().get(commentsTableKey)
+            ITableColumns usersTableColumns = sharedSchemaContextRequest.getTableColumnsList().get(usersTableKey)
+            ITableColumns commentsTableColumns = sharedSchemaContextRequest.getTableColumnsList().get(commentsTableKey)
+            ITableColumns someTableColumns = sharedSchemaContextRequest.getTableColumnsList().get(commentsTableKey)
 
         when:
             def result = tested.enrich(context, sharedSchemaContextRequest)

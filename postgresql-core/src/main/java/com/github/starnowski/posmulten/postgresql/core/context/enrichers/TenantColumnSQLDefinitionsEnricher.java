@@ -30,12 +30,12 @@ import java.util.Set;
 
 import static java.lang.String.format;
 
-public class TenantColumnSQLDefinitionsEnricher implements AbstractSharedSchemaContextEnricher {
+public class TenantColumnSQLDefinitionsEnricher implements ISharedSchemaContextEnricher {
 
     private SingleTenantColumnSQLDefinitionsProducer singleTenantColumnSQLDefinitionsProducer = new SingleTenantColumnSQLDefinitionsProducer();
 
     @Override
-    public AbstractSharedSchemaContext enrich(AbstractSharedSchemaContext context, SharedSchemaContextRequest request) throws MissingRLSPolicyDeclarationForTableException {
+    public ISharedSchemaContext enrich(ISharedSchemaContext context, SharedSchemaContextRequest request) throws MissingRLSPolicyDeclarationForTableException {
         Set<TableKey> tableThatRequireCreationOfTheTenantColumn = request.getCreateTenantColumnTableLists();
         if (tableThatRequireCreationOfTheTenantColumn.isEmpty())
         {
@@ -44,7 +44,7 @@ public class TenantColumnSQLDefinitionsEnricher implements AbstractSharedSchemaC
         String getCurrentTenantIdFunctionInvocation = context.getIGetCurrentTenantIdFunctionInvocationFactory().returnGetCurrentTenantIdFunctionInvocation();
         for (TableKey tableKey: tableThatRequireCreationOfTheTenantColumn)
         {
-            AbstractTableColumns tableColumns = request.getTableColumnsList().get(tableKey);
+            ITableColumns tableColumns = request.getTableColumnsList().get(tableKey);
             if (tableColumns == null)
             {
                 throw new MissingRLSPolicyDeclarationForTableException(tableKey, format("Missing RLS policy declaration for table %1$s in schema %2$s", tableKey.getTable(), tableKey.getSchema()));

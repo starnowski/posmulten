@@ -23,7 +23,7 @@
  */
 package com.github.starnowski.posmulten.postgresql.core.context;
 
-public class DefaultTableRLSPolicyProperties implements AbstractTableRLSPolicyProperties{
+public class DefaultTableRLSPolicyProperties implements ITableRLSPolicyProperties {
 
     private final String policyName;
 

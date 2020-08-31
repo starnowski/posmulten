@@ -23,19 +23,32 @@
  */
 package com.github.starnowski.posmulten.postgresql.core.context;
 
+import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition;
 import com.github.starnowski.posmulten.postgresql.core.rls.TenantHasAuthoritiesFunctionInvocationFactory;
+import com.github.starnowski.posmulten.postgresql.core.rls.function.IGetCurrentTenantIdFunctionInvocationFactory;
+import com.github.starnowski.posmulten.postgresql.core.rls.function.ISetCurrentTenantIdFunctionInvocationFactory;
+import com.github.starnowski.posmulten.postgresql.core.rls.function.IsRecordBelongsToCurrentTenantFunctionInvocationFactory;
 
-public interface AbstractTableRLSPolicySQLDefinitionsProducerParameters {
+import java.util.List;
+import java.util.Map;
 
-    String getGrantee();
+public interface ISharedSchemaContext {
 
-    TableKey getTableKey();
+    List<SQLDefinition> getSqlDefinitions();
 
-    String getPolicyName();
+    void addSQLDefinition(SQLDefinition sqlDefinition);
 
     TenantHasAuthoritiesFunctionInvocationFactory getTenantHasAuthoritiesFunctionInvocationFactory();
 
-    String getTenantIdColumn();
+    void setTenantHasAuthoritiesFunctionInvocationFactory(TenantHasAuthoritiesFunctionInvocationFactory factory);
 
-    String getDefaultTenantIdColumn();
+    IGetCurrentTenantIdFunctionInvocationFactory getIGetCurrentTenantIdFunctionInvocationFactory();
+
+    void setIGetCurrentTenantIdFunctionInvocationFactory(IGetCurrentTenantIdFunctionInvocationFactory factory);
+
+    void setISetCurrentTenantIdFunctionInvocationFactory(ISetCurrentTenantIdFunctionInvocationFactory factory);
+
+    ISetCurrentTenantIdFunctionInvocationFactory getISetCurrentTenantIdFunctionInvocationFactory();
+
+    Map<TableKey, IsRecordBelongsToCurrentTenantFunctionInvocationFactory> getTableKeysIsRecordBelongsToCurrentTenantFunctionInvocationFactoryMap();
 }

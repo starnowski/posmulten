@@ -1,6 +1,6 @@
 package com.github.starnowski.posmulten.postgresql.core.context
 
-import com.github.starnowski.posmulten.postgresql.core.rls.function.AbstractIsRecordBelongsToCurrentTenantProducerParameters
+import com.github.starnowski.posmulten.postgresql.core.rls.function.IIsRecordBelongsToCurrentTenantProducerParameters
 import com.github.starnowski.posmulten.postgresql.core.rls.function.IGetCurrentTenantIdFunctionInvocationFactory
 import com.github.starnowski.posmulten.postgresql.core.rls.function.IsRecordBelongsToCurrentTenantFunctionDefinition
 import com.github.starnowski.posmulten.postgresql.core.rls.function.IsRecordBelongsToCurrentTenantProducer
@@ -8,7 +8,7 @@ import spock.lang.Specification
 import spock.lang.Unroll
 
 import static com.github.starnowski.posmulten.postgresql.core.MapBuilder.mapBuilder
-import static com.github.starnowski.posmulten.postgresql.core.rls.function.AbstractIsRecordBelongsToCurrentTenantProducerParameters.pairOfColumnWithType
+import static com.github.starnowski.posmulten.postgresql.core.rls.function.IIsRecordBelongsToCurrentTenantProducerParameters.pairOfColumnWithType
 
 class IsRecordBelongsToCurrentTenantFunctionDefinitionProducerTest extends Specification {
 
@@ -23,7 +23,7 @@ class IsRecordBelongsToCurrentTenantFunctionDefinitionProducerTest extends Speci
             def tableColumns = new DefaultTableColumns(tenantId, idColumns)
             def iGetCurrentTenantIdFunctionInvocationFactory = Mock(IGetCurrentTenantIdFunctionInvocationFactory)
             def expectedSQLFunctionDefinition = Mock(IsRecordBelongsToCurrentTenantFunctionDefinition)
-            AbstractIsRecordBelongsToCurrentTenantProducerParameters capturedParameters = null;
+            IIsRecordBelongsToCurrentTenantProducerParameters capturedParameters = null;
 
         when:
             def result = tested.produce(tableKey, tableColumns, iGetCurrentTenantIdFunctionInvocationFactory, functionName, schema)

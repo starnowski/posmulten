@@ -25,16 +25,16 @@ package com.github.starnowski.posmulten.postgresql.core.context;
 
 import com.github.starnowski.posmulten.postgresql.core.rls.function.*;
 
-import static com.github.starnowski.posmulten.postgresql.core.rls.function.AbstractIsRecordBelongsToCurrentTenantProducerParameters.pairOfColumnWithType;
+import static com.github.starnowski.posmulten.postgresql.core.rls.function.IIsRecordBelongsToCurrentTenantProducerParameters.pairOfColumnWithType;
 import static java.util.stream.Collectors.toList;
 
 public class IsRecordBelongsToCurrentTenantFunctionDefinitionProducer {
 
     private IsRecordBelongsToCurrentTenantProducer isRecordBelongsToCurrentTenantProducer = new IsRecordBelongsToCurrentTenantProducer();
 
-    public IsRecordBelongsToCurrentTenantFunctionDefinition produce(TableKey tableKey, AbstractTableColumns tableColumns, IGetCurrentTenantIdFunctionInvocationFactory iGetCurrentTenantIdFunctionInvocationFactory, String functionName, String schema)
+    public IsRecordBelongsToCurrentTenantFunctionDefinition produce(TableKey tableKey, ITableColumns tableColumns, IGetCurrentTenantIdFunctionInvocationFactory iGetCurrentTenantIdFunctionInvocationFactory, String functionName, String schema)
     {
-        AbstractIsRecordBelongsToCurrentTenantProducerParameters isRecordBelongsToCurrentTenantProducerParameters = new IsRecordBelongsToCurrentTenantProducerParameters.Builder()
+        IIsRecordBelongsToCurrentTenantProducerParameters isRecordBelongsToCurrentTenantProducerParameters = new IsRecordBelongsToCurrentTenantProducerParameters.Builder()
                 .withSchema(schema)
                 .withFunctionName(functionName)
                 .withRecordTableName(tableKey.getTable())

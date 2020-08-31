@@ -25,12 +25,12 @@ package com.github.starnowski.posmulten.postgresql.core.context.enrichers;
 
 import com.github.starnowski.posmulten.postgresql.core.context.*;
 
-public class TableRLSPolicyEnricher implements AbstractSharedSchemaContextEnricher {
+public class TableRLSPolicyEnricher implements ISharedSchemaContextEnricher {
 
     private TableRLSPolicySQLDefinitionsProducer tableRLSPolicySQLDefinitionsProducer = new TableRLSPolicySQLDefinitionsProducer();
 
     @Override
-    public AbstractSharedSchemaContext enrich(AbstractSharedSchemaContext context, SharedSchemaContextRequest request) {
+    public ISharedSchemaContext enrich(ISharedSchemaContext context, SharedSchemaContextRequest request) {
         request.getTableColumnsList().entrySet().forEach(entry ->
         {
             TableRLSPolicySQLDefinitionsProducerParameters.TableRLSPolicySQLDefinitionsProducerParametersBuilder builder = new TableRLSPolicySQLDefinitionsProducerParameters.TableRLSPolicySQLDefinitionsProducerParametersBuilder();

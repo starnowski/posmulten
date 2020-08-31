@@ -25,21 +25,21 @@ package com.github.starnowski.posmulten.postgresql.core.context;
 
 import java.util.Map;
 
-public class SameTenantConstraintForForeignKeyProperties implements ISameTenantConstraintForForeignKeyProperties {
+/**
+ * Type contains information about table columns required for creation of row level security policy for table.
+ */
+public interface ITableColumns {
 
-    private final String constraintName;
-    private final Map<String, String> foreignKeyPrimaryKeyColumnsMappings;
+    /**
+     * Method returns name of column that stores tenant identifier.
+     * @return name of column that stores tenant identifier
+     */
+    String getTenantColumnName();
 
-    public SameTenantConstraintForForeignKeyProperties(String constraintName, Map<String, String> foreignKeyPrimaryKeyColumnsMappings) {
-        this.constraintName = constraintName;
-        this.foreignKeyPrimaryKeyColumnsMappings = foreignKeyPrimaryKeyColumnsMappings;
-    }
-
-    public Map<String, String> getForeignKeyPrimaryKeyColumnsMappings() {
-        return foreignKeyPrimaryKeyColumnsMappings;
-    }
-
-    public String getConstraintName() {
-        return constraintName;
-    }
+    /**
+     * Method returns map of primary key columns and its types in table.
+     * The column name is the map key and the column type is its value.
+     * @return map of primary key columns and its types in table
+     */
+    Map<String, String> getIdentityColumnNameAndTypeMap();
 }

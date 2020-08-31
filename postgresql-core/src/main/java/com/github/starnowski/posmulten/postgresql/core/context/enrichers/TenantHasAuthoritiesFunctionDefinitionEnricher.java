@@ -23,18 +23,18 @@
  */
 package com.github.starnowski.posmulten.postgresql.core.context.enrichers;
 
-import com.github.starnowski.posmulten.postgresql.core.context.AbstractSharedSchemaContext;
-import com.github.starnowski.posmulten.postgresql.core.context.AbstractSharedSchemaContextEnricher;
+import com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaContext;
+import com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaContextEnricher;
 import com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContextRequest;
 import com.github.starnowski.posmulten.postgresql.core.rls.function.*;
 
-public class TenantHasAuthoritiesFunctionDefinitionEnricher implements AbstractSharedSchemaContextEnricher {
+public class TenantHasAuthoritiesFunctionDefinitionEnricher implements ISharedSchemaContextEnricher {
 
     private EqualsCurrentTenantIdentifierFunctionProducer equalsCurrentTenantIdentifierFunctionProducer = new EqualsCurrentTenantIdentifierFunctionProducer();
     private TenantHasAuthoritiesFunctionProducer tenantHasAuthoritiesFunctionProducer = new TenantHasAuthoritiesFunctionProducer();
 
     @Override
-    public AbstractSharedSchemaContext enrich(AbstractSharedSchemaContext context, SharedSchemaContextRequest request) {
+    public ISharedSchemaContext enrich(ISharedSchemaContext context, SharedSchemaContextRequest request) {
         String equalsCurrentTenantIdentifierFunctionName = request.getEqualsCurrentTenantIdentifierFunctionName() == null ? "is_id_equals_current_tenant_id" : request.getEqualsCurrentTenantIdentifierFunctionName();
         String tenantHasAuthoritiesFunctionName = request.getTenantHasAuthoritiesFunctionName() == null ? "tenant_has_authorities" : request.getTenantHasAuthoritiesFunctionName();
         EqualsCurrentTenantIdentifierFunctionDefinition equalsCurrentTenantIdentifierFunctionDefinition = equalsCurrentTenantIdentifierFunctionProducer.produce(new EqualsCurrentTenantIdentifierFunctionProducerParameters(equalsCurrentTenantIdentifierFunctionName, request.getDefaultSchema(), request.getCurrentTenantIdPropertyType(), context.getIGetCurrentTenantIdFunctionInvocationFactory()));

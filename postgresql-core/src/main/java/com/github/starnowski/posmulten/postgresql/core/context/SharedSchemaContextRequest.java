@@ -71,12 +71,12 @@ public class SharedSchemaContextRequest implements Cloneable{
     /**
      * A map that stores information about columns that are required to creation of shared schema multi-tenancy strategy.
      * Information about columns are store for each table that required to have row level security policy.
-     * The table identifier ({@link TableKey}) is the map key and  information ({@link AbstractTableColumns}) about columns are its value.
+     * The table identifier ({@link TableKey}) is the map key and  information ({@link ITableColumns}) about columns are its value.
      * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricher
      * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.TableRLSPolicyEnricher
      * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.TenantColumnSQLDefinitionsEnricher
      */
-    private Map<TableKey, AbstractTableColumns> tableColumnsList = new HashMap<>();
+    private Map<TableKey, ITableColumns> tableColumnsList = new HashMap<>();
     /**
      * Collection that stores table identifiers ({@link TableKey}) for which a column for tenant identifier should be added.
      * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.TenantColumnSQLDefinitionsEnricher
@@ -91,10 +91,10 @@ public class SharedSchemaContextRequest implements Cloneable{
     /**
      * A map that stores information that describes the row level security policy properties for tables.
      * Properties are store for each table that required to have row level security policy.
-     * The table identifier ({@link TableKey}) is the map key and the row level security policy properties ({@link AbstractTableRLSPolicyProperties}) are its value.
+     * The table identifier ({@link TableKey}) is the map key and the row level security policy properties ({@link ITableRLSPolicyProperties}) are its value.
      * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.TableRLSPolicyEnricher
      */
-    private Map<TableKey, AbstractTableRLSPolicyProperties> tableRLSPolicies = new HashMap<>();
+    private Map<TableKey, ITableRLSPolicyProperties> tableRLSPolicies = new HashMap<>();
     /**
      * A map that stores information that are required to the creation of constraint that checks if foreign key in the main table refers to record
      * that exists in the foreign table and which belongs to the current tenant.
@@ -102,11 +102,11 @@ public class SharedSchemaContextRequest implements Cloneable{
      * for main table ({@link SameTenantConstraintForForeignKey#mainTable}) that has foreign key columns and the foreign
      * table ({@link SameTenantConstraintForForeignKey#foreignKeyTable}) which has primary key columns. The map key also
      * contains the set of column names for the foreign key ({@link SameTenantConstraintForForeignKey#foreignKeyColumns}).
-     * The object of type {@link AbstractSameTenantConstraintForForeignKeyProperties} is the map value.
+     * The object of type {@link ISameTenantConstraintForForeignKeyProperties} is the map value.
      * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricher
      * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher
      */
-    private Map<SameTenantConstraintForForeignKey, AbstractSameTenantConstraintForForeignKeyProperties> sameTenantConstraintForForeignKeyProperties = new HashMap<>();
+    private Map<SameTenantConstraintForForeignKey, ISameTenantConstraintForForeignKeyProperties> sameTenantConstraintForForeignKeyProperties = new HashMap<>();
     /**
      * Default grantee for which the row level security should be added.
      * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.TableRLSPolicyEnricher
@@ -183,7 +183,7 @@ public class SharedSchemaContextRequest implements Cloneable{
         this.defaultSchema = defaultSchema;
     }
 
-    public Map<TableKey, AbstractTableColumns> getTableColumnsList() {
+    public Map<TableKey, ITableColumns> getTableColumnsList() {
         return tableColumnsList;
     }
 
@@ -207,11 +207,11 @@ public class SharedSchemaContextRequest implements Cloneable{
         this.grantee = grantee;
     }
 
-    public Map<TableKey, AbstractTableRLSPolicyProperties> getTableRLSPolicies() {
+    public Map<TableKey, ITableRLSPolicyProperties> getTableRLSPolicies() {
         return tableRLSPolicies;
     }
 
-    public Map<SameTenantConstraintForForeignKey, AbstractSameTenantConstraintForForeignKeyProperties> getSameTenantConstraintForForeignKeyProperties() {
+    public Map<SameTenantConstraintForForeignKey, ISameTenantConstraintForForeignKeyProperties> getSameTenantConstraintForForeignKeyProperties() {
         return sameTenantConstraintForForeignKeyProperties;
     }
 

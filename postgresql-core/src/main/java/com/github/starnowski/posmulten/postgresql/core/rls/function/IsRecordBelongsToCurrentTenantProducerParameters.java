@@ -28,7 +28,7 @@ import javafx.util.Pair;
 
 import java.util.List;
 
-public class IsRecordBelongsToCurrentTenantProducerParameters implements AbstractIsRecordBelongsToCurrentTenantProducerParameters {
+public class IsRecordBelongsToCurrentTenantProducerParameters implements IIsRecordBelongsToCurrentTenantProducerParameters {
 
     private final String functionName;
     private final String schema;
