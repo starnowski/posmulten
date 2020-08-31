@@ -96,7 +96,7 @@ class TableRLSPolicyEnricherTest extends Specification {
     }
 
     @Unroll
-    def "should throw an exception when there is no declaration for grantee"()
+    def "should throw an exception when there is no declaration for grantee, for schema #schema"()
     {
         given:
             def builder = new DefaultSharedSchemaContextBuilder(schema)
