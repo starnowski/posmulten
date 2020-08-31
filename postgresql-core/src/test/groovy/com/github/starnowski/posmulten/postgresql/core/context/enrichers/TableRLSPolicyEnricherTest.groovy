@@ -116,7 +116,7 @@ class TableRLSPolicyEnricherTest extends Specification {
             def ex = thrown(MissingRLSGranteeDeclarationException)
 
         and: "exception should have correct message"
-            ex.message == ""
+            ex.message == "No grantee was defined for row level security policy"
 
         where:
             schema  << [null, "public", "some_schema"]
