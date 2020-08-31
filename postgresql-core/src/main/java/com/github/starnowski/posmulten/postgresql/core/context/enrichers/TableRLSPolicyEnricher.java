@@ -24,13 +24,18 @@
 package com.github.starnowski.posmulten.postgresql.core.context.enrichers;
 
 import com.github.starnowski.posmulten.postgresql.core.context.*;
+import com.github.starnowski.posmulten.postgresql.core.context.exceptions.MissingRLSGranteeDeclarationException;
 
 public class TableRLSPolicyEnricher implements ISharedSchemaContextEnricher {
 
     private TableRLSPolicySQLDefinitionsProducer tableRLSPolicySQLDefinitionsProducer = new TableRLSPolicySQLDefinitionsProducer();
 
     @Override
-    public ISharedSchemaContext enrich(ISharedSchemaContext context, SharedSchemaContextRequest request) {
+    public ISharedSchemaContext enrich(ISharedSchemaContext context, SharedSchemaContextRequest request) throws MissingRLSGranteeDeclarationException {
+        if (request.getGrantee() == null)
+        {
+            throw new MissingRLSGranteeDeclarationException("No grantee was defined for row level security policy");
+        }
         request.getTableColumnsList().entrySet().forEach(entry ->
         {
             TableRLSPolicySQLDefinitionsProducerParameters.TableRLSPolicySQLDefinitionsProducerParametersBuilder builder = new TableRLSPolicySQLDefinitionsProducerParameters.TableRLSPolicySQLDefinitionsProducerParametersBuilder();
