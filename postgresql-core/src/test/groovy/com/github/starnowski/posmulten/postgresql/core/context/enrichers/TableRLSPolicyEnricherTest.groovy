@@ -2,6 +2,7 @@ package com.github.starnowski.posmulten.postgresql.core.context.enrichers
 
 import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition
 import com.github.starnowski.posmulten.postgresql.core.context.*
+import com.github.starnowski.posmulten.postgresql.core.context.exceptions.MissingRLSGranteeDeclarationException
 import com.github.starnowski.posmulten.postgresql.core.rls.TenantHasAuthoritiesFunctionInvocationFactory
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -92,6 +93,33 @@ class TableRLSPolicyEnricherTest extends Specification {
         null            |   "tenant_id"             |   "core-user"
         "public"        | "tenant"                  |   "owner"
         "some_schema"   | "t_column"                |   "admin"
+    }
+
+    @Unroll
+    def "should throw an exception when there is no declaration for grantee, for schema #schema"()
+    {
+        given:
+            def builder = new DefaultSharedSchemaContextBuilder(schema)
+            builder.createRLSPolicyForColumn("posts", [:], "tenant", "posts_policy")
+            builder.createRLSPolicyForColumn("comments", [:], "tenant_id", "comments_policy")
+            def sharedSchemaContextRequest = builder.getSharedSchemaContextRequestCopy()
+            def context = new SharedSchemaContext()
+            def tableRLSPolicySQLDefinitionsProducer = Mock(TableRLSPolicySQLDefinitionsProducer)
+            def tenantHasAuthoritiesFunctionInvocationFactory = Mock(TenantHasAuthoritiesFunctionInvocationFactory)
+            tested.setTableRLSPolicySQLDefinitionsProducer(tableRLSPolicySQLDefinitionsProducer)
+            context.setTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory)
+
+        when:
+            tested.enrich(context, sharedSchemaContextRequest)
+
+        then:
+            def ex = thrown(MissingRLSGranteeDeclarationException)
+
+        and: "exception should have correct message"
+            ex.message == "No grantee was defined for row level security policy"
+
+        where:
+            schema  << [null, "public", "some_schema"]
     }
 
     TableKey tk(String table, String schema)
