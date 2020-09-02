@@ -43,3 +43,9 @@ jobs:
           - $HOME/.m2
       script: mvn -DskipTests clean install && mvn -pl :postgresql-core -P !unit-tests,integration-tests test && mvn -pl :postgresql-core-functional-tests -P !unit-tests,functional-tests test
 
+      deploy:
+        provider: script
+        script: mvn -DskipTests clean install && bash deploy/release.sh
+        on:
+          tags: true
+          branch: release
