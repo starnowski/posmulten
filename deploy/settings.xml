@@ -1,7 +1,7 @@
 <settings>
     <servers>
         <server>
-            <id>bintray-starnowski-bmunit-extension</id>
+            <id>bintray-starnowski-posmulten</id>
             <username>${env.SONATYPE_USERNAME}</username>
             <password>${env.SONATYPE_PASSWORD}</password>
         </server>

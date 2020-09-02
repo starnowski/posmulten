@@ -237,9 +237,9 @@
 
     <distributionManagement>
         <repository>
-            <id>bintray-starnowski-bmunit-extension</id>
-            <name>starnowski-bmunit-extension</name>
-            <url>https://api.bintray.com/maven/starnowski/bmunit-extension/bmunit-extension/;publish=1</url>
+            <id>bintray-starnowski-posmulten</id>
+            <name>starnowski-posmulten</name>
+            <url>https://api.bintray.com/maven/starnowski/posmulten/posmulten/;publish=1</url>
         </repository>
     </distributionManagement>
 
