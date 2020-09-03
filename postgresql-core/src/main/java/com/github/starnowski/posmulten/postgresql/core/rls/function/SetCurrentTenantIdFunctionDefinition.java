@@ -26,7 +26,7 @@ package com.github.starnowski.posmulten.postgresql.core.rls.function;
 import com.github.starnowski.posmulten.postgresql.core.common.function.DefaultFunctionDefinition;
 import com.github.starnowski.posmulten.postgresql.core.common.function.IFunctionDefinition;
 
-public class SetCurrentTenantIdFunctionDefinition extends DefaultFunctionDefinition implements ISetCurrentTenantIdFunctionInvocationFactory {
+public class SetCurrentTenantIdFunctionDefinition extends DefaultFunctionDefinition implements ISetCurrentTenantIdFunctionInvocationFactory, ISetCurrentTenantIdFunctionPreparedStatementInvocationFactory {
 
     public SetCurrentTenantIdFunctionDefinition(IFunctionDefinition functionDefinition) {
         super(functionDefinition);
@@ -34,12 +34,22 @@ public class SetCurrentTenantIdFunctionDefinition extends DefaultFunctionDefinit
 
     @Override
     public String generateStatementThatSetTenant(String tenantId) {
+        return prepareStatement("'" + tenantId + "'");
+    }
+
+    @Override
+    public String returnPreparedStatementThatSetCurrentTenant() {
+        return prepareStatement("?");
+    }
+
+    private String prepareStatement(String argument)
+    {
         StringBuilder sb = new StringBuilder();
         sb.append("SELECT ");
         sb.append(getFunctionReference());
-        sb.append("('");
-        sb.append(tenantId);
-        sb.append("');");
+        sb.append("(");
+        sb.append(argument);
+        sb.append(");");
         return sb.toString();
     }
 }

@@ -38,6 +38,7 @@ public class SetCurrentTenantIdFunctionDefinitionEnricher implements ISharedSche
         SetCurrentTenantIdFunctionDefinition sqlDefinition = setCurrentTenantIdFunctionProducer.produce(new SetCurrentTenantIdFunctionProducerParameters(functionName, request.getCurrentTenantIdProperty(), request.getDefaultSchema(), request.getCurrentTenantIdPropertyType()));
         context.addSQLDefinition(sqlDefinition);
         context.setISetCurrentTenantIdFunctionInvocationFactory(sqlDefinition);
+        context.setISetCurrentTenantIdFunctionPreparedStatementInvocationFactory(sqlDefinition);
         return context;
     }
 

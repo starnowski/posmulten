@@ -27,6 +27,7 @@ import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition;
 import com.github.starnowski.posmulten.postgresql.core.rls.TenantHasAuthoritiesFunctionInvocationFactory;
 import com.github.starnowski.posmulten.postgresql.core.rls.function.IGetCurrentTenantIdFunctionInvocationFactory;
 import com.github.starnowski.posmulten.postgresql.core.rls.function.ISetCurrentTenantIdFunctionInvocationFactory;
+import com.github.starnowski.posmulten.postgresql.core.rls.function.ISetCurrentTenantIdFunctionPreparedStatementInvocationFactory;
 import com.github.starnowski.posmulten.postgresql.core.rls.function.IsRecordBelongsToCurrentTenantFunctionInvocationFactory;
 
 import java.util.ArrayList;
@@ -38,6 +39,7 @@ public class SharedSchemaContext implements ISharedSchemaContext {
 
     private IGetCurrentTenantIdFunctionInvocationFactory iGetCurrentTenantIdFunctionInvocationFactory;
     private ISetCurrentTenantIdFunctionInvocationFactory iSetCurrentTenantIdFunctionInvocationFactory;
+    private ISetCurrentTenantIdFunctionPreparedStatementInvocationFactory iSetCurrentTenantIdFunctionPreparedStatementInvocationFactory;
     private TenantHasAuthoritiesFunctionInvocationFactory tenantHasAuthoritiesFunctionInvocationFactory;
     private List<SQLDefinition> sqlDefinitions = new ArrayList<>();
     private Map<TableKey, IsRecordBelongsToCurrentTenantFunctionInvocationFactory> tableKeysIsRecordBelongsToCurrentTenantFunctionInvocationFactoryMap = new HashMap();
@@ -80,6 +82,14 @@ public class SharedSchemaContext implements ISharedSchemaContext {
     @Override
     public ISetCurrentTenantIdFunctionInvocationFactory getISetCurrentTenantIdFunctionInvocationFactory() {
         return iSetCurrentTenantIdFunctionInvocationFactory;
+    }
+
+    public ISetCurrentTenantIdFunctionPreparedStatementInvocationFactory getISetCurrentTenantIdFunctionPreparedStatementInvocationFactory() {
+        return iSetCurrentTenantIdFunctionPreparedStatementInvocationFactory;
+    }
+
+    public void setISetCurrentTenantIdFunctionPreparedStatementInvocationFactory(ISetCurrentTenantIdFunctionPreparedStatementInvocationFactory iSetCurrentTenantIdFunctionPreparedStatementInvocationFactory) {
+        this.iSetCurrentTenantIdFunctionPreparedStatementInvocationFactory = iSetCurrentTenantIdFunctionPreparedStatementInvocationFactory;
     }
 
     @Override
