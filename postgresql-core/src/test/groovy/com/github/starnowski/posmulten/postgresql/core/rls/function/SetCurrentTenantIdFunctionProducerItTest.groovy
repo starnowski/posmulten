@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.StatementCallback
 import spock.lang.Specification
 import spock.lang.Unroll
 
+import java.sql.PreparedStatement
 import java.sql.ResultSet
 import java.sql.SQLException
 import java.sql.Statement
@@ -94,6 +95,34 @@ class SetCurrentTenantIdFunctionProducerItTest extends Specification {
             testSchema << [null, "public", "non_public_schema"]
     }
 
+    @Unroll
+    def "should create a function for the random function name, schema '#testSchema', property name and return the value that matches the random generated value by executing prepared statement" () {
+        given:
+            def r = new RandomString(12, new Random(), RandomString.lower)
+            functionName = r.nextString()
+            schema = testSchema
+            def currentTenantIdProperty = r.nextString() + "." + r.nextString()
+            def propertyValue = r.nextString()
+            assertEquals(false, isFunctionExists(jdbcTemplate, functionName, schema))
+            def expectedStatementResult = "function_value-->" + propertyValue + "<--"
+            def selectStatementWithStringConcat = returnSelectStatementWithStringConcat(currentTenantIdProperty)
+            logger.log(java.util.logging.Level.INFO, "Random function name: " + functionName)
+            logger.log(java.util.logging.Level.INFO, "Random current tenant property name: " + currentTenantIdProperty)
+
+        when:
+            def functionDefinition = tested.produce(new SetCurrentTenantIdFunctionProducerParameters(functionName, currentTenantIdProperty, schema, null))
+            jdbcTemplate.execute(functionDefinition.getCreateScript())
+
+        then:
+            isFunctionExists(jdbcTemplate, functionName, schema)
+
+        and: "return correct result for contact statement"
+            returnSelectStatementResultAfterSettingCurrentTenantIdByPreparedStatement(functionDefinition.returnPreparedStatementThatSetCurrentTenant(), selectStatementWithStringConcat, propertyValue) == expectedStatementResult
+
+        where:
+            testSchema << [null, "public", "non_public_schema"]
+    }
+
     def cleanup() {
         def argumentTypePhrase = argumentType == null ? "text" : argumentType
         dropFunction(jdbcTemplate, functionName, schema, argumentTypePhrase)
@@ -107,6 +136,21 @@ class SetCurrentTenantIdFunctionProducerItTest extends Specification {
             String doInStatement(Statement statement) throws SQLException, DataAccessException {
                 statement.execute(statementThatSetTenant)
                 ResultSet rs = statement.executeQuery(selectStatement)
+                rs.next()
+                return rs.getString(1)
+            }
+        })
+    }
+
+    def returnSelectStatementResultAfterSettingCurrentTenantIdByPreparedStatement(String preparedStatementThatSetTenant, String selectStatement, String tenant)
+    {
+        return jdbcTemplate.execute(preparedStatementThatSetTenant, new org.springframework.jdbc.core.PreparedStatementCallback<String>()
+        {
+            @Override
+            String doInPreparedStatement(PreparedStatement preparedStatement) throws SQLException, DataAccessException {
+                preparedStatement.setString(1, tenant)
+                preparedStatement.executeQuery()
+                ResultSet rs = preparedStatement.getConnection().createStatement().executeQuery(selectStatement)
                 rs.next()
                 return rs.getString(1)
             }
