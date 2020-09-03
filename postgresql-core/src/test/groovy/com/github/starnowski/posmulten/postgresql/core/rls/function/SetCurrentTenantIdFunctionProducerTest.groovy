@@ -46,6 +46,21 @@ class SetCurrentTenantIdFunctionProducerTest extends AbstractFunctionFactoryTest
     }
 
     @Unroll
+    def "should generate statement that invokes function '#testFunctionName' and could be used by prepared statement ('#currentTenantValue') for schema '#testSchema' " () {
+        expect:
+            tested.produce(new SetCurrentTenantIdFunctionProducerParameters(testFunctionName, VALID_CURRENT_TENANT_ID_PROPERTY_NAME, testSchema, null)).returnPreparedStatementThatSetCurrentTenant() == expectedStatement
+
+        where:
+            testSchema              |   testFunctionName            || expectedStatement
+            null                    |   "set_current_tenant"        ||  "SELECT set_current_tenant(?);"
+            "public"                |   "set_current_tenant"        ||  "SELECT public.set_current_tenant(?);"
+            "non_public_schema"     |   "set_current_tenant"        ||  "SELECT non_public_schema.set_current_tenant(?);"
+            null                    |   "this_is_tenant"            ||  "SELECT this_is_tenant(?);"
+            "public"                |   "this_is_tenant"            ||  "SELECT public.this_is_tenant(?);"
+            "non_public_schema"     |   "this_is_tenant"            ||  "SELECT non_public_schema.this_is_tenant(?);"
+    }
+
+    @Unroll
     def "should throw exception of type 'IllegalArgumentException' when tenant id property name is null, even if the rest of parameters are correct, function name #functionName, schema #testSchema, argument type #testArgumentType"()
     {
         when:
