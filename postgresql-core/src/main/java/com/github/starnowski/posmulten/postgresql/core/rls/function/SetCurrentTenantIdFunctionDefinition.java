@@ -34,18 +34,22 @@ public class SetCurrentTenantIdFunctionDefinition extends DefaultFunctionDefinit
 
     @Override
     public String generateStatementThatSetTenant(String tenantId) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("SELECT ");
-        sb.append(getFunctionReference());
-        sb.append("('");
-        sb.append(tenantId);
-        sb.append("');");
-        return sb.toString();
+        return prepareStatement("'" + tenantId + "'");
     }
 
     @Override
     public String returnPreparedStatementThatSetCurrentTenant() {
-        //TODO
-        return null;
+        return prepareStatement("?");
+    }
+
+    private String prepareStatement(String argument)
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append("SELECT ");
+        sb.append(getFunctionReference());
+        sb.append("(");
+        sb.append(argument);
+        sb.append(");");
+        return sb.toString();
     }
 }
