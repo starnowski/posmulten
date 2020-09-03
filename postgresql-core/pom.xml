@@ -5,40 +5,17 @@
     <parent>
         <artifactId>parent</artifactId>
         <groupId>com.github.starnowski.posmulten</groupId>
-        <version>0.1.0-SNAPSHOT</version>
+        <version>0.2.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>postgresql-core</artifactId>
 
     <url>https://github.com/starnowski/posmulten</url>
-    <name>posmulten</name>
+    <name>posmulten-core</name>
     <description>
-        Posmulten library is an open-source project for the generation of SQL DDL statements that make it easy for implementation of Shared Schema Multi-tenancy strategy via the Row Security Policies in the Postgres database.
+        Posmulten Core is a module for the generation of SQL DDL statements that make it easy for implementation of Shared Schema Multi-tenancy strategy via the Row Security Policies in the Postgres database.
     </description>
-
-    <licenses>
-        <license>
-            <name>LGPL 2.1</name>
-            <url>http://www.gnu.org/licenses/lgpl-2.1.html</url>
-        </license>
-    </licenses>
-    <developers>
-        <developer>
-            <name>Szymon Tarnowski</name>
-            <url>www.linkedin.com/in/szymon-tarnowski-a104b4150</url>
-        </developer>
-    </developers>
-
-    <issueManagement>
-        <url>https://github.com/starnowski/posmulten/issues</url>
-        <system>GitHub Issues</system>
-    </issueManagement>
-
-    <scm>
-        <url>https://github.com/starnowski/posmulten</url>
-        <connection>scm:git:git://github.com/starnowski/posmulten.git</connection>
-    </scm>
 
     <properties>
         <org.springframework.boot.version>1.5.8.RELEASE</org.springframework.boot.version>
@@ -245,52 +222,6 @@
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-surefire-plugin</artifactId>
                         <version>2.22.1</version>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <id>ossrh</id>
-            <properties>
-                <gpg.executable>gpg</gpg.executable>
-                <gpg.keyname>${env.GPG_KEYNAME}</gpg.keyname>
-                <gpg.passphrase>${env.GPG_PASSPHRASE}</gpg.passphrase>
-                <gpg.defaultKeyring>false</gpg.defaultKeyring>
-                <gpg.publicKeyring>${env.GPG_DIR}/pubring.gpg</gpg.publicKeyring>
-                <gpg.secretKeyring>${env.GPG_DIR}/secring.gpg</gpg.secretKeyring>
-            </properties>
-            <activation>
-                <property>
-                    <name>performRelease</name>
-                    <value>true</value>
-                </property>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-gpg-plugin</artifactId>
-                        <version>1.5</version>
-                        <executions>
-                            <execution>
-                                <id>sign-artifacts</id>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>sign</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.sonatype.plugins</groupId>
-                        <artifactId>nexus-staging-maven-plugin</artifactId>
-                        <version>1.6.2</version>
-                        <extensions>true</extensions>
-                        <configuration>
-                            <serverId>ossrh</serverId>
-                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                            <autoReleaseAfterClose>true</autoReleaseAfterClose>
-                        </configuration>
                     </plugin>
                 </plugins>
             </build>
