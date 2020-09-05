@@ -1,5 +1,6 @@
 package com.github.starnowski.posmulten.postgresql.core.context
 
+import com.github.starnowski.posmulten.postgresql.core.context.enrichers.ISharedSchemaContextEnricher
 import com.github.starnowski.posmulten.postgresql.core.context.exceptions.SharedSchemaContextBuilderException
 import com.github.starnowski.posmulten.postgresql.core.context.validators.ISharedSchemaContextRequestValidator
 import spock.lang.Specification
@@ -12,7 +13,7 @@ class DefaultSharedSchemaContextBuilderValidatorsTest extends Specification {
             ISharedSchemaContextRequestValidator firstValidator = Mock(ISharedSchemaContextRequestValidator)
             ISharedSchemaContextRequestValidator secondValidator = Mock(ISharedSchemaContextRequestValidator)
             ISharedSchemaContext firstSharedSchemaContext = Mock(ISharedSchemaContext)
-            ISharedSchemaContextEnricher sharedSchemaContextEnricher = Mock(ISharedSchemaContextEnricher)
+        ISharedSchemaContextEnricher sharedSchemaContextEnricher = Mock(ISharedSchemaContextEnricher)
             DefaultSharedSchemaContextBuilder builder = new DefaultSharedSchemaContextBuilder()
             builder.setValidators([firstValidator, secondValidator])
             builder.setEnrichers([sharedSchemaContextEnricher])
