@@ -25,9 +25,10 @@ class ForeignKeysMappingSharedSchemaContextRequestValidatorTest extends Specific
             noExceptionThrown()
 
         where:
-            foreignKeysTable    |   primaryKeysTable    |   foreignKeysMapping              |   primayKeyTypeDefinition
-            "comments"          |   "users"             |   [user_id: "id"]                 |   [id: null]
-            "posts"             |   "users"             |   [user_id: "uuid"]               |   [uuid: null]
-            "posts"             |   "comments"          |   [comment_id: "comment_id"]      |   [comment_id: null]
+            foreignKeysTable    |   primaryKeysTable    |   foreignKeysMapping                                          |   primayKeyTypeDefinition
+            "comments"          |   "users"             |   [user_id: "id"]                                             |   [id: null]
+            "posts"             |   "users"             |   [user_id: "uuid"]                                           |   [uuid: null]
+            "posts"             |   "comments"          |   [comment_id: "comment_id"]                                  |   [comment_id: null]
+            "posts"             |   "comments"          |   [comment_id: "comment_id", comment_user: "user"]            |   [comment_id: null, user: null]
     }
 }
