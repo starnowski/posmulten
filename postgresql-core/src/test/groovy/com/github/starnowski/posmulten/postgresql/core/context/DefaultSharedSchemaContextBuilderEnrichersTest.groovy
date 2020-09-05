@@ -8,6 +8,7 @@ import com.github.starnowski.posmulten.postgresql.core.context.enrichers.TableRL
 import com.github.starnowski.posmulten.postgresql.core.context.enrichers.TableRLSSettingsSQLDefinitionsEnricher
 import com.github.starnowski.posmulten.postgresql.core.context.enrichers.TenantColumnSQLDefinitionsEnricher
 import com.github.starnowski.posmulten.postgresql.core.context.enrichers.TenantHasAuthoritiesFunctionDefinitionEnricher
+import com.github.starnowski.posmulten.postgresql.core.context.exceptions.SharedSchemaContextBuilderException
 import spock.lang.Specification
 
 import static java.util.stream.Collectors.toList
@@ -94,5 +95,31 @@ class DefaultSharedSchemaContextBuilderEnrichersTest extends Specification {
 
         and: "result should match to the result of the last enricher"
             result.is(secondSharedSchemaContext)
+    }
+
+    def "should rethrow exception thrown by enricher in middle"()
+    {
+        given:
+            ISharedSchemaContext firstSharedSchemaContext = Mock(ISharedSchemaContext)
+            ISharedSchemaContextEnricher firstSharedSchemaContextEnricher = Mock(ISharedSchemaContextEnricher)
+            ISharedSchemaContextEnricher secondSharedSchemaContextEnricher = Mock(ISharedSchemaContextEnricher)
+            ISharedSchemaContextEnricher thirdSharedSchemaContextEnricher = Mock(ISharedSchemaContextEnricher)
+            DefaultSharedSchemaContextBuilder builder = new DefaultSharedSchemaContextBuilder()
+            builder.setEnrichers([firstSharedSchemaContextEnricher, secondSharedSchemaContextEnricher, thirdSharedSchemaContextEnricher])
+            def exception = Mock(SharedSchemaContextBuilderException)
+
+        when:
+            builder.build()
+
+        then:
+            1 * firstSharedSchemaContextEnricher.enrich(_, _) >> firstSharedSchemaContext
+
+        then:
+            1 * secondSharedSchemaContextEnricher.enrich(_, _) >> { throw exception }
+            def ex = thrown(SharedSchemaContextBuilderException)
+            ex.is(exception)
+
+        then:
+            0 * thirdSharedSchemaContextEnricher.enrich(_, _)
     }
 }
