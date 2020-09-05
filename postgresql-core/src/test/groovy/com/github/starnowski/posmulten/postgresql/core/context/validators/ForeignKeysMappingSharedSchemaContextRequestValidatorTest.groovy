@@ -8,12 +8,12 @@ class ForeignKeysMappingSharedSchemaContextRequestValidatorTest extends Specific
 
     def tested = new ForeignKeysMappingSharedSchemaContextRequestValidator()
 
-    def "should not throw any exception when foreign keys mapping is correctly defined"()
+    def "should not throw any exception when foreign keys mapping is correctly defined for tests parameters: #foreignKeysTable, #primaryKeysTable"()
     {
         given:
             DefaultSharedSchemaContextBuilder builder = new DefaultSharedSchemaContextBuilder()
-            builder.createSameTenantConstraintForForeignKey("comments", "users", [user_id: "id"], null)
-            builder.createRLSPolicyForTable("users", [id: null], null, null)
+            builder.createSameTenantConstraintForForeignKey(foreignKeysTable, primaryKeysTable, [user_id: "id"], null)
+            builder.createRLSPolicyForTable(primaryKeysTable, [id: null], null, null)
             SharedSchemaContextRequest request = builder.getSharedSchemaContextRequestCopy()
 
         when:
@@ -21,5 +21,9 @@ class ForeignKeysMappingSharedSchemaContextRequestValidatorTest extends Specific
 
         then:
             noExceptionThrown()
+
+        where:
+            foreignKeysTable    |   primaryKeysTable
+            "comments"          |   "users"
     }
 }
