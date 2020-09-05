@@ -1,5 +1,6 @@
 package com.github.starnowski.posmulten.postgresql.core.context
 
+import com.github.starnowski.posmulten.postgresql.core.context.exceptions.SharedSchemaContextBuilderException
 import com.github.starnowski.posmulten.postgresql.core.context.validators.ISharedSchemaContextRequestValidator
 import spock.lang.Specification
 
@@ -13,6 +14,7 @@ class DefaultSharedSchemaContextBuilderValidatorsTest extends Specification {
             ISharedSchemaContext firstSharedSchemaContext = Mock(ISharedSchemaContext)
             ISharedSchemaContextEnricher sharedSchemaContextEnricher = Mock(ISharedSchemaContextEnricher)
             DefaultSharedSchemaContextBuilder builder = new DefaultSharedSchemaContextBuilder()
+            builder.setValidators([firstValidator, secondValidator])
             builder.setEnrichers([sharedSchemaContextEnricher])
 
         when:
@@ -38,6 +40,7 @@ class DefaultSharedSchemaContextBuilderValidatorsTest extends Specification {
             ISharedSchemaContextRequestValidator secondValidator = Mock(ISharedSchemaContextRequestValidator)
             ISharedSchemaContextEnricher sharedSchemaContextEnricher = Mock(ISharedSchemaContextEnricher)
             DefaultSharedSchemaContextBuilder builder = new DefaultSharedSchemaContextBuilder()
+            builder.setValidators([firstValidator, secondValidator])
             builder.setEnrichers([sharedSchemaContextEnricher])
             def firstEnricherCapturedRequest = null
             def secondEnricherCapturedRequest = null
@@ -57,5 +60,32 @@ class DefaultSharedSchemaContextBuilderValidatorsTest extends Specification {
                         secondEnricherCapturedRequest = parameters[0]
                     }
             !firstEnricherCapturedRequest.is(secondEnricherCapturedRequest)
+    }
+
+    def "should rethrow exception thrown by validator in middle"()
+    {
+        given:
+            ISharedSchemaContextRequestValidator firstValidator = Mock(ISharedSchemaContextRequestValidator)
+            ISharedSchemaContextRequestValidator secondValidator = Mock(ISharedSchemaContextRequestValidator)
+            ISharedSchemaContextRequestValidator thirdValidator = Mock(ISharedSchemaContextRequestValidator)
+            ISharedSchemaContextEnricher sharedSchemaContextEnricher = Mock(ISharedSchemaContextEnricher)
+            DefaultSharedSchemaContextBuilder builder = new DefaultSharedSchemaContextBuilder()
+            builder.setValidators([firstValidator, secondValidator,thirdValidator])
+            builder.setEnrichers([sharedSchemaContextEnricher])
+            def exception = Mock(SharedSchemaContextBuilderException)
+
+        when:
+            builder.build()
+
+        then:
+            1 * firstValidator.validate(_)
+
+        then:
+            1 * secondValidator.validate(_) >> { throw exception }
+            def ex = thrown(SharedSchemaContextBuilderException)
+            ex.is(exception)
+
+        then:
+            0 * sharedSchemaContextEnricher.enrich(_, _)
     }
 }
