@@ -24,7 +24,7 @@ class DefaultSharedSchemaContextBuilderEnrichersTest extends Specification {
             ISharedSchemaContextEnricher firstSharedSchemaContextEnricher = Mock(ISharedSchemaContextEnricher)
             ISharedSchemaContextEnricher secondSharedSchemaContextEnricher = Mock(ISharedSchemaContextEnricher)
             ISharedSchemaContextEnricher thirdSharedSchemaContextEnricher = Mock(ISharedSchemaContextEnricher)
-            DefaultSharedSchemaContextBuilder builder = new DefaultSharedSchemaContextBuilder()
+            DefaultSharedSchemaContextBuilder builder = builderWithoutValidators()
             builder.setEnrichers([firstSharedSchemaContextEnricher, secondSharedSchemaContextEnricher, thirdSharedSchemaContextEnricher])
 
         when:
@@ -63,7 +63,7 @@ class DefaultSharedSchemaContextBuilderEnrichersTest extends Specification {
             ISharedSchemaContext secondSharedSchemaContext = Mock(ISharedSchemaContext)
             ISharedSchemaContextEnricher firstSharedSchemaContextEnricher = Mock(ISharedSchemaContextEnricher)
             ISharedSchemaContextEnricher secondSharedSchemaContextEnricher = Mock(ISharedSchemaContextEnricher)
-            DefaultSharedSchemaContextBuilder builder = new DefaultSharedSchemaContextBuilder()
+            DefaultSharedSchemaContextBuilder builder = builderWithoutValidators()
             builder.setEnrichers([firstSharedSchemaContextEnricher, secondSharedSchemaContextEnricher])
             def firstEnricherCapturedRequest = null
             def secondEnricherCapturedRequest = null
@@ -104,7 +104,7 @@ class DefaultSharedSchemaContextBuilderEnrichersTest extends Specification {
             ISharedSchemaContextEnricher firstSharedSchemaContextEnricher = Mock(ISharedSchemaContextEnricher)
             ISharedSchemaContextEnricher secondSharedSchemaContextEnricher = Mock(ISharedSchemaContextEnricher)
             ISharedSchemaContextEnricher thirdSharedSchemaContextEnricher = Mock(ISharedSchemaContextEnricher)
-            DefaultSharedSchemaContextBuilder builder = new DefaultSharedSchemaContextBuilder()
+            DefaultSharedSchemaContextBuilder builder = builderWithoutValidators()
             builder.setEnrichers([firstSharedSchemaContextEnricher, secondSharedSchemaContextEnricher, thirdSharedSchemaContextEnricher])
             def exception = Mock(SharedSchemaContextBuilderException)
 
@@ -121,5 +121,11 @@ class DefaultSharedSchemaContextBuilderEnrichersTest extends Specification {
 
         then:
             0 * thirdSharedSchemaContextEnricher.enrich(_, _)
+    }
+
+    def builderWithoutValidators()
+    {
+        def builder = new DefaultSharedSchemaContextBuilder()
+        builder.setValidators([])
     }
 }
