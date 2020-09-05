@@ -25,6 +25,7 @@ package com.github.starnowski.posmulten.postgresql.core.context;
 
 import com.github.starnowski.posmulten.postgresql.core.context.enrichers.*;
 import com.github.starnowski.posmulten.postgresql.core.context.exceptions.SharedSchemaContextBuilderException;
+import com.github.starnowski.posmulten.postgresql.core.context.validators.ISharedSchemaContextRequestValidator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,8 +45,13 @@ public class DefaultSharedSchemaContextBuilder {
      * Collection that stores objects of type {@link ISharedSchemaContextEnricher} used for enriching result object ({@link #build()} method).
      */
     private List<ISharedSchemaContextEnricher> enrichers = asList(new GetCurrentTenantIdFunctionDefinitionEnricher(), new SetCurrentTenantIdFunctionDefinitionEnricher(), new TenantHasAuthoritiesFunctionDefinitionEnricher(), new TenantColumnSQLDefinitionsEnricher(), new TableRLSSettingsSQLDefinitionsEnricher(), new TableRLSPolicyEnricher(), new IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricher(), new IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher());
-    private final SharedSchemaContextRequest sharedSchemaContextRequest = new SharedSchemaContextRequest();
 
+    /**
+     * Collection that stores objects of type {@link ISharedSchemaContextRequestValidator} used for validation of request object (type {@link SharedSchemaContextRequest}) in {@link #build()} method.
+     */
+    private List<ISharedSchemaContextRequestValidator> validators = new ArrayList<>();
+
+    private final SharedSchemaContextRequest sharedSchemaContextRequest = new SharedSchemaContextRequest();
     /**
      *
      * @param defaultSchema name of default schema used during building process
@@ -58,6 +64,7 @@ public class DefaultSharedSchemaContextBuilder {
      * Builds shared schema context based on properties {@link SharedSchemaContextRequest#defaultSchema} and {@link #sharedSchemaContextRequest}.
      * Context is enricher in the loop by each enricher from {@link #enrichers}  collection by an order which they were
      * added into the collection.
+     * Before enriching the result object the request object is validated by all validators stored in the {@link #validators} collection.
      * @return object of type {@link ISharedSchemaContext}
      * @throws SharedSchemaContextBuilderException
      */
@@ -275,6 +282,16 @@ public class DefaultSharedSchemaContextBuilder {
      */
     public DefaultSharedSchemaContextBuilder setNameForFunctionThatChecksIfRecordExistsInTable(String recordTable, String functionName) {
         sharedSchemaContextRequest.getFunctionThatChecksIfRecordExistsInTableNames().put(new TableKey(recordTable, sharedSchemaContextRequest.getDefaultSchema()), functionName);
+        return this;
+    }
+
+    /**
+     * Setting the {@link #validators} collection
+     * @param validators new validators lists
+     * @return builder object for which method was invoked
+     */
+    public DefaultSharedSchemaContextBuilder setValidators(List<ISharedSchemaContextRequestValidator> validators) {
+        this.validators = validators;
         return this;
     }
 
