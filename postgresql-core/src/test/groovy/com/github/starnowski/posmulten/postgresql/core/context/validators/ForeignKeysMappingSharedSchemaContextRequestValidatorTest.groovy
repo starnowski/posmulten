@@ -12,11 +12,14 @@ class ForeignKeysMappingSharedSchemaContextRequestValidatorTest extends Specific
     {
         given:
             DefaultSharedSchemaContextBuilder builder = new DefaultSharedSchemaContextBuilder()
-            builder.createSameTenantConstraintForForeignKey("comments", "users", [user_id: id], null)
-            builder.createRLSPolicyForTable()
-            SharedSchemaContextRequest request = new SharedSchemaContextRequest()
-            request.getSameTenantConstraintForForeignKeyProperties().pu
-        //request.getSameTenantConstraintForForeignKeyProperties()
+            builder.createSameTenantConstraintForForeignKey("comments", "users", [user_id: "id"], null)
+            builder.createRLSPolicyForTable("users", [id: null], null, null)
+            SharedSchemaContextRequest request = builder.getSharedSchemaContextRequestCopy()
 
+        when:
+            tested.validate(request)
+
+        then:
+            noExceptionThrown()
     }
 }
