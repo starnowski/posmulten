@@ -14,8 +14,8 @@ class ForeignKeysMappingSharedSchemaContextRequestValidatorTest extends Specific
     {
         given:
             DefaultSharedSchemaContextBuilder builder = new DefaultSharedSchemaContextBuilder()
-            builder.createSameTenantConstraintForForeignKey(foreignKeysTable, primaryKeysTable, [user_id: "id"], null)
-            builder.createRLSPolicyForTable(primaryKeysTable, [id: null], null, null)
+            builder.createSameTenantConstraintForForeignKey(foreignKeysTable, primaryKeysTable, foreignKeysMapping, null)
+            builder.createRLSPolicyForTable(primaryKeysTable, primayKeyTypeDefinition, null, null)
             SharedSchemaContextRequest request = builder.getSharedSchemaContextRequestCopy()
 
         when:
