@@ -225,7 +225,7 @@ public class DefaultSharedSchemaContextBuilder {
      * @see TableRLSPolicyEnricher
      * @see TableRLSSettingsSQLDefinitionsEnricher
      */
-    public DefaultSharedSchemaContextBuilder createRLSPolicyForColumn(String table, Map<String, String> primaryKeyColumnsList, String tenantColumnName, String rlsPolicyName)
+    public DefaultSharedSchemaContextBuilder createRLSPolicyForTable(String table, Map<String, String> primaryKeyColumnsList, String tenantColumnName, String rlsPolicyName)
     {
         TableKey tableKey = new TableKey(table, sharedSchemaContextRequest.getDefaultSchema());
         sharedSchemaContextRequest.getTableColumnsList().put(tableKey, new DefaultTableColumns(tenantColumnName, primaryKeyColumnsList));

@@ -17,9 +17,9 @@ class TableRLSSettingsSQLDefinitionsEnricherTest extends Specification {
     {
         given:
             def builder = new DefaultSharedSchemaContextBuilder(schema)
-            builder.createRLSPolicyForColumn("users", [:], "tenant", "user_policy")
-            builder.createRLSPolicyForColumn("comments", [:], "tenant_id", "comments_policy")
-            builder.createRLSPolicyForColumn("some_table", [:], "tenant_xxx_id", "some_table_policy")
+            builder.createRLSPolicyForTable("users", [:], "tenant", "user_policy")
+            builder.createRLSPolicyForTable("comments", [:], "tenant_id", "comments_policy")
+            builder.createRLSPolicyForTable("some_table", [:], "tenant_xxx_id", "some_table_policy")
             def sharedSchemaContextRequest = builder.getSharedSchemaContextRequestCopy()
             def context = new SharedSchemaContext()
             def usersTableSQLDefinition1 = Mock(SQLDefinition)
@@ -60,9 +60,9 @@ class TableRLSSettingsSQLDefinitionsEnricherTest extends Specification {
     {
         given:
             def builder = new DefaultSharedSchemaContextBuilder(schema)
-            builder.createRLSPolicyForColumn("users", [:], "tenant", "user_policy")
-            builder.createRLSPolicyForColumn("comments", [:], "tenant_id", "comments_policy")
-            builder.createRLSPolicyForColumn("some_table", [:], "tenant_xxx_id", "some_table_policy")
+            builder.createRLSPolicyForTable("users", [:], "tenant", "user_policy")
+            builder.createRLSPolicyForTable("comments", [:], "tenant_id", "comments_policy")
+            builder.createRLSPolicyForTable("some_table", [:], "tenant_xxx_id", "some_table_policy")
             builder.setForceRowLevelSecurityForTableOwner(true)
             def sharedSchemaContextRequest = builder.getSharedSchemaContextRequestCopy()
             def context = new SharedSchemaContext()

@@ -19,9 +19,9 @@ class IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricherTest extends
     {
         given:
             def builder = new DefaultSharedSchemaContextBuilder(schema)
-            builder.createRLSPolicyForColumn("users", [:], "tenant", "N/A")
-            builder.createRLSPolicyForColumn("comments", [:], "tenant_id", "N/A")
-            builder.createRLSPolicyForColumn("some_table", [:], "tenant_xxx_id", "N/A")
+            builder.createRLSPolicyForTable("users", [:], "tenant", "N/A")
+            builder.createRLSPolicyForTable("comments", [:], "tenant_id", "N/A")
+            builder.createRLSPolicyForTable("some_table", [:], "tenant_xxx_id", "N/A")
             builder.createSameTenantConstraintForForeignKey("comments", "users", mapBuilder().put("user_id", "id").build(), "comments_users_fk_con")
             builder.createSameTenantConstraintForForeignKey("some_table", "users", mapBuilder().put("owner_id", "id").build(), "some_table_same_tenant_users_con")
             builder.createSameTenantConstraintForForeignKey("some_table", "comments", mapBuilder().put("some_comment_id", "uuid").build(), "some_table_comments_const_ten")
@@ -86,9 +86,9 @@ class IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricherTest extends
     {
         given:
             def builder = new DefaultSharedSchemaContextBuilder(schema)
-            builder.createRLSPolicyForColumn("users", [:], "tenant", "N/A")
-            builder.createRLSPolicyForColumn("comments", [:], "tenant_id", "N/A")
-            builder.createRLSPolicyForColumn("some_table", [:], "tenant_xxx_id", "N/A")
+            builder.createRLSPolicyForTable("users", [:], "tenant", "N/A")
+            builder.createRLSPolicyForTable("comments", [:], "tenant_id", "N/A")
+            builder.createRLSPolicyForTable("some_table", [:], "tenant_xxx_id", "N/A")
             def sharedSchemaContextRequest = builder.getSharedSchemaContextRequestCopy()
             def context = new SharedSchemaContext()
             def isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer = Mock(IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer)
@@ -110,8 +110,8 @@ class IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricherTest extends
     {
         given:
             def builder = new DefaultSharedSchemaContextBuilder(schema)
-            builder.createRLSPolicyForColumn("users", [:], "tenant", "N/A")
-            builder.createRLSPolicyForColumn("some_table", [:], "tenant_xxx_id", "N/A")
+            builder.createRLSPolicyForTable("users", [:], "tenant", "N/A")
+            builder.createRLSPolicyForTable("some_table", [:], "tenant_xxx_id", "N/A")
             builder.createSameTenantConstraintForForeignKey("some_table", "users", mapBuilder().put("owner_id", "id").build(), "some_table_same_tenant_users_owner_con")
             builder.createSameTenantConstraintForForeignKey("some_table", "users", mapBuilder().put("parent_id", "id").build(), "some_table_same_tenant_users_parent_con")
             def sharedSchemaContextRequest = builder.getSharedSchemaContextRequestCopy()
@@ -161,8 +161,8 @@ class IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricherTest extends
     {
         given:
             def builder = new DefaultSharedSchemaContextBuilder(schema)
-            builder.createRLSPolicyForColumn("tab1", [:], "tenant", "N/A")
-            builder.createRLSPolicyForColumn(table, [:], "tenant_xxx_id", "N/A")
+            builder.createRLSPolicyForTable("tab1", [:], "tenant", "N/A")
+            builder.createRLSPolicyForTable(table, [:], "tenant_xxx_id", "N/A")
             builder.createSameTenantConstraintForForeignKey(table, "tab1", foreignKeyPrimaryKeyColumnsMappings, null)
             def sharedSchemaContextRequest = builder.getSharedSchemaContextRequestCopy()
             def context = new SharedSchemaContext()
@@ -202,8 +202,8 @@ class IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricherTest extends
     {
         given:
             def builder = new DefaultSharedSchemaContextBuilder(schema)
-            builder.createRLSPolicyForColumn("tab1", [:], "tenant", "N/A")
-            builder.createRLSPolicyForColumn(table, [:], "tenant_xxx_id", "N/A")
+            builder.createRLSPolicyForTable("tab1", [:], "tenant", "N/A")
+            builder.createRLSPolicyForTable(table, [:], "tenant_xxx_id", "N/A")
             builder.createSameTenantConstraintForForeignKey("tab1", table, [uuid: "N/A"] , "fun_1")
             def sharedSchemaContextRequest = builder.getSharedSchemaContextRequestCopy()
             def context = new SharedSchemaContext()

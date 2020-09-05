@@ -19,11 +19,11 @@ class TenantColumnSQLDefinitionsEnricherTest extends Specification {
         given:
             def randomString = new RandomString(5, new Random(), RandomString.lower)
             def builder = new DefaultSharedSchemaContextBuilder(schema)
-            builder.createRLSPolicyForColumn("users", [:], "tenant", "user_policy")
+            builder.createRLSPolicyForTable("users", [:], "tenant", "user_policy")
             builder.createTenantColumnForTable("users")
-            builder.createRLSPolicyForColumn("comments", [:], "tenant_id", "comments_policy")
+            builder.createRLSPolicyForTable("comments", [:], "tenant_id", "comments_policy")
             builder.createTenantColumnForTable("comments")
-            builder.createRLSPolicyForColumn("some_table", [:], "tenant_xxx_id", "some_table_policy")
+            builder.createRLSPolicyForTable("some_table", [:], "tenant_xxx_id", "some_table_policy")
             def sharedSchemaContextRequest = builder.getSharedSchemaContextRequestCopy()
             def context = new SharedSchemaContext()
             def currentTenantInvocation = randomString.nextString()
@@ -68,9 +68,9 @@ class TenantColumnSQLDefinitionsEnricherTest extends Specification {
     {
         given:
             def builder = new DefaultSharedSchemaContextBuilder(schema)
-            builder.createRLSPolicyForColumn("users", [:], "tenant", "user_policy")
-            builder.createRLSPolicyForColumn("comments", [:], "tenant_id", "comments_policy")
-            builder.createRLSPolicyForColumn("some_table", [:], "tenant_xxx_id", "some_table_policy")
+            builder.createRLSPolicyForTable("users", [:], "tenant", "user_policy")
+            builder.createRLSPolicyForTable("comments", [:], "tenant_id", "comments_policy")
+            builder.createRLSPolicyForTable("some_table", [:], "tenant_xxx_id", "some_table_policy")
             def sharedSchemaContextRequest = builder.getSharedSchemaContextRequestCopy()
             def context = new SharedSchemaContext()
             def singleTenantColumnSQLDefinitionsProducer = Mock(SingleTenantColumnSQLDefinitionsProducer)

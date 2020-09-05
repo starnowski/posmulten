@@ -22,9 +22,9 @@ class IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricherTest extends Spec
     {
         given:
             def builder = new DefaultSharedSchemaContextBuilder(schema)
-            builder.createRLSPolicyForColumn("users", [id: "N/A"], "tenant", "N/A")
-            builder.createRLSPolicyForColumn("comments", [uuid: "N/A"], "tenant_id", "N/A")
-            builder.createRLSPolicyForColumn("some_table", [somedid: "N/A"], "tenant_xxx_id", "N/A")
+            builder.createRLSPolicyForTable("users", [id: "N/A"], "tenant", "N/A")
+            builder.createRLSPolicyForTable("comments", [uuid: "N/A"], "tenant_id", "N/A")
+            builder.createRLSPolicyForTable("some_table", [somedid: "N/A"], "tenant_xxx_id", "N/A")
             builder.createSameTenantConstraintForForeignKey("comments", "users", mapBuilder().put("N/A", "N/A").build(), "N/A")
             builder.createSameTenantConstraintForForeignKey("some_table", "users", mapBuilder().put("N/A", "N/A").build(), "N/A")
             builder.createSameTenantConstraintForForeignKey("some_table", "comments", mapBuilder().put("N/A", "N/A").build(), "N/A")
@@ -67,9 +67,9 @@ class IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricherTest extends Spec
     {
         given:
             def builder = new DefaultSharedSchemaContextBuilder(schema)
-            builder.createRLSPolicyForColumn("users", [id: "N/A"], "tenant", "N/A")
-            builder.createRLSPolicyForColumn("comments", [uuid: "N/A"], "tenant_id", "N/A")
-            builder.createRLSPolicyForColumn("some_table", [somedid: "N/A"], "tenant_xxx_id", "N/A")
+            builder.createRLSPolicyForTable("users", [id: "N/A"], "tenant", "N/A")
+            builder.createRLSPolicyForTable("comments", [uuid: "N/A"], "tenant_id", "N/A")
+            builder.createRLSPolicyForTable("some_table", [somedid: "N/A"], "tenant_xxx_id", "N/A")
             builder.setNameForFunctionThatChecksIfRecordExistsInTable("users", "is_user_exists")
             builder.setNameForFunctionThatChecksIfRecordExistsInTable("comments", "is_comment_exists")
             def sharedSchemaContextRequest = builder.getSharedSchemaContextRequestCopy()
@@ -95,8 +95,8 @@ class IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricherTest extends Spec
     {
         given:
             def builder = new DefaultSharedSchemaContextBuilder(schema)
-            builder.createRLSPolicyForColumn(table, [id: "N/A"], "tenant", "N/A")
-            builder.createRLSPolicyForColumn("comments", [uuid: "N/A"], "tenant_id", "N/A")
+            builder.createRLSPolicyForTable(table, [id: "N/A"], "tenant", "N/A")
+            builder.createRLSPolicyForTable("comments", [uuid: "N/A"], "tenant_id", "N/A")
             builder.createSameTenantConstraintForForeignKey("comments", table, mapBuilder().put("N/A", "N/A").build(), "N/A")
             def sharedSchemaContextRequest = builder.getSharedSchemaContextRequestCopy()
             def context = new SharedSchemaContext()
