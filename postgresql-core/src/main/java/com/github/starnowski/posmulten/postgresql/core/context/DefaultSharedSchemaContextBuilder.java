@@ -71,8 +71,14 @@ public class DefaultSharedSchemaContextBuilder {
     public ISharedSchemaContext build() throws SharedSchemaContextBuilderException
     {
         ISharedSchemaContext context = new SharedSchemaContext();
-        List<ISharedSchemaContextEnricher> enrichers  = getEnrichersCopy();
         SharedSchemaContextRequest sharedSchemaContextRequestCopy = getSharedSchemaContextRequestCopy();
+        List<ISharedSchemaContextRequestValidator>validators = getValidatorsCopy();
+        for (ISharedSchemaContextRequestValidator validator : validators)
+        {
+            SharedSchemaContextRequest request = getSharedSchemaContextRequestCopyOrNull(sharedSchemaContextRequestCopy);
+            validator.validate(request);
+        }
+        List<ISharedSchemaContextEnricher> enrichers  = getEnrichersCopy();
         for (ISharedSchemaContextEnricher enricher : enrichers)
         {
             SharedSchemaContextRequest request = getSharedSchemaContextRequestCopyOrNull(sharedSchemaContextRequestCopy);
@@ -87,6 +93,14 @@ public class DefaultSharedSchemaContextBuilder {
      */
     public List<ISharedSchemaContextEnricher> getEnrichersCopy() {
         return enrichers == null ? new ArrayList<>() : new ArrayList<>(enrichers);
+    }
+
+    /**
+     *
+     * @return copy of the {@link #validators} collection
+     */
+    public List<ISharedSchemaContextRequestValidator> getValidatorsCopy() {
+        return validators == null ? new ArrayList<>() : new ArrayList<>(validators);
     }
 
     /**
