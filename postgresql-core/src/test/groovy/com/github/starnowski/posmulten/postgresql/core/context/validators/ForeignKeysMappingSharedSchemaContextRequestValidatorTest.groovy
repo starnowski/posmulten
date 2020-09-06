@@ -5,7 +5,6 @@ import com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaConte
 import com.github.starnowski.posmulten.postgresql.core.context.TableKey
 import com.github.starnowski.posmulten.postgresql.core.context.exceptions.IncorrectForeignKeysMappingException
 import com.github.starnowski.posmulten.postgresql.core.context.exceptions.MissingRLSPolicyDeclarationForTableException
-import javafx.scene.control.Tab
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -94,7 +93,7 @@ class ForeignKeysMappingSharedSchemaContextRequestValidatorTest extends Specific
             ex.message == expectedMessage
 
         and: "exception should have correctly set table key"
-            ex.tableKey == new Tab(primaryKeysTable, schema)
+            ex.tableKey == new TableKey(primaryKeysTable, schema)
 
         where:
             schema          |   foreignKeysTable    |   primaryKeysTable    ||   expectedMessage
