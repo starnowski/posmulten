@@ -3,6 +3,7 @@ package com.github.starnowski.posmulten.postgresql.core.context.validators
 import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder
 import com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContextRequest
 import com.github.starnowski.posmulten.postgresql.core.context.TableKey
+import com.github.starnowski.posmulten.postgresql.core.context.exceptions.IncorrectForeignKeysMappingException
 import com.github.starnowski.posmulten.postgresql.core.context.exceptions.MissingRLSPolicyDeclarationForTableException
 import javafx.scene.control.Tab
 import spock.lang.Specification
@@ -48,7 +49,7 @@ class ForeignKeysMappingSharedSchemaContextRequestValidatorTest extends Specific
             tested.validate(request)
 
         then:
-            def ex = thrown(MissingRLSPolicyDeclarationForTableException)
+            def ex = thrown(IncorrectForeignKeysMappingException)
 
         and: "exception should have correct message"
             ex.message == expectedMessage
