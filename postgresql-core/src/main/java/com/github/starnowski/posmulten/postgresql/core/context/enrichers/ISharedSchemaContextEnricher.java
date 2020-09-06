@@ -21,8 +21,10 @@
  *     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301
  *     USA
  */
-package com.github.starnowski.posmulten.postgresql.core.context;
+package com.github.starnowski.posmulten.postgresql.core.context.enrichers;
 
+import com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaContext;
+import com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContextRequest;
 import com.github.starnowski.posmulten.postgresql.core.context.exceptions.SharedSchemaContextBuilderException;
 
 public interface ISharedSchemaContextEnricher {
