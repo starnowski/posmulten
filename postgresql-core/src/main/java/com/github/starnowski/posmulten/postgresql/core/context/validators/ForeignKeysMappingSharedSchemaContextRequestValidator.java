@@ -2,6 +2,7 @@ package com.github.starnowski.posmulten.postgresql.core.context.validators;
 
 import com.github.starnowski.posmulten.postgresql.core.context.*;
 import com.github.starnowski.posmulten.postgresql.core.context.exceptions.IncorrectForeignKeysMappingException;
+import com.github.starnowski.posmulten.postgresql.core.context.exceptions.MissingRLSPolicyDeclarationForTableException;
 import javafx.util.Pair;
 
 import java.util.List;
@@ -15,13 +16,19 @@ import static java.util.stream.Collectors.toList;
 
 public class ForeignKeysMappingSharedSchemaContextRequestValidator implements ISharedSchemaContextRequestValidator{
     @Override
-    public void validate(SharedSchemaContextRequest request) throws IncorrectForeignKeysMappingException {
+    public void validate(SharedSchemaContextRequest request) throws IncorrectForeignKeysMappingException, MissingRLSPolicyDeclarationForTableException {
         List<Pair<SameTenantConstraintForForeignKey, ISameTenantConstraintForForeignKeyProperties>> constraintsRequests = request.getSameTenantConstraintForForeignKeyProperties().entrySet().stream().map(entry -> new Pair<SameTenantConstraintForForeignKey, ISameTenantConstraintForForeignKeyProperties>(entry.getKey(), entry.getValue())).collect(toList());
         Map<TableKey, ITableColumns> primaryKeyDefinitions = request.getTableColumnsList();
         for (Pair<SameTenantConstraintForForeignKey, ISameTenantConstraintForForeignKeyProperties> constrainRequest : constraintsRequests)
         {
             Set<String> primaryKeysInForeignKeysMapping = constrainRequest.getValue().getForeignKeyPrimaryKeyColumnsMappings().values().stream().collect(Collectors.toSet());
-            Set<String> primaryKeysForRLSPolicy = primaryKeyDefinitions.get(constrainRequest.getKey().getForeignKeyTable()).getIdentityColumnNameAndTypeMap().keySet();
+            ITableColumns rlsPolicy = primaryKeyDefinitions.get(constrainRequest.getKey().getForeignKeyTable());
+            if (rlsPolicy == null)
+            {
+                TableKey tableKey = constrainRequest.getKey().getForeignKeyTable();
+                throw new MissingRLSPolicyDeclarationForTableException(tableKey, format("Missing RLS policy declaration for table %1$s in schema %2$s", tableKey.getTable(), tableKey.getSchema()));
+            }
+            Set<String> primaryKeysForRLSPolicy = rlsPolicy.getIdentityColumnNameAndTypeMap().keySet();
             if (!primaryKeysInForeignKeysMapping.equals(primaryKeysForRLSPolicy))
             {
                 throw new IncorrectForeignKeysMappingException(prepareExceptionMessage(constrainRequest.getKey().getMainTable(), constrainRequest.getKey().getForeignKeyTable(), primaryKeysInForeignKeysMapping, primaryKeysForRLSPolicy),
