@@ -10,11 +10,13 @@ public class IsTenantValidBasedOnConstantValuesFunctionProducerParameters implem
     private final String functionName;
     private final String schema;
     private final Set<String> blacklistTenantIds;
+    private final String argumentType;
 
-    public IsTenantValidBasedOnConstantValuesFunctionProducerParameters(String functionName, String schema, Set<String> blacklistTenantIds) {
+    public IsTenantValidBasedOnConstantValuesFunctionProducerParameters(String functionName, String schema, Set<String> blacklistTenantIds, String argumentType) {
         this.functionName = functionName;
         this.schema = schema;
         this.blacklistTenantIds = blacklistTenantIds;
+        this.argumentType = argumentType;
     }
 
     @Override
@@ -30,5 +32,10 @@ public class IsTenantValidBasedOnConstantValuesFunctionProducerParameters implem
     @Override
     public Set<String> getBlacklistTenantIds() {
         return blacklistTenantIds;
+    }
+
+    @Override
+    public String getArgumentType() {
+        return argumentType;
     }
 }

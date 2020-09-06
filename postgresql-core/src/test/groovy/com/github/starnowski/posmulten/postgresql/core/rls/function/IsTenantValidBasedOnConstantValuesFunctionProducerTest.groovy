@@ -12,6 +12,7 @@ class IsTenantValidBasedOnConstantValuesFunctionProducerTest extends AbstractFun
     protected returnCorrectParametersSpyObject() {
         Spy(IsTenantValidBasedOnConstantValuesFunctionProducerParameters, constructorArgs: ["is_tenant_valid",
                                                                                 "public",
-                                                                                new HashSet<>(Arrays.asList("bad_tenant", "tenant_1"))])
+                                                                                new HashSet<>(Arrays.asList("bad_tenant", "tenant_1")),
+                                                                                "VARCHAR(255)"])
     }
 }

@@ -9,5 +9,7 @@ import java.util.Set;
  */
 public interface IIsTenantValidBasedOnConstantValuesFunctionProducerParameters extends IFunctionFactoryParameters {
 
+    String getArgumentType();
+
     Set<String> getBlacklistTenantIds();
 }
