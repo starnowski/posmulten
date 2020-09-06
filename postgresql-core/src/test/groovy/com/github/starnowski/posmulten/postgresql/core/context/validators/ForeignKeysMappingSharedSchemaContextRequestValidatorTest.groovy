@@ -34,10 +34,10 @@ class ForeignKeysMappingSharedSchemaContextRequestValidatorTest extends Specific
     }
 
     @Unroll
-    def "should throw exception when foreign keys mapping does not match to defined primary keys for tests parameters: #foreignKeysTable, #primaryKeysTable, #foreignKeysMapping, #primayKeyTypeDefinition"()
+    def "should throw exception when foreign keys mapping does not match to defined primary keys for tests parameters: #schema, #foreignKeysTable, #primaryKeysTable, #foreignKeysMapping, #primayKeyTypeDefinition"()
     {
         given:
-            DefaultSharedSchemaContextBuilder builder = new DefaultSharedSchemaContextBuilder()
+            DefaultSharedSchemaContextBuilder builder = new DefaultSharedSchemaContextBuilder(schema)
             builder.createSameTenantConstraintForForeignKey(foreignKeysTable, primaryKeysTable, foreignKeysMapping, null)
             builder.createRLSPolicyForTable(primaryKeysTable, primayKeyTypeDefinition, null, null)
             SharedSchemaContextRequest request = builder.getSharedSchemaContextRequestCopy()
@@ -52,10 +52,14 @@ class ForeignKeysMappingSharedSchemaContextRequestValidatorTest extends Specific
             ex.message == expectedMessage
 
         where:
-            foreignKeysTable    |   primaryKeysTable    |   foreignKeysMapping                                          |   primayKeyTypeDefinition             ||  expectedMessage
-            "comments"          |   "users"             |   [user_id: "id"]                                             |   [uuid: null]                        ||  "There is mismatch between foreign keys column mapping (id) in comments table and primary keys column declaration (uuid) for users table"
-            "posts"             |   "users"             |   [user_id: "uuid"]                                           |   [id: null]                          ||  "There is mismatch between foreign keys column mapping (uuid) in posts table and primary keys column declaration (id) for users table"
-            "posts"             |   "comments"          |   [comment_id: "comment_id", comment_user: "user_id"]         |   [comment_id: null, user: null]      ||  "There is mismatch between foreign keys column mapping (comment_id, user_id) in posts table and primary keys column declaration (comment_id, user) for users table"
-            "posts"             |   "comments"          |   [comment_id: "id", comment_user: "user_id"]                 |   [comment_id: null, user: null]      ||  "There is mismatch between foreign keys column mapping (id, user_id) in posts table and primary keys column declaration (comment_id, user) for users table"
+            schema      |   foreignKeysTable    |   primaryKeysTable    |   foreignKeysMapping                                          |   primayKeyTypeDefinition             ||  expectedMessage
+            null        |   "comments"          |   "users"             |   [user_id: "id"]                                             |   [uuid: null]                        ||  "There is mismatch between foreign keys column mapping (id) in comments table and primary keys column declaration (uuid) for users table"
+            null        |   "posts"             |   "users"             |   [user_id: "uuid"]                                           |   [id: null]                          ||  "There is mismatch between foreign keys column mapping (uuid) in posts table and primary keys column declaration (id) for users table"
+            null        |   "posts"             |   "comments"          |   [comment_id: "comment_id", comment_user: "user_id"]         |   [comment_id: null, user: null]      ||  "There is mismatch between foreign keys column mapping (comment_id, user_id) in posts table and primary keys column declaration (comment_id, user) for users table"
+            null        |   "posts"             |   "comments"          |   [comment_id: "id", comment_user: "user_id"]                 |   [comment_id: null, user: null]      ||  "There is mismatch between foreign keys column mapping (id, user_id) in posts table and primary keys column declaration (comment_id, user) for users table"
+            "public"    |   "comments"          |   "users"             |   [user_id: "id"]                                             |   [uuid: null]                        ||  "There is mismatch between foreign keys column mapping (id) in public.comments table and primary keys column declaration (uuid) for public.users table"
+            "public"    |   "posts"             |   "users"             |   [user_id: "uuid"]                                           |   [id: null]                          ||  "There is mismatch between foreign keys column mapping (uuid) in public.posts table and primary keys column declaration (id) for public.users table"
+            "public"    |   "posts"             |   "comments"          |   [comment_id: "comment_id", comment_user: "user_id"]         |   [comment_id: null, user: null]      ||  "There is mismatch between foreign keys column mapping (comment_id, user_id) in public.posts table and primary keys column declaration (comment_id, user) for public.users table"
+            "public"    |   "posts"             |   "comments"          |   [comment_id: "id", comment_user: "user_id"]                 |   [comment_id: null, user: null]      ||  "There is mismatch between foreign keys column mapping (id, user_id) in public.posts table and primary keys column declaration (comment_id, user) for public.users table"
     }
 }
