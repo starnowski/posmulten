@@ -92,7 +92,7 @@ class ForeignKeysMappingSharedSchemaContextRequestValidatorTest extends Specific
         and: "exception should have correct message"
             ex.message == expectedMessage
 
-        and: "exception shoul have correctly set table key"
+        and: "exception should have correctly set table key"
             ex.tableKey == new Tab(primaryKeysTable, schema)
 
         where:
