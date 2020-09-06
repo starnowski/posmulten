@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static java.lang.String.format;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
@@ -34,7 +35,7 @@ public class ForeignKeysMappingSharedSchemaContextRequestValidator implements IS
 
     private String prepareExceptionMessage(TableKey foreignTableKey, TableKey primaryTableKey, Set<String> foreignKeys, Set<String> primaryKeys)
     {
-        return String.format("There is mismatch between foreign keys column mapping (%1$s) in %2$s table and primary keys column declaration (%3$s) for %4$s table",
+        return format("There is mismatch between foreign keys column mapping (%1$s) in %2$s table and primary keys column declaration (%3$s) for %4$s table",
                 foreignKeys.stream().sorted().collect(joining(", ")),
                 returnTableName(foreignTableKey),
                 primaryKeys.stream().sorted().collect(joining(", ")),
