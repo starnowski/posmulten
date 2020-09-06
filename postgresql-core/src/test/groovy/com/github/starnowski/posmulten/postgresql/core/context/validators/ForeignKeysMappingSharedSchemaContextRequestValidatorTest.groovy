@@ -2,6 +2,7 @@ package com.github.starnowski.posmulten.postgresql.core.context.validators
 
 import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder
 import com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContextRequest
+import com.github.starnowski.posmulten.postgresql.core.context.TableKey
 import com.github.starnowski.posmulten.postgresql.core.context.exceptions.IncorrectForeignKeysMappingException
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -51,7 +52,11 @@ class ForeignKeysMappingSharedSchemaContextRequestValidatorTest extends Specific
         and: "exception should have correct message"
             ex.message == expectedMessage
 
-
+        and: "exception should have correct properties"
+            ex.foreignTableKey == new TableKey(foreignKeysTable, schema)
+            ex.primaryTableKey == new TableKey(primaryKeysTable, schema)
+            ex.foreignTableKey == new HashSet<>(foreignKeysMapping.values())
+            ex.primaryKeys == primayKeyTypeDefinition.keySet()
 
         where:
             schema              |   foreignKeysTable    |   primaryKeysTable    |   foreignKeysMapping                                          |   primayKeyTypeDefinition             ||  expectedMessage
