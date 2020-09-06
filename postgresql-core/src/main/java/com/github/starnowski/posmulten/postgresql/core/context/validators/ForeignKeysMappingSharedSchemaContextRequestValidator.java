@@ -34,7 +34,7 @@ public class ForeignKeysMappingSharedSchemaContextRequestValidator implements IS
 
     private String prepareExceptionMessage(TableKey foreignTableKey, TableKey primaryTableKey, Set<String> foreignKeys, Set<String> primaryKeys)
     {
-        return String.format("There is mismatch between foreign keys column mapping (id) in comments table and primary keys column declaration (uuid) for users table",
+        return String.format("There is mismatch between foreign keys column mapping (%1$s) in %2$s table and primary keys column declaration (%3$s) for %4$s table",
                 foreignKeys.stream().sorted().collect(joining(", ")),
                 returnTableName(foreignTableKey),
                 primaryKeys.stream().sorted().collect(joining(", ")),
