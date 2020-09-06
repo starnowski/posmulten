@@ -55,7 +55,7 @@ class ForeignKeysMappingSharedSchemaContextRequestValidatorTest extends Specific
         and: "exception should have correct properties"
             ex.foreignTableKey == new TableKey(foreignKeysTable, schema)
             ex.primaryTableKey == new TableKey(primaryKeysTable, schema)
-            ex.foreignTableKey == new HashSet<>(foreignKeysMapping.values())
+            ex.foreignKeys == new HashSet<>(foreignKeysMapping.values())
             ex.primaryKeys == primayKeyTypeDefinition.keySet()
 
         where:
