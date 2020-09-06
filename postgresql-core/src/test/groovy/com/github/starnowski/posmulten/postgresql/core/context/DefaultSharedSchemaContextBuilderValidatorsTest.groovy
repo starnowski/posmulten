@@ -17,7 +17,7 @@ class DefaultSharedSchemaContextBuilderValidatorsTest extends Specification {
             ISharedSchemaContextRequestValidator firstValidator = Mock(ISharedSchemaContextRequestValidator)
             ISharedSchemaContextRequestValidator secondValidator = Mock(ISharedSchemaContextRequestValidator)
             ISharedSchemaContext firstSharedSchemaContext = Mock(ISharedSchemaContext)
-        ISharedSchemaContextEnricher sharedSchemaContextEnricher = Mock(ISharedSchemaContextEnricher)
+            ISharedSchemaContextEnricher sharedSchemaContextEnricher = Mock(ISharedSchemaContextEnricher)
             DefaultSharedSchemaContextBuilder builder = new DefaultSharedSchemaContextBuilder()
             builder.setValidators([firstValidator, secondValidator])
             builder.setEnrichers([sharedSchemaContextEnricher])
