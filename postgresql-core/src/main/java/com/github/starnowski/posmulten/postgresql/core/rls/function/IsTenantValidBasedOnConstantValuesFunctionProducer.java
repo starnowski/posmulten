@@ -10,7 +10,7 @@ import com.github.starnowski.posmulten.postgresql.core.common.function.metadata.
 public class IsTenantValidBasedOnConstantValuesFunctionProducer extends ExtendedAbstractFunctionFactory<IIsTenantValidBasedOnConstantValuesFunctionProducerParameters, IsTenantValidBasedOnConstantValuesFunctionDefinition> {
     @Override
     protected String prepareReturnType(IIsTenantValidBasedOnConstantValuesFunctionProducerParameters parameters) {
-        return null;
+        return "BOOLEAN";
     }
 
     @Override
