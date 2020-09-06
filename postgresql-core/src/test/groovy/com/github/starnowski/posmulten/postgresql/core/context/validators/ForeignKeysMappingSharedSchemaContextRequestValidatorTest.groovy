@@ -73,4 +73,29 @@ class ForeignKeysMappingSharedSchemaContextRequestValidatorTest extends Specific
             "some_schema"       |   "posts"             |   "comments"          |   [comment_id: "comment_id", comment_user: "user_id"]         |   [comment_id: null, user: null]      ||  "There is mismatch between foreign keys column mapping (comment_id, user_id) in some_schema.posts table and primary keys column declaration (comment_id, user) for some_schema.comments table"
             "some_schema"       |   "posts"             |   "comments"          |   [comment_id: "id", comment_user: "user_id"]                 |   [comment_id: null, user: null]      ||  "There is mismatch between foreign keys column mapping (id, user_id) in some_schema.posts table and primary keys column declaration (comment_id, user) for some_schema.comments table"
     }
+
+    @Unroll
+    def "should throw exception when there is missing rls policy declaration for primary keys table for tests parameters: #schema, #foreignKeysTable, #primaryKeysTable"()
+    {
+        given:
+            DefaultSharedSchemaContextBuilder builder = new DefaultSharedSchemaContextBuilder(schema)
+            builder.createSameTenantConstraintForForeignKey(foreignKeysTable, primaryKeysTable, [:], null)
+            SharedSchemaContextRequest request = builder.getSharedSchemaContextRequestCopy()
+
+        when:
+            tested.validate(request)
+
+        then:
+            def ex = thrown(IncorrectForeignKeysMappingException)
+
+        and: "exception should have correct message"
+            ex.message == expectedMessage
+
+        where:
+            schema          |   foreignKeysTable    |   primaryKeysTable    ||   expectedMessage
+            null            |   "comments"          |   "users"             ||  "Missing RLS policy declaration for table users in schema null"
+            null            |   "posts"             |   "user_notification" ||  "Missing RLS policy declaration for table user_notification in schema null"
+            "some_schema"   |   "users"             |   "company"           ||  "Missing RLS policy declaration for table company in schema some_schema"
+            "some_schema"   |   "comments"          |   "users"             ||  "Missing RLS policy declaration for table users in schema some_schema"
+    }
 }
