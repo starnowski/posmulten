@@ -54,8 +54,8 @@ class ForeignKeysMappingSharedSchemaContextRequestValidatorTest extends Specific
         where:
             foreignKeysTable    |   primaryKeysTable    |   foreignKeysMapping                                          |   primayKeyTypeDefinition             ||  expectedMessage
             "comments"          |   "users"             |   [user_id: "id"]                                             |   [uuid: null]                        ||  "There is mismatch between foreign keys column mapping (id) in comments table and primary keys column declaration (uuid) for users table"
-            "posts"             |   "users"             |   [user_id: "uuid"]                                           |   [id: null]                          ||  ""
-            "posts"             |   "comments"          |   [comment_id: "comment_id", comment_user: "user_id"]         |   [comment_id: null, user: null]      ||  ""
-            "posts"             |   "comments"          |   [comment_id: "id", comment_user: "user_id"]                 |   [comment_id: null, user: null]      ||  ""
+            "posts"             |   "users"             |   [user_id: "uuid"]                                           |   [id: null]                          ||  "There is mismatch between foreign keys column mapping (uuid) in posts table and primary keys column declaration (id) for users table"
+            "posts"             |   "comments"          |   [comment_id: "comment_id", comment_user: "user_id"]         |   [comment_id: null, user: null]      ||  "There is mismatch between foreign keys column mapping (comment_id, user_id) in posts table and primary keys column declaration (comment_id, user) for users table"
+            "posts"             |   "comments"          |   [comment_id: "id", comment_user: "user_id"]                 |   [comment_id: null, user: null]      ||  "There is mismatch between foreign keys column mapping (id, user_id) in posts table and primary keys column declaration (comment_id, user) for users table"
     }
 }
