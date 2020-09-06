@@ -4,6 +4,9 @@ import com.github.starnowski.posmulten.postgresql.core.common.function.DefaultFu
 import com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValue;
 import com.github.starnowski.posmulten.postgresql.core.common.function.IFunctionDefinition;
 
+/**
+ * @since 0.2
+ */
 public class IsTenantValidBasedOnConstantValuesFunctionDefinition extends DefaultFunctionDefinition implements IIsTenantValidFunctionInvocationFactory{
 
     public IsTenantValidBasedOnConstantValuesFunctionDefinition(IFunctionDefinition functionDefinition) {

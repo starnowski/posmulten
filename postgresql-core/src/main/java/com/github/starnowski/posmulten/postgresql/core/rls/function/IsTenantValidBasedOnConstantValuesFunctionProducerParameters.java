@@ -2,6 +2,9 @@ package com.github.starnowski.posmulten.postgresql.core.rls.function;
 
 import java.util.Set;
 
+/**
+ * @since 0.2
+ */
 public class IsTenantValidBasedOnConstantValuesFunctionProducerParameters implements IIsTenantValidBasedOnConstantValuesFunctionProducerParameters{
 
     private final String functionName;

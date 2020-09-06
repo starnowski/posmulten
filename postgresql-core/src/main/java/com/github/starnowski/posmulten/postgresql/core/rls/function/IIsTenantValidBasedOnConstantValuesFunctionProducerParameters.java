@@ -4,6 +4,9 @@ import com.github.starnowski.posmulten.postgresql.core.common.function.IFunction
 
 import java.util.Set;
 
+/**
+ * @since 0.2
+ */
 public interface IIsTenantValidBasedOnConstantValuesFunctionProducerParameters extends IFunctionFactoryParameters {
 
     Set<String> getBlacklistTenantIds();
