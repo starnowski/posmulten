@@ -3,6 +3,7 @@ package com.github.starnowski.posmulten.postgresql.core.rls.function
 import com.github.starnowski.posmulten.postgresql.core.common.function.AbstractFunctionFactoryTest
 import spock.lang.Unroll
 
+import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValue.forNumeric
 import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValue.forReference
 import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValue.forString
 
@@ -38,6 +39,9 @@ class IsTenantValidBasedOnConstantValuesFunctionProducerTest extends AbstractFun
             null                    |   "fun1"                      |   forReference("tenant")      ||  "fun1(tenant)"
             "public"                |   "correct_tenant"            |   forReference("col1")        ||  "public.correct_tenant(col1)"
             "non_public_schema"     |   "tenant_is_correct"         |   forReference("id")          ||  "non_public_schema.tenant_is_correct(id)"
+            null                    |   "check_tenant_val"          |   forNumeric("453")           ||  "check_tenant_val(453)"
+            "public"                |   "tenat_valid"               |   forNumeric("67")            ||  "public.tenat_valid(67)"
+            "non_public_schema"     |   "is_valid_for_tenant"       |   forNumeric("98700142")      ||  "is_valid_for_tenant.tenant_is_correct(98700142)"
     }
 
     //TODO null values
