@@ -19,6 +19,10 @@ class IsTenantValidBasedOnConstantValuesFunctionProducerTest extends AbstractFun
             "non_public_schema"     |   "is_tenant_valid"           |   ["XX-dadf-dsa"]         |   null                ||  "CREATE OR REPLACE FUNCTION non_public_schema.is_tenant_valid(text) RETURNS BOOLEAN AS \$\$\nSELECT \$1 <> CAST ('XX-dadf-dsa' AS text)\n\$\$ LANGUAGE sql\nIMMUTABLE\nPARALLEL SAFE;"
     }
 
+    //TODO null values
+    //TODO Empty values
+    //TODO empty argument type
+
     @Override
     protected returnTestedObject() {
         new IsTenantValidBasedOnConstantValuesFunctionProducer()
