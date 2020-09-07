@@ -14,9 +14,9 @@ class IsTenantValidBasedOnConstantValuesFunctionProducerTest extends AbstractFun
 
         where:
             testSchema              |   testFunctionName            |   invalidTenantValues     |   argumentType        ||  expectedStatement
-            null                    |   "is_tenant_valid"           |   ["XX-dadf-dsa"]         |   null                ||  "CREATE OR REPLACE FUNCTION is_tenant_valid(text) RETURNS BOOLEAN AS \$\$\nSELECT \\\$1 <> CAST ('XX-dadf-dsa' AS text)\n\$\$ LANGUAGE sql\nSTABLE\nPARALLEL SAFE;"
-            "public"                |   "is_tenant_valid"           |   ["XX-dadf-dsa"]         |   null                ||  "CREATE OR REPLACE FUNCTION public.is_tenant_valid(text) RETURNS BOOLEAN AS \$\$\nSELECT \\\$1 <> CAST ('XX-dadf-dsa' AS text)\n\$\$ LANGUAGE sql\nSTABLE\nPARALLEL SAFE;"
-            "non_public_schema"     |   "is_tenant_valid"           |   ["XX-dadf-dsa"]         |   null                ||  "CREATE OR REPLACE FUNCTION non_public_schema.is_tenant_valid(text) RETURNS BOOLEAN AS \$\$\nSELECT \\\$1 <> CAST ('XX-dadf-dsa' AS text)\n\$\$ LANGUAGE sql\nSTABLE\nPARALLEL SAFE;"
+            null                    |   "is_tenant_valid"           |   ["XX-dadf-dsa"]         |   null                ||  "CREATE OR REPLACE FUNCTION is_tenant_valid(text) RETURNS BOOLEAN AS \$\$\nSELECT \\\$1 <> CAST ('XX-dadf-dsa' AS text)\n\$\$ LANGUAGE sql\nIMMUTABLE\nPARALLEL SAFE;"
+            "public"                |   "is_tenant_valid"           |   ["XX-dadf-dsa"]         |   null                ||  "CREATE OR REPLACE FUNCTION public.is_tenant_valid(text) RETURNS BOOLEAN AS \$\$\nSELECT \\\$1 <> CAST ('XX-dadf-dsa' AS text)\n\$\$ LANGUAGE sql\nIMMUTABLE\nPARALLEL SAFE;"
+            "non_public_schema"     |   "is_tenant_valid"           |   ["XX-dadf-dsa"]         |   null                ||  "CREATE OR REPLACE FUNCTION non_public_schema.is_tenant_valid(text) RETURNS BOOLEAN AS \$\$\nSELECT \\\$1 <> CAST ('XX-dadf-dsa' AS text)\n\$\$ LANGUAGE sql\nIMMUTABLE\nPARALLEL SAFE;"
     }
 
     @Override
