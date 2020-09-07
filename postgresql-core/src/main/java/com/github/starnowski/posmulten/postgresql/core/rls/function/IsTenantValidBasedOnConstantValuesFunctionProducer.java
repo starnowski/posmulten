@@ -6,6 +6,7 @@ import com.github.starnowski.posmulten.postgresql.core.common.function.IFunction
 import com.github.starnowski.posmulten.postgresql.core.common.function.metadata.MetadataPhraseBuilder;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentBuilder.forType;
 import static com.github.starnowski.posmulten.postgresql.core.common.function.metadata.ParallelModeEnum.SAFE;
@@ -28,7 +29,12 @@ public class IsTenantValidBasedOnConstantValuesFunctionProducer extends Extended
 
     @Override
     protected String buildBody(IIsTenantValidBasedOnConstantValuesFunctionProducerParameters parameters) {
-        return null;
+        StringBuilder sb = new StringBuilder();
+        sb.append("SELECT ");
+        final String argumentType = returnFunctionArgumentType(parameters);
+        sb.append(parameters.getBlacklistTenantIds().stream().map(invalidTenant ->
+                String.format("$1 <> CAST ('%1$s' AS %2$s)", invalidTenant, argumentType)).collect(Collectors.joining(" AND ")));
+        return sb.toString();
     }
 
     @Override
@@ -38,6 +44,11 @@ public class IsTenantValidBasedOnConstantValuesFunctionProducer extends Extended
 
     @Override
     protected List<IFunctionArgument> prepareFunctionArguments(IIsTenantValidBasedOnConstantValuesFunctionProducerParameters parameters) {
-        return singletonList(forType(parameters.getArgumentType() == null ? "text" : parameters.getArgumentType()));
+        return singletonList(forType(returnFunctionArgumentType(parameters)));
+    }
+
+    private String returnFunctionArgumentType(IIsTenantValidBasedOnConstantValuesFunctionProducerParameters parameters)
+    {
+        return parameters.getArgumentType() == null ? "text" : parameters.getArgumentType();
     }
 }
