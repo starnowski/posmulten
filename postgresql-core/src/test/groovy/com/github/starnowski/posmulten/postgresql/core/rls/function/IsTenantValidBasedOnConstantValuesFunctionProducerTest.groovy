@@ -29,7 +29,7 @@ class IsTenantValidBasedOnConstantValuesFunctionProducerTest extends AbstractFun
     @Unroll
     def "should generate sql function with name '#testFunctionName' for schema '#testSchema' that returns correct function invocation #expectedInvocation for argument #argument" () {
         expect:
-            tested.produce(new IsTenantValidBasedOnConstantValuesFunctionProducerParameters(testFunctionName, testSchema, new HashSet<String>("N/A"), null)).returnIsTenantValidFunctionInvocation(argument) == expectedInvocation
+            tested.produce(new IsTenantValidBasedOnConstantValuesFunctionProducerParameters(testFunctionName, testSchema, new HashSet<String>(Arrays.asList("N/A")), null)).returnIsTenantValidFunctionInvocation(argument) == expectedInvocation
 
         where:
             testSchema              |   testFunctionName            |   argument                    ||  expectedInvocation
@@ -41,7 +41,7 @@ class IsTenantValidBasedOnConstantValuesFunctionProducerTest extends AbstractFun
             "non_public_schema"     |   "tenant_is_correct"         |   forReference("id")          ||  "non_public_schema.tenant_is_correct(id)"
             null                    |   "check_tenant_val"          |   forNumeric("453")           ||  "check_tenant_val(453)"
             "public"                |   "tenat_valid"               |   forNumeric("67")            ||  "public.tenat_valid(67)"
-            "non_public_schema"     |   "is_valid_for_tenant"       |   forNumeric("98700142")      ||  "is_valid_for_tenant.tenant_is_correct(98700142)"
+            "non_public_schema"     |   "is_valid_for_tenant"       |   forNumeric("98700142")      ||  "non_public_schema.is_valid_for_tenant(98700142)"
     }
 
     //TODO null values
