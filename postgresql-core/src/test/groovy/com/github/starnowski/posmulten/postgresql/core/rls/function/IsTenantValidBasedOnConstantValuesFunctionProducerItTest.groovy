@@ -17,6 +17,7 @@ import java.sql.Statement
 import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValue.forNumeric
 import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValue.forString
 import static com.github.starnowski.posmulten.postgresql.test.utils.TestUtils.isFunctionExists
+import static java.lang.String.format
 import static org.junit.Assert.assertEquals
 
 @SpringBootTest(classes = [TestApplication.class])
@@ -52,7 +53,7 @@ class IsTenantValidBasedOnConstantValuesFunctionProducerItTest extends Specifica
 
         and: "return true value for valid tenant value"
             for (FunctionArgumentValue value : validValues) {
-                assertEquals(false, returnSelectStatementAsBoolean(functionDefinition.returnIsTenantValidFunctionInvocation(value)))
+                assertEquals(true, returnSelectStatementAsBoolean(functionDefinition.returnIsTenantValidFunctionInvocation(value)))
             }
 
         where:
@@ -71,8 +72,9 @@ class IsTenantValidBasedOnConstantValuesFunctionProducerItTest extends Specifica
         assertEquals(false, isFunctionExists(jdbcTemplate, functionName, schema))
     }
 
-    def returnSelectStatementAsBoolean(String selectStatement)
+    def returnSelectStatementAsBoolean(String functionInvocation)
     {
+        def selectStatement = format("SELECT %1\$s;", functionInvocation)
         return jdbcTemplate.execute(new StatementCallback<Boolean>() {
             @Override
             Boolean doInStatement(Statement statement) throws SQLException, DataAccessException {
