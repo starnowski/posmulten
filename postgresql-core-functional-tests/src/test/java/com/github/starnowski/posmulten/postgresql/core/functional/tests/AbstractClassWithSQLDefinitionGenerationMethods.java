@@ -14,7 +14,7 @@ import java.util.Map;
 import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValue.forReference;
 import static com.github.starnowski.posmulten.postgresql.core.rls.function.IIsRecordBelongsToCurrentTenantProducerParameters.pairOfColumnWithType;
 
-public abstract class AbstractClassWithSQLDefinitionGenerationMethods extends TestNGSpringContextWithoutGenericTransactionalSupportTests {
+public abstract class AbstractClassWithSQLDefinitionGenerationMethods extends DefaultTestNGTest {
 
     protected static final String POSTS_USERS_FK_CONSTRAINT_NAME = "posts_users_fk_cu";
     protected static final String COMMENTS_USERS_FK_CONSTRAINT_NAME = "comments_users_fk_cu";

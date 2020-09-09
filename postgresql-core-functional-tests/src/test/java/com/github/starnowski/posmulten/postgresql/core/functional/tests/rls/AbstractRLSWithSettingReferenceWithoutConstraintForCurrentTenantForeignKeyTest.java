@@ -1,7 +1,7 @@
 package com.github.starnowski.posmulten.postgresql.core.functional.tests.rls;
 
 import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition;
-import com.github.starnowski.posmulten.postgresql.core.functional.tests.TestNGSpringContextWithoutGenericTransactionalSupportTests;
+import com.github.starnowski.posmulten.postgresql.core.functional.tests.DefaultTestNGTest;
 import com.github.starnowski.posmulten.postgresql.core.functional.tests.pojos.Post;
 import com.github.starnowski.posmulten.postgresql.core.functional.tests.pojos.User;
 import com.github.starnowski.posmulten.postgresql.core.rls.EnableRowLevelSecurityProducer;
@@ -30,7 +30,7 @@ import static org.springframework.test.context.jdbc.SqlConfig.TransactionMode.IS
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
-public abstract class AbstractRLSWithSettingReferenceWithoutConstraintForCurrentTenantForeignKeyTest extends TestNGSpringContextWithoutGenericTransactionalSupportTests {
+public abstract class AbstractRLSWithSettingReferenceWithoutConstraintForCurrentTenantForeignKeyTest extends DefaultTestNGTest {
 
     protected static final String USER_TENANT = "primary_tenant";
     protected static final String SECONDARY_USER_TENANT = "someXDAFAS_id";

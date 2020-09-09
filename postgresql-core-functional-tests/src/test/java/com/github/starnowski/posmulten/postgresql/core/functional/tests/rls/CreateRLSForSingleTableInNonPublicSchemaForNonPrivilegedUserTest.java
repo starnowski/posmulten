@@ -3,7 +3,7 @@ package com.github.starnowski.posmulten.postgresql.core.functional.tests.rls;
 import com.github.starnowski.posmulten.postgresql.core.GrantSchemaPrivilegesProducer;
 import com.github.starnowski.posmulten.postgresql.core.GrantTablePrivilegesProducer;
 import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition;
-import com.github.starnowski.posmulten.postgresql.core.functional.tests.TestNGSpringContextWithoutGenericTransactionalSupportTests;
+import com.github.starnowski.posmulten.postgresql.core.functional.tests.DefaultTestNGTest;
 import com.github.starnowski.posmulten.postgresql.core.functional.tests.pojos.User;
 import com.github.starnowski.posmulten.postgresql.core.rls.EnableRowLevelSecurityProducer;
 import com.github.starnowski.posmulten.postgresql.core.rls.RLSPolicyProducer;
@@ -22,9 +22,7 @@ import org.testng.annotations.Test;
 import static com.github.starnowski.posmulten.postgresql.core.functional.tests.TestApplication.CLEAR_DATABASE_SCRIPT_PATH;
 import static com.github.starnowski.posmulten.postgresql.core.rls.DefaultRLSPolicyProducerParameters.builder;
 import static com.github.starnowski.posmulten.postgresql.core.rls.PermissionCommandPolicyEnum.ALL;
-import static com.github.starnowski.posmulten.postgresql.test.utils.TestUtils.VALID_CURRENT_TENANT_ID_PROPERTY_NAME;
-import static com.github.starnowski.posmulten.postgresql.test.utils.TestUtils.isAnyRecordExists;
-import static com.github.starnowski.posmulten.postgresql.test.utils.TestUtils.selectAndReturnFirstRecordAsBooleanWithSettingCurrentTenantId;
+import static com.github.starnowski.posmulten.postgresql.test.utils.TestUtils.*;
 import static java.lang.String.format;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -34,7 +32,7 @@ import static org.springframework.test.context.jdbc.SqlConfig.TransactionMode.IS
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
-public class CreateRLSForSingleTableInNonPublicSchemaForNonPrivilegedUserTest extends TestNGSpringContextWithoutGenericTransactionalSupportTests {
+public class CreateRLSForSingleTableInNonPublicSchemaForNonPrivilegedUserTest extends DefaultTestNGTest {
 
     protected static final String USER_TENANT = "primary_tenant";
     protected static final String SECONDARY_USER_TENANT = "someXDAFAS_id";
