@@ -11,6 +11,12 @@
             <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.constraint.CreateCurrentTenantCompositeForeignKeyConstraintForCommentsTableFromNonPublicSchemaTest" />
         </classes>
     </test>
+    <test name="Checking if function body is going to be updated even if function is defined as IMMUTABLE">
+        <classes>
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.constraint.IsTenantValidBasedOnConstantValuesFunctionDefinitionMutableInPublicSchemaTest" />
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.constraint.IsTenantValidBasedOnConstantValuesFunctionDefinitionMutableInNonPublicSchemaTest" />
+        </classes>
+    </test>
     <test name="Row Level Security Policy for single table">
         <classes>
             <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.rls.CreateRLSForSingleTableInPublicSchemaTest" />
