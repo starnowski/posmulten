@@ -18,7 +18,7 @@ import static java.lang.String.format;
 import static java.util.Collections.singletonList;
 import static org.junit.Assert.assertEquals;
 
-public class IsTenantValidBasedOnConstantValuesFunctionDefinitionMutableTest extends TestNGSpringContextWithoutGenericTransactionalSupportTests {
+public abstract class AbstractIsTenantValidBasedOnConstantValuesFunctionDefinitionMutableTest extends TestNGSpringContextWithoutGenericTransactionalSupportTests {
 
     private IsTenantValidBasedOnConstantValuesFunctionProducer tested = new IsTenantValidBasedOnConstantValuesFunctionProducer();
 
@@ -91,9 +91,7 @@ public class IsTenantValidBasedOnConstantValuesFunctionDefinitionMutableTest ext
         jdbcTemplate.execute(functionDefinition.getDropScript());
     }
 
-    private String getSchema() {
-        return null;
-    }
+    protected abstract String getSchema();
 
     private boolean returnFunctionResultForValue(String value)
     {
