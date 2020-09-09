@@ -18,6 +18,10 @@ import static java.lang.String.format;
 import static java.util.Collections.singletonList;
 import static org.junit.Assert.assertEquals;
 
+/**
+ * The purpose of this test is to check if the function body is going to be updated even if the function is defined as IMMUTABLE.
+ * It might be considered as conformance tests for the Postgresql database engine that is currently used in tests.
+ */
 public abstract class AbstractIsTenantValidBasedOnConstantValuesFunctionDefinitionMutableTest extends TestNGSpringContextWithoutGenericTransactionalSupportTests {
 
     private IsTenantValidBasedOnConstantValuesFunctionProducer tested = new IsTenantValidBasedOnConstantValuesFunctionProducer();
@@ -30,7 +34,7 @@ public abstract class AbstractIsTenantValidBasedOnConstantValuesFunctionDefiniti
     private final String firstInvalidValue = "SAFXCVZV";
     private final String secondInvalidValue = "FGSDFGSDG";
 
-    @Test
+    @Test(testName = "create the first version of the function that treats the first test value as an invalid tenant identifier")
     public void createFirstVersionOfFunction()
     {
         functionDefinition = tested.produce(new IsTenantValidBasedOnConstantValuesFunctionProducerParameters(testFunctionName, getSchema(), new HashSet<String>(singletonList(firstInvalidValue)), argumentType));
@@ -42,7 +46,7 @@ public abstract class AbstractIsTenantValidBasedOnConstantValuesFunctionDefiniti
         assertEquals(false, isFunctionExists(jdbcTemplate, testFunctionName, getSchema()));
     }
 
-    @Test(dependsOnMethods = "functionShouldNotExistAtTheBeginning")
+    @Test(dependsOnMethods = "functionShouldNotExistAtTheBeginning", testName = "create the first function version in the database")
     public void executeFirstVersionOfFunction()
     {
        jdbcTemplate.execute(functionDefinition.getCreateScript());
@@ -54,32 +58,32 @@ public abstract class AbstractIsTenantValidBasedOnConstantValuesFunctionDefiniti
         assertEquals(true, isFunctionExists(jdbcTemplate, testFunctionName, getSchema()));
     }
 
-    @Test(dependsOnMethods = "functionShouldExist")
+    @Test(dependsOnMethods = "functionShouldExist", testName = "the first function version should return a false value for the first test value which is defined as an invalid tenant identifier")
     public void firstFunctionVersionShouldReturnFalseForFirstInvalidValue()
     {
         assertEquals(false, returnFunctionResultForValue(firstInvalidValue));
     }
 
-    @Test(dependsOnMethods = "firstFunctionVersionShouldReturnFalseForFirstInvalidValue")
+    @Test(dependsOnMethods = "firstFunctionVersionShouldReturnFalseForFirstInvalidValue", testName = "the first function version should return a true value for the second test value which is not defined as an invalid tenant identifier")
     public void firstFunctionVersionShouldReturnTrueForSecondInvalidValue()
     {
         assertEquals(true, returnFunctionResultForValue(secondInvalidValue));
     }
 
-    @Test(dependsOnMethods = "firstFunctionVersionShouldReturnFalseForFirstInvalidValue")
+    @Test(dependsOnMethods = "firstFunctionVersionShouldReturnFalseForFirstInvalidValue", testName = "updating the function body with the second test value as the only one invalid tenant identifier")
     public void updateFunctionBodyWithSecondValueAsOnlyOneInvalidTenantIdentifier()
     {
         functionDefinition = tested.produce(new IsTenantValidBasedOnConstantValuesFunctionProducerParameters(testFunctionName, getSchema(), new HashSet<String>(singletonList(secondInvalidValue)), argumentType));
         jdbcTemplate.execute(functionDefinition.getCreateScript());
     }
 
-    @Test(dependsOnMethods = "updateFunctionBodyWithSecondValueAsOnlyOneInvalidTenantIdentifier")
+    @Test(dependsOnMethods = "updateFunctionBodyWithSecondValueAsOnlyOneInvalidTenantIdentifier", testName = "the second function version should return a false value for the second test value which is defined as an invalid tenant identifier")
     public void secondFunctionVersionShouldReturnFalseForSecondInvalidValue()
     {
         assertEquals(false, returnFunctionResultForValue(secondInvalidValue));
     }
 
-    @Test(dependsOnMethods = "secondFunctionVersionShouldReturnFalseForSecondInvalidValue")
+    @Test(dependsOnMethods = "secondFunctionVersionShouldReturnFalseForSecondInvalidValue", testName = "the second function version should return a true value for the first test value which is not defined as an invalid tenant identifier")
     public void secondFunctionVersionShouldReturnTrueForFirstInvalidValue()
     {
         assertEquals(true, returnFunctionResultForValue(firstInvalidValue));
