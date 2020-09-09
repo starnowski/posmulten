@@ -4,19 +4,14 @@ import com.github.starnowski.posmulten.postgresql.core.TestApplication
 import com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValue
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.dao.DataAccessException
 import org.springframework.jdbc.core.JdbcTemplate
-import org.springframework.jdbc.core.StatementCallback
 import spock.lang.Specification
 import spock.lang.Unroll
-
-import java.sql.ResultSet
-import java.sql.SQLException
-import java.sql.Statement
 
 import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValue.forNumeric
 import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValue.forString
 import static com.github.starnowski.posmulten.postgresql.test.utils.TestUtils.isFunctionExists
+import static com.github.starnowski.posmulten.postgresql.test.utils.TestUtils.selectAndReturnFirstRecordAsBoolean
 import static java.lang.String.format
 import static org.junit.Assert.assertEquals
 
@@ -75,13 +70,6 @@ class IsTenantValidBasedOnConstantValuesFunctionProducerItTest extends Specifica
     def returnSelectStatementAsBoolean(String functionInvocation)
     {
         def selectStatement = format("SELECT %1\$s;", functionInvocation)
-        return jdbcTemplate.execute(new StatementCallback<Boolean>() {
-            @Override
-            Boolean doInStatement(Statement statement) throws SQLException, DataAccessException {
-                ResultSet rs = statement.executeQuery(selectStatement)
-                rs.next()
-                return rs.getBoolean(1)
-            }
-        })
+        selectAndReturnFirstRecordAsBoolean(jdbcTemplate, selectStatement)
     }
 }
