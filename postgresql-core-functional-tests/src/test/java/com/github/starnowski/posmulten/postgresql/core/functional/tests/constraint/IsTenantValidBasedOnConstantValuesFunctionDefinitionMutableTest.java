@@ -73,10 +73,19 @@ public class IsTenantValidBasedOnConstantValuesFunctionDefinitionMutableTest ext
         jdbcTemplate.execute(functionDefinition.getCreateScript());
     }
 
-    //TODO Test function execution - invalid value (second)
-    //TODO Test function execution - valid value (first)
+    @Test(dependsOnMethods = "updateFunctionBodyWithSecondValueAsOnlyOneInvalidTenantIdentifier")
+    public void secondFunctionVersionShouldReturnFalseForSecondInvalidValue()
+    {
+        assertEquals(false, returnFunctionResultForValue(secondInvalidValue));
+    }
 
-    @Test(dependsOnMethods = "updateFunctionBodyWithSecondValueAsOnlyOneInvalidTenantIdentifier", alwaysRun = true)
+    @Test(dependsOnMethods = "secondFunctionVersionShouldReturnFalseForSecondInvalidValue")
+    public void secondFunctionVersionShouldReturnTrueForFirstInvalidValue()
+    {
+        assertEquals(true, returnFunctionResultForValue(firstInvalidValue));
+    }
+
+    @Test(dependsOnMethods = "secondFunctionVersionShouldReturnTrueForFirstInvalidValue", alwaysRun = true)
     public void dropFunction()
     {
         jdbcTemplate.execute(functionDefinition.getDropScript());
