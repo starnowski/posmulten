@@ -74,7 +74,24 @@ class IsTenantValidBasedOnConstantValuesFunctionProducerTest extends AbstractFun
             ex.message == "The list of invalid value cannot be empty"
     }
 
-    //TODO empty argument type
+    @Unroll
+    def "should throw an exception of type 'IllegalArgumentException' when the argument type is empty: '#argumentType'" () {
+        given:
+            def parameters = returnCorrectParametersSpyObject()
+            parameters.getArgumentType() >> argumentType
+
+        when:
+            tested.produce(parameters)
+
+        then:
+            def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+            ex.message == "The argument type cannot be empty"
+
+        where:
+            argumentType    << ["", " ", "         "]
+    }
 
     @Override
     protected returnTestedObject() {
