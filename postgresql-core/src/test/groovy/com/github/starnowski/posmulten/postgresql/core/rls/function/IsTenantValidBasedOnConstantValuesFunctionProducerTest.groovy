@@ -59,7 +59,21 @@ class IsTenantValidBasedOnConstantValuesFunctionProducerTest extends AbstractFun
             ex.message == "The list of invalid value cannot be null"
     }
 
-    //TODO Empty values
+    def "should throw an exception of type 'IllegalArgumentException' when the list of invalid values is empty" () {
+        given:
+            def parameters = returnCorrectParametersSpyObject()
+            parameters.getBlacklistTenantIds() >> []
+
+        when:
+            tested.produce(parameters)
+
+        then:
+            def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+            ex.message == "The list of invalid value cannot be empty"
+    }
+
     //TODO empty argument type
 
     @Override
