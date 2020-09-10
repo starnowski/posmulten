@@ -23,31 +23,17 @@
  */
 package com.github.starnowski.posmulten.postgresql.core.rls;
 
-import com.github.starnowski.posmulten.postgresql.core.common.DefaultSQLDefinition;
-import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition;
 import com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValueToStringMapper;
 
 import java.util.Map;
 
 import static java.util.stream.Collectors.joining;
 
-public class IsRecordBelongsToCurrentTenantConstraintProducer {
+public class IsRecordBelongsToCurrentTenantConstraintProducer extends AbstractConstraintProducer<IsRecordBelongsToCurrentTenantConstraintProducerParameters> {
 
-    public SQLDefinition produce(IsRecordBelongsToCurrentTenantConstraintProducerParameters parameters)
-    {
-        validate(parameters);
-        return new DefaultSQLDefinition(prepareCreateScript(parameters), prepareDropScript(parameters));
-    }
-
-    protected String prepareCreateScript(IsRecordBelongsToCurrentTenantConstraintProducerParameters parameters)
-    {
+    @Override
+    protected String prepareConstraintBody(IsRecordBelongsToCurrentTenantConstraintProducerParameters parameters) {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("ALTER TABLE ");
-        stringBuilder.append(prepareTableReference(parameters));
-        stringBuilder.append(" ADD CONSTRAINT ");
-        stringBuilder.append(parameters.getConstraintName());
-        stringBuilder.append(" CHECK ");
-        stringBuilder.append("(");
         stringBuilder.append("(");
         stringBuilder.append(parameters.getPrimaryColumnsValuesMap().entrySet().stream().map(Map.Entry::getValue).map(FunctionArgumentValueToStringMapper::mapToString).sorted().map(s -> s + " IS NULL").collect(joining(" AND ")));
         stringBuilder.append(")");
@@ -55,66 +41,15 @@ public class IsRecordBelongsToCurrentTenantConstraintProducer {
         stringBuilder.append("(");
         stringBuilder.append(parameters.getIsRecordBelongsToCurrentTenantFunctionInvocationFactory().returnIsRecordBelongsToCurrentTenantFunctionInvocation(parameters.getPrimaryColumnsValuesMap()));
         stringBuilder.append(")");
-        stringBuilder.append(");");
         return stringBuilder.toString();
     }
 
     protected void validate(IsRecordBelongsToCurrentTenantConstraintProducerParameters parameters)
     {
-        if (parameters == null)
-        {
-            throw new IllegalArgumentException("The parameters object cannot be null");
-        }
-        if (parameters.getTableName() == null)
-        {
-            throw new IllegalArgumentException("Table name cannot be null");
-        }
-        if (parameters.getTableName().trim().isEmpty())
-        {
-            throw new IllegalArgumentException("Table name cannot be empty");
-        }
-        if (parameters.getTableSchema() != null && parameters.getTableSchema().trim().isEmpty())
-        {
-            throw new IllegalArgumentException("Table schema cannot be empty");
-        }
-        if (parameters.getConstraintName() == null)
-        {
-            throw new IllegalArgumentException("Constraint name cannot be null");
-        }
-        if (parameters.getConstraintName().trim().isEmpty())
-        {
-            throw new IllegalArgumentException("Constraint name cannot be empty");
-        }
+        super.validate(parameters);
         if (parameters.getIsRecordBelongsToCurrentTenantFunctionInvocationFactory() == null)
         {
             throw new IllegalArgumentException("Object of type IsRecordBelongsToCurrentTenantFunctionInvocationFactory cannot be null");
         }
-    }
-
-    private String prepareTableReference(IsRecordBelongsToCurrentTenantConstraintProducerParameters parameters)
-    {
-        StringBuilder stringBuilder = new StringBuilder();
-        if (parameters.getTableSchema() != null)
-        {
-            stringBuilder.append("\"");
-            stringBuilder.append(parameters.getTableSchema());
-            stringBuilder.append("\"");
-            stringBuilder.append(".");
-        }
-        stringBuilder.append("\"");
-        stringBuilder.append(parameters.getTableName());
-        stringBuilder.append("\"");
-        return stringBuilder.toString();
-    }
-
-    protected String prepareDropScript(IsRecordBelongsToCurrentTenantConstraintProducerParameters parameters)
-    {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("ALTER TABLE ");
-        stringBuilder.append(prepareTableReference(parameters));
-        stringBuilder.append(" DROP CONSTRAINT IF EXISTS ");
-        stringBuilder.append(parameters.getConstraintName());
-        stringBuilder.append(";");
-        return stringBuilder.toString();
     }
 }

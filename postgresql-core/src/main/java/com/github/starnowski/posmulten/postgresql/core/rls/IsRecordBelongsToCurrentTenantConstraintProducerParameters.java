@@ -28,13 +28,7 @@ import com.github.starnowski.posmulten.postgresql.core.rls.function.IsRecordBelo
 
 import java.util.Map;
 
-public interface IsRecordBelongsToCurrentTenantConstraintProducerParameters {
-
-    String getConstraintName();
-
-    String getTableName();
-
-    String getTableSchema();
+public interface IsRecordBelongsToCurrentTenantConstraintProducerParameters extends IConstraintProducerParameters {
 
     Map<String, FunctionArgumentValue> getPrimaryColumnsValuesMap();
 
