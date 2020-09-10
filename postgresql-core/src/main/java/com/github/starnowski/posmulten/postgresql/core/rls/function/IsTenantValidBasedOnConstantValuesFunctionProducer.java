@@ -62,6 +62,10 @@ public class IsTenantValidBasedOnConstantValuesFunctionProducer extends Extended
         {
             throw new IllegalArgumentException("The list of invalid value cannot be empty");
         }
+        if (parameters.getArgumentType() != null && parameters.getArgumentType().trim().isEmpty())
+        {
+            throw new IllegalArgumentException("The argument type cannot be empty");
+        }
     }
 
     private String returnFunctionArgumentType(IIsTenantValidBasedOnConstantValuesFunctionProducerParameters parameters)
