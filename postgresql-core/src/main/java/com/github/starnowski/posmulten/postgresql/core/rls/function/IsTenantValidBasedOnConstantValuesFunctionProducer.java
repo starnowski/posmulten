@@ -51,6 +51,15 @@ public class IsTenantValidBasedOnConstantValuesFunctionProducer extends Extended
         return singletonList(forType(returnFunctionArgumentType(parameters)));
     }
 
+    @Override
+    protected void validate(IIsTenantValidBasedOnConstantValuesFunctionProducerParameters parameters) {
+        super.validate(parameters);
+        if (parameters.getBlacklistTenantIds() == null)
+        {
+            throw new IllegalArgumentException("The list of invalid value cannot be null");
+        }
+    }
+
     private String returnFunctionArgumentType(IIsTenantValidBasedOnConstantValuesFunctionProducerParameters parameters)
     {
         return parameters.getArgumentType() == null ? "text" : parameters.getArgumentType();
