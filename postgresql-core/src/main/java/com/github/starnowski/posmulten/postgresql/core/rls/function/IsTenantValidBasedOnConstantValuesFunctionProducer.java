@@ -58,6 +58,10 @@ public class IsTenantValidBasedOnConstantValuesFunctionProducer extends Extended
         {
             throw new IllegalArgumentException("The list of invalid value cannot be null");
         }
+        if (parameters.getBlacklistTenantIds().isEmpty())
+        {
+            throw new IllegalArgumentException("The list of invalid value cannot be empty");
+        }
     }
 
     private String returnFunctionArgumentType(IIsTenantValidBasedOnConstantValuesFunctionProducerParameters parameters)
