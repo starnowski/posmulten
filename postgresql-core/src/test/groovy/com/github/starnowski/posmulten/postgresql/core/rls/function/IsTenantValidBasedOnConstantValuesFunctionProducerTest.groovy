@@ -44,7 +44,21 @@ class IsTenantValidBasedOnConstantValuesFunctionProducerTest extends AbstractFun
             "non_public_schema"     |   "is_valid_for_tenant"       |   forNumeric("98700142")      ||  "non_public_schema.is_valid_for_tenant(98700142)"
     }
 
-    //TODO null values
+    def "should throw an exception of type 'IllegalArgumentException' when the list of invalid values is null" () {
+        given:
+            def parameters = returnCorrectParametersSpyObject()
+            parameters.getBlacklistTenantIds() >> null
+
+        when:
+            tested.produce(parameters)
+
+        then:
+            def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+            ex.message == "The list of invalid value cannot be null"
+    }
+
     //TODO Empty values
     //TODO empty argument type
 
