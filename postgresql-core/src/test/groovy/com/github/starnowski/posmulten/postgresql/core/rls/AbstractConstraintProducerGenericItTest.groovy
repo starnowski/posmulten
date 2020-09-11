@@ -16,12 +16,8 @@ abstract class AbstractConstraintProducerGenericItTest<X extends IConstraintProd
     @Autowired
     JdbcTemplate jdbcTemplate
 
-    def testSchema
-    def testTable
-    def testConstraint
-
     @Unroll
-    def "should create correct the creation statements for schema #schema and table #table and constraint #constraintName"()
+    def "should create correct the drop statements for schema #schema and table #table and constraint #constraintName"()
     {
         given:
             P tested = returnTestedObject()
@@ -29,17 +25,15 @@ abstract class AbstractConstraintProducerGenericItTest<X extends IConstraintProd
             parameters.getTableSchema() >> schema
             parameters.getTableName() >> table
             parameters.getConstraintName() >> constraintName
-            testSchema = schema
-            testTable = table
-            testConstraint = constraintName
             def functionDefinition = tested.produce(parameters)
-            assertEquals(false, isAnyRecordExists(jdbcTemplate, createSelectStatement(schema, table, constraintName)))
+            jdbcTemplate.execute(functionDefinition.getCreateScript())
+            assertEquals(true, isAnyRecordExists(jdbcTemplate, createSelectStatement(schema, table, constraintName)))
 
         when:
-            jdbcTemplate.execute(functionDefinition.getCreateScript())
+            jdbcTemplate.execute(functionDefinition.getDropScript())
 
         then:
-            assertEquals(true, isAnyRecordExists(jdbcTemplate, createSelectStatement(schema, table, constraintName)))
+            assertEquals(false, isAnyRecordExists(jdbcTemplate, createSelectStatement(schema, table, constraintName)))
 
         where:
             schema                      |   table       |   constraintName
@@ -52,25 +46,6 @@ abstract class AbstractConstraintProducerGenericItTest<X extends IConstraintProd
             null                        |   "users"     |   "this_is_constraint"
             "public"                    |   "users"     |   "this_is_constraint"
             "non_public_schema"         |   "users"     |   "this_is_constraint"
-    }
-
-    def cleanup() {
-        if (testConstraint != null)
-        {
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("ALTER TABLE ")
-            if (testSchema != null)
-            {
-                stringBuilder.append(testSchema)
-                stringBuilder.append(".")
-            }
-            stringBuilder.append(testTable)
-            stringBuilder.append(" DROP CONSTRAINT IF EXISTS ")
-            stringBuilder.append(testConstraint)
-            stringBuilder.append(";")
-            jdbcTemplate.execute(stringBuilder.toString())
-            assertEquals(false, isAnyRecordExists(jdbcTemplate, createSelectStatement(testSchema, testTable, testConstraint)))
-        }
     }
 
     String createSelectStatement(String schema, String table, String constraintName)
