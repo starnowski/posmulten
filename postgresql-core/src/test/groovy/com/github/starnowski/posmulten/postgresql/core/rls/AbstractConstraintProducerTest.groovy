@@ -6,7 +6,6 @@ import spock.lang.Unroll
 
 abstract class AbstractConstraintProducerTest<X extends IConstraintProducerParameters, P extends AbstractConstraintProducer<X>> extends Specification {
 
-
     @Unroll
     def "should return correct definition based on the generic parameters object"()
     {
@@ -118,8 +117,6 @@ abstract class AbstractConstraintProducerTest<X extends IConstraintProducerParam
         where:
             constraintName << ["", " ", "          "]
     }
-
-
 
     protected abstract P returnTestedObject()
 
