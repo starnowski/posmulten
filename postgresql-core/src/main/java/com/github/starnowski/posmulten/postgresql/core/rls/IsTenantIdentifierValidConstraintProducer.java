@@ -14,4 +14,13 @@ public class IsTenantIdentifierValidConstraintProducer extends AbstractConstrain
         sb.append(parameters.getIIsTenantValidFunctionInvocationFactory().returnIsTenantValidFunctionInvocation(forReference(parameters.getTenantColumnName())));
         return sb.toString();
     }
+
+    protected void validate(IIsTenantIdentifierValidConstraintProducerParameters parameters)
+    {
+        super.validate(parameters);
+        if (parameters.getIIsTenantValidFunctionInvocationFactory() == null)
+        {
+            throw new IllegalArgumentException("Object of type IIsTenantValidFunctionInvocationFactory cannot be null");
+        }
+    }
 }
