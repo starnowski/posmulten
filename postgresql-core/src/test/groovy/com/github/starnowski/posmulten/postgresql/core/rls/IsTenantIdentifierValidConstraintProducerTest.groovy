@@ -61,6 +61,21 @@ class IsTenantIdentifierValidConstraintProducerTest extends AbstractConstraintPr
             ex.message == "Object of type IIsTenantValidFunctionInvocationFactory cannot be null"
     }
 
+    def "should throw an exception of type 'IllegalArgumentException' when the tenant column is null" () {
+        given:
+            def parameters = returnCorrectParametersMockObject()
+
+        when:
+            returnTestedObject().produce(parameters)
+
+        then:
+            _ * parameters.getTenantColumnName() >> null
+            def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+            ex.message == "Tenant column cannot be null"
+    }
+
     @Unroll
     def "should throw an exception of type 'IllegalArgumentException' when the tenant column is empty (#tenantColumn)" () {
         given:
