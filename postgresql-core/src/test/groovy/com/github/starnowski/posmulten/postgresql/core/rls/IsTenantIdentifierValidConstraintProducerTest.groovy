@@ -46,6 +46,21 @@ class IsTenantIdentifierValidConstraintProducerTest extends AbstractConstraintPr
             "user_belongs_tt"   |   "secondary" | "users"   |   "is_it_really_my_tenant(t)"     |   "tenant_identifier"     ||  "ALTER TABLE \"secondary\".\"users\" ADD CONSTRAINT user_belongs_tt CHECK (tenant_identifier IS NULL OR is_it_really_my_tenant(t));"
     }
 
+    def "should throw an exception of type 'IllegalArgumentException' when the object of type IIsTenantValidFunctionInvocationFactory is null" () {
+        given:
+            def parameters = returnCorrectParametersMockObject()
+
+        when:
+            tested.produce(parameters)
+
+        then:
+            _ * parameters.getIIsTenantValidFunctionInvocationFactory() >> null
+            def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+            ex.message == "Object of type IIsTenantValidFunctionInvocationFactory cannot be null"
+    }
+
     @Override
     protected IsTenantIdentifierValidConstraintProducer returnTestedObject() {
         tested
