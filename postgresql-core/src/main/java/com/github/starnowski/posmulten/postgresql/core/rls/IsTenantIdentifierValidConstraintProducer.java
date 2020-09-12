@@ -26,5 +26,9 @@ public class IsTenantIdentifierValidConstraintProducer extends AbstractConstrain
         {
             throw new IllegalArgumentException("Tenant column cannot be null");
         }
+        if (parameters.getTenantColumnName().trim().isEmpty())
+        {
+            throw new IllegalArgumentException("Tenant column cannot be empty");
+        }
     }
 }
