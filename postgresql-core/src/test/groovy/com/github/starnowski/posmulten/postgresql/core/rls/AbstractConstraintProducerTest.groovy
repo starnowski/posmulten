@@ -11,6 +11,9 @@ abstract class AbstractConstraintProducerTest<X extends IConstraintProducerParam
     {
         given:
             def parameters = returnCorrectParametersMockObject()
+            parameters.getConstraintName() >> "const_1"
+            parameters.getTableName() >> "users"
+            parameters.getTableSchema() >> "public"
 
         when:
             def definition = returnTestedObject().produce(parameters)
