@@ -38,12 +38,12 @@ class IsTenantIdentifierValidConstraintProducerTest extends AbstractConstraintPr
 
         where:
             constraintName      |   schema      | table     |   conditionStatement              |   tenantColumn            ||	expectedStatement
-            "sss"               |   null        | "users"   |   "cccsss"                        |   "d_tenant"              ||  "ALTER TABLE \"users\" ADD CONSTRAINT sss CHECK ((id IS NULL) OR (cccsss));"
-            "sss"               |   "public"    | "users"   |   "cccsss"                        |   "tenant"                ||  "ALTER TABLE \"public\".\"users\" ADD CONSTRAINT sss CHECK ((abc_user_id IS NULL AND id IS NULL) OR (cccsss));"
-            "sss"               |   "secondary" | "users"   |   "cccsss"                        |   "tenant_id"             ||  "ALTER TABLE \"secondary\".\"users\" ADD CONSTRAINT sss CHECK ((abc_user_id IS NULL AND userId IS NULL) OR (cccsss));"
-            "user_belongs_tt"   |   "secondary" | "users"   |   "cccsss"                        |   "t_id"                  ||  "ALTER TABLE \"secondary\".\"users\" ADD CONSTRAINT user_belongs_tt CHECK ((uuid IS NULL) OR (cccsss));"
-            "user_belongs_tt"   |   "secondary" | "users"   |   "is_tenant_correct(tenant_id)"  |   "tenantId"              ||  "ALTER TABLE \"secondary\".\"users\" ADD CONSTRAINT user_belongs_tt CHECK ((secondary_colId IS NULL AND uuid IS NULL) OR (is_tenant_correct(tenant_id)));"
-            "user_belongs_tt"   |   "secondary" | "users"   |   "is_it_really_my_tenant(t)"     |   "tenant_identifier"     ||  "ALTER TABLE \"secondary\".\"users\" ADD CONSTRAINT user_belongs_tt CHECK ((a IS NULL AND b IS NULL AND c IS NULL) OR (is_it_really_my_tenant(t)));"
+            "sss"               |   null        | "users"   |   "cccsss"                        |   "d_tenant"              ||  "ALTER TABLE \"users\" ADD CONSTRAINT sss CHECK (d_tenant IS NULL OR cccsss);"
+            "sss"               |   "public"    | "users"   |   "some_fun(asf)"                 |   "tenant"                ||  "ALTER TABLE \"public\".\"users\" ADD CONSTRAINT sss CHECK (tenant IS NULL OR some_fun(asf));"
+            "sss"               |   "secondary" | "users"   |   "xxxx = 3"                      |   "tenant_id"             ||  "ALTER TABLE \"secondary\".\"users\" ADD CONSTRAINT sss CHECK (tenant_id IS NULL OR xxxx = 3);"
+            "user_belongs_tt"   |   "secondary" | "users"   |   "cccsss"                        |   "t_id"                  ||  "ALTER TABLE \"secondary\".\"users\" ADD CONSTRAINT user_belongs_tt CHECK (t_id IS NULL OR cccsss);"
+            "user_belongs_tt"   |   "secondary" | "users"   |   "is_tenant_correct(tenant_id)"  |   "tenantId"              ||  "ALTER TABLE \"secondary\".\"users\" ADD CONSTRAINT user_belongs_tt CHECK (tenantId IS NULL OR is_tenant_correct(tenant_id));"
+            "user_belongs_tt"   |   "secondary" | "users"   |   "is_it_really_my_tenant(t)"     |   "tenant_identifier"     ||  "ALTER TABLE \"secondary\".\"users\" ADD CONSTRAINT user_belongs_tt CHECK (tenant_identifier IS NULL OR is_it_really_my_tenant(t));"
     }
 
     @Override
