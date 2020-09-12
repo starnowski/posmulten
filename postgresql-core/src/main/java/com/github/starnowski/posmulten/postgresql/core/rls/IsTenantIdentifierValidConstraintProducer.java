@@ -22,5 +22,9 @@ public class IsTenantIdentifierValidConstraintProducer extends AbstractConstrain
         {
             throw new IllegalArgumentException("Object of type IIsTenantValidFunctionInvocationFactory cannot be null");
         }
+        if (parameters.getTenantColumnName() == null)
+        {
+            throw new IllegalArgumentException("Tenant column cannot be null");
+        }
     }
 }
