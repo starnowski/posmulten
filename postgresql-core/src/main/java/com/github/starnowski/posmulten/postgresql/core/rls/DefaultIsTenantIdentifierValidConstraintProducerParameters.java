@@ -43,6 +43,11 @@ public class DefaultIsTenantIdentifierValidConstraintProducerParameters implemen
         return iIsTenantValidFunctionInvocationFactory;
     }
 
+    public static DefaultIsTenantIdentifierValidConstraintProducerParametersBuilder builder()
+    {
+        return new DefaultIsTenantIdentifierValidConstraintProducerParametersBuilder();
+    }
+
     public static class DefaultIsTenantIdentifierValidConstraintProducerParametersBuilder
     {
         private String constraintName;
