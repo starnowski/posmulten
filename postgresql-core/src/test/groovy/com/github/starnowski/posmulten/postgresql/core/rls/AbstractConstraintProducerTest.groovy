@@ -7,20 +7,28 @@ import spock.lang.Unroll
 abstract class AbstractConstraintProducerTest<X extends IConstraintProducerParameters, P extends AbstractConstraintProducer<X>> extends Specification {
 
     @Unroll
-    def "should return correct definition based on the generic parameters object"()
+    def "should return correct definition based on the generic parameters object for table #table and schema #schema with constraint name #constraintName"()
     {
         given:
             def parameters = returnCorrectParametersMockObject()
-            parameters.getConstraintName() >> "const_1"
-            parameters.getTableName() >> "users"
-            parameters.getTableSchema() >> "public"
 
         when:
             def definition = returnTestedObject().produce(parameters)
 
         then:
-            definition.getCreateScript() ==~ /ALTER TABLE "public"\."users" ADD CONSTRAINT const_1 CHECK .*;/
-            definition.getDropScript() == "ALTER TABLE \"public\".\"users\" DROP CONSTRAINT IF EXISTS const_1;"
+            _ * parameters.getConstraintName() >> constraintName
+            _ * parameters.getTableName() >> table
+            _ * parameters.getTableSchema() >> schema
+            definition.getDropScript() == expectedDropStatement
+            definition.getCreateScript() ==~ expectedCreateStatementPattern
+
+        where:
+            table           |   schema          |   constraintName          ||  expectedDropStatement                                                                       |   expectedCreateStatementPattern
+            "users"         |   "public"        |    "const_1"              ||  "ALTER TABLE \"public\".\"users\" DROP CONSTRAINT IF EXISTS const_1;"                       |   /ALTER TABLE "public"\."users" ADD CONSTRAINT const_1 CHECK .*;/
+            "users"         |   null            |    "const_1"              ||  "ALTER TABLE \"users\" DROP CONSTRAINT IF EXISTS const_1;"                                  |   /ALTER TABLE "users" ADD CONSTRAINT const_1 CHECK .*;/
+            "users"         |   null            |    "constraint_222"       ||  "ALTER TABLE \"users\" DROP CONSTRAINT IF EXISTS constraint_222;"                           |   /ALTER TABLE "users" ADD CONSTRAINT constraint_222 CHECK .*;/
+            "notifications" |   null            |    "constraint_XXX"       ||  "ALTER TABLE \"notifications\" DROP CONSTRAINT IF EXISTS constraint_XXX;"                   |   /ALTER TABLE "notifications" ADD CONSTRAINT constraint_XXX CHECK .*;/
+            "notifications" |   "other_schema"  |    "fk_constraint"        ||  "ALTER TABLE \"other_schema\".\"notifications\" DROP CONSTRAINT IF EXISTS fk_constraint;"   |   /ALTER TABLE "other_schema"\."notifications" ADD CONSTRAINT fk_constraint CHECK .*;/
     }
 
     def "should throw an exception of type 'IllegalArgumentException' when the parameters object is null" () {
