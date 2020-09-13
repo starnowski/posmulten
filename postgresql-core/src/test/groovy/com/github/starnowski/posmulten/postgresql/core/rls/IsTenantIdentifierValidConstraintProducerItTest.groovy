@@ -50,15 +50,15 @@ class IsTenantIdentifierValidConstraintProducerItTest extends Specification {
         isConstraintExists(jdbcTemplate, schema, table, constraintName)
 
         where:
-        testConstraintName      |   testSchema              | testTable     |   tenantColumn                                                                     |   conditionStatement
-        "sss"                   |   null                    | "users"       |   "tenant_id"                                                                  |   "tenant_id = 'dsasdf'"
-        "sss"                   |   "public"                | "users"       |   "tenant_id"                                                                  |   "Cast(current_setting('some.boolean.value') as boolean)"
-        "sss"                   |   "non_public_schema"     | "users"       |   "tenant_id"                                                                 |   "tenant_id = 'dsasdf'"
-        "user_belongs_tt"       |   "non_public_schema"     | "users"       |   "tenant_id"                                                                   |   "Cast(current_setting('boolean.value2') as boolean)"
-        "user_belongs_tt"       |   "non_public_schema"     | "users"       |   "tenant_id"                                                                  |   "tenant_id = 'dsasdf'"
-        "user_belongs_tt"       |   "non_public_schema"     | "posts"       |   "tenant_id"                                                              |   "Cast(current_setting('bool.value2') as boolean)"
-        "user_belongs_tt"       |   "non_public_schema"     | "posts"       |   "tenant_id"                                                              |   "tenant_id = 'dsasdf'"
-        "does_comment_from_t"   |   "non_public_schema"     | "comments"    |   "tenant"  |   "tenant = 'dsasdf'"
+            testConstraintName      |   testSchema              | testTable     |   tenantColumn    |   conditionStatement
+            "sss"                   |   null                    | "users"       |   "tenant_id"     |   "tenant_id = 'dsasdf'"
+            "sss"                   |   "public"                | "users"       |   "tenant_id"     |   "tenant_id <> 'asdfjlzvz[HALA'"
+            "sss"                   |   "non_public_schema"     | "users"       |   "tenant_id"     |   "tenant_id = 'dsasdf'"
+            "user_belongs_tt"       |   "non_public_schema"     | "users"       |   "tenant_id"     |   "id <> 'SSSAA'"
+            "user_belongs_tt"       |   "non_public_schema"     | "users"       |   "tenant_id"     |   "tenant_id = 'dsasdf'"
+            "user_belongs_tt"       |   "non_public_schema"     | "posts"       |   "tenant_id"     |   "id <> 'SSSAA'"
+            "user_belongs_tt"       |   "non_public_schema"     | "posts"       |   "tenant_id"     |   "jhhh <> 'SSSAA'"
+            "does_comment_from_t"   |   "non_public_schema"     | "comments"    |   "tenant"        |   "uuid = 'dsasdf'"
     }
 
     def cleanup() {
