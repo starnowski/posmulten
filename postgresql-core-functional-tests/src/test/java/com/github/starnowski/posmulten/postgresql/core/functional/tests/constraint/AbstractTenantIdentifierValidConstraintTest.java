@@ -6,6 +6,7 @@ import com.github.starnowski.posmulten.postgresql.core.functional.tests.pojos.Co
 import com.github.starnowski.posmulten.postgresql.core.functional.tests.pojos.Post;
 import com.github.starnowski.posmulten.postgresql.core.functional.tests.pojos.User;
 import com.github.starnowski.posmulten.postgresql.core.rls.DefaultIsTenantIdentifierValidConstraintProducerParameters;
+import com.github.starnowski.posmulten.postgresql.core.rls.IsTenantIdentifierValidConstraintProducer;
 import com.github.starnowski.posmulten.postgresql.core.rls.function.*;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.jdbc.Sql;
@@ -19,6 +20,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static com.github.starnowski.posmulten.postgresql.core.functional.tests.TestApplication.CLEAR_DATABASE_SCRIPT_PATH;
+import static com.github.starnowski.posmulten.postgresql.core.rls.DefaultIsTenantIdentifierValidConstraintProducerParameters.builder;
 import static com.github.starnowski.posmulten.postgresql.test.utils.TestUtils.VALID_CURRENT_TENANT_ID_PROPERTY_NAME;
 import static com.github.starnowski.posmulten.postgresql.test.utils.TestUtils.isAnyRecordExists;
 import static java.lang.String.format;
@@ -58,8 +60,8 @@ public abstract class AbstractTenantIdentifierValidConstraintTest extends Abstra
     protected static Object[][] userData()
     {
         return new Object[][]{
-                {new User(1L, "Szymon Tarnowski", FIRST_VALID_TENANT)},
-                {new User(2L, "John Doe", SECOND_VALID_TENANT)}
+                {new User(1L, "Szymon Tarnowski", FIRST_VALID_TENANT), FIRST_INVALID_TENANT},
+                {new User(2L, "John Doe", SECOND_VALID_TENANT), SECOND_INVALID_TENANT}
         };
     }
 
@@ -89,24 +91,31 @@ public abstract class AbstractTenantIdentifierValidConstraintTest extends Abstra
         //Create function that returns if tenant is valid
         IsTenantValidBasedOnConstantValuesFunctionProducer isTenantValidBasedOnConstantValuesFunctionProducer = new IsTenantValidBasedOnConstantValuesFunctionProducer();
         IsTenantValidBasedOnConstantValuesFunctionDefinition functionDefinition = isTenantValidBasedOnConstantValuesFunctionProducer.produce(new IsTenantValidBasedOnConstantValuesFunctionProducerParameters(FUNCTION_NAME, getSchema(), new HashSet<String>(Arrays.asList(FIRST_INVALID_TENANT, SECOND_INVALID_TENANT)), "VARCHAR(32)"));
+        sqlDefinitions.add(functionDefinition);
 
-        DefaultIsTenantIdentifierValidConstraintProducerParameters usersConstraintProducerParameters = DefaultIsTenantIdentifierValidConstraintProducerParameters.builder()
+        DefaultIsTenantIdentifierValidConstraintProducerParameters usersConstraintProducerParameters = builder()
                 .withConstraintName(CONSTRAINT_NAME)
                 .withTableName("users")
                 .withTableSchema(getSchema())
                 .withIIsTenantValidFunctionInvocationFactory(functionDefinition)
                 .withTenantColumnName("tenant_id").build();
 
+        DefaultIsTenantIdentifierValidConstraintProducerParameters commentsConstraintProducerParameters = builder()
+                .withConstraintName(CONSTRAINT_NAME)
+                .withTableName("comments")
+                .withTableSchema(getSchema())
+                .withIIsTenantValidFunctionInvocationFactory(functionDefinition)
+                .withTenantColumnName("tenant").build();
 
+        IsTenantIdentifierValidConstraintProducer isTenantIdentifierValidConstraintProducer = new IsTenantIdentifierValidConstraintProducer();
+        sqlDefinitions.add(isTenantIdentifierValidConstraintProducer.produce(usersConstraintProducerParameters));
+        sqlDefinitions.add(isTenantIdentifierValidConstraintProducer.produce(commentsConstraintProducerParameters));
     }
 
     @Test(dependsOnMethods = {"createSQLDefinitions"}, testName = "constraint should not exists before tests execution", description = "check if constraint does not exist before executing SQL definitions")
-    public void constraintShouldNotExistsBeforeTests()
-    {
-        assertFalse(isAnyRecordExists(jdbcTemplate, createSelectStatementForConstraintName(getSchema(), "posts", POSTS_USERS_FK_CONSTRAINT_NAME)), "Constraint for users for foreign key in posts table should not exists");
-        assertFalse(isAnyRecordExists(jdbcTemplate, createSelectStatementForConstraintName(getSchema(), "comments", COMMENTS_USERS_FK_CONSTRAINT_NAME)), "Constraint for users for foreign key in comments table should not exists");
-        assertFalse(isAnyRecordExists(jdbcTemplate, createSelectStatementForConstraintName(getSchema(), "comments", COMMENTS_POSTS_FK_CONSTRAINT_NAME)), "Constraint for posts for foreign key in comments table should not exists");
-        assertFalse(isAnyRecordExists(jdbcTemplate, createSelectStatementForConstraintName(getSchema(), "comments", COMMENTS_PARENT_COMMENTS_FK_CONSTRAINT_NAME)), "Constraint for parent comment for foreign key in comments table should not exists");
+    public void constraintShouldNotExistsBeforeTests() {
+        assertFalse(isAnyRecordExists(jdbcTemplate, createSelectStatementForConstraintName(getSchema(), "users", CONSTRAINT_NAME)), "Constraint for users table should not exists");
+        assertFalse(isAnyRecordExists(jdbcTemplate, createSelectStatementForConstraintName(getSchema(), "comments", CONSTRAINT_NAME)), "Constraint for comments table should not exists");
     }
 
     @SqlGroup({
@@ -122,10 +131,8 @@ public abstract class AbstractTenantIdentifierValidConstraintTest extends Abstra
     @Test(dependsOnMethods = {"executeSQLDefinitions"}, testName = "constraint should exist after SQL definitions executed", description = "check if constraint exist after executing SQL definitions")
     public void constraintNameShouldExistAfterCreation()
     {
-        assertTrue(isAnyRecordExists(jdbcTemplate, createSelectStatementForConstraintName(getSchema(), "posts", POSTS_USERS_FK_CONSTRAINT_NAME)), "Constraint for users for foreign key in posts table should exists");
-        assertTrue(isAnyRecordExists(jdbcTemplate, createSelectStatementForConstraintName(getSchema(), "comments", COMMENTS_USERS_FK_CONSTRAINT_NAME)), "Constraint for users for foreign key in comments table should exists");
-        assertTrue(isAnyRecordExists(jdbcTemplate, createSelectStatementForConstraintName(getSchema(), "comments", COMMENTS_POSTS_FK_CONSTRAINT_NAME)), "Constraint for posts for foreign key in comments table should exists");
-        assertTrue(isAnyRecordExists(jdbcTemplate, createSelectStatementForConstraintName(getSchema(), "comments", COMMENTS_PARENT_COMMENTS_FK_CONSTRAINT_NAME)), "Constraint for parent comment for foreign key in comments table should exists");
+        assertTrue(isAnyRecordExists(jdbcTemplate, createSelectStatementForConstraintName(getSchema(), "users", CONSTRAINT_NAME)), "Constraint for users table should exists");
+        assertTrue(isAnyRecordExists(jdbcTemplate, createSelectStatementForConstraintName(getSchema(), "comments", CONSTRAINT_NAME)), "Constraint for comments table should exists");
     }
 
     @Test(dataProvider = "userData", dependsOnMethods = {"constraintNameShouldExistAfterCreation"}, testName = "insert data into to user table")
