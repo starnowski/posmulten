@@ -9,6 +9,7 @@ import com.github.starnowski.posmulten.postgresql.core.rls.IsTenantIdentifierVal
 import com.github.starnowski.posmulten.postgresql.core.rls.function.IsTenantValidBasedOnConstantValuesFunctionDefinition;
 import com.github.starnowski.posmulten.postgresql.core.rls.function.IsTenantValidBasedOnConstantValuesFunctionProducer;
 import com.github.starnowski.posmulten.postgresql.core.rls.function.IsTenantValidBasedOnConstantValuesFunctionProducerParameters;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.jdbc.SqlGroup;
@@ -23,6 +24,7 @@ import static com.github.starnowski.posmulten.postgresql.core.rls.DefaultIsTenan
 import static com.github.starnowski.posmulten.postgresql.test.utils.TestUtils.isAnyRecordExists;
 import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
 import static org.springframework.test.context.jdbc.SqlConfig.TransactionMode.ISOLATED;
 import static org.testng.Assert.assertFalse;
@@ -72,11 +74,11 @@ public abstract class AbstractTenantIdentifierValidConstraintTest extends Abstra
     }
 
     @DataProvider(name = "commentsData")
-    protected static Object[][] parentCommentsData()
+    protected static Object[][] commentsData()
     {
         return new Object[][]{
-                {new Comment(113, 1L, "Comment one for primary tenant", 57L, FIRST_VALID_TENANT, null, null)},
-                {new Comment(79, 2L, "Comment one for primary tenant", 73L, SECOND_VALID_TENANT, null, null)}
+                {new Comment(113, 1L, "Comment one for primary tenant", 57L, FIRST_VALID_TENANT, null, null), FIRST_INVALID_TENANT},
+                {new Comment(79, 2L, "Comment one for primary tenant", 73L, SECOND_VALID_TENANT, null, null), SECOND_INVALID_TENANT}
         };
     }
 
@@ -132,9 +134,21 @@ public abstract class AbstractTenantIdentifierValidConstraintTest extends Abstra
         assertTrue(isAnyRecordExists(jdbcTemplate, createSelectStatementForConstraintName(getSchema(), "comments", CONSTRAINT_NAME)), "Constraint for comments table should exists");
     }
 
-    @Test(dataProvider = "userData", dependsOnMethods = {"constraintNameShouldExistAfterCreation"}, testName = "insert data into to user table")
-    public void insertUserTestData(User user)
+    @Test(dataProvider = "userData", dependsOnMethods = {"constraintNameShouldExistAfterCreation"}, testName = "try to insert data into to user table with invalid tenant value")
+    public void tryInsertUserTestDataWintInvalidTenantValue(User user, String invalidTenant)
     {
+        assertThat(countRowsInTableWhere(getUsersTableReference(), "id = " + user.getId())).isEqualTo(0);
+        assertThatThrownBy(() ->
+                jdbcTemplate.execute(format("INSERT INTO %4$s (id, name, tenant_id) VALUES (%1$d, '%2$s', '%3$s');", user.getId(), user.getName(), invalidTenant, getUsersTableReference()))
+        )
+                .isInstanceOf(DataIntegrityViolationException.class);
+        assertFalse(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %4$s WHERE id = %1$d AND name = '%2$s' AND tenant_id = '%3$s'", user.getId(), user.getName(), user.getTenantId(), getUsersTableReference())), "The tests user should exists");
+    }
+
+    @Test(dataProvider = "userData", dependsOnMethods = {"tryInsertUserTestDataWintInvalidTenantValue"}, testName = "insert data into to user table")
+    public void insertUserTestData(Object[] parameters)
+    {
+        User user = (User) parameters[0];
         assertThat(countRowsInTableWhere(getUsersTableReference(), "id = " + user.getId())).isEqualTo(0);
         jdbcTemplate.execute(format("INSERT INTO %4$s (id, name, tenant_id) VALUES (%1$d, '%2$s', '%3$s');", user.getId(), user.getName(), user.getTenantId(), getUsersTableReference()));
         assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %4$s WHERE id = %1$d AND name = '%2$s' AND tenant_id = '%3$s'", user.getId(), user.getName(), user.getTenantId(), getUsersTableReference())), "The tests user should exists");
