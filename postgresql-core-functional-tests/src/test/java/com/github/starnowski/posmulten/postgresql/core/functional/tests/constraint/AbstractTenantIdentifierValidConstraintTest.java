@@ -82,7 +82,7 @@ public abstract class AbstractTenantIdentifierValidConstraintTest extends Abstra
         };
     }
 
-    //TODO
+    //TODO Fix test descriptions
 
     @Test(testName = "create SQL definitions", description = "Create SQL function that creates statements that set current tenant value, retrieve current tenant value and create a constraint for a foreign key for a table that is multi-tenant aware")
     public void createSQLDefinitions()
@@ -163,24 +163,25 @@ public abstract class AbstractTenantIdentifierValidConstraintTest extends Abstra
         assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %4$s WHERE id = %1$d AND text = '%2$s' AND tenant_id = '%3$s'", post.getId(), post.getText(), post.getTenantId(), getPostsTableReference())), "The tests post should exists");
     }
 
-    @Test(dataProvider = "parentCommentsData", dependsOnMethods = {"insertPostData"}, testName = "insert data into the comments table that do not have reference to the comment parent")
-    public void tryToInsertCommentWithInvalidTenant(Comment comment)
+    @Test(dataProvider = "commentsData", dependsOnMethods = {"insertPostData"}, testName = "insert data into the comments table that do not have reference to the comment parent")
+    public void tryToInsertCommentWithInvalidTenant(Comment comment, String invalidTenant)
     {
         assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %3$s WHERE id = %1$d AND tenant_id = '%2$s'", comment.getUserId(), comment.getTenantId(), getUsersTableReference())), "The tests user should exists");
         assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %3$s WHERE id = %1$d AND tenant_id = '%2$s'", comment.getPostId(), comment.getTenantId(), getPostsTableReference())), "The tests post should exists");
         assertThat(countRowsInTableWhere(getCommentsTableReference(), "id = " + comment.getId())).isEqualTo(0);
-        jdbcTemplate.execute(format("INSERT INTO %6$s (id, user_id, text, post_id, tenant) VALUES (%12$d, %2$d, '%3$s', '%4$s', '%5$s');", comment.getId(), comment.getUserId(), comment.getText(), comment.getPostId(), comment.getTenantId(), getCommentsTableReference()));
-        assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %4$s WHERE id = %1$d AND text = '%2$s' AND tenant = '%3$s'", comment.getId(), comment.getText(), comment.getTenantId(), getCommentsTableReference())), "The tests comment should exists");
+        assertThatThrownBy(() ->
+                jdbcTemplate.execute(format("INSERT INTO %6$s (id, user_id, text, post_id, tenant) VALUES (%1$d, %2$d, '%3$s', '%4$s', '%5$s');", comment.getId(), comment.getUserId(), comment.getText(), comment.getPostId(), invalidTenant, getCommentsTableReference()))
+        )
+                .isInstanceOf(DataIntegrityViolationException.class);
+        assertFalse(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %4$s WHERE id = %1$d AND text = '%2$s' AND tenant = '%3$s'", comment.getId(), comment.getText(), comment.getTenantId(), getCommentsTableReference())), "The tests comment should exists");
     }
 
     @Test(dataProvider = "commentsData", dependsOnMethods = {"tryToInsertCommentWithInvalidTenant"}, testName = "try to insert data into the comments table with reference to parent comment that belongs to same tenant", description = "test case assumes that constraint is not going to allow to insert data into the comments table with reference to parent comment that belongs to same tenant")
     public void insertCommentWithCorrectTenant(Object[] array)
     {
         Comment comment = (Comment) array[0];
-        Comment commentWithSameTenant = (Comment) array[2];
-        assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %3$s WHERE id = %1$d AND user_id = %2$d", commentWithSameTenant.getId(), commentWithSameTenant.getUserId(), getCommentsTableReference())), "The tests parent comment should exists");
         assertThat(countRowsInTableWhere(getCommentsTableReference(), "id = " + comment.getId() + " AND user_id = " + comment.getUserId())).isEqualTo(0);
-        jdbcTemplate.execute(format("INSERT INTO %8$s (id, user_id, text, post_id, tenant, parent_comment_id, parent_comment_user_id) VALUES (%1$d, %2$d, '%3$s', '%4$s', '%5$s', %6$d, %7$d);", comment.getId(), comment.getUserId(), comment.getText(), comment.getPostId(), comment.getTenantId(), commentWithSameTenant.getId(), commentWithSameTenant.getUserId(), getCommentsTableReference()));
+        jdbcTemplate.execute(format("INSERT INTO %6$s (id, user_id, text, post_id, tenant) VALUES (%1$d, %2$d, '%3$s', '%4$s', '%5$s');", comment.getId(), comment.getUserId(), comment.getText(), comment.getPostId(), comment.getTenantId(), getCommentsTableReference()));
         assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %5$s WHERE id = %1$d AND text = '%2$s' AND user_id = %3$d AND tenant = '%4$s'", comment.getId(), comment.getText(), comment.getUserId(), comment.getTenantId(), getCommentsTableReference())), "The tests comment should exists");
     }
 
