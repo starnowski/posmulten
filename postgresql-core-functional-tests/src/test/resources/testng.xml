@@ -34,6 +34,12 @@
             <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.rls.RLSWithSettingReferenceWithoutConstraintForCurrentTenantForeignKeyInPublicSchemaTest" />
         </classes>
     </test>
+    <test name="Setting constraint ">
+        <classes>
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.constraint.TenantIdentifierValidConstraintInPublicSchemaTest" />
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.constraint.TenantIdentifierValidConstraintInNonPublicSchemaTest" />
+        </classes>
+    </test>
     <test name="Setting Row Level Security Policy for single table that the tenant column was just added">
         <classes>
             <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.rls.CreateRLSForSingleTableForWhichTenantColumnWasJustAddedInNonPublicSchemaTest" />
