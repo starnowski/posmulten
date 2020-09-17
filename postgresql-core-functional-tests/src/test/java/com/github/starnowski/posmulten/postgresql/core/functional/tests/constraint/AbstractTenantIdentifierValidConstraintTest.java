@@ -81,9 +81,7 @@ public abstract class AbstractTenantIdentifierValidConstraintTest extends Abstra
         };
     }
 
-    //TODO Fix test descriptions
-
-    @Test(testName = "create SQL definitions", description = "Create SQL function that creates statements that set current tenant value, retrieve current tenant value and create a constraint for a foreign key for a table that is multi-tenant aware")
+    @Test(testName = "create SQL definitions", description = "Create SQL function that creates statements that create constraint that checks if tenant value is correct")
     public void createSQLDefinitions()
     {
         //Create function that returns if tenant is valid
@@ -144,7 +142,7 @@ public abstract class AbstractTenantIdentifierValidConstraintTest extends Abstra
         assertFalse(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %4$s WHERE id = %1$d AND name = '%2$s' AND tenant_id = '%3$s'", user.getId(), user.getName(), user.getTenantId(), getUsersTableReference())), "The tests user should exists");
     }
 
-    @Test(dataProvider = "userData", dependsOnMethods = {"tryInsertUserTestDataWintInvalidTenantValue"}, testName = "insert data into to user table")
+    @Test(dataProvider = "userData", dependsOnMethods = {"tryInsertUserTestDataWintInvalidTenantValue"}, testName = "insert data into to user table with valid tenant value")
     public void insertUserTestData(Object[] parameters)
     {
         User user = (User) parameters[0];
@@ -162,7 +160,7 @@ public abstract class AbstractTenantIdentifierValidConstraintTest extends Abstra
         assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %4$s WHERE id = %1$d AND text = '%2$s' AND tenant_id = '%3$s'", post.getId(), post.getText(), post.getTenantId(), getPostsTableReference())), "The tests post should exists");
     }
 
-    @Test(dataProvider = "commentsData", dependsOnMethods = {"insertPostData"}, testName = "insert data into the comments table that do not have reference to the comment parent")
+    @Test(dataProvider = "commentsData", dependsOnMethods = {"insertPostData"}, testName = "test case assumes that constraint is not going to allow to insert data into the comments table with invalid tenant value")
     public void tryToInsertCommentWithInvalidTenant(Comment comment, String invalidTenant)
     {
         assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %3$s WHERE id = %1$d AND tenant_id = '%2$s'", comment.getUserId(), comment.getTenantId(), getUsersTableReference())), "The tests user should exists");
@@ -175,7 +173,7 @@ public abstract class AbstractTenantIdentifierValidConstraintTest extends Abstra
         assertFalse(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %4$s WHERE id = %1$d AND text = '%2$s' AND tenant = '%3$s'", comment.getId(), comment.getText(), comment.getTenantId(), getCommentsTableReference())), "The tests comment should exists");
     }
 
-    @Test(dataProvider = "commentsData", dependsOnMethods = {"tryToInsertCommentWithInvalidTenant"}, testName = "try to insert data into the comments table with reference to parent comment that belongs to same tenant", description = "test case assumes that constraint is not going to allow to insert data into the comments table with reference to parent comment that belongs to same tenant")
+    @Test(dataProvider = "commentsData", dependsOnMethods = {"tryToInsertCommentWithInvalidTenant"}, testName = "insert data into the comments table with valid tenant value", description = "test case assumes that constraint is going to allow to insert data into the comments table with valid tenant value")
     public void insertCommentWithCorrectTenant(Object[] array)
     {
         Comment comment = (Comment) array[0];
