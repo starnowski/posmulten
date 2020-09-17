@@ -77,7 +77,7 @@ public abstract class AbstractTenantIdentifierValidConstraintTest extends Abstra
     {
         return new Object[][]{
                 {new Comment(113, 1L, "Comment one for primary tenant", 57L, FIRST_VALID_TENANT, null, null), FIRST_INVALID_TENANT},
-                {new Comment(79, 2L, "Comment one for primary tenant", 73L, SECOND_VALID_TENANT, null, null), SECOND_INVALID_TENANT}
+                {new Comment(79, 2L, "Comment one for secondary tenant", 73L, SECOND_VALID_TENANT, null, null), SECOND_INVALID_TENANT}
         };
     }
 
