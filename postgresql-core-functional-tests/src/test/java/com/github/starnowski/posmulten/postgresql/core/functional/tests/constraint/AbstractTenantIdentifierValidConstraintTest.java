@@ -32,7 +32,6 @@ import static org.testng.Assert.assertTrue;
 
 public abstract class AbstractTenantIdentifierValidConstraintTest extends AbstractClassWithSQLDefinitionGenerationMethods {
 
-
     private static final String FIRST_VALID_TENANT = "DFAXCVZ";
     private static final String SECOND_VALID_TENANT = "adfavczvc";
     private static final String FIRST_INVALID_TENANT = "abdas1dsfa";
