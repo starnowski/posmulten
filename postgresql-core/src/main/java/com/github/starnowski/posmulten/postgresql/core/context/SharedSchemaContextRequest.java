@@ -23,10 +23,7 @@
  */
 package com.github.starnowski.posmulten.postgresql.core.context;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class SharedSchemaContextRequest implements Cloneable{
 
@@ -118,6 +115,11 @@ public class SharedSchemaContextRequest implements Cloneable{
      * value is the function name.
      */
     private Map<TableKey, String> functionThatChecksIfRecordExistsInTableNames = new HashMap<>();
+
+    /**
+     * TODO
+     */
+    private List<String> tenantValuesBlacklist;
 
     public String getDefaultTenantIdColumn() {
         return defaultTenantIdColumn;
@@ -222,5 +224,13 @@ public class SharedSchemaContextRequest implements Cloneable{
     @Override
     protected Object clone() throws CloneNotSupportedException {
         return super.clone();
+    }
+
+    public List<String> getTenantValuesBlacklist() {
+        return tenantValuesBlacklist;
+    }
+
+    public void setTenantValuesBlacklist(List<String> tenantValuesBlacklist) {
+        this.tenantValuesBlacklist = tenantValuesBlacklist;
     }
 }

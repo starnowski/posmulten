@@ -310,7 +310,15 @@ public class DefaultSharedSchemaContextBuilder {
         return this;
     }
 
-    public DefaultSharedSchemaContextBuilder createValidTenantValueConstraint(List<String> blacklistTenantValues, String isTenantValidFunctionName, String isTenantValidConstraintName) {
+    /**
+     * TODO Comment
+     * @param tenantValuesBlacklist
+     * @param isTenantValidFunctionName
+     * @param isTenantValidConstraintName
+     * @return builder object for which method was invoked
+     */
+    public DefaultSharedSchemaContextBuilder createValidTenantValueConstraint(List<String> tenantValuesBlacklist, String isTenantValidFunctionName, String isTenantValidConstraintName) {
+        sharedSchemaContextRequest.setTenantValuesBlacklist(tenantValuesBlacklist);
         //TODO
         return this;
     }
