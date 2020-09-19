@@ -310,6 +310,11 @@ public class DefaultSharedSchemaContextBuilder {
         return this;
     }
 
+    public DefaultSharedSchemaContextBuilder createValidTenantValueConstraint(List<String> blacklistTenantValues, String isTenantValidFunctionName, String isTenantValidConstraintName) {
+        //TODO
+        return this;
+    }
+
     protected SharedSchemaContextRequest getSharedSchemaContextRequestCopyOrNull(SharedSchemaContextRequest request) {
         try {
             return (SharedSchemaContextRequest) request.clone();
