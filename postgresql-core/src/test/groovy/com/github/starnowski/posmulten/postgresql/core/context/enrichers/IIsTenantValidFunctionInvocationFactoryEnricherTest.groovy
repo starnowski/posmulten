@@ -37,7 +37,7 @@ class IIsTenantValidFunctionInvocationFactoryEnricherTest extends Specification 
 
         and: "passed parameters should match default values"
             capturedParameters.getSchema() == schema
-            capturedParameters.getBlacklistTenantIds() == blacklist
+            capturedParameters.getBlacklistTenantIds() == new HashSet<String>(blacklist)
             capturedParameters.getArgumentType() == sharedSchemaContextRequest.getCurrentTenantIdPropertyType()
             capturedParameters.getFunctionName() == "is_tenant_identifier_valid"
 
