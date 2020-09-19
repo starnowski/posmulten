@@ -50,4 +50,6 @@ class IIsTenantValidFunctionInvocationFactoryEnricherTest extends Specification 
             "some_schema"   |   ["BADSF", "DSFZCV"]
             "some_schema"   |   ["10.22", "9990"]
     }
+
+    //TODO Setting function name
 }
