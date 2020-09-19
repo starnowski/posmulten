@@ -55,4 +55,6 @@ public interface ISharedSchemaContext {
     Map<TableKey, IsRecordBelongsToCurrentTenantFunctionInvocationFactory> getTableKeysIsRecordBelongsToCurrentTenantFunctionInvocationFactoryMap();
 
     IIsTenantValidFunctionInvocationFactory getIIsTenantValidFunctionInvocationFactory();
+
+    void setIIsTenantValidFunctionInvocationFactory(IIsTenantValidFunctionInvocationFactory factory);
 }

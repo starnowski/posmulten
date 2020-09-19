@@ -98,4 +98,9 @@ public class SharedSchemaContext implements ISharedSchemaContext {
     public IIsTenantValidFunctionInvocationFactory getIIsTenantValidFunctionInvocationFactory() {
         return iIsTenantValidFunctionInvocationFactory;
     }
+
+    @Override
+    public void setIIsTenantValidFunctionInvocationFactory(IIsTenantValidFunctionInvocationFactory factory) {
+        this.iIsTenantValidFunctionInvocationFactory = factory;
+    }
 }
