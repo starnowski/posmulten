@@ -91,6 +91,4 @@ class IIsTenantValidFunctionInvocationFactoryEnricherTest extends Specification 
             "some_schema"   |   ["BADSF", "DSFZCV"]     |   "tenant_valid"              |   null
             "some_schema"   |   ["10.22", "9990"]       |   "is_t_valid"                |   "ten_const_va"
     }
-
-    //TODO Setting function name
 }
