@@ -25,7 +25,8 @@ public class IIsTenantValidFunctionInvocationFactoryEnricher implements ISharedS
     public ISharedSchemaContext enrich(ISharedSchemaContext context, SharedSchemaContextRequest request) throws SharedSchemaContextBuilderException {
         if (request.getTenantValuesBlacklist() != null && !request.getTenantValuesBlacklist().isEmpty())
         {
-            String testFunctionName = "is_tenant_identifier_valid";
+            String requestFunctionName = request.getIsTenantValidFunctionName();
+            String testFunctionName = requestFunctionName == null || requestFunctionName.trim().isEmpty() ? "is_tenant_identifier_valid" : requestFunctionName;
             IsTenantValidBasedOnConstantValuesFunctionDefinition sqlFunctionDefinition = isTenantIdentifierValidConstraintProducer.produce(new IsTenantValidBasedOnConstantValuesFunctionProducerParameters(testFunctionName, request.getDefaultSchema(), new HashSet<String>(request.getTenantValuesBlacklist()), request.getCurrentTenantIdPropertyType()));
             context.addSQLDefinition(sqlFunctionDefinition);
             context.setIIsTenantValidFunctionInvocationFactory(sqlFunctionDefinition);
