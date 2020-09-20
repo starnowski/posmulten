@@ -120,6 +120,14 @@ public class SharedSchemaContextRequest implements Cloneable{
      * TODO
      */
     private List<String> tenantValuesBlacklist;
+    /**
+     * TODO
+     */
+    private String isTenantValidFunctionName;
+    /**
+     * TODO
+     */
+    private String isTenantValidConstraintName;
 
     public String getDefaultTenantIdColumn() {
         return defaultTenantIdColumn;
@@ -232,5 +240,21 @@ public class SharedSchemaContextRequest implements Cloneable{
 
     public void setTenantValuesBlacklist(List<String> tenantValuesBlacklist) {
         this.tenantValuesBlacklist = tenantValuesBlacklist;
+    }
+
+    public String getIsTenantValidFunctionName() {
+        return isTenantValidFunctionName;
+    }
+
+    public void setIsTenantValidFunctionName(String isTenantValidFunctionName) {
+        this.isTenantValidFunctionName = isTenantValidFunctionName;
+    }
+
+    public String getIsTenantValidConstraintName() {
+        return isTenantValidConstraintName;
+    }
+
+    public void setIsTenantValidConstraintName(String isTenantValidConstraintName) {
+        this.isTenantValidConstraintName = isTenantValidConstraintName;
     }
 }
