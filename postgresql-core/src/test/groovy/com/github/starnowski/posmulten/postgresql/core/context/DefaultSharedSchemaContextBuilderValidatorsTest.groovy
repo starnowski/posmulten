@@ -19,8 +19,8 @@ class DefaultSharedSchemaContextBuilderValidatorsTest extends Specification {
             ISharedSchemaContext firstSharedSchemaContext = Mock(ISharedSchemaContext)
             ISharedSchemaContextEnricher sharedSchemaContextEnricher = Mock(ISharedSchemaContextEnricher)
             DefaultSharedSchemaContextBuilder builder = new DefaultSharedSchemaContextBuilder()
-            builder.setValidators([firstValidator, secondValidator])
-            builder.setEnrichers([sharedSchemaContextEnricher])
+                .setValidators([firstValidator, secondValidator])
+                .setEnrichers([sharedSchemaContextEnricher])
 
         when:
             def result = builder.build()
@@ -45,8 +45,8 @@ class DefaultSharedSchemaContextBuilderValidatorsTest extends Specification {
             ISharedSchemaContextRequestValidator secondValidator = Mock(ISharedSchemaContextRequestValidator)
             ISharedSchemaContextEnricher sharedSchemaContextEnricher = Mock(ISharedSchemaContextEnricher)
             DefaultSharedSchemaContextBuilder builder = new DefaultSharedSchemaContextBuilder()
-            builder.setValidators([firstValidator, secondValidator])
-            builder.setEnrichers([sharedSchemaContextEnricher])
+                .setValidators([firstValidator, secondValidator])
+                .setEnrichers([sharedSchemaContextEnricher])
             def firstEnricherCapturedRequest = null
             def secondEnricherCapturedRequest = null
 
@@ -75,8 +75,8 @@ class DefaultSharedSchemaContextBuilderValidatorsTest extends Specification {
             ISharedSchemaContextRequestValidator thirdValidator = Mock(ISharedSchemaContextRequestValidator)
             ISharedSchemaContextEnricher sharedSchemaContextEnricher = Mock(ISharedSchemaContextEnricher)
             DefaultSharedSchemaContextBuilder builder = new DefaultSharedSchemaContextBuilder()
-            builder.setValidators([firstValidator, secondValidator,thirdValidator])
-            builder.setEnrichers([sharedSchemaContextEnricher])
+                .setValidators([firstValidator, secondValidator,thirdValidator])
+                .setEnrichers([sharedSchemaContextEnricher])
             def exception = Mock(SharedSchemaContextBuilderException)
 
         when:
