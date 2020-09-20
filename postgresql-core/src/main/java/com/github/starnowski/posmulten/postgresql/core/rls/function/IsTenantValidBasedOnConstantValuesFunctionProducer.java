@@ -36,7 +36,7 @@ public class IsTenantValidBasedOnConstantValuesFunctionProducer extends Extended
         StringBuilder sb = new StringBuilder();
         sb.append("SELECT ");
         final String argumentType = returnFunctionArgumentType(parameters);
-        sb.append(parameters.getBlacklistTenantIds().stream().map(invalidTenant ->
+        sb.append(parameters.getBlacklistTenantIds().stream().sorted().map(invalidTenant ->
                 format("$1 <> CAST ('%1$s' AS %2$s)", invalidTenant, argumentType)).collect(Collectors.joining(" AND ")));
         return sb.toString();
     }
