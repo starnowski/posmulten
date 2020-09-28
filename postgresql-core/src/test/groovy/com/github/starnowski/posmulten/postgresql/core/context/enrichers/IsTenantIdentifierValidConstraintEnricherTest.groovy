@@ -4,8 +4,8 @@ import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSche
 import com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContext
 import com.github.starnowski.posmulten.postgresql.core.rls.IIsTenantIdentifierValidConstraintProducerParameters
 import com.github.starnowski.posmulten.postgresql.core.rls.IsTenantIdentifierValidConstraintProducer
-import com.github.starnowski.posmulten.postgresql.core.rls.function.IIsTenantValidBasedOnConstantValuesFunctionProducerParameters
 import com.github.starnowski.posmulten.postgresql.core.rls.function.IsTenantValidBasedOnConstantValuesFunctionDefinition
+import javafx.util.Pair
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -15,14 +15,15 @@ class IsTenantIdentifierValidConstraintEnricherTest extends Specification {
      * TODO
      */
     @Unroll
-    def "should enrich shared schema context with SQL definition for the function that checks if tenant value is correct based on default values for shares schema context builder for schema #schema and black list values (#blacklist)"()
+    def "should enrich shared schema context with SQL definition for the constraint that checks if tenant value is correct based on default values for shares schema context builder for schema #schema and black list values (#blacklist)"()
     {
         given:
         def builder = new DefaultSharedSchemaContextBuilder(schema)
-        builder.createValidTenantValueConstraint(blacklist, null, null)
+        builder.createValidTenantValueConstraint(["ADFZ", "DFZCXVZ"], null, null)
+                .createRLSPolicyForTable("table", null, "tenant_xxx", null)
         def sharedSchemaContextRequest = builder.getSharedSchemaContextRequestCopy()
         def context = new SharedSchemaContext()
-        IIsTenantValidBasedOnConstantValuesFunctionProducerParameters capturedParameters = null
+        List<IIsTenantIdentifierValidConstraintProducerParameters> capturedParameters = new ArrayList<>()
         def mockedSQLDefinition = Mock(IsTenantValidBasedOnConstantValuesFunctionDefinition)
         def producer = Mock(IsTenantIdentifierValidConstraintProducer)
         IsTenantIdentifierValidConstraintEnricher tested = new IsTenantIdentifierValidConstraintEnricher(producer)
@@ -33,7 +34,7 @@ class IsTenantIdentifierValidConstraintEnricherTest extends Specification {
         then:
         1 * producer.produce(_) >>  {
             parameters ->
-                capturedParameters = parameters[0]
+                capturedParameters.add(parameters[0])
                 mockedSQLDefinition
         }
         result.getSqlDefinitions().contains(mockedSQLDefinition)
@@ -46,13 +47,15 @@ class IsTenantIdentifierValidConstraintEnricherTest extends Specification {
         capturedParameters.getFunctionName() == "is_tenant_identifier_valid"
 
         where:
-        schema          |   blacklist
-        null            |   ["ADFZ", "DFZCXVZ"]
-        null            |   ["10.22", "9990"]
-        "public"        |   ["ADFZ", "DFZCXVZ"]
-        "public"        |   ["10.22", "9990"]
-        "some_schema"   |   ["BADSF", "DSFZCV"]
-        "some_schema"   |   ["10.22", "9990"]
+            schema          |   tableNameTenantNamePairs                                        ||  expectedPassedParameters
+            null            |   [new Pair("users", "tenant_id"), new Pair("leads", "t_xxx")]    ||  [tp("tenant_identifier_valid", "leads", null, "t_xxx"), tp("tenant_identifier_valid", "users", null, "tenant_id")]
+            "public"        |   [new Pair("users", "tenant_id"), new Pair("leads", "t_xxx")]    ||  [tp("tenant_identifier_valid", "leads", "public", "t_xxx"), tp("tenant_identifier_valid", "users", "public", "tenant_id")]
+            "some_schema"   |   [new Pair("users", "tenant_id"), new Pair("leads", "t_xxx")]    ||  [tp("tenant_identifier_valid", "leads", "public", "t_xxx"), tp("tenant_identifier_valid", "users", "public", "tenant_id")]
+    }
+
+    static IsTenantIdentifierValidConstraintProducerKey tp(String constraintName, String tableName, String tableSchema, String tenantColumnName)
+    {
+        new IsTenantIdentifierValidConstraintProducerKey(constraintName, tableName, tableSchema, tenantColumnName)
     }
 
     static class IsTenantIdentifierValidConstraintProducerKey
@@ -77,7 +80,8 @@ class IsTenantIdentifierValidConstraintEnricherTest extends Specification {
         String getTenantColumnName() {
             return tenantColumnName
         }
-        IsTenantIdentifierValidConstraintProducerKey(String constraintName, String tableName, String tableSchema, String tenantColumnName) {
+        IsTenantIdentifierValidConstraintProducerKey(String constraintName, String tableName, String tableSchema, String tenantColumnName)
+        {
             this.constraintName = constraintName
             this.tableName = tableName
             this.tableSchema = tableSchema
