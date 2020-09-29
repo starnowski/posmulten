@@ -74,7 +74,6 @@ class IsTenantIdentifierValidConstraintEnricherTest extends Specification {
             def context = new SharedSchemaContext()
             def mockedFunction = Mock(IIsTenantValidFunctionInvocationFactory)
             context.setIIsTenantValidFunctionInvocationFactory(mockedFunction)
-            def mockedSQLDefinition = Mock(SQLDefinition)
             def producer = Mock(IsTenantIdentifierValidConstraintProducer)
             IsTenantIdentifierValidConstraintEnricher tested = new IsTenantIdentifierValidConstraintEnricher(producer)
 
