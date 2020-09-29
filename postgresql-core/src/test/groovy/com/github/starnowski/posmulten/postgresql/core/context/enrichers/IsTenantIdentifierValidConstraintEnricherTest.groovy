@@ -1,50 +1,54 @@
 package com.github.starnowski.posmulten.postgresql.core.context.enrichers
 
+import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition
 import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder
 import com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContext
 import com.github.starnowski.posmulten.postgresql.core.rls.IIsTenantIdentifierValidConstraintProducerParameters
 import com.github.starnowski.posmulten.postgresql.core.rls.IsTenantIdentifierValidConstraintProducer
-import com.github.starnowski.posmulten.postgresql.core.rls.function.IsTenantValidBasedOnConstantValuesFunctionDefinition
+import com.github.starnowski.posmulten.postgresql.core.rls.function.IIsTenantValidFunctionInvocationFactory
 import javafx.util.Pair
 import spock.lang.Specification
 import spock.lang.Unroll
 
+import static java.util.stream.Collectors.toSet
+
 class IsTenantIdentifierValidConstraintEnricherTest extends Specification {
 
-    /*
-     * TODO
-     */
     @Unroll
     def "should enrich shared schema context with SQL definition for the constraint that checks if tenant value is correct based on default values for shares schema context builder for schema #schema and black list values (#blacklist)"()
     {
         given:
-        def builder = new DefaultSharedSchemaContextBuilder(schema)
-        builder.createValidTenantValueConstraint(["ADFZ", "DFZCXVZ"], null, null)
-                .createRLSPolicyForTable("table", null, "tenant_xxx", null)
-        def sharedSchemaContextRequest = builder.getSharedSchemaContextRequestCopy()
-        def context = new SharedSchemaContext()
-        List<IIsTenantIdentifierValidConstraintProducerParameters> capturedParameters = new ArrayList<>()
-        def mockedSQLDefinition = Mock(IsTenantValidBasedOnConstantValuesFunctionDefinition)
-        def producer = Mock(IsTenantIdentifierValidConstraintProducer)
-        IsTenantIdentifierValidConstraintEnricher tested = new IsTenantIdentifierValidConstraintEnricher(producer)
+            def builder = new DefaultSharedSchemaContextBuilder(schema)
+            builder.createValidTenantValueConstraint(["ADFZ", "DFZCXVZ"], null, null)
+            for (Pair tableNameTenantNamePair : tableNameTenantNamePairs)
+            {
+                builder.createRLSPolicyForTable(tableNameTenantNamePair.key, null, tableNameTenantNamePair.value, null)
+            }
+            def sharedSchemaContextRequest = builder.getSharedSchemaContextRequestCopy()
+            def context = new SharedSchemaContext()
+            def mockedFunction = Mock(IIsTenantValidFunctionInvocationFactory)
+            context.setIIsTenantValidFunctionInvocationFactory(mockedFunction)
+            List<IIsTenantIdentifierValidConstraintProducerParameters> capturedParameters = new ArrayList<>()
+            def mockedSQLDefinition = Mock(SQLDefinition)
+            def producer = Mock(IsTenantIdentifierValidConstraintProducer)
+            IsTenantIdentifierValidConstraintEnricher tested = new IsTenantIdentifierValidConstraintEnricher(producer)
 
         when:
         def result = tested.enrich(context, sharedSchemaContextRequest)
 
         then:
-        1 * producer.produce(_) >>  {
-            parameters ->
-                capturedParameters.add(parameters[0])
-                mockedSQLDefinition
-        }
-        result.getSqlDefinitions().contains(mockedSQLDefinition)
-        result.getIIsTenantValidFunctionInvocationFactory().is(mockedSQLDefinition)
+            tableNameTenantNamePairs.size() * producer.produce(_) >>  {
+                parameters ->
+                    capturedParameters.add(parameters[0])
+                    mockedSQLDefinition
+            }
+            result.getSqlDefinitions().size() == tableNameTenantNamePairs.size()
 
-        and: "passed parameters should match default values"
-        capturedParameters.getSchema() == schema
-        capturedParameters.getBlacklistTenantIds() == new HashSet<String>(blacklist)
-        capturedParameters.getArgumentType() == sharedSchemaContextRequest.getCurrentTenantIdPropertyType()
-        capturedParameters.getFunctionName() == "is_tenant_identifier_valid"
+        and: "passed producer parameters should contains object function"
+            capturedParameters.getIIsTenantValidFunctionInvocationFactory() == mockedFunction
+
+        and: "passed parameters should match with expected"
+            capturedParameters.stream().map({ parameters -> map(parameters) }).collect(toSet()) == new HashSet<IsTenantIdentifierValidConstraintProducerKey>(expectedPassedParameters)
 
         where:
             schema          |   tableNameTenantNamePairs                                        ||  expectedPassedParameters
@@ -56,6 +60,11 @@ class IsTenantIdentifierValidConstraintEnricherTest extends Specification {
     static IsTenantIdentifierValidConstraintProducerKey tp(String constraintName, String tableName, String tableSchema, String tenantColumnName)
     {
         new IsTenantIdentifierValidConstraintProducerKey(constraintName, tableName, tableSchema, tenantColumnName)
+    }
+
+    static IsTenantIdentifierValidConstraintProducerKey map(IIsTenantIdentifierValidConstraintProducerParameters parameters)
+    {
+        new IsTenantIdentifierValidConstraintProducerKey(parameters.getConstraintName(), parameters.getTableName(), parameters.getTableSchema(), parameters.getTenantColumnName())
     }
 
     static class IsTenantIdentifierValidConstraintProducerKey
@@ -86,11 +95,6 @@ class IsTenantIdentifierValidConstraintEnricherTest extends Specification {
             this.tableName = tableName
             this.tableSchema = tableSchema
             this.tenantColumnName = tenantColumnName
-        }
-
-        static IsTenantIdentifierValidConstraintProducerKey map(IIsTenantIdentifierValidConstraintProducerParameters parameters)
-        {
-            new IsTenantIdentifierValidConstraintProducerKey(parameters.getConstraintName(), parameters.getTableName(), parameters.getTableSchema(), parameters.getTenantColumnName())
         }
 
         boolean equals(o) {
