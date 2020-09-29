@@ -10,6 +10,9 @@ import javafx.util.Pair
 import spock.lang.Specification
 import spock.lang.Unroll
 
+import java.util.stream.Collectors
+
+import static com.github.starnowski.posmulten.postgresql.core.MapBuilder.mapBuilder
 import static java.util.stream.Collectors.toSet
 
 class IsTenantIdentifierValidConstraintEnricherTest extends Specification {
@@ -57,7 +60,42 @@ class IsTenantIdentifierValidConstraintEnricherTest extends Specification {
             "some_schema"   |   [new Pair("users", "tenant_id"), new Pair("leads", "t_xxx")]    ||  [tp("tenant_identifier_valid", "leads", "some_schema", "t_xxx"), tp("tenant_identifier_valid", "users", "some_schema", "tenant_id")]
     }
 
-    //TODO check results
+    @Unroll
+    def "should enrich shared schema context with SQL definition for schema #schema returned by producer component"()
+    {
+        given:
+            def builder = (new DefaultSharedSchemaContextBuilder(schema))
+                    .createValidTenantValueConstraint(["sfaf", "1324a"], null, null)
+            for (IsTenantIdentifierValidConstraintProducerKey identifierValidConstraintProducerKey : passedParametersSqlDefinitionsResults.keySet())
+            {
+                builder.createRLSPolicyForTable(identifierValidConstraintProducerKey.getTableName(), [:], identifierValidConstraintProducerKey.getTenantColumnName(), null)
+            }
+            def sharedSchemaContextRequest = builder.getSharedSchemaContextRequestCopy()
+            def context = new SharedSchemaContext()
+            def mockedFunction = Mock(IIsTenantValidFunctionInvocationFactory)
+            context.setIIsTenantValidFunctionInvocationFactory(mockedFunction)
+            def mockedSQLDefinition = Mock(SQLDefinition)
+            def producer = Mock(IsTenantIdentifierValidConstraintProducer)
+            IsTenantIdentifierValidConstraintEnricher tested = new IsTenantIdentifierValidConstraintEnricher(producer)
+
+        when:
+            def result = tested.enrich(context, sharedSchemaContextRequest)
+
+        then:
+            passedParametersSqlDefinitionsResults.size() * producer.produce(_) >>  {
+                parameters ->
+                    IsTenantIdentifierValidConstraintProducerKey key = map((IIsTenantIdentifierValidConstraintProducerParameters)parameters[0])
+                    passedParametersSqlDefinitionsResults.get(key)
+            }
+            result.getSqlDefinitions().size() == passedParametersSqlDefinitionsResults.size()
+            result.getSqlDefinitions().stream().collect(Collectors.toSet()) == new HashSet<SQLDefinition>(passedParametersSqlDefinitionsResults.values())
+
+        where:
+            schema          |   passedParametersSqlDefinitionsResults
+            null            |   mapBuilder().put(tp("tenant_identifier_valid", "leads", null, "t_xxx"), Mock(SQLDefinition)).put(tp("tenant_identifier_valid", "users", null, "tenant_id"), Mock(SQLDefinition)).build()
+            "public"        |   mapBuilder().put(tp("tenant_identifier_valid", "leads", "public", "t_xxx"), Mock(SQLDefinition)).put(tp("tenant_identifier_valid", "users", "public", "tenant_id"), Mock(SQLDefinition)).build()
+            "some_schema"   |   mapBuilder().put(tp("tenant_identifier_valid", "leads", "some_schema", "t_xxx"), Mock(SQLDefinition)).put(tp("tenant_identifier_valid", "users", "some_schema", "tenant_id"), Mock(SQLDefinition)).build()
+    }
 
     //TODO constraint name
     //TODO custom constraint name per table
