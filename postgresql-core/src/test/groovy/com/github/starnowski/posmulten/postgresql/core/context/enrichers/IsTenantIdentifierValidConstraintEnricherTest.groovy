@@ -34,7 +34,7 @@ class IsTenantIdentifierValidConstraintEnricherTest extends Specification {
             IsTenantIdentifierValidConstraintEnricher tested = new IsTenantIdentifierValidConstraintEnricher(producer)
 
         when:
-        def result = tested.enrich(context, sharedSchemaContextRequest)
+            def result = tested.enrich(context, sharedSchemaContextRequest)
 
         then:
             tableNameTenantNamePairs.size() * producer.produce(_) >>  {
@@ -56,6 +56,11 @@ class IsTenantIdentifierValidConstraintEnricherTest extends Specification {
             "public"        |   [new Pair("users", "tenant_id"), new Pair("leads", "t_xxx")]    ||  [tp("tenant_identifier_valid", "leads", "public", "t_xxx"), tp("tenant_identifier_valid", "users", "public", "tenant_id")]
             "some_schema"   |   [new Pair("users", "tenant_id"), new Pair("leads", "t_xxx")]    ||  [tp("tenant_identifier_valid", "leads", "some_schema", "t_xxx"), tp("tenant_identifier_valid", "users", "some_schema", "tenant_id")]
     }
+
+    //TODO check results
+
+    //TODO constraint name
+    //TODO custom constraint name per table
 
     static IsTenantIdentifierValidConstraintProducerKey tp(String constraintName, String tableName, String tableSchema, String tenantColumnName)
     {
