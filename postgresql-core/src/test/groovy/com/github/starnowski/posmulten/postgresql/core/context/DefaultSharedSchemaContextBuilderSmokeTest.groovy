@@ -12,7 +12,6 @@ class DefaultSharedSchemaContextBuilderSmokeTest extends Specification {
     def "run smoke test for builder with schema #schema" ()
     {
         given:
-            def tested = new DefaultSharedSchemaContextBuilder(schema)
             String CORE_OWNER_USER = "postgresql-core-owner"
             String CUSTOM_TENANT_COLUMN_NAME = "tenant"
             String USERS_TABLE_NAME = "users"
@@ -26,7 +25,7 @@ class DefaultSharedSchemaContextBuilderSmokeTest extends Specification {
             String COMMENTS_POSTS_FK_CONSTRAINT_NAME = "comments_posts_fk_cu"
             String COMMENTS_PARENT_COMMENTS_FK_CONSTRAINT_NAME = "comments_parent_comments_fk_cu"
             String NOTIFICATIONS_USERS_COMMENTS_FK_CONSTRAINT_NAME = "notifications_users_fk_cu"
-            tested.setCurrentTenantIdProperty(VALID_CURRENT_TENANT_ID_PROPERTY_NAME)
+            def tested = (new DefaultSharedSchemaContextBuilder(schema)).setCurrentTenantIdProperty(VALID_CURRENT_TENANT_ID_PROPERTY_NAME)
                 .setForceRowLevelSecurityForTableOwner(true)
                 .setGrantee(CORE_OWNER_USER)
                 .createTenantColumnForTable(NOTIFICATIONS_TABLE_NAME)
