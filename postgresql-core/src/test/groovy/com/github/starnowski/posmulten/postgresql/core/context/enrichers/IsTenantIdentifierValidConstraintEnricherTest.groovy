@@ -18,8 +18,8 @@ class IsTenantIdentifierValidConstraintEnricherTest extends Specification {
     def "should enrich shared schema context with SQL definition for the constraint that checks if tenant value is correct based on default values for shares schema context builder for schema #schema and black list values (#blacklist)"()
     {
         given:
-            def builder = new DefaultSharedSchemaContextBuilder(schema)
-            builder.createValidTenantValueConstraint(["ADFZ", "DFZCXVZ"], null, null)
+            def builder = (new DefaultSharedSchemaContextBuilder(schema))
+                .createValidTenantValueConstraint(["ADFZ", "DFZCXVZ"], null, null)
             for (Pair tableNameTenantNamePair : tableNameTenantNamePairs)
             {
                 builder.createRLSPolicyForTable(tableNameTenantNamePair.key, null, tableNameTenantNamePair.value, null)
