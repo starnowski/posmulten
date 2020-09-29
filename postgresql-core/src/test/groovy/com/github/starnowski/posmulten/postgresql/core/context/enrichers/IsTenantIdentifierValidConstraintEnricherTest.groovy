@@ -22,7 +22,7 @@ class IsTenantIdentifierValidConstraintEnricherTest extends Specification {
                 .createValidTenantValueConstraint(["ADFZ", "DFZCXVZ"], null, null)
             for (Pair tableNameTenantNamePair : tableNameTenantNamePairs)
             {
-                builder.createRLSPolicyForTable(tableNameTenantNamePair.key, null, tableNameTenantNamePair.value, null)
+                builder.createRLSPolicyForTable(tableNameTenantNamePair.key, [:], tableNameTenantNamePair.value, null)
             }
             def sharedSchemaContextRequest = builder.getSharedSchemaContextRequestCopy()
             def context = new SharedSchemaContext()
@@ -45,7 +45,7 @@ class IsTenantIdentifierValidConstraintEnricherTest extends Specification {
             result.getSqlDefinitions().size() == tableNameTenantNamePairs.size()
 
         and: "passed producer parameters should contains object function"
-            capturedParameters.getIIsTenantValidFunctionInvocationFactory() == mockedFunction
+            capturedParameters.stream().allMatch({parameter -> parameter.getIIsTenantValidFunctionInvocationFactory() == mockedFunction})
 
         and: "passed parameters should match with expected"
             capturedParameters.stream().map({ parameters -> map(parameters) }).collect(toSet()) == new HashSet<IsTenantIdentifierValidConstraintProducerKey>(expectedPassedParameters)
@@ -54,7 +54,7 @@ class IsTenantIdentifierValidConstraintEnricherTest extends Specification {
             schema          |   tableNameTenantNamePairs                                        ||  expectedPassedParameters
             null            |   [new Pair("users", "tenant_id"), new Pair("leads", "t_xxx")]    ||  [tp("tenant_identifier_valid", "leads", null, "t_xxx"), tp("tenant_identifier_valid", "users", null, "tenant_id")]
             "public"        |   [new Pair("users", "tenant_id"), new Pair("leads", "t_xxx")]    ||  [tp("tenant_identifier_valid", "leads", "public", "t_xxx"), tp("tenant_identifier_valid", "users", "public", "tenant_id")]
-            "some_schema"   |   [new Pair("users", "tenant_id"), new Pair("leads", "t_xxx")]    ||  [tp("tenant_identifier_valid", "leads", "public", "t_xxx"), tp("tenant_identifier_valid", "users", "public", "tenant_id")]
+            "some_schema"   |   [new Pair("users", "tenant_id"), new Pair("leads", "t_xxx")]    ||  [tp("tenant_identifier_valid", "leads", "some_schema", "t_xxx"), tp("tenant_identifier_valid", "users", "some_schema", "tenant_id")]
     }
 
     static IsTenantIdentifierValidConstraintProducerKey tp(String constraintName, String tableName, String tableSchema, String tenantColumnName)
@@ -118,6 +118,16 @@ class IsTenantIdentifierValidConstraintEnricherTest extends Specification {
             result = 31 * result + (tableSchema != null ? tableSchema.hashCode() : 0)
             result = 31 * result + (tenantColumnName != null ? tenantColumnName.hashCode() : 0)
             return result
+        }
+
+        @Override
+        public String toString() {
+            return "IsTenantIdentifierValidConstraintProducerKey{" +
+                    "constraintName='" + constraintName + '\'' +
+                    ", tableName='" + tableName + '\'' +
+                    ", tableSchema='" + tableSchema + '\'' +
+                    ", tenantColumnName='" + tenantColumnName + '\'' +
+                    '}';
         }
     }
 }
