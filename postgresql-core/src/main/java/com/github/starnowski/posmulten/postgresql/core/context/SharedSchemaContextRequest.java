@@ -129,6 +129,11 @@ public class SharedSchemaContextRequest implements Cloneable{
      */
     private String isTenantValidConstraintName;
 
+    /**
+     * TODO
+     */
+    private boolean constraintForValidTenantValueShouldBeAdded;
+
     public String getDefaultTenantIdColumn() {
         return defaultTenantIdColumn;
     }
@@ -256,5 +261,13 @@ public class SharedSchemaContextRequest implements Cloneable{
 
     public void setIsTenantValidConstraintName(String isTenantValidConstraintName) {
         this.isTenantValidConstraintName = isTenantValidConstraintName;
+    }
+
+    public boolean isConstraintForValidTenantValueShouldBeAdded() {
+        return constraintForValidTenantValueShouldBeAdded;
+    }
+
+    public void setConstraintForValidTenantValueShouldBeAdded(boolean constraintForValidTenantValueShouldBeAdded) {
+        this.constraintForValidTenantValueShouldBeAdded = constraintForValidTenantValueShouldBeAdded;
     }
 }

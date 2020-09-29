@@ -1,9 +1,15 @@
 package com.github.starnowski.posmulten.postgresql.core.context.enrichers;
 
 import com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaContext;
+import com.github.starnowski.posmulten.postgresql.core.context.ITableColumns;
 import com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContextRequest;
+import com.github.starnowski.posmulten.postgresql.core.context.TableKey;
 import com.github.starnowski.posmulten.postgresql.core.context.exceptions.SharedSchemaContextBuilderException;
 import com.github.starnowski.posmulten.postgresql.core.rls.IsTenantIdentifierValidConstraintProducer;
+
+import java.util.Map;
+
+import static com.github.starnowski.posmulten.postgresql.core.rls.DefaultIsTenantIdentifierValidConstraintProducerParameters.builder;
 
 public class IsTenantIdentifierValidConstraintEnricher implements ISharedSchemaContextEnricher {
 
@@ -19,6 +25,19 @@ public class IsTenantIdentifierValidConstraintEnricher implements ISharedSchemaC
 
     @Override
     public ISharedSchemaContext enrich(ISharedSchemaContext context, SharedSchemaContextRequest request) throws SharedSchemaContextBuilderException {
-        return null;
+        if (request.isConstraintForValidTenantValueShouldBeAdded())
+        {
+            String defaultConstraintName = request.getIsTenantValidConstraintName() == null ? "tenant_identifier_valid" : request.getIsTenantValidConstraintName();
+            for (Map.Entry<TableKey, ITableColumns> entry : request.getTableColumnsList().entrySet())
+            {
+                context.addSQLDefinition(producer.produce(builder()
+                        .withConstraintName(defaultConstraintName)
+                        .withTableName(entry.getKey().getTable())
+                        .withTableSchema(entry.getKey().getSchema())
+                        .withIIsTenantValidFunctionInvocationFactory(context.getIIsTenantValidFunctionInvocationFactory())
+                        .withTenantColumnName(entry.getValue().getTenantColumnName()).build()));
+            }
+        }
+        return context;
     }
 }

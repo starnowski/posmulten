@@ -320,6 +320,7 @@ public class DefaultSharedSchemaContextBuilder {
     public DefaultSharedSchemaContextBuilder createValidTenantValueConstraint(List<String> tenantValuesBlacklist, String isTenantValidFunctionName, String isTenantValidConstraintName) {
         sharedSchemaContextRequest.setTenantValuesBlacklist(tenantValuesBlacklist);
         sharedSchemaContextRequest.setIsTenantValidFunctionName(isTenantValidFunctionName);
+        sharedSchemaContextRequest.setConstraintForValidTenantValueShouldBeAdded(true);
         //TODO
         return this;
     }
