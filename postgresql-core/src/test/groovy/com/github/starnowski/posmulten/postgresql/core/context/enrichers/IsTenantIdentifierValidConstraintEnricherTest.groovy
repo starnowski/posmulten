@@ -142,6 +142,56 @@ class IsTenantIdentifierValidConstraintEnricherTest extends Specification {
             "some_schema"   |   "tenant_has_to_be_valid"        |   [new Pair("users", "tenant_id"), new Pair("leads", "t_xxx")]    ||  [tp("tenant_has_to_be_valid", "leads", "some_schema", "t_xxx"), tp("tenant_has_to_be_valid", "users", "some_schema", "tenant_id")]
     }
 
+    @Unroll
+    def "should enrich shared schema context with SQL definition for the constraint that checks if tenant value is correct with custom constraint per table for shares schema context builder for schema #schema, constraint name #constraintName and custom constraint names per table (tableConstraintNames)"()
+    {
+        given:
+            def builder = (new DefaultSharedSchemaContextBuilder(schema))
+                    .createValidTenantValueConstraint(["ADFZ", "DFZCXVZ"], null, constraintName)
+            for (Pair tableNameTenantNamePair : tableNameTenantNamePairs)
+            {
+                builder.createRLSPolicyForTable(tableNameTenantNamePair.key, [:], tableNameTenantNamePair.value, null)
+            }
+            for (Map.Entry<String, String> tableConstraintName: tableConstraintNames.entrySet())
+            {
+                builder.registerCustomValidTenantValueConstraintNameForTable(tableConstraintName.getKey(), tableConstraintName.getValue())
+            }
+            def sharedSchemaContextRequest = builder.getSharedSchemaContextRequestCopy()
+            def context = new SharedSchemaContext()
+            def mockedFunction = Mock(IIsTenantValidFunctionInvocationFactory)
+            context.setIIsTenantValidFunctionInvocationFactory(mockedFunction)
+            List<IIsTenantIdentifierValidConstraintProducerParameters> capturedParameters = new ArrayList<>()
+            def mockedSQLDefinition = Mock(SQLDefinition)
+            def producer = Mock(IsTenantIdentifierValidConstraintProducer)
+            IsTenantIdentifierValidConstraintEnricher tested = new IsTenantIdentifierValidConstraintEnricher(producer)
+
+        when:
+            def result = tested.enrich(context, sharedSchemaContextRequest)
+
+        then:
+            tableNameTenantNamePairs.size() * producer.produce(_) >>  {
+                parameters ->
+                    capturedParameters.add(parameters[0])
+                    mockedSQLDefinition
+            }
+            result.getSqlDefinitions().size() == tableNameTenantNamePairs.size()
+
+        and: "passed producer parameters should contains object function"
+            capturedParameters.stream().allMatch({parameter -> parameter.getIIsTenantValidFunctionInvocationFactory() == mockedFunction})
+
+        and: "passed parameters should match with expected"
+            capturedParameters.stream().map({ parameters -> map(parameters) }).collect(toSet()) == new HashSet<IsTenantIdentifierValidConstraintProducerKey>(expectedPassedParameters)
+
+        where:
+            schema          |   constraintName                  |   tableNameTenantNamePairs                                        |   tableConstraintNames                                ||  expectedPassedParameters
+            null            |   "is_valid"                      |   [new Pair("users", "tenant_id"), new Pair("leads", "t_xxx")]    |   [users: "xxx_constraint_yyy"]                       ||  [tp("is_valid", "leads", null, "t_xxx"), tp("xxx_constraint_yyy", "users", null, "tenant_id")]
+            "public"        |   "is_valid"                      |   [new Pair("users", "tenant_id"), new Pair("leads", "t_xxx")]    |   [leads: "valid", users: "xxx_constraint_yyy"]       ||  [tp("valid", "leads", "public", "t_xxx"), tp("xxx_constraint_yyy", "users", "public", "tenant_id")]
+            "some_schema"   |   "is_valid"                      |   [new Pair("users", "tenant_id"), new Pair("leads", "t_xxx")]    |   [leads: "tenant_val"]                               ||  [tp("tenant_val", "leads", "some_schema", "t_xxx"), tp("is_valid", "users", "some_schema", "tenant_id")]
+            null            |   "tenant_has_to_be_valid"        |   [new Pair("users", "tenant_id"), new Pair("leads", "t_xxx")]    |   [leads: "asdf"]                                     ||  [tp("asdf", "leads", null, "t_xxx"), tp("tenant_has_to_be_valid", "users", null, "tenant_id")]
+            "public"        |   "tenant_has_to_be_valid"        |   [new Pair("users", "tenant_id"), new Pair("leads", "t_xxx")]    |   [users: "const_tenant"]                             ||  [tp("tenant_has_to_be_valid", "leads", "public", "t_xxx"), tp("const_tenant", "users", "public", "tenant_id")]
+            "some_schema"   |   "tenant_has_to_be_valid"        |   [new Pair("users", "tenant_id"), new Pair("leads", "t_xxx")]    |   [users: "const_tenant", leads: "valid"]             ||  [tp("valid", "leads", "some_schema", "t_xxx"), tp("const_tenant", "users", "some_schema", "tenant_id")]
+    }
+
     //TODO custom constraint name per table
 
     static IsTenantIdentifierValidConstraintProducerKey tp(String constraintName, String tableName, String tableSchema, String tenantColumnName)
