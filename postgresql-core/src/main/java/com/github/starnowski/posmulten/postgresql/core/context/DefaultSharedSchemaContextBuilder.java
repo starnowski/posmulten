@@ -325,6 +325,17 @@ public class DefaultSharedSchemaContextBuilder {
         return this;
     }
 
+    /**
+     * //TODO Comment
+     * @param table
+     * @param constraintName
+     * @return builder object for which method was invoked
+     */
+    public DefaultSharedSchemaContextBuilder registerCustomValidTenantValueConstraintNameForTable(String table, String constraintName) {
+        sharedSchemaContextRequest.getTenantValidConstraintCustomNamerPerTables().put(new TableKey(table, sharedSchemaContextRequest.getDefaultSchema()), constraintName);
+        return this;
+    }
+
     protected SharedSchemaContextRequest getSharedSchemaContextRequestCopyOrNull(SharedSchemaContextRequest request) {
         try {
             return (SharedSchemaContextRequest) request.clone();

@@ -30,8 +30,9 @@ public class IsTenantIdentifierValidConstraintEnricher implements ISharedSchemaC
             String defaultConstraintName = request.getIsTenantValidConstraintName() == null ? "tenant_identifier_valid" : request.getIsTenantValidConstraintName();
             for (Map.Entry<TableKey, ITableColumns> entry : request.getTableColumnsList().entrySet())
             {
+                String constraintName = request.getTenantValidConstraintCustomNamerPerTables().getOrDefault(entry.getKey(), defaultConstraintName);
                 context.addSQLDefinition(producer.produce(builder()
-                        .withConstraintName(defaultConstraintName)
+                        .withConstraintName(constraintName)
                         .withTableName(entry.getKey().getTable())
                         .withTableSchema(entry.getKey().getSchema())
                         .withIIsTenantValidFunctionInvocationFactory(context.getIIsTenantValidFunctionInvocationFactory())
