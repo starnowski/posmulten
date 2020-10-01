@@ -5,6 +5,7 @@ import com.github.starnowski.posmulten.postgresql.core.context.enrichers.IIsTena
 import com.github.starnowski.posmulten.postgresql.core.context.enrichers.ISharedSchemaContextEnricher
 import com.github.starnowski.posmulten.postgresql.core.context.enrichers.IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher
 import com.github.starnowski.posmulten.postgresql.core.context.enrichers.IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricher
+import com.github.starnowski.posmulten.postgresql.core.context.enrichers.IsTenantIdentifierValidConstraintEnricher
 import com.github.starnowski.posmulten.postgresql.core.context.enrichers.SetCurrentTenantIdFunctionDefinitionEnricher
 import com.github.starnowski.posmulten.postgresql.core.context.enrichers.TableRLSPolicyEnricher
 import com.github.starnowski.posmulten.postgresql.core.context.enrichers.TableRLSSettingsSQLDefinitionsEnricher
@@ -48,7 +49,7 @@ class DefaultSharedSchemaContextBuilderEnrichersTest extends Specification {
     def "should have configured the list of enrichers with correct order"()
     {
         given:
-            def expectedEnrichersTypeInOrder = [GetCurrentTenantIdFunctionDefinitionEnricher.class, SetCurrentTenantIdFunctionDefinitionEnricher.class, TenantHasAuthoritiesFunctionDefinitionEnricher.class, IIsTenantValidFunctionInvocationFactoryEnricher.class, TenantColumnSQLDefinitionsEnricher.class, TableRLSSettingsSQLDefinitionsEnricher.class, TableRLSPolicyEnricher.class, IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricher.class, IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher.class]
+            def expectedEnrichersTypeInOrder = [GetCurrentTenantIdFunctionDefinitionEnricher.class, SetCurrentTenantIdFunctionDefinitionEnricher.class, TenantHasAuthoritiesFunctionDefinitionEnricher.class, IIsTenantValidFunctionInvocationFactoryEnricher.class, TenantColumnSQLDefinitionsEnricher.class, TableRLSSettingsSQLDefinitionsEnricher.class, TableRLSPolicyEnricher.class, IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricher.class, IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher.class, IsTenantIdentifierValidConstraintEnricher.class]
             DefaultSharedSchemaContextBuilder builder = new DefaultSharedSchemaContextBuilder()
 
         when:
