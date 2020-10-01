@@ -45,7 +45,7 @@ public class DefaultSharedSchemaContextBuilder {
     /**
      * Collection that stores objects of type {@link ISharedSchemaContextEnricher} used for enriching result object ({@link #build()} method).
      */
-    private List<ISharedSchemaContextEnricher> enrichers = asList(new GetCurrentTenantIdFunctionDefinitionEnricher(), new SetCurrentTenantIdFunctionDefinitionEnricher(), new TenantHasAuthoritiesFunctionDefinitionEnricher(), new IIsTenantValidFunctionInvocationFactoryEnricher(), new TenantColumnSQLDefinitionsEnricher(), new TableRLSSettingsSQLDefinitionsEnricher(), new TableRLSPolicyEnricher(), new IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricher(), new IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher());
+    private List<ISharedSchemaContextEnricher> enrichers = asList(new GetCurrentTenantIdFunctionDefinitionEnricher(), new SetCurrentTenantIdFunctionDefinitionEnricher(), new TenantHasAuthoritiesFunctionDefinitionEnricher(), new IIsTenantValidFunctionInvocationFactoryEnricher(), new TenantColumnSQLDefinitionsEnricher(), new TableRLSSettingsSQLDefinitionsEnricher(), new TableRLSPolicyEnricher(), new IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricher(), new IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher(), new IsTenantIdentifierValidConstraintEnricher());
 
     /**
      * Collection that stores objects of type {@link ISharedSchemaContextRequestValidator} used for validation of request object (type {@link SharedSchemaContextRequest}) in {@link #build()} method.
