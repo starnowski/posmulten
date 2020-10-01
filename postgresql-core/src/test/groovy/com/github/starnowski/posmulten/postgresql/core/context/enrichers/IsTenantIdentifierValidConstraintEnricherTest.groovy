@@ -195,8 +195,6 @@ class IsTenantIdentifierValidConstraintEnricherTest extends Specification {
             "some_schema"   |   "tenant_has_to_be_valid"        |   [new Pair("users", "tenant_id"), new Pair("leads", "t_xxx")]    |   [users: "const_tenant", leads: "valid"]             ||  [tp("valid", "leads", "some_schema", "t_xxx"), tp("const_tenant", "users", "some_schema", "tenant_id")]
     }
 
-    //TODO custom constraint name per table
-
     static IsTenantIdentifierValidConstraintProducerKey tp(String constraintName, String tableName, String tableSchema, String tenantColumnName)
     {
         new IsTenantIdentifierValidConstraintProducerKey(constraintName, tableName, tableSchema, tenantColumnName)
