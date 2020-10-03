@@ -145,6 +145,9 @@ public abstract class AbstractCreateTenantIdentifierValidConstraintForRLSTablesT
         assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %4$s WHERE id = %1$d AND name = '%2$s' AND tenant_id = '%3$s'", user.getId(), user.getName(), user.getTenantId(), getUsersTableReference())), "The tests user should exists");
     }
 
+    //TODO add posts
+    //TODO add notifications
+
     @Override
     @Test(dependsOnMethods = { "insertDataIntoUserTableAsCurrentTenant" }, alwaysRun = true)
     public void dropAllSQLDefinitions() {
