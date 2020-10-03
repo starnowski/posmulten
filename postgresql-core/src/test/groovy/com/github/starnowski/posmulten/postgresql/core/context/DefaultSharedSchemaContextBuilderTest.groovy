@@ -103,4 +103,19 @@ class DefaultSharedSchemaContextBuilderTest extends Specification {
         and: "returned lists should be equal"
             result1 == result2
     }
+
+    def "should return always new copy of request object"()
+    {
+        given:
+            def tested = new DefaultSharedSchemaContextBuilder()
+
+        when:
+            def result1 = tested.getSharedSchemaContextRequestCopy()
+            def result2 = tested.getSharedSchemaContextRequestCopy()
+
+        then:
+            result1 != null
+            result2 != null
+            !result1.is(result2)
+    }
 }
