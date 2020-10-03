@@ -9,8 +9,6 @@ import spock.lang.Unroll
 
 class TableRLSPolicyEnricherTest extends Specification {
 
-    def tested = new TableRLSPolicyEnricher()
-
     @Unroll
     def "should create all required SQL definition that creates RLS policy for schema #schema and default tenant id column #defaultTenantIdColumn and grantee #grantee"()
     {
@@ -27,7 +25,7 @@ class TableRLSPolicyEnricherTest extends Specification {
             def commentsTableSQLDefinition1 = Mock(SQLDefinition)
             def tableRLSPolicySQLDefinitionsProducer = Mock(TableRLSPolicySQLDefinitionsProducer)
             def tenantHasAuthoritiesFunctionInvocationFactory = Mock(TenantHasAuthoritiesFunctionInvocationFactory)
-            tested.setTableRLSPolicySQLDefinitionsProducer(tableRLSPolicySQLDefinitionsProducer)
+            def tested = new TableRLSPolicyEnricher(tableRLSPolicySQLDefinitionsProducer)
             context.setTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory)
             def postsTableKey = tk("posts", schema)
             def commentsTableKey = tk("comments", schema)
@@ -78,7 +76,7 @@ class TableRLSPolicyEnricherTest extends Specification {
             def context = new SharedSchemaContext()
             def tableRLSPolicySQLDefinitionsProducer = Mock(TableRLSPolicySQLDefinitionsProducer)
             def tenantHasAuthoritiesFunctionInvocationFactory = Mock(TenantHasAuthoritiesFunctionInvocationFactory)
-            tested.setTableRLSPolicySQLDefinitionsProducer(tableRLSPolicySQLDefinitionsProducer)
+            def tested = new TableRLSPolicyEnricher(tableRLSPolicySQLDefinitionsProducer)
             context.setTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory)
 
         when:
@@ -106,7 +104,7 @@ class TableRLSPolicyEnricherTest extends Specification {
             def context = new SharedSchemaContext()
             def tableRLSPolicySQLDefinitionsProducer = Mock(TableRLSPolicySQLDefinitionsProducer)
             def tenantHasAuthoritiesFunctionInvocationFactory = Mock(TenantHasAuthoritiesFunctionInvocationFactory)
-            tested.setTableRLSPolicySQLDefinitionsProducer(tableRLSPolicySQLDefinitionsProducer)
+            def tested = new TableRLSPolicyEnricher(tableRLSPolicySQLDefinitionsProducer)
             context.setTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory)
 
         when:

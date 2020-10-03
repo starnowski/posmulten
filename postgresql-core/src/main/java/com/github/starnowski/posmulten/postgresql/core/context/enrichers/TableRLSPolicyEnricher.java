@@ -28,7 +28,15 @@ import com.github.starnowski.posmulten.postgresql.core.context.exceptions.Missin
 
 public class TableRLSPolicyEnricher implements ISharedSchemaContextEnricher {
 
-    private TableRLSPolicySQLDefinitionsProducer tableRLSPolicySQLDefinitionsProducer = new TableRLSPolicySQLDefinitionsProducer();
+    private final TableRLSPolicySQLDefinitionsProducer tableRLSPolicySQLDefinitionsProducer;
+
+    public TableRLSPolicyEnricher(TableRLSPolicySQLDefinitionsProducer tableRLSPolicySQLDefinitionsProducer) {
+        this.tableRLSPolicySQLDefinitionsProducer = tableRLSPolicySQLDefinitionsProducer;
+    }
+
+    public TableRLSPolicyEnricher() {
+        this(new TableRLSPolicySQLDefinitionsProducer());
+    }
 
     @Override
     public ISharedSchemaContext enrich(ISharedSchemaContext context, SharedSchemaContextRequest request) throws MissingRLSGranteeDeclarationException {
@@ -50,9 +58,5 @@ public class TableRLSPolicyEnricher implements ISharedSchemaContextEnricher {
             tableRLSPolicySQLDefinitionsProducer.produce(parameters).forEach(context::addSQLDefinition);
         });
         return context;
-    }
-
-    void setTableRLSPolicySQLDefinitionsProducer(TableRLSPolicySQLDefinitionsProducer tableRLSPolicySQLDefinitionsProducer) {
-        this.tableRLSPolicySQLDefinitionsProducer = tableRLSPolicySQLDefinitionsProducer;
     }
 }
