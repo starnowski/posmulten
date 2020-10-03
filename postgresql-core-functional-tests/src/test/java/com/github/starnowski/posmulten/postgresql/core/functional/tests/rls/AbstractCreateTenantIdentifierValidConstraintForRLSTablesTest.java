@@ -9,7 +9,10 @@ import com.github.starnowski.posmulten.postgresql.core.functional.tests.pojos.Po
 import com.github.starnowski.posmulten.postgresql.core.functional.tests.pojos.User;
 import com.github.starnowski.posmulten.postgresql.core.rls.function.ISetCurrentTenantIdFunctionInvocationFactory;
 import org.postgresql.util.PSQLException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.jdbc.SqlGroup;
@@ -43,6 +46,10 @@ public abstract class AbstractCreateTenantIdentifierValidConstraintForRLSTablesT
     abstract protected String getSchema();
 
     protected ISetCurrentTenantIdFunctionInvocationFactory setCurrentTenantIdFunctionInvocationFactory;
+
+    @Autowired
+    @Qualifier("ownerJdbcTemplate")
+    protected JdbcTemplate ownerJdbcTemplate;
 
     @DataProvider(name = "userData")
     protected static Object[][] userData()
@@ -129,10 +136,10 @@ public abstract class AbstractCreateTenantIdentifierValidConstraintForRLSTablesT
     {
         assertThat(countRowsInTableWhere(getUsersTableReference(), "id = " + user.getId())).isEqualTo(0);
         assertThatThrownBy(() ->
-                jdbcTemplate.execute(format("%4$s INSERT INTO %3$s (id, name) VALUES (%1$d, '%2$s');", user.getId(), user.getName(), getUsersTableReference(), setCurrentTenantIdFunctionInvocationFactory.generateStatementThatSetTenant(FIRST_INVALID_TENANT_IDENTIFIER)))
+                ownerJdbcTemplate.execute(format("%4$s INSERT INTO %3$s (id, name) VALUES (%1$d, '%2$s');", user.getId(), user.getName(), getUsersTableReference(), setCurrentTenantIdFunctionInvocationFactory.generateStatementThatSetTenant(FIRST_INVALID_TENANT_IDENTIFIER)))
         ).isInstanceOf(DataIntegrityViolationException.class).getRootCause().isInstanceOf(PSQLException.class);
         assertThatThrownBy(() ->
-                jdbcTemplate.execute(format("INSERT INTO %4$s (id, name, tenant_id) VALUES (%1$d, '%2$s', '%3$s');", user.getId(), user.getName(), SECOND_INVALID_TENANT_IDENTIFIER, getUsersTableReference()))
+                ownerJdbcTemplate.execute(format("INSERT INTO %4$s (id, name, tenant_id) VALUES (%1$d, '%2$s', '%3$s');", user.getId(), user.getName(), SECOND_INVALID_TENANT_IDENTIFIER, getUsersTableReference()))
         ).isInstanceOf(DataIntegrityViolationException.class).getRootCause().isInstanceOf(PSQLException.class);
         assertThat(countRowsInTableWhere(getUsersTableReference(), "id = " + user.getId())).isEqualTo(0);
     }
@@ -141,7 +148,7 @@ public abstract class AbstractCreateTenantIdentifierValidConstraintForRLSTablesT
     public void insertDataIntoUserTableAsCurrentTenant(User user)
     {
         assertThat(countRowsInTableWhere(getUsersTableReference(), "id = " + user.getId())).isEqualTo(0);
-        jdbcTemplate.execute(format("%5$s INSERT INTO %4$s (id, name, tenant_id) VALUES (%1$d, '%2$s', '%3$s');", user.getId(), user.getName(), user.getTenantId(), getUsersTableReference(), setCurrentTenantIdFunctionInvocationFactory.generateStatementThatSetTenant(user.getTenantId())));
+        ownerJdbcTemplate.execute(format("%5$s INSERT INTO %4$s (id, name, tenant_id) VALUES (%1$d, '%2$s', '%3$s');", user.getId(), user.getName(), user.getTenantId(), getUsersTableReference(), setCurrentTenantIdFunctionInvocationFactory.generateStatementThatSetTenant(user.getTenantId())));
         assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %4$s WHERE id = %1$d AND name = '%2$s' AND tenant_id = '%3$s'", user.getId(), user.getName(), user.getTenantId(), getUsersTableReference())), "The tests user should exists");
     }
 
