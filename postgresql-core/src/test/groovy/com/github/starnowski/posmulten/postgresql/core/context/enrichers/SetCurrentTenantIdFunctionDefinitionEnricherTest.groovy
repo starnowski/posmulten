@@ -9,8 +9,6 @@ import spock.lang.Unroll
 
 class SetCurrentTenantIdFunctionDefinitionEnricherTest extends Specification {
 
-    def tested = new SetCurrentTenantIdFunctionDefinitionEnricher()
-
     def "should enrich shared schema context with sql definition for function that sets current tenant id based on default values for shares schema context builder"()
     {
         given:
@@ -19,7 +17,7 @@ class SetCurrentTenantIdFunctionDefinitionEnricherTest extends Specification {
             def capturedParameters = null
             def mockedSQLDefinition = Mock(SetCurrentTenantIdFunctionDefinition)
             def producer = Mock(SetCurrentTenantIdFunctionProducer)
-            tested.setSetCurrentTenantIdFunctionProducer(producer)
+            def tested = new SetCurrentTenantIdFunctionDefinitionEnricher(producer)
 
         when:
             def result = tested.enrich(context, sharedSchemaContextRequest)
@@ -54,7 +52,7 @@ class SetCurrentTenantIdFunctionDefinitionEnricherTest extends Specification {
             def capturedParameters = null
             def mockedSQLDefinition = Mock(SetCurrentTenantIdFunctionDefinition)
             def producer = Mock(SetCurrentTenantIdFunctionProducer)
-            tested.setSetCurrentTenantIdFunctionProducer(producer)
+            def tested = new SetCurrentTenantIdFunctionDefinitionEnricher(producer)
 
         when:
             def result = tested.enrich(context, sharedSchemaContextRequest)
