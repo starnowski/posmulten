@@ -12,8 +12,6 @@ import spock.lang.Unroll
 
 class TenantHasAuthoritiesFunctionDefinitionEnricherTest extends Specification {
 
-    def tested = new TenantHasAuthoritiesFunctionDefinitionEnricher()
-
     def "should enrich shared schema context with sql definition for function that passed tenant id is equal to current tenant id based on default values for shares schema context builder"()
     {
         given:
