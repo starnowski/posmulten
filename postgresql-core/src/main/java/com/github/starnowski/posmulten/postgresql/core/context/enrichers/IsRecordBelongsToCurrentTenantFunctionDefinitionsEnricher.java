@@ -34,7 +34,15 @@ import static java.util.stream.Collectors.toList;
 
 public class IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricher implements ISharedSchemaContextEnricher {
 
-    private IsRecordBelongsToCurrentTenantFunctionDefinitionProducer isRecordBelongsToCurrentTenantFunctionDefinitionProducer = new IsRecordBelongsToCurrentTenantFunctionDefinitionProducer();
+    private IsRecordBelongsToCurrentTenantFunctionDefinitionProducer isRecordBelongsToCurrentTenantFunctionDefinitionProducer;
+
+    public IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricher(IsRecordBelongsToCurrentTenantFunctionDefinitionProducer isRecordBelongsToCurrentTenantFunctionDefinitionProducer) {
+        this.isRecordBelongsToCurrentTenantFunctionDefinitionProducer = isRecordBelongsToCurrentTenantFunctionDefinitionProducer;
+    }
+
+    public IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricher() {
+        this(new IsRecordBelongsToCurrentTenantFunctionDefinitionProducer());
+    }
 
     @Override
     public ISharedSchemaContext enrich(ISharedSchemaContext context, SharedSchemaContextRequest request) throws MissingFunctionNameDeclarationForTableException {
@@ -51,9 +59,5 @@ public class IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricher implement
             context.getTableKeysIsRecordBelongsToCurrentTenantFunctionInvocationFactoryMap().put(tableKey, functionDefinition);
         }
         return context;
-    }
-
-    void setIsRecordBelongsToCurrentTenantFunctionDefinitionProducer(IsRecordBelongsToCurrentTenantFunctionDefinitionProducer isRecordBelongsToCurrentTenantFunctionDefinitionProducer) {
-        this.isRecordBelongsToCurrentTenantFunctionDefinitionProducer = isRecordBelongsToCurrentTenantFunctionDefinitionProducer;
     }
 }

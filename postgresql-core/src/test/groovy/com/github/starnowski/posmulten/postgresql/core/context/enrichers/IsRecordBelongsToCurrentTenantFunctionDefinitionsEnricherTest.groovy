@@ -37,7 +37,7 @@ class IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricherTest extends Spec
             def usersTableSQLDefinition = Mock(IsRecordBelongsToCurrentTenantFunctionDefinition)
             def commentsTableSQLDefinition = Mock(IsRecordBelongsToCurrentTenantFunctionDefinition)
             def isRecordBelongsToCurrentTenantFunctionDefinitionProducer = Mock(IsRecordBelongsToCurrentTenantFunctionDefinitionProducer)
-            tested.setIsRecordBelongsToCurrentTenantFunctionDefinitionProducer(isRecordBelongsToCurrentTenantFunctionDefinitionProducer)
+            def tested = new IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricher(isRecordBelongsToCurrentTenantFunctionDefinitionProducer)
             def usersTableKey = tk("users", schema)
             def commentsTableKey = tk("comments", schema)
             def usersTableColumns = sharedSchemaContextRequest.getTableColumnsList().get(usersTableKey)
@@ -77,7 +77,7 @@ class IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricherTest extends Spec
             def iGetCurrentTenantIdFunctionInvocationFactory = Mock(IGetCurrentTenantIdFunctionInvocationFactory)
             context.setIGetCurrentTenantIdFunctionInvocationFactory(iGetCurrentTenantIdFunctionInvocationFactory)
             def isRecordBelongsToCurrentTenantFunctionDefinitionProducer = Mock(IsRecordBelongsToCurrentTenantFunctionDefinitionProducer)
-            tested.setIsRecordBelongsToCurrentTenantFunctionDefinitionProducer(isRecordBelongsToCurrentTenantFunctionDefinitionProducer)
+            def tested = new IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricher(isRecordBelongsToCurrentTenantFunctionDefinitionProducer)
 
         when:
             def result = tested.enrich(context, sharedSchemaContextRequest)
@@ -103,7 +103,7 @@ class IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricherTest extends Spec
             def iGetCurrentTenantIdFunctionInvocationFactory = Mock(IGetCurrentTenantIdFunctionInvocationFactory)
             context.setIGetCurrentTenantIdFunctionInvocationFactory(iGetCurrentTenantIdFunctionInvocationFactory)
             def isRecordBelongsToCurrentTenantFunctionDefinitionProducer = Mock(IsRecordBelongsToCurrentTenantFunctionDefinitionProducer)
-            tested.setIsRecordBelongsToCurrentTenantFunctionDefinitionProducer(isRecordBelongsToCurrentTenantFunctionDefinitionProducer)
+            def tested = new IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricher(isRecordBelongsToCurrentTenantFunctionDefinitionProducer)
 
         when:
             tested.enrich(context, sharedSchemaContextRequest)
