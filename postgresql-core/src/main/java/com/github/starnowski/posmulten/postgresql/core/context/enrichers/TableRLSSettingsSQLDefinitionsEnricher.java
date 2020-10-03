@@ -29,7 +29,15 @@ import com.github.starnowski.posmulten.postgresql.core.context.TableRLSSettingsS
 
 public class TableRLSSettingsSQLDefinitionsEnricher implements ISharedSchemaContextEnricher {
 
-    private TableRLSSettingsSQLDefinitionsProducer tableRLSSettingsSQLDefinitionsProducer = new TableRLSSettingsSQLDefinitionsProducer();
+    private TableRLSSettingsSQLDefinitionsProducer tableRLSSettingsSQLDefinitionsProducer;
+
+    public TableRLSSettingsSQLDefinitionsEnricher(TableRLSSettingsSQLDefinitionsProducer tableRLSSettingsSQLDefinitionsProducer) {
+        this.tableRLSSettingsSQLDefinitionsProducer = tableRLSSettingsSQLDefinitionsProducer;
+    }
+
+    public TableRLSSettingsSQLDefinitionsEnricher() {
+        this(new TableRLSSettingsSQLDefinitionsProducer());
+    }
 
     @Override
     public ISharedSchemaContext enrich(ISharedSchemaContext context, SharedSchemaContextRequest request) {
@@ -38,9 +46,5 @@ public class TableRLSSettingsSQLDefinitionsEnricher implements ISharedSchemaCont
             tableRLSSettingsSQLDefinitionsProducer.produce(tableKey, request.isForceRowLevelSecurityForTableOwner()).forEach(context::addSQLDefinition);
         });
         return context;
-    }
-
-    void setTableRLSSettingsSQLDefinitionsProducer(TableRLSSettingsSQLDefinitionsProducer tableRLSSettingsSQLDefinitionsProducer) {
-        this.tableRLSSettingsSQLDefinitionsProducer = tableRLSSettingsSQLDefinitionsProducer;
     }
 }
