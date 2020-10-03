@@ -10,8 +10,6 @@ import spock.lang.Unroll
 
 class TableRLSSettingsSQLDefinitionsEnricherTest extends Specification {
 
-    def tested = new TableRLSSettingsSQLDefinitionsEnricher()
-
     @Unroll
     def "should create all required SQL definition that enables RLS policy but not force policy for schema #schema"()
     {
