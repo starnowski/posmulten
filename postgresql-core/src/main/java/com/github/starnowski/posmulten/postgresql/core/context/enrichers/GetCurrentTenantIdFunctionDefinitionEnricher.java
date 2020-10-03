@@ -31,7 +31,15 @@ import com.github.starnowski.posmulten.postgresql.core.rls.function.GetCurrentTe
 
 public class GetCurrentTenantIdFunctionDefinitionEnricher implements ISharedSchemaContextEnricher {
 
-    private GetCurrentTenantIdFunctionProducer getCurrentTenantIdFunctionProducer = new GetCurrentTenantIdFunctionProducer();
+    private final GetCurrentTenantIdFunctionProducer getCurrentTenantIdFunctionProducer;
+
+    public GetCurrentTenantIdFunctionDefinitionEnricher() {
+        this(new GetCurrentTenantIdFunctionProducer());
+    }
+
+    public GetCurrentTenantIdFunctionDefinitionEnricher(GetCurrentTenantIdFunctionProducer getCurrentTenantIdFunctionProducer) {
+        this.getCurrentTenantIdFunctionProducer = getCurrentTenantIdFunctionProducer;
+    }
 
     @Override
     public ISharedSchemaContext enrich(ISharedSchemaContext context, SharedSchemaContextRequest request) {
@@ -42,7 +50,4 @@ public class GetCurrentTenantIdFunctionDefinitionEnricher implements ISharedSche
         return context;
     }
 
-    void setGetCurrentTenantIdFunctionProducer(GetCurrentTenantIdFunctionProducer getCurrentTenantIdFunctionProducer) {
-        this.getCurrentTenantIdFunctionProducer = getCurrentTenantIdFunctionProducer;
-    }
 }
