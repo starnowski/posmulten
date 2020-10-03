@@ -11,8 +11,6 @@ import static java.lang.String.format
 
 class TenantColumnSQLDefinitionsEnricherTest extends Specification {
 
-    def tested = new TenantColumnSQLDefinitionsEnricher()
-
     @Unroll
     def "should enrich shared schema context with sql definition that creates column for storing record tenant id with schema #schema"()
     {
@@ -34,7 +32,7 @@ class TenantColumnSQLDefinitionsEnricherTest extends Specification {
             def usersTableSQLDefinition2 = Mock(SQLDefinition)
             def commentsTableSQLDefinition1 = Mock(SQLDefinition)
             def singleTenantColumnSQLDefinitionsProducer = Mock(SingleTenantColumnSQLDefinitionsProducer)
-            tested.setSingleTenantColumnSQLDefinitionsProducer(singleTenantColumnSQLDefinitionsProducer)
+            def tested = new TenantColumnSQLDefinitionsEnricher(singleTenantColumnSQLDefinitionsProducer)
             context.setIGetCurrentTenantIdFunctionInvocationFactory(getCurrentTenantIdFunctionInvocationFactory)
             def usersTableKey = tk("users", schema)
             def commentsTableKey = tk("comments", schema)
@@ -74,7 +72,7 @@ class TenantColumnSQLDefinitionsEnricherTest extends Specification {
             def sharedSchemaContextRequest = builder.getSharedSchemaContextRequestCopy()
             def context = new SharedSchemaContext()
             def singleTenantColumnSQLDefinitionsProducer = Mock(SingleTenantColumnSQLDefinitionsProducer)
-            tested.setSingleTenantColumnSQLDefinitionsProducer(singleTenantColumnSQLDefinitionsProducer)
+            def tested = new TenantColumnSQLDefinitionsEnricher(singleTenantColumnSQLDefinitionsProducer)
 
         when:
             def result = tested.enrich(context, sharedSchemaContextRequest)
@@ -101,7 +99,7 @@ class TenantColumnSQLDefinitionsEnricherTest extends Specification {
                 currentTenantInvocation
             }
             def singleTenantColumnSQLDefinitionsProducer = Mock(SingleTenantColumnSQLDefinitionsProducer)
-            tested.setSingleTenantColumnSQLDefinitionsProducer(singleTenantColumnSQLDefinitionsProducer)
+            def tested = new TenantColumnSQLDefinitionsEnricher(singleTenantColumnSQLDefinitionsProducer)
             context.setIGetCurrentTenantIdFunctionInvocationFactory(getCurrentTenantIdFunctionInvocationFactory)
 
         when:

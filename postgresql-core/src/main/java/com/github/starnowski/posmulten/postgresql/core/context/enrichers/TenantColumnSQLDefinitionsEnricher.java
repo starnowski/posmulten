@@ -32,7 +32,15 @@ import static java.lang.String.format;
 
 public class TenantColumnSQLDefinitionsEnricher implements ISharedSchemaContextEnricher {
 
-    private SingleTenantColumnSQLDefinitionsProducer singleTenantColumnSQLDefinitionsProducer = new SingleTenantColumnSQLDefinitionsProducer();
+    private final SingleTenantColumnSQLDefinitionsProducer singleTenantColumnSQLDefinitionsProducer;
+
+    public TenantColumnSQLDefinitionsEnricher(SingleTenantColumnSQLDefinitionsProducer singleTenantColumnSQLDefinitionsProducer) {
+        this.singleTenantColumnSQLDefinitionsProducer = singleTenantColumnSQLDefinitionsProducer;
+    }
+
+    public TenantColumnSQLDefinitionsEnricher() {
+        this(new SingleTenantColumnSQLDefinitionsProducer());
+    }
 
     @Override
     public ISharedSchemaContext enrich(ISharedSchemaContext context, SharedSchemaContextRequest request) throws MissingRLSPolicyDeclarationForTableException {
@@ -53,9 +61,5 @@ public class TenantColumnSQLDefinitionsEnricher implements ISharedSchemaContextE
                 .forEach(context::addSQLDefinition);
         }
         return context;
-    }
-
-    void setSingleTenantColumnSQLDefinitionsProducer(SingleTenantColumnSQLDefinitionsProducer singleTenantColumnSQLDefinitionsProducer) {
-        this.singleTenantColumnSQLDefinitionsProducer = singleTenantColumnSQLDefinitionsProducer;
     }
 }
