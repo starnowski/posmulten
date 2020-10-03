@@ -12,8 +12,6 @@ import static com.github.starnowski.posmulten.postgresql.core.MapBuilder.mapBuil
 
 class IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricherTest extends Specification {
 
-    def tested = new IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher()
-
     @Unroll
     def "should create all required SQL definitions that create a constraint that checks if the foreign key reference to the record that belongs to the same tenant in schema #schema"()
     {
@@ -36,7 +34,7 @@ class IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricherTest extends
             context.getTableKeysIsRecordBelongsToCurrentTenantFunctionInvocationFactoryMap().put(commentsTableKey, isCommentBelongsToCurrentTenantFunctionInvocationFactory)
 
             def isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer = Mock(IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer)
-            tested.setIsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer(isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer)
+            def tested = new IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher(isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer)
 
             def expectedCommentUserConstraintParameters = IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducerParameters.builder()
                 .withConstraintName("comments_users_fk_con")
@@ -92,7 +90,7 @@ class IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricherTest extends
             def sharedSchemaContextRequest = builder.getSharedSchemaContextRequestCopy()
             def context = new SharedSchemaContext()
             def isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer = Mock(IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer)
-            tested.setIsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer(isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer)
+            def tested = new IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher(isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer)
 
         when:
             def result = tested.enrich(context, sharedSchemaContextRequest)
@@ -122,7 +120,7 @@ class IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricherTest extends
             context.getTableKeysIsRecordBelongsToCurrentTenantFunctionInvocationFactoryMap().put(usersTableKey, isUserBelongsToCurrentTenantFunctionInvocationFactory)
 
             def isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer = Mock(IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer)
-            tested.setIsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer(isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer)
+            def tested = new IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher(isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer)
 
             def expectedSomeTableUserOwnerConstraintParameters = IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducerParameters.builder()
                     .withConstraintName("some_table_same_tenant_users_owner_con")
@@ -171,7 +169,7 @@ class IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricherTest extends
             context.getTableKeysIsRecordBelongsToCurrentTenantFunctionInvocationFactoryMap().put(usersTableKey, isRecordBelongsToCurrentTenantFunctionInvocationFactory)
 
             def isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer = Mock(IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer)
-            tested.setIsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer(isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer)
+            def tested = new IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher(isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer)
 
         when:
             tested.enrich(context, sharedSchemaContextRequest)
@@ -209,7 +207,7 @@ class IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricherTest extends
             def context = new SharedSchemaContext()
 
             def isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer = Mock(IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer)
-            tested.setIsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer(isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer)
+            def tested = new IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher(isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer)
 
         when:
             tested.enrich(context, sharedSchemaContextRequest)
