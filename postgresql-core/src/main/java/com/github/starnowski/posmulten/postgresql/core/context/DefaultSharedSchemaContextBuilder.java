@@ -336,6 +336,15 @@ public class DefaultSharedSchemaContextBuilder {
         return this;
     }
 
+    /**
+     * TODO Comment
+     * @param value
+     * @return builder object for which method was invoked
+     */
+    public DefaultSharedSchemaContextBuilder setCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables(boolean value) {
+        return this;
+    }
+
     protected SharedSchemaContextRequest getSharedSchemaContextRequestCopyOrNull(SharedSchemaContextRequest request) {
         try {
             return (SharedSchemaContextRequest) request.clone();

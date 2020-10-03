@@ -91,6 +91,7 @@ public abstract class AbstractCreateTenantIdentifierValidConstraintForRLSTablesT
                 .setNameForFunctionThatChecksIfRecordExistsInTable(USERS_TABLE_NAME, "is_user_belongs_to_current_tenant")
                 .createValidTenantValueConstraint(asList(FIRST_INVALID_TENANT_IDENTIFIER, SECOND_INVALID_TENANT_IDENTIFIER), "is_tenant_id_valid", DEFAULT_CONSTRAINT_NAME)
                 .registerCustomValidTenantValueConstraintNameForTable(POSTS_TABLE_NAME, POSTS_TABLE_CONSTRAINT_NAME)
+                .setCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables(true)
                 .build();
 
         sqlDefinitions.addAll(result.getSqlDefinitions());
