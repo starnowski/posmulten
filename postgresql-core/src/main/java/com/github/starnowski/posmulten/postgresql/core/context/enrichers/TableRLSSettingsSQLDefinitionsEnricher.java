@@ -29,7 +29,7 @@ import com.github.starnowski.posmulten.postgresql.core.context.TableRLSSettingsS
 
 public class TableRLSSettingsSQLDefinitionsEnricher implements ISharedSchemaContextEnricher {
 
-    private TableRLSSettingsSQLDefinitionsProducer tableRLSSettingsSQLDefinitionsProducer;
+    private final TableRLSSettingsSQLDefinitionsProducer tableRLSSettingsSQLDefinitionsProducer;
 
     public TableRLSSettingsSQLDefinitionsEnricher(TableRLSSettingsSQLDefinitionsProducer tableRLSSettingsSQLDefinitionsProducer) {
         this.tableRLSSettingsSQLDefinitionsProducer = tableRLSSettingsSQLDefinitionsProducer;
