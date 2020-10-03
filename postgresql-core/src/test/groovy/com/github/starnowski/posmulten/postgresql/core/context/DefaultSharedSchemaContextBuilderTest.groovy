@@ -11,13 +11,17 @@ class DefaultSharedSchemaContextBuilderTest extends Specification {
         given:
             def tested = new DefaultSharedSchemaContextBuilder()
             def request = Mock(SharedSchemaContextRequest)
-            request.clone() >> { throw  new CloneNotSupportedException("test")}
+            def exception = Mock(CloneNotSupportedException)
+            request.clone() >> { throw  exception}
 
         when:
             def result = tested.getSharedSchemaContextRequestCopyOrNull(request)
 
         then:
             result == null
+
+        and: "print stack trace"
+            1 * exception.printStackTrace()
     }
 
     def "should return empty list of enrichers when list has value null"()
