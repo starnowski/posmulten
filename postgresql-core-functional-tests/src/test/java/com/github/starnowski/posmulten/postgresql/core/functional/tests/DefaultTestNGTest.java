@@ -4,9 +4,7 @@ import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import static java.lang.String.format;
 
@@ -56,5 +54,26 @@ public class DefaultTestNGTest extends TestNGSpringContextWithoutGenericTransact
                 jdbcTemplate.execute(sqlDefinition.getDropScript());
             });
         }
+    }
+
+    protected static class MapBuilder <K, V>
+    {
+        private Map<K, V> map = new HashMap<>();
+
+        public MapBuilder put(K key, V value)
+        {
+            map.put(key, value);
+            return this;
+        }
+
+        public Map<K, V> build()
+        {
+            return map;
+        }
+    }
+
+    protected static <K, V> MapBuilder<K, V> mapBuilder()
+    {
+        return new MapBuilder<>();
     }
 }
