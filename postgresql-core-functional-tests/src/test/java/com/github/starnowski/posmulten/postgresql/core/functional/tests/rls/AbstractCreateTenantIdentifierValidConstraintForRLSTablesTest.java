@@ -9,10 +9,15 @@ import org.testng.annotations.Test;
 import java.util.Map;
 
 import static com.github.starnowski.posmulten.postgresql.test.utils.TestUtils.VALID_CURRENT_TENANT_ID_PROPERTY_NAME;
+import static java.util.Arrays.asList;
 
 public abstract class AbstractCreateTenantIdentifierValidConstraintForRLSTablesTest extends DefaultTestNGTest {
 
     protected static final String CUSTOM_TENANT_COLUMN_NAME = "tenant";
+    protected static final String FIRST_INVALID_TENANT_IDENTIFIER = "DUMMMY_TENANT";
+    protected static final String SECOND_INVALID_TENANT_IDENTIFIER = "XXX-INVAlid_tenant";
+    protected static final String DEFAULT_CONSTRAINT_NAME = "tenant_should_be_valid";
+    protected static final String POSTS_TABLE_CONSTRAINT_NAME = "posts_tenant_is_valid";
 
     abstract protected String getSchema();
 
@@ -28,6 +33,8 @@ public abstract class AbstractCreateTenantIdentifierValidConstraintForRLSTablesT
                 .createSameTenantConstraintForForeignKey(POSTS_TABLE_NAME, USERS_TABLE_NAME, mapBuilder().put("user_id", "id").build(), "post_users_tenant_fk")
                 .createSameTenantConstraintForForeignKey(NOTIFICATIONS_TABLE_NAME, USERS_TABLE_NAME, mapBuilder().put("user_id", "id").build(), "notification_users_tenant_fk")
                 .setNameForFunctionThatChecksIfRecordExistsInTable(USERS_TABLE_NAME, "is_user_belongs_to_current_tenant")
+                .createValidTenantValueConstraint(asList(FIRST_INVALID_TENANT_IDENTIFIER, SECOND_INVALID_TENANT_IDENTIFIER), "is_tenant_id_valid", DEFAULT_CONSTRAINT_NAME)
+                .registerCustomValidTenantValueConstraintNameForTable("posts", POSTS_TABLE_CONSTRAINT_NAME)
                 .build();
     }
 
