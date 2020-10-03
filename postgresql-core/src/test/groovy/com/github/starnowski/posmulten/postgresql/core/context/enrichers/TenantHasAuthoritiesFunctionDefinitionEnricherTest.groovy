@@ -26,8 +26,7 @@ class TenantHasAuthoritiesFunctionDefinitionEnricherTest extends Specification {
             def mockedTenantHasAuthoritiesFunctionDefinition = Mock(TenantHasAuthoritiesFunctionDefinition)
             def equalsCurrentTenantIdentifierFunctionProducer = Mock(EqualsCurrentTenantIdentifierFunctionProducer)
             def tenantHasAuthoritiesFunctionProducer = Mock(TenantHasAuthoritiesFunctionProducer)
-            tested.setEqualsCurrentTenantIdentifierFunctionProducer(equalsCurrentTenantIdentifierFunctionProducer)
-            tested.setTenantHasAuthoritiesFunctionProducer(tenantHasAuthoritiesFunctionProducer)
+            def tested = new TenantHasAuthoritiesFunctionDefinitionEnricher(equalsCurrentTenantIdentifierFunctionProducer, tenantHasAuthoritiesFunctionProducer)
             context.setIGetCurrentTenantIdFunctionInvocationFactory(getCurrentTenantIdFunctionInvocationFactory)
 
         when:
@@ -86,8 +85,7 @@ class TenantHasAuthoritiesFunctionDefinitionEnricherTest extends Specification {
             def mockedTenantHasAuthoritiesFunctionDefinition = Mock(TenantHasAuthoritiesFunctionDefinition)
             def equalsCurrentTenantIdentifierFunctionProducer = Mock(EqualsCurrentTenantIdentifierFunctionProducer)
             def tenantHasAuthoritiesFunctionProducer = Mock(TenantHasAuthoritiesFunctionProducer)
-            tested.setEqualsCurrentTenantIdentifierFunctionProducer(equalsCurrentTenantIdentifierFunctionProducer)
-            tested.setTenantHasAuthoritiesFunctionProducer(tenantHasAuthoritiesFunctionProducer)
+            def tested = new TenantHasAuthoritiesFunctionDefinitionEnricher(equalsCurrentTenantIdentifierFunctionProducer, tenantHasAuthoritiesFunctionProducer)
             context.setIGetCurrentTenantIdFunctionInvocationFactory(getCurrentTenantIdFunctionInvocationFactory)
 
         when:

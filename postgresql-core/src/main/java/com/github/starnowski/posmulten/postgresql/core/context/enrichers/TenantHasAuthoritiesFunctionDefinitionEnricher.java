@@ -29,8 +29,17 @@ import com.github.starnowski.posmulten.postgresql.core.rls.function.*;
 
 public class TenantHasAuthoritiesFunctionDefinitionEnricher implements ISharedSchemaContextEnricher {
 
-    private EqualsCurrentTenantIdentifierFunctionProducer equalsCurrentTenantIdentifierFunctionProducer = new EqualsCurrentTenantIdentifierFunctionProducer();
-    private TenantHasAuthoritiesFunctionProducer tenantHasAuthoritiesFunctionProducer = new TenantHasAuthoritiesFunctionProducer();
+    private EqualsCurrentTenantIdentifierFunctionProducer equalsCurrentTenantIdentifierFunctionProducer;
+    private TenantHasAuthoritiesFunctionProducer tenantHasAuthoritiesFunctionProducer;
+
+    public TenantHasAuthoritiesFunctionDefinitionEnricher(EqualsCurrentTenantIdentifierFunctionProducer equalsCurrentTenantIdentifierFunctionProducer, TenantHasAuthoritiesFunctionProducer tenantHasAuthoritiesFunctionProducer) {
+        this.equalsCurrentTenantIdentifierFunctionProducer = equalsCurrentTenantIdentifierFunctionProducer;
+        this.tenantHasAuthoritiesFunctionProducer = tenantHasAuthoritiesFunctionProducer;
+    }
+
+    public TenantHasAuthoritiesFunctionDefinitionEnricher() {
+        this(new EqualsCurrentTenantIdentifierFunctionProducer(), new TenantHasAuthoritiesFunctionProducer());
+    }
 
     @Override
     public ISharedSchemaContext enrich(ISharedSchemaContext context, SharedSchemaContextRequest request) {
@@ -42,13 +51,5 @@ public class TenantHasAuthoritiesFunctionDefinitionEnricher implements ISharedSc
         context.addSQLDefinition(tenantHasAuthoritiesFunctionDefinition);
         context.setTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionDefinition);
         return context;
-    }
-
-    void setEqualsCurrentTenantIdentifierFunctionProducer(EqualsCurrentTenantIdentifierFunctionProducer equalsCurrentTenantIdentifierFunctionProducer) {
-        this.equalsCurrentTenantIdentifierFunctionProducer = equalsCurrentTenantIdentifierFunctionProducer;
-    }
-
-    void setTenantHasAuthoritiesFunctionProducer(TenantHasAuthoritiesFunctionProducer tenantHasAuthoritiesFunctionProducer) {
-        this.tenantHasAuthoritiesFunctionProducer = tenantHasAuthoritiesFunctionProducer;
     }
 }
