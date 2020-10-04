@@ -46,6 +46,12 @@
             <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.rls.CreateRLSForSingleTableForWhichTenantColumnWasJustAddedInPublicSchemaTest" />
         </classes>
     </test>
+    <test name="Setting constraint for tenant column that checks if the tenant identifier has the correct value">
+        <classes>
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.rls.CreateTenantIdentifierValidConstraintForRLSTablesInNonPublicSchemaTest" />
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.rls.CreateTenantIdentifierValidConstraintForRLSTablesInPublicSchemaTest" />
+        </classes>
+    </test>
     <test name="Full tests with Shared Schema Builder 1">
         <classes>
             <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.sanity.CreateCurrentTenantCompositeForeignKeyConstraintForCommentsTableInNonPublicSchemaTest" />
