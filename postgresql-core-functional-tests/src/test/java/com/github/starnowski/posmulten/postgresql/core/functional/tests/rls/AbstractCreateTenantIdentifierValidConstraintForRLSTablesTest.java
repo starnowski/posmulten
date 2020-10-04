@@ -154,6 +154,7 @@ public abstract class AbstractCreateTenantIdentifierValidConstraintForRLSTablesT
 
     //TODO add posts
     //TODO add notifications
+    //TODO add groups - exclude default value for tenant column
 
     @Override
     @Test(dependsOnMethods = { "insertDataIntoUserTableAsCurrentTenant" }, alwaysRun = true)
