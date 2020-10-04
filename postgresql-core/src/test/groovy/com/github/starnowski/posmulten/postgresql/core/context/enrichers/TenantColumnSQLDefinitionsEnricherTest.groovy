@@ -46,8 +46,8 @@ class TenantColumnSQLDefinitionsEnricherTest extends Specification {
             def result = tested.enrich(context, sharedSchemaContextRequest)
 
         then:
-            1 * singleTenantColumnSQLDefinitionsProducer.produce(usersTableKey, usersTableColumns, currentTenantInvocation, sharedSchemaContextRequest.getCurrentTenantIdProperty(), sharedSchemaContextRequest.getCurrentTenantIdPropertyType()) >> [usersTableSQLDefinition1, usersTableSQLDefinition2]
-            1 * singleTenantColumnSQLDefinitionsProducer.produce(commentsTableKey, commentsTableColumns, currentTenantInvocation, sharedSchemaContextRequest.getCurrentTenantIdProperty(), sharedSchemaContextRequest.getCurrentTenantIdPropertyType()) >> [commentsTableSQLDefinition1]
+            1 * singleTenantColumnSQLDefinitionsProducer.produce(usersTableKey, usersTableColumns, currentTenantInvocation, sharedSchemaContextRequest.getDefaultTenantIdColumn(), sharedSchemaContextRequest.getCurrentTenantIdPropertyType()) >> [usersTableSQLDefinition1, usersTableSQLDefinition2]
+            1 * singleTenantColumnSQLDefinitionsProducer.produce(commentsTableKey, commentsTableColumns, currentTenantInvocation, sharedSchemaContextRequest.getDefaultTenantIdColumn(), sharedSchemaContextRequest.getCurrentTenantIdPropertyType()) >> [commentsTableSQLDefinition1]
             0 * singleTenantColumnSQLDefinitionsProducer.produce(someTableKey, someTableColumns, _, _, _)
 
             result.getSqlDefinitions().contains(usersTableSQLDefinition1)
