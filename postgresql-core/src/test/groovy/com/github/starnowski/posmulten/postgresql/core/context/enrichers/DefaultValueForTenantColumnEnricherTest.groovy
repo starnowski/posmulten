@@ -8,16 +8,16 @@ class DefaultValueForTenantColumnEnricherTest extends Specification {
 
     static class SetDefaultStatementProducerParameters {
 
-        private final String table;
-        private final String column;
-        private final String defaultValueDefinition;
-        private final String schema;
+        private final String table
+        private final String column
+        private final String defaultValueDefinition
+        private final String schema
 
         SetDefaultStatementProducerParameters(String table, String column, String defaultValueDefinition, String schema) {
-            this.table = table;
-            this.column = column;
-            this.defaultValueDefinition = defaultValueDefinition;
-            this.schema = schema;
+            this.table = table
+            this.column = column
+            this.defaultValueDefinition = defaultValueDefinition
+            this.schema = schema
         }
 
         String getTable() {
