@@ -1,10 +1,36 @@
 package com.github.starnowski.posmulten.postgresql.core.context.enrichers
 
+import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder
+import javafx.util.Pair
 import spock.lang.Specification
+import spock.lang.Unroll
 
 class DefaultValueForTenantColumnEnricherTest extends Specification {
 
+    @Unroll
+    def "should create sql definitions for all tables" ()
+    {
+        given:
+            def builder = (new DefaultSharedSchemaContextBuilder(schema))
+                    .setCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables(true)
+            for (Pair tableNameTenantNamePair : tableNameTenantNamePairs)
+            {
+                builder.createRLSPolicyForTable(tableNameTenantNamePair.key, [:], tableNameTenantNamePair.value, null)
+            }
 
+        when:
+            def result = builder.build()
+
+        then:
+            false
+
+        where:
+            //TODO
+            schema          |   tableNameTenantNamePairs                                        ||  expectedPassedParameters
+            null            |   [new Pair("users", "tenant_id"), new Pair("leads", "t_xxx")]    ||  [tp("tenant_identifier_valid", "leads", null, "t_xxx"), tp("tenant_identifier_valid", "users", null, "tenant_id")]
+            "public"        |   [new Pair("users", "tenant_id"), new Pair("leads", "t_xxx")]    ||  [tp("tenant_identifier_valid", "leads", "public", "t_xxx"), tp("tenant_identifier_valid", "users", "public", "tenant_id")]
+            "some_schema"   |   [new Pair("users", "tenant_id"), new Pair("leads", "t_xxx")]    ||  [tp("tenant_identifier_valid", "leads", "some_schema", "t_xxx"), tp("tenant_identifier_valid", "users", "some_schema", "tenant_id")]
+    }
 
     static class SetDefaultStatementProducerParameters {
 
