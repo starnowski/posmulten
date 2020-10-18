@@ -1,6 +1,7 @@
 package com.github.starnowski.posmulten.postgresql.core.context.enrichers
 
 import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder
+import com.github.starnowski.posmulten.postgresql.core.rls.IIsTenantIdentifierValidConstraintProducerParameters
 import javafx.util.Pair
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -17,29 +18,40 @@ class DefaultValueForTenantColumnEnricherTest extends Specification {
             {
                 builder.createRLSPolicyForTable(tableNameTenantNamePair.key, [:], tableNameTenantNamePair.value, null)
             }
+            List<IIsTenantIdentifierValidConstraintProducerParameters> capturedParameters = new ArrayList<>()
 
         when:
             def result = builder.build()
 
         then:
-            false
+            tableNameTenantNamePairs.size() * producer.produce(_) >>  {
+                parameters ->
+                    capturedParameters.add(parameters[0])
+                    mockedSQLDefinition
+            }
+            result.getSqlDefinitions().size() == tableNameTenantNamePairs.size()
 
         where:
             //TODO
-            schema          |   tableNameTenantNamePairs                                        ||  expectedPassedParameters
-            null            |   [new Pair("users", "tenant_id"), new Pair("leads", "t_xxx")]    ||  [tp("tenant_identifier_valid", "leads", null, "t_xxx"), tp("tenant_identifier_valid", "users", null, "tenant_id")]
-            "public"        |   [new Pair("users", "tenant_id"), new Pair("leads", "t_xxx")]    ||  [tp("tenant_identifier_valid", "leads", "public", "t_xxx"), tp("tenant_identifier_valid", "users", "public", "tenant_id")]
-            "some_schema"   |   [new Pair("users", "tenant_id"), new Pair("leads", "t_xxx")]    ||  [tp("tenant_identifier_valid", "leads", "some_schema", "t_xxx"), tp("tenant_identifier_valid", "users", "some_schema", "tenant_id")]
+            schema          |   defaultValue    |   tableNameTenantNamePairs                                        ||  expectedPassedParameters
+            null            |   "some_fun(1)"   |   [new Pair("users", "tenant_id"), new Pair("leads", "t_xxx")]    ||  [key("leads", "tenant_id", "some_fun(1)", null), key("tenant_identifier_valid", "users", "some_fun(1)", null)]
+            "public"        |   "def_fun()"     |   [new Pair("users", "tenant_id"), new Pair("leads", "t_xxx")]    ||  [key("leads", "tenant_id", "def_fun()", "public"), key("tenant_identifier_valid", "users", "def_fun()", "public")]
+            "some_schema"   |   "CONST"         |   [new Pair("users", "tenant_id"), new Pair("leads", "t_xxx")]    ||  [key("leads", "tenant_id", "CONST", "some_schema"), key("tenant_identifier_valid", "users", "CONST", "some_schema")]
     }
 
-    static class SetDefaultStatementProducerParameters {
+    static SetDefaultStatementProducerParametersKey key(String table, String column, String defaultValueDefinition, String schema)
+    {
+        new SetDefaultStatementProducerParametersKey(table, column, defaultValueDefinition, schema)
+    }
+
+    static class SetDefaultStatementProducerParametersKey {
 
         private final String table
         private final String column
         private final String defaultValueDefinition
         private final String schema
 
-        SetDefaultStatementProducerParameters(String table, String column, String defaultValueDefinition, String schema) {
+        SetDefaultStatementProducerParametersKey(String table, String column, String defaultValueDefinition, String schema) {
             this.table = table
             this.column = column
             this.defaultValueDefinition = defaultValueDefinition
