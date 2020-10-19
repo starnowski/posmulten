@@ -139,6 +139,11 @@ public class SharedSchemaContextRequest implements Cloneable{
      */
     private Map<TableKey, String> tenantValidConstraintCustomNamerPerTables = new HashMap<>();
 
+    /**
+     * TODO
+     */
+    private boolean currentTenantIdentifierAsDefaultValueForTenantColumnInAllTables;
+
     public String getDefaultTenantIdColumn() {
         return defaultTenantIdColumn;
     }
@@ -278,5 +283,13 @@ public class SharedSchemaContextRequest implements Cloneable{
 
     public Map<TableKey, String> getTenantValidConstraintCustomNamerPerTables() {
         return tenantValidConstraintCustomNamerPerTables;
+    }
+
+    public void setCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables(boolean value) {
+        this.currentTenantIdentifierAsDefaultValueForTenantColumnInAllTables = value;
+    }
+
+    public boolean isCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables() {
+        return currentTenantIdentifierAsDefaultValueForTenantColumnInAllTables;
     }
 }

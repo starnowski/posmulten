@@ -342,6 +342,7 @@ public class DefaultSharedSchemaContextBuilder {
      * @return builder object for which method was invoked
      */
     public DefaultSharedSchemaContextBuilder setCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables(boolean value) {
+        sharedSchemaContextRequest.setCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables(value);
         return this;
     }
 
