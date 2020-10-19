@@ -1,6 +1,10 @@
 package com.github.starnowski.posmulten.postgresql.core.context.enrichers
 
+import com.github.starnowski.posmulten.postgresql.core.ISetDefaultStatementProducerParameters
+import com.github.starnowski.posmulten.postgresql.core.SetDefaultStatementProducer
+import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition
 import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder
+import com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContext
 import com.github.starnowski.posmulten.postgresql.core.rls.IIsTenantIdentifierValidConstraintProducerParameters
 import javafx.util.Pair
 import spock.lang.Specification
@@ -18,25 +22,37 @@ class DefaultValueForTenantColumnEnricherTest extends Specification {
             {
                 builder.createRLSPolicyForTable(tableNameTenantNamePair.key, [:], tableNameTenantNamePair.value, null)
             }
-            List<IIsTenantIdentifierValidConstraintProducerParameters> capturedParameters = new ArrayList<>()
+            Set<IIsTenantIdentifierValidConstraintProducerParameters> capturedParameters = new HashSet<>()
+            SetDefaultStatementProducer producer = Mock(SetDefaultStatementProducer)
+            SQLDefinition mockedSQLDefinition = Mock(SQLDefinition)
+            def sharedSchemaContextRequest = builder.getSharedSchemaContextRequestCopy()
+            def context = new SharedSchemaContext()
+            def tested = new DefaultValueForTenantColumnEnricher(producer)
 
         when:
-            def result = builder.build()
+            def result = tested.enrich(context, sharedSchemaContextRequest)
 
         then:
             tableNameTenantNamePairs.size() * producer.produce(_) >>  {
                 parameters ->
-                    capturedParameters.add(parameters[0])
+                    capturedParameters.add(key(parameters[0]))
                     mockedSQLDefinition
             }
             result.getSqlDefinitions().size() == tableNameTenantNamePairs.size()
+            capturedParameters == new HashSet(expectedPassedParameters)
+
 
         where:
             //TODO
             schema          |   defaultValue    |   tableNameTenantNamePairs                                        ||  expectedPassedParameters
-            null            |   "some_fun(1)"   |   [new Pair("users", "tenant_id"), new Pair("leads", "t_xxx")]    ||  [key("leads", "tenant_id", "some_fun(1)", null), key("tenant_identifier_valid", "users", "some_fun(1)", null)]
-            "public"        |   "def_fun()"     |   [new Pair("users", "tenant_id"), new Pair("leads", "t_xxx")]    ||  [key("leads", "tenant_id", "def_fun()", "public"), key("tenant_identifier_valid", "users", "def_fun()", "public")]
-            "some_schema"   |   "CONST"         |   [new Pair("users", "tenant_id"), new Pair("leads", "t_xxx")]    ||  [key("leads", "tenant_id", "CONST", "some_schema"), key("tenant_identifier_valid", "users", "CONST", "some_schema")]
+            null            |   "some_fun(1)"   |   [new Pair("users", "tenant_id"), new Pair("leads", "t_xxx")]    ||  [key("leads", "tenant_id", "some_fun(1)", null), key("users", "t_xxx", "some_fun(1)", null)]
+            "public"        |   "def_fun()"     |   [new Pair("users", "tenant_id"), new Pair("leads", "t_xxx")]    ||  [key("leads", "tenant_id", "def_fun()", "public"), key("users", "t_xxx", "def_fun()", "public")]
+            "some_schema"   |   "CONST"         |   [new Pair("users", "tenant_id"), new Pair("leads", "t_xxx")]    ||  [key("leads", "tenant_id", "CONST", "some_schema"), key("users", "t_xxx", "CONST", "some_schema")]
+    }
+
+    static SetDefaultStatementProducerParametersKey key(ISetDefaultStatementProducerParameters parameters)
+    {
+        new SetDefaultStatementProducerParametersKey(parameters.getTable(), parameters.getColumn(), parameters.getDefaultValueDefinition(), parameters.getSchema())
     }
 
     static SetDefaultStatementProducerParametersKey key(String table, String column, String defaultValueDefinition, String schema)
@@ -78,7 +94,7 @@ class DefaultValueForTenantColumnEnricherTest extends Specification {
             if (this.is(o)) return true
             if (getClass() != o.class) return false
 
-            SetDefaultStatementProducerParameters that = (SetDefaultStatementProducerParameters) o
+            SetDefaultStatementProducerParametersKey that = (SetDefaultStatementProducerParametersKey) o
 
             if (column != that.column) return false
             if (defaultValueDefinition != that.defaultValueDefinition) return false
