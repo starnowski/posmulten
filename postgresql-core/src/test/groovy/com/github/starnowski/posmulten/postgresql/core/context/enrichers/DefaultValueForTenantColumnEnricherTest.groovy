@@ -6,6 +6,7 @@ import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition
 import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder
 import com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContext
 import com.github.starnowski.posmulten.postgresql.core.rls.IIsTenantIdentifierValidConstraintProducerParameters
+import com.github.starnowski.posmulten.postgresql.core.rls.function.IGetCurrentTenantIdFunctionInvocationFactory
 import javafx.util.Pair
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -25,8 +26,11 @@ class DefaultValueForTenantColumnEnricherTest extends Specification {
             Set<IIsTenantIdentifierValidConstraintProducerParameters> capturedParameters = new HashSet<>()
             SetDefaultStatementProducer producer = Mock(SetDefaultStatementProducer)
             SQLDefinition mockedSQLDefinition = Mock(SQLDefinition)
+            IGetCurrentTenantIdFunctionInvocationFactory getCurrentTenantIdFunctionInvocationFactory = Mock(IGetCurrentTenantIdFunctionInvocationFactory)
+            getCurrentTenantIdFunctionInvocationFactory.returnGetCurrentTenantIdFunctionInvocation() >> defaultValue
             def sharedSchemaContextRequest = builder.getSharedSchemaContextRequestCopy()
             def context = new SharedSchemaContext()
+            context.setIGetCurrentTenantIdFunctionInvocationFactory(getCurrentTenantIdFunctionInvocationFactory)
             def tested = new DefaultValueForTenantColumnEnricher(producer)
 
         when:
@@ -45,9 +49,9 @@ class DefaultValueForTenantColumnEnricherTest extends Specification {
         where:
             //TODO
             schema          |   defaultValue    |   tableNameTenantNamePairs                                        ||  expectedPassedParameters
-            null            |   "some_fun(1)"   |   [new Pair("users", "tenant_id"), new Pair("leads", "t_xxx")]    ||  [key("leads", "tenant_id", "some_fun(1)", null), key("users", "t_xxx", "some_fun(1)", null)]
-            "public"        |   "def_fun()"     |   [new Pair("users", "tenant_id"), new Pair("leads", "t_xxx")]    ||  [key("leads", "tenant_id", "def_fun()", "public"), key("users", "t_xxx", "def_fun()", "public")]
-            "some_schema"   |   "CONST"         |   [new Pair("users", "tenant_id"), new Pair("leads", "t_xxx")]    ||  [key("leads", "tenant_id", "CONST", "some_schema"), key("users", "t_xxx", "CONST", "some_schema")]
+            null            |   "some_fun(1)"   |   [new Pair("users", "tenant_id"), new Pair("leads", "t_xxx")]    ||  [key("users", "tenant_id", "some_fun(1)", null), key("leads", "t_xxx", "some_fun(1)", null)]
+            "public"        |   "def_fun()"     |   [new Pair("users", "tenant_id"), new Pair("leads", "t_xxx")]    ||  [key("users", "tenant_id", "def_fun()", "public"), key("leads", "t_xxx", "def_fun()", "public")]
+            "some_schema"   |   "CONST"         |   [new Pair("users", "tenant_id"), new Pair("leads", "t_xxx")]    ||  [key("users", "tenant_id", "CONST", "some_schema"), key("leads", "t_xxx", "CONST", "some_schema")]
     }
 
     static SetDefaultStatementProducerParametersKey key(ISetDefaultStatementProducerParameters parameters)
@@ -111,6 +115,16 @@ class DefaultValueForTenantColumnEnricherTest extends Specification {
             result = 31 * result + (defaultValueDefinition != null ? defaultValueDefinition.hashCode() : 0)
             result = 31 * result + (schema != null ? schema.hashCode() : 0)
             return result
+        }
+
+        @Override
+        String toString() {
+            return "SetDefaultStatementProducerParametersKey{" +
+                    "table='" + table + '\'' +
+                    ", column='" + column + '\'' +
+                    ", defaultValueDefinition='" + defaultValueDefinition + '\'' +
+                    ", schema='" + schema + '\'' +
+                    '}';
         }
     }
 }
