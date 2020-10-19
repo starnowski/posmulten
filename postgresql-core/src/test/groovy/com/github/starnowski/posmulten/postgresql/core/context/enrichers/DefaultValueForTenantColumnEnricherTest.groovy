@@ -13,7 +13,7 @@ import spock.lang.Unroll
 class DefaultValueForTenantColumnEnricherTest extends Specification {
 
     @Unroll
-    def "should create sql definitions for all tables" ()
+    def "should create sql definitions that add default value declaration '#defaultValue' for schema '#schema' for all tables (#tableNameTenantNamePairs)" ()
     {
         given:
             def builder = (new DefaultSharedSchemaContextBuilder(schema))
