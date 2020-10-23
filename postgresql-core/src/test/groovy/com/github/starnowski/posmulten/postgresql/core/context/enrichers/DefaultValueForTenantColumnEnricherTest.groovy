@@ -54,6 +54,49 @@ class DefaultValueForTenantColumnEnricherTest extends Specification {
             "some_schema"   |   "CONST"         |   [new Pair("users", "tenant_id"), new Pair("leads", "t_xxx")]    ||  [key("users", "tenant_id", "CONST", "some_schema"), key("leads", "t_xxx", "CONST", "some_schema")]
     }
 
+    @Unroll
+    def "should create sql definitions that add default value declaration '#defaultValue' for schema '#schema' for tables which tenant column should be created (#tablesThatRequiredTenantColumn) amongst tables (#tableNameTenantNamePairs)" ()
+    {
+        given:
+            def builder = (new DefaultSharedSchemaContextBuilder(schema))
+            for (Pair tableNameTenantNamePair : tableNameTenantNamePairs)
+            {
+                builder.createRLSPolicyForTable(tableNameTenantNamePair.key, [:], tableNameTenantNamePair.value, null)
+            }
+            for (String tableThatRequiredTenantColumn : tablesThatRequiredTenantColumn)
+            {
+                builder.createTenantColumnForTable(tableThatRequiredTenantColumn)
+            }
+            Set<IIsTenantIdentifierValidConstraintProducerParameters> capturedParameters = new HashSet<>()
+            SetDefaultStatementProducer producer = Mock(SetDefaultStatementProducer)
+            SQLDefinition mockedSQLDefinition = Mock(SQLDefinition)
+            IGetCurrentTenantIdFunctionInvocationFactory getCurrentTenantIdFunctionInvocationFactory = Mock(IGetCurrentTenantIdFunctionInvocationFactory)
+            getCurrentTenantIdFunctionInvocationFactory.returnGetCurrentTenantIdFunctionInvocation() >> defaultValue
+            def sharedSchemaContextRequest = builder.getSharedSchemaContextRequestCopy()
+            def context = new SharedSchemaContext()
+            context.setIGetCurrentTenantIdFunctionInvocationFactory(getCurrentTenantIdFunctionInvocationFactory)
+            def tested = new DefaultValueForTenantColumnEnricher(producer)
+
+        when:
+            def result = tested.enrich(context, sharedSchemaContextRequest)
+
+        then:
+            tableNameTenantNamePairs.size() * producer.produce(_) >>  {
+                parameters ->
+                    capturedParameters.add(key(parameters[0]))
+                    mockedSQLDefinition
+            }
+            result.getSqlDefinitions().size() == tableNameTenantNamePairs.size()
+            capturedParameters == new HashSet(expectedPassedParameters)
+
+
+        where:
+            schema          |   defaultValue    |   tableNameTenantNamePairs                                                                        |   tablesThatRequiredTenantColumn  ||  expectedPassedParameters
+            null            |   "some_fun(1)"   |   [new Pair("users", "tenant_id"), new Pair("leads", "t_xxx"), new Pair("comments", "t_xxx")]     |   ["comments"]                    ||  [key("comments", "t_xxx", "some_fun(1)", null)]
+            "public"        |   "def_fun()"     |   [new Pair("users", "tenant_id"), new Pair("leads", "t_xxx")]                                    |   ["leads"]                       ||  [key("leads", "t_xxx", "def_fun()", "public")]
+            "some_schema"   |   "CONST"         |   [new Pair("leads", "tenant_id"), new Pair("users", "t_xxx"), new Pair("posts", "tenant")]       |   ["posts", "users"]              ||  [key("users", "tenant_id", "CONST", "some_schema"), key("posts", "tenant", "CONST", "some_schema")]
+    }
+
     static SetDefaultStatementProducerParametersKey key(ISetDefaultStatementProducerParameters parameters)
     {
         new SetDefaultStatementProducerParametersKey(parameters.getTable(), parameters.getColumn(), parameters.getDefaultValueDefinition(), parameters.getSchema())
