@@ -9,7 +9,6 @@ import com.github.starnowski.posmulten.postgresql.core.context.exceptions.Shared
 import javafx.util.Pair;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
@@ -32,7 +31,9 @@ public class DefaultValueForTenantColumnEnricher implements ISharedSchemaContext
         if (request.isCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables())
         {
             tableColumnPairs = request.getTableColumnsList().entrySet().stream().map(entry -> new Pair<>(entry.getKey(), entry.getValue().getTenantColumnName())).collect(toList());
-
+        } else if (!request.getCreateTenantColumnTableLists().isEmpty()) {
+            //TODO Throw exception
+            tableColumnPairs = request.getTableColumnsList().entrySet().stream().filter(entry -> request.getCreateTenantColumnTableLists().contains(entry.getKey())).map(entry -> new Pair<>(entry.getKey(), entry.getValue().getTenantColumnName())).collect(toList());
         }
         if (!tableColumnPairs.isEmpty())
         {
