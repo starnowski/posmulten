@@ -81,12 +81,12 @@ class DefaultValueForTenantColumnEnricherTest extends Specification {
             def result = tested.enrich(context, sharedSchemaContextRequest)
 
         then:
-            tableNameTenantNamePairs.size() * producer.produce(_) >>  {
+            expectedPassedParameters.size() * producer.produce(_) >>  {
                 parameters ->
                     capturedParameters.add(key(parameters[0]))
                     mockedSQLDefinition
             }
-            result.getSqlDefinitions().size() == tableNameTenantNamePairs.size()
+            result.getSqlDefinitions().size() == expectedPassedParameters.size()
             capturedParameters == new HashSet(expectedPassedParameters)
 
 
@@ -94,7 +94,7 @@ class DefaultValueForTenantColumnEnricherTest extends Specification {
             schema          |   defaultValue    |   tableNameTenantNamePairs                                                                        |   tablesThatRequiredTenantColumn  ||  expectedPassedParameters
             null            |   "some_fun(1)"   |   [new Pair("users", "tenant_id"), new Pair("leads", "t_xxx"), new Pair("comments", "t_xxx")]     |   ["comments"]                    ||  [key("comments", "t_xxx", "some_fun(1)", null)]
             "public"        |   "def_fun()"     |   [new Pair("users", "tenant_id"), new Pair("leads", "t_xxx")]                                    |   ["leads"]                       ||  [key("leads", "t_xxx", "def_fun()", "public")]
-            "some_schema"   |   "CONST"         |   [new Pair("leads", "tenant_id"), new Pair("users", "t_xxx"), new Pair("posts", "tenant")]       |   ["posts", "users"]              ||  [key("users", "tenant_id", "CONST", "some_schema"), key("posts", "tenant", "CONST", "some_schema")]
+            "some_schema"   |   "CONST"         |   [new Pair("leads", "tenant_id"), new Pair("users", "t_xxx"), new Pair("posts", "tenant")]       |   ["posts", "users"]              ||  [key("users", "t_xxx", "CONST", "some_schema"), key("posts", "tenant", "CONST", "some_schema")]
     }
 
     static SetDefaultStatementProducerParametersKey key(ISetDefaultStatementProducerParameters parameters)
