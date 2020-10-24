@@ -1,5 +1,6 @@
 package com.github.starnowski.posmulten.postgresql.core.context
 
+import com.github.starnowski.posmulten.postgresql.core.context.enrichers.DefaultValueForTenantColumnEnricher
 import com.github.starnowski.posmulten.postgresql.core.context.enrichers.GetCurrentTenantIdFunctionDefinitionEnricher
 import com.github.starnowski.posmulten.postgresql.core.context.enrichers.IIsTenantValidFunctionInvocationFactoryEnricher
 import com.github.starnowski.posmulten.postgresql.core.context.enrichers.ISharedSchemaContextEnricher
@@ -54,7 +55,7 @@ class DefaultSharedSchemaContextBuilderEnrichersTest extends Specification {
                                                 IIsTenantValidFunctionInvocationFactoryEnricher.class, TenantColumnSQLDefinitionsEnricher.class,
                                                 TableRLSSettingsSQLDefinitionsEnricher.class, TableRLSPolicyEnricher.class,
                                                 IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricher.class, IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher.class,
-                                                IsTenantIdentifierValidConstraintEnricher.class]
+                                                IsTenantIdentifierValidConstraintEnricher.class, DefaultValueForTenantColumnEnricher.class]
             DefaultSharedSchemaContextBuilder builder = new DefaultSharedSchemaContextBuilder()
 
         when:
