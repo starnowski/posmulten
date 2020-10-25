@@ -108,7 +108,7 @@ class DefaultValueForTenantColumnEnricherTest extends Specification {
             }
             for (String tableThatShouldBeSkipped : tablesThatShouldBeSkipped)
             {
-                builder.skipCreationOfTenantColumnForTable(tableThatRequiredTenantColumn)
+                builder.skipAddingOfTenantColumnDefaultValueForTable(tableThatShouldBeSkipped)
             }
             Set<IIsTenantIdentifierValidConstraintProducerParameters> capturedParameters = new HashSet<>()
             SetDefaultStatementProducer producer = Mock(SetDefaultStatementProducer)
