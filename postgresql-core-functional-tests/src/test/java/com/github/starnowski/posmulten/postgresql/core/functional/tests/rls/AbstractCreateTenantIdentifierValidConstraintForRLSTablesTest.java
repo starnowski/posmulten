@@ -88,6 +88,7 @@ public abstract class AbstractCreateTenantIdentifierValidConstraintForRLSTablesT
     public void createSQLDefinitions() throws SharedSchemaContextBuilderException {
         ISharedSchemaContext result = (new DefaultSharedSchemaContextBuilder(getSchema())).setCurrentTenantIdProperty(VALID_CURRENT_TENANT_ID_PROPERTY_NAME)
                 .setForceRowLevelSecurityForTableOwner(true)
+                .setCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables(true)
                 .setGrantee(CORE_OWNER_USER)
                 .createTenantColumnForTable(NOTIFICATIONS_TABLE_NAME)
                 .createRLSPolicyForTable(NOTIFICATIONS_TABLE_NAME, prepareIdColumnTypeForSingleColumnKey("uuid", "uuid"), CUSTOM_TENANT_COLUMN_NAME, "notifications_table_rls_policy")
@@ -139,7 +140,7 @@ public abstract class AbstractCreateTenantIdentifierValidConstraintForRLSTablesT
                 ownerJdbcTemplate.execute(format("%4$s INSERT INTO %3$s (id, name) VALUES (%1$d, '%2$s');", user.getId(), user.getName(), getUsersTableReference(), setCurrentTenantIdFunctionInvocationFactory.generateStatementThatSetTenant(FIRST_INVALID_TENANT_IDENTIFIER)))
         ).isInstanceOf(DataIntegrityViolationException.class).getRootCause().isInstanceOf(PSQLException.class);
         assertThatThrownBy(() ->
-                ownerJdbcTemplate.execute(format("INSERT INTO %4$s (id, name, tenant_id) VALUES (%1$d, '%2$s', '%3$s');", user.getId(), user.getName(), SECOND_INVALID_TENANT_IDENTIFIER, getUsersTableReference()))
+                jdbcTemplate.execute(format("INSERT INTO %4$s (id, name, tenant_id) VALUES (%1$d, '%2$s', '%3$s');", user.getId(), user.getName(), SECOND_INVALID_TENANT_IDENTIFIER, getUsersTableReference()))
         ).isInstanceOf(DataIntegrityViolationException.class).getRootCause().isInstanceOf(PSQLException.class);
         assertThat(countRowsInTableWhere(getUsersTableReference(), "id = " + user.getId())).isEqualTo(0);
     }
