@@ -23,7 +23,9 @@
  */
 package com.github.starnowski.posmulten.postgresql.core.context;
 
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 public class SharedSchemaContextRequest implements Cloneable{
 
@@ -143,6 +145,11 @@ public class SharedSchemaContextRequest implements Cloneable{
      * TODO
      */
     private boolean currentTenantIdentifierAsDefaultValueForTenantColumnInAllTables;
+
+    /**
+     * TODO
+     */
+    private Set<TableKey> tablesThatAddingOfTenantColumnDefaultValueShouldBeSkipped = new HashSet<>();
 
     public String getDefaultTenantIdColumn() {
         return defaultTenantIdColumn;
@@ -291,5 +298,9 @@ public class SharedSchemaContextRequest implements Cloneable{
 
     public boolean isCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables() {
         return currentTenantIdentifierAsDefaultValueForTenantColumnInAllTables;
+    }
+
+    public Set<TableKey> getTablesThatAddingOfTenantColumnDefaultValueShouldBeSkipped() {
+        return tablesThatAddingOfTenantColumnDefaultValueShouldBeSkipped;
     }
 }

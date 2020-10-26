@@ -346,6 +346,16 @@ public class DefaultSharedSchemaContextBuilder {
         return this;
     }
 
+    /**
+     * TODO Comment
+     * @param value
+     * @return builder object for which method was invoked
+     */
+    public DefaultSharedSchemaContextBuilder skipAddingOfTenantColumnDefaultValueForTable(String value) {
+        sharedSchemaContextRequest.getTablesThatAddingOfTenantColumnDefaultValueShouldBeSkipped().add(new TableKey(value, sharedSchemaContextRequest.getDefaultSchema()));
+        return this;
+    }
+
     protected SharedSchemaContextRequest getSharedSchemaContextRequestCopyOrNull(SharedSchemaContextRequest request) {
         try {
             return (SharedSchemaContextRequest) request.clone();
