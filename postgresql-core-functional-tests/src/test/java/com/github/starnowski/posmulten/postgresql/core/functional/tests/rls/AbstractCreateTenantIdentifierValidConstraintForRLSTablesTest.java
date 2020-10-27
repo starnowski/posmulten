@@ -163,9 +163,11 @@ public abstract class AbstractCreateTenantIdentifierValidConstraintForRLSTablesT
         assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %4$s WHERE id = %1$d AND name = '%2$s' AND tenant_id = '%3$s'", user.getId(), user.getName(), user.getTenantId(), getUsersTableReference())), "The tests user should exists");
     }
 
-    //TODO add posts
-    //TODO add notifications
+    //TODO add posts (custom constraint name)
+    //TODO add notifications (new created tenant column)
     //TODO add groups - exclude default value for tenant column
+    //TODO try to add group with null tenant
+    //TODO add group with non-null tenant
 
     @Override
     @Test(dependsOnMethods = { "insertDataIntoUserTableAsCurrentTenant" }, alwaysRun = true)
