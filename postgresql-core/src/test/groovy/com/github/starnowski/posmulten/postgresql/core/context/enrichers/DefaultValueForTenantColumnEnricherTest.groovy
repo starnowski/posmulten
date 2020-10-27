@@ -145,7 +145,6 @@ class DefaultValueForTenantColumnEnricherTest extends Specification {
     {
         given:
             def builder = (new DefaultSharedSchemaContextBuilder(schema))
-                    .setCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables(true)
             for (Pair tableNameTenantNamePair : tableNameTenantNamePairs)
             {
                 builder.createRLSPolicyForTable(tableNameTenantNamePair.key, [:], tableNameTenantNamePair.value, null)
@@ -154,9 +153,9 @@ class DefaultValueForTenantColumnEnricherTest extends Specification {
             {
                 builder.skipAddingOfTenantColumnDefaultValueForTable(tableThatShouldBeSkipped)
             }
-            for (String tableThatShouldBeSkipped : tablesThatShouldBeSkipped)
+            for (String tableThatRequiredTenantColumn : tablesThatRequiredTenantColumn)
             {
-                builder.skipAddingOfTenantColumnDefaultValueForTable(tableThatShouldBeSkipped)
+                builder.createTenantColumnForTable(tableThatRequiredTenantColumn)
             }
             Set<IIsTenantIdentifierValidConstraintProducerParameters> capturedParameters = new HashSet<>()
             SetDefaultStatementProducer producer = Mock(SetDefaultStatementProducer)
@@ -183,9 +182,9 @@ class DefaultValueForTenantColumnEnricherTest extends Specification {
 
         where:
             schema          |   defaultValue    |   tableNameTenantNamePairs                                                                                                        |   tablesThatShouldBeSkipped       |   tablesThatRequiredTenantColumn      ||  expectedPassedParameters
-            null            |   "some_fun(1)"   |   [new Pair("users", "tenant_id"), new Pair("leads", "t_xxx"), new Pair("comments", "t_xxx"), new Pair("posts", "tenant")]        |   ["users", "leads"]              |   ["comments", "posts", "users"]      ||  [key("comments", "t_xxx", "some_fun(1)", null)]
+            null            |   "some_fun(1)"   |   [new Pair("users", "tenant_id"), new Pair("leads", "t_xxx"), new Pair("comments", "t_xxx"), new Pair("posts", "tenant")]        |   ["users", "leads", "posts"]              |   ["comments", "posts", "users"]      ||  [key("comments", "t_xxx", "some_fun(1)", null)]
             "public"        |   "def_fun()"     |   [new Pair("users", "tenant_id"), new Pair("leads", "t_xxx"), new Pair("posts", "tenant"), new Pair("comments", "t_xxx")]        |   ["users"]                       |   ["leads", "users"]                  ||  [key("leads", "t_xxx", "def_fun()", "public")]
-            "some_schema"   |   "CONST"         |   [new Pair("leads", "tenant_id"), new Pair("users", "t_xxx"), new Pair("comments", "t_xxx"), new Pair("posts", "tenant")]        |   ["leads"]                       |   ["comments", "posts", "users"]      ||  [key("users", "t_xxx", "CONST", "some_schema"), key("posts", "tenant", "CONST", "some_schema")]
+            "some_schema"   |   "CONST"         |   [new Pair("leads", "tenant_id"), new Pair("users", "t_xxx"), new Pair("comments", "t_xxx"), new Pair("posts", "tenant")]        |   ["leads", "comments"]           |   ["comments", "posts", "users"]      ||  [key("users", "t_xxx", "CONST", "some_schema"), key("posts", "tenant", "CONST", "some_schema")]
     }
 
     static SetDefaultStatementProducerParametersKey key(ISetDefaultStatementProducerParameters parameters)
