@@ -4,6 +4,7 @@ import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSche
 import com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaContext;
 import com.github.starnowski.posmulten.postgresql.core.context.exceptions.SharedSchemaContextBuilderException;
 import com.github.starnowski.posmulten.postgresql.core.functional.tests.DefaultTestNGTest;
+import com.github.starnowski.posmulten.postgresql.core.functional.tests.pojos.Group;
 import com.github.starnowski.posmulten.postgresql.core.functional.tests.pojos.Notification;
 import com.github.starnowski.posmulten.postgresql.core.functional.tests.pojos.Post;
 import com.github.starnowski.posmulten.postgresql.core.functional.tests.pojos.User;
@@ -75,6 +76,15 @@ public abstract class AbstractCreateTenantIdentifierValidConstraintForRLSTablesT
         return new Object[][]{
                 {new Notification("40e6215d-b5c6-4896-987c-f30f3678f608", "Notification content", "Test", 1L, FIRST_VALID_TENANT_IDENTIFIER)},
                 {new Notification("3f333df6-90a4-4fda-8dd3-9485d27cee36", "Notification content", "Test", 2L, SECOND_VALID_TENANT_IDENTIFIER)}
+        };
+    }
+
+    @DataProvider(name = "groupsData")
+    protected static Object[][] groupsData()
+    {
+        return new Object[][]{
+                {new Group("40e6215d-b5c6-4896-987c-f30f3678f608", "admin_tenant_1", FIRST_VALID_TENANT_IDENTIFIER)},
+                {new Group("3f333df6-90a4-4fda-8dd3-9485d27cee36", "admin_tenant_2", SECOND_VALID_TENANT_IDENTIFIER)}
         };
     }
 
