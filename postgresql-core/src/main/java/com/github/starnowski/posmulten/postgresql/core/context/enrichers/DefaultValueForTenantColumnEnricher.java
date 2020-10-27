@@ -33,7 +33,7 @@ public class DefaultValueForTenantColumnEnricher implements ISharedSchemaContext
             tableColumnPairs = request.getTableColumnsList().entrySet().stream().filter(entry -> !request.getTablesThatAddingOfTenantColumnDefaultValueShouldBeSkipped().contains(entry.getKey())).map(entry -> new Pair<>(entry.getKey(), entry.getValue().getTenantColumnName())).collect(toList());
         } else if (!request.getCreateTenantColumnTableLists().isEmpty()) {
             //TODO Throw exception
-            tableColumnPairs = request.getTableColumnsList().entrySet().stream().filter(entry -> request.getCreateTenantColumnTableLists().contains(entry.getKey())).map(entry -> new Pair<>(entry.getKey(), entry.getValue().getTenantColumnName())).collect(toList());
+            tableColumnPairs = request.getTableColumnsList().entrySet().stream().filter(entry -> request.getCreateTenantColumnTableLists().contains(entry.getKey())).filter(entry -> !request.getTablesThatAddingOfTenantColumnDefaultValueShouldBeSkipped().contains(entry.getKey())).map(entry -> new Pair<>(entry.getKey(), entry.getValue().getTenantColumnName())).collect(toList());
         }
         //TODO Add excluded tables
         //TODO Throw exception for excluded tables
