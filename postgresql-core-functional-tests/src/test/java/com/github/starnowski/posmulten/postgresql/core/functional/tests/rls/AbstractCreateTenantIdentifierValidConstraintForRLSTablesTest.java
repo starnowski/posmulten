@@ -93,6 +93,10 @@ public abstract class AbstractCreateTenantIdentifierValidConstraintForRLSTablesT
         return (getSchema() == null ? "" : getSchema() + ".") + USERS_TABLE_NAME;
     }
 
+    protected String getPostsTableReference()
+    {
+        return (getSchema() == null ? "" : getSchema() + ".") + POSTS_TABLE_NAME;
+    }
 
     @Test(testName = "create SQL definitions", description = "Create SQL function that creates statements that set current tenant value, retrieve current tenant value and create the row level security policy for a table that is multi-tenant aware and also creates column for tenant id")
     public void createSQLDefinitions() throws SharedSchemaContextBuilderException {
@@ -142,8 +146,9 @@ public abstract class AbstractCreateTenantIdentifierValidConstraintForRLSTablesT
         assertTrue(isAnyRecordExists(jdbcTemplate, createSelectStatementForConstraintName(getSchema(), USERS_TABLE_NAME, DEFAULT_CONSTRAINT_NAME)), "Constraint for users table should exists");
     }
 
+    //TODO Description
     @Test(dataProvider = "userData", dependsOnMethods = {"constraintNameShouldExistAfterCreation"}, testName = "try to insert data into the users table assigned to invalid tenant", description = "test case assumes that row level security for users table is not going to allow to insert data into the users table assigned to invalid tenant")
-    public void tryToInsertDataIntoUserTableAsDifferentTenant(User user)
+    public void tryToInsertDataIntoUserTableWithInvalidTenant(User user)
     {
         assertThat(countRowsInTableWhere(getUsersTableReference(), "id = " + user.getId())).isEqualTo(0);
         assertThatThrownBy(() ->
@@ -155,7 +160,8 @@ public abstract class AbstractCreateTenantIdentifierValidConstraintForRLSTablesT
         assertThat(countRowsInTableWhere(getUsersTableReference(), "id = " + user.getId())).isEqualTo(0);
     }
 
-    @Test(dataProvider = "userData", dependsOnMethods = {"tryToInsertDataIntoUserTableAsDifferentTenant"}, testName = "insert data into the users table assigned to valid tenant", description = "test case assumes that row level security for users table is going to allow to insert data into the users table assigned to valid tenant")
+    //TODO Description
+    @Test(dataProvider = "userData", dependsOnMethods = {"tryToInsertDataIntoUserTableWithInvalidTenant"}, testName = "insert data into the users table assigned to valid tenant", description = "test case assumes that row level security for users table is going to allow to insert data into the users table assigned to valid tenant")
     public void insertDataIntoUserTableAsCurrentTenant(User user)
     {
         assertThat(countRowsInTableWhere(getUsersTableReference(), "id = " + user.getId())).isEqualTo(0);
@@ -163,14 +169,38 @@ public abstract class AbstractCreateTenantIdentifierValidConstraintForRLSTablesT
         assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %4$s WHERE id = %1$d AND name = '%2$s' AND tenant_id = '%3$s'", user.getId(), user.getName(), user.getTenantId(), getUsersTableReference())), "The tests user should exists");
     }
 
-    //TODO add posts (custom constraint name)
+    //TODO Description
+    @Test(dataProvider = "postData", dependsOnMethods = {"insertDataIntoUserTableAsCurrentTenant"}, testName = "try to insert data into the post table related to primary tests tenant as different tenant", description = "test case assumes that constraint is not going to allow to insert data into the post table related to the primary tenant when a current tenant is different")
+    public void tryToInsertPostTableWithInvalidTenant(Post post)
+    {
+        assertThat(countRowsInTableWhere(getPostsTableReference(), "id = " + post.getUserId())).isEqualTo(0);
+        assertThatThrownBy(() ->
+                ownerJdbcTemplate.execute(format("%1$s INSERT INTO %5$s (id, user_id, text) VALUES (%2$d, %3$d, '%4$s');", setCurrentTenantIdFunctionInvocationFactory.generateStatementThatSetTenant(FIRST_INVALID_TENANT_IDENTIFIER), post.getId(), post.getUserId(), post.getText(), getPostsTableReference()))
+        )
+                .isInstanceOf(DataIntegrityViolationException.class);
+        assertThatThrownBy(() ->
+                jdbcTemplate.execute(format("INSERT INTO %5$s (id, user_id, text, tenant_id) VALUES (%1$d, %2$d, '%3$s', '%4$s');", post.getId(), post.getUserId(), post.getText(), SECOND_INVALID_TENANT_IDENTIFIER, getPostsTableReference()))
+        )
+                .isInstanceOf(DataIntegrityViolationException.class);
+        assertThat(countRowsInTableWhere(getPostsTableReference(), "id = " + post.getUserId())).isEqualTo(0);
+    }
+
+    //TODO Description
+    @Test(dataProvider = "postData", dependsOnMethods = {"tryToInsertPostTableWithInvalidTenant"}, testName = "insert data into the post table related to primary tests tenant as the primary tenant")
+    public void insertPostForUserFromSameTenant(Post post)
+    {
+        assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %3$s WHERE id = %1$d AND tenant_id = '%2$s'", post.getUserId(), post.getTenantId(), getUsersTableReference())), "The tests user should exists");
+        assertThat(countRowsInTableWhere(getPostsTableReference(), "id = " + post.getUserId())).isEqualTo(0);
+        jdbcTemplate.execute(format("%1$s INSERT INTO %6$s (id, user_id, text, tenant_id) VALUES (%2$d, %3$d, '%4$s', '%5$s');", setCurrentTenantIdFunctionInvocationFactory.generateStatementThatSetTenant(post.getTenantId()), post.getId(), post.getUserId(), post.getText(), post.getTenantId(), getPostsTableReference()));
+        assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %4$s WHERE id = %1$d AND text = '%2$s' AND tenant_id = '%3$s'", post.getId(), post.getText(), post.getTenantId(), getPostsTableReference())), "The tests post should exists");
+    }
     //TODO add notifications (new created tenant column)
     //TODO add groups - exclude default value for tenant column
     //TODO try to add group with null tenant
     //TODO add group with non-null tenant
 
     @Override
-    @Test(dependsOnMethods = { "insertDataIntoUserTableAsCurrentTenant" }, alwaysRun = true)
+    @Test(dependsOnMethods = { "insertDataIntoUserTableAsCurrentTenant", "insertPostForUserFromSameTenant"}, alwaysRun = true)
     public void dropAllSQLDefinitions() {
         super.dropAllSQLDefinitions();
     }
