@@ -13,6 +13,7 @@ import org.postgresql.util.PSQLException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
@@ -96,6 +97,11 @@ public abstract class AbstractCreateTenantIdentifierValidConstraintForRLSTablesT
     protected String getPostsTableReference()
     {
         return (getSchema() == null ? "" : getSchema() + ".") + POSTS_TABLE_NAME;
+    }
+
+    protected String getNotificationsTableReference()
+    {
+        return (getSchema() == null ? "" : getSchema() + ".") + "notifications";
     }
 
     @Test(testName = "create SQL definitions", description = "Create SQL function that creates statements that set current tenant value, retrieve current tenant value and create the row level security policy for a table that is multi-tenant aware and also creates column for tenant id")
@@ -195,12 +201,32 @@ public abstract class AbstractCreateTenantIdentifierValidConstraintForRLSTablesT
         assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %4$s WHERE id = %1$d AND text = '%2$s' AND tenant_id = '%3$s'", post.getId(), post.getText(), post.getTenantId(), getPostsTableReference())), "The tests post should exists");
     }
     //TODO add notifications (new created tenant column)
+    //TODO Description
+    @Test(dataProvider = "notificationData", dependsOnMethods = {"insertPostForUserFromSameTenant"}, testName = "try to insert data into the notifications table assigned to the different tenant than currently set", description = "test case assumes that row level security for notifications table is not going to allow to insert data into the notifications table assigned to the different tenant than currently set")
+    public void tryToInsertDataIntoNotificationTableAsDifferentTenant(Notification notification, String differentTenant)
+    {
+        assertThat(countRowsInTableWhere(getNotificationsTableReference(), "uuid = '" + notification.getUuid() + "'")).isEqualTo(0);
+        assertThatThrownBy(() ->
+                ownerJdbcTemplate.execute(format("%7$s INSERT INTO %6$s (uuid, title, content, user_id, tenant) VALUES ('%1$s', '%2$s', '%3$s', %4$d, '%5$s');", notification.getUuid(), notification.getTitle(), notification.getContent(), notification.getUserId(), notification.getTenantId(), getNotificationsTableReference(), setCurrentTenantIdFunctionInvocationFactory.generateStatementThatSetTenant(differentTenant)))
+        ).isInstanceOf(BadSqlGrammarException.class).getRootCause().isInstanceOf(PSQLException.class);
+        assertThat(countRowsInTableWhere(getNotificationsTableReference(), "uuid = '" + notification.getUuid() + "'")).isEqualTo(0);
+    }
+
+    //TODO Description
+    @Test(dataProvider = "notificationData", dependsOnMethods = {"tryToInsertDataIntoNotificationTableAsDifferentTenant"}, testName = "insert data into the notifications table assigned to the currently set", description = "test case assumes that row level security for notifications table is going to allow to insert data into the notifications table assigned to the current tenant")
+    public void insertDataIntoNotificationTableAsDifferentTenant(Object[] parameters)
+    {
+        Notification notification = (Notification) parameters[0];
+        assertThat(countRowsInTableWhere(getNotificationsTableReference(), "uuid = '" + notification.getUuid() + "'")).isEqualTo(0);
+        ownerJdbcTemplate.execute(format("%7$s INSERT INTO %6$s (uuid, title, content, user_id, tenant) VALUES ('%1$s', '%2$s', '%3$s', %4$d, '%5$s');", notification.getUuid(), notification.getTitle(), notification.getContent(), notification.getUserId(), notification.getTenantId(), getNotificationsTableReference(), setCurrentTenantIdFunctionInvocationFactory.generateStatementThatSetTenant(notification.getTenantId())));
+        assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %4$s WHERE uuid = '%1$s' AND title = '%2$s' AND tenant = '%3$s'", notification.getUuid(), notification.getTitle(), notification.getTenantId(), getNotificationsTableReference())), "The tests notification should exists");
+    }
     //TODO add groups - exclude default value for tenant column
     //TODO try to add group with null tenant
     //TODO add group with non-null tenant
 
     @Override
-    @Test(dependsOnMethods = { "insertDataIntoUserTableAsCurrentTenant", "insertPostForUserFromSameTenant"}, alwaysRun = true)
+    @Test(dependsOnMethods = { "insertDataIntoUserTableAsCurrentTenant", "insertPostForUserFromSameTenant", "insertDataIntoNotificationTableAsDifferentTenant"}, alwaysRun = true)
     public void dropAllSQLDefinitions() {
         super.dropAllSQLDefinitions();
     }
