@@ -120,12 +120,14 @@ public abstract class AbstractCreateTenantIdentifierValidConstraintForRLSTablesT
                 .createRLSPolicyForTable(NOTIFICATIONS_TABLE_NAME, prepareIdColumnTypeForSingleColumnKey("uuid", "uuid"), CUSTOM_TENANT_COLUMN_NAME, "notifications_table_rls_policy")
                 .createRLSPolicyForTable(USERS_TABLE_NAME, prepareIdColumnTypeForSingleColumnKey("id", "bigint"), "tenant_id", "users_table_rls_policy")
                 .createRLSPolicyForTable(POSTS_TABLE_NAME, prepareIdColumnTypeForSingleColumnKey("id", "bigint"), "tenant_id", "posts_table_rls_policy")
+                .createRLSPolicyForTable(GROUPS_TABLE_NAME, prepareIdColumnTypeForSingleColumnKey("uuid", "uuid"), "tenant_id", "groups_table_rls_policy")
                 .createSameTenantConstraintForForeignKey(POSTS_TABLE_NAME, USERS_TABLE_NAME, mapBuilder().put("user_id", "id").build(), "post_users_tenant_fk")
                 .createSameTenantConstraintForForeignKey(NOTIFICATIONS_TABLE_NAME, USERS_TABLE_NAME, mapBuilder().put("user_id", "id").build(), "notification_users_tenant_fk")
                 .setNameForFunctionThatChecksIfRecordExistsInTable(USERS_TABLE_NAME, "is_user_belongs_to_current_tenant")
                 .createValidTenantValueConstraint(asList(FIRST_INVALID_TENANT_IDENTIFIER, SECOND_INVALID_TENANT_IDENTIFIER), "is_tenant_id_valid", DEFAULT_CONSTRAINT_NAME)
                 .registerCustomValidTenantValueConstraintNameForTable(POSTS_TABLE_NAME, POSTS_TABLE_CONSTRAINT_NAME)
                 .setCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables(true)
+                .skipAddingOfTenantColumnDefaultValueForTable(GROUPS_TABLE_NAME)
                 .build();
 
         sqlDefinitions.addAll(result.getSqlDefinitions());
@@ -190,10 +192,6 @@ public abstract class AbstractCreateTenantIdentifierValidConstraintForRLSTablesT
                 ownerJdbcTemplate.execute(format("%1$s INSERT INTO %5$s (id, user_id, text) VALUES (%2$d, %3$d, '%4$s');", setCurrentTenantIdFunctionInvocationFactory.generateStatementThatSetTenant(FIRST_INVALID_TENANT_IDENTIFIER), post.getId(), post.getUserId(), post.getText(), getPostsTableReference()))
         )
                 .isInstanceOf(DataIntegrityViolationException.class);
-        assertThatThrownBy(() ->
-                jdbcTemplate.execute(format("INSERT INTO %5$s (id, user_id, text, tenant_id) VALUES (%1$d, %2$d, '%3$s', '%4$s');", post.getId(), post.getUserId(), post.getText(), SECOND_INVALID_TENANT_IDENTIFIER, getPostsTableReference()))
-        )
-                .isInstanceOf(DataIntegrityViolationException.class);
         assertThat(countRowsInTableWhere(getPostsTableReference(), "id = " + post.getUserId())).isEqualTo(0);
     }
 
@@ -209,41 +207,39 @@ public abstract class AbstractCreateTenantIdentifierValidConstraintForRLSTablesT
     //TODO add notifications (new created tenant column)
     //TODO Description
     @Test(dataProvider = "notificationData", dependsOnMethods = {"insertPostForUserFromSameTenant"}, testName = "try to insert data into the notifications table assigned to the different tenant than currently set", description = "test case assumes that row level security for notifications table is not going to allow to insert data into the notifications table assigned to the different tenant than currently set")
-    public void tryToInsertDataIntoNotificationTableAsDifferentTenant(Notification notification, String differentTenant)
+    public void tryToInsertDataIntoNotificationTableAsDifferentTenant(Notification notification)
     {
         assertThat(countRowsInTableWhere(getNotificationsTableReference(), "uuid = '" + notification.getUuid() + "'")).isEqualTo(0);
         assertThatThrownBy(() ->
-                ownerJdbcTemplate.execute(format("%7$s INSERT INTO %6$s (uuid, title, content, user_id, tenant) VALUES ('%1$s', '%2$s', '%3$s', %4$d, '%5$s');", notification.getUuid(), notification.getTitle(), notification.getContent(), notification.getUserId(), notification.getTenantId(), getNotificationsTableReference(), setCurrentTenantIdFunctionInvocationFactory.generateStatementThatSetTenant(differentTenant)))
+                ownerJdbcTemplate.execute(format("%7$s INSERT INTO %6$s (uuid, title, content, user_id, tenant) VALUES ('%1$s', '%2$s', '%3$s', %4$d, '%5$s');", notification.getUuid(), notification.getTitle(), notification.getContent(), notification.getUserId(), notification.getTenantId(), getNotificationsTableReference(), setCurrentTenantIdFunctionInvocationFactory.generateStatementThatSetTenant(FIRST_INVALID_TENANT_IDENTIFIER)))
         ).isInstanceOf(BadSqlGrammarException.class).getRootCause().isInstanceOf(PSQLException.class);
         assertThat(countRowsInTableWhere(getNotificationsTableReference(), "uuid = '" + notification.getUuid() + "'")).isEqualTo(0);
     }
 
     //TODO Description
     @Test(dataProvider = "notificationData", dependsOnMethods = {"tryToInsertDataIntoNotificationTableAsDifferentTenant"}, testName = "insert data into the notifications table assigned to the currently set", description = "test case assumes that row level security for notifications table is going to allow to insert data into the notifications table assigned to the current tenant")
-    public void insertDataIntoNotificationTableAsDifferentTenant(Object[] parameters)
+    public void insertDataIntoNotificationTableAsDifferentTenant(Notification notification)
     {
-        Notification notification = (Notification) parameters[0];
         assertThat(countRowsInTableWhere(getNotificationsTableReference(), "uuid = '" + notification.getUuid() + "'")).isEqualTo(0);
         ownerJdbcTemplate.execute(format("%7$s INSERT INTO %6$s (uuid, title, content, user_id, tenant) VALUES ('%1$s', '%2$s', '%3$s', %4$d, '%5$s');", notification.getUuid(), notification.getTitle(), notification.getContent(), notification.getUserId(), notification.getTenantId(), getNotificationsTableReference(), setCurrentTenantIdFunctionInvocationFactory.generateStatementThatSetTenant(notification.getTenantId())));
         assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %4$s WHERE uuid = '%1$s' AND title = '%2$s' AND tenant = '%3$s'", notification.getUuid(), notification.getTitle(), notification.getTenantId(), getNotificationsTableReference())), "The tests notification should exists");
     }
     //TODO add groups - exclude default value for tenant column
-    //TODO try to add group with null tenant
     //TODO add group with non-null tenant
+    //TODO try to add group with null tenant
     @Test(dataProvider = "groupsData", dependsOnMethods = {"insertDataIntoNotificationTableAsDifferentTenant"}, testName = "try to insert data into the groups table assigned to the different tenant than currently set", description = "test case assumes that row level security for groups table is not going to allow to insert data into the groups table assigned to the different tenant than currently set")
-    public void tryToInsertDataIntoGroupTableAsDifferentTenant(Group group, String differentTenant)
+    public void tryToInsertDataIntoGroupTableAsDifferentTenant(Group group)
     {
         AssertionsForClassTypes.assertThat(countRowsInTableWhere(getGroupsTableReference(), "uuid = '" + group.getUuid() + "'")).isEqualTo(0);
         assertThatThrownBy(() ->
-                ownerJdbcTemplate.execute(format("%1$s INSERT INTO %2$s (uuid, name, tenant_id) VALUES ('%3$s', '%4$s', '%5$s');", setCurrentTenantIdFunctionInvocationFactory.generateStatementThatSetTenant(differentTenant), getGroupsTableReference(), group.getUuid(), group.getName(), group.getTenantId()))
+                ownerJdbcTemplate.execute(format("%1$s INSERT INTO %2$s (uuid, name, tenant_id) VALUES ('%3$s', '%4$s', '%5$s');", setCurrentTenantIdFunctionInvocationFactory.generateStatementThatSetTenant(SECOND_INVALID_TENANT_IDENTIFIER), getGroupsTableReference(), group.getUuid(), group.getName(), group.getTenantId()))
         ).isInstanceOf(BadSqlGrammarException.class).getRootCause().isInstanceOf(PSQLException.class);
         AssertionsForClassTypes.assertThat(countRowsInTableWhere(getGroupsTableReference(), "uuid = '" + group.getUuid() + "'")).isEqualTo(0);
     }
 
     @Test(dataProvider = "groupsData", dependsOnMethods = {"tryToInsertDataIntoGroupTableAsDifferentTenant"}, testName = "insert data into the groups table assigned to the currently set", description = "test case assumes that row level security for groups table is going to allow to insert data into the groups table assigned to the currently set")
-    public void insertDataIntoGroupTableAsCurrentTenant(Object[] parameters)
+    public void insertDataIntoGroupTableAsCurrentTenant(Group group)
     {
-        Group group = (Group) parameters[0];
         AssertionsForClassTypes.assertThat(countRowsInTableWhere(getGroupsTableReference(), "uuid = '" + group.getUuid() + "'")).isEqualTo(0);
         ownerJdbcTemplate.execute(format("%1$s INSERT INTO %2$s (uuid, name, tenant_id) VALUES ('%3$s', '%4$s', '%5$s');", setCurrentTenantIdFunctionInvocationFactory.generateStatementThatSetTenant(group.getTenantId()), getGroupsTableReference(), group.getUuid(), group.getName(), group.getTenantId()));
         AssertionsForClassTypes.assertThat(countRowsInTableWhere(getGroupsTableReference(), "uuid = '" + group.getUuid() + "'")).isEqualTo(1);
