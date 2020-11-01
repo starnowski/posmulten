@@ -9,6 +9,7 @@ import com.github.starnowski.posmulten.postgresql.core.functional.tests.pojos.No
 import com.github.starnowski.posmulten.postgresql.core.functional.tests.pojos.Post;
 import com.github.starnowski.posmulten.postgresql.core.functional.tests.pojos.User;
 import com.github.starnowski.posmulten.postgresql.core.rls.function.ISetCurrentTenantIdFunctionInvocationFactory;
+import org.assertj.core.api.AssertionsForClassTypes;
 import org.postgresql.util.PSQLException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -102,6 +103,11 @@ public abstract class AbstractCreateTenantIdentifierValidConstraintForRLSTablesT
     protected String getNotificationsTableReference()
     {
         return (getSchema() == null ? "" : getSchema() + ".") + "notifications";
+    }
+
+    protected String getGroupsTableReference()
+    {
+        return (getSchema() == null ? "" : getSchema() + ".") + "groups";
     }
 
     @Test(testName = "create SQL definitions", description = "Create SQL function that creates statements that set current tenant value, retrieve current tenant value and create the row level security policy for a table that is multi-tenant aware and also creates column for tenant id")
@@ -224,9 +230,27 @@ public abstract class AbstractCreateTenantIdentifierValidConstraintForRLSTablesT
     //TODO add groups - exclude default value for tenant column
     //TODO try to add group with null tenant
     //TODO add group with non-null tenant
+    @Test(dataProvider = "groupsData", dependsOnMethods = {"insertDataIntoNotificationTableAsDifferentTenant"}, testName = "try to insert data into the groups table assigned to the different tenant than currently set", description = "test case assumes that row level security for groups table is not going to allow to insert data into the groups table assigned to the different tenant than currently set")
+    public void tryToInsertDataIntoGroupTableAsDifferentTenant(Group group, String differentTenant)
+    {
+        AssertionsForClassTypes.assertThat(countRowsInTableWhere(getGroupsTableReference(), "uuid = '" + group.getUuid() + "'")).isEqualTo(0);
+        assertThatThrownBy(() ->
+                ownerJdbcTemplate.execute(format("%1$s INSERT INTO %2$s (uuid, name, tenant_id) VALUES ('%3$s', '%4$s', '%5$s');", setCurrentTenantIdFunctionInvocationFactory.generateStatementThatSetTenant(differentTenant), getGroupsTableReference(), group.getUuid(), group.getName(), group.getTenantId()))
+        ).isInstanceOf(BadSqlGrammarException.class).getRootCause().isInstanceOf(PSQLException.class);
+        AssertionsForClassTypes.assertThat(countRowsInTableWhere(getGroupsTableReference(), "uuid = '" + group.getUuid() + "'")).isEqualTo(0);
+    }
+
+    @Test(dataProvider = "groupsData", dependsOnMethods = {"tryToInsertDataIntoGroupTableAsDifferentTenant"}, testName = "insert data into the groups table assigned to the currently set", description = "test case assumes that row level security for groups table is going to allow to insert data into the groups table assigned to the currently set")
+    public void insertDataIntoGroupTableAsCurrentTenant(Object[] parameters)
+    {
+        Group group = (Group) parameters[0];
+        AssertionsForClassTypes.assertThat(countRowsInTableWhere(getGroupsTableReference(), "uuid = '" + group.getUuid() + "'")).isEqualTo(0);
+        ownerJdbcTemplate.execute(format("%1$s INSERT INTO %2$s (uuid, name, tenant_id) VALUES ('%3$s', '%4$s', '%5$s');", setCurrentTenantIdFunctionInvocationFactory.generateStatementThatSetTenant(group.getTenantId()), getGroupsTableReference(), group.getUuid(), group.getName(), group.getTenantId()));
+        AssertionsForClassTypes.assertThat(countRowsInTableWhere(getGroupsTableReference(), "uuid = '" + group.getUuid() + "'")).isEqualTo(1);
+    }
 
     @Override
-    @Test(dependsOnMethods = { "insertDataIntoUserTableAsCurrentTenant", "insertPostForUserFromSameTenant", "insertDataIntoNotificationTableAsDifferentTenant"}, alwaysRun = true)
+    @Test(dependsOnMethods = { "insertDataIntoUserTableAsCurrentTenant", "insertPostForUserFromSameTenant", "insertDataIntoNotificationTableAsDifferentTenant", "insertDataIntoGroupTableAsCurrentTenant"}, alwaysRun = true)
     public void dropAllSQLDefinitions() {
         super.dropAllSQLDefinitions();
     }
