@@ -243,7 +243,7 @@ public abstract class AbstractCreateTenantIdentifierValidConstraintForRLSTablesT
     {
         AssertionsForClassTypes.assertThat(countRowsInTableWhere(getGroupsTableReference(), "uuid = '" + group.getUuid() + "'")).isEqualTo(0);
         assertThatThrownBy(() ->
-                ownerJdbcTemplate.execute(format("%1$s INSERT INTO %2$s (uuid, name) VALUES ('%3$s', '%4$s');", setCurrentTenantIdFunctionInvocationFactory.generateStatementThatSetTenant(group.getTenantId()), getGroupsTableReference(), group.getUuid(), group.getName(), group.getTenantId()))
+                ownerJdbcTemplate.execute(format("%1$s INSERT INTO %2$s (uuid, name) VALUES ('%3$s', '%4$s');", setCurrentTenantIdFunctionInvocationFactory.generateStatementThatSetTenant(group.getTenantId()), getGroupsTableReference(), group.getUuid(), group.getName()))
         ).isInstanceOf(BadSqlGrammarException.class).getRootCause().isInstanceOf(PSQLException.class);
         AssertionsForClassTypes.assertThat(countRowsInTableWhere(getGroupsTableReference(), "uuid = '" + group.getUuid() + "'")).isEqualTo(0);
     }
