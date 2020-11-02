@@ -219,7 +219,7 @@ public abstract class AbstractCreateTenantIdentifierValidConstraintForRLSTablesT
     }
 
     //TODO Description
-    @Test(dataProvider = "notificationData", dependsOnMethods = {"tryToInsertDataIntoNotificationTableAsDifferentTenant"}, testName = "insert data into the notifications table assigned to the currently set", description = "test case assumes that row level security for notifications table is going to allow to insert data into the notifications table assigned to the current tenant")
+    @Test(dataProvider = "notificationData", dependsOnMethods = {"tryToInsertDataIntoNotificationTableAsDifferentTenant"}, testName = "insert data into the notifications table assigned to valid tenant", description = "test case assumes that row level security for notifications table is going to allow to insert data into the notifications table assigned to valid tenant")
     public void insertDataIntoNotificationTableWithCorrectTenant(Notification notification)
     {
         assertThat(countRowsInTableWhere(getNotificationsTableReference(), "uuid = '" + notification.getUuid() + "'")).isEqualTo(0);
