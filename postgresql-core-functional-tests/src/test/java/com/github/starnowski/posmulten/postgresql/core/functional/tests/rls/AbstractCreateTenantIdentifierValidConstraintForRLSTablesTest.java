@@ -209,9 +209,8 @@ public abstract class AbstractCreateTenantIdentifierValidConstraintForRLSTablesT
         jdbcTemplate.execute(format("%1$s INSERT INTO %6$s (id, user_id, text, tenant_id) VALUES (%2$d, %3$d, '%4$s', '%5$s');", setCurrentTenantIdFunctionInvocationFactory.generateStatementThatSetTenant(post.getTenantId()), post.getId(), post.getUserId(), post.getText(), post.getTenantId(), getPostsTableReference()));
         assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %4$s WHERE id = %1$d AND text = '%2$s' AND tenant_id = '%3$s'", post.getId(), post.getText(), post.getTenantId(), getPostsTableReference())), "The tests post should exists");
     }
-    //TODO add notifications (new created tenant column)
-    //TODO Description
-    @Test(dataProvider = "notificationData", dependsOnMethods = {"insertPostForUserFromSameTenant"}, testName = "try to insert data into the notifications table assigned to the different tenant than currently set", description = "test case assumes that row level security for notifications table is not going to allow to insert data into the notifications table assigned to the different tenant than currently set")
+
+    @Test(dataProvider = "notificationData", dependsOnMethods = {"insertPostForUserFromSameTenant"}, testName = "try to insert data into the notifications table assigned to invalid tenant by default value statement", description = "test case assumes that constraint that check if tenant value is correct for notifications table is not going to allow to insert data into the notifications table  when tenant value comes from default value statement and current tenant has invalid value")
     public void tryToInsertDataIntoNotificationTableAsDifferentTenant(Notification notification)
     {
         assertThat(countRowsInTableWhere(getNotificationsTableReference(), "uuid = '" + notification.getUuid() + "'")).isEqualTo(0);
