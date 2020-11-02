@@ -180,7 +180,6 @@ public abstract class AbstractCreateTenantIdentifierValidConstraintForRLSTablesT
         assertThat(countRowsInTableWhere(getUsersTableReference(), "id = " + user.getId())).isEqualTo(0);
     }
 
-    //TODO Description
     @Test(dataProvider = "userData", dependsOnMethods = {"tryToInsertDataIntoUserTableWithInvalidTenantBySpecifiedValueInInsertStatement"}, testName = "insert data into the users table assigned to valid tenant", description = "test case assumes that row level security for users table is going to allow to insert data into the users table assigned to valid tenant")
     public void insertDataIntoUserTableWithCorrectTenantValue(User user)
     {
@@ -200,8 +199,7 @@ public abstract class AbstractCreateTenantIdentifierValidConstraintForRLSTablesT
         assertThat(countRowsInTableWhere(getPostsTableReference(), "id = " + post.getUserId())).isEqualTo(0);
     }
 
-    //TODO Description
-    @Test(dataProvider = "postData", dependsOnMethods = {"tryToInsertPostTableWithInvalidTenant"}, testName = "insert data into the post table related to primary tests tenant as the primary tenant")
+    @Test(dataProvider = "postData", dependsOnMethods = {"tryToInsertPostTableWithInvalidTenant"}, testName = "insert data into the posts table assigned to valid tenant", description = "test case assumes that row level security for posts table is going to allow to insert data into the posts table assigned to valid tenant")
     public void insertPostTableWithCorrectTenant(Post post)
     {
         assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %3$s WHERE id = %1$d AND tenant_id = '%2$s'", post.getUserId(), post.getTenantId(), getUsersTableReference())), "The tests user should exists");
