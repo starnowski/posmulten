@@ -160,9 +160,8 @@ public abstract class AbstractCreateTenantIdentifierValidConstraintForRLSTablesT
         assertTrue(isAnyRecordExists(jdbcTemplate, createSelectStatementForConstraintName(getSchema(), USERS_TABLE_NAME, DEFAULT_CONSTRAINT_NAME)), "Constraint for users table should exists");
     }
 
-    //TODO Description
-    @Test(dataProvider = "userData", dependsOnMethods = {"constraintNameShouldExistAfterCreation"}, testName = "try to insert data into the users table assigned to invalid tenant", description = "test case assumes that row level security for users table is not going to allow to insert data into the users table assigned to invalid tenant")
-    public void tryToInsertDataIntoUserTableWithInvalidTenant(User user)
+    @Test(dataProvider = "userData", dependsOnMethods = {"constraintNameShouldExistAfterCreation"}, testName = "try to insert data into the users table assigned to invalid tenant by default value statement", description = "test case assumes that constraint that check if tenant value is correct for users table is not going to allow to insert data into the users table  when tenant value comes from default value statement and current tenant has invalid value")
+    public void tryToInsertDataIntoUserTableWithInvalidTenantByDefaultValueStatement(User user)
     {
         assertThat(countRowsInTableWhere(getUsersTableReference(), "id = " + user.getId())).isEqualTo(0);
         assertThatThrownBy(() ->
