@@ -237,7 +237,19 @@ public abstract class AbstractCreateTenantIdentifierValidConstraintForRLSTablesT
         AssertionsForClassTypes.assertThat(countRowsInTableWhere(getGroupsTableReference(), "uuid = '" + group.getUuid() + "'")).isEqualTo(0);
     }
 
-    @Test(dataProvider = "groupsData", dependsOnMethods = {"tryToInsertDataIntoGroupTableAsDifferentTenant"}, testName = "insert data into the groups table assigned to the currently set", description = "test case assumes that row level security for groups table is going to allow to insert data into the groups table assigned to the currently set")
+    //TODO Description
+    @Test(dataProvider = "groupsData", dependsOnMethods = {"insertDataIntoNotificationTableAsDifferentTenant"}, testName = "try to insert data into the groups table assigned to the different tenant than currently set", description = "test case assumes that row level security for groups table is not going to allow to insert data into the groups table assigned to the different tenant than currently set")
+    public void tryToInsertDataIntoGroupTableWithValidTenantButWithoutTenantColumnDefaultValue(Group group)
+    {
+        AssertionsForClassTypes.assertThat(countRowsInTableWhere(getGroupsTableReference(), "uuid = '" + group.getUuid() + "'")).isEqualTo(0);
+        assertThatThrownBy(() ->
+                ownerJdbcTemplate.execute(format("%1$s INSERT INTO %2$s (uuid, name) VALUES ('%3$s', '%4$s');", setCurrentTenantIdFunctionInvocationFactory.generateStatementThatSetTenant(group.getTenantId()), getGroupsTableReference(), group.getUuid(), group.getName(), group.getTenantId()))
+        ).isInstanceOf(BadSqlGrammarException.class).getRootCause().isInstanceOf(PSQLException.class);
+        AssertionsForClassTypes.assertThat(countRowsInTableWhere(getGroupsTableReference(), "uuid = '" + group.getUuid() + "'")).isEqualTo(0);
+    }
+
+    //TODO Description
+    @Test(dataProvider = "groupsData", dependsOnMethods = {"tryToInsertDataIntoGroupTableWithValidTenantButWithoutTenantColumnDefaultValue"}, testName = "insert data into the groups table assigned to the currently set", description = "test case assumes that row level security for groups table is going to allow to insert data into the groups table assigned to the currently set")
     public void insertDataIntoGroupTableAsCurrentTenant(Group group)
     {
         AssertionsForClassTypes.assertThat(countRowsInTableWhere(getGroupsTableReference(), "uuid = '" + group.getUuid() + "'")).isEqualTo(0);
