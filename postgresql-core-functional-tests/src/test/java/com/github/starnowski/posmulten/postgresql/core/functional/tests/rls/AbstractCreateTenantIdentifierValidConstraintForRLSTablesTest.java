@@ -182,14 +182,14 @@ public abstract class AbstractCreateTenantIdentifierValidConstraintForRLSTablesT
 
     //TODO Description
     @Test(dataProvider = "userData", dependsOnMethods = {"tryToInsertDataIntoUserTableWithInvalidTenantBySpecifiedValueInInsertStatement"}, testName = "insert data into the users table assigned to valid tenant", description = "test case assumes that row level security for users table is going to allow to insert data into the users table assigned to valid tenant")
-    public void insertDataIntoUserTableAsCurrentTenant(User user)
+    public void insertDataIntoUserTableWithCorrectTenantValue(User user)
     {
         assertThat(countRowsInTableWhere(getUsersTableReference(), "id = " + user.getId())).isEqualTo(0);
         ownerJdbcTemplate.execute(format("%5$s INSERT INTO %4$s (id, name, tenant_id) VALUES (%1$d, '%2$s', '%3$s');", user.getId(), user.getName(), user.getTenantId(), getUsersTableReference(), setCurrentTenantIdFunctionInvocationFactory.generateStatementThatSetTenant(user.getTenantId())));
         assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %4$s WHERE id = %1$d AND name = '%2$s' AND tenant_id = '%3$s'", user.getId(), user.getName(), user.getTenantId(), getUsersTableReference())), "The tests user should exists");
     }
 
-    @Test(dataProvider = "postData", dependsOnMethods = {"insertDataIntoUserTableAsCurrentTenant"}, testName = "try to insert data into the posts table assigned to invalid tenant by default value statement", description = "test case assumes that constraint that check if tenant value is correct for posts table is not going to allow to insert data into the posts table  when tenant value comes from default value statement and current tenant has invalid value")
+    @Test(dataProvider = "postData", dependsOnMethods = {"insertDataIntoUserTableWithCorrectTenantValue"}, testName = "try to insert data into the posts table assigned to invalid tenant by default value statement", description = "test case assumes that constraint that check if tenant value is correct for posts table is not going to allow to insert data into the posts table  when tenant value comes from default value statement and current tenant has invalid value")
     public void tryToInsertPostTableWithInvalidTenant(Post post)
     {
         assertThat(countRowsInTableWhere(getPostsTableReference(), "id = " + post.getUserId())).isEqualTo(0);
@@ -202,7 +202,7 @@ public abstract class AbstractCreateTenantIdentifierValidConstraintForRLSTablesT
 
     //TODO Description
     @Test(dataProvider = "postData", dependsOnMethods = {"tryToInsertPostTableWithInvalidTenant"}, testName = "insert data into the post table related to primary tests tenant as the primary tenant")
-    public void insertPostForUserFromSameTenant(Post post)
+    public void insertPostTableWithCorrectTenant(Post post)
     {
         assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %3$s WHERE id = %1$d AND tenant_id = '%2$s'", post.getUserId(), post.getTenantId(), getUsersTableReference())), "The tests user should exists");
         assertThat(countRowsInTableWhere(getPostsTableReference(), "id = " + post.getUserId())).isEqualTo(0);
@@ -210,7 +210,7 @@ public abstract class AbstractCreateTenantIdentifierValidConstraintForRLSTablesT
         assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %4$s WHERE id = %1$d AND text = '%2$s' AND tenant_id = '%3$s'", post.getId(), post.getText(), post.getTenantId(), getPostsTableReference())), "The tests post should exists");
     }
 
-    @Test(dataProvider = "notificationData", dependsOnMethods = {"insertPostForUserFromSameTenant"}, testName = "try to insert data into the notifications table assigned to invalid tenant by default value statement", description = "test case assumes that constraint that check if tenant value is correct for notifications table is not going to allow to insert data into the notifications table  when tenant value comes from default value statement and current tenant has invalid value")
+    @Test(dataProvider = "notificationData", dependsOnMethods = {"insertPostTableWithCorrectTenant"}, testName = "try to insert data into the notifications table assigned to invalid tenant by default value statement", description = "test case assumes that constraint that check if tenant value is correct for notifications table is not going to allow to insert data into the notifications table  when tenant value comes from default value statement and current tenant has invalid value")
     public void tryToInsertDataIntoNotificationTableAsDifferentTenant(Notification notification)
     {
         assertThat(countRowsInTableWhere(getNotificationsTableReference(), "uuid = '" + notification.getUuid() + "'")).isEqualTo(0);
@@ -262,7 +262,7 @@ public abstract class AbstractCreateTenantIdentifierValidConstraintForRLSTablesT
     }
 
     @Override
-    @Test(dependsOnMethods = { "insertDataIntoUserTableAsCurrentTenant", "insertPostForUserFromSameTenant", "insertDataIntoNotificationTableAsDifferentTenant", "insertDataIntoGroupTableAsCurrentTenant"}, alwaysRun = true)
+    @Test(dependsOnMethods = { "insertDataIntoUserTableWithCorrectTenantValue", "insertPostTableWithCorrectTenant", "insertDataIntoNotificationTableAsDifferentTenant", "insertDataIntoGroupTableAsCurrentTenant"}, alwaysRun = true)
     public void dropAllSQLDefinitions() {
         super.dropAllSQLDefinitions();
     }
