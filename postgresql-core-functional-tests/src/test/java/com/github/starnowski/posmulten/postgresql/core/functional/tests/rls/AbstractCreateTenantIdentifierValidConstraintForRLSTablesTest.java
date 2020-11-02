@@ -189,8 +189,7 @@ public abstract class AbstractCreateTenantIdentifierValidConstraintForRLSTablesT
         assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %4$s WHERE id = %1$d AND name = '%2$s' AND tenant_id = '%3$s'", user.getId(), user.getName(), user.getTenantId(), getUsersTableReference())), "The tests user should exists");
     }
 
-    //TODO Description
-    @Test(dataProvider = "postData", dependsOnMethods = {"insertDataIntoUserTableAsCurrentTenant"}, testName = "try to insert data into the post table related to primary tests tenant as different tenant", description = "test case assumes that constraint is not going to allow to insert data into the post table related to the primary tenant when a current tenant is different")
+    @Test(dataProvider = "postData", dependsOnMethods = {"insertDataIntoUserTableAsCurrentTenant"}, testName = "try to insert data into the posts table assigned to invalid tenant by default value statement", description = "test case assumes that constraint that check if tenant value is correct for posts table is not going to allow to insert data into the posts table  when tenant value comes from default value statement and current tenant has invalid value")
     public void tryToInsertPostTableWithInvalidTenant(Post post)
     {
         assertThat(countRowsInTableWhere(getPostsTableReference(), "id = " + post.getUserId())).isEqualTo(0);
