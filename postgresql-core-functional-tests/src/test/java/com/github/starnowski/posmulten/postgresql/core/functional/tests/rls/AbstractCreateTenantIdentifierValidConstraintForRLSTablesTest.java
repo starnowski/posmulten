@@ -231,7 +231,7 @@ public abstract class AbstractCreateTenantIdentifierValidConstraintForRLSTablesT
     //TODO add groups - exclude default value for tenant column
     //TODO add group with non-null tenant
     //TODO try to add group with null tenant
-    @Test(dataProvider = "groupsData", dependsOnMethods = {"insertDataIntoNotificationTableAsDifferentTenant"}, testName = "try to insert data into the groups table assigned to the different tenant than currently set", description = "test case assumes that row level security for groups table is not going to allow to insert data into the groups table assigned to the different tenant than currently set")
+    @Test(dataProvider = "groupsData", dependsOnMethods = {"insertDataIntoNotificationTableAsDifferentTenant"}, testName = "try to insert data into the groups table assigned to invalid tenant by default value statement", description = "test case assumes that constraint that check if tenant value is correct for groups table is not going to allow to insert data into the groups table  when tenant value comes from default value statement and current tenant has invalid value")
     public void tryToInsertDataIntoGroupTableAsDifferentTenant(Group group)
     {
         AssertionsForClassTypes.assertThat(countRowsInTableWhere(getGroupsTableReference(), "uuid = '" + group.getUuid() + "'")).isEqualTo(0);
