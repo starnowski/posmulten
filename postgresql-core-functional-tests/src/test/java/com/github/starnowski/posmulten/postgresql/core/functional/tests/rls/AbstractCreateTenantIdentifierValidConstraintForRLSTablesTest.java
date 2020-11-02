@@ -254,7 +254,7 @@ public abstract class AbstractCreateTenantIdentifierValidConstraintForRLSTablesT
 
     //TODO Description
     @Test(dataProvider = "groupsData", dependsOnMethods = {"tryToInsertDataIntoGroupTableWithValidTenantButWithoutTenantColumnDefaultValue"}, testName = "insert data into the groups table assigned to the currently set", description = "test case assumes that row level security for groups table is going to allow to insert data into the groups table assigned to the currently set")
-    public void insertDataIntoGroupTableAsCurrentTenant(Group group)
+    public void insertDataIntoGroupTableWithCorrectTenant(Group group)
     {
         AssertionsForClassTypes.assertThat(countRowsInTableWhere(getGroupsTableReference(), "uuid = '" + group.getUuid() + "'")).isEqualTo(0);
         ownerJdbcTemplate.execute(format("%1$s INSERT INTO %2$s (uuid, name, tenant_id) VALUES ('%3$s', '%4$s', '%5$s');", setCurrentTenantIdFunctionInvocationFactory.generateStatementThatSetTenant(group.getTenantId()), getGroupsTableReference(), group.getUuid(), group.getName(), group.getTenantId()));
@@ -262,7 +262,7 @@ public abstract class AbstractCreateTenantIdentifierValidConstraintForRLSTablesT
     }
 
     @Override
-    @Test(dependsOnMethods = { "insertDataIntoUserTableWithCorrectTenantValue", "insertPostTableWithCorrectTenant", "insertDataIntoNotificationTableWithCorrectTenant", "insertDataIntoGroupTableAsCurrentTenant"}, alwaysRun = true)
+    @Test(dependsOnMethods = { "insertDataIntoUserTableWithCorrectTenantValue", "insertPostTableWithCorrectTenant", "insertDataIntoNotificationTableWithCorrectTenant", "insertDataIntoGroupTableWithCorrectTenant"}, alwaysRun = true)
     public void dropAllSQLDefinitions() {
         super.dropAllSQLDefinitions();
     }
