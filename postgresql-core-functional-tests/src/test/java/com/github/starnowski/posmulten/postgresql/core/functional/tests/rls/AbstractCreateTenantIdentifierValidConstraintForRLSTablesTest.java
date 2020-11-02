@@ -168,6 +168,14 @@ public abstract class AbstractCreateTenantIdentifierValidConstraintForRLSTablesT
         assertThatThrownBy(() ->
                 ownerJdbcTemplate.execute(format("%4$s INSERT INTO %3$s (id, name) VALUES (%1$d, '%2$s');", user.getId(), user.getName(), getUsersTableReference(), setCurrentTenantIdFunctionInvocationFactory.generateStatementThatSetTenant(FIRST_INVALID_TENANT_IDENTIFIER)))
         ).isInstanceOf(DataIntegrityViolationException.class).getRootCause().isInstanceOf(PSQLException.class);
+        assertThat(countRowsInTableWhere(getUsersTableReference(), "id = " + user.getId())).isEqualTo(0);
+    }
+
+    //TODO Description
+    @Test(dataProvider = "userData", dependsOnMethods = {"constraintNameShouldExistAfterCreation"}, testName = "try to insert data into the users table assigned to invalid tenant", description = "test case assumes that row level security for users table is not going to allow to insert data into the users table assigned to invalid tenant")
+    public void tryToInsertDataIntoUserTableWithInvalidTenantBySpecifiedValueInInsertStatement(User user)
+    {
+        assertThat(countRowsInTableWhere(getUsersTableReference(), "id = " + user.getId())).isEqualTo(0);
         assertThatThrownBy(() ->
                 jdbcTemplate.execute(format("INSERT INTO %4$s (id, name, tenant_id) VALUES (%1$d, '%2$s', '%3$s');", user.getId(), user.getName(), SECOND_INVALID_TENANT_IDENTIFIER, getUsersTableReference()))
         ).isInstanceOf(DataIntegrityViolationException.class).getRootCause().isInstanceOf(PSQLException.class);
@@ -175,7 +183,7 @@ public abstract class AbstractCreateTenantIdentifierValidConstraintForRLSTablesT
     }
 
     //TODO Description
-    @Test(dataProvider = "userData", dependsOnMethods = {"tryToInsertDataIntoUserTableWithInvalidTenant"}, testName = "insert data into the users table assigned to valid tenant", description = "test case assumes that row level security for users table is going to allow to insert data into the users table assigned to valid tenant")
+    @Test(dataProvider = "userData", dependsOnMethods = {"tryToInsertDataIntoUserTableWithInvalidTenantBySpecifiedValueInInsertStatement"}, testName = "insert data into the users table assigned to valid tenant", description = "test case assumes that row level security for users table is going to allow to insert data into the users table assigned to valid tenant")
     public void insertDataIntoUserTableAsCurrentTenant(User user)
     {
         assertThat(countRowsInTableWhere(getUsersTableReference(), "id = " + user.getId())).isEqualTo(0);
