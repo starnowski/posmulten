@@ -246,8 +246,7 @@ public abstract class AbstractCreateTenantIdentifierValidConstraintForRLSTablesT
         AssertionsForClassTypes.assertThat(countRowsInTableWhere(getGroupsTableReference(), "uuid = '" + group.getUuid() + "'")).isEqualTo(0);
     }
 
-    //TODO Description
-    @Test(dataProvider = "groupsData", dependsOnMethods = {"tryToInsertDataIntoGroupTableWithValidTenantButWithoutTenantColumnDefaultValue"}, testName = "insert data into the groups table assigned to the currently set", description = "test case assumes that row level security for groups table is going to allow to insert data into the groups table assigned to the currently set")
+    @Test(dataProvider = "groupsData", dependsOnMethods = {"tryToInsertDataIntoGroupTableWithValidTenantButWithoutTenantColumnDefaultValue"}, testName = "insert data into the groups table assigned to valid tenant", description = "test case assumes that row level security for groups table is going to allow to insert data into the groups table assigned to valid tenant")
     public void insertDataIntoGroupTableWithCorrectTenant(Group group)
     {
         AssertionsForClassTypes.assertThat(countRowsInTableWhere(getGroupsTableReference(), "uuid = '" + group.getUuid() + "'")).isEqualTo(0);
