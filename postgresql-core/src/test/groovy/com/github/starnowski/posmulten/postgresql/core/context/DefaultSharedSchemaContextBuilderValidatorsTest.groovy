@@ -3,6 +3,7 @@ package com.github.starnowski.posmulten.postgresql.core.context
 
 import com.github.starnowski.posmulten.postgresql.core.context.enrichers.ISharedSchemaContextEnricher
 import com.github.starnowski.posmulten.postgresql.core.context.exceptions.SharedSchemaContextBuilderException
+import com.github.starnowski.posmulten.postgresql.core.context.validators.CreateTenantColumnTableMappingSharedSchemaContextRequestValidator
 import com.github.starnowski.posmulten.postgresql.core.context.validators.ForeignKeysMappingSharedSchemaContextRequestValidator
 import com.github.starnowski.posmulten.postgresql.core.context.validators.ISharedSchemaContextRequestValidator
 import spock.lang.Specification
@@ -97,7 +98,7 @@ class DefaultSharedSchemaContextBuilderValidatorsTest extends Specification {
     def "should have configured the list of validators with correct order"()
     {
         given:
-            def expectedValidatorsTypeInOrder = [ForeignKeysMappingSharedSchemaContextRequestValidator.class]
+            def expectedValidatorsTypeInOrder = [ForeignKeysMappingSharedSchemaContextRequestValidator.class, CreateTenantColumnTableMappingSharedSchemaContextRequestValidator.class]
             DefaultSharedSchemaContextBuilder builder = new DefaultSharedSchemaContextBuilder()
 
         when:
