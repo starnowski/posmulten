@@ -25,6 +25,7 @@ package com.github.starnowski.posmulten.postgresql.core.context;
 
 import com.github.starnowski.posmulten.postgresql.core.context.enrichers.*;
 import com.github.starnowski.posmulten.postgresql.core.context.exceptions.SharedSchemaContextBuilderException;
+import com.github.starnowski.posmulten.postgresql.core.context.validators.CreateTenantColumnTableMappingSharedSchemaContextRequestValidator;
 import com.github.starnowski.posmulten.postgresql.core.context.validators.ForeignKeysMappingSharedSchemaContextRequestValidator;
 import com.github.starnowski.posmulten.postgresql.core.context.validators.ISharedSchemaContextRequestValidator;
 
@@ -50,7 +51,7 @@ public class DefaultSharedSchemaContextBuilder {
     /**
      * Collection that stores objects of type {@link ISharedSchemaContextRequestValidator} used for validation of request object (type {@link SharedSchemaContextRequest}) in {@link #build()} method.
      */
-    private List<ISharedSchemaContextRequestValidator> validators = asList(new ForeignKeysMappingSharedSchemaContextRequestValidator());
+    private List<ISharedSchemaContextRequestValidator> validators = asList(new ForeignKeysMappingSharedSchemaContextRequestValidator(), new CreateTenantColumnTableMappingSharedSchemaContextRequestValidator());
 
     private final SharedSchemaContextRequest sharedSchemaContextRequest = new SharedSchemaContextRequest();
     /**
