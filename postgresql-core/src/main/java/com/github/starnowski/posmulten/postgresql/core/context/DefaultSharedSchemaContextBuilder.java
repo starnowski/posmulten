@@ -313,10 +313,11 @@ public class DefaultSharedSchemaContextBuilder {
     }
 
     /**
-     * TODO Comment
-     * @param tenantValuesBlacklist
-     * @param isTenantValidFunctionName
-     * @param isTenantValidConstraintName
+     * Register the request for creation of constraints that are going to check if tenant column has valid value in all
+     * tables that require rls policy.
+     * @param tenantValuesBlacklist list of invalid tenant identifiers
+     * @param isTenantValidFunctionName default name of function that check if tenant identifier is valid
+     * @param isTenantValidConstraintName default name of constraint that check if tenant identifier is valid
      * @return builder object for which method was invoked
      */
     public DefaultSharedSchemaContextBuilder createValidTenantValueConstraint(List<String> tenantValuesBlacklist, String isTenantValidFunctionName, String isTenantValidConstraintName) {
