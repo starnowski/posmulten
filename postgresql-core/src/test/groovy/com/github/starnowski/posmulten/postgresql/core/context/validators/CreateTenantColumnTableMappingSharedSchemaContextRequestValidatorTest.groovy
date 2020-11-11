@@ -12,7 +12,7 @@ class CreateTenantColumnTableMappingSharedSchemaContextRequestValidatorTest exte
     def tested = new CreateTenantColumnTableMappingSharedSchemaContextRequestValidator()
 
     @Unroll
-    def "should not throw any exception when all tables that required tenant column creation has reference in map for tables that required rls policy creation for tests parameters: #foreignKeysTable, #primaryKeysTable, #foreignKeysMapping, #primayKeyTypeDefinition"()
+    def "should not throw any exception when all tables that required tenant column creation has reference in map for tables that required rls policy creation for tests parameters: #foreignKeysTable, #primaryKeysTable, #primayKeyTypeDefinition"()
     {
         given:
             DefaultSharedSchemaContextBuilder builder = new DefaultSharedSchemaContextBuilder()
