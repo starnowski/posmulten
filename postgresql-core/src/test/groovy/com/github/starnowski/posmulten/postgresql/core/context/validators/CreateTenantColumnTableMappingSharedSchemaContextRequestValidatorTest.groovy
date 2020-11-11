@@ -4,6 +4,7 @@ import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSche
 import com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContextRequest
 import com.github.starnowski.posmulten.postgresql.core.context.TableKey
 import com.github.starnowski.posmulten.postgresql.core.context.exceptions.MissingRLSPolicyDeclarationForTableException
+import com.github.starnowski.posmulten.postgresql.core.context.exceptions.MissingRLSPolicyDeclarationForTableThatRequiredTenantColumnCreationException
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -50,7 +51,7 @@ class CreateTenantColumnTableMappingSharedSchemaContextRequestValidatorTest exte
             tested.validate(request)
 
         then:
-            def ex = thrown(MissingRLSPolicyDeclarationForTableException)
+            def ex = thrown(MissingRLSPolicyDeclarationForTableThatRequiredTenantColumnCreationException)
 
         and: "exception should have correct message"
             ex.message == expectedMessage
