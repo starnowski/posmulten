@@ -23,8 +23,6 @@
  */
 package com.github.starnowski.posmulten.postgresql.core.context;
 
-import com.github.starnowski.posmulten.postgresql.core.context.enrichers.IsTenantValidFunctionInvocationFactoryEnricher;
-
 import java.util.*;
 import java.util.List;
 
@@ -121,12 +119,13 @@ public class SharedSchemaContextRequest implements Cloneable{
 
     /**
      * A list that stores invalid tenant identifiers.
-     * @see IsTenantValidFunctionInvocationFactoryEnricher
+     * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.IsTenantValidFunctionInvocationFactoryEnricher
      * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.IsTenantIdentifierValidConstraintEnricher
      */
     private List<String> tenantValuesBlacklist;
     /**
-     * TODO
+     * The name of function that check is passed tenant identifier is valid.
+     * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.IsTenantValidFunctionInvocationFactoryEnricher
      */
     private String isTenantValidFunctionName;
     /**
