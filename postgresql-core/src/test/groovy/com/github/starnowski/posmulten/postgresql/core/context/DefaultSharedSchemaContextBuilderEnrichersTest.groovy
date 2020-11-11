@@ -2,7 +2,7 @@ package com.github.starnowski.posmulten.postgresql.core.context
 
 import com.github.starnowski.posmulten.postgresql.core.context.enrichers.DefaultValueForTenantColumnEnricher
 import com.github.starnowski.posmulten.postgresql.core.context.enrichers.GetCurrentTenantIdFunctionDefinitionEnricher
-import com.github.starnowski.posmulten.postgresql.core.context.enrichers.IIsTenantValidFunctionInvocationFactoryEnricher
+import com.github.starnowski.posmulten.postgresql.core.context.enrichers.IsTenantValidFunctionInvocationFactoryEnricher
 import com.github.starnowski.posmulten.postgresql.core.context.enrichers.ISharedSchemaContextEnricher
 import com.github.starnowski.posmulten.postgresql.core.context.enrichers.IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher
 import com.github.starnowski.posmulten.postgresql.core.context.enrichers.IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricher
@@ -52,7 +52,7 @@ class DefaultSharedSchemaContextBuilderEnrichersTest extends Specification {
         given:
             def expectedEnrichersTypeInOrder = [GetCurrentTenantIdFunctionDefinitionEnricher.class,
                                                 SetCurrentTenantIdFunctionDefinitionEnricher.class, TenantHasAuthoritiesFunctionDefinitionEnricher.class,
-                                                IIsTenantValidFunctionInvocationFactoryEnricher.class, TenantColumnSQLDefinitionsEnricher.class,
+                                                IsTenantValidFunctionInvocationFactoryEnricher.class, TenantColumnSQLDefinitionsEnricher.class,
                                                 TableRLSSettingsSQLDefinitionsEnricher.class, TableRLSPolicyEnricher.class,
                                                 IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricher.class, IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher.class,
                                                 IsTenantIdentifierValidConstraintEnricher.class, DefaultValueForTenantColumnEnricher.class]

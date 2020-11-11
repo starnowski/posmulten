@@ -9,15 +9,15 @@ import com.github.starnowski.posmulten.postgresql.core.rls.function.IsTenantVali
 
 import java.util.HashSet;
 
-public class IIsTenantValidFunctionInvocationFactoryEnricher implements ISharedSchemaContextEnricher {
+public class IsTenantValidFunctionInvocationFactoryEnricher implements ISharedSchemaContextEnricher {
 
     private final IsTenantValidBasedOnConstantValuesFunctionProducer isTenantIdentifierValidConstraintProducer;
 
-    public IIsTenantValidFunctionInvocationFactoryEnricher() {
+    public IsTenantValidFunctionInvocationFactoryEnricher() {
         this(new IsTenantValidBasedOnConstantValuesFunctionProducer());
     }
 
-    public IIsTenantValidFunctionInvocationFactoryEnricher(IsTenantValidBasedOnConstantValuesFunctionProducer isTenantIdentifierValidConstraintProducer) {
+    public IsTenantValidFunctionInvocationFactoryEnricher(IsTenantValidBasedOnConstantValuesFunctionProducer isTenantIdentifierValidConstraintProducer) {
         this.isTenantIdentifierValidConstraintProducer = isTenantIdentifierValidConstraintProducer;
     }
 

@@ -8,7 +8,7 @@ import com.github.starnowski.posmulten.postgresql.core.rls.function.IsTenantVali
 import spock.lang.Specification
 import spock.lang.Unroll
 
-class IIsTenantValidFunctionInvocationFactoryEnricherTest extends Specification {
+class IsTenantValidFunctionInvocationFactoryEnricherTest extends Specification {
 
     @Unroll
     def "should enrich shared schema context with SQL definition for the function that checks if tenant value is correct based on default values for shares schema context builder for schema #schema and black list values (#blacklist)"()
@@ -21,7 +21,7 @@ class IIsTenantValidFunctionInvocationFactoryEnricherTest extends Specification 
             IIsTenantValidBasedOnConstantValuesFunctionProducerParameters capturedParameters = null
             def mockedSQLDefinition = Mock(IsTenantValidBasedOnConstantValuesFunctionDefinition)
             def producer = Mock(IsTenantValidBasedOnConstantValuesFunctionProducer)
-            IIsTenantValidFunctionInvocationFactoryEnricher tested = new IIsTenantValidFunctionInvocationFactoryEnricher(producer)
+            IsTenantValidFunctionInvocationFactoryEnricher tested = new IsTenantValidFunctionInvocationFactoryEnricher(producer)
 
         when:
             def result = tested.enrich(context, sharedSchemaContextRequest)
@@ -62,7 +62,7 @@ class IIsTenantValidFunctionInvocationFactoryEnricherTest extends Specification 
             IIsTenantValidBasedOnConstantValuesFunctionProducerParameters capturedParameters = null
             def mockedSQLDefinition = Mock(IsTenantValidBasedOnConstantValuesFunctionDefinition)
             def producer = Mock(IsTenantValidBasedOnConstantValuesFunctionProducer)
-            IIsTenantValidFunctionInvocationFactoryEnricher tested = new IIsTenantValidFunctionInvocationFactoryEnricher(producer)
+            IsTenantValidFunctionInvocationFactoryEnricher tested = new IsTenantValidFunctionInvocationFactoryEnricher(producer)
 
         when:
             def result = tested.enrich(context, sharedSchemaContextRequest)
