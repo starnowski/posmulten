@@ -25,10 +25,7 @@ package com.github.starnowski.posmulten.postgresql.core.context;
 
 import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition;
 import com.github.starnowski.posmulten.postgresql.core.rls.TenantHasAuthoritiesFunctionInvocationFactory;
-import com.github.starnowski.posmulten.postgresql.core.rls.function.IGetCurrentTenantIdFunctionInvocationFactory;
-import com.github.starnowski.posmulten.postgresql.core.rls.function.ISetCurrentTenantIdFunctionInvocationFactory;
-import com.github.starnowski.posmulten.postgresql.core.rls.function.ISetCurrentTenantIdFunctionPreparedStatementInvocationFactory;
-import com.github.starnowski.posmulten.postgresql.core.rls.function.IsRecordBelongsToCurrentTenantFunctionInvocationFactory;
+import com.github.starnowski.posmulten.postgresql.core.rls.function.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,6 +40,7 @@ public class SharedSchemaContext implements ISharedSchemaContext {
     private TenantHasAuthoritiesFunctionInvocationFactory tenantHasAuthoritiesFunctionInvocationFactory;
     private List<SQLDefinition> sqlDefinitions = new ArrayList<>();
     private Map<TableKey, IsRecordBelongsToCurrentTenantFunctionInvocationFactory> tableKeysIsRecordBelongsToCurrentTenantFunctionInvocationFactoryMap = new HashMap();
+    private IIsTenantValidFunctionInvocationFactory iIsTenantValidFunctionInvocationFactory;
 
     @Override
     public List<SQLDefinition> getSqlDefinitions() {
@@ -95,5 +93,14 @@ public class SharedSchemaContext implements ISharedSchemaContext {
     @Override
     public Map<TableKey, IsRecordBelongsToCurrentTenantFunctionInvocationFactory> getTableKeysIsRecordBelongsToCurrentTenantFunctionInvocationFactoryMap() {
         return tableKeysIsRecordBelongsToCurrentTenantFunctionInvocationFactoryMap;
+    }
+
+    public IIsTenantValidFunctionInvocationFactory getIIsTenantValidFunctionInvocationFactory() {
+        return iIsTenantValidFunctionInvocationFactory;
+    }
+
+    @Override
+    public void setIIsTenantValidFunctionInvocationFactory(IIsTenantValidFunctionInvocationFactory factory) {
+        this.iIsTenantValidFunctionInvocationFactory = factory;
     }
 }

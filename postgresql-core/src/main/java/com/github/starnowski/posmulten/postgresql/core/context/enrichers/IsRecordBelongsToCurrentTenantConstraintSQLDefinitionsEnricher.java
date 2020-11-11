@@ -37,7 +37,15 @@ import static java.util.stream.Collectors.toList;
 
 public class IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher implements ISharedSchemaContextEnricher {
 
-    private IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer = new IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer();
+    private final IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer;
+
+    public IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher(IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer) {
+        this.isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer = isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer;
+    }
+
+    public IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher() {
+        this(new IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer());
+    }
 
     @Override
     public ISharedSchemaContext enrich(ISharedSchemaContext context, SharedSchemaContextRequest request) throws MissingConstraintNameDeclarationForTableException, MissingIsRecordBelongsToCurrentTenantFunctionInvocationFactoryException {
@@ -70,9 +78,5 @@ public class IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher impl
             isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer.produce(parameters).forEach(sqlDefinition -> context.addSQLDefinition(sqlDefinition));
         }
         return context;
-    }
-
-    void setIsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer(IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer) {
-        this.isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer = isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer;
     }
 }

@@ -11,6 +11,12 @@
             <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.constraint.CreateCurrentTenantCompositeForeignKeyConstraintForCommentsTableFromNonPublicSchemaTest" />
         </classes>
     </test>
+    <test name="Checking if function body is going to be updated even if function is defined as IMMUTABLE">
+        <classes>
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.constraint.IsTenantValidBasedOnConstantValuesFunctionDefinitionMutableInPublicSchemaTest" />
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.constraint.IsTenantValidBasedOnConstantValuesFunctionDefinitionMutableInNonPublicSchemaTest" />
+        </classes>
+    </test>
     <test name="Row Level Security Policy for single table">
         <classes>
             <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.rls.CreateRLSForSingleTableInPublicSchemaTest" />
@@ -28,10 +34,22 @@
             <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.rls.RLSWithSettingReferenceWithoutConstraintForCurrentTenantForeignKeyInPublicSchemaTest" />
         </classes>
     </test>
+    <test name="Setting constraint ">
+        <classes>
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.constraint.TenantIdentifierValidConstraintInPublicSchemaTest" />
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.constraint.TenantIdentifierValidConstraintInNonPublicSchemaTest" />
+        </classes>
+    </test>
     <test name="Setting Row Level Security Policy for single table that the tenant column was just added">
         <classes>
             <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.rls.CreateRLSForSingleTableForWhichTenantColumnWasJustAddedInNonPublicSchemaTest" />
             <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.rls.CreateRLSForSingleTableForWhichTenantColumnWasJustAddedInPublicSchemaTest" />
+        </classes>
+    </test>
+    <test name="Setting constraint for tenant column that checks if the tenant identifier has the correct value">
+        <classes>
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.rls.CreateTenantIdentifierValidConstraintForRLSTablesInNonPublicSchemaTest" />
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.rls.CreateTenantIdentifierValidConstraintForRLSTablesInPublicSchemaTest" />
         </classes>
     </test>
     <test name="Full tests with Shared Schema Builder 1">

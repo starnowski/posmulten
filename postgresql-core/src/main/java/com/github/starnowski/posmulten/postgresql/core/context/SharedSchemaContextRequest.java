@@ -23,10 +23,8 @@
  */
 package com.github.starnowski.posmulten.postgresql.core.context;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.List;
 
 public class SharedSchemaContextRequest implements Cloneable{
 
@@ -118,6 +116,50 @@ public class SharedSchemaContextRequest implements Cloneable{
      * value is the function name.
      */
     private Map<TableKey, String> functionThatChecksIfRecordExistsInTableNames = new HashMap<>();
+
+    /**
+     * A list that stores invalid tenant identifiers.
+     * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.IsTenantValidFunctionInvocationFactoryEnricher
+     * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.IsTenantIdentifierValidConstraintEnricher
+     */
+    private List<String> tenantValuesBlacklist;
+    /**
+     * The name of function that check if passed tenant identifier is valid.
+     * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.IsTenantValidFunctionInvocationFactoryEnricher
+     */
+    private String isTenantValidFunctionName;
+    /**
+     * The name of constraint that check if passed tenant identifier is valid.
+     * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.IsTenantIdentifierValidConstraintEnricher
+     */
+    private String isTenantValidConstraintName;
+
+    /**
+     * The toggle, based on which builder is going to add constraint for all tables that required rls policy
+     * (true) or not (false). The default value is false.
+     * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.IsTenantIdentifierValidConstraintEnricher
+     */
+    private boolean constraintForValidTenantValueShouldBeAdded;
+
+    /**
+     * A map that stores the custom names for a constraint that checks if the tenant identifier is valid.
+     * The map key is a table identifier ({@link TableKey}), and the value is the constraint name.
+     * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.IsTenantIdentifierValidConstraintEnricher
+     */
+    private Map<TableKey, String> tenantValidConstraintCustomNamePerTables = new HashMap<>();
+
+    /**
+     * The toggle, based on which builder is going to add default value declaration for tenant column in all tables that required rls policy
+     * (true) or not (false). The default value is false.
+     * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.DefaultValueForTenantColumnEnricher
+     */
+    private boolean currentTenantIdentifierAsDefaultValueForTenantColumnInAllTables;
+
+    /**
+     * A set of table identifiers for which adding of default value declaration for tenant column should be skipped.
+     * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.DefaultValueForTenantColumnEnricher
+     */
+    private Set<TableKey> tablesThatAddingOfTenantColumnDefaultValueShouldBeSkipped = new HashSet<>();
 
     public String getDefaultTenantIdColumn() {
         return defaultTenantIdColumn;
@@ -222,5 +264,53 @@ public class SharedSchemaContextRequest implements Cloneable{
     @Override
     protected Object clone() throws CloneNotSupportedException {
         return super.clone();
+    }
+
+    public List<String> getTenantValuesBlacklist() {
+        return tenantValuesBlacklist;
+    }
+
+    public void setTenantValuesBlacklist(List<String> tenantValuesBlacklist) {
+        this.tenantValuesBlacklist = tenantValuesBlacklist;
+    }
+
+    public String getIsTenantValidFunctionName() {
+        return isTenantValidFunctionName;
+    }
+
+    public void setIsTenantValidFunctionName(String isTenantValidFunctionName) {
+        this.isTenantValidFunctionName = isTenantValidFunctionName;
+    }
+
+    public String getIsTenantValidConstraintName() {
+        return isTenantValidConstraintName;
+    }
+
+    public void setIsTenantValidConstraintName(String isTenantValidConstraintName) {
+        this.isTenantValidConstraintName = isTenantValidConstraintName;
+    }
+
+    public boolean isConstraintForValidTenantValueShouldBeAdded() {
+        return constraintForValidTenantValueShouldBeAdded;
+    }
+
+    public void setConstraintForValidTenantValueShouldBeAdded(boolean constraintForValidTenantValueShouldBeAdded) {
+        this.constraintForValidTenantValueShouldBeAdded = constraintForValidTenantValueShouldBeAdded;
+    }
+
+    public Map<TableKey, String> getTenantValidConstraintCustomNamePerTables() {
+        return tenantValidConstraintCustomNamePerTables;
+    }
+
+    public void setCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables(boolean value) {
+        this.currentTenantIdentifierAsDefaultValueForTenantColumnInAllTables = value;
+    }
+
+    public boolean isCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables() {
+        return currentTenantIdentifierAsDefaultValueForTenantColumnInAllTables;
+    }
+
+    public Set<TableKey> getTablesThatAddingOfTenantColumnDefaultValueShouldBeSkipped() {
+        return tablesThatAddingOfTenantColumnDefaultValueShouldBeSkipped;
     }
 }

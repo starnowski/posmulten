@@ -1,14 +1,13 @@
 package com.github.starnowski.posmulten.postgresql.core.rls
 
-import com.github.starnowski.posmulten.postgresql.test.utils.RandomString
 import com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValue
 import com.github.starnowski.posmulten.postgresql.core.rls.function.IsRecordBelongsToCurrentTenantFunctionInvocationFactory
-import spock.lang.Specification
+import com.github.starnowski.posmulten.postgresql.test.utils.RandomString
 import spock.lang.Unroll
 
 import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValue.forReference
 
-class IsRecordBelongsToCurrentTenantConstraintProducerTest extends Specification {
+class IsRecordBelongsToCurrentTenantConstraintProducerTest extends AbstractConstraintProducerTest<IsRecordBelongsToCurrentTenantConstraintProducerParameters, IsRecordBelongsToCurrentTenantConstraintProducer> {
 
     def tested = new IsRecordBelongsToCurrentTenantConstraintProducer()
 
@@ -43,7 +42,7 @@ class IsRecordBelongsToCurrentTenantConstraintProducerTest extends Specification
             "sss"               |   "public"    | "users"   |   "cccsss"                        |   [ff : forReference("id"), hggf: forReference("abc_user_id")]                        ||  "ALTER TABLE \"public\".\"users\" ADD CONSTRAINT sss CHECK ((abc_user_id IS NULL AND id IS NULL) OR (cccsss));"
             "sss"               |   "secondary" | "users"   |   "cccsss"                        |   [x1 : forReference("userId"), asdf: forReference("abc_user_id")]                    ||  "ALTER TABLE \"secondary\".\"users\" ADD CONSTRAINT sss CHECK ((abc_user_id IS NULL AND userId IS NULL) OR (cccsss));"
             "user_belongs_tt"   |   "secondary" | "users"   |   "cccsss"                        |   [ss : forReference("uuid")]                                                         ||  "ALTER TABLE \"secondary\".\"users\" ADD CONSTRAINT user_belongs_tt CHECK ((uuid IS NULL) OR (cccsss));"
-            "user_belongs_tt"   |   "secondary" | "users"   |   "is_tenant_correct(tenant_id)"  |   [v : forReference("secondary_colId"), rv : forReference("uuid")]         ||  "ALTER TABLE \"secondary\".\"users\" ADD CONSTRAINT user_belongs_tt CHECK ((secondary_colId IS NULL AND uuid IS NULL) OR (is_tenant_correct(tenant_id)));"
+            "user_belongs_tt"   |   "secondary" | "users"   |   "is_tenant_correct(tenant_id)"  |   [v : forReference("secondary_colId"), rv : forReference("uuid")]                    ||  "ALTER TABLE \"secondary\".\"users\" ADD CONSTRAINT user_belongs_tt CHECK ((secondary_colId IS NULL AND uuid IS NULL) OR (is_tenant_correct(tenant_id)));"
             "user_belongs_tt"   |   "secondary" | "users"   |   "is_it_really_my_tenant(t)"     |   [x1 : forReference("c"), uuu : forReference("a"), ranV : forReference("b")]         ||  "ALTER TABLE \"secondary\".\"users\" ADD CONSTRAINT user_belongs_tt CHECK ((a IS NULL AND b IS NULL AND c IS NULL) OR (is_it_really_my_tenant(t)));"
     }
 
@@ -89,104 +88,6 @@ class IsRecordBelongsToCurrentTenantConstraintProducerTest extends Specification
         then:
             definition.getCreateScript() ==~ /ALTER TABLE "public"\."users" ADD CONSTRAINT const_1 CHECK \(\((.* IS NULL)+( AND )*\) OR \(current_tenant\(\)\)\);/
             definition.getDropScript() == "ALTER TABLE \"public\".\"users\" DROP CONSTRAINT IF EXISTS const_1;"
-    }
-
-    def "should throw an exception of type 'IllegalArgumentException' when the parameters object is null" () {
-        when:
-            tested.produce(null)
-
-        then:
-            def ex = thrown(IllegalArgumentException.class)
-
-        and: "exception should have correct message"
-            ex.message == "The parameters object cannot be null"
-    }
-
-    def "should throw an exception of type 'IllegalArgumentException' when the table name is null" () {
-        given:
-            def parameters = returnCorrectParametersMockObject()
-
-        when:
-            tested.produce(parameters)
-
-        then:
-            _ * parameters.getTableName() >> null
-            def ex = thrown(IllegalArgumentException.class)
-
-        and: "exception should have correct message"
-            ex.message == "Table name cannot be null"
-    }
-
-    @Unroll
-    def "should throw an exception of type 'IllegalArgumentException' when the table name is empty (#tableName)" () {
-        given:
-            def parameters = returnCorrectParametersMockObject()
-
-        when:
-            tested.produce(parameters)
-
-        then:
-            _ * parameters.getTableName() >> tableName
-            def ex = thrown(IllegalArgumentException.class)
-
-        and: "exception should have correct message"
-            ex.message == "Table name cannot be empty"
-
-        where:
-            tableName << ["", " ", "          "]
-    }
-
-    @Unroll
-    def "should throw an exception of type 'IllegalArgumentException' when the table schema is empty (#tableSchema)" () {
-        given:
-            def parameters = returnCorrectParametersMockObject()
-
-        when:
-            tested.produce(parameters)
-
-        then:
-            _ * parameters.getTableSchema() >> tableSchema
-            def ex = thrown(IllegalArgumentException.class)
-
-        and: "exception should have correct message"
-            ex.message == "Table schema cannot be empty"
-
-        where:
-            tableSchema << ["", " ", "          "]
-    }
-
-    def "should throw an exception of type 'IllegalArgumentException' when the constraint name is null" () {
-        given:
-            def parameters = returnCorrectParametersMockObject()
-
-        when:
-            tested.produce(parameters)
-
-        then:
-            _ * parameters.getConstraintName() >> null
-            def ex = thrown(IllegalArgumentException.class)
-
-        and: "exception should have correct message"
-            ex.message == "Constraint name cannot be null"
-    }
-
-    @Unroll
-    def "should throw an exception of type 'IllegalArgumentException' when the constraint nameis empty (#constraintName()" () {
-        given:
-            def parameters = returnCorrectParametersMockObject()
-
-        when:
-            tested.produce(parameters)
-
-        then:
-            _ * parameters.getConstraintName() >> constraintName
-            def ex = thrown(IllegalArgumentException.class)
-
-        and: "exception should have correct message"
-            ex.message == "Constraint name cannot be empty"
-
-        where:
-            constraintName << ["", " ", "          "]
     }
 
     def "should throw an exception of type 'IllegalArgumentException' when the object of type IsRecordBelongsToCurrentTenantFunctionInvocationFactory is null" () {
@@ -236,5 +137,9 @@ class IsRecordBelongsToCurrentTenantConstraintProducerTest extends Specification
         mock.getIsRecordBelongsToCurrentTenantFunctionInvocationFactory() >> isRecordBelongsToCurrentTenantFunctionInvocationFactory
         mock.getPrimaryColumnsValuesMap() >> primaryColumnsValuesMap
         mock
+    }
+
+    IsRecordBelongsToCurrentTenantConstraintProducer returnTestedObject() {
+        tested
     }
 }

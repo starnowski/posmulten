@@ -32,7 +32,15 @@ import static java.lang.String.format;
 
 public class TenantColumnSQLDefinitionsEnricher implements ISharedSchemaContextEnricher {
 
-    private SingleTenantColumnSQLDefinitionsProducer singleTenantColumnSQLDefinitionsProducer = new SingleTenantColumnSQLDefinitionsProducer();
+    private final SingleTenantColumnSQLDefinitionsProducer singleTenantColumnSQLDefinitionsProducer;
+
+    public TenantColumnSQLDefinitionsEnricher(SingleTenantColumnSQLDefinitionsProducer singleTenantColumnSQLDefinitionsProducer) {
+        this.singleTenantColumnSQLDefinitionsProducer = singleTenantColumnSQLDefinitionsProducer;
+    }
+
+    public TenantColumnSQLDefinitionsEnricher() {
+        this(new SingleTenantColumnSQLDefinitionsProducer());
+    }
 
     @Override
     public ISharedSchemaContext enrich(ISharedSchemaContext context, SharedSchemaContextRequest request) throws MissingRLSPolicyDeclarationForTableException {
@@ -49,13 +57,9 @@ public class TenantColumnSQLDefinitionsEnricher implements ISharedSchemaContextE
             {
                 throw new MissingRLSPolicyDeclarationForTableException(tableKey, format("Missing RLS policy declaration for table %1$s in schema %2$s", tableKey.getTable(), tableKey.getSchema()));
             }
-            singleTenantColumnSQLDefinitionsProducer.produce(tableKey, tableColumns, getCurrentTenantIdFunctionInvocation, request.getCurrentTenantIdProperty(), request.getCurrentTenantIdPropertyType())
+            singleTenantColumnSQLDefinitionsProducer.produce(tableKey, tableColumns, getCurrentTenantIdFunctionInvocation, request.getDefaultTenantIdColumn(), request.getCurrentTenantIdPropertyType())
                 .forEach(context::addSQLDefinition);
         }
         return context;
-    }
-
-    void setSingleTenantColumnSQLDefinitionsProducer(SingleTenantColumnSQLDefinitionsProducer singleTenantColumnSQLDefinitionsProducer) {
-        this.singleTenantColumnSQLDefinitionsProducer = singleTenantColumnSQLDefinitionsProducer;
     }
 }

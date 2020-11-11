@@ -10,8 +10,6 @@ import spock.lang.Unroll
 
 class TableRLSSettingsSQLDefinitionsEnricherTest extends Specification {
 
-    def tested = new TableRLSSettingsSQLDefinitionsEnricher()
-
     @Unroll
     def "should create all required SQL definition that enables RLS policy but not force policy for schema #schema"()
     {
@@ -28,7 +26,7 @@ class TableRLSSettingsSQLDefinitionsEnricherTest extends Specification {
             def someTableSQLDefinition1 = Mock(SQLDefinition)
             def someTableSQLDefinition2 = Mock(SQLDefinition)
             def tableRLSSettingsSQLDefinitionsProducer = Mock(TableRLSSettingsSQLDefinitionsProducer)
-            tested.setTableRLSSettingsSQLDefinitionsProducer(tableRLSSettingsSQLDefinitionsProducer)
+            def tested = new TableRLSSettingsSQLDefinitionsEnricher(tableRLSSettingsSQLDefinitionsProducer)
             def usersTableKey = tk("users", schema)
             def commentsTableKey = tk("comments", schema)
             def someTableKey = tk("some_table", schema)
@@ -72,7 +70,7 @@ class TableRLSSettingsSQLDefinitionsEnricherTest extends Specification {
             def someTableSQLDefinition1 = Mock(SQLDefinition)
             def someTableSQLDefinition2 = Mock(SQLDefinition)
             def tableRLSSettingsSQLDefinitionsProducer = Mock(TableRLSSettingsSQLDefinitionsProducer)
-            tested.setTableRLSSettingsSQLDefinitionsProducer(tableRLSSettingsSQLDefinitionsProducer)
+            def tested = new TableRLSSettingsSQLDefinitionsEnricher(tableRLSSettingsSQLDefinitionsProducer)
             def usersTableKey = tk("users", schema)
             def commentsTableKey = tk("comments", schema)
             def someTableKey = tk("some_table", schema)
@@ -107,7 +105,7 @@ class TableRLSSettingsSQLDefinitionsEnricherTest extends Specification {
             def sharedSchemaContextRequest = builder.getSharedSchemaContextRequestCopy()
             def context = new SharedSchemaContext()
             def tableRLSSettingsSQLDefinitionsProducer = Mock(TableRLSSettingsSQLDefinitionsProducer)
-            tested.setTableRLSSettingsSQLDefinitionsProducer(tableRLSSettingsSQLDefinitionsProducer)
+            def tested = new TableRLSSettingsSQLDefinitionsEnricher(tableRLSSettingsSQLDefinitionsProducer)
 
         when:
             def result = tested.enrich(context, sharedSchemaContextRequest)

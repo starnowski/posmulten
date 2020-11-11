@@ -14,16 +14,12 @@ class SingleTenantColumnSQLDefinitionsProducerTest extends Specification {
     {
         given:
             def createColumnStatementProducer = Mock(CreateColumnStatementProducer)
-            def setDefaultStatementProducer = Mock(SetDefaultStatementProducer)
             def setNotNullStatementProducer = Mock(SetNotNullStatementProducer)
             def createColumnStatementProducerSQLDefinition = Mock(SQLDefinition)
-            def setDefaultStatementProducerSQLDefinition = Mock(SQLDefinition)
             def setNotNullStatementProducerSQLDefinition = Mock(SQLDefinition)
             def capturedCreateColumnStatementProducerParameters = null
-            def capturedSetDefaultStatementProducerParameters = null
             def capturedSetNotNullStatementProducerParameters = null
             tested.setCreateColumnStatementProducer(createColumnStatementProducer)
-            tested.setSetDefaultStatementProducer(setDefaultStatementProducer)
             tested.setSetNotNullStatementProducer(setNotNullStatementProducer)
             def tableColumns = dtc(tenantColumn)
 
@@ -44,19 +40,6 @@ class SingleTenantColumnSQLDefinitionsProducerTest extends Specification {
             columnStatementProducerParameters.getColumnType() == expectedTenantColumnType
 
         then:
-            1 * setDefaultStatementProducer.produce(_) >>  {
-                parameters ->
-                    capturedSetDefaultStatementProducerParameters = parameters[0]
-                    setDefaultStatementProducerSQLDefinition
-            }
-            results.contains(setDefaultStatementProducerSQLDefinition)
-            ISetDefaultStatementProducerParameters iSetDefaultStatementProducerParameters = capturedSetDefaultStatementProducerParameters
-            iSetDefaultStatementProducerParameters.getTable() == tenantTable.getTable()
-            iSetDefaultStatementProducerParameters.getSchema() == tenantTable.getSchema()
-            iSetDefaultStatementProducerParameters.getColumn() == expectedTenantColumn
-            iSetDefaultStatementProducerParameters.getDefaultValueDefinition() == defaultTenantColumnValue
-
-        then:
             1 * setNotNullStatementProducer.produce(_) >>  {
                 parameters ->
                     capturedSetNotNullStatementProducerParameters = parameters[0]
@@ -69,7 +52,7 @@ class SingleTenantColumnSQLDefinitionsProducerTest extends Specification {
             iSetNotNullStatementProducerParameters.getColumn() == expectedTenantColumn
 
         and: "pass SQL definition in correct order"
-            results == [createColumnStatementProducerSQLDefinition, setDefaultStatementProducerSQLDefinition, setNotNullStatementProducerSQLDefinition]
+            results == [createColumnStatementProducerSQLDefinition, setNotNullStatementProducerSQLDefinition]
 
         where:
             tenantTable                     |   tenantColumn    |   defaultTenantColumn |   defaultTenantColumnType |   defaultTenantColumnValue    ||  expectedTenantColumn    |   expectedTenantColumnType

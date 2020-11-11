@@ -1,9 +1,12 @@
 package com.github.starnowski.posmulten.postgresql.core.context
 
+import com.github.starnowski.posmulten.postgresql.core.context.enrichers.DefaultValueForTenantColumnEnricher
 import com.github.starnowski.posmulten.postgresql.core.context.enrichers.GetCurrentTenantIdFunctionDefinitionEnricher
+import com.github.starnowski.posmulten.postgresql.core.context.enrichers.IsTenantValidFunctionInvocationFactoryEnricher
 import com.github.starnowski.posmulten.postgresql.core.context.enrichers.ISharedSchemaContextEnricher
 import com.github.starnowski.posmulten.postgresql.core.context.enrichers.IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher
 import com.github.starnowski.posmulten.postgresql.core.context.enrichers.IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricher
+import com.github.starnowski.posmulten.postgresql.core.context.enrichers.IsTenantIdentifierValidConstraintEnricher
 import com.github.starnowski.posmulten.postgresql.core.context.enrichers.SetCurrentTenantIdFunctionDefinitionEnricher
 import com.github.starnowski.posmulten.postgresql.core.context.enrichers.TableRLSPolicyEnricher
 import com.github.starnowski.posmulten.postgresql.core.context.enrichers.TableRLSSettingsSQLDefinitionsEnricher
@@ -22,7 +25,7 @@ class DefaultSharedSchemaContextBuilderEnrichersTest extends Specification {
             ISharedSchemaContext firstSharedSchemaContext = Mock(ISharedSchemaContext)
             ISharedSchemaContext secondSharedSchemaContext = Mock(ISharedSchemaContext)
             ISharedSchemaContext thirdSharedSchemaContext = Mock(ISharedSchemaContext)
-        ISharedSchemaContextEnricher firstSharedSchemaContextEnricher = Mock(ISharedSchemaContextEnricher)
+            ISharedSchemaContextEnricher firstSharedSchemaContextEnricher = Mock(ISharedSchemaContextEnricher)
             ISharedSchemaContextEnricher secondSharedSchemaContextEnricher = Mock(ISharedSchemaContextEnricher)
             ISharedSchemaContextEnricher thirdSharedSchemaContextEnricher = Mock(ISharedSchemaContextEnricher)
             DefaultSharedSchemaContextBuilder builder = builderWithoutValidators()
@@ -47,7 +50,12 @@ class DefaultSharedSchemaContextBuilderEnrichersTest extends Specification {
     def "should have configured the list of enrichers with correct order"()
     {
         given:
-            def expectedEnrichersTypeInOrder = [GetCurrentTenantIdFunctionDefinitionEnricher.class, SetCurrentTenantIdFunctionDefinitionEnricher.class, TenantHasAuthoritiesFunctionDefinitionEnricher.class, TenantColumnSQLDefinitionsEnricher.class, TableRLSSettingsSQLDefinitionsEnricher.class, TableRLSPolicyEnricher.class, IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricher.class, IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher.class]
+            def expectedEnrichersTypeInOrder = [GetCurrentTenantIdFunctionDefinitionEnricher.class,
+                                                SetCurrentTenantIdFunctionDefinitionEnricher.class, TenantHasAuthoritiesFunctionDefinitionEnricher.class,
+                                                IsTenantValidFunctionInvocationFactoryEnricher.class, TenantColumnSQLDefinitionsEnricher.class,
+                                                TableRLSSettingsSQLDefinitionsEnricher.class, TableRLSPolicyEnricher.class,
+                                                IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricher.class, IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher.class,
+                                                IsTenantIdentifierValidConstraintEnricher.class, DefaultValueForTenantColumnEnricher.class]
             DefaultSharedSchemaContextBuilder builder = new DefaultSharedSchemaContextBuilder()
 
         when:

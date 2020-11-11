@@ -8,6 +8,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import static java.lang.String.format;
+
 public class TestUtils {
 
     public static String VALID_CURRENT_TENANT_ID_PROPERTY_NAME = "c.c_ten";
@@ -107,5 +109,14 @@ public class TestUtils {
     public static String returnFunctionReference(String functionName, String schema)
     {
         return schema == null ? functionName : schema + "." + functionName;
+    }
+
+    public static boolean isConstraintExists(JdbcTemplate jdbcTemplate, String schema, String table, String constraintName)
+    {
+        String template = "SELECT 1\n" +
+                "\t\tFROM information_schema.table_constraints\n" +
+                "\t\tWHERE table_schema = '%s' AND table_name = '%s' AND constraint_name = '%s'";
+        String selectStatement = format(template, schema == null ? "public" : schema, table, constraintName);
+        return isAnyRecordExists(jdbcTemplate, selectStatement);
     }
 }

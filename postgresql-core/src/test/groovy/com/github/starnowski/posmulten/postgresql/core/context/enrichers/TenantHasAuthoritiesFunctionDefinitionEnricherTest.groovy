@@ -12,8 +12,6 @@ import spock.lang.Unroll
 
 class TenantHasAuthoritiesFunctionDefinitionEnricherTest extends Specification {
 
-    def tested = new TenantHasAuthoritiesFunctionDefinitionEnricher()
-
     def "should enrich shared schema context with sql definition for function that passed tenant id is equal to current tenant id based on default values for shares schema context builder"()
     {
         given:
@@ -26,8 +24,7 @@ class TenantHasAuthoritiesFunctionDefinitionEnricherTest extends Specification {
             def mockedTenantHasAuthoritiesFunctionDefinition = Mock(TenantHasAuthoritiesFunctionDefinition)
             def equalsCurrentTenantIdentifierFunctionProducer = Mock(EqualsCurrentTenantIdentifierFunctionProducer)
             def tenantHasAuthoritiesFunctionProducer = Mock(TenantHasAuthoritiesFunctionProducer)
-            tested.setEqualsCurrentTenantIdentifierFunctionProducer(equalsCurrentTenantIdentifierFunctionProducer)
-            tested.setTenantHasAuthoritiesFunctionProducer(tenantHasAuthoritiesFunctionProducer)
+            def tested = new TenantHasAuthoritiesFunctionDefinitionEnricher(equalsCurrentTenantIdentifierFunctionProducer, tenantHasAuthoritiesFunctionProducer)
             context.setIGetCurrentTenantIdFunctionInvocationFactory(getCurrentTenantIdFunctionInvocationFactory)
 
         when:
@@ -86,8 +83,7 @@ class TenantHasAuthoritiesFunctionDefinitionEnricherTest extends Specification {
             def mockedTenantHasAuthoritiesFunctionDefinition = Mock(TenantHasAuthoritiesFunctionDefinition)
             def equalsCurrentTenantIdentifierFunctionProducer = Mock(EqualsCurrentTenantIdentifierFunctionProducer)
             def tenantHasAuthoritiesFunctionProducer = Mock(TenantHasAuthoritiesFunctionProducer)
-            tested.setEqualsCurrentTenantIdentifierFunctionProducer(equalsCurrentTenantIdentifierFunctionProducer)
-            tested.setTenantHasAuthoritiesFunctionProducer(tenantHasAuthoritiesFunctionProducer)
+            def tested = new TenantHasAuthoritiesFunctionDefinitionEnricher(equalsCurrentTenantIdentifierFunctionProducer, tenantHasAuthoritiesFunctionProducer)
             context.setIGetCurrentTenantIdFunctionInvocationFactory(getCurrentTenantIdFunctionInvocationFactory)
 
         when:

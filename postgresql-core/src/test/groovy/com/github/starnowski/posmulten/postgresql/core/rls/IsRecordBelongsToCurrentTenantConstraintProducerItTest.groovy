@@ -1,8 +1,6 @@
 package com.github.starnowski.posmulten.postgresql.core.rls
 
-import com.github.starnowski.posmulten.postgresql.test.utils.RandomString
 import com.github.starnowski.posmulten.postgresql.core.TestApplication
-import com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValue
 import com.github.starnowski.posmulten.postgresql.core.rls.function.IsRecordBelongsToCurrentTenantFunctionInvocationFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -10,8 +8,8 @@ import org.springframework.jdbc.core.JdbcTemplate
 import spock.lang.Specification
 import spock.lang.Unroll
 
-import static com.github.starnowski.posmulten.postgresql.test.utils.TestUtils.isAnyRecordExists
 import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValue.forReference
+import static com.github.starnowski.posmulten.postgresql.test.utils.TestUtils.isConstraintExists
 import static org.junit.Assert.assertEquals
 
 @SpringBootTest(classes = [TestApplication.class])
@@ -34,7 +32,7 @@ class IsRecordBelongsToCurrentTenantConstraintProducerItTest extends Specificati
             schema = testSchema
             table = testTable
             constraintName = testConstraintName
-            assertEquals(false, isAnyRecordExists(jdbcTemplate, createSelectStatement(schema, table, constraintName)))
+            assertEquals(false, isConstraintExists(jdbcTemplate, schema, table, constraintName))
             IsRecordBelongsToCurrentTenantFunctionInvocationFactory isRecordBelongsToCurrentTenantFunctionInvocationFactory =
                     {
                         conditionStatement
@@ -50,7 +48,7 @@ class IsRecordBelongsToCurrentTenantConstraintProducerItTest extends Specificati
             jdbcTemplate.execute(definition.getCreateScript())
 
         then:
-            isAnyRecordExists(jdbcTemplate, createSelectStatement(schema, table, constraintName))
+            isConstraintExists(jdbcTemplate, schema, table, constraintName)
 
         where:
             testConstraintName      |   testSchema              | testTable     |   primaryColumnsValuesMap                                                                     |   conditionStatement
@@ -64,22 +62,8 @@ class IsRecordBelongsToCurrentTenantConstraintProducerItTest extends Specificati
             "does_comment_from_t"   |   "non_public_schema"     | "comments"    |   [id : forReference("parent_comment_id"), user_id: forReference("parent_comment_user_id")]   |   "tenant = 'dsasdf'"
     }
 
-    String createSelectStatement(String schema, String table, String constraintName)
-    {
-        def template = "SELECT 1\n" +
-        "\t\tFROM information_schema.table_constraints\n" +
-        "\t\tWHERE table_schema = '%s' AND table_name = '%s' AND constraint_name = '%s'"
-        String.format(template, schema == null ? "public" : schema, table, constraintName)
-    }
-
-    FunctionArgumentValue randomFAV()
-    {
-        def randomString = new RandomString(5, new Random(), RandomString.lower)
-        forReference(randomString.nextString())
-    }
-
     def cleanup() {
         jdbcTemplate.execute(definition.getDropScript())
-        assertEquals(false, isAnyRecordExists(jdbcTemplate, createSelectStatement(schema, table, constraintName)))
+        assertEquals(false, isConstraintExists(jdbcTemplate, schema, table, constraintName))
     }
 }

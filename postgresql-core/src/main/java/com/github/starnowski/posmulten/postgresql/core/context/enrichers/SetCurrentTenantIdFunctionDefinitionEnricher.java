@@ -29,7 +29,15 @@ import com.github.starnowski.posmulten.postgresql.core.rls.function.*;
 
 public class SetCurrentTenantIdFunctionDefinitionEnricher implements ISharedSchemaContextEnricher {
 
-    private SetCurrentTenantIdFunctionProducer setCurrentTenantIdFunctionProducer = new SetCurrentTenantIdFunctionProducer();
+    private final SetCurrentTenantIdFunctionProducer setCurrentTenantIdFunctionProducer;
+
+    public SetCurrentTenantIdFunctionDefinitionEnricher(SetCurrentTenantIdFunctionProducer setCurrentTenantIdFunctionProducer) {
+        this.setCurrentTenantIdFunctionProducer = setCurrentTenantIdFunctionProducer;
+    }
+
+    public SetCurrentTenantIdFunctionDefinitionEnricher() {
+        this(new SetCurrentTenantIdFunctionProducer());
+    }
 
     @Override
     public ISharedSchemaContext enrich(ISharedSchemaContext context, SharedSchemaContextRequest request) {
@@ -39,9 +47,5 @@ public class SetCurrentTenantIdFunctionDefinitionEnricher implements ISharedSche
         context.setISetCurrentTenantIdFunctionInvocationFactory(sqlDefinition);
         context.setISetCurrentTenantIdFunctionPreparedStatementInvocationFactory(sqlDefinition);
         return context;
-    }
-
-    void setSetCurrentTenantIdFunctionProducer(SetCurrentTenantIdFunctionProducer setCurrentTenantIdFunctionProducer) {
-        this.setCurrentTenantIdFunctionProducer = setCurrentTenantIdFunctionProducer;
     }
 }

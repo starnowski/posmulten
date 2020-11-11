@@ -25,8 +25,10 @@ package com.github.starnowski.posmulten.postgresql.core.context;
 
 import com.github.starnowski.posmulten.postgresql.core.context.enrichers.*;
 import com.github.starnowski.posmulten.postgresql.core.context.exceptions.SharedSchemaContextBuilderException;
+import com.github.starnowski.posmulten.postgresql.core.context.validators.CreateTenantColumnTableMappingSharedSchemaContextRequestValidator;
 import com.github.starnowski.posmulten.postgresql.core.context.validators.ForeignKeysMappingSharedSchemaContextRequestValidator;
 import com.github.starnowski.posmulten.postgresql.core.context.validators.ISharedSchemaContextRequestValidator;
+import com.github.starnowski.posmulten.postgresql.core.context.validators.TablesThatAddingOfTenantColumnDefaultValueShouldBeSkippedSharedSchemaContextRequestValidator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,12 +47,12 @@ public class DefaultSharedSchemaContextBuilder {
     /**
      * Collection that stores objects of type {@link ISharedSchemaContextEnricher} used for enriching result object ({@link #build()} method).
      */
-    private List<ISharedSchemaContextEnricher> enrichers = asList(new GetCurrentTenantIdFunctionDefinitionEnricher(), new SetCurrentTenantIdFunctionDefinitionEnricher(), new TenantHasAuthoritiesFunctionDefinitionEnricher(), new TenantColumnSQLDefinitionsEnricher(), new TableRLSSettingsSQLDefinitionsEnricher(), new TableRLSPolicyEnricher(), new IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricher(), new IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher());
+    private List<ISharedSchemaContextEnricher> enrichers = asList(new GetCurrentTenantIdFunctionDefinitionEnricher(), new SetCurrentTenantIdFunctionDefinitionEnricher(), new TenantHasAuthoritiesFunctionDefinitionEnricher(), new IsTenantValidFunctionInvocationFactoryEnricher(), new TenantColumnSQLDefinitionsEnricher(), new TableRLSSettingsSQLDefinitionsEnricher(), new TableRLSPolicyEnricher(), new IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricher(), new IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher(), new IsTenantIdentifierValidConstraintEnricher(), new DefaultValueForTenantColumnEnricher());
 
     /**
      * Collection that stores objects of type {@link ISharedSchemaContextRequestValidator} used for validation of request object (type {@link SharedSchemaContextRequest}) in {@link #build()} method.
      */
-    private List<ISharedSchemaContextRequestValidator> validators = asList(new ForeignKeysMappingSharedSchemaContextRequestValidator());
+    private List<ISharedSchemaContextRequestValidator> validators = asList(new ForeignKeysMappingSharedSchemaContextRequestValidator(), new CreateTenantColumnTableMappingSharedSchemaContextRequestValidator(), new TablesThatAddingOfTenantColumnDefaultValueShouldBeSkippedSharedSchemaContextRequestValidator());
 
     private final SharedSchemaContextRequest sharedSchemaContextRequest = new SharedSchemaContextRequest();
     /**
@@ -307,6 +309,56 @@ public class DefaultSharedSchemaContextBuilder {
      */
     public DefaultSharedSchemaContextBuilder setValidators(List<ISharedSchemaContextRequestValidator> validators) {
         this.validators = validators;
+        return this;
+    }
+
+    /**
+     * Register the request for creation of constraints that are going to check if tenant column has valid value in all
+     * tables that require rls policy.
+     * @param tenantValuesBlacklist list of invalid tenant identifiers
+     * @param isTenantValidFunctionName default name of function that check if tenant identifier is valid
+     * @param isTenantValidConstraintName default name of constraint that check if tenant identifier is valid
+     * @return builder object for which method was invoked
+     */
+    public DefaultSharedSchemaContextBuilder createValidTenantValueConstraint(List<String> tenantValuesBlacklist, String isTenantValidFunctionName, String isTenantValidConstraintName) {
+        sharedSchemaContextRequest.setTenantValuesBlacklist(tenantValuesBlacklist);
+        sharedSchemaContextRequest.setIsTenantValidFunctionName(isTenantValidFunctionName);
+        sharedSchemaContextRequest.setIsTenantValidConstraintName(isTenantValidConstraintName);
+        sharedSchemaContextRequest.setConstraintForValidTenantValueShouldBeAdded(true);
+        return this;
+    }
+
+    /**
+     * Register custom name for constraint that are going to check if tenant column has valid value in specified
+     * table that require rls policy.
+     * @param table table name
+     * @param constraintName constraint name
+     * @return builder object for which method was invoked
+     */
+    public DefaultSharedSchemaContextBuilder registerCustomValidTenantValueConstraintNameForTable(String table, String constraintName) {
+        sharedSchemaContextRequest.getTenantValidConstraintCustomNamePerTables().put(new TableKey(table, sharedSchemaContextRequest.getDefaultSchema()), constraintName);
+        return this;
+    }
+
+    /**
+     * Setting if builder should add default value declaration for tenant column in all tables that required rls policy.
+     * Default value is going to be current tenant identifier.
+     * @param value true if builder should add default declaration
+     * @return builder object for which method was invoked
+     */
+    public DefaultSharedSchemaContextBuilder setCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables(boolean value) {
+        sharedSchemaContextRequest.setCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables(value);
+        return this;
+    }
+
+    /**
+     * Specify for which table the adding of default value declaration should be skipped.
+     * @param value table name
+     * @return builder object for which method was invoked
+     * @see #setCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables(boolean)
+     */
+    public DefaultSharedSchemaContextBuilder skipAddingOfTenantColumnDefaultValueForTable(String value) {
+        sharedSchemaContextRequest.getTablesThatAddingOfTenantColumnDefaultValueShouldBeSkipped().add(new TableKey(value, sharedSchemaContextRequest.getDefaultSchema()));
         return this;
     }
 
