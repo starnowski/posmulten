@@ -142,7 +142,9 @@ public class SharedSchemaContextRequest implements Cloneable{
     private boolean constraintForValidTenantValueShouldBeAdded;
 
     /**
-     * TODO
+     * A map that stores the custom names for a constraint that checks if the tenant identifier is valid.
+     * The map key is a table identifier ({@link TableKey}), and the value is the constraint name.
+     * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.IsTenantIdentifierValidConstraintEnricher
      */
     private Map<TableKey, String> tenantValidConstraintCustomNamePerTables = new HashMap<>();
 
