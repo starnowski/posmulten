@@ -341,8 +341,9 @@ public class DefaultSharedSchemaContextBuilder {
     }
 
     /**
-     * TODO Comment
-     * @param value
+     * Setting if builder should add default value declaration for tenant column in all tables that required rls policy.
+     * Default value is going to be current tenant identifier.
+     * @param value true if builder should add default declaration
      * @return builder object for which method was invoked
      */
     public DefaultSharedSchemaContextBuilder setCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables(boolean value) {
