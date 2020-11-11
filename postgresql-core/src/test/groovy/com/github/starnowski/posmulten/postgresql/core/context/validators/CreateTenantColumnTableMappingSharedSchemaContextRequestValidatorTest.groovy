@@ -61,8 +61,8 @@ class CreateTenantColumnTableMappingSharedSchemaContextRequestValidatorTest exte
         where:
             schema          |   tableRequiredTenantColumnCreation       |   rlsTables                   ||   expectedMessage
             null            |   "comments"                              |   ["users", "company"]        ||  "Missing RLS policy declaration for table comments in schema null for which creation of tenant column was requested"
-            null            |   "posts"                                 |   ["users", "company"]        ||  "Missing RLS policy declaration for table user_notification in schema null for which creation of tenant column was requested"
-            "some_schema"   |   "users"                                 |   ["posts", "company"]        ||  "Missing RLS policy declaration for table users posts schema some_schema for which creation of tenant column was requested"
+            null            |   "posts"                                 |   ["users", "company"]        ||  "Missing RLS policy declaration for table posts in schema null for which creation of tenant column was requested"
+            "some_schema"   |   "users"                                 |   ["posts", "company"]        ||  "Missing RLS policy declaration for table users in schema some_schema for which creation of tenant column was requested"
             "some_schema"   |   "comments"                              |   ["users", "company"]        ||  "Missing RLS policy declaration for table comments in schema some_schema for which creation of tenant column was requested"
     }
 
