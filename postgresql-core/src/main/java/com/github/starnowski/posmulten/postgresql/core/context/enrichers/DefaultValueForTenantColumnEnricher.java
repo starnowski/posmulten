@@ -5,7 +5,6 @@ import com.github.starnowski.posmulten.postgresql.core.SetDefaultStatementProduc
 import com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaContext;
 import com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContextRequest;
 import com.github.starnowski.posmulten.postgresql.core.context.TableKey;
-import com.github.starnowski.posmulten.postgresql.core.context.exceptions.SharedSchemaContextBuilderException;
 import javafx.util.Pair;
 
 import java.util.List;
@@ -26,7 +25,7 @@ public class DefaultValueForTenantColumnEnricher implements ISharedSchemaContext
     }
 
     @Override
-    public ISharedSchemaContext enrich(ISharedSchemaContext context, SharedSchemaContextRequest request) throws SharedSchemaContextBuilderException {
+    public ISharedSchemaContext enrich(ISharedSchemaContext context, SharedSchemaContextRequest request) {
         List<Pair<TableKey, String>> tableColumnPairs = emptyList();
         if (request.isCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables())
         {
