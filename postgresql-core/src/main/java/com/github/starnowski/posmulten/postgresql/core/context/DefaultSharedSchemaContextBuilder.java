@@ -334,7 +334,7 @@ public class DefaultSharedSchemaContextBuilder {
      * @return builder object for which method was invoked
      */
     public DefaultSharedSchemaContextBuilder registerCustomValidTenantValueConstraintNameForTable(String table, String constraintName) {
-        sharedSchemaContextRequest.getTenantValidConstraintCustomNamerPerTables().put(new TableKey(table, sharedSchemaContextRequest.getDefaultSchema()), constraintName);
+        sharedSchemaContextRequest.getTenantValidConstraintCustomNamePerTables().put(new TableKey(table, sharedSchemaContextRequest.getDefaultSchema()), constraintName);
         return this;
     }
 
