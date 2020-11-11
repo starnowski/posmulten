@@ -6,6 +6,7 @@ import com.github.starnowski.posmulten.postgresql.core.context.exceptions.Shared
 import com.github.starnowski.posmulten.postgresql.core.context.validators.CreateTenantColumnTableMappingSharedSchemaContextRequestValidator
 import com.github.starnowski.posmulten.postgresql.core.context.validators.ForeignKeysMappingSharedSchemaContextRequestValidator
 import com.github.starnowski.posmulten.postgresql.core.context.validators.ISharedSchemaContextRequestValidator
+import com.github.starnowski.posmulten.postgresql.core.context.validators.TablesThatAddingOfTenantColumnDefaultValueShouldBeSkippedSharedSchemaContextRequestValidator
 import spock.lang.Specification
 
 import static java.util.stream.Collectors.toList
@@ -98,7 +99,7 @@ class DefaultSharedSchemaContextBuilderValidatorsTest extends Specification {
     def "should have configured the list of validators with correct order"()
     {
         given:
-            def expectedValidatorsTypeInOrder = [ForeignKeysMappingSharedSchemaContextRequestValidator.class, CreateTenantColumnTableMappingSharedSchemaContextRequestValidator.class]
+            def expectedValidatorsTypeInOrder = [ForeignKeysMappingSharedSchemaContextRequestValidator.class, CreateTenantColumnTableMappingSharedSchemaContextRequestValidator.class, TablesThatAddingOfTenantColumnDefaultValueShouldBeSkippedSharedSchemaContextRequestValidator.class]
             DefaultSharedSchemaContextBuilder builder = new DefaultSharedSchemaContextBuilder()
 
         when:
