@@ -41,7 +41,7 @@ class CreateTenantColumnTableMappingSharedSchemaContextRequestValidatorTest exte
             DefaultSharedSchemaContextBuilder builder = new DefaultSharedSchemaContextBuilder(schema)
             for (String table : rlsTables)
             {
-                builder.createRLSPolicyForTable(rlsTables, [id: null], null, null)
+                builder.createRLSPolicyForTable(table, [id: null], null, null)
             }
             builder.createTenantColumnForTable(tableRequiredTenantColumnCreation)
             SharedSchemaContextRequest request = builder.getSharedSchemaContextRequestCopy()
