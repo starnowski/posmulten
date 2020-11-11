@@ -156,7 +156,8 @@ public class SharedSchemaContextRequest implements Cloneable{
     private boolean currentTenantIdentifierAsDefaultValueForTenantColumnInAllTables;
 
     /**
-     * TODO
+     * A set of table identifiers for which adding of default value declaration for tenant column should be skipped.
+     * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.DefaultValueForTenantColumnEnricher
      */
     private Set<TableKey> tablesThatAddingOfTenantColumnDefaultValueShouldBeSkipped = new HashSet<>();
 
