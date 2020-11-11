@@ -124,12 +124,13 @@ public class SharedSchemaContextRequest implements Cloneable{
      */
     private List<String> tenantValuesBlacklist;
     /**
-     * The name of function that check is passed tenant identifier is valid.
+     * The name of function that check if passed tenant identifier is valid.
      * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.IsTenantValidFunctionInvocationFactoryEnricher
      */
     private String isTenantValidFunctionName;
     /**
-     * TODO
+     * The name of constraint that check if passed tenant identifier is valid.
+     * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.IsTenantIdentifierValidConstraintEnricher
      */
     private String isTenantValidConstraintName;
 
