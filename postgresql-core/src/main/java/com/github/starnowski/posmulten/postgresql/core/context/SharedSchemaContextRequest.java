@@ -119,7 +119,9 @@ public class SharedSchemaContextRequest implements Cloneable{
     private Map<TableKey, String> functionThatChecksIfRecordExistsInTableNames = new HashMap<>();
 
     /**
-     * TODO
+     * A list that stores invalid tenant identifiers.
+     * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.IIsTenantValidFunctionInvocationFactoryEnricher
+     * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.IsTenantIdentifierValidConstraintEnricher
      */
     private List<String> tenantValuesBlacklist;
     /**
