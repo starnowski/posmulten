@@ -135,7 +135,7 @@ public class SharedSchemaContextRequest implements Cloneable{
     private String isTenantValidConstraintName;
 
     /**
-     * The toggle, based on which builder is going to add constraint for all tables that required rls policy.
+     * The toggle, based on which builder is going to add constraint for all tables that required rls policy
      * (true) or not (false). The default value is false.
      * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.IsTenantIdentifierValidConstraintEnricher
      */
@@ -149,7 +149,9 @@ public class SharedSchemaContextRequest implements Cloneable{
     private Map<TableKey, String> tenantValidConstraintCustomNamePerTables = new HashMap<>();
 
     /**
-     * TODO
+     * The toggle, based on which builder is going to add default value declaration for tenant column in all tables that required rls policy
+     * (true) or not (false). The default value is false.
+     * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.DefaultValueForTenantColumnEnricher
      */
     private boolean currentTenantIdentifierAsDefaultValueForTenantColumnInAllTables;
 
