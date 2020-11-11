@@ -329,9 +329,10 @@ public class DefaultSharedSchemaContextBuilder {
     }
 
     /**
-     * //TODO Comment
-     * @param table
-     * @param constraintName
+     * Register custom name for constraint that are going to check if tenant column has valid value in specified
+     * table that require rls policy.
+     * @param table table name
+     * @param constraintName constraint name
      * @return builder object for which method was invoked
      */
     public DefaultSharedSchemaContextBuilder registerCustomValidTenantValueConstraintNameForTable(String table, String constraintName) {
