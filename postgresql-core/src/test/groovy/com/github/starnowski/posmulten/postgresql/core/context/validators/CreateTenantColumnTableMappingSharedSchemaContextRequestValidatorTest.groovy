@@ -3,7 +3,6 @@ package com.github.starnowski.posmulten.postgresql.core.context.validators
 import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder
 import com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContextRequest
 import com.github.starnowski.posmulten.postgresql.core.context.TableKey
-import com.github.starnowski.posmulten.postgresql.core.context.exceptions.MissingRLSPolicyDeclarationForTableException
 import com.github.starnowski.posmulten.postgresql.core.context.exceptions.MissingRLSPolicyDeclarationForTableThatRequiredTenantColumnCreationException
 import spock.lang.Specification
 import spock.lang.Unroll
