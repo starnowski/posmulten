@@ -24,7 +24,7 @@ jobs:
         - .travis/bats/bats-core-installation.sh "$TRAVIS_BUILD_DIR/.travis/bats"
       services:
         - docker
-      script: export PATH="$TRAVIS_BUILD_DIR/.travis/bats/bats-core/bin:$PATH" && bats/run_bats_test.sh
+      script: export PATH="$TRAVIS_BUILD_DIR/.travis/bats/bats-core/bin:$PATH" && bats/run_bats_test_for_all_db_version.sh
 
     - stage: "integration and functional tests"
       name: "Integration and functional tests in postgresql-core module"
