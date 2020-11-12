@@ -25,11 +25,36 @@ function shutdownDockerContainer {
     sudo docker rm -f -v test-postgres
     exit $lastCommandStatus
 }
+
+export POSTGRES_DOCKER_VERSION="9.6.12"
+
+# Call getopt to validate the provided input.
+options=$(getopt -o "" --long postgres_docker_version: -- "$@")
+[ $? -eq 0 ] || {
+    echo "Incorrect options provided"
+    exit 1
+}
+eval set -- "$options"
+while true; do
+    case "$1" in
+    --postgres_docker_version)
+        shift; # The arg is next in position args
+        export POSTGRES_DOCKER_VERSION="$1"
+        ;;
+    --)
+        shift
+        break
+        ;;
+    esac
+    shift
+done
+
+
 trap shutdownDockerContainer EXIT SIGINT
 
 export DATABASE_PORT=15432
 
-sudo docker run --rm --name test-postgres -e POSTGRES_PASSWORD=postgres_posmulten -p 127.0.0.1:$DATABASE_PORT:5432/tcp -d postgres:9.6.12
+sudo docker run --rm --name test-postgres -e POSTGRES_PASSWORD=postgres_posmulten -p 127.0.0.1:$DATABASE_PORT:5432/tcp -d postgres:$POSTGRES_DOCKER_VERSION
 
 export DOCKER_DB_IP="127.0.0.1"
 export PGPASSWORD=postgres_posmulten
