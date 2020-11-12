@@ -49,6 +49,7 @@ while true; do
     shift
 done
 
+echo "Running test for postgres docker image with version $POSTGRES_DOCKER_VERSION"
 
 trap shutdownDockerContainer EXIT SIGINT
 
