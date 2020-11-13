@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+set -e
 DIRNAME="$(dirname $0)"
 echo "Running tests for postgres with version 9.6"
 "$DIRNAME"/run_bats_test.sh
