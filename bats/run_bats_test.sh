@@ -33,15 +33,15 @@ trap shutdownDockerContainer EXIT SIGINT
 
 export DATABASE_PORT=15432
 
-sudo docker run --rm --name test-postgres -e POSTGRES_PASSWORD=postgres_posmulten -p 127.0.0.1:$DATABASE_PORT:5432/tcp -d postgres:$POSTGRES_DOCKER_VERSION
+startPostgresDockerContainer
 
 export DOCKER_DB_IP="127.0.0.1"
 export PGPASSWORD=postgres_posmulten
 
 waitUntilDockerContainerIsReady
 
-SCRIPT_DIR=`resolveScriptDirectory`
-psql -qtAX -U postgres -p $DATABASE_PORT --host="$DOCKER_DB_IP" -f "$SCRIPT_DIR/../db_scripts/prepare_postgresql-core_db.sql"
+exportScriptDirEnvironment
+preparePostgresDatabase
 
 
 #Run test
