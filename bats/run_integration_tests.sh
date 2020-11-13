@@ -45,21 +45,9 @@ preparePostgresDatabase
 
 
 #Run test
-set +e
-bats -rt "$SCRIPT_DIR/prepare_postgresql-core_db"
-DATABASE_TESTS_RESULT="$?"
-
-echo "Running schema structure tests for 'public' schema"
-export DATABASE_TESTS_SCHEMA_NAME="public"
-bats -rt "$SCRIPT_DIR/schema_structure"
-DATABASE_TESTS_PUBLIC_SCHEMA_RESULT="$?"
-
-echo "Running schema structure tests for 'non_public_schema' schema"
-export DATABASE_TESTS_SCHEMA_NAME="non_public_schema"
-bats -rt "$SCRIPT_DIR/schema_structure"
-DATABASE_TESTS_NON_PUBLIC_SCHEMA_RESULT="$?"
-
-[[ $DATABASE_TESTS_RESULT -eq 0 ]] && [[ $DATABASE_TESTS_PUBLIC_SCHEMA_RESULT -eq 0 ]] && [[ $DATABASE_TESTS_NON_PUBLIC_SCHEMA_RESULT -eq 0 ]]
+pushd "$SCRIPT_DIR/.."
+mvn -DskipTests clean install && mvn -pl :postgresql-core -Dspring.profiles.active=docker -P !unit-tests,integration-tests test && mvn -pl :postgresql-core-functional-tests -Dspring.profiles.active=docker -P !unit-tests,functional-tests test
+popd
 
 #
 # TIPS!
