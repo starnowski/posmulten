@@ -1,7 +1,7 @@
 stages:
   # Compilation, tests, testing database creation scripts
   - "compilation, unit tests, database creation tests"
-  - "integration tests"
+  - "integration and functional tests"
   - "compatible tests"
 jobs:
   include:
