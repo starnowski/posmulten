@@ -87,3 +87,9 @@ https://changelog.com/podcast/127
 
 -   Renamed method com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#createRLSPolicyForTable(String, Map<String, String>, String, String)
     from createRLSPolicyForColumn to createRLSPolicyForTable [113](https://github.com/starnowski/posmulten/issues/113)
+    
+### Removed
+
+-   Removed method com.github.starnowski.posmulten.postgresql.core.contex.SingleTenantColumnSQLDefinitionsProducer#setSetDefaultStatementProducer(SetDefaultStatementProducer)
+    [106](https://github.com/starnowski/posmulten/issues/106)  
+    
