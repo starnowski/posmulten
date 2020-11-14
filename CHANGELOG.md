@@ -92,4 +92,7 @@ https://changelog.com/podcast/127
 
 -   Removed method com.github.starnowski.posmulten.postgresql.core.contex.SingleTenantColumnSQLDefinitionsProducer#setSetDefaultStatementProducer(SetDefaultStatementProducer)
     [106](https://github.com/starnowski/posmulten/issues/106)  
+-   Removed type com.github.starnowski.posmulten.postgresql.core.context.TenantColumnRequest
+    [108](https://github.com/starnowski/posmulten/issues/108)   
+    
     
