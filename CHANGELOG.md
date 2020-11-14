@@ -112,6 +112,8 @@ https://www.markdownguide.org/basic-syntax/
         [113](https://github.com/starnowski/posmulten/issues/113)
     -   Added type com.github.starnowski.posmulten.postgresql.core.context.exceptions.IncorrectForeignKeysMappingException
         [113](https://github.com/starnowski/posmulten/issues/113)
+    -   Added type com.github.starnowski.posmulten.postgresql.core.context.validators.ForeignKeysMappingSharedSchemaContextRequestValidator
+        [113](https://github.com/starnowski/posmulten/issues/113) 
 
 ### Changed
 
