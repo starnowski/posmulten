@@ -27,6 +27,8 @@ https://www.markdownguide.org/basic-syntax/
         [105](https://github.com/starnowski/posmulten/issues/105)     
     -   Added type com.github.starnowski.posmulten.postgresql.core.rls.function.ISetCurrentTenantIdFunctionPreparedStatementInvocationFactory
         [105](https://github.com/starnowski/posmulten/issues/105)    
+    -   Added method com.github.starnowski.posmulten.postgresql.core.rls.function.SetCurrentTenantIdFunctionDefinition#returnPreparedStatementThatSetCurrentTenant()
+        [105](https://github.com/starnowski/posmulten/issues/105)  
 
 -   Components that generate constraint on tenant column that checks if tenant value is valid and generate function 
     that checks if passed tenant value is not one of values from blacklist [106](https://github.com/starnowski/posmulten/issues/106)
