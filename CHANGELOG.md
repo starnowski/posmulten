@@ -41,12 +41,38 @@ https://changelog.com/podcast/127
         [106](https://github.com/starnowski/posmulten/issues/106)     
     -   Added method com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaContext#getIIsTenantValidFunctionInvocationFactory()
         [106](https://github.com/starnowski/posmulten/issues/106)    
-    -   Added method com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaContext#setIIsTenantValidFunctionInvocationFactory(IIsTenantValidFunctionInvocationFactory
+    -   Added method com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaContext#setIIsTenantValidFunctionInvocationFactory(IIsTenantValidFunctionInvocationFactory)
         [106](https://github.com/starnowski/posmulten/issues/106)  
     -   Added method com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContext#getIIsTenantValidFunctionInvocationFactory
         [106](https://github.com/starnowski/posmulten/issues/106)         
-    -   Added method com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContext#setIIsTenantValidFunctionInvocationFactory(IIsTenantValidFunctionInvocationFactory factory)
+    -   Added method com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContext#setIIsTenantValidFunctionInvocationFactory(IIsTenantValidFunctionInvocationFactory)
         [106](https://github.com/starnowski/posmulten/issues/106)  
+    -   Added method com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContextRequest#getTenantValuesBlacklist()
+        [106](https://github.com/starnowski/posmulten/issues/106)    
+    -   Added method com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContextRequest#setTenantValuesBlacklist(List<String>)
+        [106](https://github.com/starnowski/posmulten/issues/106)  
+    -   Added method com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContextRequest#getIsTenantValidFunctionName()
+        [106](https://github.com/starnowski/posmulten/issues/106)  
+    -   Added method com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContextRequest#setIsTenantValidFunctionName(String)
+        [106](https://github.com/starnowski/posmulten/issues/106)  
+    -   Added method com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContextRequest#getIsTenantValidConstraintName()
+        [106](https://github.com/starnowski/posmulten/issues/106)  
+    -   Added method com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContextRequest#setIsTenantValidConstraintName(String)
+        [106](https://github.com/starnowski/posmulten/issues/106)  
+    -   Added method com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContextRequest#isConstraintForValidTenantValueShouldBeAdded()
+        [106](https://github.com/starnowski/posmulten/issues/106)  
+    -   Added method com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContextRequest#setConstraintForValidTenantValueShouldBeAdded(boolean)
+        [106](https://github.com/starnowski/posmulten/issues/106)  
+    -   Added method com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContextRequest#getTenantValidConstraintCustomNamePerTables()
+        [106](https://github.com/starnowski/posmulten/issues/106)  
+    -   Added method com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContextRequest#setCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables(boolean)
+        [106](https://github.com/starnowski/posmulten/issues/106)  
+    -   Added method com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContextRequest#isCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables()
+        [106](https://github.com/starnowski/posmulten/issues/106)  
+    -   Added method com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContextRequest#getTablesThatAddingOfTenantColumnDefaultValueShouldBeSkipped()
+        [106](https://github.com/starnowski/posmulten/issues/106)  
+
+
         
 -   Throwing an exception in IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher class when the mapping of 
     foreign keys and primary keys are not correct with the RLS policy declaration for the table. 
