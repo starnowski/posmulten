@@ -73,6 +73,8 @@ https://changelog.com/podcast/127
         [106](https://github.com/starnowski/posmulten/issues/106)  
     -   Added type com.github.starnowski.posmulten.postgresql.core.context.enrichers.DefaultValueForTenantColumnEnricher
         [106](https://github.com/starnowski/posmulten/issues/106)  
+    -   Added constructor com.github.starnowski.posmulten.postgresql.core.context.enrichers.GetCurrentTenantIdFunctionDefinitionEnricher#GetCurrentTenantIdFunctionDefinitionEnricher(GetCurrentTenantIdFunctionProducer)
+        [106](https://github.com/starnowski/posmulten/issues/106)  
         
 -   Throwing an exception in IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher class when the mapping of 
     foreign keys and primary keys are not correct with the RLS policy declaration for the table. 
@@ -90,7 +92,9 @@ https://changelog.com/podcast/127
     
 ### Removed
 
--   Removed method com.github.starnowski.posmulten.postgresql.core.contex.SingleTenantColumnSQLDefinitionsProducer#setSetDefaultStatementProducer(SetDefaultStatementProducer)
+-   Removed method com.github.starnowski.posmulten.postgresql.core.context.SingleTenantColumnSQLDefinitionsProducer#setSetDefaultStatementProducer(SetDefaultStatementProducer)
+    [106](https://github.com/starnowski/posmulten/issues/106)  
+-   Removed method com.github.starnowski.posmulten.postgresql.core.context.enrichers.GetCurrentTenantIdFunctionDefinitionEnricher#setGetCurrentTenantIdFunctionProducer(GetCurrentTenantIdFunctionProducer)
     [106](https://github.com/starnowski/posmulten/issues/106)  
 -   Removed type com.github.starnowski.posmulten.postgresql.core.context.TenantColumnRequest
     [108](https://github.com/starnowski/posmulten/issues/108)   
