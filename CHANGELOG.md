@@ -19,7 +19,15 @@ https://changelog.com/podcast/127
 
     -   Added type com.github.starnowski.posmulten.postgresql.core.common.function.DefaultFunctionArgumentValueToStringMapper
         [106](https://github.com/starnowski/posmulten/issues/106)
-
+    -   Added method com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#createValidTenantValueConstraint(List<String>, String, String)
+        [106](https://github.com/starnowski/posmulten/issues/106)      
+    -   Added method com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#registerCustomValidTenantValueConstraintNameForTable(String, String)
+        [106](https://github.com/starnowski/posmulten/issues/106)              
+    -   Added method com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#setCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables(boolean)
+        [106](https://github.com/starnowski/posmulten/issues/106)      
+    -   Added method com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#skipAddingOfTenantColumnDefaultValueForTable(String)
+        [106](https://github.com/starnowski/posmulten/issues/106)          
+        
 -   Throwing an exception in IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher class when the mapping of 
     foreign keys and primary keys are not correct with the RLS policy declaration for the table. 
     [113](https://github.com/starnowski/posmulten/issues/113)
