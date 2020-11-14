@@ -114,6 +114,10 @@ https://www.markdownguide.org/basic-syntax/
         [113](https://github.com/starnowski/posmulten/issues/113)
     -   Added type com.github.starnowski.posmulten.postgresql.core.context.validators.ForeignKeysMappingSharedSchemaContextRequestValidator
         [113](https://github.com/starnowski/posmulten/issues/113) 
+    -   Moved type ISharedSchemaContextEnricher to com.github.starnowski.posmulten.postgresql.core.context.enrichers package
+        [113](https://github.com/starnowski/posmulten/issues/113) 
+    -   Added type com.github.starnowski.posmulten.postgresql.core.context.validators.ISharedSchemaContextRequestValidator
+        [113](https://github.com/starnowski/posmulten/issues/113) 
 
 ### Changed
 
