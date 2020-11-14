@@ -1,4 +1,4 @@
-# posmulten
+# Posmulten
 
 [![Build Status](https://travis-ci.org/starnowski/posmulten.svg?branch=master)](https://travis-ci.org/starnowski/posmulten)
 [ ![Download](https://api.bintray.com/packages/starnowski/posmulten/posmulten/images/download.svg?version=0.1.7) ](https://bintray.com/starnowski/posmulten/posmulten/0.1.7/link)
