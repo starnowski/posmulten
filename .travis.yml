@@ -1,7 +1,8 @@
 stages:
   # Compilation, tests, testing database creation scripts
   - "compilation, unit tests, database creation tests"
-  - "integration tests"
+  - "integration and functional tests"
+  - "compatible tests"
 jobs:
   include:
     - stage: "compilation, unit tests, database creation tests"
@@ -16,7 +17,7 @@ jobs:
       script: mvn clean install
 
     - stage: "compilation, unit tests, database creation tests"
-      name: "Database creation tests"
+      name: "Database creation tests for multiple postgres versions 9.6, 10, 11, 12, 13"
       language: bash
       sudo: true
       before_install:
@@ -24,7 +25,7 @@ jobs:
         - .travis/bats/bats-core-installation.sh "$TRAVIS_BUILD_DIR/.travis/bats"
       services:
         - docker
-      script: export PATH="$TRAVIS_BUILD_DIR/.travis/bats/bats-core/bin:$PATH" && bats/run_bats_test.sh
+      script: export PATH="$TRAVIS_BUILD_DIR/.travis/bats/bats-core/bin:$PATH" && bats/run_bats_test_for_all_db_version.sh
 
     - stage: "integration and functional tests"
       name: "Integration and functional tests in postgresql-core module"
@@ -43,6 +44,18 @@ jobs:
           - $HOME/.m2
       script: mvn -DskipTests clean install && mvn -pl :postgresql-core -P !unit-tests,integration-tests test && mvn -pl :postgresql-core-functional-tests -P !unit-tests,functional-tests test
 
+    - stage: "compatible tests"
+      name: "Running integration and functional tests that checks if code is compatible with postgres versions 9.6, 10, 11, 12, 13"
+      dist: trusty # https://docs.travis-ci.com/user/reference/trusty/#jvm-clojure-groovy-java-scala-images - Trusty supports java 8
+      language: java
+      jdk: oraclejdk8
+      sudo: true
+      services:
+        - docker
+      cache:
+        directories:
+          - $HOME/.m2
+      script: bats/run_integration_test_for_all_db_version.sh
       deploy:
         provider: script
         script: mvn -DskipTests clean install && bash deploy/release.sh
