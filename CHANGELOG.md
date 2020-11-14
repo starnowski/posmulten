@@ -14,11 +14,20 @@ https://changelog.com/podcast/127
 ## [0.2.0] - 2020-11-14
 ### Added
 
--   Add components that generate constraint on tenant column that checks if tenant value is valid and generate function 
+-   Components that generate constraint on tenant column that checks if tenant value is valid and generate function 
     that checks if passed tenant value is not one of values from blacklist [106](https://github.com/starnowski/posmulten/issues/106)
 
     -   Added type com.github.starnowski.posmulten.postgresql.core.common.function.DefaultFunctionArgumentValueToStringMapper
+        [106](https://github.com/starnowski/posmulten/issues/106)
 
+-   Throwing an exception in IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher class when the mapping of 
+    foreign keys and primary keys are not correct with the RLS policy declaration for the table. 
+    [113](https://github.com/starnowski/posmulten/issues/113)
+    
+    -   Added method com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#getValidatorsCopy() 
+        [113](https://github.com/starnowski/posmulten/issues/113)    
+    -   Added method com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#setValidators(List<ISharedSchemaContextRequestValidator>) 
+        [113](https://github.com/starnowski/posmulten/issues/113)
 
 ### Changed
 
