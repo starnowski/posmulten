@@ -21,6 +21,10 @@ https://changelog.com/podcast/127
         [105](https://github.com/starnowski/posmulten/issues/105)    
     -   Added method com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaContext#getISetCurrentTenantIdFunctionPreparedStatementInvocationFactory()
         [105](https://github.com/starnowski/posmulten/issues/105)    
+    -   Added method com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContext#getISetCurrentTenantIdFunctionPreparedStatementInvocationFactory()
+        [105](https://github.com/starnowski/posmulten/issues/105)   
+    -   Added method com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContext#setISetCurrentTenantIdFunctionPreparedStatementInvocationFactory(ISetCurrentTenantIdFunctionPreparedStatementInvocationFactory)
+        [105](https://github.com/starnowski/posmulten/issues/105)          
 
 -   Components that generate constraint on tenant column that checks if tenant value is valid and generate function 
     that checks if passed tenant value is not one of values from blacklist [106](https://github.com/starnowski/posmulten/issues/106)
@@ -38,7 +42,11 @@ https://changelog.com/podcast/127
     -   Added method com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaContext#getIIsTenantValidFunctionInvocationFactory()
         [106](https://github.com/starnowski/posmulten/issues/106)    
     -   Added method com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaContext#setIIsTenantValidFunctionInvocationFactory(IIsTenantValidFunctionInvocationFactory
-        [106](https://github.com/starnowski/posmulten/issues/106)        
+        [106](https://github.com/starnowski/posmulten/issues/106)  
+    -   Added method com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContext#getIIsTenantValidFunctionInvocationFactory
+        [106](https://github.com/starnowski/posmulten/issues/106)         
+    -   Added method com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContext#setIIsTenantValidFunctionInvocationFactory(IIsTenantValidFunctionInvocationFactory factory)
+        [106](https://github.com/starnowski/posmulten/issues/106)  
         
 -   Throwing an exception in IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher class when the mapping of 
     foreign keys and primary keys are not correct with the RLS policy declaration for the table. 
