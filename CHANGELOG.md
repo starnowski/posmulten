@@ -104,6 +104,8 @@ https://www.markdownguide.org/basic-syntax/
         [113](https://github.com/starnowski/posmulten/issues/113)    
     -   Added method com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#setValidators(List<ISharedSchemaContextRequestValidator>) 
         [113](https://github.com/starnowski/posmulten/issues/113)
+    -   Added type com.github.starnowski.posmulten.postgresql.core.context.exceptions.IncorrectForeignKeysMappingException
+        [113](https://github.com/starnowski/posmulten/issues/113)
 
 ### Changed
 
