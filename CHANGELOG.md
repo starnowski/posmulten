@@ -87,6 +87,8 @@ https://www.markdownguide.org/basic-syntax/
         [106](https://github.com/starnowski/posmulten/issues/106)  
     -   Added constructor com.github.starnowski.posmulten.postgresql.core.context.enrichers.TableRLSSettingsSQLDefinitionsEnricher#TableRLSSettingsSQLDefinitionsEnricher(TableRLSSettingsSQLDefinitionsProducer)
         [106](https://github.com/starnowski/posmulten/issues/106)  
+    -   Added constructor com.github.starnowski.posmulten.postgresql.core.context.enrichers.TenantColumnSQLDefinitionsEnricher#TenantColumnSQLDefinitionsEnricher(SingleTenantColumnSQLDefinitionsProducer)
+        [106](https://github.com/starnowski/posmulten/issues/106)  
         
 -   **Code Refactor** Changed the "Abstract" prefix for all interfaces to "I" prefix.
     -   Added constructor com.github.starnowski.posmulten.postgresql.core.context.enrichers.IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher#IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher(IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer)
@@ -120,6 +122,8 @@ https://www.markdownguide.org/basic-syntax/
     [106](https://github.com/starnowski/posmulten/issues/106)  
 -   Removed method com.github.starnowski.posmulten.postgresql.core.context.enrichers.TableRLSSettingsSQLDefinitionsEnricher#setTableRLSSettingsSQLDefinitionsProducer(TableRLSSettingsSQLDefinitionsProducer)
     [106](https://github.com/starnowski/posmulten/issues/106)  
+-   Removed method com.github.starnowski.posmulten.postgresql.core.context.enrichers.TenantColumnSQLDefinitionsEnricher#setSingleTenantColumnSQLDefinitionsProducer(SingleTenantColumnSQLDefinitionsProducer)
+    [106](https://github.com/starnowski/posmulten/issues/106) 
     
 -   Removed type com.github.starnowski.posmulten.postgresql.core.context.TenantColumnRequest
     [108](https://github.com/starnowski/posmulten/issues/108)   
