@@ -83,6 +83,8 @@ https://www.markdownguide.org/basic-syntax/
         [106](https://github.com/starnowski/posmulten/issues/106)
     -   Added constructor com.github.starnowski.posmulten.postgresql.core.context.enrichers.SetCurrentTenantIdFunctionDefinitionEnricher#SetCurrentTenantIdFunctionDefinitionEnricher(SetCurrentTenantIdFunctionProducer)
         [106](https://github.com/starnowski/posmulten/issues/106)  
+    -   Added constructor com.github.starnowski.posmulten.postgresql.core.context.enrichers.TableRLSPolicyEnricher#TableRLSPolicyEnricher(TableRLSPolicySQLDefinitionsProducer)
+        [106](https://github.com/starnowski/posmulten/issues/106)  
         
 -   **Code Refactor** Changed the "Abstract" prefix for all interfaces to "I" prefix.
     -   Added constructor com.github.starnowski.posmulten.postgresql.core.context.enrichers.IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher#IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher(IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer)
@@ -111,6 +113,8 @@ https://www.markdownguide.org/basic-syntax/
 -   Removed method com.github.starnowski.posmulten.postgresql.core.context.enrichers.IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricher#setIsRecordBelongsToCurrentTenantFunctionDefinitionProducer(IsRecordBelongsToCurrentTenantFunctionDefinitionProducer)
     [106](https://github.com/starnowski/posmulten/issues/106)  
 -   Removed method com.github.starnowski.posmulten.postgresql.core.context.enrichers.SetCurrentTenantIdFunctionDefinitionEnricher#setSetCurrentTenantIdFunctionProducer(SetCurrentTenantIdFunctionProducer)
+    [106](https://github.com/starnowski/posmulten/issues/106)  
+-   Removed method com.github.starnowski.posmulten.postgresql.core.context.enrichers.TableRLSPolicyEnricher#setTableRLSPolicySQLDefinitionsProducer(TableRLSPolicySQLDefinitionsProducer)
     [106](https://github.com/starnowski/posmulten/issues/106)  
     
 -   Removed type com.github.starnowski.posmulten.postgresql.core.context.TenantColumnRequest
