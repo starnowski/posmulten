@@ -14,6 +14,14 @@ https://changelog.com/podcast/127
 ## [0.2.0] - 2020-11-14
 ### Added
 
+-   Interface similar to the "com.github.starnowski.posmulten.postgresql.core.rls.function.ISetCurrentTenantIdFunctionInvocationFactory" 
+    that is going to return sql invocation that could be used with PreparedStatement mechanism [105](https://github.com/starnowski/posmulten/issues/105)
+    
+    -   Added method com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaContext#setISetCurrentTenantIdFunctionPreparedStatementInvocationFactory(ISetCurrentTenantIdFunctionPreparedStatementInvocationFactory)
+        [105](https://github.com/starnowski/posmulten/issues/105)    
+    -   Added method com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaContext#getISetCurrentTenantIdFunctionPreparedStatementInvocationFactory()
+        [105](https://github.com/starnowski/posmulten/issues/105)    
+
 -   Components that generate constraint on tenant column that checks if tenant value is valid and generate function 
     that checks if passed tenant value is not one of values from blacklist [106](https://github.com/starnowski/posmulten/issues/106)
 
@@ -26,7 +34,11 @@ https://changelog.com/podcast/127
     -   Added method com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#setCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables(boolean)
         [106](https://github.com/starnowski/posmulten/issues/106)      
     -   Added method com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#skipAddingOfTenantColumnDefaultValueForTable(String)
-        [106](https://github.com/starnowski/posmulten/issues/106)          
+        [106](https://github.com/starnowski/posmulten/issues/106)     
+    -   Added method com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaContext#getIIsTenantValidFunctionInvocationFactory()
+        [106](https://github.com/starnowski/posmulten/issues/106)    
+    -   Added method com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaContext#setIIsTenantValidFunctionInvocationFactory(IIsTenantValidFunctionInvocationFactory
+        [106](https://github.com/starnowski/posmulten/issues/106)        
         
 -   Throwing an exception in IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher class when the mapping of 
     foreign keys and primary keys are not correct with the RLS policy declaration for the table. 
