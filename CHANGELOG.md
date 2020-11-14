@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 https://keepachangelog.com/en/1.0.0/
 https://changelog.com/podcast/127
-
+https://www.markdownguide.org/basic-syntax/
 
 ## [Unreleased]
 
@@ -76,6 +76,10 @@ https://changelog.com/podcast/127
     -   Added constructor com.github.starnowski.posmulten.postgresql.core.context.enrichers.GetCurrentTenantIdFunctionDefinitionEnricher#GetCurrentTenantIdFunctionDefinitionEnricher(GetCurrentTenantIdFunctionProducer)
         [106](https://github.com/starnowski/posmulten/issues/106)  
         
+-   **Code Refactor** Changed the "Abstract" prefix for all interfaces to "I" prefix.
+    -   Added constructor com.github.starnowski.posmulten.postgresql.core.context.enrichers.IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher#IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher(IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer)
+        [108](https://github.com/starnowski/posmulten/issues/108)  
+        
 -   Throwing an exception in IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher class when the mapping of 
     foreign keys and primary keys are not correct with the RLS policy declaration for the table. 
     [113](https://github.com/starnowski/posmulten/issues/113)
@@ -96,7 +100,8 @@ https://changelog.com/podcast/127
     [106](https://github.com/starnowski/posmulten/issues/106)  
 -   Removed method com.github.starnowski.posmulten.postgresql.core.context.enrichers.GetCurrentTenantIdFunctionDefinitionEnricher#setGetCurrentTenantIdFunctionProducer(GetCurrentTenantIdFunctionProducer)
     [106](https://github.com/starnowski/posmulten/issues/106)  
+    
 -   Removed type com.github.starnowski.posmulten.postgresql.core.context.TenantColumnRequest
     [108](https://github.com/starnowski/posmulten/issues/108)   
-    
-    
+-   Removed method com.github.starnowski.posmulten.postgresql.core.context.enrichers.IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher#setIsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer(IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer)
+    [108](https://github.com/starnowski/posmulten/issues/108)   
