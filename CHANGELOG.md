@@ -93,6 +93,8 @@ https://www.markdownguide.org/basic-syntax/
         [106](https://github.com/starnowski/posmulten/issues/106)  
     -   Added type com.github.starnowski.posmulten.postgresql.core.context.exceptions.MissingRLSPolicyDeclarationForTableThatRequiredTenantColumnCreationException
         [106](https://github.com/starnowski/posmulten/issues/106)  
+    -   Added type com.github.starnowski.posmulten.postgresql.core.context.exceptions.MissingRLSPolicyDeclarationForTablesThatAddingOfTenantColumnDefaultValueShouldBeSkippedException
+        [106](https://github.com/starnowski/posmulten/issues/106)  
         
 -   **Code Refactor** Changed the "Abstract" prefix for all interfaces to "I" prefix.
     -   Added constructor com.github.starnowski.posmulten.postgresql.core.context.enrichers.IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher#IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher(IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer)
