@@ -43,7 +43,7 @@ jobs:
       cache:
         directories:
           - $HOME/.m2
-      script: mvn -DskipTests clean install && mvn -pl :postgresql-core -P !unit-tests,integration-tests test && mvn -pl :postgresql-core-functional-tests -P !unit-tests,functional-tests test
+      script: mvn -DskipTests --quiet clean install && mvn -pl :postgresql-core -P !unit-tests,integration-tests test && mvn -pl :postgresql-core-functional-tests -P !unit-tests,functional-tests test
 
     - stage: "compatibility tests"
       name: "Running integration and functional tests that checks if code is compatible with postgres versions 10, 11, 12, 13"

@@ -46,7 +46,7 @@ preparePostgresDatabase
 
 #Run test
 pushd "$SCRIPT_DIR/.."
-mvn -DskipTests clean install && mvn -pl :postgresql-core -Dspring.profiles.active=docker -P !unit-tests,integration-tests test && mvn -pl :postgresql-core-functional-tests -Dspring.profiles.active=docker -P !unit-tests,functional-tests test
+mvn -DskipTests --quiet clean install && mvn -pl :postgresql-core -Dspring.profiles.active=docker -P !unit-tests,integration-tests test && mvn -pl :postgresql-core-functional-tests -Dspring.profiles.active=docker -P !unit-tests,functional-tests test
 popd
 
 #
