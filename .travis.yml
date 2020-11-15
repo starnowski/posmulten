@@ -3,6 +3,7 @@ stages:
   - "compilation, unit tests, database creation tests"
   - "integration and functional tests"
   - "compatibility tests"
+  - "deploy"
 jobs:
   include:
     - stage: "compilation, unit tests, database creation tests"
@@ -56,9 +57,21 @@ jobs:
         directories:
           - $HOME/.m2
       script: bats/run_integration_test_for_all_db_version.sh
+
+    - stage: "deploy"
+      name: "Deploy project"
+      if: |
+        tag IS present
+      dist: trusty # https://docs.travis-ci.com/user/reference/trusty/#jvm-clojure-groovy-java-scala-images - Trusty supports java 8
+      language: java
+      jdk: oraclejdk8
+      cache:
+        directories:
+          - $HOME/.m2
+      script: mvn -DskipTests clean install
       deploy:
         provider: script
-        script: mvn -DskipTests clean install && bash deploy/release.sh
+        script: bash deploy/release.sh
         on:
           tags: true
           branch: release
