@@ -11,7 +11,7 @@ jobs:
       dist: trusty # https://docs.travis-ci.com/user/reference/trusty/#jvm-clojure-groovy-java-scala-images - Trusty supports java 8
       language: java
       jdk: oraclejdk8
-      sudo: false
+      install: skip
       cache:
         directories:
           - $HOME/.m2
@@ -20,7 +20,6 @@ jobs:
     - stage: "compilation, unit tests, database creation tests"
       name: "Database creation tests for multiple postgres versions 9.6, 10, 11, 12, 13"
       language: bash
-      sudo: true
       before_install:
         # Install bats-core with version 1.1.0 when package will be available (see https://github.com/bats-core/bats-core/issues/103)
         - .travis/bats/bats-core-installation.sh "$TRAVIS_BUILD_DIR/.travis/bats"
@@ -33,7 +32,7 @@ jobs:
       dist: trusty # https://docs.travis-ci.com/user/reference/trusty/#jvm-clojure-groovy-java-scala-images - Trusty supports java 8
       language: java
       jdk: oraclejdk8
-      sudo: false
+      install: skip
       addons:
         postgresql: "9.6"
       services:
@@ -43,14 +42,14 @@ jobs:
       cache:
         directories:
           - $HOME/.m2
-      script: mvn -DskipTests clean install && mvn -pl :postgresql-core -P !unit-tests,integration-tests test && mvn -pl :postgresql-core-functional-tests -P !unit-tests,functional-tests test
+      script: mvn -DskipTests --quiet clean install && mvn -pl :postgresql-core -P !unit-tests,integration-tests test && mvn -pl :postgresql-core-functional-tests -P !unit-tests,functional-tests test
 
     - stage: "compatibility tests"
       name: "Running integration and functional tests that checks if code is compatible with postgres versions 10, 11, 12, 13"
       dist: trusty # https://docs.travis-ci.com/user/reference/trusty/#jvm-clojure-groovy-java-scala-images - Trusty supports java 8
       language: java
       jdk: oraclejdk8
-      sudo: true
+      install: skip
       services:
         - docker
       cache:
@@ -65,6 +64,7 @@ jobs:
       dist: trusty # https://docs.travis-ci.com/user/reference/trusty/#jvm-clojure-groovy-java-scala-images - Trusty supports java 8
       language: java
       jdk: oraclejdk8
+      install: skip
       cache:
         directories:
           - $HOME/.m2
