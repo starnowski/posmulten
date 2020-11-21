@@ -16,9 +16,11 @@ Posmulten library is an open-source project for the generation of SQL DDL statem
 
 Based on [hibernate documentation](https://docs.jboss.org/hibernate/orm/4.3/devguide/en-US/html/ch16.html) 
 _`the term multi-tenancy in general is applied to software development to indicate an architecture in which a single running instance of an application simultaneously serves multiple clients (tenants).`_
-There three main strategies [separate database](#separate-database), [separate schema](#separate-schema) and [shared schema](#shared-schema)
+There are three main strategies [separate database](#separate-database), [separate schema](#separate-schema) and [shared schema](#shared-schema)
+Below you can find short description of those strategies. Of course we will focus more on [shared schema](#shared-schema).
+For more information about what pros and cons of each approach please check below links:
 
-# TODO Mention about three main strategies
+* https://docs.jboss.org/hibernate/orm/4.3/devguide/en-US/html/ch16.html
 
 ## Separate database
 TODO
