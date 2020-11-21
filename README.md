@@ -21,6 +21,7 @@ Below you can find short description of those strategies. Of course we will focu
 For more information about what pros and cons of each approach please check below links:
 
 * https://docs.jboss.org/hibernate/orm/4.3/devguide/en-US/html/ch16.html
+* https://medium.com/@MentorMate/increase-efficiency-with-multi-tenant-cloud-software-architecture-4261fca6025e
 
 ## Separate database
 TODO
