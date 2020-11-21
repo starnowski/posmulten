@@ -30,6 +30,11 @@ For this obvious reason this approach gives the highest isolation level.
 
 ![Seperate database_diagram](https://raw.githubusercontent.com/starnowski/posmulten/master/doc/Separate_database.png)
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/starnowski/posmulten/master/doc/Separate_database.png">
+</p>
+
+
 ## Separate schema
 TODO
 
