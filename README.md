@@ -28,15 +28,18 @@ For more information about what pros and cons of each approach please check belo
 In this strategy each tenant's data is stored in separate database. 
 For this obvious reason this approach gives the highest isolation level.
 
-![Seperate database_diagram](https://raw.githubusercontent.com/starnowski/posmulten/master/doc/Separate_database.png)
-
 <p align="center">
   <img src="https://raw.githubusercontent.com/starnowski/posmulten/master/doc/Separate_database.png">
 </p>
 
 
 ## Separate schema
-TODO
+Strategy assumes that each tenant's data is kept in his own schema but all those schemas exists in single database instance.
+Obviously this approach offers lower isolation level than [separate database](#separate-database) but allows to potentially save costs for infrastructure by not having multiple database instances.
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/starnowski/posmulten/master/doc/Separate_schema.png">
+</p>
 
 ## Shared schema
 TODO
