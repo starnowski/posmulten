@@ -6,14 +6,29 @@
 
 
 * [Introduction](#introduction)
+* [Multi-tenancy](#multi-tenancy)
 
 
 # Introduction
 Posmulten library is an open-source project for the generation of SQL DDL statements that make it easy for implementation of Shared Schema Multi-tenancy strategy via the [Row Security Policies](https://www.postgresql.org/docs/9.6/ddl-rowsecurity.html) in the Postgres database.
 
+# Multi-tenancy
 
-# TODO Mention about hibernate documentation
+Based on [hibernate documentation](https://docs.jboss.org/hibernate/orm/4.3/devguide/en-US/html/ch16.html) 
+_`the term multi-tenancy in general is applied to software development to indicate an architecture in which a single running instance of an application simultaneously serves multiple clients (tenants).`_
+There three main strategies [separate database](#separate-database), [separate schema](#separate-schema) and [shared schema](#shared-schema)
+
 # TODO Mention about three main strategies
+
+## Separate database
+TODO
+
+## Separate schema
+TODO
+
+## Shared schema
+TODO
+
 # TODO Concept What is shared schema strategy
 # TODO UML
 # TODO How sql query looks like for shared schema
