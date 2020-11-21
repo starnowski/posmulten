@@ -7,6 +7,7 @@
 
 * [Introduction](#introduction)
 * [Multi-tenancy](#multi-tenancy)
+    * [Separate database strategy](#separate-database)
 
 
 # Introduction
@@ -24,7 +25,10 @@ For more information about what pros and cons of each approach please check belo
 * https://medium.com/@MentorMate/increase-efficiency-with-multi-tenant-cloud-software-architecture-4261fca6025e
 
 ## Separate database
-TODO
+In this strategy each tenant's data is stored in separate database. 
+For this obvious reason this approach gives the highest isolation level.
+
+![Seperate database_diagram](https://raw.githubusercontent.com/starnowski/posmulten/master/doc/Separate_database.png)
 
 ## Separate schema
 TODO
