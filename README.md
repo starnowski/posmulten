@@ -8,6 +8,7 @@
 * [Introduction](#introduction)
 * [Multi-tenancy](#multi-tenancy)
     * [Separate database strategy](#separate-database)
+    * [Separate schema strategy](#separate-schema)
 
 
 # Introduction
