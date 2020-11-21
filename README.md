@@ -9,6 +9,7 @@
 * [Multi-tenancy](#multi-tenancy)
     * [Separate database strategy](#separate-database)
     * [Separate schema strategy](#separate-schema)
+    * [Shared schema strategy](#shared-schema)
 
 
 # Introduction
@@ -52,4 +53,8 @@ TODO
 # TODO  - RLS policy
 # TODO  - Constraints
 # TODO  - Connection settings 
+
+# TODO How to start using posmulten
+
+# TODO Compatibility with other versions
 
