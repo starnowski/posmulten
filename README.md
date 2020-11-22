@@ -50,7 +50,12 @@ In this strategies data all tenants are kept in single database and same schema.
 Although there is no limitation that there has to be only one schema in database but all tenants should have same access to them.
 The strategy assumes that all tables in a database (with an exception for tables that stores vocabulary data or data available for all tenants) have a column that stores tenant identifier.
 Of course, based on this value column, we know which tenant is the owner of the table raw.
-Obviously, this approach offers a lower isolation level than both previous strategies but, just like [shared schema](#shared-schema) strategy, allows to save costs for infrastructure potentially
+Obviously, this approach offers a lower isolation level than both previous strategies but, just like [shared schema](#shared-schema) strategy, allows to save costs for infrastructure potentially.
+In comparison to [shared schema](#shared-schema) strategy we can say that although postgres can handle with multiple schemas and even we can find comments from person who use this strategy postgres.
+We can find statements that with larger number of tenants the maintenance for this approach is harder.
+Executing ddl scripts for hundreds schemas might be easily automated but still it might create complexity and slower deployment.
+It does not mean that executing ddl scripts for database with shared schema approach is error free.
+Every change should be considered.
 
 
 <p align="center">
