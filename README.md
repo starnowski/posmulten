@@ -45,7 +45,6 @@ Obviously this approach offers lower isolation level than [separate database](#s
 </p>
 
 ## Shared schema
-TODO
 In this strategies data all tenants are kept in single database and same schema.
 Although there is no limitation that there has to be only one schema in database but all tenants should have same access to them.
 The strategy assumes that all tables in a database (with an exception for tables that stores vocabulary data or data available for all tenants) have a column that stores tenant identifier.
