@@ -48,13 +48,16 @@ Obviously this approach offers lower isolation level than [separate database](#s
 TODO
 In this strategies data all tenants are kept in single database and same schema.
 Although there is no limitation that there has to be only one schema in database but all tenants should have same access to them.
+The strategy assumes that all tables in a database (with an exception for tables that stores vocabulary data or data available for all tenants) have a column that stores tenant identifier.
+Of course, based on this value column, we know which tenant is the owner of the table raw.
+Obviously, this approach offers a lower isolation level than both previous strategies but, just like [shared schema](#shared-schema) strategy, allows to save costs for infrastructure potentially
+
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/starnowski/posmulten/master/doc/Shared_schema.png">
 </p>
 
 # TODO Concept What is shared schema strategy
-# TODO UML
 # TODO How sql query looks like for shared schema
 # TODO How Posmulten is doing this?
 # TODO  - RLS policy
@@ -63,5 +66,4 @@ Although there is no limitation that there has to be only one schema in database
 
 # TODO How to start using posmulten
 
-# TODO Compatibility with other versions
 
