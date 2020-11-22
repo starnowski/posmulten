@@ -67,7 +67,10 @@ There are some other [important considerations](#implementation-requirements) wh
 Just like it mention in section above, the [shared schema](#shared-schema) strategy assumes that all tables shared by tenant have column which defines its owner.
 This means that the value of this column has to be checked in each SQL query and operation.
 Column has to checked during execution of SELECT statement and all operations that modifies data like UPDATE, INSERT and DELETE.
-  
+In case when decision is made that application should handle this checks then every sql statement send to database by application need to contains in WHERE statement condition for tenant column for each table.
+It might be easier if application use some ORM framework. 
+But still if application code contains any custom query then developer has to be aware that he needs to add check for tenant identifier column.
+
 
 
 # TODO How sql query looks like for shared schema
