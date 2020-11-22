@@ -49,7 +49,7 @@ In this strategies data all tenants are kept in single database and same schema.
 Although there is no limitation that there has to be only one schema in database but all tenants should have same access to them.
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/starnowski/posmulten/feature/133_readme_file/doc/Shared_schema.png">
+  <img src="https://raw.githubusercontent.com/starnowski/posmulten/master/doc/Shared_schema.png">
 </p>
 
 # TODO Concept What is shared schema strategy
