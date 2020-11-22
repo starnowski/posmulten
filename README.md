@@ -52,7 +52,7 @@ The strategy assumes that all tables in a database (with an exception for tables
 Of course, based on this value column, we know which tenant is the owner of the table raw.
 Obviously, this approach offers a lower isolation level than both previous strategies but, just like [shared schema](#shared-schema) strategy, allows to save costs for infrastructure potentially.
 In comparison to [shared schema](#shared-schema) strategy we can say that although postgres can handle with multiple schemas and even we can find comments from person who use this strategy postgres.
-We can find statements that with larger number of tenants the maintenance for this approach is harder.
+We can find statements that with larger number of tenants the maintenance for this approach is harder than when schema is shared between tenants.
 Executing ddl scripts for hundreds schemas might be easily automated but still it might create complexity and slower deployment.
 It does not mean that executing ddl scripts for database with shared schema approach is error free.
 Every change should be considered.
