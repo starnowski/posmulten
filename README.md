@@ -75,7 +75,10 @@ However there are cons for such situation if for example we would consider of ha
 All application should have implemented tenant column checks. 
 Not to mention if those application would be writen in different programing languages.
 
-
+Other approach is that database engine is going to handle tenant column checks.
+Of course not all database engine support such feature.
+TODO
+ 
 
 # TODO How sql query looks like for shared schema
 # TODO How Posmulten is doing this?
