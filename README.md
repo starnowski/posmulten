@@ -64,6 +64,11 @@ There are some other [important considerations](#implementation-requirements) wh
 </p>
 
 ### Implementation requirements
+Just like it mention in section above, the [shared schema](#shared-schema) strategy assumes that all tables shared by tenant have column which defines its owner.
+This means that the value of this column has to be checked in each SQL query and operation.
+Column has to checked during execution of SELECT statement and all operations that modifies data like UPDATE, INSERT and DELETE.
+  
+
 
 # TODO How sql query looks like for shared schema
 # TODO How Posmulten is doing this?
