@@ -69,7 +69,7 @@ This means that the value of this column has to be checked in each SQL query and
 Column has to checked during execution of SELECT statement and all operations that modifies data like UPDATE, INSERT and DELETE.
 In case when decision is made that application should handle this checks then every sql statement send to database by application need to contains in WHERE statement condition for tenant column for each table.
 It might be easier if application use some ORM framework. 
-But still if application code contains any custom query then developer has to be aware that he needs to add check for tenant identifier column.
+But still if application code contains any custom query then developer has to be aware that he needs to add checks for tenant identifier column.
 The pros for this approach is that if we would ever consider changing database engine for application then it would be quick easy
 However there are cons for such situation if for example we would consider of having many application that use same database.
 All application should have implemented tenant column checks. 
