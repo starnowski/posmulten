@@ -62,7 +62,6 @@ Every change should be considered.
   <img src="https://raw.githubusercontent.com/starnowski/posmulten/master/doc/Shared_schema.png">
 </p>
 
-# TODO Concept What is shared schema strategy
 # TODO How sql query looks like for shared schema
 # TODO How Posmulten is doing this?
 # TODO  - RLS policy
