@@ -55,11 +55,14 @@ We can find statements that with larger number of tenants the maintenance for th
 Executing ddl scripts for hundreds schemas might be easily automated but still it might create complexity and slower deployment.
 It does not mean that executing ddl scripts for database with shared schema approach is error free.
 Every change should be considered.
+There are some other important considerations which should taken before deciding for shared schema strategy.
 
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/starnowski/posmulten/master/doc/Shared_schema.png">
 </p>
+
+
 
 # TODO How sql query looks like for shared schema
 # TODO How Posmulten is doing this?
