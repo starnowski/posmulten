@@ -77,7 +77,7 @@ Not to mention if those application would be writen in different programing lang
 
 Other approach is that database engine is going to handle tenant column checks.
 Of course not all database engines support such feature.
-One of such database is Oracle with feature called the (Virtual private database)[https://www.oracle.com/database/technologies/virtual-private-db.html].
+One of such database is Oracle with feature called the [Virtual private database](https://www.oracle.com/database/technologies/virtual-private-db.html).
 And also Postgres has similar feature [Row Security Policy](https://www.postgresql.org/docs/9.6/ddl-rowsecurity.html).
 
  
