@@ -78,18 +78,21 @@ Not to mention if those application would be writen in different programing lang
 Another approach is that the database engine is going to handle tenant column checks.
 Of course, not all database engines support such features.
 One such database is Oracle with a feature called the [virtual private database](https://www.oracle.com/database/technologies/virtual-private-db.html).
-And also Postgres has a similar feature called the [row security policy](https://www.postgresql.org/docs/9.6/ddl-rowsecurity.html) which posmulten is [using](#rls-policy).
+And also Postgres has a similar feature called the [row security policy](https://www.postgresql.org/docs/9.6/ddl-rowsecurity.html) which posmulten is [using](#setting-rls-policy).
 This approach might be better if you planned to have multiple different applications connected to your database.
 Besides some connection adjustments, there is no additional logic that has to be added to every SQL statement created by the application code.
 Not to mention the situation when connected applications are written in different programming languages.
 
+One thing that might be considered during implementation is constraints that check if the foreign key columns reference rows that belong to the same tenant
+
+
 
 # How posmulten helps to implement shared schema strategy?
-#### RLS policy
+#### Setting RLS policy
 
 TODO
 
-#### Constraints
+#### Adding constraints for foreign key columns
 TODO
 
 ### Connecting to Database 
@@ -98,7 +101,7 @@ TODO
 # TODO How sql query looks like for shared schema
 
 # TODO  - Constraints
-# TODO  - Connection settings 
+# TODO  - Connection settings st
 
 # TODO How to start using posmulten
 
