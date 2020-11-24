@@ -87,7 +87,7 @@ One thing that might be considered during implementation is constraints that che
 Of course, assuming if the above requirement is fulfilled, then even if SQL injection will succeed, the application that checks tenant column should not display the record for other tenants or modify it.
 But there might be a situation when a separate application is also connected to a database but operate on data without checking the tenant column.
 For example, statistical data gathering or other specific goals where joining data from different tables is crucial.
-
+Posmulten helps to [create such constraints](#adding-constraints-for-foreign-key-columns) for the foreign key columns.
 
 
 # How posmulten helps to implement shared schema strategy?
