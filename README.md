@@ -83,7 +83,8 @@ This approach might be better if you planned to have multiple different applicat
 Besides some connection adjustments, there is no additional logic that has to be added to every SQL statement created by the application code.
 Not to mention the situation when connected applications are written in different programming languages.
 
-One thing that might be considered during implementation is constraints that check if the foreign key columns reference rows that belong to the same tenant
+One thing that might be considered during implementation is constraints that check if the foreign key columns reference rows that belong to the same tenant.
+Of course, assuming if the above requirement is fulfilled, then even if SQL injection will succeed, the application that checks tenant column should not display the record for other tenants or modify it.
 
 
 
