@@ -91,20 +91,14 @@ For example, statistical data gathering or other specific goals where joining da
 
 
 # How posmulten helps to implement shared schema strategy?
-#### Setting RLS policy
+## Setting RLS policy
 
 TODO
 
-#### Adding constraints for foreign key columns
+## Adding constraints for foreign key columns
 TODO
 
-### Connecting to Database 
-
-
-# TODO How sql query looks like for shared schema
-
-# TODO  - Constraints
-# TODO  - Connection settings st
+## Connecting to Database 
 
 # TODO How to start using posmulten
 
