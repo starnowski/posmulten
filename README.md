@@ -11,6 +11,10 @@
     * [Separate schema strategy](#separate-schema)
     * [Shared schema strategy](#shared-schema)
         * [Implementation requirements](#implementation-requirements)
+    * [How posmulten helps to implement shared schema strategy?](#how-posmulten-helps-to-implement-shared-schema-strategy?)
+        * [Setting RLS policy](#setting-rls-policy)
+        * [Adding constraints for foreign key columns](#adding-constraints-for-foreign-key-columns)
+        * [Connecting to Database](#connecting-to-database)
 
 
 # Introduction
@@ -90,15 +94,16 @@ For example, statistical data gathering or other specific goals where joining da
 Posmulten helps to [create such constraints](#adding-constraints-for-foreign-key-columns) for the foreign key columns.
 
 
-# How posmulten helps to implement shared schema strategy?
-## Setting RLS policy
+## How posmulten helps to implement shared schema strategy?
+### Setting RLS policy
 
 TODO
 
-## Adding constraints for foreign key columns
+### Adding constraints for foreign key columns
 TODO
 
-## Connecting to Database 
+### Connecting to Database 
+TODO
 
 # TODO How to start using posmulten
 
