@@ -97,6 +97,19 @@ Posmulten helps to [create such constraints](#adding-constraints-for-foreign-key
 ## How posmulten helps to implement shared schema strategy?
 ### Setting RLS policy
 
+Posmolten use [row security policy](https://www.postgresql.org/docs/9.6/ddl-rowsecurity.html) mechanism to handle tenant data isolation.
+Creates policy for all operations (syntax "ALL" applies to SQL commands like INSERT, SELECT, UPDATE, DELETE) and [specific user](#setting-default-database-user-for-rls-policy).
+
+`
+CREATE POLICY posts_table_rls_policy ON posts
+FOR ALL
+TO "postgresql-core-owner"
+USING (tenant_has_authorities(tenant_id, 'ALL', 'USING', 'posts', 'public'))
+WITH CHECK (tenant_has_authorities(tenant_id, 'ALL', 'WITH_CHECK', 'posts', 'public'));
+`
+
+
+
 TODO
 
 ### Adding constraints for foreign key columns
@@ -105,6 +118,15 @@ TODO
 ### Connecting to Database 
 TODO
 
-# TODO How to start using posmulten
+# How to start using posmulten
+TODO
 
+# Setting maven dependency
+TODO
+
+# Setting default database user for RLS policy
+TODO
+
+# Setting RLS Policy for table
+TODO
 
