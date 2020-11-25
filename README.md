@@ -11,7 +11,7 @@
     * [Separate schema strategy](#separate-schema)
     * [Shared schema strategy](#shared-schema)
         * [Implementation requirements](#implementation-requirements)
-    * [How posmulten helps to implement shared schema strategy?](#how-posmulten-helps-to-implement-shared-schema-strategy?)
+    * [How posmulten helps to implement shared schema strategy?](#how-posmulten-helps-to-implement-shared-schema-strategy)
         * [Setting RLS policy](#setting-rls-policy)
         * [Adding constraints for foreign key columns](#adding-constraints-for-foreign-key-columns)
         * [Connecting to Database](#connecting-to-database)
