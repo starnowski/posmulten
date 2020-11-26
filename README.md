@@ -132,7 +132,7 @@ TABLESPACE pg_default;
 
 ### Setting RLS policy
 
-Posmolten use [row security policy](https://www.postgresql.org/docs/9.6/ddl-rowsecurity.html) mechanism to handle tenant data isolation.
+Posmulten use [row security policy](https://www.postgresql.org/docs/9.6/ddl-rowsecurity.html) mechanism to handle tenant data isolation.
 Creates policy for all operations (syntax "ALL" applies to SQL commands like INSERT, SELECT, UPDATE, DELETE) and [specific user](#setting-default-database-user-for-rls-policy).
 
 `
