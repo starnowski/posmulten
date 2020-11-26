@@ -154,6 +154,7 @@ PARALLEL SAFE;
 `
 
 Creates a DDL statement for a function that checks if the current tenant identifier set for the database session is equal to the passed tenant identifier.
+The [function](#setting-function-name-that-checks-if-passed-identifier-is-the-same-as-current-tenant-identifier) name and function [argument type](#setting-of-type-for-tenant-identifier-value) can be changed 
 
 `
 CREATE OR REPLACE FUNCTION is_id_equals_current_tenant_id(VARCHAR(255)) RETURNS BOOLEAN AS $$
@@ -184,4 +185,13 @@ TODO
 
 # Setting RLS Policy for table
 TODO
+
+# Setting of type for tenant identifier value
+TODO
+
+# Setting function name that checks if passed identifier is the same as current tenant identifier
+TODO
+
+
+
 
