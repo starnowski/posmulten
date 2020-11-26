@@ -108,7 +108,7 @@ USING (tenant_has_authorities(tenant_id, 'ALL', 'USING', 'posts', 'public'))
 WITH CHECK (tenant_has_authorities(tenant_id, 'ALL', 'WITH_CHECK', 'posts', 'public'));
 `
 
-Creates DDL statement for function that check if tenant identifier which is set for database session is equal to tenant column value of row that is being checks.
+Creates DDL statement for function that check if tenant identifier which is set for database session is equal to tenant column (for case above it is "tenant_id") value of row that is being checks.
 
 TODO
 
