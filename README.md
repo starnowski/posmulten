@@ -248,6 +248,13 @@ TODO
 # Setting function name that checks if passed identifier is the same as current tenant identifier
 TODO
 
+# Other maven repositories
+TODO
 
+# Reporting issues
+TODO
+
+# Project contribution
+TODO
 
 
