@@ -95,6 +95,41 @@ Posmulten helps to [create such constraints](#adding-constraints-for-foreign-key
 
 
 ## How posmulten helps to implement shared schema strategy?
+
+Below there is short explanation how posmulten helps to implement shared schema strategy and what ddl statements are generated.
+The ddl statements examples are generated for tables users and posts.
+
+`
+CREATE TABLE public.users
+(
+    id bigint NOT NULL,
+    name character varying(255),
+    tenant_id character varying(255),
+    CONSTRAINT users_pkey PRIMARY KEY (id)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+`
+
+`
+CREATE TABLE public.posts
+(
+    id bigint NOT NULL,
+    text text NOT NULL,
+    user_id bigint NOT NULL,
+    tenant_id character varying(255),
+    CONSTRAINT fk_posts_user_id FOREIGN KEY (user_id)
+              REFERENCES users (id) MATCH SIMPLE,
+    CONSTRAINT posts_pkey PRIMARY KEY (id)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+`
+
 ### Setting RLS policy
 
 Posmolten use [row security policy](https://www.postgresql.org/docs/9.6/ddl-rowsecurity.html) mechanism to handle tenant data isolation.
@@ -134,6 +169,8 @@ TODO
 
 # Setting default database user for RLS policy
 TODO
+
+# Adding tenant column to tenant table
 
 # Setting RLS Policy for table
 TODO
