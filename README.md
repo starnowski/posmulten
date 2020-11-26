@@ -13,8 +13,8 @@
         * [Implementation requirements](#implementation-requirements)
     * [How posmulten helps to implement shared schema strategy?](#how-posmulten-helps-to-implement-shared-schema-strategy)
         * [Setting RLS policy](#setting-rls-policy)
-        * [Adding constraints for foreign key columns](#adding-constraints-for-foreign-key-columns)
         * [Connecting to Database](#connecting-to-database)
+        * [Adding constraints for foreign key columns](#adding-constraints-for-foreign-key-columns)
 
 
 # Introduction
@@ -193,11 +193,12 @@ PARALLEL SAFE;
 
 TODO
 
+### Connecting to Database 
+TODO
+
 ### Adding constraints for foreign key columns
 TODO
 
-### Connecting to Database 
-TODO
 
 # How to start using posmulten
 TODO
