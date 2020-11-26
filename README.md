@@ -143,11 +143,21 @@ USING (tenant_has_authorities(tenant_id, 'ALL', 'USING', 'posts', 'public'))
 WITH CHECK (tenant_has_authorities(tenant_id, 'ALL', 'WITH_CHECK', 'posts', 'public'));
 `
 
-Creates DDL statement for function that check if tenant identifier which is set for database session is equal to tenant column (for case above it is "tenant_id") value of row that is being checks.
+Creates DDL statement for a function that checks if the current tenant for the database session has access to table row based on tenant column (for the case below it is "tenant_id") value.
 
 `
 CREATE OR REPLACE FUNCTION tenant_has_authorities(VARCHAR(255), VARCHAR(255), VARCHAR(255), VARCHAR(255), VARCHAR(255)) RETURNS BOOLEAN AS $$
 SELECT is_id_equals_current_tenant_id($1)
+$$ LANGUAGE sql
+STABLE
+PARALLEL SAFE;
+`
+
+Creates a DDL statement for a function that checks if the current tenant identifier set for the database session is equal to the passed tenant identifier.
+
+`
+CREATE OR REPLACE FUNCTION is_id_equals_current_tenant_id(VARCHAR(255)) RETURNS BOOLEAN AS $$
+SELECT $1 = get_current_tenant_id()
 $$ LANGUAGE sql
 STABLE
 PARALLEL SAFE;
