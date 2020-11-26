@@ -191,6 +191,21 @@ PARALLEL SAFE;
 <br/>
 <br/>
 
+Another crucial function is that one which set current tenant identifier in database connection.
+
+<br/>
+
+`
+CREATE OR REPLACE FUNCTION set_current_tenant_id(VARCHAR(255)) RETURNS VOID AS $$
+BEGIN
+PERFORM set_config('c.c_ten', $1, false);
+END
+$$ LANGUAGE plpgsql
+VOLATILE;
+`
+<br/>
+<br/>
+
 TODO
 
 ### Connecting to Database 
