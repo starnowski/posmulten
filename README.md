@@ -145,6 +145,8 @@ WITH CHECK (tenant_has_authorities(tenant_id, 'ALL', 'WITH_CHECK', 'posts', 'pub
 
 Creates DDL statement for a function that checks if the current tenant for the database session has access to table row based on tenant column (for the case below it is "tenant_id") value.
 ***Current function logic is not complex, but this might be changed in the next release.***
+The [function name](#setting-function-name-that-checks-if-current-tenant-has-authorities-to-a-table-row) can be customize.
+The type of function first argument is the same as the default type for tenant identifier value which can be [customized](#setting-of-type-for-tenant-identifier-value).
 
 `
 CREATE OR REPLACE FUNCTION tenant_has_authorities(VARCHAR(255), VARCHAR(255), VARCHAR(255), VARCHAR(255), VARCHAR(255)) RETURNS BOOLEAN AS $$
@@ -155,7 +157,7 @@ PARALLEL SAFE;
 `
 
 Creates a DDL statement for a function that checks if the current tenant identifier set for the database session is equal to the passed tenant identifier.
-The [function](#setting-function-name-that-checks-if-passed-identifier-is-the-same-as-current-tenant-identifier) name and function [argument type](#setting-of-type-for-tenant-identifier-value) can be changed 
+The [function name](#setting-function-name-that-checks-if-passed-identifier-is-the-same-as-current-tenant-identifier) and function [argument type](#setting-of-type-for-tenant-identifier-value) can be changed.
 
 `
 CREATE OR REPLACE FUNCTION is_id_equals_current_tenant_id(VARCHAR(255)) RETURNS BOOLEAN AS $$
@@ -188,6 +190,9 @@ TODO
 TODO
 
 # Setting of type for tenant identifier value
+TODO
+
+# Setting function name that checks if current tenant has authorities to a table row
 TODO
 
 # Setting function name that checks if passed identifier is the same as current tenant identifier
