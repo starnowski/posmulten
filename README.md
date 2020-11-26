@@ -191,8 +191,9 @@ PARALLEL SAFE;
 <br/>
 <br/>
 
-Another crucial function is that one which set current tenant identifier in database connection.
-
+Another crucial function is that one which sets current tenant identifier in database connection.
+The [property name](#setting-the-property-name-that-stores-tenant-identifier-value) and [function name](#setting-function-name-that-sets-the-current-tenant-identifier) can customized.
+The type of function argument is the same as the default type for tenant identifier value which can be [customized](#setting-of-type-for-tenant-identifier-value).
 <br/>
 
 `
@@ -236,6 +237,9 @@ TODO
 TODO
 
 # Setting function name that returns the current tenant identifier
+TODO
+
+# Setting function name that sets the current tenant identifier
 TODO
 
 # Setting function name that checks if current tenant has authorities to a table row
