@@ -110,6 +110,14 @@ WITH CHECK (tenant_has_authorities(tenant_id, 'ALL', 'WITH_CHECK', 'posts', 'pub
 
 Creates DDL statement for function that check if tenant identifier which is set for database session is equal to tenant column (for case above it is "tenant_id") value of row that is being checks.
 
+`
+CREATE OR REPLACE FUNCTION tenant_has_authorities(VARCHAR(255), VARCHAR(255), VARCHAR(255), VARCHAR(255), VARCHAR(255)) RETURNS BOOLEAN AS $$
+SELECT is_id_equals_current_tenant_id($1)
+$$ LANGUAGE sql
+STABLE
+PARALLEL SAFE;
+`
+
 TODO
 
 ### Adding constraints for foreign key columns
