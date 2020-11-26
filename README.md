@@ -146,7 +146,7 @@ WITH CHECK (tenant_has_authorities(tenant_id, 'ALL', 'WITH_CHECK', 'posts', 'pub
 <br/>
 <br/>
 
-Creates DDL statement for a function that checks if the current tenant for the database session has access to table row based on tenant column (for the case below it is "tenant_id") value.
+Creates a DDL statement for a function that checks if the current tenant for the database session has access to table row based on tenant column (for the case below it is "tenant_id") value.
 ***Current function logic is not complex, but this might be changed in the next release.***
 The [function name](#setting-function-name-that-checks-if-current-tenant-has-authorities-to-a-table-row) can be customize.
 The type of function first argument is the same as the default type for tenant identifier value which can be [customized](#setting-of-type-for-tenant-identifier-value).
@@ -169,6 +169,21 @@ The [function name](#setting-function-name-that-checks-if-passed-identifier-is-t
 `
 CREATE OR REPLACE FUNCTION is_id_equals_current_tenant_id(VARCHAR(255)) RETURNS BOOLEAN AS $$
 SELECT $1 = get_current_tenant_id()
+$$ LANGUAGE sql
+STABLE
+PARALLEL SAFE;
+`
+<br/>
+<br/>
+
+Next function that is created by Posmulten project is function that returns value of identifier for current tenant.
+Function reads property value that is save for database session. 
+The [property name](#setting-the-property-name-that-stores-tenant-identifier-value) and [function name](#setting-function-name-that-returns-the-current-tenant-identifier) can customized.
+<br/>
+
+`
+CREATE OR REPLACE FUNCTION get_current_tenant_id() RETURNS VARCHAR(255) AS $$
+SELECT current_setting('c.c_ten')
 $$ LANGUAGE sql
 STABLE
 PARALLEL SAFE;
@@ -199,6 +214,12 @@ TODO
 TODO
 
 # Setting of type for tenant identifier value
+TODO
+
+# Setting the property name that stores tenant identifier value
+TODO
+
+# Setting function name that returns the current tenant identifier
 TODO
 
 # Setting function name that checks if current tenant has authorities to a table row
