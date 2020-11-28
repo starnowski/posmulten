@@ -249,7 +249,16 @@ Posmulten is a java project, so besides other projects written in java, you can 
 The project required at least java 8.
 
 # Setting maven dependency
-TODO
+The project is available in the central maven repository.
+You can use it just by adding it as a dependency in the project descriptor file (pom.xml).
+
+```xml
+        <dependency>
+            <groupId>com.github.starnowski.posmulten</groupId>
+            <artifactId>postgresql-core</artifactId>
+            <version>0.2.0</version>
+        </dependency>
+```
 
 # Setting default database user for RLS policy
 TODO
