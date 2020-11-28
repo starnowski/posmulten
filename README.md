@@ -221,7 +221,11 @@ ALTER TABLE "posts" ADD CONSTRAINT posts_users_fk_cu CHECK ((user_id IS NULL) OR
 <br/>
 <br/>
 
-TODO
+The library also creates the function that checks if the passed identifier exists in a specific table.
+The statement is created only when the is a request for the creation of a [foreign key constraint](#adding-a-foreign-key-constraint).
+The types of arguments for this function are based on column types that a part of the primary key [declared for the table](#setting-rls-policy-for-table) which foreign key references to.
+<br/>
+
 `
 CREATE OR REPLACE FUNCTION is_user_belongs_to_current_tenant(bigint) RETURNS BOOLEAN AS $$
 SELECT EXISTS (
