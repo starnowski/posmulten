@@ -218,16 +218,16 @@ The library has the possibility to add a [foreign key constraint](#adding-a-fore
 <br/>
 
 `
-ALTER TABLE "comments" ADD CONSTRAINT comments_posts_fk_cu CHECK ((post_id IS NULL) OR (is_post_belongs_to_current_tenant(post_id)));
+ALTER TABLE "posts" ADD CONSTRAINT posts_users_fk_cu CHECK ((user_id IS NULL) OR (is_user_belongs_to_current_tenant(user_id)));
 `
 <br/>
 <br/>
 
 TODO
 `
-CREATE OR REPLACE FUNCTION is_post_belongs_to_current_tenant(bigint) RETURNS BOOLEAN AS $$
+CREATE OR REPLACE FUNCTION is_user_belongs_to_current_tenant(bigint) RETURNS BOOLEAN AS $$
 SELECT EXISTS (
-	SELECT 1 FROM posts rt WHERE rt.id = $1 AND rt.tenant_id = get_current_tenant_id()
+	SELECT 1 FROM users rt WHERE rt.id = $1 AND rt.tenant_id = get_current_tenant_id()
 )
 $$ LANGUAGE sql
 STABLE
