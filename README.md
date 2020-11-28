@@ -264,7 +264,7 @@ You can use it just by adding it as a dependency in the project descriptor file 
 ```
 
 ### How to start using builder
-Main public component for the library is DefaultSharedSchemaContextBuilder that produce all required DDL statements based on passed criteria.
+The library's main public component is DefaultSharedSchemaContextBuilder, which produces all required DDL statements based on passed criteria.
 For example:
 
 ```java
