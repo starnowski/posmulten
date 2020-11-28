@@ -264,6 +264,26 @@ You can use it just by adding it as a dependency in the project descriptor file 
 ```
 
 ### How to start using builder
+Main public component for the library is DefaultSharedSchemaContextBuilder that produce all required DDL statements based on passed criteria.
+For example:
+
+```java
+import com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaContext;
+import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder;
+//...
+Map<String, String> usersTablePrimaryKeyNameToType = new HashMap();
+usersTablePrimaryKeyNameToType.put("id", "bigint");
+Map<String, String> postsTablePrimaryKeyNameToType = new HashMap();
+postsTablePrimaryKeyNameToType.put("id", "bigint");
+DefaultSharedSchemaContextBuilder defaultSharedSchemaContextBuilder = new DefaultSharedSchemaContextBuilder(null);
+defaultSharedSchemaContextBuilder.setGrantee("db_user");
+defaultSharedSchemaContextBuilder.createRLSPolicyForTable(USERS_TABLE_NAME, usersTablePrimaryKeyNameToType, "tenant_id", "users_table_rls_policy");
+defaultSharedSchemaContextBuilder.createRLSPolicyForTable(POSTS_TABLE_NAME, postsTablePrimaryKeyNameToType, "tenant_id", "posts_table_rls_policy");
+//... other crieria
+ISharedSchemaContext sharedSchemaContext = defaultSharedSchemaContextBuilder.build();
+```
+
+
 TODO
 
 ### Setting default database schema
