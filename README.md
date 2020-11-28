@@ -18,7 +18,7 @@
         * [Other columns modifications](#other-columns-modifications)
 * [How to start using posmulten](#how-to-start-using-posmulten)
     * [Setting maven dependency](#setting-maven-dependency)
-    * [Setting default database user for RLS polic](#setting-default-database-user-for-rls-policy)
+    * [Setting default database user for RLS policy](#setting-default-database-user-for-rls-policy)
 
 
 # Introduction
