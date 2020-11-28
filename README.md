@@ -208,8 +208,6 @@ VOLATILE;
 <br/>
 <br/>
 
-TODO
-
 ### Connecting to Database 
 TODO
 
