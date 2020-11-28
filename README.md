@@ -18,6 +18,8 @@
         * [Other columns modifications](#other-columns-modifications)
 * [How to start using posmulten](#how-to-start-using-posmulten)
     * [Setting maven dependency](#setting-maven-dependency)
+    * [How to start using builder](#how-to-start-using-builder)
+    * [Setting default database schema](#setting-default-database-schema)
     * [Setting default database user for RLS policy](#setting-default-database-user-for-rls-policy)
 
 
@@ -260,6 +262,12 @@ You can use it just by adding it as a dependency in the project descriptor file 
             <version>0.2.0</version>
         </dependency>
 ```
+
+### How to start using builder
+TODO
+
+### Setting default database schema
+TODO
 
 ### Setting default database user for RLS policy
 TODO
