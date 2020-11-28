@@ -246,7 +246,7 @@ For example, the library can add a statement that [adds default value](#adding-d
 Posmulten is a java project, so besides other projects written in java, you can also use the project as a dependency on projects written in languages executed on java virtual machine.
 The project required at least java 8.
 
-# Setting maven dependency
+### Setting maven dependency
 The project is available in the central maven repository.
 You can use it just by adding it as a dependency in the project descriptor file (pom.xml).
 
@@ -258,40 +258,40 @@ You can use it just by adding it as a dependency in the project descriptor file 
         </dependency>
 ```
 
-# Setting default database user for RLS policy
+### Setting default database user for RLS policy
 TODO
 
-# Setting RLS Policy for table
+### Setting RLS Policy for table
 TODO
 
-# Adding a foreign key constraint
+### Adding a foreign key constraint
 TODO
 
-# Setting of type for tenant identifier value
+### Setting of type for tenant identifier value
 TODO
 
-# Setting the property name that stores tenant identifier value
+### Setting the property name that stores tenant identifier value
 TODO
 
-# Adding default value for tenant column
+### Adding default value for tenant column
 TODO
 
-# Adding tenant column to tenant table
+### Adding tenant column to tenant table
 TODO
 
-# Setting function name that returns the current tenant identifier
+### Setting function name that returns the current tenant identifier
 TODO
 
-# Setting function name that sets the current tenant identifier
+### Setting function name that sets the current tenant identifier
 TODO
 
-# Setting function name that checks if current tenant has authorities to a table row
+### Setting function name that checks if current tenant has authorities to a table row
 TODO
 
-# Setting function name that checks if passed identifier is the same as current tenant identifier
+### Setting function name that checks if passed identifier is the same as current tenant identifier
 TODO
 
-# Other maven repositories
+### Other maven repositories
 TODO
 
 # Reporting issues
