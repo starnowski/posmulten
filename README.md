@@ -16,6 +16,9 @@
         * [Connecting to Database](#connecting-to-database)
         * [Adding constraints for foreign key columns](#adding-constraints-for-foreign-key-columns)
         * [Other columns modifications](#other-columns-modifications)
+* [How to start using posmulten](#how-to-start-using-posmulten)
+    * [Setting maven dependency](#setting-maven-dependency)
+    * [Setting default database user for RLS polic](#setting-default-database-user-for-rls-policy)
 
 
 # Introduction
