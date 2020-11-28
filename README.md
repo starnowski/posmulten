@@ -214,7 +214,27 @@ TODO
 TODO
 
 ### Adding constraints for foreign key columns
+The library has the possibility to add a [foreign key constraint](#adding-a-foreign-key-constraint) that checks if foreign key value references to the row which belongs to the current tenant.
+<br/>
+
+`
+ALTER TABLE "comments" ADD CONSTRAINT comments_posts_fk_cu CHECK ((post_id IS NULL) OR (is_post_belongs_to_current_tenant(post_id)));
+`
+<br/>
+<br/>
+
 TODO
+`
+CREATE OR REPLACE FUNCTION is_post_belongs_to_current_tenant(bigint) RETURNS BOOLEAN AS $$
+SELECT EXISTS (
+	SELECT 1 FROM posts rt WHERE rt.id = $1 AND rt.tenant_id = get_current_tenant_id()
+)
+$$ LANGUAGE sql
+STABLE
+PARALLEL SAFE;
+`
+<br/>
+<br/>
 
 ### Other columns modifications
 TODO
@@ -232,6 +252,9 @@ TODO
 TODO
 
 # Setting RLS Policy for table
+TODO
+
+# Adding a foreign key constraint
 TODO
 
 # Setting of type for tenant identifier value
