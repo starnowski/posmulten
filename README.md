@@ -277,9 +277,9 @@ Map<String, String> postsTablePrimaryKeyNameToType = new HashMap();
 postsTablePrimaryKeyNameToType.put("id", "bigint");
 DefaultSharedSchemaContextBuilder defaultSharedSchemaContextBuilder = new DefaultSharedSchemaContextBuilder(null);
 defaultSharedSchemaContextBuilder.setGrantee("db_user");
-defaultSharedSchemaContextBuilder.createRLSPolicyForTable(USERS_TABLE_NAME, usersTablePrimaryKeyNameToType, "tenant_id", "users_table_rls_policy");
-defaultSharedSchemaContextBuilder.createRLSPolicyForTable(POSTS_TABLE_NAME, postsTablePrimaryKeyNameToType, "tenant_id", "posts_table_rls_policy");
-//... other crieria
+defaultSharedSchemaContextBuilder.createRLSPolicyForTable("users", usersTablePrimaryKeyNameToType, "tenant_id", "users_table_rls_policy");
+defaultSharedSchemaContextBuilder.createRLSPolicyForTable("posts", postsTablePrimaryKeyNameToType, "tenant_id", "posts_table_rls_policy");
+//... other criteria
 ISharedSchemaContext sharedSchemaContext = defaultSharedSchemaContextBuilder.build();
 ```
 
