@@ -229,6 +229,7 @@ TODO
 TODO
 
 # Adding tenant column to tenant table
+TODO
 
 # Setting RLS Policy for table
 TODO
