@@ -245,7 +245,8 @@ For example, the library can add a statement that [adds default value](#adding-d
 <br/>
 
 # How to start using posmulten
-TODO
+Posmulten is a java project, so besides other projects written in java, you can also use the project as a dependency on projects written in languages executed on java virtual machine.
+The project required at least java 8.
 
 # Setting maven dependency
 TODO
