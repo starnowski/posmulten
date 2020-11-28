@@ -227,7 +227,7 @@ The statement is created only when the is a request for the creation of a [forei
 The types of arguments for this function are based on column types that a part of the primary key [declared for the table](#setting-rls-policy-for-table) which foreign key references to.
 <br/>
 
-`
+```sql
 CREATE OR REPLACE FUNCTION is_user_belongs_to_current_tenant(bigint) RETURNS BOOLEAN AS $$
 SELECT EXISTS (
 	SELECT 1 FROM users rt WHERE rt.id = $1 AND rt.tenant_id = get_current_tenant_id()
@@ -235,7 +235,7 @@ SELECT EXISTS (
 $$ LANGUAGE sql
 STABLE
 PARALLEL SAFE;
-`
+```
 <br/>
 <br/>
 
