@@ -101,7 +101,7 @@ Posmulten helps to [create such constraints](#adding-constraints-for-foreign-key
 Below there is short explanation how posmulten helps to implement shared schema strategy and what ddl statements are generated.
 The ddl statements examples are generated for tables users and posts.
 
-`
+```sql
 CREATE TABLE public.users
 (
     id bigint NOT NULL,
@@ -113,9 +113,7 @@ WITH (
     OIDS = FALSE
 )
 TABLESPACE pg_default;
-`
 
-`
 CREATE TABLE public.posts
 (
     id bigint NOT NULL,
@@ -130,7 +128,7 @@ WITH (
     OIDS = FALSE
 )
 TABLESPACE pg_default;
-`
+```
 
 ### Setting RLS policy
 
@@ -138,13 +136,13 @@ Posmulten use [row security policy](https://www.postgresql.org/docs/9.6/ddl-rows
 Creates policy for all operations (syntax "ALL" applies to SQL commands like INSERT, SELECT, UPDATE, DELETE) and [specific user](#setting-default-database-user-for-rls-policy).
 <br/>
 
-`
+```sql
 CREATE POLICY posts_table_rls_policy ON posts
 FOR ALL
 TO "postgresql-core-owner"
 USING (tenant_has_authorities(tenant_id, 'ALL', 'USING', 'posts', 'public'))
 WITH CHECK (tenant_has_authorities(tenant_id, 'ALL', 'WITH_CHECK', 'posts', 'public'));
-`
+```
 <br/>
 <br/>
 
@@ -154,13 +152,13 @@ The [function name](#setting-function-name-that-checks-if-current-tenant-has-aut
 The type of function first argument is the same as the default type for tenant identifier value which can be [customized](#setting-of-type-for-tenant-identifier-value).
 <br/>
 
-`
+```sql
 CREATE OR REPLACE FUNCTION tenant_has_authorities(VARCHAR(255), VARCHAR(255), VARCHAR(255), VARCHAR(255), VARCHAR(255)) RETURNS BOOLEAN AS $$
 SELECT is_id_equals_current_tenant_id($1)
 $$ LANGUAGE sql
 STABLE
 PARALLEL SAFE;
-`
+```
 <br/>
 <br/>
 
@@ -168,13 +166,13 @@ Creates a DDL statement for a function that checks if the current tenant identif
 The [function name](#setting-function-name-that-checks-if-passed-identifier-is-the-same-as-current-tenant-identifier) and function [argument type](#setting-of-type-for-tenant-identifier-value) can be changed.
 <br/>
 
-`
+```sql
 CREATE OR REPLACE FUNCTION is_id_equals_current_tenant_id(VARCHAR(255)) RETURNS BOOLEAN AS $$
 SELECT $1 = get_current_tenant_id()
 $$ LANGUAGE sql
 STABLE
 PARALLEL SAFE;
-`
+```
 <br/>
 <br/>
 
@@ -183,13 +181,13 @@ Function reads property value that is save for database session.
 The [property name](#setting-the-property-name-that-stores-tenant-identifier-value) and [function name](#setting-function-name-that-returns-the-current-tenant-identifier) can customized.
 <br/>
 
-`
+```sql
 CREATE OR REPLACE FUNCTION get_current_tenant_id() RETURNS VARCHAR(255) AS $$
 SELECT current_setting('c.c_ten')
 $$ LANGUAGE sql
 STABLE
 PARALLEL SAFE;
-`
+```
 <br/>
 <br/>
 
@@ -198,14 +196,14 @@ The [property name](#setting-the-property-name-that-stores-tenant-identifier-val
 The type of function argument is the same as the default type for tenant identifier value which can be [customized](#setting-of-type-for-tenant-identifier-value).
 <br/>
 
-`
+```sql
 CREATE OR REPLACE FUNCTION set_current_tenant_id(VARCHAR(255)) RETURNS VOID AS $$
 BEGIN
 PERFORM set_config('c.c_ten', $1, false);
 END
 $$ LANGUAGE plpgsql
 VOLATILE;
-`
+```
 <br/>
 <br/>
 
@@ -216,9 +214,9 @@ TODO
 The library has the possibility to add a [foreign key constraint](#adding-a-foreign-key-constraint) that checks if foreign key value references to the row which belongs to the current tenant.
 <br/>
 
-`
+```sql
 ALTER TABLE "posts" ADD CONSTRAINT posts_users_fk_cu CHECK ((user_id IS NULL) OR (is_user_belongs_to_current_tenant(user_id)));
-`
+```
 <br/>
 <br/>
 
