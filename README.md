@@ -330,6 +330,24 @@ Just like was mentioned in the previous section that the statements returned by 
 Based on that fact, the statements returned by the getDropScript() method for objects, should be executed in the reverse list's order. 
 TODO
 
+```java
+import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+//...
+        @Autowired
+        JdbcTemplate jdbcTemplate;
+//...
+        List<SQLDefinition> sqlDefinitions = sharedSchemaContext.getSqlDefinitions();
+        //Run sql statements in reverse order
+        LinkedList<SQLDefinition> stack = new LinkedList<>();
+        sqlDefinitions.forEach(stack::push);
+        stack.forEach(sqlDefinition ->
+        {
+            jdbcTemplate.execute(sqlDefinition.getDropScript());
+        });
+```
+
 TODO
 
 ### Setting default database schema
