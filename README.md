@@ -21,6 +21,7 @@
     * [How to start using builder](#how-to-start-using-builder)
         * [Applying builder changes](#applying-builder-changes)
         * [Dropping builder changes](#dropping-builder-changes)
+        * [Using posmulten components with database connection](#using-posmulten-components-with-database-connection)
     * [Setting default database schema](#setting-default-database-schema)
     * [Setting default database user for RLS policy](#setting-default-database-user-for-rls-policy)
 
@@ -348,6 +349,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
         });
 ```
 
+#### Using posmulten components with database connection
 TODO
 
 ### Setting default database schema
