@@ -32,6 +32,12 @@ import java.util.Map;
 
 public interface ISharedSchemaContext {
 
+    /**
+     * Getting a list of objects of type {@link SQLDefinition} that represents DDL changes that should be applied.
+     * The list's order is crucial because objects are sorted in order of how DDL statements should be applied.
+     * This means that in case of dropping changes, the DDL instructions should be applied in reverse order.
+     * @return list of objects that represents DDL statements that should be applied
+     */
     List<SQLDefinition> getSqlDefinitions();
 
     void addSQLDefinition(SQLDefinition sqlDefinition);
