@@ -46,6 +46,7 @@ public interface ISharedSchemaContext {
      * The object is added to the end of that list.
      * This is crucial because objects are added in order of how DDL statements should be applied.
      * @param sqlDefinition object of type {@link SQLDefinition} that represents DDL statement that should be applied
+     * @see SQLDefinition
      */
     void addSQLDefinition(SQLDefinition sqlDefinition);
 
