@@ -161,8 +161,11 @@ A statement that enables the [row security policy](https://www.postgresql.org/do
 ALTER TABLE "posts" ENABLE ROW LEVEL SECURITY;
 ```
 <br/>
-
-TODO enable policy
+<b>IMPORTANT!</b>
+<br/>
+When the database user for who row security policy is supposed to be created is table owner, it is required to [force row security policy](#force-rls-policy-for-table-owner) mechanism.
+By default, posmulten does not force this mechanism.
+<br/>
 
 Creates a DDL statement for a function that checks if the current tenant for the database session has access to table row based on tenant column (for the case below it is "tenant_id") value.
 ***Current function logic is not complex, but this might be changed in the next release.***
@@ -369,6 +372,9 @@ TODO
 TODO
 
 ### Setting RLS Policy for table
+TODO
+
+### Force RLS Policy for table owner
 TODO
 
 ### Adding a foreign key constraint
