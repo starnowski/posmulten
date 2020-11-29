@@ -393,9 +393,10 @@ Instead it sets specific value passed as argument, for example:
 <b>IMPORTANT!</b>
 <br/>
 
-TODO
 Please in mind that if it is required to use custom sql statement that might use values passed out side application, for instance from application user then is more secure to use PreparedStatement type.
-
+It is also worth mentioning that some frameworks for optimization purposes use database connection pools.
+Just like in the examples above where the JdbcTemplate is used.
+In case when the component is used in the context of the already existed transaction, then the Spring framework might use a connection that is kept in context for the local thread. 
 
 
 ### Setting default database schema
