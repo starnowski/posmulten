@@ -273,16 +273,16 @@ For example:
 import com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaContext;
 import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder;
 //...
-Map<String, String> usersTablePrimaryKeyNameToType = new HashMap();
-usersTablePrimaryKeyNameToType.put("id", "bigint");
-Map<String, String> postsTablePrimaryKeyNameToType = new HashMap();
-postsTablePrimaryKeyNameToType.put("id", "bigint");
-DefaultSharedSchemaContextBuilder defaultSharedSchemaContextBuilder = new DefaultSharedSchemaContextBuilder(null);
-defaultSharedSchemaContextBuilder.setGrantee("db_user");
-defaultSharedSchemaContextBuilder.createRLSPolicyForTable("users", usersTablePrimaryKeyNameToType, "tenant_id", "users_table_rls_policy");
-defaultSharedSchemaContextBuilder.createRLSPolicyForTable("posts", postsTablePrimaryKeyNameToType, "tenant_id", "posts_table_rls_policy");
-//... other criteria
-ISharedSchemaContext sharedSchemaContext = defaultSharedSchemaContextBuilder.build();
+    Map<String, String> usersTablePrimaryKeyNameToType = new HashMap();
+    usersTablePrimaryKeyNameToType.put("id", "bigint");
+    Map<String, String> postsTablePrimaryKeyNameToType = new HashMap();
+    postsTablePrimaryKeyNameToType.put("id", "bigint");
+    DefaultSharedSchemaContextBuilder defaultSharedSchemaContextBuilder = new DefaultSharedSchemaContextBuilder(null);
+    defaultSharedSchemaContextBuilder.setGrantee("db_user");
+    defaultSharedSchemaContextBuilder.createRLSPolicyForTable("users", usersTablePrimaryKeyNameToType, "tenant_id", "users_table_rls_policy");
+    defaultSharedSchemaContextBuilder.createRLSPolicyForTable("posts", postsTablePrimaryKeyNameToType, "tenant_id", "posts_table_rls_policy");
+    //... other criteria
+    ISharedSchemaContext sharedSchemaContext = defaultSharedSchemaContextBuilder.build();
 ```
 
 The builder component, as a result of method build(), returns an object of type ISharedSchemaContext.
@@ -290,6 +290,29 @@ The type contains all properties required to create a shared schema strategy and
 
 #### Applying builder changes
 One of the crucial methods of the ISharedSchemaContext interface is "getSqlDefinitions()".
+It returns list of object of type "SQLDefinition" that contains method getCreateScript().
+The method returns DDL statement that should be applied to implement shared schema strategy.
+<br/>
+<b>IMPORTANT!</b>
+The list's order is crucial because the DDL statements returned by the getCreateScript() method that represents each object of the list should be applied based on the list's order.
+Just like in code example below:
+<br/>
+
+
+```java
+import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+//...
+@Autowired
+JdbcTemplate jdbcTemplate;
+//...
+        List<SQLDefinition> sqlDefinitions = sharedSchemaContext.getSqlDefinitions();
+        sqlDefinitions.forEach(sqlDefinition ->
+        {
+            jdbcTemplate.execute(sqlDefinition.getCreateScript());
+        });
+```
 
 TODO
 #### Reverting builder changes
