@@ -143,7 +143,6 @@ TABLESPACE pg_default;
 Posmulten use [row security policy](https://www.postgresql.org/docs/9.6/ddl-rowsecurity.html) mechanism to handle tenant data isolation.
 Creates policy for all operations (syntax "ALL" applies to SQL commands like INSERT, SELECT, UPDATE, DELETE) and [specific user](#setting-default-database-user-for-rls-policy).
 <br/>
-
 ```sql
 CREATE POLICY posts_table_rls_policy ON posts
 FOR ALL
@@ -152,11 +151,9 @@ USING (tenant_has_authorities(tenant_id, 'ALL', 'USING', 'posts', 'public'))
 WITH CHECK (tenant_has_authorities(tenant_id, 'ALL', 'WITH_CHECK', 'posts', 'public'));
 ```
 <br/>
-<br/>
 
 A statement that enables the [row security policy](https://www.postgresql.org/docs/9.6/ddl-rowsecurity.html) mechanism is also created.
 <br/>
-
 ```sql
 ALTER TABLE "posts" ENABLE ROW LEVEL SECURITY;
 ```
