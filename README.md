@@ -294,6 +294,7 @@ It returns list of object of type "SQLDefinition" that contains method getCreate
 The method returns DDL statement that should be applied to implement shared schema strategy.
 <br/>
 <b>IMPORTANT!</b>
+<br/>
 The list's order is crucial because the DDL statements returned by the getCreateScript() method that represents each object of the list should be applied based on the list's order.
 Just like in code example below:
 <br/>
