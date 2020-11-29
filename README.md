@@ -286,6 +286,8 @@ ISharedSchemaContext sharedSchemaContext = defaultSharedSchemaContextBuilder.bui
 ```
 
 #### Applying builder changes
+One of the crucial methods of the ISharedSchemaContext interface is "getSqlDefinitions()".
+
 TODO
 #### Reverting builder changes
 TODO
