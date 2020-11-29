@@ -316,7 +316,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 #### Dropping builder changes
 The second important method of the SQLDefinition type is getDropScript().
-It returns statement that drops changes applied by statement returned by the getCreateScript() method.
+It returns a statement that drops changes applied by the statement returned by the getCreateScript() method.
 <br/>
 <b>IMPORTANT!</b>
 <br/>
