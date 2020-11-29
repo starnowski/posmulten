@@ -42,7 +42,7 @@ public interface ISharedSchemaContext {
     List<SQLDefinition> getSqlDefinitions();
 
     /**
-     * Adding object of type {@link SQLDefinition} to list that is returned by the {@link #getSqlDefinitions()} method.
+     * Adding an object of type SQLDefinition to the list that is returned by the {@link #getSqlDefinitions()} method.
      * The object is added to the end of that list.
      * This is crucial because objects are added in order of how DDL statements should be applied.
      * @param sqlDefinition object of type {@link SQLDefinition} that represents DDL statement that should be applied
