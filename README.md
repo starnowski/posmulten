@@ -285,6 +285,9 @@ defaultSharedSchemaContextBuilder.createRLSPolicyForTable("posts", postsTablePri
 ISharedSchemaContext sharedSchemaContext = defaultSharedSchemaContextBuilder.build();
 ```
 
+The builder component, as a result of method build(), returns an object of type ISharedSchemaContext.
+The type contains all properties required to create a shared schema strategy and components that help using it correctly in your java code.
+
 #### Applying builder changes
 One of the crucial methods of the ISharedSchemaContext interface is "getSqlDefinitions()".
 
