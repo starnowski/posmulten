@@ -20,7 +20,7 @@
     * [Setting maven dependency](#setting-maven-dependency)
     * [How to start using builder](#how-to-start-using-builder)
         * [Applying builder changes](#applying-builder-changes)
-        * [Reverting builder changes](#reverting-builder-changes)
+        * [Dropping builder changes](#dropping-builder-changes)
     * [Setting default database schema](#setting-default-database-schema)
     * [Setting default database user for RLS policy](#setting-default-database-user-for-rls-policy)
 
@@ -314,8 +314,20 @@ import org.springframework.jdbc.core.JdbcTemplate;
         });
 ```
 
-TODO
-#### Reverting builder changes
+#### Dropping builder changes
+The second important method of the SQLDefinition type is getDropScript().
+It returns statement that drops changes applied by statement returned by the getCreateScript() method.
+<br/>
+<b>IMPORTANT!</b>
+<br/>
+By default, there is no assumption that statement has to contains the compensation operation for operation returned by the {@link #getCreateScript()} method.
+This means that the operation can not be by default treated as a rollback operation, but an operation that removes changes applied by statement returned by the {@link #getCreateScript()} method.
+
+<br/>
+<b>IMPORTANT!</b>
+<br/>
+Just like was mentioned in the previous section that the statements returned by the getCreateScript() method for objects from the list returned from the getSqlDefinitions() method, should be applied based on the list's order.
+
 TODO
 
 TODO
