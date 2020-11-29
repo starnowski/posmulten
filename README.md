@@ -304,8 +304,8 @@ import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 //...
-@Autowired
-JdbcTemplate jdbcTemplate;
+        @Autowired
+        JdbcTemplate jdbcTemplate;
 //...
         List<SQLDefinition> sqlDefinitions = sharedSchemaContext.getSqlDefinitions();
         sqlDefinitions.forEach(sqlDefinition ->
