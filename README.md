@@ -154,6 +154,8 @@ WITH CHECK (tenant_has_authorities(tenant_id, 'ALL', 'WITH_CHECK', 'posts', 'pub
 <br/>
 <br/>
 
+TODO enable policy
+
 Creates a DDL statement for a function that checks if the current tenant for the database session has access to table row based on tenant column (for the case below it is "tenant_id") value.
 ***Current function logic is not complex, but this might be changed in the next release.***
 The [function name](#setting-function-name-that-checks-if-current-tenant-has-authorities-to-a-table-row) can be customize.
