@@ -327,7 +327,7 @@ This means that the operation can not be by default treated as a rollback operat
 <b>IMPORTANT!</b>
 <br/>
 Just like was mentioned in the previous section that the statements returned by the getCreateScript() method for objects from the list returned from the getSqlDefinitions() method, should be applied based on the list's order.
-
+Based on that fact, the statements returned by the getDropScript() method for objects, should be executed in the reverse list's order. 
 TODO
 
 TODO
