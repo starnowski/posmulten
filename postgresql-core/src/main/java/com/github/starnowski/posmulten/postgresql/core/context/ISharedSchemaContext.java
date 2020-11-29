@@ -37,6 +37,7 @@ public interface ISharedSchemaContext {
      * The list's order is crucial because objects are sorted in order of how DDL statements should be applied.
      * This means that in case of dropping changes, the DDL instructions should be applied in reverse order.
      * @return list of objects that represents DDL statements that should be applied
+     * @see SQLDefinition
      */
     List<SQLDefinition> getSqlDefinitions();
 
