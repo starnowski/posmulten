@@ -354,7 +354,49 @@ import org.springframework.jdbc.core.JdbcTemplate;
 ```
 
 #### Using posmulten components with database connection
+Other useful components that type ISharedSchemaContext contains is object of type "ISetCurrentTenantIdFunctionPreparedStatementInvocationFactory" returned by method getISetCurrentTenantIdFunctionPreparedStatementInvocationFactory().
+Component of type ISetCurrentTenantIdFunctionPreparedStatementInvocationFactory returns statement that sets current tenant identifier and can be used by PreparedStatement object.
+
+```java
+import com.github.starnowski.posmulten.postgresql.core.rls.function.ISetCurrentTenantIdFunctionPreparedStatementInvocationFactory;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+//...
+        @Autowired
+        JdbcTemplate jdbcTemplate;
+//...
+        ISetCurrentTenantIdFunctionPreparedStatementInvocationFactory setCurrentTenantIdFunctionPreparedStatementInvocationFactory = sharedSchemaContext.getISetCurrentTenantIdFunctionPreparedStatementInvocationFactory();
+        jdbcTemplate.execute(setCurrentTenantIdFunctionPreparedStatementInvocationFactory.returnPreparedStatementThatSetCurrentTenant(), (PreparedStatementCallback<Integer>) preparedStatement -> {
+            preparedStatement.setString(1, "some-tenant-id-SDFAFD-DZXCV");
+            preparedStatement.executeQuery();
+            ResultSet rs = preparedStatement.getConnection().createStatement().executeQuery("SELECT COUNT(*) FROM users");
+            rs.next();
+            return rs.getInt(1);
+        });
+```
+
+Assuming that function that [sets current tenant](#setting-function-name-that-sets-the-current-tenant-identifier) has name 'set_tenant' the ISetCurrentTenantIdFunctionPreparedStatementInvocationFactory#returnPreparedStatementThatSetCurrentTenant() method is going to return string just like below:
+```sql
+SELECT set_tenant(?);
+```
+
+Type ISharedSchemaContext contains also object of type ISetCurrentTenantIdFunctionInvocationFactory returned by method getISetCurrentTenantIdFunctionInvocationFactory().
+The ISetCurrentTenantIdFunctionInvocationFactory type has method that returns similar result as ISetCurrentTenantIdFunctionPreparedStatementInvocationFactory but without "?" mark.
+Instead it sets specific value passed as argument, for example:
+
+```java
+    String tenant = "TXDS-tenant-id";
+    ISetCurrentTenantIdFunctionInvocationFactory setCurrentTenantIdFunctionDefinition = sharedSchemaContext.getISetCurrentTenantIdFunctionInvocationFactory();
+    jdbcTemplate.execute(String.format("%1$s UPDATE users %2$s SET name = '%2$s' WHERE id = %3$d ;", setCurrentTenantIdFunctionDefinition.generateStatementThatSetTenant(tenant), updatedName, user.getId()));
+```
+<br/>
+<b>IMPORTANT!</b>
+<br/>
+
 TODO
+Please in mind that if it is required to use custom sql statement that might use values passed out side application, for instance from application user then is more secure to use PreparedStatement type.
+
+
 
 ### Setting default database schema
 TODO
