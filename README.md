@@ -178,7 +178,6 @@ STABLE
 PARALLEL SAFE;
 ```
 <br/>
-<br/>
 
 Creates a DDL statement for a function that checks if the current tenant identifier set for the database session is equal to the passed tenant identifier.
 The [function name](#setting-function-name-that-checks-if-passed-identifier-is-the-same-as-current-tenant-identifier) and function [argument type](#setting-of-type-for-tenant-identifier-value) can be changed.
@@ -191,7 +190,6 @@ $$ LANGUAGE sql
 STABLE
 PARALLEL SAFE;
 ```
-<br/>
 <br/>
 
 Next function that is created by Posmulten project is function that returns value of identifier for current tenant.
@@ -206,7 +204,6 @@ $$ LANGUAGE sql
 STABLE
 PARALLEL SAFE;
 ```
-<br/>
 <br/>
 
 Another crucial function is that one which sets current tenant identifier in database connection.
@@ -223,7 +220,6 @@ $$ LANGUAGE plpgsql
 VOLATILE;
 ```
 <br/>
-<br/>
 
 ### Connecting to Database 
 TODO
@@ -235,7 +231,6 @@ The library has the possibility to add a [foreign key constraint](#adding-a-fore
 ```sql
 ALTER TABLE "posts" ADD CONSTRAINT posts_users_fk_cu CHECK ((user_id IS NULL) OR (is_user_belongs_to_current_tenant(user_id)));
 ```
-<br/>
 <br/>
 
 The library also creates the function that checks if the passed identifier exists in a specific table.
@@ -252,7 +247,6 @@ $$ LANGUAGE sql
 STABLE
 PARALLEL SAFE;
 ```
-<br/>
 <br/>
 
 ### Other columns modifications
