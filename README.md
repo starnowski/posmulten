@@ -400,6 +400,7 @@ In case when the component is used in the context of the already existed transac
 
 
 ### Setting default database schema
+Builder component has one constructor with one String parameter (there is a task to add non-argument constructor [135](https://github.com/starnowski/posmulten/issues/135)).
 TODO
 
 ### Setting default database user for RLS policy
