@@ -401,7 +401,59 @@ In case when the component is used in the context of the already existed transac
 
 ### Setting default database schema
 Builder component has one constructor with one String parameter (there is a task to add non-argument constructor [135](https://github.com/starnowski/posmulten/issues/135)).
-TODO
+The constructor is name of default schema for which statement are going to be created.
+If null is going to passed then by default the schema name is not going to be added to created DDL statements.
+For example the code below:
+```java
+import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder;
+//...
+    DefaultSharedSchemaContextBuilder defaultSharedSchemaContextBuilder = new DefaultSharedSchemaContextBuilder(null); // Constructor with passed null parameter
+    Map<String, String> usersTablePrimaryKeyNameToType = new HashMap();
+    usersTablePrimaryKeyNameToType.put("id", "bigint");
+    Map<String, String> postsTablePrimaryKeyNameToType = new HashMap();
+    postsTablePrimaryKeyNameToType.put("id", "bigint");
+    Map<String, String> postsTableForeignKeyToUserPrimaryKey = new HashMap();
+    postsTableForeignKeyToUserPrimaryKey.put("user_id", "id");
+    defaultSharedSchemaContextBuilder.setGrantee("postgresql-core-owner");
+    defaultSharedSchemaContextBuilder.createRLSPolicyForTable("users", usersTablePrimaryKeyNameToType, "tenant_id", "users_table_rls_policy");
+    defaultSharedSchemaContextBuilder.createRLSPolicyForTable("posts", postsTablePrimaryKeyNameToType, "tenant_id", "posts_table_rls_policy");
+    //...
+    defaultSharedSchemaContextBuilder.createSameTenantConstraintForForeignKey("posts", "users, postsTableForeignKeyToUserPrimaryKey, "posts_users_fk_cu");
+```
+
+is going to produce below statements (displayed only few results)
+
+```sql
+CREATE POLICY users_table_rls_policy ON users
+FOR ALL
+TO "postgresql-core-owner"
+USING (tenant_has_authorities(tenant_id, 'ALL', 'USING', 'users', 'public'))
+WITH CHECK (tenant_has_authorities(tenant_id, 'ALL', 'WITH_CHECK', 'users', 'public'));
+
+---..
+ALTER TABLE "posts" ADD CONSTRAINT posts_users_fk_cu CHECK ((user_id IS NULL) OR (is_user_belongs_to_current_tenant(user_id)));
+```
+
+In case if the "non_public_schema" value would be passed to constructor the result would look different.
+
+```java
+//...
+    DefaultSharedSchemaContextBuilder defaultSharedSchemaContextBuilder = new DefaultSharedSchemaContextBuilder("non_public_schema"); // Constructor with passed "non_public_schema" parameter
+//...
+```
+
+It would contain the "non_public_schema" schema name.
+
+```sql
+CREATE POLICY users_table_rls_policy ON non_public_schema.users
+FOR ALL
+TO "postgresql-core-owner"
+USING (non_public_schema.tenant_has_authorities(tenant_id, 'ALL', 'USING', 'users', 'non_public_schema'))
+WITH CHECK (non_public_schema.tenant_has_authorities(tenant_id, 'ALL', 'WITH_CHECK', 'users', 'non_public_schema'));
+
+---..
+ALTER TABLE "non_public_schema"."posts" ADD CONSTRAINT posts_users_fk_cu CHECK ((user_id IS NULL) OR (non_public_schema.is_user_belongs_to_current_tenant(user_id)));
+```
 
 ### Setting default database user for RLS policy
 TODO
