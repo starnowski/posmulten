@@ -30,6 +30,7 @@
 Posmulten library is an open-source project for the generation of SQL DDL statements that make it easy to implementation of the [shared schema multi-tenancy strategy](#shared-schema) via the [row security policies](https://www.postgresql.org/docs/9.6/ddl-rowsecurity.html) in the Postgres database.
 Project is tested for compatibility with the Postgres database in versions 9.6, 10.14, 11.9, 12.4, and 13.0.
 The library is written in a java programming language.
+The project required at least java 8.
 
 # Multi-tenancy
 
