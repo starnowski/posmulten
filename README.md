@@ -458,7 +458,7 @@ ALTER TABLE "non_public_schema"."posts" ADD CONSTRAINT posts_users_fk_cu CHECK (
 
 ### Setting default database user for RLS policy
 Builder required to specify default database user for which the [row security policies](https://www.postgresql.org/docs/9.6/ddl-rowsecurity.html) are going to be created.
-For bellow criteria:
+For the below criteria:
 ```java
 import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder;
 //...
@@ -468,13 +468,13 @@ import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSche
     defaultSharedSchemaContextBuilder.createRLSPolicyForTable("users", usersTablePrimaryKeyNameToType, "tenant_id", "users_table_rls_policy");
     //...
 ```
-And database user with name "postgresql-core-owner"
+and database user with name "postgresql-core-owner"
 ```java
     //...
     defaultSharedSchemaContextBuilder.setGrantee("postgresql-core-owner");
     //...
 ```
-builder will produce:
+the builder will produce:
 ```sql
 CREATE POLICY users_table_rls_policy ON users
 FOR ALL
