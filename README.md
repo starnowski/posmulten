@@ -25,6 +25,8 @@
     * [Setting default database schema](#setting-default-database-schema)
     * [Setting default database user for RLS policy](#setting-default-database-user-for-rls-policy)
     * [Setting RLS Policy for table](#setting-rls-policy-for-table)
+        * [Setting RLS Policy for a table with a multi-column primary key](#setting-rls-policy-for-a-table-with-a-multi-column-primary-key)
+        * [Setting RLS Policy for a table without primary key](#setting-rls-policy-for-a-table-without-primary-key)
 
 
 # Introduction
@@ -499,6 +501,10 @@ WITH CHECK (tenant_has_authorities(tenant_id, 'ALL', 'WITH_CHECK', 'users', 'pub
 ```
 
 ### Setting RLS Policy for table
+TODO
+#### Setting RLS Policy for a table with a multi-column primary key
+TODO
+#### Setting RLS Policy for a table without primary key
 TODO
 
 ### Force RLS Policy for table owner
