@@ -501,6 +501,8 @@ WITH CHECK (tenant_has_authorities(tenant_id, 'ALL', 'WITH_CHECK', 'users', 'pub
 ```
 
 ### Setting RLS Policy for table
+The most crucial thing from builder perspective is to define which tables need have created [row security policy](https://www.postgresql.org/docs/9.6/ddl-rowsecurity.html).
+
 TODO
 #### Setting RLS Policy for a table with a multi-column primary key
 TODO
@@ -536,6 +538,9 @@ TODO
 
 ### Setting function name that checks if passed identifier is the same as current tenant identifier
 TODO
+
+### Naming convention and its constraints
+TODO - [Create a validator component that checks if the passed identifier has the correct name.](https://github.com/starnowski/posmulten/issues/137)
 
 ### Other maven repositories
 TODO
