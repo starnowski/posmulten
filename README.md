@@ -24,6 +24,7 @@
         * [Using posmulten components with database connection](#using-posmulten-components-with-database-connection)
     * [Setting default database schema](#setting-default-database-schema)
     * [Setting default database user for RLS policy](#setting-default-database-user-for-rls-policy)
+    * [Setting RLS Policy for table](#setting-rls-policy-for-table)
 
 
 # Introduction
@@ -488,7 +489,7 @@ For user "app-first-user"
     defaultSharedSchemaContextBuilder.setGrantee("app-first-user");
     //...
 ```
-builder will produce:
+the builder will produce:
 ```sql
 CREATE POLICY users_table_rls_policy ON users
 FOR ALL
