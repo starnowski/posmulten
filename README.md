@@ -512,6 +512,30 @@ com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaConte
 Set by builder or [custom value](#setting-default-tenant-column-name).<br/>
 <b>rlsPolicyName</b> - <b>(Required)</b> name of row level security policy (see [task 48](https://github.com/starnowski/posmulten/issues/48)).<br/>
 
+For the below criteria:
+```java
+import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder;
+//...
+    DefaultSharedSchemaContextBuilder defaultSharedSchemaContextBuilder = new DefaultSharedSchemaContextBuilder("some_schema");
+    defaultSharedSchemaContextBuilder.setGrantee("db-us");
+    //...
+```
+and database policy declaration for table users_tab:
+```java
+    //...
+    usersTablePrimaryKeyNameToType.put("user_uuid", "UUID");
+    defaultSharedSchemaContextBuilder.createRLSPolicyForTable("users_tab", usersTablePrimaryKeyNameToType, "ten_col", "users_policy");
+    //...
+```
+the builder will produce:
+```sql
+CREATE POLICY users_policy ON some_schema.users_tab
+FOR ALL
+TO "db-us"
+USING (some_schema.tenant_has_authorities(ten_col, 'ALL', 'USING', 'users_tab', 'some_schema'))
+WITH CHECK (some_schema.tenant_has_authorities(ten_col, 'ALL', 'WITH_CHECK', 'users_tab', 'some_schema'));
+```
+
 TODO
 #### Setting RLS Policy for a table with a multi-column primary key
 TODO
