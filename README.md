@@ -537,8 +537,8 @@ WITH CHECK (some_schema.tenant_has_authorities(ten_col, 'ALL', 'WITH_CHECK', 'us
 ```
 
 #### Setting RLS Policy for a table with a multi-column primary key
-In case when table has more complex primary key than single column. 
-All columns that are part of primary key has to be passed to method.
+In case when the table has a more complex primary key than a single column. 
+All columns that are part of the primary key have to be passed to the method. 
 For example, for below comments table with two-column primary:
 ```sql
 CREATE TABLE public.comments
