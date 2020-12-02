@@ -536,8 +536,45 @@ USING (some_schema.tenant_has_authorities(ten_col, 'ALL', 'USING', 'users_tab', 
 WITH CHECK (some_schema.tenant_has_authorities(ten_col, 'ALL', 'WITH_CHECK', 'users_tab', 'some_schema'));
 ```
 
-TODO
 #### Setting RLS Policy for a table with a multi-column primary key
+In case when table has more complex primary key than single column. 
+All columns that are part of primary key has to be passed to method.
+For example, for below comments table with two-column primary:
+```sql
+CREATE TABLE public.comments
+(
+id int NOT NULL,
+user_id bigint NOT NULL,
+text text NOT NULL,
+tenant character varying(255),
+
+parent_comment_id int,
+parent_comment_user_id bigint,
+
+CONSTRAINT fk_comments_users_id FOREIGN KEY (user_id)
+REFERENCES public.users (id) MATCH SIMPLE,
+
+CONSTRAINT fk_comments_parent_id FOREIGN KEY (parent_comment_id, parent_comment_user_id)
+REFERENCES public.comments (id, user_id) MATCH SIMPLE,
+
+CONSTRAINT comments_pkey PRIMARY KEY (id, user_id)
+```
+
+the declaration should like below:
+```java
+    //...
+    Map<String, String> commentsTablePrimaryKeyNameToType = new HashMap();
+    commentsTablePrimaryKeyNameToType.put("id", "int");
+    commentsTablePrimaryKeyNameToType.put("user_id", "bigint");
+    defaultSharedSchemaContextBuilder.createRLSPolicyForTable("comments", commentsTablePrimaryKeyNameToType, "tenant", "comments_table_rls_policy");
+    //...
+```
+
+<b>IMPORTANT!</b><br/>
+The primary key columns map is not required to create RLS policy but it is required when there is any relation between tables (or single table has relation to itself) where there is a foreign key constraint.
+In such case posmulten need know primary key table definition to create correct function that checks if table row exist for specific tenant.
+Such function is created only if there is any [foreign key constraint declaration](#adding-a-foreign-key-constraint). 
+
 TODO
 #### Setting RLS Policy for a table without primary key
 TODO
