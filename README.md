@@ -508,7 +508,7 @@ com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaConte
 ```
 <b>table</b> - <b>(Required)</b> table name.<br/>
 <b>primaryKeyColumnsList</b> - <b>(Required)</b> map of primary key columns and their types in table. Column name is the map key and column type is its value.<br/>
-<b>tenantColumnName</b> - <b>(Optional)</b> name of column that stores tenant identifier in table. In null value will passed then default tenant column name will be used.
+<b>tenantColumnName</b> - <b>(Optional)</b> name of the column that stores tenant identifier in table. In null value will be passed then default tenant column name will be used.
 Set by builder or [custom value](#setting-default-tenant-column-name).<br/>
 <b>rlsPolicyName</b> - <b>(Required)</b> name of row level security policy.<br/>
 
