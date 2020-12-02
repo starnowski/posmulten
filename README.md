@@ -27,6 +27,7 @@
     * [Setting RLS Policy for table](#setting-rls-policy-for-table)
         * [Setting RLS Policy for a table with a multi-column primary key](#setting-rls-policy-for-a-table-with-a-multi-column-primary-key)
         * [Setting RLS Policy for a table without primary key](#setting-rls-policy-for-a-table-without-primary-key)
+    * [Force RLS Policy for table owner](#force-rls-policy-for-table-owner)
 
 
 # Introduction
