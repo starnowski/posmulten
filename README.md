@@ -502,15 +502,15 @@ WITH CHECK (tenant_has_authorities(tenant_id, 'ALL', 'WITH_CHECK', 'users', 'pub
 
 ### Setting RLS Policy for table
 The most crucial thing from builder perspective is to define which tables need have created [row security policy](https://www.postgresql.org/docs/9.6/ddl-rowsecurity.html).
-The RLS policy is added via method com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#createRLSPolicyForTable(String table, Map<String, String> primaryKeyColumnsList, String tenantColumnName, String rlsPolicyName).
+The RLS policy is added via method:
 ```javadoc
 com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#createRLSPolicyForTable(String table, Map<String, String> primaryKeyColumnsList, String tenantColumnName, String rlsPolicyName)
-
-table - table name
-Map<String, String> primaryKeyColumnsList - map of primary key columns and their types in table. Column name is the map key and column type is its value
-tenantColumnName - name of column that stores tenant identifier in table
-rlsPolicyName - name of row level security policy
 ```
+<b>table</b> - <b>(Required)</b> table name.<br/>
+<b>primaryKeyColumnsList</b> - <b>(Required)</b> map of primary key columns and their types in table. Column name is the map key and column type is its value.<br/>
+<b>tenantColumnName</b> - <b>(Optional)</b> name of column that stores tenant identifier in table. In null value will passed then default tenant column name will be used.
+Set by builder or [custom value](#setting-default-tenant-column-name).<br/>
+<b>rlsPolicyName</b> - <b>(Required)</b> name of row level security policy.<br/>
 
 TODO
 #### Setting RLS Policy for a table with a multi-column primary key
@@ -534,6 +534,9 @@ TODO
 TODO
 
 ### Adding tenant column to tenant table
+TODO
+
+### Setting default tenant column name
 TODO
 
 ### Setting function name that returns the current tenant identifier
