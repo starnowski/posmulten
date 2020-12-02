@@ -510,7 +510,7 @@ com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaConte
 <b>primaryKeyColumnsList</b> - <b>(Required)</b> map of primary key columns and their types in the table. The column name is the map key and the column type is its value.<br/>
 <b>tenantColumnName</b> - <b>(Optional)</b> name of the column that stores tenant identifier in table. In null value will be passed then default tenant column name will be used.
 Set by builder or [custom value](#setting-default-tenant-column-name).<br/>
-<b>rlsPolicyName</b> - <b>(Required)</b> name of row level security policy.<br/>
+<b>rlsPolicyName</b> - <b>(Required)</b> name of row level security policy (see [task 48](https://github.com/starnowski/posmulten/issues/48)).<br/>
 
 TODO
 #### Setting RLS Policy for a table with a multi-column primary key
