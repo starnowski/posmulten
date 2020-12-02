@@ -575,9 +575,35 @@ The primary key columns map is not required to create RLS policy, but it is requ
 In such a case, posmulten needs to know the primary key table definition to create the correct function that checks if a table row exists for a specific tenant.
 Such a function is created only if there is any [foreign key constraint declaration](#adding-a-foreign-key-constraint). 
 
-TODO
 #### Setting RLS Policy for a table without primary key
-TODO
+In case when RLS policy has to be created for a table without a primary key, for example, for join table in many to many relations.
+The empty map has to be passed as a method argument.
+
+For example, for the below SQL table:
+
+```sql
+CREATE TABLE public.users_groups
+(
+    user_id bigint NOT NULL,
+    group_id uuid NOT NULL,
+    tenant_id character varying(255),
+    CONSTRAINT fk_users_groups_user_id FOREIGN KEY (user_id)
+        REFERENCES users (id) MATCH SIMPLE,
+    CONSTRAINT fk_users_groups_group_id FOREIGN KEY (group_id)
+            REFERENCES groups (uuid) MATCH SIMPLE
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+```
+the RLS policy declaration should look like this:
+```java
+    //...
+    defaultSharedSchemaContextBuilder.createRLSPolicyForTable("users_groups", new HashMap<>(), "tenant_id", "users_groups_table_rls_policy");
+    //...
+```
+<b>INFORMATION!</b> There is a [task](https://github.com/starnowski/posmulten/issues/138) whose goal is to add the ability to pass a null value as a map to give the same result.
 
 ### Force RLS Policy for table owner
 TODO
