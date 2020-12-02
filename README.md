@@ -502,6 +502,15 @@ WITH CHECK (tenant_has_authorities(tenant_id, 'ALL', 'WITH_CHECK', 'users', 'pub
 
 ### Setting RLS Policy for table
 The most crucial thing from builder perspective is to define which tables need have created [row security policy](https://www.postgresql.org/docs/9.6/ddl-rowsecurity.html).
+The RLS policy is added via method com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#createRLSPolicyForTable(String table, Map<String, String> primaryKeyColumnsList, String tenantColumnName, String rlsPolicyName).
+```javadoc
+com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#createRLSPolicyForTable(String table, Map<String, String> primaryKeyColumnsList, String tenantColumnName, String rlsPolicyName)
+
+table - table name
+Map<String, String> primaryKeyColumnsList - map of primary key columns and their types in table. Column name is the map key and column type is its value
+tenantColumnName - name of column that stores tenant identifier in table
+rlsPolicyName - name of row level security policy
+```
 
 TODO
 #### Setting RLS Policy for a table with a multi-column primary key
