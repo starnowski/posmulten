@@ -507,7 +507,7 @@ The RLS policy is added via method:
 com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#createRLSPolicyForTable(String table, Map<String, String> primaryKeyColumnsList, String tenantColumnName, String rlsPolicyName)
 ```
 <b>table</b> - <b>(Required)</b> table name.<br/>
-<b>primaryKeyColumnsList</b> - <b>(Required)</b> map of primary key columns and their types in table. Column name is the map key and column type is its value.<br/>
+<b>primaryKeyColumnsList</b> - <b>(Required)</b> map of primary key columns and their types in the table. The column name is the map key and the column type is its value.<br/>
 <b>tenantColumnName</b> - <b>(Optional)</b> name of the column that stores tenant identifier in table. In null value will be passed then default tenant column name will be used.
 Set by builder or [custom value](#setting-default-tenant-column-name).<br/>
 <b>rlsPolicyName</b> - <b>(Required)</b> name of row level security policy.<br/>
