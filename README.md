@@ -571,9 +571,9 @@ the declaration should like below:
 ```
 
 <b>IMPORTANT!</b><br/>
-The primary key columns map is not required to create RLS policy but it is required when there is any relation between tables (or single table has relation to itself) where there is a foreign key constraint.
-In such case posmulten need know primary key table definition to create correct function that checks if table row exist for specific tenant.
-Such function is created only if there is any [foreign key constraint declaration](#adding-a-foreign-key-constraint). 
+The primary key columns map is not required to create RLS policy, but it is required when there is any relation between tables (or a single table has a relation to itself) where there is a foreign key constraint. 
+In such a case, posmulten needs to know the primary key table definition to create the correct function that checks if a table row exists for a specific tenant.
+Such a function is created only if there is any [foreign key constraint declaration](#adding-a-foreign-key-constraint). 
 
 TODO
 #### Setting RLS Policy for a table without primary key
