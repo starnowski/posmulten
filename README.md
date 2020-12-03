@@ -637,6 +637,13 @@ ALTER TABLE "posts" FORCE ROW LEVEL SECURITY;
 ```
 
 ### Adding a foreign key constraint
+The builder can create an additional constraint that checks if foreign key value references to the table row that belongs to the current tenant.
+```javadoc
+createSameTenantConstraintForForeignKey(String mainTable, String foreignKeyTable, Map<String, String> foreignKeyPrimaryKeyColumnsMappings, String constraintName)
+```
+
+<b>mainTable</b> - <b>(Required)</b> table name for which foreign key reference to.<br/>
+<b>foreignKeyTable</b> - <b>(Required)</b> table name that has foreign key column.<br/>
 TODO
 
 ### Setting of type for tenant identifier value
