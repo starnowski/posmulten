@@ -641,9 +641,10 @@ The builder can create an additional constraint that checks if foreign key value
 ```javadoc
 createSameTenantConstraintForForeignKey(String mainTable, String foreignKeyTable, Map<String, String> foreignKeyPrimaryKeyColumnsMappings, String constraintName)
 ```
-
-<b>mainTable</b> - <b>(Required)</b> table name for which foreign key reference to.<br/>
-<b>foreignKeyTable</b> - <b>(Required)</b> table name that has foreign key column.<br/>
+<b>mainTable</b> - <b>(Required)</b> table name that has foreign key columns.<br/>
+<b>foreignKeyTable</b> - <b>(Required)</b> table name that is in relation.<br/>
+<b>foreignKeyPrimaryKeyColumnsMappings</b> - <b>(Required)</b> map of foreign key columns and primary key columns from table which is in relation. The foreign key column name is the map key and the column name from relation table is its value.<br/>
+<b>constraintName</b> - <b>(Required)</b> constraint name.<br/>
 TODO
 
 ### Setting of type for tenant identifier value
