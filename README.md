@@ -645,6 +645,57 @@ createSameTenantConstraintForForeignKey(String mainTable, String foreignKeyTable
 <b>foreignKeyTable</b> - <b>(Required)</b> table name that is in relation.<br/>
 <b>foreignKeyPrimaryKeyColumnsMappings</b> - <b>(Required)</b> map of foreign key columns and primary key columns from table which is in relation. The foreign key column name is the map key and the column name from relation table is its value.<br/>
 <b>constraintName</b> - <b>(Required)</b> constraint name.<br/>
+
+For example, assuming that we have two tables, "users" and "posts":
+```sql
+CREATE TABLE public.users
+(
+    id bigint NOT NULL,
+    name character varying(255),
+    tenant_id character varying(255),
+    CONSTRAINT users_pkey PRIMARY KEY (id)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+CREATE TABLE public.posts
+(
+    id bigint NOT NULL,
+    text text NOT NULL,
+    user_id bigint NOT NULL,
+    tenant_id character varying(255),
+    CONSTRAINT fk_posts_user_id FOREIGN KEY (user_id)
+              REFERENCES users (id) MATCH SIMPLE,
+    CONSTRAINT posts_pkey PRIMARY KEY (id)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+```
+
+for below criteria:
+```java
+import com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaContext;
+import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder;
+//...
+    Map<String, String> usersTablePrimaryKeyNameToType = new HashMap();
+    usersTablePrimaryKeyNameToType.put("id", "bigint");
+    Map<String, String> postsTablePrimaryKeyNameToType = new HashMap();
+    postsTablePrimaryKeyNameToType.put("id", "bigint");
+    DefaultSharedSchemaContextBuilder defaultSharedSchemaContextBuilder = new DefaultSharedSchemaContextBuilder(null);
+    defaultSharedSchemaContextBuilder.setGrantee("db_user");
+    defaultSharedSchemaContextBuilder.createRLSPolicyForTable("users", usersTablePrimaryKeyNameToType, "tenant_id", "users_table_rls_policy");
+    defaultSharedSchemaContextBuilder.createRLSPolicyForTable("posts", postsTablePrimaryKeyNameToType, "tenant_id", "posts_table_rls_policy");
+    //... foreign key constraint declaration
+    Map<String, String> foreignKeyColumnToPrimaryKeyColumn = new HashMap();
+    foreignKeyColumnToPrimaryKeyColumn.put("user_id", "id");
+    defaultSharedSchemaContextBuilder.createSameTenantConstraintForForeignKey("posts", "users", foreignKeyColumnToPrimaryKeyColumn, "posts_users_fk_cu");
+```
+
+
 TODO
 
 ### Setting of type for tenant identifier value
