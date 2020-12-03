@@ -608,8 +608,33 @@ the RLS policy declaration should look like this:
 
 ### Force RLS Policy for table owner
 In situation when RLS policy has to be created for database user that is a tables owner in schema then there has to additional DDL instruction created for each table.
+It is because just like is mentioned in Postgres documentation 
+_Table owners normally bypass row security as well, though a table owner can choose to be subject to row security with ALTER TABLE ... FORCE ROW LEVEL SECURITY._
+To specify this option builder has method:
+```javadoc
+com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#setForceRowLevelSecurityForTableOwner(boolean forceRowLevelSecurityForTableOwner)
+```
 
-TODO
+For example, for below requirements:
+```java
+import com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaContext;
+import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder;
+//...
+    Map<String, String> usersTablePrimaryKeyNameToType = new HashMap();
+    usersTablePrimaryKeyNameToType.put("id", "bigint");
+    Map<String, String> postsTablePrimaryKeyNameToType = new HashMap();
+    postsTablePrimaryKeyNameToType.put("id", "bigint");
+    DefaultSharedSchemaContextBuilder defaultSharedSchemaContextBuilder = new DefaultSharedSchemaContextBuilder(null);
+    defaultSharedSchemaContextBuilder.setForceRowLevelSecurityForTableOwner(true);
+    defaultSharedSchemaContextBuilder.createRLSPolicyForTable("users", usersTablePrimaryKeyNameToType, "tenant_id", "users_table_rls_policy");
+    defaultSharedSchemaContextBuilder.createRLSPolicyForTable("posts", postsTablePrimaryKeyNameToType, "tenant_id", "posts_table_rls_policy");
+    //... other criteria
+```
+builder will produce 
+```sql
+ALTER TABLE "users" FORCE ROW LEVEL SECURITY;
+ALTER TABLE "posts" ENABLE ROW LEVEL SECURITY;
+```
 
 ### Adding a foreign key constraint
 TODO
