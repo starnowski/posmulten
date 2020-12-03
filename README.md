@@ -694,7 +694,18 @@ import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSche
     foreignKeyColumnToPrimaryKeyColumn.put("user_id", "id");
     defaultSharedSchemaContextBuilder.createSameTenantConstraintForForeignKey("posts", "users", foreignKeyColumnToPrimaryKeyColumn, "posts_users_fk_cu");
 ```
+posmulten is going to produce the below statements related to foreign key constraint:
+```sql
+CREATE OR REPLACE FUNCTION is_user_belongs_to_current_tenant(bigint) RETURNS BOOLEAN AS $$
+SELECT EXISTS (
+	SELECT 1 FROM users rt WHERE rt.id = $1 AND rt.tenant_id = get_current_tenant_id()
+)
+$$ LANGUAGE sql
+STABLE
+PARALLEL SAFE;
 
+ALTER TABLE "posts" ADD CONSTRAINT posts_users_fk_cu CHECK ((user_id IS NULL) OR (is_user_belongs_to_current_tenant(user_id)));
+```
 
 TODO
 
