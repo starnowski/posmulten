@@ -693,6 +693,9 @@ import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSche
     Map<String, String> foreignKeyColumnToPrimaryKeyColumn = new HashMap();
     foreignKeyColumnToPrimaryKeyColumn.put("user_id", "id");
     defaultSharedSchemaContextBuilder.createSameTenantConstraintForForeignKey("posts", "users", foreignKeyColumnToPrimaryKeyColumn, "posts_users_fk_cu");
+
+    // setting name for function
+    defaultSharedSchemaContextBuilder.setNameForFunctionThatChecksIfRecordExistsInTable("users", "is_user_belongs_to_current_tenant");
 ```
 posmulten is going to produce the below statements related to foreign key constraint:
 ```sql
@@ -706,6 +709,8 @@ PARALLEL SAFE;
 
 ALTER TABLE "posts" ADD CONSTRAINT posts_users_fk_cu CHECK ((user_id IS NULL) OR (is_user_belongs_to_current_tenant(user_id)));
 ```
+As was mentioned in previous [sections](#setting-rls-policy-for-a-table-with-a-multi-column-primary-key), posmulten creates function that check if row with specified primary key exists for current tenant.
+For this example the is_user_belongs_to_current_tenant function was created because table posts has foreign key column that references to table users.
 
 TODO
 
