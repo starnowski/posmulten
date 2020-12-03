@@ -607,7 +607,8 @@ the RLS policy declaration should look like this:
 <b>INFORMATION!</b> There is a [task](https://github.com/starnowski/posmulten/issues/138) whose goal is to add the ability to pass a null value as a map to give the same result.
 
 ### Force RLS Policy for table owner
-In situation when shared schema strategy has to be created for database user that is a tables owner in schema
+In situation when RLS policy has to be created for database user that is a tables owner in schema then there has to additional DDL instruction created for each table.
+
 TODO
 
 ### Adding a foreign key constraint
