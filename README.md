@@ -633,7 +633,7 @@ import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSche
 builder will produce 
 ```sql
 ALTER TABLE "users" FORCE ROW LEVEL SECURITY;
-ALTER TABLE "posts" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "posts" FORCE ROW LEVEL SECURITY;
 ```
 
 ### Adding a foreign key constraint
