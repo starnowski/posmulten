@@ -37,6 +37,12 @@
     * [Setting of type for tenant identifier value](#setting-of-type-for-tenant-identifier-value)
     * [Setting the property name that stores tenant identifier value](#setting-the-property-name-that-stores-tenant-identifier-value)
     * [Adding default value for tenant column](#adding-default-value-for-tenant-column)
+    * [Setting default tenant column name](#setting-default-tenant-column-name)
+    * [Setting function name that returns the current tenant identifier](#setting-function-name-that-returns-the-current-tenant-identifier)
+    * [Setting function name that sets the current tenant identifier](#setting-function-name-that-sets-the-current-tenant-identifier)
+    * [Setting function name that checks if current tenant has authorities to a table row](#setting-function-name-that-checks-if-current-tenant-has-authorities-to-a-table-row)
+    * [Setting function name that checks if passed identifier is the same as current tenant identifier](#setting-function-name-that-checks-if-passed-identifier-is-the-same-as-current-tenant-identifier)
+    * [Setting function name that checks if passed primary key for a specific table exists for the current tenant](#setting-function-name-that-checks-if-passed-primary-key-for-a-specific-table-exists-for-the-current-tenant)
 
 
 # Introduction
