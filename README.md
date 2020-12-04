@@ -43,6 +43,10 @@
     * [Setting function name that checks if current tenant has authorities to a table row](#setting-function-name-that-checks-if-current-tenant-has-authorities-to-a-table-row)
     * [Setting function name that checks if passed identifier is the same as current tenant identifier](#setting-function-name-that-checks-if-passed-identifier-is-the-same-as-current-tenant-identifier)
     * [Setting function name that checks if passed primary key for a specific table exists for the current tenant](#setting-function-name-that-checks-if-passed-primary-key-for-a-specific-table-exists-for-the-current-tenant)
+    * [Naming convention and its constraints](#naming-convention-and-its-constraints)
+    * [Other maven repositories](#other-maven-repositories)
+* [Reporting issues](#reporting-issues)
+* [Project contribution](#project-contribution)
 
 
 # Introduction
