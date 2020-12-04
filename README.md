@@ -715,7 +715,47 @@ As was mentioned in previous [sections](#setting-rls-policy-for-a-table-with-a-m
 For this example, the is_user_belongs_to_current_tenant function was created because table posts have a foreign key column that references table users.
 At this moment, the [name](#setting-function-name-that-checks-if-passed-primary-key-for-a-specific-table-exists-for-the-current-tenant) for such function has to be specified; otherwise, the builder can throw an exception.
 
-### Adding a foreign key constraint with a multi-column primary key
+#### Adding a foreign key constraint with a multi-column primary key
+Below there is an example how to specify foreign key constraint when key has many columns.
+The comments table has primary key with two columns.
+```sql
+CREATE TABLE public.comments
+(
+id int NOT NULL,
+user_id bigint NOT NULL,
+text text NOT NULL,
+tenant character varying(255),
+
+parent_comment_id int,
+parent_comment_user_id bigint,
+
+CONSTRAINT fk_comments_users_id FOREIGN KEY (user_id)
+REFERENCES public.users (id) MATCH SIMPLE,
+
+CONSTRAINT fk_comments_parent_id FOREIGN KEY (parent_comment_id, parent_comment_user_id)
+REFERENCES public.comments (id, user_id) MATCH SIMPLE,
+
+CONSTRAINT comments_pkey PRIMARY KEY (id, user_id)
+)
+WITH (
+OIDS = FALSE
+)
+TABLESPACE pg_default;
+```
+Table has relation to itself (comment has its parent).
+Below is example how to define foreign key constraint with builder component.
+```java
+import com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaContext;
+import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder;
+//...
+
+    Map<String, String> commentsTablePrimaryKeyNameToType = new HashMap();
+    commentsTablePrimaryKeyNameToType.put("id", "int");
+    commentsTablePrimaryKeyNameToType.put("user_id", "bigint");
+    defaultSharedSchemaContextBuilder.createRLSPolicyForTable("comments", commentsTablePrimaryKeyNameToType, "tenant", "comments_table_rls_policy");
+```
+
+
 TODO
 
 ### Setting of type for tenant identifier value
