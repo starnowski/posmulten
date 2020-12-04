@@ -13,7 +13,7 @@
         * [Implementation requirements](#implementation-requirements)
     * [How posmulten helps to implement shared schema strategy?](#how-posmulten-helps-to-implement-shared-schema-strategy)
         * [Setting RLS policy](#setting-rls-policy)
-            *[Function that checks tenant access to a table row](#function-that-checks-tenant-access-to-a-table-row)
+            * [Function that checks tenant access to a table row](#function-that-checks-tenant-access-to-a-table-row)
         * [Connecting to Database](#connecting-to-database)
         * [Adding constraints for foreign key columns](#adding-constraints-for-foreign-key-columns)
         * [Other columns modifications](#other-columns-modifications)
