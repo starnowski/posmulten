@@ -716,8 +716,8 @@ For this example, the is_user_belongs_to_current_tenant function was created bec
 At this moment, the [name](#setting-function-name-that-checks-if-passed-primary-key-for-a-specific-table-exists-for-the-current-tenant) for such function has to be specified; otherwise, the builder can throw an exception.
 
 #### Adding a foreign key constraint with a multi-column primary key
-Below there is an example how to specify foreign key constraint when key has many columns.
-The comments table has primary key with two columns.
+Below there is an example of how to specify a foreign key constraint when the key has many columns. 
+The comments table has a primary key with two columns.
 ```sql
 CREATE TABLE public.comments
 (
