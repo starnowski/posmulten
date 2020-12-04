@@ -781,7 +781,7 @@ ALTER TABLE "comments" ADD CONSTRAINT comments_parent_comments_fk_cu CHECK ((par
 
 ### Setting of type for tenant identifier value
 By default, the builder assumes that the tenant column type is going to be `VARCHAR(255)`.
-This also type for parameters of a few particual function:
+This also the type for parameters of a few function:
 - [Function that checks tenant access to a table row](#function-that-checks-tenant-access-to-a-table-row)
 - [Function that checks if the passed identifier is the same as the current tenant identifier](#function-that-checks-if-the-passed-identifier-is-the-same-as-the-current-tenant-identifier)
 - [Function that set the current tenant identifier](#function-that-set-the-current-tenant-identifier)
