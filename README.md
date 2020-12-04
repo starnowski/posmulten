@@ -28,6 +28,8 @@
         * [Setting RLS Policy for a table with a multi-column primary key](#setting-rls-policy-for-a-table-with-a-multi-column-primary-key)
         * [Setting RLS Policy for a table without primary key](#setting-rls-policy-for-a-table-without-primary-key)
     * [Force RLS Policy for table owner](#force-rls-policy-for-table-owner)
+    * [Adding a foreign key constraint](#adding-a-foreign-key-constraint)
+        * [Adding a foreign key constraint with a multi-column primary key](#adding-a-foreign-key-constraint-with-a-multi-column-primary-key)
 
 
 # Introduction
@@ -713,6 +715,7 @@ As was mentioned in previous [sections](#setting-rls-policy-for-a-table-with-a-m
 For this example, the is_user_belongs_to_current_tenant function was created because table posts have a foreign key column that references table users.
 At this moment, the [name](#setting-function-name-that-checks-if-passed-primary-key-for-a-specific-table-exists-for-the-current-tenant) for such function has to be specified; otherwise, the builder can throw an exception.
 
+### Adding a foreign key constraint with a multi-column primary key
 TODO
 
 ### Setting of type for tenant identifier value
