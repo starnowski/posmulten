@@ -14,6 +14,7 @@
     * [How posmulten helps to implement shared schema strategy?](#how-posmulten-helps-to-implement-shared-schema-strategy)
         * [Setting RLS policy](#setting-rls-policy)
             * [Function that checks tenant access to a table row](#function-that-checks-tenant-access-to-a-table-row)
+            * [Function that checks if the passed identifier is the same as the current tenant identifier](#function-that-checks-if-the-passed-identifier-is-the-same-as-the-current-tenant-identifier)
         * [Connecting to Database](#connecting-to-database)
         * [Adding constraints for foreign key columns](#adding-constraints-for-foreign-key-columns)
         * [Other columns modifications](#other-columns-modifications)
@@ -188,6 +189,7 @@ PARALLEL SAFE;
 ```
 <br/>
 
+#### Function that checks if the passed identifier is the same as the current tenant identifier
 Creates a DDL statement for a function that checks if the current tenant identifier set for the database session is equal to the passed tenant identifier.
 The [function name](#setting-function-name-that-checks-if-passed-identifier-is-the-same-as-current-tenant-identifier) and function [argument type](#setting-of-type-for-tenant-identifier-value) can be changed.
 <br/>
@@ -777,6 +779,7 @@ ALTER TABLE "comments" ADD CONSTRAINT comments_parent_comments_fk_cu CHECK ((par
 By default, the builder assumes that the tenant column type is going to be `VARCHAR(255)`.
 This same type is also set for parameters of a few particual function:
 - [Function that checks tenant access to a table row](#function-that-checks-tenant-access-to-a-table-row)
+- [Function that checks if the passed identifier is the same as the current tenant identifier](#function-that-checks-if-the-passed-identifier-is-the-same-as-the-current-tenant-identifier)
 
 TODO
 
