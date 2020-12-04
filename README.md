@@ -711,6 +711,7 @@ ALTER TABLE "posts" ADD CONSTRAINT posts_users_fk_cu CHECK ((user_id IS NULL) OR
 ```
 As was mentioned in previous [sections](#setting-rls-policy-for-a-table-with-a-multi-column-primary-key), posmulten creates a function that checks if a row with a specified primary key exists for the current tenant.
 For this example, the is_user_belongs_to_current_tenant function was created because table posts have a foreign key column that references table users.
+At this moment, the [name](#setting-function-name-that-checks-if-passed-primary-key-for-a-specific-table-exists-for-the-current-tenant) for such function has to be specified; otherwise, the builder can throw an exception.
 
 TODO
 
@@ -739,6 +740,9 @@ TODO
 TODO
 
 ### Setting function name that checks if passed identifier is the same as current tenant identifier
+TODO
+
+### Setting function name that checks if passed primary key for a specific table exists for the current tenant
 TODO
 
 ### Naming convention and its constraints
