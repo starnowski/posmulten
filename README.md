@@ -34,6 +34,7 @@
     * [Force RLS Policy for table owner](#force-rls-policy-for-table-owner)
     * [Adding a foreign key constraint](#adding-a-foreign-key-constraint)
         * [Adding a foreign key constraint with a multi-column primary key](#adding-a-foreign-key-constraint-with-a-multi-column-primary-key)
+    * [Setting of type for tenant identifier value](#setting-of-type-for-tenant-identifier-value)
 
 
 # Introduction
@@ -788,8 +789,28 @@ This also the type for parameters of a few function:
 - [Function that set the current tenant identifier](#function-that-set-the-current-tenant-identifier)
 
 It is also return type for function [function that returns the current tenant identifier](#function-that-returns-the-current-tenant-identifier).
+The method that set this type is:
 
-TODO
+```javadoc
+com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#setCurrentTenantIdPropertyType(String currentTenantIdPropertyType
+```
+
+For example, if the value is going to be set to the "UUID" then the builder is going to produce a statement like this:
+
+```sql
+CREATE OR REPLACE FUNCTION get_current_tenant_id() RETURNS UUID AS $$
+SELECT current_setting('c.c_ten')
+$$ LANGUAGE sql
+STABLE
+PARALLEL SAFE;
+
+CREATE OR REPLACE FUNCTION set_current_tenant_id(UUID) RETURNS VOID AS $$
+BEGIN
+PERFORM set_config('c.c_ten', $1, false);
+END
+$$ LANGUAGE plpgsql
+VOLATILE;
+```
 
 ### Setting the property name that stores tenant identifier value
 TODO
