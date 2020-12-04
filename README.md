@@ -13,6 +13,7 @@
         * [Implementation requirements](#implementation-requirements)
     * [How posmulten helps to implement shared schema strategy?](#how-posmulten-helps-to-implement-shared-schema-strategy)
         * [Setting RLS policy](#setting-rls-policy)
+            *[Function that checks tenant access to a table row](#function-that-checks-tenant-access-to-a-table-row)
         * [Connecting to Database](#connecting-to-database)
         * [Adding constraints for foreign key columns](#adding-constraints-for-foreign-key-columns)
         * [Other columns modifications](#other-columns-modifications)
@@ -171,6 +172,7 @@ By default, posmulten does not force this mechanism.
 <br/>
 <br/>
 
+#### Function that checks tenant access to a table row
 Creates a DDL statement for a function that checks if the current tenant for the database session has access to table row based on tenant column (for the case below it is "tenant_id") value.
 ***Current function logic is not complex, but this might be changed in the next release.***
 The [function name](#setting-function-name-that-checks-if-current-tenant-has-authorities-to-a-table-row) can be customize.
@@ -772,6 +774,10 @@ ALTER TABLE "comments" ADD CONSTRAINT comments_parent_comments_fk_cu CHECK ((par
 ```
 
 ### Setting of type for tenant identifier value
+By default, the builder assumes that the tenant column type is going to be `VARCHAR(255)`.
+This same type is also set for parameters of a few particual function:
+- [Function that checks tenant access to a table row](#function-that-checks-tenant-access-to-a-table-row)
+
 TODO
 
 ### Setting the property name that stores tenant identifier value
