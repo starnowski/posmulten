@@ -742,8 +742,8 @@ OIDS = FALSE
 )
 TABLESPACE pg_default;
 ```
-Table has relation to itself (comment has its parent).
-Below is example how to define foreign key constraint with builder component.
+The table has a relation to itself (the comment has its parent).
+Below is an example of how to define foreign key constraints with the builder component.
 ```java
 import com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaContext;
 import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder;
@@ -758,7 +758,7 @@ import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSche
     foreignKeyColumnToPrimaryKeyColumn.put("parent_comment_user_id", "user_id");
     defaultSharedSchemaContextBuilder.createSameTenantConstraintForForeignKey("comments", "comments", foreignKeyColumnToPrimaryKeyColumn, "comments_parent_comments_fk_cu");
 ```
-the build will produce below statements:
+the builder will produce the below statements:
 ```sql
 CREATE OR REPLACE FUNCTION is_comment_belongs_to_current_tenant(bigint, int) RETURNS BOOLEAN AS $$
 SELECT EXISTS (
@@ -770,9 +770,6 @@ PARALLEL SAFE;
 --
 ALTER TABLE "comments" ADD CONSTRAINT comments_parent_comments_fk_cu CHECK ((parent_comment_id IS NULL AND parent_comment_user_id IS NULL) OR (is_comment_belongs_to_current_tenant(parent_comment_user_id, parent_comment_id)));
 ```
-
-
-TODO
 
 ### Setting of type for tenant identifier value
 TODO
