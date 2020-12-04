@@ -15,6 +15,7 @@
         * [Setting RLS policy](#setting-rls-policy)
             * [Function that checks tenant access to a table row](#function-that-checks-tenant-access-to-a-table-row)
             * [Function that checks if the passed identifier is the same as the current tenant identifier](#function-that-checks-if-the-passed-identifier-is-the-same-as-the-current-tenant-identifier)
+            * [Function that returns the current tenant identifier](#function-that-returns-the-current-tenant-identifier)
         * [Connecting to Database](#connecting-to-database)
         * [Adding constraints for foreign key columns](#adding-constraints-for-foreign-key-columns)
         * [Other columns modifications](#other-columns-modifications)
@@ -203,6 +204,7 @@ PARALLEL SAFE;
 ```
 <br/>
 
+#### Function that returns the current tenant identifier
 Next function that is created by Posmulten project is function that returns value of identifier for current tenant.
 Function reads property value that is save for database session. 
 The [property name](#setting-the-property-name-that-stores-tenant-identifier-value) and [function name](#setting-function-name-that-returns-the-current-tenant-identifier) can customized.
@@ -777,9 +779,10 @@ ALTER TABLE "comments" ADD CONSTRAINT comments_parent_comments_fk_cu CHECK ((par
 
 ### Setting of type for tenant identifier value
 By default, the builder assumes that the tenant column type is going to be `VARCHAR(255)`.
-This same type is also set for parameters of a few particual function:
+This also type for parameters of a few particual function:
 - [Function that checks tenant access to a table row](#function-that-checks-tenant-access-to-a-table-row)
 - [Function that checks if the passed identifier is the same as the current tenant identifier](#function-that-checks-if-the-passed-identifier-is-the-same-as-the-current-tenant-identifier)
+It is also return type for function [function that returns the current tenant identifier](#function-that-returns-the-current-tenant-identifier).
 
 TODO
 
