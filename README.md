@@ -753,6 +753,22 @@ import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSche
     commentsTablePrimaryKeyNameToType.put("id", "int");
     commentsTablePrimaryKeyNameToType.put("user_id", "bigint");
     defaultSharedSchemaContextBuilder.createRLSPolicyForTable("comments", commentsTablePrimaryKeyNameToType, "tenant", "comments_table_rls_policy");
+    Map<String, String> foreignKeyColumnToPrimaryKeyColumn = new HashMap();
+    foreignKeyColumnToPrimaryKeyColumn.put("parent_comment_id", "id");
+    foreignKeyColumnToPrimaryKeyColumn.put("parent_comment_user_id", "user_id");
+    defaultSharedSchemaContextBuilder.createSameTenantConstraintForForeignKey("comments", "comments", foreignKeyColumnToPrimaryKeyColumn, "comments_parent_comments_fk_cu");
+```
+the build will produce below statements:
+```sql
+CREATE OR REPLACE FUNCTION is_comment_belongs_to_current_tenant(bigint, int) RETURNS BOOLEAN AS $$
+SELECT EXISTS (
+	SELECT 1 FROM comments rt WHERE rt.user_id = $1 AND rt.id = $2 AND rt.tenant = get_current_tenant_id()
+)
+$$ LANGUAGE sql
+STABLE
+PARALLEL SAFE;
+--
+ALTER TABLE "comments" ADD CONSTRAINT comments_parent_comments_fk_cu CHECK ((parent_comment_id IS NULL AND parent_comment_user_id IS NULL) OR (is_comment_belongs_to_current_tenant(parent_comment_user_id, parent_comment_id)));
 ```
 
 
