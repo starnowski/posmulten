@@ -35,6 +35,8 @@
     * [Adding a foreign key constraint](#adding-a-foreign-key-constraint)
         * [Adding a foreign key constraint with a multi-column primary key](#adding-a-foreign-key-constraint-with-a-multi-column-primary-key)
     * [Setting of type for tenant identifier value](#setting-of-type-for-tenant-identifier-value)
+    * [Setting the property name that stores tenant identifier value](#setting-the-property-name-that-stores-tenant-identifier-value)
+    * [Adding default value for tenant column](#adding-default-value-for-tenant-column)
 
 
 # Introduction
@@ -816,6 +818,7 @@ VOLATILE;
 TODO
 
 ### Adding default value for tenant column
+To specify if builder should generate default value statment 
 TODO
 
 ### Adding tenant column to tenant table
