@@ -709,8 +709,8 @@ PARALLEL SAFE;
 
 ALTER TABLE "posts" ADD CONSTRAINT posts_users_fk_cu CHECK ((user_id IS NULL) OR (is_user_belongs_to_current_tenant(user_id)));
 ```
-As was mentioned in previous [sections](#setting-rls-policy-for-a-table-with-a-multi-column-primary-key), posmulten creates function that check if row with specified primary key exists for current tenant.
-For this example the is_user_belongs_to_current_tenant function was created because table posts has foreign key column that references to table users.
+As was mentioned in previous [sections](#setting-rls-policy-for-a-table-with-a-multi-column-primary-key), posmulten creates a function that checks if a row with a specified primary key exists for the current tenant.
+For this example, the is_user_belongs_to_current_tenant function was created because table posts have a foreign key column that references table users.
 
 TODO
 
