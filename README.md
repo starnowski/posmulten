@@ -828,7 +828,9 @@ VOLATILE;
 TODO
 
 ### Adding default value for tenant column
-To specify if builder should generate default value statment 
+The builder can create statements that adds default values statement for tenant column in each table.
+By default the builder does not do that.
+To specify if builder should generate default value statement for all tenant column 
 TODO
 
 ### Adding tenant column to tenant table
