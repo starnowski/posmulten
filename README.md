@@ -830,7 +830,59 @@ TODO
 ### Adding default value for tenant column
 The builder can create statements that adds default values statement for tenant column in each table.
 By default the builder does not do that.
-To specify if builder should generate default value statement for all tenant column 
+To specify behaviour builder use method:
+```javadoc
+com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#setCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables(boolean value)
+```
+For example, for below database tables:
+```sql
+CREATE TABLE public.users
+(
+    id bigint NOT NULL,
+    name character varying(255),
+    tenant_id character varying(255),
+    CONSTRAINT users_pkey PRIMARY KEY (id)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+CREATE TABLE public.posts
+(
+    id bigint NOT NULL,
+    text text NOT NULL,
+    user_id bigint NOT NULL,
+    tenant_id character varying(255),
+    CONSTRAINT fk_posts_user_id FOREIGN KEY (user_id)
+              REFERENCES users (id) MATCH SIMPLE,
+    CONSTRAINT posts_pkey PRIMARY KEY (id)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+```
+and builder criteria:
+```java
+import com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaContext;
+import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder;
+    Map<String, String> usersTablePrimaryKeyNameToType = new HashMap();
+    usersTablePrimaryKeyNameToType.put("id", "bigint");
+    Map<String, String> postsTablePrimaryKeyNameToType = new HashMap();
+    postsTablePrimaryKeyNameToType.put("id", "bigint");
+    DefaultSharedSchemaContextBuilder defaultSharedSchemaContextBuilder = new DefaultSharedSchemaContextBuilder(null);
+    defaultSharedSchemaContextBuilder.createRLSPolicyForTable("users", usersTablePrimaryKeyNameToType, "tenant_id", "users_table_rls_policy");
+    defaultSharedSchemaContextBuilder.createRLSPolicyForTable("posts", postsTablePrimaryKeyNameToType, "tenant_id", "posts_table_rls_policy");
+//... other criteria
+    defaultSharedSchemaContextBuilder.setCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables(true);
+```
+the builder will produce below statements:
+```sql
+ALTER TABLE users ALTER COLUMN tenant_id SET DEFAULT get_current_tenant_id();
+ALTER TABLE posts ALTER COLUMN tenant_id SET DEFAULT get_current_tenant_id();
+```
+
 TODO
 
 ### Adding tenant column to tenant table
