@@ -40,7 +40,7 @@ public class GrantTablePrivilegesProducer {
      * @param table - Database table
      * @param user  - Database user (grantee)
      * @param privileges - List of table privileges
-     * @return
+     * @return object of type {@link SQLDefinition}
      */
     public SQLDefinition produce(String schema, String table, String user, List<String> privileges) {
         validateParameters(schema, table, user, privileges);
