@@ -253,6 +253,7 @@ VOLATILE;
 <br/>
 
 ### Connecting to Database 
+After correct setup of RLS policies the way how we connect to database and execute sql script has to be changed a little bit.
 TODO
 
 ### Adding constraints for foreign key columns
