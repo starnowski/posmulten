@@ -255,7 +255,7 @@ VOLATILE;
 ### Connecting to Database 
 After correct setup of RLS policies the way how we connect to database and execute sql script has to be changed a little bit.
 For example let's assume that the name of session property that stores current tenant identifier is "c.c_ten".
-
+The function that set value for this property is set_current_tenant_id(VARCHAR(255)) and function that return its value is called get_current_tenant_id().
 TODO
 
 ### Adding constraints for foreign key columns
