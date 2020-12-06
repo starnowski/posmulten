@@ -885,6 +885,30 @@ ALTER TABLE posts ALTER COLUMN tenant_id SET DEFAULT get_current_tenant_id();
 ```
 
 #### Skipping adding default value for tenant column for a single table
+The builder has a method that allows skipping the creation of the default value statements for a specific table when the option of adding default value for all tenant columns is on.
+```javadoc
+com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#skipAddingOfTenantColumnDefaultValueForTable(String value)
+```
+For below criteria:
+```java
+import com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaContext;
+import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder;
+    Map<String, String> usersTablePrimaryKeyNameToType = new HashMap();
+    usersTablePrimaryKeyNameToType.put("id", "bigint");
+    Map<String, String> postsTablePrimaryKeyNameToType = new HashMap();
+    postsTablePrimaryKeyNameToType.put("id", "bigint");
+    DefaultSharedSchemaContextBuilder defaultSharedSchemaContextBuilder = new DefaultSharedSchemaContextBuilder(null);
+    defaultSharedSchemaContextBuilder.createRLSPolicyForTable("users", usersTablePrimaryKeyNameToType, "tenant_id", "users_table_rls_policy");
+    defaultSharedSchemaContextBuilder.createRLSPolicyForTable("posts", postsTablePrimaryKeyNameToType, "tenant_id", "posts_table_rls_policy");
+//... other criteria
+    defaultSharedSchemaContextBuilder.setCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables(true);
+    defaultSharedSchemaContextBuilder.skipAddingOfTenantColumnDefaultValueForTable("posts");
+```
+the builder will produce below statements:
+```sql
+ALTER TABLE users ALTER COLUMN tenant_id SET DEFAULT get_current_tenant_id();
+```
+builder will not produce a statement for the posts table.
 
 TODO
 
