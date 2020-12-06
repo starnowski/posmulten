@@ -960,6 +960,31 @@ com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaConte
 <b>tenantValuesBlacklist</b> - <b>(Required)</b> list of invalid tenant identifier values.<br/>
 <b>isTenantValidFunctionName</b> - <b>(Optional)</b> name of the function that checks if passed tenant identifier is valid. If passed value is null then function name is "is_tenant_identifier_valid".<br/>
 <b>isTenantValidConstraintName</b> - <b>(Optional)</b> name of the constraint that checks if the tenant column has a valid value. If the passed value is null then the constraint name is "tenant_identifier_valid".<br/>
+
+For below criteria:
+```java
+import com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaContext;
+import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder;
+    Map<String, String> usersTablePrimaryKeyNameToType = new HashMap();
+    usersTablePrimaryKeyNameToType.put("id", "bigint");
+    Map<String, String> postsTablePrimaryKeyNameToType = new HashMap();
+    postsTablePrimaryKeyNameToType.put("id", "bigint");
+    DefaultSharedSchemaContextBuilder defaultSharedSchemaContextBuilder = new DefaultSharedSchemaContextBuilder(null);
+    defaultSharedSchemaContextBuilder.createRLSPolicyForTable("users", usersTablePrimaryKeyNameToType, "tenant_id", "users_table_rls_policy");
+    defaultSharedSchemaContextBuilder.createRLSPolicyForTable("posts", postsTablePrimaryKeyNameToType, "tenant_id", "posts_table_rls_policy");
+//... other criteria
+    defaultSharedSchemaContextBuilder.createValidTenantValueConstraint(asList("DUMMMY_TENANT",  "XXX-INVAlid_tenant"), null, null);
+```
+the builder will produce below statements:
+```sql
+CREATE OR REPLACE FUNCTION is_tenant_id_valid(VARCHAR(255)) RETURNS BOOLEAN AS $$
+SELECT $1 <> CAST ('DUMMMY_TENANT' AS VARCHAR(255)) AND $1 <> CAST ('XXX-INVAlid_tenant' AS VARCHAR(255))
+$$ LANGUAGE sql
+IMMUTABLE
+PARALLEL SAFE;
+ALTER TABLE "users" ADD CONSTRAINT tenant_should_be_valid CHECK (tenant_id IS NULL OR is_tenant_id_valid(tenant_id));
+ALTER TABLE "posts" ADD CONSTRAINT tenant_should_be_valid CHECK (tenant_id IS NULL OR is_tenant_id_valid(tenant_id));
+```
 TODO
 
 ### Naming convention and its constraints
