@@ -946,6 +946,10 @@ com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaConte
 ```
 
 ### Setting function name that returns the current tenant identifier
+The builder allows to set the name of [function that returns the current tenant identifier](#function-that-returns-the-current-tenant-identifier) via method:
+```javadoc
+com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#setGetCurrentTenantIdFunctionName(String getCurrentTenantIdFunctionName)
+```
 TODO
 
 ### Setting function name that sets the current tenant identifier
