@@ -44,7 +44,7 @@
     * [Setting function name that checks if current tenant has authorities to a table row](#setting-function-name-that-checks-if-current-tenant-has-authorities-to-a-table-row)
     * [Setting function name that checks if passed identifier is the same as current tenant identifier](#setting-function-name-that-checks-if-passed-identifier-is-the-same-as-current-tenant-identifier)
     * [Setting function name that checks if passed primary key for a specific table exists for the current tenant](#setting-function-name-that-checks-if-passed-primary-key-for-a-specific-table-exists-for-the-current-tenant)
-    * [Setting a list of invalid the tenant identifier values](#setting-a-list-of-invalid-the-tenant-identifier-values)
+    * [Setting a list of invalid tenant identifier values](#setting-a-list-of-invalid-tenant-identifier-values)
     * [Naming convention and its constraints](#naming-convention-and-its-constraints)
     * [Other maven repositories](#other-maven-repositories)
 * [Reporting issues](#reporting-issues)
@@ -952,7 +952,14 @@ TODO
 ### Setting function name that checks if passed primary key for a specific table exists for the current tenant
 TODO
 
-### Setting a list of invalid the tenant identifier values
+### Setting a list of invalid tenant identifier values
+The builder allows to specify the list of invalid tenant identifier values via method:
+```javadoc
+com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#createValidTenantValueConstraint(List<String> tenantValuesBlacklist, String isTenantValidFunctionName, String isTenantValidConstraintName)
+```
+<b>tenantValuesBlacklist</b> - <b>(Required)</b> list of invalid tenant identifier values.<br/>
+<b>isTenantValidFunctionName</b> - <b>(Optional)</b> name of the function that checks if passed tenant identifier is valid. If passed value is null then function name is "is_tenant_identifier_valid".<br/>
+<b>isTenantValidConstraintName</b> - <b>(Optional)</b> name of the constraint that checks if the tenant column has a valid value. If the passed value is null then the constraint name is "tenant_identifier_valid".<br/>
 TODO
 
 ### Naming convention and its constraints
