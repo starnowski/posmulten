@@ -1014,7 +1014,6 @@ the builder will produce below statements:
 ALTER TABLE "users" ADD CONSTRAINT tenant_should_be_valid CHECK (tenant_id IS NULL OR is_tenant_id_valid(tenant_id));
 ALTER TABLE "posts" ADD CONSTRAINT posts_tenant_is_valid CHECK (tenant_id IS NULL OR is_tenant_id_valid(tenant_id));
 ```
-TODO
 
 ### Naming convention and its constraints
 TODO - [Create a validator component that checks if the passed identifier has the correct name.](https://github.com/starnowski/posmulten/issues/137)
