@@ -987,7 +987,7 @@ ALTER TABLE "users" ADD CONSTRAINT tenant_should_be_valid CHECK (tenant_id IS NU
 ALTER TABLE "posts" ADD CONSTRAINT tenant_should_be_valid CHECK (tenant_id IS NULL OR is_tenant_id_valid(tenant_id));
 ```
 #### Setting custom name for table tenant column constraint
-Builder allows to specify custom constraint name via method:
+Builder allows specifying custom constraint name via the method:
 ```javadoc
 com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#registerCustomValidTenantValueConstraintNameForTable(String table, String constraintName)
 ```
