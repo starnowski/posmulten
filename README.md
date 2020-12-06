@@ -936,7 +936,14 @@ ALTER TABLE notifications ALTER COLUMN tenant_x SET DEFAULT get_current_tenant_i
 ```
 
 ### Setting default tenant column name
-TODO
+By default tenant the builder assume that tenant column name is "tenant_id".
+It is important during [adding tenant column](#adding-default-value-for-tenant-column).
+Or specifying RLS policy for table without specifying tenant column name.
+In such case the builder assumes that tenant column for such table is equal to the default value.
+Builder allows to change default tenant column name via method:
+```javadoc
+com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#setDefaultTenantIdColumn(String defaultTenantIdColumn)
+```
 
 ### Setting function name that returns the current tenant identifier
 TODO
