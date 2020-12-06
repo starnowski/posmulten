@@ -950,10 +950,12 @@ The builder allows to set the name of [function that returns the current tenant 
 ```javadoc
 com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#setGetCurrentTenantIdFunctionName(String getCurrentTenantIdFunctionName)
 ```
-TODO
 
 ### Setting function name that sets the current tenant identifier
-TODO
+The builder allows to set the name of [function that set the current tenant identifier](#function-that-set-the-current-tenant-identifier) via method:
+```javadoc
+com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#setSetCurrentTenantIdFunctionName(String setCurrentTenantIdFunctionName)
+```
 
 ### Setting function name that checks if current tenant has authorities to a table row
 TODO
