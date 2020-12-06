@@ -257,7 +257,8 @@ After correct setup of RLS policies the way how we connect to database and execu
 For example let's assume that the name of session property that stores current tenant identifier is "c.c_ten".
 The function that set value for this property is set_current_tenant_id(VARCHAR(255)) and function that return its value is called get_current_tenant_id().
 If opening connection as user for which the RLS was configured it is required to set tenant identifier.
-Below there is example that show what happend in situation when tenant identifier is not set.
+Below there is example that show what happens in situation when tenant identifier is not set.
+<b>Important</b>, all examples were generated in the Postgres database in version 9.6. 
 ```sql
 SELECT * FROM users;
 ```
