@@ -274,6 +274,10 @@ SELECT set_current_tenant_id('SOME_TENANT_1');
 SELECT COUNT(*) FROM users;
 ```
 
+In the beginning, there are no records.
+Below there is an example how to insert into table for tenant.
+
+
 TODO
 
 ### Adding constraints for foreign key columns
