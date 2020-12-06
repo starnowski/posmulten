@@ -828,9 +828,9 @@ VOLATILE;
 TODO
 
 ### Adding default value for tenant column
-The builder can create statements that adds default values statement for tenant column in each table.
-By default the builder does not do that.
-To specify behaviour builder use method:
+The builder can create statements that add default values statements for the tenant column in each table. 
+By default, the builder does not do that. 
+To specify behavior builder use method:
 ```javadoc
 com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#setCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables(boolean value)
 ```
