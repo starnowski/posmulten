@@ -267,6 +267,12 @@ ERROR:  unrecognized configuration parameter "c.c_ten"
 SQL state: 42704
 ```
 
+Let's pretend that our newly created tenant should have the name "SOME_TENANT_1".
+```sql
+SELECT set_current_tenant_id('SOME_TENANT_1');
+SELECT * FROM users;
+```
+
 TODO
 
 ### Adding constraints for foreign key columns
