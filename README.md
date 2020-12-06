@@ -910,8 +910,6 @@ ALTER TABLE users ALTER COLUMN tenant_id SET DEFAULT get_current_tenant_id();
 ```
 builder will not produce a statement for the posts table.
 
-TODO
-
 ### Adding tenant column to tenant table
 TODO
 
