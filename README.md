@@ -1041,7 +1041,7 @@ TODO - [Create a validator component that checks if the passed identifier has th
 TODO
 
 # Reporting issues
-TODO
+* Any new issues please report in GitHub site
 
 # Project contribution
 TODO
