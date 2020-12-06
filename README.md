@@ -37,6 +37,7 @@
     * [Setting of type for tenant identifier value](#setting-of-type-for-tenant-identifier-value)
     * [Setting the property name that stores tenant identifier value](#setting-the-property-name-that-stores-tenant-identifier-value)
     * [Adding default value for tenant column](#adding-default-value-for-tenant-column)
+        * [Skipping adding default value for tenant column for a single table](#skipping-adding-default-value-for-tenant-column-for-a-single-table)
     * [Setting default tenant column name](#setting-default-tenant-column-name)
     * [Setting function name that returns the current tenant identifier](#setting-function-name-that-returns-the-current-tenant-identifier)
     * [Setting function name that sets the current tenant identifier](#setting-function-name-that-sets-the-current-tenant-identifier)
@@ -882,6 +883,8 @@ the builder will produce below statements:
 ALTER TABLE users ALTER COLUMN tenant_id SET DEFAULT get_current_tenant_id();
 ALTER TABLE posts ALTER COLUMN tenant_id SET DEFAULT get_current_tenant_id();
 ```
+
+#### Skipping adding default value for tenant column for a single table
 
 TODO
 
