@@ -45,6 +45,7 @@
     * [Setting function name that checks if passed identifier is the same as current tenant identifier](#setting-function-name-that-checks-if-passed-identifier-is-the-same-as-current-tenant-identifier)
     * [Setting function name that checks if passed primary key for a specific table exists for the current tenant](#setting-function-name-that-checks-if-passed-primary-key-for-a-specific-table-exists-for-the-current-tenant)
     * [Setting a list of invalid tenant identifier values](#setting-a-list-of-invalid-tenant-identifier-values)
+        * [Setting custom name for table tenant column constraint](#setting-custom-name-for-table-tenant-column-constraint)
     * [Naming convention and its constraints](#naming-convention-and-its-constraints)
     * [Other maven repositories](#other-maven-repositories)
 * [Reporting issues](#reporting-issues)
@@ -985,6 +986,8 @@ PARALLEL SAFE;
 ALTER TABLE "users" ADD CONSTRAINT tenant_should_be_valid CHECK (tenant_id IS NULL OR is_tenant_id_valid(tenant_id));
 ALTER TABLE "posts" ADD CONSTRAINT tenant_should_be_valid CHECK (tenant_id IS NULL OR is_tenant_id_valid(tenant_id));
 ```
+#### Setting custom name for table tenant column constraint
+
 TODO
 
 ### Naming convention and its constraints
