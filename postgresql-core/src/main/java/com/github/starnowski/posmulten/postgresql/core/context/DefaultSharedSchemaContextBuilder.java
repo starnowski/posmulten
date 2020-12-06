@@ -69,7 +69,7 @@ public class DefaultSharedSchemaContextBuilder {
      * added into the collection.
      * Before enriching the result object the request object is validated by all validators stored in the {@link #validators} collection.
      * @return object of type {@link ISharedSchemaContext}
-     * @throws SharedSchemaContextBuilderException
+     * @throws SharedSchemaContextBuilderException exceptions thrown by enrichers and validators
      */
     public ISharedSchemaContext build() throws SharedSchemaContextBuilderException
     {

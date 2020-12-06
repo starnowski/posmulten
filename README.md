@@ -37,12 +37,15 @@
     * [Setting of type for tenant identifier value](#setting-of-type-for-tenant-identifier-value)
     * [Setting the property name that stores tenant identifier value](#setting-the-property-name-that-stores-tenant-identifier-value)
     * [Adding default value for tenant column](#adding-default-value-for-tenant-column)
+        * [Skipping adding default value for tenant column for a single table](#skipping-adding-default-value-for-tenant-column-for-a-single-table)
     * [Setting default tenant column name](#setting-default-tenant-column-name)
     * [Setting function name that returns the current tenant identifier](#setting-function-name-that-returns-the-current-tenant-identifier)
     * [Setting function name that sets the current tenant identifier](#setting-function-name-that-sets-the-current-tenant-identifier)
     * [Setting function name that checks if current tenant has authorities to a table row](#setting-function-name-that-checks-if-current-tenant-has-authorities-to-a-table-row)
     * [Setting function name that checks if passed identifier is the same as current tenant identifier](#setting-function-name-that-checks-if-passed-identifier-is-the-same-as-current-tenant-identifier)
     * [Setting function name that checks if passed primary key for a specific table exists for the current tenant](#setting-function-name-that-checks-if-passed-primary-key-for-a-specific-table-exists-for-the-current-tenant)
+    * [Setting a list of invalid tenant identifier values](#setting-a-list-of-invalid-tenant-identifier-values)
+        * [Setting custom name for table tenant column constraint](#setting-custom-name-for-table-tenant-column-constraint)
     * [Naming convention and its constraints](#naming-convention-and-its-constraints)
     * [Other maven repositories](#other-maven-repositories)
 * [Reporting issues](#reporting-issues)
@@ -828,29 +831,208 @@ VOLATILE;
 TODO
 
 ### Adding default value for tenant column
-To specify if builder should generate default value statment 
-TODO
+The builder can create statements that add default values statements for the tenant column in each table. 
+By default, the builder does not do that. 
+To specify behavior builder use method:
+```javadoc
+com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#setCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables(boolean value)
+```
+For example, for database tables below:
+```sql
+CREATE TABLE public.users
+(
+    id bigint NOT NULL,
+    name character varying(255),
+    tenant_id character varying(255),
+    CONSTRAINT users_pkey PRIMARY KEY (id)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+CREATE TABLE public.posts
+(
+    id bigint NOT NULL,
+    text text NOT NULL,
+    user_id bigint NOT NULL,
+    tenant_id character varying(255),
+    CONSTRAINT fk_posts_user_id FOREIGN KEY (user_id)
+              REFERENCES users (id) MATCH SIMPLE,
+    CONSTRAINT posts_pkey PRIMARY KEY (id)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+```
+and builder criteria:
+```java
+import com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaContext;
+import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder;
+    Map<String, String> usersTablePrimaryKeyNameToType = new HashMap();
+    usersTablePrimaryKeyNameToType.put("id", "bigint");
+    Map<String, String> postsTablePrimaryKeyNameToType = new HashMap();
+    postsTablePrimaryKeyNameToType.put("id", "bigint");
+    DefaultSharedSchemaContextBuilder defaultSharedSchemaContextBuilder = new DefaultSharedSchemaContextBuilder(null);
+    defaultSharedSchemaContextBuilder.createRLSPolicyForTable("users", usersTablePrimaryKeyNameToType, "tenant_id", "users_table_rls_policy");
+    defaultSharedSchemaContextBuilder.createRLSPolicyForTable("posts", postsTablePrimaryKeyNameToType, "tenant_id", "posts_table_rls_policy");
+//... other criteria
+    defaultSharedSchemaContextBuilder.setCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables(true);
+```
+the builder will produce below statements:
+```sql
+ALTER TABLE users ALTER COLUMN tenant_id SET DEFAULT get_current_tenant_id();
+ALTER TABLE posts ALTER COLUMN tenant_id SET DEFAULT get_current_tenant_id();
+```
+
+#### Skipping adding default value for tenant column for a single table
+The builder has a method that allows skipping the creation of the default value statements for a specific table when the option of adding default value for all tenant columns is on.
+```javadoc
+com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#skipAddingOfTenantColumnDefaultValueForTable(String value)
+```
+For below criteria:
+```java
+import com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaContext;
+import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder;
+    Map<String, String> usersTablePrimaryKeyNameToType = new HashMap();
+    usersTablePrimaryKeyNameToType.put("id", "bigint");
+    Map<String, String> postsTablePrimaryKeyNameToType = new HashMap();
+    postsTablePrimaryKeyNameToType.put("id", "bigint");
+    DefaultSharedSchemaContextBuilder defaultSharedSchemaContextBuilder = new DefaultSharedSchemaContextBuilder(null);
+    defaultSharedSchemaContextBuilder.createRLSPolicyForTable("users", usersTablePrimaryKeyNameToType, "tenant_id", "users_table_rls_policy");
+    defaultSharedSchemaContextBuilder.createRLSPolicyForTable("posts", postsTablePrimaryKeyNameToType, "tenant_id", "posts_table_rls_policy");
+//... other criteria
+    defaultSharedSchemaContextBuilder.setCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables(true);
+    defaultSharedSchemaContextBuilder.skipAddingOfTenantColumnDefaultValueForTable("posts");
+```
+the builder will produce below statements:
+```sql
+ALTER TABLE users ALTER COLUMN tenant_id SET DEFAULT get_current_tenant_id();
+```
+builder will not produce a statement for the posts table.
 
 ### Adding tenant column to tenant table
-TODO
+The builder can produce a statement that creates a tenant column for a table that does not have it.
+```javadoc
+com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#createTenantColumnForTable(String table)
+```
+For below criteria:
+```java
+import com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaContext;
+import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder;
+    Map<String, String> notificationsTablePrimaryKeyNameToType = new HashMap();
+    notificationsTablePrimaryKeyNameToType.put("uuid", "uuid");
+    DefaultSharedSchemaContextBuilder defaultSharedSchemaContextBuilder = new DefaultSharedSchemaContextBuilder(null);
+    defaultSharedSchemaContextBuilder.createTenantColumnForTable("notifications")
+        .createRLSPolicyForTable("notifications", notificationsTablePrimaryKeyNameToType, "tenant_x", "notifications_table_rls_policy")
+//... other criteria
+```
+the builder will produce below statements:
+```sql
+ALTER TABLE notifications ADD COLUMN tenant_x VARCHAR(255);
+ALTER TABLE notifications ALTER COLUMN tenant_x SET NOT NULL;
+ALTER TABLE notifications ALTER COLUMN tenant_x SET DEFAULT get_current_tenant_id();
+```
 
 ### Setting default tenant column name
-TODO
+By default tenant, the builder assumes that tenant column name is "tenant_id".
+It is important during [adding tenant column](#adding-default-value-for-tenant-column).
+Or specifying [RLS policy](#setting-rls-policy-for-table) for a table without specifying a tenant column name. 
+In such a case, the builder assumes that the tenant column for such a table is equal to the default value. 
+The builder allows to change default tenant column name via method:
+```javadoc
+com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#setDefaultTenantIdColumn(String defaultTenantIdColumn)
+```
 
 ### Setting function name that returns the current tenant identifier
-TODO
+The builder allows to set the name of [function that returns the current tenant identifier](#function-that-returns-the-current-tenant-identifier) via method:
+```javadoc
+com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#setGetCurrentTenantIdFunctionName(String getCurrentTenantIdFunctionName)
+```
 
 ### Setting function name that sets the current tenant identifier
-TODO
+The builder allows to set the name of [function that set the current tenant identifier](#function-that-set-the-current-tenant-identifier) via method:
+```javadoc
+com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#setSetCurrentTenantIdFunctionName(String setCurrentTenantIdFunctionName)
+```
 
 ### Setting function name that checks if current tenant has authorities to a table row
-TODO
+The builder allows to set the name of [function that checks tenant access to a table row](#function-that-checks-tenant-access-to-a-table-row) via method:
+```javadoc
+com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#setTenantHasAuthoritiesFunctionName(String tenantHasAuthoritiesFunctionName)
+```
 
 ### Setting function name that checks if passed identifier is the same as current tenant identifier
-TODO
+The builder allows to set the name of [function that checks if the passed identifier is the same as the current tenant identifier](#function-that-checks-if-the-passed-identifier-is-the-same-as-the-current-tenant-identifier) via method:
+```javadoc
+com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#setEqualsCurrentTenantIdentifierFunctionName(String equalsCurrentTenantIdentifierFunctionName)
+```
 
 ### Setting function name that checks if passed primary key for a specific table exists for the current tenant
 TODO
+
+### Setting a list of invalid tenant identifier values
+The builder allows to specify the list of invalid tenant identifier values via method:
+```javadoc
+com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#createValidTenantValueConstraint(List<String> tenantValuesBlacklist, String isTenantValidFunctionName, String isTenantValidConstraintName)
+```
+<b>tenantValuesBlacklist</b> - <b>(Required)</b> list of invalid tenant identifier values.<br/>
+<b>isTenantValidFunctionName</b> - <b>(Optional)</b> name of the function that checks if passed tenant identifier is valid. If passed value is null then function name is "is_tenant_identifier_valid".<br/>
+<b>isTenantValidConstraintName</b> - <b>(Optional)</b> name of the constraint that checks if the tenant column has a valid value. If the passed value is null then the constraint name is "tenant_identifier_valid".<br/>
+
+For below criteria:
+```java
+import com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaContext;
+import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder;
+    Map<String, String> usersTablePrimaryKeyNameToType = new HashMap();
+    usersTablePrimaryKeyNameToType.put("id", "bigint");
+    Map<String, String> postsTablePrimaryKeyNameToType = new HashMap();
+    postsTablePrimaryKeyNameToType.put("id", "bigint");
+    DefaultSharedSchemaContextBuilder defaultSharedSchemaContextBuilder = new DefaultSharedSchemaContextBuilder(null);
+    defaultSharedSchemaContextBuilder.createRLSPolicyForTable("users", usersTablePrimaryKeyNameToType, "tenant_id", "users_table_rls_policy");
+    defaultSharedSchemaContextBuilder.createRLSPolicyForTable("posts", postsTablePrimaryKeyNameToType, "tenant_id", "posts_table_rls_policy");
+//... other criteria
+    defaultSharedSchemaContextBuilder.createValidTenantValueConstraint(asList("DUMMMY_TENANT",  "XXX-INVAlid_tenant"), null, null);
+```
+the builder will produce below statements:
+```sql
+CREATE OR REPLACE FUNCTION is_tenant_id_valid(VARCHAR(255)) RETURNS BOOLEAN AS $$
+SELECT $1 <> CAST ('DUMMMY_TENANT' AS VARCHAR(255)) AND $1 <> CAST ('XXX-INVAlid_tenant' AS VARCHAR(255))
+$$ LANGUAGE sql
+IMMUTABLE
+PARALLEL SAFE;
+ALTER TABLE "users" ADD CONSTRAINT tenant_should_be_valid CHECK (tenant_id IS NULL OR is_tenant_id_valid(tenant_id));
+ALTER TABLE "posts" ADD CONSTRAINT tenant_should_be_valid CHECK (tenant_id IS NULL OR is_tenant_id_valid(tenant_id));
+```
+#### Setting custom name for table tenant column constraint
+Builder allows specifying custom constraint name via the method:
+```javadoc
+com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#registerCustomValidTenantValueConstraintNameForTable(String table, String constraintName)
+```
+<b>table</b> - <b>(Required)</b> name of table.<br/>
+<b>constraintName</b> - <b>(Required)</b> name of constraint.<br/>
+
+for below criteria:
+```java
+import com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaContext;
+import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder;
+    Map<String, String> usersTablePrimaryKeyNameToType = new HashMap();
+    usersTablePrimaryKeyNameToType.put("id", "bigint");
+    Map<String, String> postsTablePrimaryKeyNameToType = new HashMap();
+    postsTablePrimaryKeyNameToType.put("id", "bigint");
+    DefaultSharedSchemaContextBuilder defaultSharedSchemaContextBuilder = new DefaultSharedSchemaContextBuilder(null);
+    defaultSharedSchemaContextBuilder.createRLSPolicyForTable("users", usersTablePrimaryKeyNameToType, "tenant_id", "users_table_rls_policy");
+    defaultSharedSchemaContextBuilder.createRLSPolicyForTable("posts", postsTablePrimaryKeyNameToType, "tenant_id", "posts_table_rls_policy");
+    defaultSharedSchemaContextBuilder.createValidTenantValueConstraint(asList("DUMMMY_TENANT",  "XXX-INVAlid_tenant"), null, null);
+//... other criteria
+    defaultSharedSchemaContextBuilder.registerCustomValidTenantValueConstraintNameForTable("posts", "posts_tenant_is_valid");
+```
+the builder will produce below statements:
+```sql
+ALTER TABLE "users" ADD CONSTRAINT tenant_should_be_valid CHECK (tenant_id IS NULL OR is_tenant_id_valid(tenant_id));
+ALTER TABLE "posts" ADD CONSTRAINT posts_tenant_is_valid CHECK (tenant_id IS NULL OR is_tenant_id_valid(tenant_id));
+```
 
 ### Naming convention and its constraints
 TODO - [Create a validator component that checks if the passed identifier has the correct name.](https://github.com/starnowski/posmulten/issues/137)
@@ -859,7 +1041,7 @@ TODO - [Create a validator component that checks if the passed identifier has th
 TODO
 
 # Reporting issues
-TODO
+* Any new issues please report in GitHub site
 
 # Project contribution
 TODO
