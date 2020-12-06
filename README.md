@@ -256,6 +256,17 @@ VOLATILE;
 After correct setup of RLS policies the way how we connect to database and execute sql script has to be changed a little bit.
 For example let's assume that the name of session property that stores current tenant identifier is "c.c_ten".
 The function that set value for this property is set_current_tenant_id(VARCHAR(255)) and function that return its value is called get_current_tenant_id().
+If opening connection as user for which the RLS was configured it is required to set tenant identifier.
+Below there is example that show what happend in situation when tenant identifier is not set.
+```sql
+SELECT * FROM users;
+```
+For displaying rows from the users table without setting tenant identifier there is going to be thrown exception.
+```sql
+ERROR:  unrecognized configuration parameter "c.c_ten"
+SQL state: 42704
+```
+
 TODO
 
 ### Adding constraints for foreign key columns
