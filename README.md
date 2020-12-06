@@ -44,6 +44,7 @@
     * [Setting function name that checks if current tenant has authorities to a table row](#setting-function-name-that-checks-if-current-tenant-has-authorities-to-a-table-row)
     * [Setting function name that checks if passed identifier is the same as current tenant identifier](#setting-function-name-that-checks-if-passed-identifier-is-the-same-as-current-tenant-identifier)
     * [Setting function name that checks if passed primary key for a specific table exists for the current tenant](#setting-function-name-that-checks-if-passed-primary-key-for-a-specific-table-exists-for-the-current-tenant)
+    * [Setting a list of invalid the tenant identifier values](#setting-a-list-of-invalid-the-tenant-identifier-values)
     * [Naming convention and its constraints](#naming-convention-and-its-constraints)
     * [Other maven repositories](#other-maven-repositories)
 * [Reporting issues](#reporting-issues)
@@ -949,6 +950,9 @@ TODO
 TODO
 
 ### Setting function name that checks if passed primary key for a specific table exists for the current tenant
+TODO
+
+### Setting a list of invalid the tenant identifier values
 TODO
 
 ### Naming convention and its constraints
