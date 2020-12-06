@@ -254,6 +254,8 @@ VOLATILE;
 
 ### Connecting to Database 
 After correct setup of RLS policies the way how we connect to database and execute sql script has to be changed a little bit.
+For example let's assume that the name of session property that stores current tenant identifier is "c.c_ten".
+
 TODO
 
 ### Adding constraints for foreign key columns
