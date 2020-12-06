@@ -1041,9 +1041,11 @@ TODO - [Create a validator component that checks if the passed identifier has th
 TODO
 
 # Reporting issues
-* Any new issues please report in GitHub site
+* Any new issues please report in [GitHub site](https://github.com/starnowski/posmulten/issues)
 
 # Project contribution
+At this moment please create issue on page [issues](https://github.com/starnowski/posmulten/issues) with "[CONTRIBUTION]".
+Or send message to me directly on [LinkedIn site](https://pl.linkedin.com/in/szymon-tarnowski-a104b4150).
 TODO
 
 
