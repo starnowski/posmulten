@@ -958,7 +958,10 @@ com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaConte
 ```
 
 ### Setting function name that checks if current tenant has authorities to a table row
-TODO
+The builder allows to set the name of [function that checks tenant access to a table row](#function-that-checks-tenant-access-to-a-table-row) via method:
+```javadoc
+com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#setTenantHasAuthoritiesFunctionName(String tenantHasAuthoritiesFunctionName)
+```
 
 ### Setting function name that checks if passed identifier is the same as current tenant identifier
 TODO
