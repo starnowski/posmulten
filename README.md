@@ -964,7 +964,10 @@ com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaConte
 ```
 
 ### Setting function name that checks if passed identifier is the same as current tenant identifier
-TODO
+The builder allows to set the name of [function that checks if the passed identifier is the same as the current tenant identifier](#function-that-checks-if-the-passed-identifier-is-the-same-as-the-current-tenant-identifier) via method:
+```javadoc
+com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#setEqualsCurrentTenantIdentifierFunctionName(String equalsCurrentTenantIdentifierFunctionName)
+```
 
 ### Setting function name that checks if passed primary key for a specific table exists for the current tenant
 TODO
