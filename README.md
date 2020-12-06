@@ -834,7 +834,7 @@ To specify behavior builder use method:
 ```javadoc
 com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#setCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables(boolean value)
 ```
-For example, for below database tables:
+For example, for database tables below:
 ```sql
 CREATE TABLE public.users
 (
