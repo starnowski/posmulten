@@ -911,7 +911,27 @@ ALTER TABLE users ALTER COLUMN tenant_id SET DEFAULT get_current_tenant_id();
 builder will not produce a statement for the posts table.
 
 ### Adding tenant column to tenant table
-TODO
+The builder can produce a statement that creates a tenant column for a table that does not have it.
+```javadoc
+com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#createTenantColumnForTable(String table)
+```
+For below criteria:
+```java
+import com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaContext;
+import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder;
+    Map<String, String> notificationsTablePrimaryKeyNameToType = new HashMap();
+    notificationsTablePrimaryKeyNameToType.put("uuid", "uuid");
+    DefaultSharedSchemaContextBuilder defaultSharedSchemaContextBuilder = new DefaultSharedSchemaContextBuilder(null);
+    defaultSharedSchemaContextBuilder.createTenantColumnForTable("notifications")
+        .createRLSPolicyForTable("notifications", notificationsTablePrimaryKeyNameToType, "tenant_x", "notifications_table_rls_policy")
+//... other criteria
+```
+the builder will produce below statements:
+```sql
+ALTER TABLE notifications ADD COLUMN tenant_x VARCHAR(255);
+ALTER TABLE notifications ALTER COLUMN tenant_x SET NOT NULL;
+ALTER TABLE notifications ALTER COLUMN tenant_x SET DEFAULT get_current_tenant_id();
+```
 
 ### Setting default tenant column name
 TODO
