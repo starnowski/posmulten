@@ -282,6 +282,8 @@ INSERT INTO users (id, name) VALUES (1, 'Szymon Tarnowski');
 INSERT INTO users (id, name, tenant_id) VALUES (2, 'John Doe', 'SOME_TENANT_1');
 ```
 
+After inserting above records, the previous select statements should return result 2.
+
 TODO
 
 ### Adding constraints for foreign key columns
