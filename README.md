@@ -276,7 +276,11 @@ SELECT COUNT(*) FROM users;
 
 In the beginning, there are no records.
 Below there is an example how to insert into table for tenant.
-
+```sql
+SELECT set_current_tenant_id('SOME_TENANT_1');
+INSERT INTO users (id, name) VALUES (1, 'Szymon Tarnowski');
+INSERT INTO users (id, name, tenant_id) VALUES (2, 'John Doe', 'SOME_TENANT_1');
+```
 
 TODO
 
