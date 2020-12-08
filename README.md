@@ -288,7 +288,18 @@ In case if we want to change current tenant to 'TENANT_X_2' and display all rows
 SELECT set_current_tenant_id('TENANT_X_2');
 SELECT COUNT(*) FROM users;
 ```
-
+After adding a single record we should get the one as a select query result.
+```sql
+SELECT set_current_tenant_id('TENANT_X_2');
+INSERT INTO users (id, name) VALUES (3, 'Jimmy Doe');
+SELECT COUNT(*) FROM users;
+```
+After deleting all results from the users table, the select query should return zero results.
+```sql
+SELECT set_current_tenant_id('TENANT_X_2');
+DELETE FROM users;
+SELECT COUNT(*) FROM users;
+```  
 TODO
 
 ### Adding constraints for foreign key columns
