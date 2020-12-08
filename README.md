@@ -1026,6 +1026,13 @@ com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaConte
 ```
 
 ### Setting function name that checks if passed primary key for a specific table exists for the current tenant
+It is required to specify the function that checks if the passed identifier exists in a specific table.
+The builder has a single method for this purpose.
+```javadoc
+com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#setNameForFunctionThatChecksIfRecordExistsInTable(String recordTable, String functionName)
+```
+<b>recordTable</b> - <b>(Required)</b> table name.<br/>
+<b>functionName</b> - <b>(Required)</b> function name.<br/>
 TODO
 
 ### Setting a list of invalid tenant identifier values
