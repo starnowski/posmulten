@@ -283,6 +283,11 @@ INSERT INTO users (id, name, tenant_id) VALUES (2, 'John Doe', 'SOME_TENANT_1');
 ```
 
 After inserting above records, the previous select statements should return result 2.
+In case if we want to change current tenant to 'TENANT_X_2' and display all rows we should get zero results. 
+```sql
+SELECT set_current_tenant_id('TENANT_X_2');
+SELECT COUNT(*) FROM users;
+```
 
 TODO
 
