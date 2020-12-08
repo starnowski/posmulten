@@ -300,6 +300,12 @@ SELECT set_current_tenant_id('TENANT_X_2');
 DELETE FROM users;
 SELECT COUNT(*) FROM users;
 ```  
+
+But if we change current tenant to the 'SOME_TENANT_1' then for select query we should get two records.
+```sql
+SELECT set_current_tenant_id('SOME_TENANT_1');
+SELECT COUNT(*) FROM users;
+```
 TODO
 
 ### Adding constraints for foreign key columns
