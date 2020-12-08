@@ -306,7 +306,6 @@ But if we change current tenant to the 'SOME_TENANT_1' then for select query we 
 SELECT set_current_tenant_id('SOME_TENANT_1');
 SELECT COUNT(*) FROM users;
 ```
-TODO
 
 ### Adding constraints for foreign key columns
 The library has the possibility to add a [foreign key constraint](#adding-a-foreign-key-constraint) that checks if foreign key value references to the row which belongs to the current tenant.
@@ -881,6 +880,9 @@ VOLATILE;
 ```
 
 ### Setting the property name that stores tenant identifier value
+By default builder use property name "posmulten.tenant_id" to set current tenant identifier.
+This property is used in function that [set current tenant identifier](#function-that-set-the-current-tenant-identifier) or [gets its value](#function-that-returns-the-current-tenant-identifier).
+
 TODO
 
 ### Adding default value for tenant column
