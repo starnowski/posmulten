@@ -882,8 +882,9 @@ VOLATILE;
 ### Setting the property name that stores tenant identifier value
 By default builder use property name "posmulten.tenant_id" to set current tenant identifier.
 This property is used in function that [set current tenant identifier](#function-that-set-the-current-tenant-identifier) or [gets its value](#function-that-returns-the-current-tenant-identifier).
-
-TODO
+```javadoc
+com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#setCurrentTenantIdProperty(String currentTenantIdProperty)
+```
 
 ### Adding default value for tenant column
 The builder can create statements that add default values statements for the tenant column in each table. 
