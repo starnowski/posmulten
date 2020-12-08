@@ -281,7 +281,7 @@ SELECT set_current_tenant_id('SOME_TENANT_1');
 INSERT INTO users (id, name) VALUES (1, 'Szymon Tarnowski');
 INSERT INTO users (id, name, tenant_id) VALUES (2, 'John Doe', 'SOME_TENANT_1');
 ```
-<b>IMPORTANT!</b>The first insert statement without tenant_id is posible because it was used statement that [adds default value](#adding-default-value-for-tenant-column).
+<b>IMPORTANT!</b>The first insert statement without tenant_id is possible because it was used a statement that [adds default value](#adding-default-value-for-tenant-column).
 After inserting above records, the previous select statements should return result 2.
 In case if we want to change current tenant to 'TENANT_X_2' and display all rows we should get zero results. 
 ```sql
