@@ -253,7 +253,59 @@ VOLATILE;
 <br/>
 
 ### Connecting to Database 
-TODO
+After correct setup of RLS policies the way how we connect to database and execute sql script has to be changed a little bit.
+For example let's assume that the name of session property that stores current tenant identifier is "c.c_ten".
+The function that set value for this property is set_current_tenant_id(VARCHAR(255)) and function that return its value is called get_current_tenant_id().
+If opening connection as user for which the RLS was configured it is required to set tenant identifier.
+Below there is example that show what happens in situation when tenant identifier is not set.
+<b>Important</b>, all examples were generated in the Postgres database in version 9.6. 
+```sql
+SELECT * FROM users;
+```
+For displaying rows from the users table without setting tenant identifier there is going to be thrown exception.
+```sql
+ERROR:  unrecognized configuration parameter "c.c_ten"
+SQL state: 42704
+```
+
+Let's pretend that our newly created tenant should have the name "SOME_TENANT_1".
+```sql
+SELECT set_current_tenant_id('SOME_TENANT_1');
+SELECT COUNT(*) FROM users;
+```
+
+In the beginning, there are no records.
+Below there is an example how to insert into table for tenant.
+```sql
+SELECT set_current_tenant_id('SOME_TENANT_1');
+INSERT INTO users (id, name) VALUES (1, 'Szymon Tarnowski');
+INSERT INTO users (id, name, tenant_id) VALUES (2, 'John Doe', 'SOME_TENANT_1');
+```
+<b>IMPORTANT!</b>The first insert statement without tenant_id is possible because it was used a statement that [adds default value](#adding-default-value-for-tenant-column).
+After inserting above records, the previous select statements should return result 2.
+In case if we want to change current tenant to 'TENANT_X_2' and display all rows we should get zero results. 
+```sql
+SELECT set_current_tenant_id('TENANT_X_2');
+SELECT COUNT(*) FROM users;
+```
+After adding a single record we should get the one as a select query result.
+```sql
+SELECT set_current_tenant_id('TENANT_X_2');
+INSERT INTO users (id, name) VALUES (3, 'Jimmy Doe');
+SELECT COUNT(*) FROM users;
+```
+After deleting all results from the users table, the select query should return zero results.
+```sql
+SELECT set_current_tenant_id('TENANT_X_2');
+DELETE FROM users;
+SELECT COUNT(*) FROM users;
+```  
+
+But if we change current tenant to the 'SOME_TENANT_1' then for select query we should get two records.
+```sql
+SELECT set_current_tenant_id('SOME_TENANT_1');
+SELECT COUNT(*) FROM users;
+```
 
 ### Adding constraints for foreign key columns
 The library has the possibility to add a [foreign key constraint](#adding-a-foreign-key-constraint) that checks if foreign key value references to the row which belongs to the current tenant.
@@ -828,7 +880,11 @@ VOLATILE;
 ```
 
 ### Setting the property name that stores tenant identifier value
-TODO
+By default builder use property name "posmulten.tenant_id" to set current tenant identifier.
+This property is used in function that [set current tenant identifier](#function-that-set-the-current-tenant-identifier) or [gets its value](#function-that-returns-the-current-tenant-identifier).
+```javadoc
+com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#setCurrentTenantIdProperty(String currentTenantIdProperty)
+```
 
 ### Adding default value for tenant column
 The builder can create statements that add default values statements for the tenant column in each table. 
@@ -970,6 +1026,13 @@ com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaConte
 ```
 
 ### Setting function name that checks if passed primary key for a specific table exists for the current tenant
+It is required to specify the function that checks if the passed identifier exists in a specific table.
+The builder has a single method for this purpose.
+```javadoc
+com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#setNameForFunctionThatChecksIfRecordExistsInTable(String recordTable, String functionName)
+```
+<b>recordTable</b> - <b>(Required)</b> table name.<br/>
+<b>functionName</b> - <b>(Required)</b> function name.<br/>
 TODO
 
 ### Setting a list of invalid tenant identifier values
@@ -1041,9 +1104,11 @@ TODO - [Create a validator component that checks if the passed identifier has th
 TODO
 
 # Reporting issues
-* Any new issues please report in GitHub site
+* Any new issues please report in [GitHub site](https://github.com/starnowski/posmulten/issues)
 
 # Project contribution
+At this moment please create issue on page the [issues](https://github.com/starnowski/posmulten/issues) with "[CONTRIBUTION]".
+Or send message to me directly on [LinkedIn site](https://pl.linkedin.com/in/szymon-tarnowski-a104b4150).
 TODO
 
 
