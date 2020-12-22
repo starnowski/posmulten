@@ -13,6 +13,7 @@ import spock.lang.Unroll
 import java.util.stream.Collectors
 
 import static com.github.starnowski.posmulten.postgresql.core.MapBuilder.mapBuilder
+import static com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContextRequest.DEFAULT_TENANT_ID_COLUMN
 import static java.util.stream.Collectors.toSet
 
 class IsTenantIdentifierValidConstraintEnricherTest extends Specification {
@@ -193,6 +194,43 @@ class IsTenantIdentifierValidConstraintEnricherTest extends Specification {
             null            |   "tenant_has_to_be_valid"        |   [new Pair("users", "tenant_id"), new Pair("leads", "t_xxx")]    |   [leads: "asdf"]                                     ||  [tp("asdf", "leads", null, "t_xxx"), tp("tenant_has_to_be_valid", "users", null, "tenant_id")]
             "public"        |   "tenant_has_to_be_valid"        |   [new Pair("users", "tenant_id"), new Pair("leads", "t_xxx")]    |   [users: "const_tenant"]                             ||  [tp("tenant_has_to_be_valid", "leads", "public", "t_xxx"), tp("const_tenant", "users", "public", "tenant_id")]
             "some_schema"   |   "tenant_has_to_be_valid"        |   [new Pair("users", "tenant_id"), new Pair("leads", "t_xxx")]    |   [users: "const_tenant", leads: "valid"]             ||  [tp("valid", "leads", "some_schema", "t_xxx"), tp("const_tenant", "users", "some_schema", "tenant_id")]
+    }
+
+    @Unroll
+    def "should enrich shared schema context with SQL definition for the constraint that checks if tenant value with usage of default tenant column name when column na #schema"()
+    {
+        given:
+            def builder = (new DefaultSharedSchemaContextBuilder(schema))
+                    .createValidTenantValueConstraint(["ADFZ", "DFZCXVZ"], null, null)
+            for (Pair tableNameTenantNamePair : tableNameTenantNamePairs)
+            {
+                builder.createRLSPolicyForTable(tableNameTenantNamePair.key, [:], tableNameTenantNamePair.value, null)
+            }
+            def sharedSchemaContextRequest = builder.getSharedSchemaContextRequestCopy()
+            def context = new SharedSchemaContext()
+            def mockedFunction = Mock(IIsTenantValidFunctionInvocationFactory)
+            context.setIIsTenantValidFunctionInvocationFactory(mockedFunction)
+            List<IIsTenantIdentifierValidConstraintProducerParameters> capturedParameters = new ArrayList<>()
+            def mockedSQLDefinition = Mock(SQLDefinition)
+            def producer = Mock(IsTenantIdentifierValidConstraintProducer)
+            IsTenantIdentifierValidConstraintEnricher tested = new IsTenantIdentifierValidConstraintEnricher(producer)
+
+        when:
+            tested.enrich(context, sharedSchemaContextRequest)
+
+        then:
+            tableNameTenantNamePairs.size() * producer.produce(_) >>  {
+                parameters ->
+                    capturedParameters.add(parameters[0])
+                    mockedSQLDefinition
+            }
+            capturedParameters.stream().map({ parameters -> map(parameters) }).collect(toSet()) == new HashSet<IsTenantIdentifierValidConstraintProducerKey>(expectedPassedParameters)
+
+        where:
+            schema          |   tableNameTenantNamePairs                                    ||  expectedPassedParameters
+            null            |   [new Pair("users", null), new Pair("leads", "t_xxx")]       ||  [tp("tenant_identifier_valid", "leads", null, "t_xxx"), tp("tenant_identifier_valid", "users", null, DEFAULT_TENANT_ID_COLUMN)]
+            "public"        |   [new Pair("users", "tenant_id"), new Pair("leads", null)]   ||  [tp("tenant_identifier_valid", "leads", "public", DEFAULT_TENANT_ID_COLUMN), tp("tenant_identifier_valid", "users", "public", "tenant_id")]
+            "some_schema"   |   [new Pair("users", null), new Pair("leads", null)]          ||  [tp("tenant_identifier_valid", "leads", "some_schema", DEFAULT_TENANT_ID_COLUMN), tp("tenant_identifier_valid", "users", "some_schema", DEFAULT_TENANT_ID_COLUMN)]
     }
 
     static IsTenantIdentifierValidConstraintProducerKey tp(String constraintName, String tableName, String tableSchema, String tenantColumnName)
