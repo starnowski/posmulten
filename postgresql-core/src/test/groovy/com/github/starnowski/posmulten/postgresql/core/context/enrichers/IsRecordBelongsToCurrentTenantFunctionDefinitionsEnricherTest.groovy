@@ -11,6 +11,7 @@ import spock.lang.Specification
 import spock.lang.Unroll
 
 import static com.github.starnowski.posmulten.postgresql.core.MapBuilder.mapBuilder
+import static com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContextRequest.DEFAULT_TENANT_ID_COLUMN
 import static java.lang.String.format
 
 class IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricherTest extends Specification {
@@ -21,15 +22,7 @@ class IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricherTest extends Spec
     def "should create all required SQL definition that creates functions that checks if records from specified tables exists for schema #schema"()
     {
         given:
-            def builder = new DefaultSharedSchemaContextBuilder(schema)
-            builder.createRLSPolicyForTable("users", [id: "N/A"], "tenant", "N/A")
-            builder.createRLSPolicyForTable("comments", [uuid: "N/A"], "tenant_id", "N/A")
-            builder.createRLSPolicyForTable("some_table", [somedid: "N/A"], "tenant_xxx_id", "N/A")
-            builder.createSameTenantConstraintForForeignKey("comments", "users", mapBuilder().put("N/A", "N/A").build(), "N/A")
-            builder.createSameTenantConstraintForForeignKey("some_table", "users", mapBuilder().put("N/A", "N/A").build(), "N/A")
-            builder.createSameTenantConstraintForForeignKey("some_table", "comments", mapBuilder().put("N/A", "N/A").build(), "N/A")
-            builder.setNameForFunctionThatChecksIfRecordExistsInTable("users", "is_user_exists")
-            builder.setNameForFunctionThatChecksIfRecordExistsInTable("comments", "is_comment_exists")
+            def builder = prepareBuilder(schema)
             def sharedSchemaContextRequest = builder.getSharedSchemaContextRequestCopy()
             def context = new SharedSchemaContext()
             def iGetCurrentTenantIdFunctionInvocationFactory = Mock(IGetCurrentTenantIdFunctionInvocationFactory)
@@ -47,8 +40,46 @@ class IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricherTest extends Spec
             def result = tested.enrich(context, sharedSchemaContextRequest)
 
         then:
-            1 * isRecordBelongsToCurrentTenantFunctionDefinitionProducer.produce(usersTableKey, usersTableColumns, iGetCurrentTenantIdFunctionInvocationFactory, "is_user_exists", schema) >> usersTableSQLDefinition
-            1 * isRecordBelongsToCurrentTenantFunctionDefinitionProducer.produce(commentsTableKey, commentsTableColumns, iGetCurrentTenantIdFunctionInvocationFactory, "is_comment_exists", schema) >> commentsTableSQLDefinition
+            1 * isRecordBelongsToCurrentTenantFunctionDefinitionProducer.produce(usersTableKey, usersTableColumns.getTenantColumnName(), usersTableColumns.getIdentityColumnNameAndTypeMap(), iGetCurrentTenantIdFunctionInvocationFactory, "is_user_exists", schema) >> usersTableSQLDefinition
+            1 * isRecordBelongsToCurrentTenantFunctionDefinitionProducer.produce(commentsTableKey, commentsTableColumns.getTenantColumnName(), commentsTableColumns.getIdentityColumnNameAndTypeMap(), iGetCurrentTenantIdFunctionInvocationFactory, "is_comment_exists", schema) >> commentsTableSQLDefinition
+            0 * isRecordBelongsToCurrentTenantFunctionDefinitionProducer.produce(_)
+
+            result.getSqlDefinitions().contains(usersTableSQLDefinition)
+            result.getSqlDefinitions().contains(commentsTableSQLDefinition)
+
+        and: "put function objects into map"
+            result.getTableKeysIsRecordBelongsToCurrentTenantFunctionInvocationFactoryMap().get(usersTableKey) == usersTableSQLDefinition
+            result.getTableKeysIsRecordBelongsToCurrentTenantFunctionInvocationFactoryMap().get(commentsTableKey) == commentsTableSQLDefinition
+
+        where:
+            schema << [null, "public", "some_schema"]
+    }
+
+    @Unroll
+    def "should pass default tenant column when table does not have specified tenant column"()
+    {
+        given:
+            def builder = prepareBuilder(schema)
+                    .createRLSPolicyForTable("users", [id: "N/A"], null, "N/A")
+            def sharedSchemaContextRequest = builder.getSharedSchemaContextRequestCopy()
+            def context = new SharedSchemaContext()
+            def iGetCurrentTenantIdFunctionInvocationFactory = Mock(IGetCurrentTenantIdFunctionInvocationFactory)
+            context.setIGetCurrentTenantIdFunctionInvocationFactory(iGetCurrentTenantIdFunctionInvocationFactory)
+            def usersTableSQLDefinition = Mock(IsRecordBelongsToCurrentTenantFunctionDefinition)
+            def commentsTableSQLDefinition = Mock(IsRecordBelongsToCurrentTenantFunctionDefinition)
+            def isRecordBelongsToCurrentTenantFunctionDefinitionProducer = Mock(IsRecordBelongsToCurrentTenantFunctionDefinitionProducer)
+            def tested = new IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricher(isRecordBelongsToCurrentTenantFunctionDefinitionProducer)
+            def usersTableKey = tk("users", schema)
+            def commentsTableKey = tk("comments", schema)
+            def usersTableColumns = sharedSchemaContextRequest.getTableColumnsList().get(usersTableKey)
+            def commentsTableColumns = sharedSchemaContextRequest.getTableColumnsList().get(commentsTableKey)
+
+        when:
+            def result = tested.enrich(context, sharedSchemaContextRequest)
+
+        then:
+            1 * isRecordBelongsToCurrentTenantFunctionDefinitionProducer.produce(usersTableKey, DEFAULT_TENANT_ID_COLUMN, usersTableColumns.getIdentityColumnNameAndTypeMap(), iGetCurrentTenantIdFunctionInvocationFactory, "is_user_exists", schema) >> usersTableSQLDefinition
+            1 * isRecordBelongsToCurrentTenantFunctionDefinitionProducer.produce(commentsTableKey, commentsTableColumns.getTenantColumnName(), commentsTableColumns.getIdentityColumnNameAndTypeMap(), iGetCurrentTenantIdFunctionInvocationFactory, "is_comment_exists", schema) >> commentsTableSQLDefinition
             0 * isRecordBelongsToCurrentTenantFunctionDefinitionProducer.produce(_)
 
             result.getSqlDefinitions().contains(usersTableSQLDefinition)
@@ -129,5 +160,18 @@ class IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricherTest extends Spec
     TableKey tk(String table, String schema)
     {
         new TableKey(table, schema)
+    }
+
+    DefaultSharedSchemaContextBuilder prepareBuilder(String schema)
+    {
+        new DefaultSharedSchemaContextBuilder(schema)
+        .createRLSPolicyForTable("users", [id: "N/A"], "tenant", "N/A")
+        .createRLSPolicyForTable("comments", [uuid: "N/A"], "tenant_id", "N/A")
+        .createRLSPolicyForTable("some_table", [somedid: "N/A"], "tenant_xxx_id", "N/A")
+        .createSameTenantConstraintForForeignKey("comments", "users", mapBuilder().put("N/A", "N/A").build(), "N/A")
+        .createSameTenantConstraintForForeignKey("some_table", "users", mapBuilder().put("N/A", "N/A").build(), "N/A")
+        .createSameTenantConstraintForForeignKey("some_table", "comments", mapBuilder().put("N/A", "N/A").build(), "N/A")
+        .setNameForFunctionThatChecksIfRecordExistsInTable("users", "is_user_exists")
+        .setNameForFunctionThatChecksIfRecordExistsInTable("comments", "is_comment_exists")
     }
 }
