@@ -20,13 +20,12 @@ class IsRecordBelongsToCurrentTenantFunctionDefinitionProducerTest extends Speci
         given:
             def isRecordBelongsToCurrentTenantProducer = Mock(IsRecordBelongsToCurrentTenantProducer)
             tested.setIsRecordBelongsToCurrentTenantProducer(isRecordBelongsToCurrentTenantProducer)
-            def tableColumns = new DefaultTableColumns(tenantId, idColumns)
             def iGetCurrentTenantIdFunctionInvocationFactory = Mock(IGetCurrentTenantIdFunctionInvocationFactory)
             def expectedSQLFunctionDefinition = Mock(IsRecordBelongsToCurrentTenantFunctionDefinition)
             IIsRecordBelongsToCurrentTenantProducerParameters capturedParameters = null;
 
         when:
-            def result = tested.produce(tableKey, tableColumns, iGetCurrentTenantIdFunctionInvocationFactory, functionName, schema)
+            def result = tested.produce(tableKey, tenantId, idColumns, iGetCurrentTenantIdFunctionInvocationFactory, functionName, schema)
 
         then:
             1 * isRecordBelongsToCurrentTenantProducer.produce(_) >>
