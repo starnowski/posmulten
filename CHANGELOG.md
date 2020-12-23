@@ -25,6 +25,10 @@ https://www.markdownguide.org/basic-syntax/
     [138](https://github.com/starnowski/posmulten/issues/138)
 -   Issue related to passing null tenant column name in method DefaultSharedSchemaContextBuilder#createRLSPolicyForTable(String table, Map<String, String> primaryKeyColumnsList, String tenantColumnName, String rlsPolicyName)
     [145](https://github.com/starnowski/posmulten/issues/145)
+    
+### Changed
+
+-   Changed method parameters, from com.github.starnowski.posmulten.postgresql.core.rls.function.IsRecordBelongsToCurrentTenantFunctionDefinitionProducer#produce(TableKey, ITableColumns, IGetCurrentTenantIdFunctionInvocationFactory, String, String) to com.github.starnowski.posmulten.postgresql.core.rls.function.IsRecordBelongsToCurrentTenantFunctionDefinitionProducer#produce(TableKey, String, Map<String, String>, IGetCurrentTenantIdFunctionInvocationFactory, String, String)
 
 ## [0.2.0] - 2020-11-14
 ### Added
