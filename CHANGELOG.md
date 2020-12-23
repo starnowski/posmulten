@@ -21,7 +21,10 @@ https://www.markdownguide.org/basic-syntax/
 
 ### Fixed
 
--   TODO
+-   Add ability to pass null map in constructor com.github.starnowski.posmulten.postgresql.core.context.DefaultTableColumns#DefaultTableColumns(String, Map<String, String>)
+    [138](https://github.com/starnowski/posmulten/issues/138)
+-   Issue related to passing null tenant column name in method DefaultSharedSchemaContextBuilder#createRLSPolicyForTable(String table, Map<String, String> primaryKeyColumnsList, String tenantColumnName, String rlsPolicyName)
+    [145](https://github.com/starnowski/posmulten/issues/145)
 
 ## [0.2.0] - 2020-11-14
 ### Added
