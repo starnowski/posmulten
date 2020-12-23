@@ -29,7 +29,8 @@ https://www.markdownguide.org/basic-syntax/
 ### Changed
 
 -   Changed method parameters, from com.github.starnowski.posmulten.postgresql.core.rls.function.IsRecordBelongsToCurrentTenantFunctionDefinitionProducer#produce(TableKey, ITableColumns, IGetCurrentTenantIdFunctionInvocationFactory, String, String) to com.github.starnowski.posmulten.postgresql.core.rls.function.IsRecordBelongsToCurrentTenantFunctionDefinitionProducer#produce(TableKey, String, Map<String, String>, IGetCurrentTenantIdFunctionInvocationFactory, String, String)
-
+    [145](https://github.com/starnowski/posmulten/issues/145)
+    
 ## [0.2.0] - 2020-11-14
 ### Added
 
