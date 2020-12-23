@@ -8,7 +8,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 https://keepachangelog.com/en/1.0.0/
 https://www.markdownguide.org/basic-syntax/
 
+* [0.2.1](#021---2020-12-23)
+* [0.2.0](#020---2020-11-14)
+
 ## [Unreleased]
+
+## [0.2.1] - 2020-12-23
+### Added
+
+-   Added constant __DEFAULT_TENANT_ID_COLUMN__ in type com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContextRequest
+    [145](https://github.com/starnowski/posmulten/issues/145)    
+
+### Fixed
+
+-   TODO
 
 ## [0.2.0] - 2020-11-14
 ### Added
