@@ -28,6 +28,8 @@ import java.util.List;
 
 public class SharedSchemaContextRequest implements Cloneable{
 
+    public static final String DEFAULT_TENANT_ID_COLUMN = "tenant_id";
+
     /**
      * Name of default schema used during building process.
      */
@@ -65,7 +67,7 @@ public class SharedSchemaContextRequest implements Cloneable{
      * Name for column that stores the tenant identifier for table row.
      * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.TableRLSPolicyEnricher
      */
-    private String defaultTenantIdColumn = "tenant_id";
+    private String defaultTenantIdColumn = DEFAULT_TENANT_ID_COLUMN;
     /**
      * A map that stores information about columns that are required to creation of shared schema multi-tenancy strategy.
      * Information about columns are store for each table that required to have row level security policy.

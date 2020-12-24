@@ -54,7 +54,9 @@ public class IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricher implement
             {
                 throw new MissingFunctionNameDeclarationForTableException(tableKey, format("Missing function name that checks if record exists in table %1$s and schema %2$s", tableKey.getTable(), tableKey.getSchema()));
             }
-            IsRecordBelongsToCurrentTenantFunctionDefinition functionDefinition = isRecordBelongsToCurrentTenantFunctionDefinitionProducer.produce(tableKey, request.getTableColumnsList().get(tableKey), context.getIGetCurrentTenantIdFunctionInvocationFactory(), functionName, request.getDefaultSchema());
+            ITableColumns tableProperties = request.getTableColumnsList().get(tableKey);
+            String tenantColumn = tableProperties.getTenantColumnName() == null ? request.getDefaultTenantIdColumn() : tableProperties.getTenantColumnName();
+            IsRecordBelongsToCurrentTenantFunctionDefinition functionDefinition = isRecordBelongsToCurrentTenantFunctionDefinitionProducer.produce(tableKey, tenantColumn, tableProperties.getIdentityColumnNameAndTypeMap(), context.getIGetCurrentTenantIdFunctionInvocationFactory(), functionName, request.getDefaultSchema());
             context.addSQLDefinition(functionDefinition);
             context.getTableKeysIsRecordBelongsToCurrentTenantFunctionInvocationFactoryMap().put(tableKey, functionDefinition);
         }

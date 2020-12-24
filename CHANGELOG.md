@@ -8,8 +8,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 https://keepachangelog.com/en/1.0.0/
 https://www.markdownguide.org/basic-syntax/
 
+* [0.2.1](#021---2020-12-23)
+* [0.2.0](#020---2020-11-14)
+
 ## [Unreleased]
 
+## [0.2.1] - 2020-12-23
+### Added
+
+-   Added constant __DEFAULT_TENANT_ID_COLUMN__ in type com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContextRequest
+    [145](https://github.com/starnowski/posmulten/issues/145)    
+
+### Fixed
+
+-   Add ability to pass null map in constructor com.github.starnowski.posmulten.postgresql.core.context.DefaultTableColumns#DefaultTableColumns(String, Map<String, String>)
+    [138](https://github.com/starnowski/posmulten/issues/138)
+-   Issue related to passing null tenant column name in method DefaultSharedSchemaContextBuilder#createRLSPolicyForTable(String table, Map<String, String> primaryKeyColumnsList, String tenantColumnName, String rlsPolicyName)
+    [145](https://github.com/starnowski/posmulten/issues/145)
+    
+### Changed
+
+-   Changed method parameters, from com.github.starnowski.posmulten.postgresql.core.rls.function.IsRecordBelongsToCurrentTenantFunctionDefinitionProducer#produce(TableKey, ITableColumns, IGetCurrentTenantIdFunctionInvocationFactory, String, String) to com.github.starnowski.posmulten.postgresql.core.rls.function.IsRecordBelongsToCurrentTenantFunctionDefinitionProducer#produce(TableKey, String, Map<String, String>, IGetCurrentTenantIdFunctionInvocationFactory, String, String)
+    [145](https://github.com/starnowski/posmulten/issues/145)
+    
 ## [0.2.0] - 2020-11-14
 ### Added
 

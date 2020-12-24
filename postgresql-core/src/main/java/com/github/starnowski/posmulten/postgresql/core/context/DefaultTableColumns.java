@@ -23,6 +23,7 @@
  */
 package com.github.starnowski.posmulten.postgresql.core.context;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import static java.util.Collections.unmodifiableMap;
@@ -34,7 +35,7 @@ public class DefaultTableColumns implements ITableColumns {
 
     public DefaultTableColumns(String tenantColumnName, Map<String, String> identityColumnNameAndTypeMap) {
         this.tenantColumnName = tenantColumnName;
-        this.identityColumnNameAndTypeMap = unmodifiableMap(identityColumnNameAndTypeMap);
+        this.identityColumnNameAndTypeMap = unmodifiableMap(identityColumnNameAndTypeMap == null ? new HashMap<>() : identityColumnNameAndTypeMap);
     }
 
     @Override

@@ -31,12 +31,13 @@ public class IsTenantIdentifierValidConstraintEnricher implements ISharedSchemaC
             for (Map.Entry<TableKey, ITableColumns> entry : request.getTableColumnsList().entrySet())
             {
                 String constraintName = request.getTenantValidConstraintCustomNamePerTables().getOrDefault(entry.getKey(), defaultConstraintName);
+                String tenantColumnName = entry.getValue().getTenantColumnName() == null ? request.getDefaultTenantIdColumn() : entry.getValue().getTenantColumnName();
                 context.addSQLDefinition(producer.produce(builder()
                         .withConstraintName(constraintName)
                         .withTableName(entry.getKey().getTable())
                         .withTableSchema(entry.getKey().getSchema())
                         .withIIsTenantValidFunctionInvocationFactory(context.getIIsTenantValidFunctionInvocationFactory())
-                        .withTenantColumnName(entry.getValue().getTenantColumnName()).build()));
+                        .withTenantColumnName(tenantColumnName).build()));
             }
         }
         return context;
