@@ -34,7 +34,7 @@ public class SingleTenantColumnSQLDefinitionsProducer {
     private CreateColumnStatementProducer createColumnStatementProducer = new CreateColumnStatementProducer();
     private SetNotNullStatementProducer setNotNullStatementProducer = new SetNotNullStatementProducer();
 
-    public List<SQLDefinition> produce(TableKey tableKey, ITableColumns tableColumns, String defaultTenantColumnValue, String defaultTenantColumn, String defaultTenantColumnType)
+    public List<SQLDefinition> produce(TableKey tableKey, ITableColumns tableColumns, String defaultTenantColumn, String defaultTenantColumnType)
     {
         List<SQLDefinition> results = new ArrayList<>();
         String tenantColumn = tableColumns.getTenantColumnName() == null ? defaultTenantColumn : tableColumns.getTenantColumnName();
