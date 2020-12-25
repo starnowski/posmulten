@@ -24,16 +24,11 @@ class TenantColumnSQLDefinitionsEnricherTest extends Specification {
             builder.createRLSPolicyForTable("some_table", [:], "tenant_xxx_id", "some_table_policy")
             def sharedSchemaContextRequest = builder.getSharedSchemaContextRequestCopy()
             def context = new SharedSchemaContext()
-            def currentTenantInvocation = randomString.nextString()
-            def getCurrentTenantIdFunctionInvocationFactory = {
-                currentTenantInvocation
-            }
             def usersTableSQLDefinition1 = Mock(SQLDefinition)
             def usersTableSQLDefinition2 = Mock(SQLDefinition)
             def commentsTableSQLDefinition1 = Mock(SQLDefinition)
             def singleTenantColumnSQLDefinitionsProducer = Mock(SingleTenantColumnSQLDefinitionsProducer)
             def tested = new TenantColumnSQLDefinitionsEnricher(singleTenantColumnSQLDefinitionsProducer)
-            context.setIGetCurrentTenantIdFunctionInvocationFactory(getCurrentTenantIdFunctionInvocationFactory)
             def usersTableKey = tk("users", schema)
             def commentsTableKey = tk("comments", schema)
             def someTableKey = tk("some_table", schema)
@@ -46,9 +41,9 @@ class TenantColumnSQLDefinitionsEnricherTest extends Specification {
             def result = tested.enrich(context, sharedSchemaContextRequest)
 
         then:
-            1 * singleTenantColumnSQLDefinitionsProducer.produce(usersTableKey, usersTableColumns, currentTenantInvocation, sharedSchemaContextRequest.getDefaultTenantIdColumn(), sharedSchemaContextRequest.getCurrentTenantIdPropertyType()) >> [usersTableSQLDefinition1, usersTableSQLDefinition2]
-            1 * singleTenantColumnSQLDefinitionsProducer.produce(commentsTableKey, commentsTableColumns, currentTenantInvocation, sharedSchemaContextRequest.getDefaultTenantIdColumn(), sharedSchemaContextRequest.getCurrentTenantIdPropertyType()) >> [commentsTableSQLDefinition1]
-            0 * singleTenantColumnSQLDefinitionsProducer.produce(someTableKey, someTableColumns, _, _, _)
+            1 * singleTenantColumnSQLDefinitionsProducer.produce(usersTableKey, usersTableColumns, sharedSchemaContextRequest.getDefaultTenantIdColumn(), sharedSchemaContextRequest.getCurrentTenantIdPropertyType()) >> [usersTableSQLDefinition1, usersTableSQLDefinition2]
+            1 * singleTenantColumnSQLDefinitionsProducer.produce(commentsTableKey, commentsTableColumns, sharedSchemaContextRequest.getDefaultTenantIdColumn(), sharedSchemaContextRequest.getCurrentTenantIdPropertyType()) >> [commentsTableSQLDefinition1]
+            0 * singleTenantColumnSQLDefinitionsProducer.produce(someTableKey, someTableColumns, _, _)
 
             result.getSqlDefinitions().contains(usersTableSQLDefinition1)
             result.getSqlDefinitions().contains(usersTableSQLDefinition2)
@@ -78,7 +73,7 @@ class TenantColumnSQLDefinitionsEnricherTest extends Specification {
             def result = tested.enrich(context, sharedSchemaContextRequest)
 
         then:
-            0 * singleTenantColumnSQLDefinitionsProducer.produce(_, _, _, _, _)
+            0 * singleTenantColumnSQLDefinitionsProducer.produce(_, _, _, _)
             result.getSqlDefinitions().isEmpty()
 
         where:
@@ -94,13 +89,8 @@ class TenantColumnSQLDefinitionsEnricherTest extends Specification {
             builder.createTenantColumnForTable(table)
             def sharedSchemaContextRequest = builder.getSharedSchemaContextRequestCopy()
             def context = new SharedSchemaContext()
-            def currentTenantInvocation = randomString.nextString()
-            def getCurrentTenantIdFunctionInvocationFactory = {
-                currentTenantInvocation
-            }
             def singleTenantColumnSQLDefinitionsProducer = Mock(SingleTenantColumnSQLDefinitionsProducer)
             def tested = new TenantColumnSQLDefinitionsEnricher(singleTenantColumnSQLDefinitionsProducer)
-            context.setIGetCurrentTenantIdFunctionInvocationFactory(getCurrentTenantIdFunctionInvocationFactory)
 
         when:
             tested.enrich(context, sharedSchemaContextRequest)

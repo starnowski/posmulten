@@ -24,7 +24,7 @@ class SingleTenantColumnSQLDefinitionsProducerTest extends Specification {
             def tableColumns = dtc(tenantColumn)
 
         when:
-            def results = tested.produce(tenantTable, tableColumns, defaultTenantColumnValue, defaultTenantColumn, defaultTenantColumnType)
+            def results = tested.produce(tenantTable, tableColumns, defaultTenantColumn, defaultTenantColumnType)
 
         then:
             1 * createColumnStatementProducer.produce(_) >>  {
@@ -55,12 +55,12 @@ class SingleTenantColumnSQLDefinitionsProducerTest extends Specification {
             results == [createColumnStatementProducerSQLDefinition, setNotNullStatementProducerSQLDefinition]
 
         where:
-            tenantTable                     |   tenantColumn    |   defaultTenantColumn |   defaultTenantColumnType |   defaultTenantColumnValue    ||  expectedTenantColumn    |   expectedTenantColumnType
-            tk("users", null)               |   "tenant_id"     |   "tenant"            |   "VARCHAR(255)"          |   "XXX_TT"                    ||  "tenant_id"             |   "VARCHAR(255)"
-            tk("users", "public")           |   "tenant_id"     |   "tenant"            |   "text"                  |   "XXX_TT"                    ||  "tenant_id"             |   "text"
-            tk("users", "other_schema")     |   "tenant_id"     |   "tenant_col"        |   "VARCHAR(255)"          |   "XXX_TT"                    ||  "tenant_id"             |   "VARCHAR(255)"
-            tk("some_tab", "other_schema")  |   "ten"           |   "tenant"            |   "VARCHAR(32)"           |   "tenat_col_val"             ||  "ten"                   |   "VARCHAR(32)"
-            tk("some_tab", "other_schema")  |   null            |   "tenant_col"        |   "VARCHAR(255)"          |   "tenat_col_val"             ||  "tenant_col"            |   "VARCHAR(255)"
+            tenantTable                     |   tenantColumn    |   defaultTenantColumn |   defaultTenantColumnType ||  expectedTenantColumn    |   expectedTenantColumnType
+            tk("users", null)               |   "tenant_id"     |   "tenant"            |   "VARCHAR(255)"          ||  "tenant_id"             |   "VARCHAR(255)"
+            tk("users", "public")           |   "tenant_id"     |   "tenant"            |   "text"                  ||  "tenant_id"             |   "text"
+            tk("users", "other_schema")     |   "tenant_id"     |   "tenant_col"        |   "VARCHAR(255)"          ||  "tenant_id"             |   "VARCHAR(255)"
+            tk("some_tab", "other_schema")  |   "ten"           |   "tenant"            |   "VARCHAR(32)"           ||  "ten"                   |   "VARCHAR(32)"
+            tk("some_tab", "other_schema")  |   null            |   "tenant_col"        |   "VARCHAR(255)"          |  "tenant_col"            |   "VARCHAR(255)"
     }
 
     TableKey tk(String table, String schema)
