@@ -55,8 +55,16 @@ public class DefaultSharedSchemaContextBuilder {
     private List<ISharedSchemaContextRequestValidator> validators = asList(new ForeignKeysMappingSharedSchemaContextRequestValidator(), new CreateTenantColumnTableMappingSharedSchemaContextRequestValidator(), new TablesThatAddingOfTenantColumnDefaultValueShouldBeSkippedSharedSchemaContextRequestValidator());
 
     private final SharedSchemaContextRequest sharedSchemaContextRequest = new SharedSchemaContextRequest();
+
     /**
-     *
+     * Constructor set value null for the default schema
+     */
+    public DefaultSharedSchemaContextBuilder() {
+        this(null);
+    }
+
+    /**
+     * Constructor that ables to specify the default schema
      * @param defaultSchema name of default schema used during building process
      */
     public DefaultSharedSchemaContextBuilder(String defaultSchema) {
