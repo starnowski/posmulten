@@ -12,6 +12,7 @@
         <module>postgresql-core</module>
         <module>postgresql-core-functional-tests</module>
         <module>test-utils</module>
+        <module>configuration-parent</module>
     </modules>
 
     <name>posmulten</name>
