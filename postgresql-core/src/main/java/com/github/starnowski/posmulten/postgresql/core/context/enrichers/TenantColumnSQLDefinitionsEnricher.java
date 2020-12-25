@@ -49,7 +49,6 @@ public class TenantColumnSQLDefinitionsEnricher implements ISharedSchemaContextE
         {
             return context;
         }
-        String getCurrentTenantIdFunctionInvocation = context.getIGetCurrentTenantIdFunctionInvocationFactory().returnGetCurrentTenantIdFunctionInvocation();
         for (TableKey tableKey: tableThatRequireCreationOfTheTenantColumn)
         {
             ITableColumns tableColumns = request.getTableColumnsList().get(tableKey);
@@ -57,7 +56,7 @@ public class TenantColumnSQLDefinitionsEnricher implements ISharedSchemaContextE
             {
                 throw new MissingRLSPolicyDeclarationForTableException(tableKey, format("Missing RLS policy declaration for table %1$s in schema %2$s", tableKey.getTable(), tableKey.getSchema()));
             }
-            singleTenantColumnSQLDefinitionsProducer.produce(tableKey, tableColumns, getCurrentTenantIdFunctionInvocation, request.getDefaultTenantIdColumn(), request.getCurrentTenantIdPropertyType())
+            singleTenantColumnSQLDefinitionsProducer.produce(tableKey, tableColumns, request.getDefaultTenantIdColumn(), request.getCurrentTenantIdPropertyType())
                 .forEach(context::addSQLDefinition);
         }
         return context;
