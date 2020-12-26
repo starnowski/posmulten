@@ -1,0 +1,2 @@
+default_schema: public
+current_tenant_id_property_type:  "VARCHAR(255)"
