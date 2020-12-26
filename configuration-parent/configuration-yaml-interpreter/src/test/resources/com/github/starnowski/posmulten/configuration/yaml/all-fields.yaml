@@ -9,3 +9,10 @@ force_row_level_security_for_table_owner: true
 default_tenant_id_column: "tenant_id"
 grantee: "application-user"
 set_current_tenant_identifier_as_default_value_for_tenant_column_in_all_tables: true
+valid_tenant_value_constraint:
+  is_tenant_valid_function_name:  is_t_valid
+  is_tenant_valid_constraint_name:  "is_tenant_valid_constraint_SDFA"
+  tenant_identifiers_blacklist:
+    - invalid_tenant
+    - "Some strange tenant ID"
+    - "'; DROP ALL TABLES"
