@@ -36,5 +36,7 @@ public class SharedSchemaContextConfiguration {
     private String defaultTenantIdColumn;
     @JsonProperty(value = "grantee", required = true)
     private String grantee;
+    @JsonProperty(value = "set_current_tenant_identifier_as_default_value_for_tenant_column_in_all_tables")
+    private Boolean currentTenantIdentifierAsDefaultValueForTenantColumnInAllTables;
     //TODO createValidTenantValueConstraint(List<String> tenantValuesBlacklist, String isTenantValidFunctionName, String isTenantValidConstraintName)
 }
