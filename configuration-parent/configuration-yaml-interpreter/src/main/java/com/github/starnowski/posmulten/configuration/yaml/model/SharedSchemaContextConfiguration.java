@@ -32,4 +32,9 @@ public class SharedSchemaContextConfiguration {
     private String tenantHasAuthoritiesFunctionName;
     @JsonProperty(value = "force_row_level_security_for_table_owner")
     private Boolean forceRowLevelSecurityForTableOwner;
+    @JsonProperty(value = "default_tenant_id_column")
+    private String defaultTenantIdColumn;
+    @JsonProperty(value = "grantee", required = true)
+    private String grantee;
+    //TODO createValidTenantValueConstraint(List<String> tenantValuesBlacklist, String isTenantValidFunctionName, String isTenantValidConstraintName)
 }
