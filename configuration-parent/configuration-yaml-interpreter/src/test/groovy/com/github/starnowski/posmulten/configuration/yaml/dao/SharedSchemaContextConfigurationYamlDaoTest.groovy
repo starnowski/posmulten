@@ -7,6 +7,7 @@ import java.nio.file.Paths
 class SharedSchemaContextConfigurationYamlDaoTest extends spock.lang.Specification {
 
     public static final ALL_FIELDS_FILE_PATH = "/com/github/starnowski/posmulten/configuration/yaml/all-fields.yaml"
+    public static final ONLY_MANDATORY_FIELDS_FILE_PATH = "/com/github/starnowski/posmulten/configuration/yaml/only-mandatory-fields.yaml"
 
     def tested = new SharedSchemaContextConfigurationYamlDao()
 
@@ -23,6 +24,6 @@ class SharedSchemaContextConfigurationYamlDaoTest extends spock.lang.Specificati
             result
 
         where:
-            filePath << [ALL_FIELDS_FILE_PATH]
+            filePath << [ALL_FIELDS_FILE_PATH, ONLY_MANDATORY_FIELDS_FILE_PATH]
     }
 }

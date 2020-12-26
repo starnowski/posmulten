@@ -1,5 +1,6 @@
 package com.github.starnowski.posmulten.configuration.yaml.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -12,9 +13,11 @@ import lombok.experimental.Accessors;
 @Setter
 @EqualsAndHashCode
 @ToString
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class SharedSchemaContextConfiguration {
 
     @JsonProperty(value = "default_schema", required = true)
     private String defaultSchema;
-    private String currentTenantIdPropertyType;//current_tenant_id_property_type
+    @JsonProperty(value = "current_tenant_id_property_type")
+    private String currentTenantIdPropertyType;
 }
