@@ -20,4 +20,6 @@ public class SharedSchemaContextConfiguration {
     private String defaultSchema;
     @JsonProperty(value = "current_tenant_id_property_type")
     private String currentTenantIdPropertyType;
+    @JsonProperty(value = "current_tenant_id_property")
+    private String currentTenantIdProperty;
 }
