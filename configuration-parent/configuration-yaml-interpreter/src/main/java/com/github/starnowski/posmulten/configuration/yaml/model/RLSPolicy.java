@@ -8,6 +8,8 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
+import java.util.Map;
+
 @Accessors(chain = true)
 @Getter
 @Setter
@@ -15,7 +17,10 @@ import lombok.experimental.Accessors;
 @ToString
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class RLSPolicy {
-    //    createRLSPolicyForTable(String table, Map<String, String> primaryKeyColumnsList, String tenantColumnName, String rlsPolicyName)
     @JsonProperty(value = "name", required = true)
     private String name;
+    @JsonProperty(value = "tenant_column")
+    private String tenantColumn;
+    @JsonProperty(value = "pk_columns_name_to_type")
+    private Map<String, String> primaryKeyColumnsNameToTypeMap;
 }

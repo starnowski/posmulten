@@ -16,3 +16,10 @@ valid_tenant_value_constraint:
     - invalid_tenant
     - "Some strange tenant ID"
     - "'; DROP ALL TABLES"
+tables:
+  - name: users
+    rls_policy:
+      name: users_table_rls_policy
+      tenant_column:  tenant_id
+      pk_columns_name_to_type:
+        id: bigint

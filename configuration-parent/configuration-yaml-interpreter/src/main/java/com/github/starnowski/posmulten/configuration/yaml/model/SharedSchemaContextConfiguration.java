@@ -8,6 +8,8 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
+import java.util.List;
+
 @Accessors(chain = true)
 @Getter
 @Setter
@@ -40,4 +42,6 @@ public class SharedSchemaContextConfiguration {
     private Boolean currentTenantIdentifierAsDefaultValueForTenantColumnInAllTables;
     @JsonProperty(value = "valid_tenant_value_constraint")
     private ValidTenantValueConstraintConfiguration validTenantValueConstraint;
+    @JsonProperty(value = "tables")
+    private List<TableEntry> tables;
 }

@@ -21,6 +21,8 @@ public class TableEntry {
      */
     @JsonProperty(value = "name", required = true)
     private String name;
+    @JsonProperty(value = "rls_policy")
+    private RLSPolicy rlsPolicy;
 //    createRLSPolicyForTable(String table, Map<String, String> primaryKeyColumnsList, String tenantColumnName, String rlsPolicyName)
 //    createSameTenantConstraintForForeignKey(String mainTable, String foreignKeyTable, Map<String, String> foreignKeyPrimaryKeyColumnsMappings, String constraintName)
 //    createTenantColumnForTable(String table)
