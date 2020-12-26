@@ -1,3 +1,5 @@
 default_schema: public
 current_tenant_id_property_type:  "VARCHAR(255)"
 current_tenant_id_property: "pos.c.ten"
+get_current_tenant_id_function_name: "get_ten_id"
+set_current_tenant_id_function_name: "set_tenant"

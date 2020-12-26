@@ -22,4 +22,8 @@ public class SharedSchemaContextConfiguration {
     private String currentTenantIdPropertyType;
     @JsonProperty(value = "current_tenant_id_property")
     private String currentTenantIdProperty;
+    @JsonProperty(value = "get_current_tenant_id_function_name")
+    private String getCurrentTenantIdFunctionName;
+    @JsonProperty(value = "set_current_tenant_id_function_name")
+    private String setCurrentTenantIdFunctionName;
 }
