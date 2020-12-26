@@ -23,3 +23,16 @@ tables:
       tenant_column:  tenant_id
       pk_columns_name_to_type:
         id: bigint
+  - name: posts
+    rls_policy:
+      name: "posts_table_rls_policy"
+      tenant_column:  tenant_id
+      pk_columns_name_to_type:
+        id: bigint
+  - name: "comments"
+    rls_policy:
+      name: comments_table_rls_policy
+      tenant_column:  tenant
+      pk_columns_name_to_type:
+        id: int
+        user_id: bigint
