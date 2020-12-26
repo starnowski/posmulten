@@ -3,3 +3,6 @@ current_tenant_id_property_type:  "VARCHAR(255)"
 current_tenant_id_property: "pos.c.ten"
 get_current_tenant_id_function_name: "get_ten_id"
 set_current_tenant_id_function_name: "set_tenant"
+equals_current_tenant_identifier_function_name: "eqauls_cur_tenant"
+tenant_has_authorities_function_name: "eqauls_cur_tenant"
+force_row_level_security_for_table_owner: true

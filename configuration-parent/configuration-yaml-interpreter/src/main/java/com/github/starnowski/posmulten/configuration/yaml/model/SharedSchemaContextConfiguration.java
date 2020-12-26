@@ -26,4 +26,10 @@ public class SharedSchemaContextConfiguration {
     private String getCurrentTenantIdFunctionName;
     @JsonProperty(value = "set_current_tenant_id_function_name")
     private String setCurrentTenantIdFunctionName;
+    @JsonProperty(value = "equals_current_tenant_identifier_function_name")
+    private String equalsCurrentTenantIdentifierFunctionName;
+    @JsonProperty(value = "tenant_has_authorities_function_name")
+    private String tenantHasAuthoritiesFunctionName;
+    @JsonProperty(value = "force_row_level_security_for_table_owner")
+    private Boolean forceRowLevelSecurityForTableOwner;
 }
