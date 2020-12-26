@@ -15,7 +15,7 @@ class SharedSchemaContextConfigurationYamlDaoTest extends spock.lang.Specificati
     def "should return non null object based on file #filePath"()
     {
         given:
-            def resolvedPath = Paths.get(this.class.getResource(ALL_FIELDS_FILE_PATH).toURI()).toFile().getPath()
+            def resolvedPath = Paths.get(this.class.getResource(filePath).toURI()).toFile().getPath()
 
         when:
             def result = tested.read(resolvedPath)
