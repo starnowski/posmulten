@@ -21,25 +21,30 @@ tables:
     rls_policy:
       name: users_table_rls_policy
       tenant_column:  tenant_id
+      name_for_function_that_checks_if_record_exists_in_table: "is_user_exists"
       pk_columns_name_to_type:
         id: bigint
   - name: posts
     rls_policy:
       name: "posts_table_rls_policy"
       tenant_column:  tenant_id
+      name_for_function_that_checks_if_record_exists_in_table: "is_post_exists"
       pk_columns_name_to_type:
         id: bigint
   - name: "comments"
     rls_policy:
       name: comments_table_rls_policy
       tenant_column:  tenant
+      name_for_function_that_checks_if_record_exists_in_table: "is_comment_exists"
       pk_columns_name_to_type:
         id: int
         user_id: bigint
   - name: notifications
     rls_policy:
-      name: users_table_rls_policy
+      name: notifications_table_rls_policy
       tenant_column:  tenant
+      name_for_function_that_checks_if_record_exists_in_table: "is_notification_exists"
+      create_tenant_column_for_table: true
       pk_columns_name_to_type:
         uuid: uuid
 

@@ -23,8 +23,11 @@ public class RLSPolicy {
     private String tenantColumn;
     @JsonProperty(value = "pk_columns_name_to_type")
     private Map<String, String> primaryKeyColumnsNameToTypeMap;
+    @JsonProperty(value = "create_tenant_column_for_table")
+    private Boolean createTenantColumnForTable;
+    @JsonProperty(value = "name_for_function_that_checks_if_record_exists_in_table", required = true)
+    private String nameForFunctionThatChecksIfRecordExistsInTable;
 
-    //TODO    createTenantColumnForTable(String table)
 //TODO    setNameForFunctionThatChecksIfRecordExistsInTable(String recordTable, String functionName)
 //TODO    registerCustomValidTenantValueConstraintNameForTable(String table, String constraintName)
 //TODO    skipAddingOfTenantColumnDefaultValueForTable(String value)
