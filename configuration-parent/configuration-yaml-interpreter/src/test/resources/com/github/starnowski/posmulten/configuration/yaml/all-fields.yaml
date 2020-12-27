@@ -36,3 +36,11 @@ tables:
       pk_columns_name_to_type:
         id: int
         user_id: bigint
+  - name: notifications
+    rls_policy:
+      name: users_table_rls_policy
+      tenant_column:  tenant
+      pk_columns_name_to_type:
+        uuid: uuid
+
+#        notifications
