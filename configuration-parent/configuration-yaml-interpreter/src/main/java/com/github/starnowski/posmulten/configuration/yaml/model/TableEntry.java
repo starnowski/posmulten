@@ -23,10 +23,5 @@ public class TableEntry {
     private String name;
     @JsonProperty(value = "rls_policy")
     private RLSPolicy rlsPolicy;
-//    createRLSPolicyForTable(String table, Map<String, String> primaryKeyColumnsList, String tenantColumnName, String rlsPolicyName)
-//    createSameTenantConstraintForForeignKey(String mainTable, String foreignKeyTable, Map<String, String> foreignKeyPrimaryKeyColumnsMappings, String constraintName)
-//    createTenantColumnForTable(String table)
-//    setNameForFunctionThatChecksIfRecordExistsInTable(String recordTable, String functionName)
-//    registerCustomValidTenantValueConstraintNameForTable(String table, String constraintName)
-//    skipAddingOfTenantColumnDefaultValueForTable(String value)
+//TODO    createSameTenantConstraintForForeignKey(String mainTable, String foreignKeyTable, Map<String, String> foreignKeyPrimaryKeyColumnsMappings, String constraintName)
 }
