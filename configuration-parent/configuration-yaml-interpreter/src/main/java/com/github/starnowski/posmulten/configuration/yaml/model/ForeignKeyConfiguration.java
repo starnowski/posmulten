@@ -8,6 +8,8 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.Map;
 
 @Accessors(chain = true)
@@ -19,10 +21,12 @@ import java.util.Map;
 public class ForeignKeyConfiguration {
 
     @JsonProperty(value = "constraint_name", required = true)
+    @NotBlank
     private String constraintName;
+    @NotBlank
     @JsonProperty(value = "table_name", required = true)
     private String tableName;
     @JsonProperty(value = "foreign_key_primary_key_columns_mappings", required = true)
-    //TODO Not empty
+    @Size(min = 1)
     private Map<String, String> foreignKeyPrimaryKeyColumnsMappings;
 }

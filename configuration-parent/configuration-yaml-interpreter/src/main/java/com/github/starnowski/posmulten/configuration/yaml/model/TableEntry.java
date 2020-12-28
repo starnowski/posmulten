@@ -8,6 +8,7 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 @Accessors(chain = true)
@@ -21,6 +22,7 @@ public class TableEntry {
     /**
      * Table name
      */
+    @NotBlank
     @JsonProperty(value = "name", required = true)
     private String name;
     @JsonProperty(value = "rls_policy")

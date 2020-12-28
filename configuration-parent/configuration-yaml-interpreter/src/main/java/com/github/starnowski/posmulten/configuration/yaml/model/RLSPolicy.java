@@ -8,6 +8,7 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
+import javax.validation.constraints.NotBlank;
 import java.util.Map;
 
 @Accessors(chain = true)
@@ -17,6 +18,7 @@ import java.util.Map;
 @ToString
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class RLSPolicy {
+    @NotBlank
     @JsonProperty(value = "name", required = true)
     private String name;
     @JsonProperty(value = "tenant_column")
@@ -25,6 +27,7 @@ public class RLSPolicy {
     private Map<String, String> primaryKeyColumnsNameToTypeMap;
     @JsonProperty(value = "create_tenant_column_for_table")
     private Boolean createTenantColumnForTable;
+    @NotBlank
     @JsonProperty(value = "name_for_function_that_checks_if_record_exists_in_table", required = true)
     private String nameForFunctionThatChecksIfRecordExistsInTable;
     @JsonProperty(value = "valid_tenant_value_constraint_name")

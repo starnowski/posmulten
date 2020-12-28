@@ -8,6 +8,7 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 @Accessors(chain = true)
@@ -18,6 +19,7 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class SharedSchemaContextConfiguration {
 
+    @NotBlank
     @JsonProperty(value = "default_schema", required = true)
     private String defaultSchema;
     @JsonProperty(value = "current_tenant_id_property_type")
@@ -36,6 +38,7 @@ public class SharedSchemaContextConfiguration {
     private Boolean forceRowLevelSecurityForTableOwner;
     @JsonProperty(value = "default_tenant_id_column")
     private String defaultTenantIdColumn;
+    @NotBlank
     @JsonProperty(value = "grantee", required = true)
     private String grantee;
     @JsonProperty(value = "set_current_tenant_identifier_as_default_value_for_tenant_column_in_all_tables")
