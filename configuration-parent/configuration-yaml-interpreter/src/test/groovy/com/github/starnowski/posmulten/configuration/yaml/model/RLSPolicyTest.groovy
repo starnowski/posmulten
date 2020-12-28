@@ -45,7 +45,7 @@ class RLSPolicyTest extends Specification {
     }
 
     @Unroll
-    def "equals method should return false for objects with same values [ob1 (#ob1), ob2 (#ob2)]"()
+    def "equals method should return false for objects with different values [ob1 (#ob1), ob2 (#ob2)]"()
     {
         expect:
             !ob1.equals(ob2) && !ob2.equals(ob1)
