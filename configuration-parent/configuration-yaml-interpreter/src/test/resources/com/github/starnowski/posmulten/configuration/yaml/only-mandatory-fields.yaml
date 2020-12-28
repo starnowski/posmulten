@@ -1,0 +1,2 @@
+default_schema: public
+grantee: "db-user"

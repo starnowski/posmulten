@@ -3,7 +3,7 @@ package com.github.starnowski.posmulten.postgresql.core.context
 import spock.lang.Specification
 import spock.lang.Unroll
 
-import static com.github.starnowski.posmulten.postgresql.core.MapBuilder.mapBuilder
+import static com.github.starnowski.posmulten.postgresql.test.utils.MapBuilder.mapBuilder
 import static com.github.starnowski.posmulten.postgresql.test.utils.TestUtils.VALID_CURRENT_TENANT_ID_PROPERTY_NAME
 import static java.util.Arrays.asList
 

@@ -1,4 +1,4 @@
-package com.github.starnowski.posmulten.postgresql.core;
+package com.github.starnowski.posmulten.postgresql.test.utils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,4 +23,3 @@ public class MapBuilder <K, V>
         return new MapBuilder<>();
     }
 }
-

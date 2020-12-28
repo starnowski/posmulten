@@ -25,6 +25,7 @@ import org.testng.annotations.Test;
 import java.util.Map;
 
 import static com.github.starnowski.posmulten.postgresql.core.functional.tests.TestApplication.CLEAR_DATABASE_SCRIPT_PATH;
+import static com.github.starnowski.posmulten.postgresql.test.utils.MapBuilder.mapBuilder;
 import static com.github.starnowski.posmulten.postgresql.test.utils.TestUtils.VALID_CURRENT_TENANT_ID_PROPERTY_NAME;
 import static com.github.starnowski.posmulten.postgresql.test.utils.TestUtils.isAnyRecordExists;
 import static java.lang.String.format;
