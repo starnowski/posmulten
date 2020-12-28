@@ -33,10 +33,10 @@ tables:
       pk_columns_name_to_type:
         id: bigint
       foreign_keys:
-        constraint_name:  "posts_users_tenant_constraint"
-        table_name: "users"
-        foreign_key_primary_key_columns_mappings:
-          user_id:  id
+        - constraint_name:  "posts_users_tenant_constraint"
+          table_name: "users"
+          foreign_key_primary_key_columns_mappings:
+            user_id:  id
   - name: "comments"
     rls_policy:
       name: comments_table_rls_policy
@@ -47,21 +47,19 @@ tables:
         id: int
         user_id: bigint
       foreign_keys:
-        constraint_name:  "comments_users_tenant_constraint"
-        table_name: users
-        foreign_key_primary_key_columns_mappings:
-          user_id:  id
-      foreign_keys:
-        constraint_name:  "comments_posts_tenant_constraint"
-        table_name: posts
-        foreign_key_primary_key_columns_mappings:
-          post_id:  id
-      foreign_keys:
-        constraint_name:  "comments_comment_parent_tenant_constraint"
-        table_name: comments
-        foreign_key_primary_key_columns_mappings:
-          parent_comment_id:  id
-          parent_comment_user_id:  user_id
+        - constraint_name:  "comments_users_tenant_constraint"
+          table_name: users
+          foreign_key_primary_key_columns_mappings:
+            user_id:  id
+        - constraint_name:  "comments_posts_tenant_constraint"
+          table_name: posts
+          foreign_key_primary_key_columns_mappings:
+            post_id:  id
+        - constraint_name:  "comments_comment_parent_tenant_constraint"
+          table_name: comments
+          foreign_key_primary_key_columns_mappings:
+            parent_comment_id:  id
+            parent_comment_user_id:  user_id
   - name: notifications
     rls_policy:
       name: notifications_table_rls_policy
