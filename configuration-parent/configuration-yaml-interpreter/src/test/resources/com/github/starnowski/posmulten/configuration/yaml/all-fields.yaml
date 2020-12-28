@@ -69,5 +69,8 @@ tables:
       valid_tenant_value_constraint_name: "is_tenant_id_valid"
       pk_columns_name_to_type:
         uuid: uuid
-
-#        notifications
+      foreign_keys:
+        - constraint_name:  "notifications_users_tenant_constraint"
+          table_name: users
+          foreign_key_primary_key_columns_mappings:
+            user_id:  id
