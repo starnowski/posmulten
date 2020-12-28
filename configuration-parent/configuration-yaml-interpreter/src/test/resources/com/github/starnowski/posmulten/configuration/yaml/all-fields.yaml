@@ -29,6 +29,7 @@ tables:
       name: "posts_table_rls_policy"
       tenant_column:  tenant_id
       name_for_function_that_checks_if_record_exists_in_table: "is_post_exists"
+      skip_adding_of_tenant_column_default_value: false
       pk_columns_name_to_type:
         id: bigint
   - name: "comments"
@@ -36,6 +37,7 @@ tables:
       name: comments_table_rls_policy
       tenant_column:  tenant
       name_for_function_that_checks_if_record_exists_in_table: "is_comment_exists"
+      skip_adding_of_tenant_column_default_value: true
       pk_columns_name_to_type:
         id: int
         user_id: bigint
@@ -45,6 +47,7 @@ tables:
       tenant_column:  tenant
       name_for_function_that_checks_if_record_exists_in_table: "is_notification_exists"
       create_tenant_column_for_table: true
+      valid_tenant_value_constraint_name: "is_tenant_id_valid"
       pk_columns_name_to_type:
         uuid: uuid
 
