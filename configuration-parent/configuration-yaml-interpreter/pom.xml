@@ -26,6 +26,7 @@
             <groupId>com.fasterxml.jackson.dataformat</groupId>
             <artifactId>jackson-dataformat-yaml</artifactId>
             <version>${com.fasterxml.jackson.dataformat.jackson-dataformat-yaml.version}</version>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.spockframework</groupId>
