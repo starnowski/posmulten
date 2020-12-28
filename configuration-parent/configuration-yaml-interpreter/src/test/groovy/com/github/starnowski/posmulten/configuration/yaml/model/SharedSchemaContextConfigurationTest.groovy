@@ -3,6 +3,8 @@ package com.github.starnowski.posmulten.configuration.yaml.model
 import spock.lang.Specification
 import spock.lang.Unroll
 
+import static java.util.Arrays.asList
+
 class SharedSchemaContextConfigurationTest extends Specification {
 
     @Unroll
@@ -12,12 +14,13 @@ class SharedSchemaContextConfigurationTest extends Specification {
             ob1.equals(ob2) && ob2.equals(ob1)
 
         where:
-            ob1 |   ob2
-            new SharedSchemaContextConfiguration() | new SharedSchemaContextConfiguration()
+            ob1                                                                                                     |   ob2
+            new SharedSchemaContextConfiguration()                                                                  | new SharedSchemaContextConfiguration()
             new SharedSchemaContextConfiguration().setCurrentTenantIdPropertyType("xxx").setDefaultSchema("shema1") | new SharedSchemaContextConfiguration().setCurrentTenantIdPropertyType("xxx").setDefaultSchema("shema1")
-            new SharedSchemaContextConfiguration().setCurrentTenantIdPropertyType("xxx") | new SharedSchemaContextConfiguration().setCurrentTenantIdPropertyType("xxx")
-            new SharedSchemaContextConfiguration().setDefaultSchema("shema1") | new SharedSchemaContextConfiguration().setDefaultSchema("shema1")
-            new SharedSchemaContextConfiguration().setDefaultSchema("public") | new SharedSchemaContextConfiguration().setDefaultSchema("public")
+            new SharedSchemaContextConfiguration().setCurrentTenantIdPropertyType("xxx")                            | new SharedSchemaContextConfiguration().setCurrentTenantIdPropertyType("xxx")
+            new SharedSchemaContextConfiguration().setDefaultSchema("shema1")                                       | new SharedSchemaContextConfiguration().setDefaultSchema("shema1")
+            new SharedSchemaContextConfiguration().setDefaultSchema("public")                                       | new SharedSchemaContextConfiguration().setDefaultSchema("public")
+            new SharedSchemaContextConfiguration().setTables(asList(new TableEntry().setName("tab1")))              | new SharedSchemaContextConfiguration().setTables(asList(new TableEntry().setName("tab1")))
     }
 
     @Unroll
@@ -27,12 +30,13 @@ class SharedSchemaContextConfigurationTest extends Specification {
             ob1.hashCode() == ob2.hashCode()
 
         where:
-            ob1 |   ob2
-            new SharedSchemaContextConfiguration() | new SharedSchemaContextConfiguration()
+            ob1                                                                                                     |   ob2
+            new SharedSchemaContextConfiguration()                                                                  | new SharedSchemaContextConfiguration()
             new SharedSchemaContextConfiguration().setCurrentTenantIdPropertyType("xxx").setDefaultSchema("shema1") | new SharedSchemaContextConfiguration().setCurrentTenantIdPropertyType("xxx").setDefaultSchema("shema1")
-            new SharedSchemaContextConfiguration().setCurrentTenantIdPropertyType("xxx") | new SharedSchemaContextConfiguration().setCurrentTenantIdPropertyType("xxx")
-            new SharedSchemaContextConfiguration().setDefaultSchema("shema1") | new SharedSchemaContextConfiguration().setDefaultSchema("shema1")
-            new SharedSchemaContextConfiguration().setDefaultSchema("public") | new SharedSchemaContextConfiguration().setDefaultSchema("public")
+            new SharedSchemaContextConfiguration().setCurrentTenantIdPropertyType("xxx")                            | new SharedSchemaContextConfiguration().setCurrentTenantIdPropertyType("xxx")
+            new SharedSchemaContextConfiguration().setDefaultSchema("shema1")                                       | new SharedSchemaContextConfiguration().setDefaultSchema("shema1")
+            new SharedSchemaContextConfiguration().setDefaultSchema("public")                                       | new SharedSchemaContextConfiguration().setDefaultSchema("public")
+            new SharedSchemaContextConfiguration().setTables(asList(new TableEntry().setName("tab1")))              | new SharedSchemaContextConfiguration().setTables(asList(new TableEntry().setName("tab1")))
     }
 
     @Unroll
