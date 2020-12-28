@@ -8,7 +8,7 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
-import java.util.List;
+import java.util.Map;
 
 @Accessors(chain = true)
 @Getter
@@ -16,15 +16,13 @@ import java.util.List;
 @EqualsAndHashCode
 @ToString
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class TableEntry {
+public class ForeignKeyConfiguration {
 
-    /**
-     * Table name
-     */
-    @JsonProperty(value = "name", required = true)
-    private String name;
-    @JsonProperty(value = "rls_policy")
-    private RLSPolicy rlsPolicy;
-    @JsonProperty(value = "foreign_keys")
-    private List<ForeignKeyConfiguration> foreignKeys;
+    @JsonProperty(value = "constraint_name", required = true)
+    private String constraintName;
+    @JsonProperty(value = "table_name", required = true)
+    private String tableName;
+    @JsonProperty(value = "foreign_key_primary_key_columns_mappings", required = true)
+    //TODO Not empty
+    private Map<String, String> foreignKeyPrimaryKeyColumnsMappings;
 }
