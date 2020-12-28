@@ -12,7 +12,7 @@ import spock.lang.Unroll
 
 import java.util.stream.Collectors
 
-import static com.github.starnowski.posmulten.postgresql.core.MapBuilder.mapBuilder
+import static com.github.starnowski.posmulten.postgresql.test.utils.MapBuilder.mapBuilder
 import static com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContextRequest.DEFAULT_TENANT_ID_COLUMN
 import static java.util.stream.Collectors.toSet
 

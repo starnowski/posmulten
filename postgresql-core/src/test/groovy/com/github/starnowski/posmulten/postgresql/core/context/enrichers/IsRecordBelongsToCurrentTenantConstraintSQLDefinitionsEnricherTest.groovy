@@ -8,7 +8,7 @@ import com.github.starnowski.posmulten.postgresql.core.rls.function.IsRecordBelo
 import spock.lang.Specification
 import spock.lang.Unroll
 
-import static com.github.starnowski.posmulten.postgresql.core.MapBuilder.mapBuilder
+import static com.github.starnowski.posmulten.postgresql.test.utils.MapBuilder.mapBuilder
 
 class IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricherTest extends Specification {
 
