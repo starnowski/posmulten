@@ -15,8 +15,7 @@ public class SharedSchemaContextConfigurationYamlDao {
         return mapper.readValue(new File(filePath), SharedSchemaContextConfiguration.class);
     }
 
-    public void save(SharedSchemaContextConfiguration configuration, String filePath)
-    {
-        //TODO
+    public void save(SharedSchemaContextConfiguration configuration, String filePath) throws IOException {
+        mapper.writeValue(new File(filePath), configuration);
     }
 }
