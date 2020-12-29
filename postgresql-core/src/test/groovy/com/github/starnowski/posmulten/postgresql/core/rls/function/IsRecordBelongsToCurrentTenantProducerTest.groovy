@@ -1,7 +1,7 @@
 package com.github.starnowski.posmulten.postgresql.core.rls.function
 
 import com.github.starnowski.posmulten.postgresql.core.common.function.AbstractFunctionFactoryTest
-import javafx.util.Pair
+import com.github.starnowski.posmulten.postgresql.core.util.Pair
 import spock.lang.Unroll
 
 import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValue.forNumeric

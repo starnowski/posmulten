@@ -6,7 +6,7 @@ import com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaConte
 import com.github.starnowski.posmulten.postgresql.core.rls.IIsTenantIdentifierValidConstraintProducerParameters
 import com.github.starnowski.posmulten.postgresql.core.rls.IsTenantIdentifierValidConstraintProducer
 import com.github.starnowski.posmulten.postgresql.core.rls.function.IIsTenantValidFunctionInvocationFactory
-import javafx.util.Pair
+import com.github.starnowski.posmulten.postgresql.core.util.Pair
 import spock.lang.Specification
 import spock.lang.Unroll
 

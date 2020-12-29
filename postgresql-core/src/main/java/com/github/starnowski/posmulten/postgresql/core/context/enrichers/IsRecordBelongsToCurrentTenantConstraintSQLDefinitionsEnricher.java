@@ -27,7 +27,7 @@ import com.github.starnowski.posmulten.postgresql.core.context.*;
 import com.github.starnowski.posmulten.postgresql.core.context.exceptions.MissingConstraintNameDeclarationForTableException;
 import com.github.starnowski.posmulten.postgresql.core.context.exceptions.MissingIsRecordBelongsToCurrentTenantFunctionInvocationFactoryException;
 import com.github.starnowski.posmulten.postgresql.core.rls.function.IsRecordBelongsToCurrentTenantFunctionInvocationFactory;
-import javafx.util.Pair;
+import com.github.starnowski.posmulten.postgresql.core.util.Pair;
 
 import java.util.List;
 
