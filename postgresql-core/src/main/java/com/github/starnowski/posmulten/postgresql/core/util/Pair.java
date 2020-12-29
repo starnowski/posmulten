@@ -22,6 +22,14 @@ public final class Pair<L, R> {
         return right;
     }
 
+    public L getKey() {
+        return left;
+    }
+
+    public R getValue() {
+        return right;
+    }
+
     @Override
     public int hashCode() {
         return left.hashCode() ^ right.hashCode();
