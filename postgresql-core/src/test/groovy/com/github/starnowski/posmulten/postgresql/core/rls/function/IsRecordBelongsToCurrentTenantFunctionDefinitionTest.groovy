@@ -3,7 +3,7 @@ package com.github.starnowski.posmulten.postgresql.core.rls.function
 import com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValue
 import com.github.starnowski.posmulten.postgresql.core.common.function.IFunctionArgument
 import com.github.starnowski.posmulten.postgresql.core.common.function.IFunctionDefinition
-import javafx.util.Pair
+import com.github.starnowski.posmulten.postgresql.core.util.Pair
 import spock.lang.Specification
 import spock.lang.Unroll
 

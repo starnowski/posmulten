@@ -5,7 +5,7 @@ import com.github.starnowski.posmulten.postgresql.core.SetDefaultStatementProduc
 import com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaContext;
 import com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContextRequest;
 import com.github.starnowski.posmulten.postgresql.core.context.TableKey;
-import javafx.util.Pair;
+import com.github.starnowski.posmulten.postgresql.core.util.Pair;
 
 import java.util.List;
 

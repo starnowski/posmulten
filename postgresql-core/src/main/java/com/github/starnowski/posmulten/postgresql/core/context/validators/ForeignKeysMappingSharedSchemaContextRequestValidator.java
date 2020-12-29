@@ -3,7 +3,7 @@ package com.github.starnowski.posmulten.postgresql.core.context.validators;
 import com.github.starnowski.posmulten.postgresql.core.context.*;
 import com.github.starnowski.posmulten.postgresql.core.context.exceptions.IncorrectForeignKeysMappingException;
 import com.github.starnowski.posmulten.postgresql.core.context.exceptions.MissingRLSPolicyDeclarationForTableException;
-import javafx.util.Pair;
+import com.github.starnowski.posmulten.postgresql.core.util.Pair;
 
 import java.util.List;
 import java.util.Map;
