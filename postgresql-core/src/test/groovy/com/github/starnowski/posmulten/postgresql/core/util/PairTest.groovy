@@ -6,7 +6,7 @@ import spock.lang.Unroll
 class PairTest extends Specification {
 
     @Unroll
-    def "should return first value passed in constructor #value"() {
+    def "getLeft method should return first value passed in constructor #value"() {
         given:
             def right = "Value2"
             def pair = new Pair<String, String>(value, right)
@@ -23,7 +23,24 @@ class PairTest extends Specification {
     }
 
     @Unroll
-    def "should return second value passed in constructor #value"() {
+    def "should return first value passed in constructor #value"() {
+        given:
+            def right = "Value2"
+            def pair = new Pair<String, String>(value, right)
+
+        when:
+            def result = pair.getKey()
+
+        then:
+            result.is(value)
+
+        where:
+            value << ["value1", "XXXX", ""]
+
+    }
+
+    @Unroll
+    def "getLeft getRight should return second value passed in constructor #value"() {
         given:
             def left = "Value2"
             def pair = new Pair<String, String>(left, value)
@@ -38,6 +55,24 @@ class PairTest extends Specification {
             value << ["value1", "XXXX", ""]
 
     }
+
+    @Unroll
+    def "should return second value passed in constructor #value"() {
+        given:
+            def left = "Value2"
+            def pair = new Pair<String, String>(left, value)
+
+        when:
+            def result = pair.getValue()
+
+        then:
+            result.is(value)
+
+        where:
+            value << ["value1", "XXXX", ""]
+
+    }
+
 
     @Unroll
     def "equals method should return true for objects with same values [ob1 (#ob1), ob2 (#ob2)]"()
