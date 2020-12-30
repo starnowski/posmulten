@@ -2,6 +2,7 @@ package com.github.starnowski.posmulten.configuration.yaml.dao
 
 import com.github.starnowski.posmulten.configuration.yaml.model.ForeignKeyConfiguration
 import com.github.starnowski.posmulten.configuration.yaml.model.RLSPolicy
+import com.github.starnowski.posmulten.configuration.yaml.model.SharedSchemaContextConfiguration
 import com.github.starnowski.posmulten.configuration.yaml.model.TableEntry
 import com.github.starnowski.posmulten.configuration.yaml.model.ValidTenantValueConstraintConfiguration
 import org.junit.Rule
@@ -164,6 +165,28 @@ class SharedSchemaContextConfigurationYamlDaoTest extends spock.lang.Specificati
             ALL_FIELDS_FILE_PATH            |   "comments"          |   new ForeignKeyConfiguration().setTableName("posts").setConstraintName("comments_posts_tenant_constraint").setForeignKeyPrimaryKeyColumnsMappings(mapBuilder().put("post_id", "id").build())
             ALL_FIELDS_FILE_PATH            |   "comments"          |   new ForeignKeyConfiguration().setTableName("comments").setConstraintName("comments_comment_parent_tenant_constraint").setForeignKeyPrimaryKeyColumnsMappings(mapBuilder().put("parent_comment_id", "id").put("parent_comment_user_id", "user_id").build())
             ALL_FIELDS_FILE_PATH            |   "notifications"     |   new ForeignKeyConfiguration().setTableName("users").setConstraintName("notifications_users_tenant_constraint").setForeignKeyPrimaryKeyColumnsMappings(mapBuilder().put("user_id", "id").build())
+    }
+
+    @Unroll
+    def "should return object based on file which was created based on test object #testObject"()
+    {
+        given:
+        def tmpFile = tempFolder.newFile("temp-config.yaml")
+        tested.save(testObject, tmpFile.getAbsoluteFile().getAbsolutePath())
+
+        when:
+            def result = tested.read(tmpFile.getAbsoluteFile().getAbsolutePath())
+
+        then:
+            result
+
+        and: "tests object should be equal"
+            result == testObject
+
+        where:
+            testObject << [ new SharedSchemaContextConfiguration().setCurrentTenantIdPropertyType("xxx").setDefaultSchema("shema1").setTables(asList(new TableEntry().setName("tab1"))),
+                            new SharedSchemaContextConfiguration().setDefaultSchema("public").setTables(asList(new TableEntry().setName("users")))
+            ]
     }
 
     private String resolveFilePath(String filePath) {
