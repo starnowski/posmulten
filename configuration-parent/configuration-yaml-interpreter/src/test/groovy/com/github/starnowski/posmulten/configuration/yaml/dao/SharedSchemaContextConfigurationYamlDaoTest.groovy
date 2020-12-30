@@ -141,6 +141,7 @@ class SharedSchemaContextConfigurationYamlDaoTest extends spock.lang.Specificati
         where:
             filePath                        |   tableEntry
             ALL_FIELDS_FILE_PATH            |   new TableEntry().setName("users").setRlsPolicy(new RLSPolicy().setName("users_table_rls_policy").setTenantColumn("tenant_id").setNameForFunctionThatChecksIfRecordExistsInTable("is_user_exists").setPrimaryKeyColumnsNameToTypeMap(mapBuilder().put("id", "bigint").build()))
+            ALL_FIELDS_FILE_PATH            |   new TableEntry().setName("notifications").setRlsPolicy(new RLSPolicy().setName("notifications_table_rls_policy").setTenantColumn("tenant").setNameForFunctionThatChecksIfRecordExistsInTable("is_notification_exists").setCreateTenantColumnForTable(true).setValidTenantValueConstraintName("is_tenant_id_valid").setPrimaryKeyColumnsNameToTypeMap(mapBuilder().put("uuid", "uuid").build()))
     }
 
     private String resolveFilePath(String filePath) {
