@@ -18,7 +18,7 @@ class PairTest extends Specification {
             result.is(value)
 
         where:
-            value << ["value1", "XXXX", ""]
+            value << ["value1", "XXXX", "", null]
 
     }
 
@@ -35,7 +35,7 @@ class PairTest extends Specification {
             result.is(value)
 
         where:
-            value << ["value1", "XXXX", ""]
+            value << ["value1", "XXXX", "", null]
 
     }
 
@@ -52,7 +52,7 @@ class PairTest extends Specification {
             result.is(value)
 
         where:
-            value << ["value1", "XXXX", ""]
+            value << ["value1", "XXXX", "", null]
 
     }
 
@@ -69,7 +69,7 @@ class PairTest extends Specification {
             result.is(value)
 
         where:
-            value << ["value1", "XXXX", ""]
+            value << ["value1", "XXXX", "", null]
 
     }
 
@@ -81,9 +81,12 @@ class PairTest extends Specification {
             ob1.equals(ob2) && ob2.equals(ob1)
 
         where:
-            ob1                                                         |   ob2
-            new Pair<String, String>("XXX", "YYY")           |   new Pair<String, String>("XXX", "YYY")
-            new Pair<String, String>("value1", "value2")     |   new Pair<String, String>("value1", "value2")
+            ob1                                                             |   ob2
+            new Pair<String, String>("XXX", "YYY")               |   new Pair<String, String>("XXX", "YYY")
+            new Pair<String, String>("value1", "value2")         |   new Pair<String, String>("value1", "value2")
+            new Pair<String, String>(null, "value2")             |   new Pair<String, String>(null, "value2")
+            new Pair<String, String>(null, null)                 |   new Pair<String, String>(null, null)
+            new Pair<String, String>("value1", null)             |   new Pair<String, String>("value1", null)
     }
 
     @Unroll
@@ -93,9 +96,12 @@ class PairTest extends Specification {
             ob1.hashCode() == ob2.hashCode()
 
         where:
-            ob1                                                         |   ob2
-            new Pair<String, String>("XXX", "YYY")           |   new Pair<String, String>("XXX", "YYY")
-            new Pair<String, String>("value1", "value2")     |   new Pair<String, String>("value1", "value2")
+            ob1                                                             |   ob2
+            new Pair<String, String>("XXX", "YYY")               |   new Pair<String, String>("XXX", "YYY")
+            new Pair<String, String>("value1", "value2")         |   new Pair<String, String>("value1", "value2")
+            new Pair<String, String>(null, "value2")             |   new Pair<String, String>(null, "value2")
+            new Pair<String, String>(null, null)                 |   new Pair<String, String>(null, null)
+            new Pair<String, String>("value1", null)             |   new Pair<String, String>("value1", null)
     }
 
     @Unroll
@@ -108,22 +114,8 @@ class PairTest extends Specification {
             ob1                                                         |   ob2
             new Pair<String, String>("XXX", "YYY")           |   new Pair<String, String>("ZZZ", "YYY")
             new Pair<String, String>("value1", "value2")     |   new Pair<String, String>("value1", "value3")
-    }
-
-    @Unroll
-    def "should throw exception when null parameter is passed left: #left right: #right"()
-    {
-        when:
-            new Pair<String, String>(left, right)
-
-        then:
-            def ex = thrown(NullPointerException.class)
-            ex
-
-        where:
-            left    |   right
-            null    |   "XXX"
-            "XXX"   |   null
-            null    |   null
+            new Pair<String, String>(null, "value2")         |   new Pair<String, String>(null, "value3")
+            new Pair<String, String>("value1", null)         |   new Pair<String, String>("value3", null)
+            new Pair<String, String>("value1", null)         |   new Pair<String, String>(null, null)
     }
 }
