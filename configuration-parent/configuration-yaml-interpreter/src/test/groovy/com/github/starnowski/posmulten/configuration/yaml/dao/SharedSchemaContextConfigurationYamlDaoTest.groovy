@@ -1,15 +1,14 @@
 package com.github.starnowski.posmulten.configuration.yaml.dao
 
+import com.github.starnowski.posmulten.configuration.yaml.model.ForeignKeyConfiguration
 import com.github.starnowski.posmulten.configuration.yaml.model.RLSPolicy
 import com.github.starnowski.posmulten.configuration.yaml.model.TableEntry
 import com.github.starnowski.posmulten.configuration.yaml.model.ValidTenantValueConstraintConfiguration
-import com.github.starnowski.posmulten.postgresql.test.utils.MapBuilder
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import spock.lang.Unroll
 
 import java.nio.file.Paths
-import java.util.stream.Collectors
 
 import static com.github.starnowski.posmulten.postgresql.test.utils.MapBuilder.mapBuilder
 import static java.util.Arrays.asList
@@ -133,7 +132,7 @@ class SharedSchemaContextConfigurationYamlDaoTest extends spock.lang.Specificati
             def resolvedPath = resolveFilePath(filePath)
 
         when:
-        def results = tested.read(resolvedPath).getTables().stream().map({table -> table.setForeignKeys(null) }).collect(toList())
+            def results = tested.read(resolvedPath).getTables().stream().map({table -> table.setForeignKeys(null) }).collect(toList())
 
         then:
             results.contains(tableEntry)
@@ -142,6 +141,23 @@ class SharedSchemaContextConfigurationYamlDaoTest extends spock.lang.Specificati
             filePath                        |   tableEntry
             ALL_FIELDS_FILE_PATH            |   new TableEntry().setName("users").setRlsPolicy(new RLSPolicy().setName("users_table_rls_policy").setTenantColumn("tenant_id").setNameForFunctionThatChecksIfRecordExistsInTable("is_user_exists").setPrimaryKeyColumnsNameToTypeMap(mapBuilder().put("id", "bigint").build()))
             ALL_FIELDS_FILE_PATH            |   new TableEntry().setName("notifications").setRlsPolicy(new RLSPolicy().setName("notifications_table_rls_policy").setTenantColumn("tenant").setNameForFunctionThatChecksIfRecordExistsInTable("is_notification_exists").setCreateTenantColumnForTable(true).setValidTenantValueConstraintName("is_tenant_id_valid").setPrimaryKeyColumnsNameToTypeMap(mapBuilder().put("uuid", "uuid").build()))
+    }
+
+    @Unroll
+    def "for file '#filePath' should return object that contains expected foreign key configuration #foreignKey for table #table"()
+    {
+        given:
+            def resolvedPath = resolveFilePath(filePath)
+
+        when:
+            def results = tested.read(resolvedPath).getTables().stream().filter({t -> (table == t.getName()) }).flatMap({t -> t.getForeignKeys().stream()}).collect(toList())
+
+        then:
+            results.contains(foreignKey)
+
+        where:
+            filePath                        |   table       |   foreignKey
+            ALL_FIELDS_FILE_PATH            |   "posts"     |   new ForeignKeyConfiguration().setTableName("users").setConstraintName("posts_users_tenant_constraint").setForeignKeyPrimaryKeyColumnsMappings(mapBuilder().put("user_id", "id").build())
     }
 
     private String resolveFilePath(String filePath) {
