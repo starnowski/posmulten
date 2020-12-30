@@ -55,7 +55,7 @@ class SharedSchemaContextConfigurationYamlDaoTest extends spock.lang.Specificati
     }
 
     @Unroll
-    def "should return object with expected fields : defaultSchema (#defaultSchema), currentTenantIdPropertyType (#currentTenantIdPropertyType), currentTenantIdProperty (#currentTenantIdProperty), getCurrentTenantIdFunctionName (#getCurrentTenantIdFunctionName), setCurrentTenantIdFunctionName (#setCurrentTenantIdFunctionName)"()
+    def "for file '#filePath' should return object with expected fields : defaultSchema (#defaultSchema), currentTenantIdPropertyType (#currentTenantIdPropertyType), currentTenantIdProperty (#currentTenantIdProperty), getCurrentTenantIdFunctionName (#getCurrentTenantIdFunctionName), setCurrentTenantIdFunctionName (#setCurrentTenantIdFunctionName)"()
     {
         given:
             def resolvedPath = Paths.get(this.class.getResource(filePath).toURI()).toFile().getPath()
@@ -73,6 +73,29 @@ class SharedSchemaContextConfigurationYamlDaoTest extends spock.lang.Specificati
         where:
             filePath                        |   defaultSchema   |   currentTenantIdProperty |   currentTenantIdPropertyType |   getCurrentTenantIdFunctionName  |   setCurrentTenantIdFunctionName
             ALL_FIELDS_FILE_PATH            |   "public"        |   "pos.c.ten"             |   "VARCHAR(255)"              |   "get_ten_id"                    |   "set_tenant"
-            ONLY_MANDATORY_FIELDS_FILE_PATH |   "public"        |   null                    |   null                        |   null                            |   null
+            ONLY_MANDATORY_FIELDS_FILE_PATH |   "non_public"    |   null                    |   null                        |   null                            |   null
+    }
+
+    @Unroll
+    def "for file '#filePath' should return object with expected fields : equalsCurrentTenantIdentifierFunctionName (#equalsCurrentTenantIdentifierFunctionName), tenantHasAuthoritiesFunctionName (#tenantHasAuthoritiesFunctionName), forceRowLevelSecurityForTableOwner (#forceRowLevelSecurityForTableOwner), defaultTenantIdColumn (#defaultTenantIdColumn), grantee (#grantee), setCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables (#setCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables)"()
+    {
+        given:
+            def resolvedPath = Paths.get(this.class.getResource(filePath).toURI()).toFile().getPath()
+
+        when:
+            def result = tested.read(resolvedPath)
+
+        then:
+            result.getEqualsCurrentTenantIdentifierFunctionName() == equalsCurrentTenantIdentifierFunctionName
+            result.getTenantHasAuthoritiesFunctionName() == tenantHasAuthoritiesFunctionName
+            result.getForceRowLevelSecurityForTableOwner() == forceRowLevelSecurityForTableOwner
+            result.getDefaultTenantIdColumn() == defaultTenantIdColumn
+            result.getGrantee() == grantee
+            result.getCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables() == setCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables
+
+        where:
+            filePath                        |   equalsCurrentTenantIdentifierFunctionName   |   tenantHasAuthoritiesFunctionName    |   forceRowLevelSecurityForTableOwner  |   defaultTenantIdColumn   |   grantee             |   setCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables
+            ALL_FIELDS_FILE_PATH            |   "equals_cur_tenant"                         |   "_tenant_hast_auth"                 |   true                                |   "tenant_id"             |   "application-user"  |   true
+            ONLY_MANDATORY_FIELDS_FILE_PATH |   null                                        |   null                                |   null                                |   null                    |   "db-user"           |   null
     }
 }
