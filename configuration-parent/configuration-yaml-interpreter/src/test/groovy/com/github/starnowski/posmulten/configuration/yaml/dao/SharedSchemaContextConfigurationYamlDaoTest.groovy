@@ -1,10 +1,13 @@
 package com.github.starnowski.posmulten.configuration.yaml.dao
 
+import com.github.starnowski.posmulten.configuration.yaml.model.ValidTenantValueConstraintConfiguration
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import spock.lang.Unroll
 
 import java.nio.file.Paths
+
+import static java.util.Arrays.asList
 
 class SharedSchemaContextConfigurationYamlDaoTest extends spock.lang.Specification {
 
@@ -97,5 +100,23 @@ class SharedSchemaContextConfigurationYamlDaoTest extends spock.lang.Specificati
             filePath                        |   equalsCurrentTenantIdentifierFunctionName   |   tenantHasAuthoritiesFunctionName    |   forceRowLevelSecurityForTableOwner  |   defaultTenantIdColumn   |   grantee             |   setCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables
             ALL_FIELDS_FILE_PATH            |   "equals_cur_tenant"                         |   "_tenant_hast_auth"                 |   true                                |   "tenant_id"             |   "application-user"  |   true
             ONLY_MANDATORY_FIELDS_FILE_PATH |   null                                        |   null                                |   null                                |   null                    |   "db-user"           |   null
+    }
+
+    @Unroll
+    def "for file '#filePath' should return object with expected fields related to valid tenant value constraint #properties"()
+    {
+        given:
+            def resolvedPath = Paths.get(this.class.getResource(filePath).toURI()).toFile().getPath()
+
+        when:
+            def result = tested.read(resolvedPath)
+
+        then:
+            result.getValidTenantValueConstraint() == properties
+
+        where:
+            filePath                        |   properties
+            ONLY_MANDATORY_FIELDS_FILE_PATH |   null
+            ALL_FIELDS_FILE_PATH            |   new ValidTenantValueConstraintConfiguration().setIsTenantValidConstraintName("is_tenant_valid_constraint_SDFA").setIsTenantValidFunctionName("is_t_valid").setTenantIdentifiersBlacklist(asList("invalid_tenant", "Some strange tenant ID", "'; DROP ALL TABLES"))
     }
 }
