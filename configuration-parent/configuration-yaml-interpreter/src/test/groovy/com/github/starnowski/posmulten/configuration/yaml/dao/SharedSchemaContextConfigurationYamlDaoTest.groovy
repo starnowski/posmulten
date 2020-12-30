@@ -158,6 +158,9 @@ class SharedSchemaContextConfigurationYamlDaoTest extends spock.lang.Specificati
         where:
             filePath                        |   table       |   foreignKey
             ALL_FIELDS_FILE_PATH            |   "posts"     |   new ForeignKeyConfiguration().setTableName("users").setConstraintName("posts_users_tenant_constraint").setForeignKeyPrimaryKeyColumnsMappings(mapBuilder().put("user_id", "id").build())
+            ALL_FIELDS_FILE_PATH            |   "comments"     |   new ForeignKeyConfiguration().setTableName("users").setConstraintName("comments_users_tenant_constraint").setForeignKeyPrimaryKeyColumnsMappings(mapBuilder().put("user_id", "id").build())
+            ALL_FIELDS_FILE_PATH            |   "comments"     |   new ForeignKeyConfiguration().setTableName("posts").setConstraintName("comments_posts_tenant_constraint").setForeignKeyPrimaryKeyColumnsMappings(mapBuilder().put("post_id", "id").build())
+            ALL_FIELDS_FILE_PATH            |   "comments"     |   new ForeignKeyConfiguration().setTableName("comments").setConstraintName("comments_comment_parent_tenant_constraint").setForeignKeyPrimaryKeyColumnsMappings(mapBuilder().put("parent_comment_id", "id").put("parent_comment_user_id", "user_id").build())
     }
 
     private String resolveFilePath(String filePath) {
