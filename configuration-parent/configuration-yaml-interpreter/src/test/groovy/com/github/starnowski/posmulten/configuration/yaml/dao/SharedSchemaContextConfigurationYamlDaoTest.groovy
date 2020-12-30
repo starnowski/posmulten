@@ -5,7 +5,6 @@ import com.github.starnowski.posmulten.configuration.yaml.model.RLSPolicy
 import com.github.starnowski.posmulten.configuration.yaml.model.SharedSchemaContextConfiguration
 import com.github.starnowski.posmulten.configuration.yaml.model.TableEntry
 import com.github.starnowski.posmulten.configuration.yaml.model.ValidTenantValueConstraintConfiguration
-import com.github.starnowski.posmulten.postgresql.core.common.function.DefaultFunctionDefinition
 import org.jeasy.random.EasyRandom
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
