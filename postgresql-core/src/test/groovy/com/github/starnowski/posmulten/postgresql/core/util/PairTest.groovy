@@ -90,6 +90,28 @@ class PairTest extends Specification {
     }
 
     @Unroll
+    def "toString method should return expected value (#expectedString) with key (#key) and value (#value)"()
+    {
+        given:
+            def pair = new Pair(key,value)
+
+        when:
+            def result = pair.toString()
+
+        then:
+            result == expectedString
+
+        where:
+            key     |   value   | expectedString
+            null    |   null    | "null=null"
+            "X"     |   null    | "X=null"
+            "X"     |   "Y"     | "X=Y"
+            " "     |   "Y"     | " =Y"
+            " "     |   " "     | " = "
+            ""      |   "Y"     | "=Y"
+    }
+
+    @Unroll
     def "hashCode method should return same result for objects with same values [ob1 (#ob1), ob2 (#ob2)]"()
     {
         expect:
