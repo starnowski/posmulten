@@ -67,6 +67,12 @@ class SharedSchemaContextConfigurationYamlDaoTest extends spock.lang.Specificati
             result.getDefaultSchema() == defaultSchema
             result.getCurrentTenantIdProperty() == currentTenantIdProperty
             result.getCurrentTenantIdPropertyType() == currentTenantIdPropertyType
-        //TODO
+            result.getGetCurrentTenantIdFunctionName() == getCurrentTenantIdFunctionName
+            result.getSetCurrentTenantIdFunctionName() == setCurrentTenantIdFunctionName
+
+        where:
+            filePath                        |   defaultSchema   |   currentTenantIdProperty |   currentTenantIdPropertyType |   getCurrentTenantIdFunctionName  |   setCurrentTenantIdFunctionName
+            ALL_FIELDS_FILE_PATH            |   "public"        |   "pos.c.ten"             |   "VARCHAR(255)"              |   "get_ten_id"                    |   "set_tenant"
+            ONLY_MANDATORY_FIELDS_FILE_PATH |   "public"        |   null                    |   null                        |   null                            |   null
     }
 }
