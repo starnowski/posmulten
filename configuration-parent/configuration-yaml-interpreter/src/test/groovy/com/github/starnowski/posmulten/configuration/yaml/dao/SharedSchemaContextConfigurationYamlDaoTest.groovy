@@ -1,13 +1,19 @@
 package com.github.starnowski.posmulten.configuration.yaml.dao
 
+import com.github.starnowski.posmulten.configuration.yaml.model.RLSPolicy
+import com.github.starnowski.posmulten.configuration.yaml.model.TableEntry
 import com.github.starnowski.posmulten.configuration.yaml.model.ValidTenantValueConstraintConfiguration
+import com.github.starnowski.posmulten.postgresql.test.utils.MapBuilder
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import spock.lang.Unroll
 
 import java.nio.file.Paths
+import java.util.stream.Collectors
 
+import static com.github.starnowski.posmulten.postgresql.test.utils.MapBuilder.mapBuilder
 import static java.util.Arrays.asList
+import static java.util.stream.Collectors.toList
 
 class SharedSchemaContextConfigurationYamlDaoTest extends spock.lang.Specification {
 
@@ -127,15 +133,14 @@ class SharedSchemaContextConfigurationYamlDaoTest extends spock.lang.Specificati
             def resolvedPath = resolveFilePath(filePath)
 
         when:
-            def result = tested.read(resolvedPath)
+        def results = tested.read(resolvedPath).getTables().stream().map({table -> table.setForeignKeys(null) }).collect(toList())
 
         then:
-            result.getValidTenantValueConstraint() == properties
+            results.contains(tableEntry)
 
         where:
-        filePath                        |   properties
-        ONLY_MANDATORY_FIELDS_FILE_PATH |   null
-        ALL_FIELDS_FILE_PATH            |   new ValidTenantValueConstraintConfiguration().setIsTenantValidConstraintName("is_tenant_valid_constraint_SDFA").setIsTenantValidFunctionName("is_t_valid").setTenantIdentifiersBlacklist(asList("invalid_tenant", "Some strange tenant ID", "'; DROP ALL TABLES"))
+            filePath                        |   tableEntry
+            ALL_FIELDS_FILE_PATH            |   new TableEntry().setName("users").setRlsPolicy(new RLSPolicy().setName("users_table_rls_policy").setTenantColumn("tenant_id").setNameForFunctionThatChecksIfRecordExistsInTable("is_user_exists").setPrimaryKeyColumnsNameToTypeMap(mapBuilder().put("id", "bigint").build()))
     }
 
     private String resolveFilePath(String filePath) {
