@@ -1,5 +1,7 @@
 package com.github.starnowski.posmulten.postgresql.core.util;
 
+import java.util.Objects;
+
 import static java.util.Objects.requireNonNull;
 
 public final class Pair<L, R> {
@@ -8,8 +10,6 @@ public final class Pair<L, R> {
     private final R right;
 
     public Pair(L left, R right) {
-        requireNonNull(left);
-        requireNonNull(right);
         this.left = left;
         this.right = right;
     }
@@ -31,16 +31,25 @@ public final class Pair<L, R> {
     }
 
     @Override
-    public int hashCode() {
-        return left.hashCode() ^ right.hashCode();
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Pair<?, ?> pair = (Pair<?, ?>) o;
+        return Objects.equals(left, pair.left) &&
+                Objects.equals(right, pair.right);
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (!(o instanceof Pair)) return false;
-        Pair pairo = (Pair) o;
-        return this.left.equals(pairo.getLeft()) &&
-                this.right.equals(pairo.getRight());
+    public int hashCode() {
+        return Objects.hash(left, right);
     }
 
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(left);
+        sb.append("=");
+        sb.append(right);
+        return sb.toString();
+    }
 }
