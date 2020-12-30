@@ -23,7 +23,7 @@ class SharedSchemaContextConfigurationYamlDaoTest extends spock.lang.Specificati
     def "should return non null object based on file #filePath"()
     {
         given:
-            def resolvedPath = Paths.get(this.class.getResource(filePath).toURI()).toFile().getPath()
+            def resolvedPath = resolveFilePath(filePath)
 
         when:
             def result = tested.read(resolvedPath)
@@ -39,7 +39,7 @@ class SharedSchemaContextConfigurationYamlDaoTest extends spock.lang.Specificati
     def "should return object based on file which was created by other test file #filePath"()
     {
         given:
-            def resolvedPath = Paths.get(this.class.getResource(filePath).toURI()).toFile().getPath()
+            def resolvedPath = resolveFilePath(filePath)
             def testObject = tested.read(resolvedPath)
             def tmpFile = tempFolder.newFile("temp-config.yaml")
             tested.save(testObject, tmpFile.getAbsoluteFile().getAbsolutePath())
@@ -61,7 +61,7 @@ class SharedSchemaContextConfigurationYamlDaoTest extends spock.lang.Specificati
     def "for file '#filePath' should return object with expected fields : defaultSchema (#defaultSchema), currentTenantIdPropertyType (#currentTenantIdPropertyType), currentTenantIdProperty (#currentTenantIdProperty), getCurrentTenantIdFunctionName (#getCurrentTenantIdFunctionName), setCurrentTenantIdFunctionName (#setCurrentTenantIdFunctionName)"()
     {
         given:
-            def resolvedPath = Paths.get(this.class.getResource(filePath).toURI()).toFile().getPath()
+            def resolvedPath = resolveFilePath(filePath)
 
         when:
             def result = tested.read(resolvedPath)
@@ -83,7 +83,7 @@ class SharedSchemaContextConfigurationYamlDaoTest extends spock.lang.Specificati
     def "for file '#filePath' should return object with expected fields : equalsCurrentTenantIdentifierFunctionName (#equalsCurrentTenantIdentifierFunctionName), tenantHasAuthoritiesFunctionName (#tenantHasAuthoritiesFunctionName), forceRowLevelSecurityForTableOwner (#forceRowLevelSecurityForTableOwner), defaultTenantIdColumn (#defaultTenantIdColumn), grantee (#grantee), setCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables (#setCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables)"()
     {
         given:
-            def resolvedPath = Paths.get(this.class.getResource(filePath).toURI()).toFile().getPath()
+            def resolvedPath = resolveFilePath(filePath)
 
         when:
             def result = tested.read(resolvedPath)
@@ -106,7 +106,7 @@ class SharedSchemaContextConfigurationYamlDaoTest extends spock.lang.Specificati
     def "for file '#filePath' should return object with expected fields related to valid tenant value constraint #properties"()
     {
         given:
-            def resolvedPath = Paths.get(this.class.getResource(filePath).toURI()).toFile().getPath()
+            def resolvedPath = resolveFilePath(filePath)
 
         when:
             def result = tested.read(resolvedPath)
@@ -118,5 +118,27 @@ class SharedSchemaContextConfigurationYamlDaoTest extends spock.lang.Specificati
             filePath                        |   properties
             ONLY_MANDATORY_FIELDS_FILE_PATH |   null
             ALL_FIELDS_FILE_PATH            |   new ValidTenantValueConstraintConfiguration().setIsTenantValidConstraintName("is_tenant_valid_constraint_SDFA").setIsTenantValidFunctionName("is_t_valid").setTenantIdentifiersBlacklist(asList("invalid_tenant", "Some strange tenant ID", "'; DROP ALL TABLES"))
+    }
+
+    @Unroll
+    def "for file '#filePath' should return object that contains expected table configuration #tableEntry (without comparing foreign keys entries)"()
+    {
+        given:
+            def resolvedPath = resolveFilePath(filePath)
+
+        when:
+            def result = tested.read(resolvedPath)
+
+        then:
+            result.getValidTenantValueConstraint() == properties
+
+        where:
+        filePath                        |   properties
+        ONLY_MANDATORY_FIELDS_FILE_PATH |   null
+        ALL_FIELDS_FILE_PATH            |   new ValidTenantValueConstraintConfiguration().setIsTenantValidConstraintName("is_tenant_valid_constraint_SDFA").setIsTenantValidFunctionName("is_t_valid").setTenantIdentifiersBlacklist(asList("invalid_tenant", "Some strange tenant ID", "'; DROP ALL TABLES"))
+    }
+
+    private String resolveFilePath(String filePath) {
+        Paths.get(this.class.getResource(filePath).toURI()).toFile().getPath()
     }
 }
