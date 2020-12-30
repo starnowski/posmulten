@@ -5,6 +5,8 @@ import com.github.starnowski.posmulten.configuration.yaml.model.RLSPolicy
 import com.github.starnowski.posmulten.configuration.yaml.model.SharedSchemaContextConfiguration
 import com.github.starnowski.posmulten.configuration.yaml.model.TableEntry
 import com.github.starnowski.posmulten.configuration.yaml.model.ValidTenantValueConstraintConfiguration
+import com.github.starnowski.posmulten.postgresql.core.common.function.DefaultFunctionDefinition
+import org.jeasy.random.EasyRandom
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import spock.lang.Unroll
@@ -171,7 +173,7 @@ class SharedSchemaContextConfigurationYamlDaoTest extends spock.lang.Specificati
     def "should return object based on file which was created based on test object #testObject"()
     {
         given:
-        def tmpFile = tempFolder.newFile("temp-config.yaml")
+        def tmpFile = tempFolder.newFile("spec-temp-config.yaml")
         tested.save(testObject, tmpFile.getAbsoluteFile().getAbsolutePath())
 
         when:
@@ -180,13 +182,31 @@ class SharedSchemaContextConfigurationYamlDaoTest extends spock.lang.Specificati
         then:
             result
 
-        and: "tests object should be equal"
+        and: "tests objects should be equal"
             result == testObject
 
         where:
             testObject << [ new SharedSchemaContextConfiguration().setCurrentTenantIdPropertyType("xxx").setDefaultSchema("shema1").setTables(asList(new TableEntry().setName("tab1"))),
                             new SharedSchemaContextConfiguration().setDefaultSchema("public").setTables(asList(new TableEntry().setName("users")))
             ]
+    }
+
+    def "should return object based on file which was created based on random generated object"()
+    {
+        given:
+            EasyRandom easyRandom = new EasyRandom()
+            def randomObject = easyRandom.nextObject(SharedSchemaContextConfiguration)
+            def tmpFile = tempFolder.newFile("rand-temp-config.yaml")
+            tested.save(randomObject, tmpFile.getAbsoluteFile().getAbsolutePath())
+
+        when:
+            def result = tested.read(tmpFile.getAbsoluteFile().getAbsolutePath())
+
+        then:
+            result
+
+        and: "tests objects should be equal"
+            result == randomObject
     }
 
     private String resolveFilePath(String filePath) {
