@@ -53,4 +53,20 @@ class SharedSchemaContextConfigurationYamlDaoTest extends spock.lang.Specificati
         where:
             filePath << [ALL_FIELDS_FILE_PATH, ONLY_MANDATORY_FIELDS_FILE_PATH]
     }
+
+    @Unroll
+    def "should return object with expected fields : defaultSchema (#defaultSchema), currentTenantIdPropertyType (#currentTenantIdPropertyType), currentTenantIdProperty (#currentTenantIdProperty), getCurrentTenantIdFunctionName (#getCurrentTenantIdFunctionName), setCurrentTenantIdFunctionName (#setCurrentTenantIdFunctionName)"()
+    {
+        given:
+            def resolvedPath = Paths.get(this.class.getResource(filePath).toURI()).toFile().getPath()
+
+        when:
+            def result = tested.read(resolvedPath)
+
+        then:
+            result.getDefaultSchema() == defaultSchema
+            result.getCurrentTenantIdProperty() == currentTenantIdProperty
+            result.getCurrentTenantIdPropertyType() == currentTenantIdPropertyType
+        //TODO
+    }
 }
