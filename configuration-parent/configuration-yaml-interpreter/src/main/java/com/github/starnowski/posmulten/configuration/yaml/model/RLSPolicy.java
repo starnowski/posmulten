@@ -21,6 +21,7 @@ public class RLSPolicy {
     @NotBlank
     @JsonProperty(value = "name", required = true)
     private String name;
+    @NotBlank
     @JsonProperty(value = "tenant_column")
     private String tenantColumn;
     @JsonProperty(value = "pk_columns_name_to_type")
@@ -30,6 +31,7 @@ public class RLSPolicy {
     @NotBlank
     @JsonProperty(value = "name_for_function_that_checks_if_record_exists_in_table", required = true)
     private String nameForFunctionThatChecksIfRecordExistsInTable;
+    @NotBlank
     @JsonProperty(value = "valid_tenant_value_constraint_name")
     private String validTenantValueConstraintName;
     @JsonProperty(value = "skip_adding_of_tenant_column_default_value")
