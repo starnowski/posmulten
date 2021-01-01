@@ -19,8 +19,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.github.starnowski.posmulten</groupId>
-            <artifactId>postgresql-core</artifactId>
+            <groupId>com.github.starnowski.posmulten.configuration</groupId>
+            <artifactId>configuration-core</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
