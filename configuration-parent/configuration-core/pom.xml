@@ -3,18 +3,13 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>parent</artifactId>
-        <groupId>com.github.starnowski.posmulten</groupId>
+        <artifactId>configuration-parent</artifactId>
+        <groupId>com.github.starnowski.posmulten.configuration</groupId>
         <version>0.3.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <packaging>pom</packaging>
-    <modules>
-        <module>configuration-yaml-interpreter</module>
-        <module>configuration-core</module>
-    </modules>
-    <groupId>com.github.starnowski.posmulten.configuration</groupId>
-    <artifactId>configuration-parent</artifactId>
+
+    <artifactId>configuration-core</artifactId>
 
 
 </project>
