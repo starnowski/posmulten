@@ -5,6 +5,9 @@ import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSche
 import spock.lang.Specification
 import spock.lang.Unroll
 
+import static java.lang.Boolean.FALSE
+import static java.lang.Boolean.TRUE
+
 class DefaultSharedSchemaContextBuilderConfigurationEnricherTest extends Specification {
 
     def tested = new DefaultSharedSchemaContextBuilderConfigurationEnricher()
@@ -37,6 +40,36 @@ class DefaultSharedSchemaContextBuilderConfigurationEnricherTest extends Specifi
             currentTenantIdPropertyType |   currentTenantIdProperty |   getCurrentTenantIdFunctionName  |   setCurrentTenantIdFunctionName  |   equalsCurrentTenantIdentifierFunctionName
             "VARCHAR(37)"               |   "customer_d"            |   "what_is_tenant_id"             |   "tenant_is_now"                 |   "is_it_this_tenant_id"
             "UUID"                      |   "tenantId"              |   "get_current_t"                 |   "set_t"                         |   "equals_tenant"
+    }
+
+    @Unroll
+    def "should set builder component with specific properties tenantHasAuthoritiesFunctionName (#tenantHasAuthoritiesFunctionName), forceRowLevelSecurityForTableOwner (#forceRowLevelSecurityForTableOwner), defaultTenantIdColumn (#defaultTenantIdColumn), grantee (#grantee), currentTenantIdentifierAsDefaultValueForTenantColumnInAllTables (#currentTenantIdentifierAsDefaultValueForTenantColumnInAllTables)"()
+    {
+        given:
+            def builder = prepareBuilderMockWithZeroExpectationOfMethodsInvocation()
+            def configuration = new SharedSchemaContextConfiguration()
+                    .setTenantHasAuthoritiesFunctionName(tenantHasAuthoritiesFunctionName)
+                    .setForceRowLevelSecurityForTableOwner(forceRowLevelSecurityForTableOwner)
+                    .setDefaultTenantIdColumn(defaultTenantIdColumn)
+                    .setGrantee(grantee)
+                    .setCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables(currentTenantIdentifierAsDefaultValueForTenantColumnInAllTables)
+
+        when:
+            def result = tested.enrich(builder, configuration)
+
+        then:
+            result == builder
+            1 * builder.setTenantHasAuthoritiesFunctionName(tenantHasAuthoritiesFunctionName)
+            1 * builder.setCurrentTenantIdPropertyType(forceRowLevelSecurityForTableOwner)
+            1 * builder.setDefaultTenantIdColumn(defaultTenantIdColumn)
+            1 * builder.setGrantee(grantee)
+            1 * builder.setEqualsCurrentTenantIdentifierFunctionName(currentTenantIdentifierAsDefaultValueForTenantColumnInAllTables)
+
+
+        where:
+            tenantHasAuthoritiesFunctionName    |   forceRowLevelSecurityForTableOwner  |   defaultTenantIdColumn   |   grantee         |   currentTenantIdentifierAsDefaultValueForTenantColumnInAllTables
+            "t_has_au"                          |   TRUE                                |   "ten"                   |   "super_user"    |   FALSE
+            "is_tenant_allowed_to_access"       |   FALSE                               |   "id_tenant"             |   "i_am_db_owner" |   TRUE
     }
 
     private DefaultSharedSchemaContextBuilder prepareBuilderMockWithZeroExpectationOfMethodsInvocation()
