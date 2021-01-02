@@ -10,10 +10,20 @@ public class DefaultSharedSchemaContextBuilderConfigurationEnricher {
         if (contextConfiguration.getCurrentTenantIdPropertyType() != null) {
             builder.setCurrentTenantIdPropertyType(contextConfiguration.getCurrentTenantIdPropertyType());
         }
-        builder.setCurrentTenantIdProperty(contextConfiguration.getCurrentTenantIdProperty());
-        builder.setGetCurrentTenantIdFunctionName(contextConfiguration.getGetCurrentTenantIdFunctionName());
-        builder.setSetCurrentTenantIdFunctionName(contextConfiguration.getSetCurrentTenantIdFunctionName());
-        builder.setEqualsCurrentTenantIdentifierFunctionName(contextConfiguration.getEqualsCurrentTenantIdentifierFunctionName());
+        if (contextConfiguration.getCurrentTenantIdProperty() != null) {
+            builder.setCurrentTenantIdProperty(contextConfiguration.getCurrentTenantIdProperty());
+        }
+        if (contextConfiguration.getGetCurrentTenantIdFunctionName() != null) {
+            builder.setGetCurrentTenantIdFunctionName(contextConfiguration.getGetCurrentTenantIdFunctionName());
+        }
+        if (contextConfiguration.getSetCurrentTenantIdFunctionName() != null)
+        {
+            builder.setSetCurrentTenantIdFunctionName(contextConfiguration.getSetCurrentTenantIdFunctionName());
+        }
+        if (contextConfiguration.getEqualsCurrentTenantIdentifierFunctionName() != null)
+        {
+            builder.setEqualsCurrentTenantIdentifierFunctionName(contextConfiguration.getEqualsCurrentTenantIdentifierFunctionName());
+        }
         builder.setTenantHasAuthoritiesFunctionName(contextConfiguration.getTenantHasAuthoritiesFunctionName());
         builder.setForceRowLevelSecurityForTableOwner(contextConfiguration.getForceRowLevelSecurityForTableOwner());
         builder.setDefaultTenantIdColumn(contextConfiguration.getDefaultTenantIdColumn());
