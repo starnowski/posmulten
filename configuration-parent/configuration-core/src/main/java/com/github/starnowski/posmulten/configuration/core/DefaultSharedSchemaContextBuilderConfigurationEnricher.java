@@ -8,6 +8,11 @@ public class DefaultSharedSchemaContextBuilderConfigurationEnricher {
     public DefaultSharedSchemaContextBuilder enrich(DefaultSharedSchemaContextBuilder builder, SharedSchemaContextConfiguration contextConfiguration)
     {
         //TODO
-        return null;
+        builder.setCurrentTenantIdPropertyType(contextConfiguration.getCurrentTenantIdPropertyType());
+        builder.setCurrentTenantIdProperty(contextConfiguration.getCurrentTenantIdProperty());
+        builder.setGetCurrentTenantIdFunctionName(contextConfiguration.getGetCurrentTenantIdFunctionName());
+        builder.setSetCurrentTenantIdFunctionName(contextConfiguration.getSetCurrentTenantIdFunctionName());
+        builder.setEqualsCurrentTenantIdentifierFunctionName(contextConfiguration.getEqualsCurrentTenantIdentifierFunctionName());
+        return builder;
     }
 }
