@@ -24,11 +24,26 @@ public class DefaultSharedSchemaContextBuilderConfigurationEnricher {
         {
             builder.setEqualsCurrentTenantIdentifierFunctionName(contextConfiguration.getEqualsCurrentTenantIdentifierFunctionName());
         }
-        builder.setTenantHasAuthoritiesFunctionName(contextConfiguration.getTenantHasAuthoritiesFunctionName());
-        builder.setForceRowLevelSecurityForTableOwner(contextConfiguration.getForceRowLevelSecurityForTableOwner());
-        builder.setDefaultTenantIdColumn(contextConfiguration.getDefaultTenantIdColumn());
-        builder.setGrantee(contextConfiguration.getGrantee());
-        builder.setCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables(contextConfiguration.getCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables());
+        if (contextConfiguration.getTenantHasAuthoritiesFunctionName() != null)
+        {
+            builder.setTenantHasAuthoritiesFunctionName(contextConfiguration.getTenantHasAuthoritiesFunctionName());
+        }
+        if (contextConfiguration.getForceRowLevelSecurityForTableOwner() != null)
+        {
+            builder.setForceRowLevelSecurityForTableOwner(contextConfiguration.getForceRowLevelSecurityForTableOwner());
+        }
+        if (contextConfiguration.getDefaultTenantIdColumn() != null)
+        {
+            builder.setDefaultTenantIdColumn(contextConfiguration.getDefaultTenantIdColumn());
+        }
+        if (contextConfiguration.getGrantee() != null)
+        {
+            builder.setGrantee(contextConfiguration.getGrantee());
+        }
+        if (contextConfiguration.getCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables() != null)
+        {
+            builder.setCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables(contextConfiguration.getCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables());
+        }
         return builder;
     }
 }
