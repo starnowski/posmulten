@@ -5,10 +5,11 @@ import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSche
 
 public class DefaultSharedSchemaContextBuilderConfigurationEnricher {
 
-    public DefaultSharedSchemaContextBuilder enrich(DefaultSharedSchemaContextBuilder builder, SharedSchemaContextConfiguration contextConfiguration)
-    {
+    public DefaultSharedSchemaContextBuilder enrich(DefaultSharedSchemaContextBuilder builder, SharedSchemaContextConfiguration contextConfiguration) {
         //TODO
-        builder.setCurrentTenantIdPropertyType(contextConfiguration.getCurrentTenantIdPropertyType());
+        if (contextConfiguration.getCurrentTenantIdPropertyType() != null) {
+            builder.setCurrentTenantIdPropertyType(contextConfiguration.getCurrentTenantIdPropertyType());
+        }
         builder.setCurrentTenantIdProperty(contextConfiguration.getCurrentTenantIdProperty());
         builder.setGetCurrentTenantIdFunctionName(contextConfiguration.getGetCurrentTenantIdFunctionName());
         builder.setSetCurrentTenantIdFunctionName(contextConfiguration.getSetCurrentTenantIdFunctionName());
