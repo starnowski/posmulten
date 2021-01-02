@@ -52,7 +52,9 @@ class DefaultSharedSchemaContextBuilderConfigurationEnricherTest extends Specifi
         0 * builder.setDefaultTenantIdColumn(_)
         0 * builder.setGrantee(_)
         0 * builder.setCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables(_)
-
+        0 * builder.registerCustomValidTenantValueConstraintNameForTable(_, _)
+        0 * builder.createValidTenantValueConstraint(_, _, _)
+        0 * builder.createRLSPolicyForTable(_, _, _, _)
         builder
     }
 }
