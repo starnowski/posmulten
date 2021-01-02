@@ -5,6 +5,19 @@ import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSche
 
 public class DefaultSharedSchemaContextBuilderConfigurationEnricher {
 
+    private final TablesEntriesEnricher tablesEntriesEnricher;
+    private final ValidTenantValueConstraintConfigurationEnricher validTenantValueConstraintConfigurationEnricher;
+
+    public DefaultSharedSchemaContextBuilderConfigurationEnricher()
+    {
+        this(new TablesEntriesEnricher(), new ValidTenantValueConstraintConfigurationEnricher());
+    }
+
+    public DefaultSharedSchemaContextBuilderConfigurationEnricher(TablesEntriesEnricher tablesEntriesEnricher, ValidTenantValueConstraintConfigurationEnricher validTenantValueConstraintConfigurationEnricher) {
+        this.tablesEntriesEnricher = tablesEntriesEnricher;
+        this.validTenantValueConstraintConfigurationEnricher = validTenantValueConstraintConfigurationEnricher;
+    }
+
     public DefaultSharedSchemaContextBuilder enrich(DefaultSharedSchemaContextBuilder builder, SharedSchemaContextConfiguration contextConfiguration) {
         //TODO
         if (contextConfiguration.getCurrentTenantIdPropertyType() != null) {
