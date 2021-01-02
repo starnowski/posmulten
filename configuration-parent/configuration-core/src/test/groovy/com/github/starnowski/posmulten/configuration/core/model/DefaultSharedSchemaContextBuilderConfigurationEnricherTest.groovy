@@ -47,6 +47,12 @@ class DefaultSharedSchemaContextBuilderConfigurationEnricherTest extends Specifi
         0 * builder.setGetCurrentTenantIdFunctionName(_)
         0 * builder.setSetCurrentTenantIdFunctionName(_)
         0 * builder.setEqualsCurrentTenantIdentifierFunctionName(_)
+        0 * builder.setTenantHasAuthoritiesFunctionName(_)
+        0 * builder.setForceRowLevelSecurityForTableOwner(_)
+        0 * builder.setDefaultTenantIdColumn(_)
+        0 * builder.setGrantee(_)
+        0 * builder.setCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables(_)
+
         builder
     }
 }
