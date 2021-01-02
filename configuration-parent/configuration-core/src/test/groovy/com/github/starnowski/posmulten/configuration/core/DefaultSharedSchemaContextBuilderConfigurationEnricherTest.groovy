@@ -2,6 +2,8 @@ package com.github.starnowski.posmulten.configuration.core
 
 import com.github.starnowski.posmulten.configuration.core.DefaultSharedSchemaContextBuilderConfigurationEnricher
 import com.github.starnowski.posmulten.configuration.core.model.SharedSchemaContextConfiguration
+import com.github.starnowski.posmulten.configuration.core.model.TableEntry
+import com.github.starnowski.posmulten.configuration.core.model.ValidTenantValueConstraintConfiguration
 import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -11,7 +13,14 @@ import static java.lang.Boolean.TRUE
 
 class DefaultSharedSchemaContextBuilderConfigurationEnricherTest extends Specification {
 
-    def tested = new DefaultSharedSchemaContextBuilderConfigurationEnricher()
+    def tablesEntriesEnricher = Mock(TablesEntriesEnricher)
+    def validTenantValueConstraintConfigurationEnricher = Mock(ValidTenantValueConstraintConfigurationEnricher)
+    DefaultSharedSchemaContextBuilderConfigurationEnricher tested
+
+    def setup()
+    {
+        tested = new DefaultSharedSchemaContextBuilderConfigurationEnricher(tablesEntriesEnricher, validTenantValueConstraintConfigurationEnricher)
+    }
 
     @Unroll
     def "should set builder component with specific properties currentTenantIdPropertyType (#currentTenantIdPropertyType), currentTenantIdProperty (#currentTenantIdProperty), getCurrentTenantIdFunctionName (#getCurrentTenantIdFunctionName), setCurrentTenantIdFunctionName (#setCurrentTenantIdFunctionName), equalsCurrentTenantIdentifierFunctionName (#equalsCurrentTenantIdentifierFunctionName)"()
@@ -71,6 +80,30 @@ class DefaultSharedSchemaContextBuilderConfigurationEnricherTest extends Specifi
             tenantHasAuthoritiesFunctionName    |   forceRowLevelSecurityForTableOwner  |   defaultTenantIdColumn   |   grantee         |   currentTenantIdentifierAsDefaultValueForTenantColumnInAllTables
             "t_has_au"                          |   TRUE                                |   "ten"                   |   "super_user"    |   FALSE
             "is_tenant_allowed_to_access"       |   FALSE                               |   "id_tenant"             |   "i_am_db_owner" |   TRUE
+    }
+
+    @Unroll
+    def "should use enricher components for entries #validTenantValueConstraintConfiguration and #tablesEntries"()
+    {
+        given:
+            def builder = prepareBuilderMockWithZeroExpectationOfMethodsInvocation()
+            def configuration = new SharedSchemaContextConfiguration()
+                    .setValidTenantValueConstraint(validTenantValueConstraintConfiguration)
+                    .setTables(tablesEntries)
+
+        when:
+            def result = tested.enrich(builder, configuration)
+
+        then:
+            result == builder
+            1 * validTenantValueConstraintConfigurationEnricher.enrich(builder, validTenantValueConstraintConfiguration)
+            1 * tablesEntriesEnricher.enrich(builder, tablesEntries)
+
+        where:
+            validTenantValueConstraintConfiguration         |   tablesEntries
+            null                                            |   null
+            new ValidTenantValueConstraintConfiguration()   |   []
+            new ValidTenantValueConstraintConfiguration()   |   [new TableEntry()]
     }
 
     private DefaultSharedSchemaContextBuilder prepareBuilderMockWithZeroExpectationOfMethodsInvocation()
