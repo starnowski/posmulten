@@ -19,7 +19,6 @@
 
     <properties>
         <org.springframework.boot.version>1.5.8.RELEASE</org.springframework.boot.version>
-        <net.bytebuddy.byte.buddy.version>1.6.4</net.bytebuddy.byte.buddy.version>
         <eu.stamp-project.descartes.version>1.2.6</eu.stamp-project.descartes.version>
         <license.dir>${project.parent.basedir}</license.dir>
     </properties>
@@ -53,8 +52,6 @@
         <dependency>
             <groupId>net.bytebuddy</groupId>
             <artifactId>byte-buddy</artifactId>
-            <version>${net.bytebuddy.byte.buddy.version}</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.jeasy</groupId>
