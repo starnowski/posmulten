@@ -26,11 +26,11 @@ class DefaultSharedSchemaContextBuilderConfigurationEnricherTest extends Specifi
 
         then:
             result == builder
+            1 * builder.setCurrentTenantIdProperty(currentTenantIdProperty)
             1 * builder.setCurrentTenantIdPropertyType(currentTenantIdPropertyType)
-            1 * builder.setCurrentTenantIdProperty(currentTenantIdPropertyType)
             1 * builder.setGetCurrentTenantIdFunctionName(getCurrentTenantIdFunctionName)
             1 * builder.setSetCurrentTenantIdFunctionName(setCurrentTenantIdFunctionName)
-            1 * builder.setSetCurrentTenantIdFunctionName(equalsCurrentTenantIdentifierFunctionName)
+            1 * builder.setEqualsCurrentTenantIdentifierFunctionName(equalsCurrentTenantIdentifierFunctionName)
 
 
         where:
