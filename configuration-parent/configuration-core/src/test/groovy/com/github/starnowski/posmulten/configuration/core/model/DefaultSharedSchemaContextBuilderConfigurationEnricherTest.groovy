@@ -60,10 +60,10 @@ class DefaultSharedSchemaContextBuilderConfigurationEnricherTest extends Specifi
         then:
             result == builder
             1 * builder.setTenantHasAuthoritiesFunctionName(tenantHasAuthoritiesFunctionName)
-            1 * builder.setCurrentTenantIdPropertyType(forceRowLevelSecurityForTableOwner)
+            1 * builder.setForceRowLevelSecurityForTableOwner(forceRowLevelSecurityForTableOwner)
             1 * builder.setDefaultTenantIdColumn(defaultTenantIdColumn)
             1 * builder.setGrantee(grantee)
-            1 * builder.setEqualsCurrentTenantIdentifierFunctionName(currentTenantIdentifierAsDefaultValueForTenantColumnInAllTables)
+            1 * builder.setCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables(currentTenantIdentifierAsDefaultValueForTenantColumnInAllTables)
 
 
         where:
