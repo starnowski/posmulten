@@ -1,6 +1,7 @@
-package com.github.starnowski.posmulten.configuration.core.model
+package com.github.starnowski.posmulten.configuration.core
 
 import com.github.starnowski.posmulten.configuration.core.DefaultSharedSchemaContextBuilderConfigurationEnricher
+import com.github.starnowski.posmulten.configuration.core.model.SharedSchemaContextConfiguration
 import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder
 import spock.lang.Specification
 import spock.lang.Unroll
