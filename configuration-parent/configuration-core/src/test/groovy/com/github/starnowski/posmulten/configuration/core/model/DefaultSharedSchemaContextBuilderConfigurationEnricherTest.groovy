@@ -55,6 +55,10 @@ class DefaultSharedSchemaContextBuilderConfigurationEnricherTest extends Specifi
         0 * builder.registerCustomValidTenantValueConstraintNameForTable(_, _)
         0 * builder.createValidTenantValueConstraint(_, _, _)
         0 * builder.createRLSPolicyForTable(_, _, _, _)
+        0 * builder.createTenantColumnForTable(_)
+        0 * builder.skipAddingOfTenantColumnDefaultValueForTable(_)
+        0 * builder.registerCustomValidTenantValueConstraintNameForTable(_, _)
+        0 * builder.setNameForFunctionThatChecksIfRecordExistsInTable(_, _)
         builder
     }
 }
