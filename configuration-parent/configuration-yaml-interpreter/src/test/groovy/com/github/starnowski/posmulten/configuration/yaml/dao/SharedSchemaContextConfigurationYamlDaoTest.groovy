@@ -105,9 +105,9 @@ class SharedSchemaContextConfigurationYamlDaoTest extends spock.lang.Specificati
             result.getCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables() == setCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables
 
         where:
-            filePath                        |   equalsCurrentTenantIdentifierFunctionName   |   tenantHasAuthoritiesFunctionName    |   forceRowLevelSecurityForTableOwner  |   defaultTenantIdColumn   |   grantee             |   setCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables
-            ALL_FIELDS_FILE_PATH            |   "equals_cur_tenant"                         |   "_tenant_hast_auth"                 |   true                                |   "tenant_id"             |   "application-user"  |   true
-            ONLY_MANDATORY_FIELDS_FILE_PATH |   null                                        |   null                                |   null                                |   null                    |   "db-user"           |   null
+            filePath                        |   equalsCurrentTenantIdentifierFunctionName       |   tenantHasAuthoritiesFunctionName            |   forceRowLevelSecurityForTableOwner  |   defaultTenantIdColumn               |   grantee             |   setCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables
+            ALL_FIELDS_FILE_PATH            |   stringWrapper("equals_cur_tenant")          |   stringWrapper("_tenant_hast_auth")  |   true                                |   stringWrapper("tenant_id")      |   "application-user"  |   true
+            ONLY_MANDATORY_FIELDS_FILE_PATH |   null                                            |   null                                        |   null                                |   null                                |   "db-user"           |   null
     }
 
     @Unroll
