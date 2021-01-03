@@ -11,6 +11,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>configuration-yaml-interpreter</module>
+        <module>configuration-core</module>
     </modules>
     <groupId>com.github.starnowski.posmulten.configuration</groupId>
     <artifactId>configuration-parent</artifactId>

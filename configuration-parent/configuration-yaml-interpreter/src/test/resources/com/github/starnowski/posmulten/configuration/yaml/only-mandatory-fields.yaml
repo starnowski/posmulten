@@ -1,2 +1,2 @@
-default_schema: public
+default_schema: non_public
 grantee: "db-user"

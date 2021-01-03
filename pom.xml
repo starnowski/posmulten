@@ -56,6 +56,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <org.springframework.boot.version>1.5.8.RELEASE</org.springframework.boot.version>
         <license.dir>${basedir}</license.dir>
+        <easy.random.core.org.jeasy.version>4.2.0</easy.random.core.org.jeasy.version>
+        <net.bytebuddy.byte.buddy.version>1.6.4</net.bytebuddy.byte.buddy.version>
     </properties>
 
     <reporting>
@@ -119,6 +121,18 @@
                 <artifactId>lombok</artifactId>
                 <version>1.18.12</version>
                 <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.jeasy</groupId>
+                <artifactId>easy-random-core</artifactId>
+                <version>${easy.random.core.org.jeasy.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>net.bytebuddy</groupId>
+                <artifactId>byte-buddy</artifactId>
+                <version>${net.bytebuddy.byte.buddy.version}</version>
+                <scope>test</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
