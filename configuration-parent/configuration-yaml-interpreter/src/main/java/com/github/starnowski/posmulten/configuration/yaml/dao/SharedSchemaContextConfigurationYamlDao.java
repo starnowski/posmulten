@@ -1,22 +1,24 @@
 package com.github.starnowski.posmulten.configuration.yaml.dao;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.github.starnowski.posmulten.configuration.yaml.exceptions.YamlInvalidSchema;
 import com.github.starnowski.posmulten.configuration.yaml.model.SharedSchemaContextConfiguration;
+import org.hibernate.validator.internal.engine.path.PathImpl;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
+import javax.validation.*;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
+import static javax.validation.ElementKind.BEAN;
 
 public class SharedSchemaContextConfigurationYamlDao {
 
@@ -48,9 +50,50 @@ public class SharedSchemaContextConfigurationYamlDao {
 
     private String prepareErrorMessage(ConstraintViolation<SharedSchemaContextConfiguration> error) {
         StringBuilder sb = new StringBuilder();
-        sb.append(error.getPropertyPath());
+        sb.append(resolvePropertyPath(error));
         sb.append(" ");
         sb.append(error.getMessage());
+        return sb.toString();
+    }
+
+    private String resolvePropertyPath(ConstraintViolation<SharedSchemaContextConfiguration> error) {
+        StringBuilder sb = new StringBuilder();
+        Path path = error.getPropertyPath();
+        if (path instanceof PathImpl) {
+            PathImpl pathImpl = (PathImpl) path;
+            Iterator<Path.Node> it = pathImpl.iterator();
+            Path.Node parrent = null;
+            for (; it.hasNext();)
+            {
+                Path.Node node = it.next();
+                if (parrent == null)
+                {
+                    Class<?> keyClass = SharedSchemaContextConfiguration.class;
+                    try {
+                        Field field = keyClass.getDeclaredField(node.getName());
+                        JsonProperty annotation = field.getAnnotation(JsonProperty.class);
+                        if (annotation != null)
+                        {
+                            sb.append(annotation.value() == null ? node.getName() : annotation.value());
+                        }
+                    } catch (NoSuchFieldException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (parrent != null)
+                {
+                    //TODO
+                    if (BEAN.equals(parrent.getKind()))
+                    {
+                        Class<? extends Object> keyClass = parrent.getKey().getClass();
+                        keyClass.getDeclaredFields();
+                    }
+                }
+                parrent = node;
+            }
+        } else {
+            sb.append(error.getPropertyPath());
+        }
         return sb.toString();
     }
 }
