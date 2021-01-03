@@ -4,9 +4,12 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.EqualsAndHashCode;
 
+import javax.validation.constraints.NotBlank;
+
 @EqualsAndHashCode
 public class StringWrapperWithNotBlankValue {
 
+    @NotBlank
     private final String value;
 
     @JsonCreator
