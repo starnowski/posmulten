@@ -22,8 +22,6 @@ import static java.util.stream.Collectors.toList;
 
 public class SharedSchemaContextConfigurationYamlDao {
 
-    private static final String REGEXP_PATTERN = ".*(\\\\[\\d*\\])";
-
     private final ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
 
     public SharedSchemaContextConfiguration read(String filePath) throws IOException {
