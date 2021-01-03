@@ -75,4 +75,4 @@ tables:
       - constraint_name:  "notifications_users_tenant_constraint"
         table_name: users
         foreign_key_primary_key_columns_mappings:
-          user_id:  "       "
+          user_identi:  "       "
