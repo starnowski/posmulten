@@ -19,7 +19,6 @@ public class DefaultSharedSchemaContextBuilderConfigurationEnricher {
     }
 
     public DefaultSharedSchemaContextBuilder enrich(DefaultSharedSchemaContextBuilder builder, SharedSchemaContextConfiguration contextConfiguration) {
-        //TODO
         if (contextConfiguration.getCurrentTenantIdPropertyType() != null) {
             builder.setCurrentTenantIdPropertyType(contextConfiguration.getCurrentTenantIdPropertyType());
         }
