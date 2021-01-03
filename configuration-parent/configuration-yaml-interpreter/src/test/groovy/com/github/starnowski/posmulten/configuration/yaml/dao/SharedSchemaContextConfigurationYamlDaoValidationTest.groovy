@@ -83,7 +83,7 @@ class SharedSchemaContextConfigurationYamlDaoValidationTest extends spock.lang.S
             ex.getErrorMessages().contains(errorMessage)
 
         where:
-            errorMessage << ["tables[3].rls_policy.name_for_function_that_checks_if_record_exists_in_table must not be blank", "tables[1].rls_policy.name must not be blank", "tables[0].name must not be blank"]
+            errorMessage << ["tables[3].rls_policy.name_for_function_that_checks_if_record_exists_in_table must not be blank", "tables[2].rls_policy.name must not be blank", "tables[0].name must not be blank"]
     }
 
     private String resolveFilePath(String filePath) {
