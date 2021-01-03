@@ -32,4 +32,17 @@ class ValidTenantValueConstraintConfigurationEnricherTest extends AbstractBaseTe
             []                      |   null                        |   null
             null                    |   null                        |   null
     }
+
+    def "should not enrich builder when configuration object is null"()
+    {
+        given:
+            def builder = prepareBuilderMockWithZeroExpectationOfMethodsInvocation()
+
+        when:
+            def result = tested.enrich(builder, null)
+
+        then:
+            result == builder
+            0 * builder.createValidTenantValueConstraint(_, _, _)
+    }
 }
