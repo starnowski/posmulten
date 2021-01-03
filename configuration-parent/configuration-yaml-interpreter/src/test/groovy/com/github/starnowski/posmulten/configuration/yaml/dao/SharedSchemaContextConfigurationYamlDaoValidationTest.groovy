@@ -91,18 +91,26 @@ class SharedSchemaContextConfigurationYamlDaoValidationTest extends spock.lang.S
     def "should throw exception that contains error message (#errorMessage) for file invalid-map-blank-fields.yaml"()
     {
         given:
-        def resolvedPath = resolveFilePath(INVALID_MAP_BLANK_FIELDS_PATH)
+            def resolvedPath = resolveFilePath(INVALID_MAP_BLANK_FIELDS_PATH)
 
         when:
-        tested.read(resolvedPath)
+            tested.read(resolvedPath)
 
         then:
-        def ex = thrown(YamlInvalidSchema)
-        ex
-        ex.getErrorMessages().contains(errorMessage)
+            def ex = thrown(YamlInvalidSchema)
+            ex
+            ex.getErrorMessages().contains(errorMessage)
 
         where:
-        errorMessage << ["tables[3].rls_policy.name_for_function_that_checks_if_record_exists_in_table must not be blank", "tables[2].rls_policy.name must not be blank", "tables[0].name must not be blank"]
+            errorMessage << ["tables[0].foreign_keys[0].foreign_key_primary_key_columns_mappings must have at least one element",
+                             "tables[1].foreign_keys[0].foreign_key_primary_key_columns_mappings.user_id must not be blank",
+                             "tables[2].foreign_keys[1].constraint_name must not be blank",
+                             "tables[3].foreign_keys[0].foreign_key_primary_key_columns_mappings.user_identi must not be blank",
+                             "tables[2].foreign_keys[0].foreign_key_primary_key_columns_mappings must not be null",
+                             "tables[2].foreign_keys[2].foreign_key_primary_key_columns_mappings.parent_comment_id must not be blank",
+                             "tables[2].foreign_keys[2].foreign_key_primary_key_columns_mappings.<map key> must not be blank",
+                             "tables[1].foreign_keys[0].constraint_name must not be blank"
+            ]
     }
 
     private String resolveFilePath(String filePath) {
