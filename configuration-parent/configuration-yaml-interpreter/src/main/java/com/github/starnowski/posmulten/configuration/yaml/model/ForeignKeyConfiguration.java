@@ -30,5 +30,5 @@ public class ForeignKeyConfiguration {
     @JsonProperty(value = "foreign_key_primary_key_columns_mappings", required = true)
     @NotNull
     @Size(min = 1)
-    private Map<String, String> foreignKeyPrimaryKeyColumnsMappings;
+    private Map<@NotBlank String, @NotBlank String> foreignKeyPrimaryKeyColumnsMappings;
 }
