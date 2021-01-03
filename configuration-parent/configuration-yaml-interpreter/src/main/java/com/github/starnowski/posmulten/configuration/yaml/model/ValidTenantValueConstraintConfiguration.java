@@ -8,6 +8,7 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.List;
@@ -23,8 +24,10 @@ public class ValidTenantValueConstraintConfiguration {
     @JsonProperty(value = "tenant_identifiers_blacklist", required = true)
     @Size(min = 1)
     private List<String> tenantIdentifiersBlacklist;
+    @Valid
     @JsonProperty(value = "is_tenant_valid_function_name")
     private StringWrapperWithNotBlankValue isTenantValidFunctionName;
+    @Valid
     @JsonProperty(value = "is_tenant_valid_constraint_name")
     private StringWrapperWithNotBlankValue isTenantValidConstraintName;
 
