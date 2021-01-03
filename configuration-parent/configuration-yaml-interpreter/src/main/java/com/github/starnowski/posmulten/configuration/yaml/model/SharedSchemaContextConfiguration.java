@@ -23,29 +23,22 @@ public class SharedSchemaContextConfiguration {
     @NotBlank
     @JsonProperty(value = "default_schema", required = true)
     private String defaultSchema;
-    @NotBlank
     @JsonProperty(value = "current_tenant_id_property_type")
-    private String currentTenantIdPropertyType;
-    @NotBlank
+    private StringWrapperWithNotBlankValue currentTenantIdPropertyType;
     @JsonProperty(value = "current_tenant_id_property")
-    private String currentTenantIdProperty;
-    @NotBlank
+    private StringWrapperWithNotBlankValue currentTenantIdProperty;
     @JsonProperty(value = "get_current_tenant_id_function_name")
-    private String getCurrentTenantIdFunctionName;
-    @NotBlank
+    private StringWrapperWithNotBlankValue getCurrentTenantIdFunctionName;
     @JsonProperty(value = "set_current_tenant_id_function_name")
-    private String setCurrentTenantIdFunctionName;
-    @NotBlank
+    private StringWrapperWithNotBlankValue setCurrentTenantIdFunctionName;
     @JsonProperty(value = "equals_current_tenant_identifier_function_name")
-    private String equalsCurrentTenantIdentifierFunctionName;
-    @NotBlank
+    private StringWrapperWithNotBlankValue equalsCurrentTenantIdentifierFunctionName;
     @JsonProperty(value = "tenant_has_authorities_function_name")
-    private String tenantHasAuthoritiesFunctionName;
+    private StringWrapperWithNotBlankValue tenantHasAuthoritiesFunctionName;
     @JsonProperty(value = "force_row_level_security_for_table_owner")
     private Boolean forceRowLevelSecurityForTableOwner;
-    @NotBlank
     @JsonProperty(value = "default_tenant_id_column")
-    private String defaultTenantIdColumn;
+    private StringWrapperWithNotBlankValue defaultTenantIdColumn;
     @NotBlank
     @JsonProperty(value = "grantee", required = true)
     private String grantee;
@@ -56,4 +49,14 @@ public class SharedSchemaContextConfiguration {
     private ValidTenantValueConstraintConfiguration validTenantValueConstraint;
     @JsonProperty(value = "tables")
     private List<@Valid TableEntry> tables;
+
+    public SharedSchemaContextConfiguration setCurrentTenantIdPropertyType(String currentTenantIdPropertyType) {
+        this.currentTenantIdPropertyType = new StringWrapperWithNotBlankValue(currentTenantIdPropertyType);
+        return this;
+    }
+
+    public SharedSchemaContextConfiguration setCurrentTenantIdProperty(String currentTenantIdProperty) {
+        this.currentTenantIdProperty = new StringWrapperWithNotBlankValue(currentTenantIdProperty);
+        return this;
+    }
 }
