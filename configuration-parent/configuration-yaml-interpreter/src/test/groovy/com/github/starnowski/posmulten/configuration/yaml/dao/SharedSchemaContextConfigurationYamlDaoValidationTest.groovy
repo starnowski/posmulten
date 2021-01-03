@@ -10,6 +10,7 @@ class SharedSchemaContextConfigurationYamlDaoValidationTest extends spock.lang.S
     public static final INVALID_ROOT_NODE_BLANK_FIELDS_FILE_PATH = "/com/github/starnowski/posmulten/configuration/yaml/invalid-root-node-blank-fields.yaml"
     public static final INVALID_NESTED_NODE_BLANK_FIELDS_FILE_PATH = "/com/github/starnowski/posmulten/configuration/yaml/invalid-nested-node-blank-fields.yaml"
     public static final INVALID_NESTED_NODE_EMPTY_LIST_FILE_PATH = "/com/github/starnowski/posmulten/configuration/yaml/invalid-nested-node-empty-list.yaml"
+    public static final INVALID_NESTED_NODE_NULL_LIST_FILE_PATH = "/com/github/starnowski/posmulten/configuration/yaml/invalid-nested-node-null-list.yaml"
 
     def tested = new SharedSchemaContextConfigurationYamlDao()
 
@@ -65,6 +66,24 @@ class SharedSchemaContextConfigurationYamlDaoValidationTest extends spock.lang.S
 
         where:
             errorMessage << ["valid_tenant_value_constraint.tenant_identifiers_blacklist must have at least one element"]
+    }
+
+    @Unroll
+    def "should throw exception that contains error message (#errorMessage) for file invalid-nested-node-null-list.yaml"()
+    {
+        given:
+            def resolvedPath = resolveFilePath(INVALID_NESTED_NODE_NULL_LIST_FILE_PATH)
+
+        when:
+            tested.read(resolvedPath)
+
+        then:
+            def ex = thrown(YamlInvalidSchema)
+            ex
+            ex.getErrorMessages().contains(errorMessage)
+
+        where:
+            errorMessage << ["valid_tenant_value_constraint.tenant_identifiers_blacklist must not be null"]
     }
 
     private String resolveFilePath(String filePath) {
