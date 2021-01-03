@@ -12,12 +12,13 @@ import javax.validation.*;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
-import static javax.validation.ElementKind.BEAN;
 
 public class SharedSchemaContextConfigurationYamlDao {
 
@@ -70,8 +71,7 @@ public class SharedSchemaContextConfigurationYamlDao {
                     prepareNodePathBasedOnParentNodeClass(nodes, node, keyClass);
                 } else {
                     NodeImpl parentImpl = (NodeImpl) parent;
-                    if (ElementKind.PROPERTY.equals(parentImpl.getKind()))
-                    {
+                    if (ElementKind.PROPERTY.equals(parentImpl.getKind())) {
                         Class<?> keyClass = parentImpl.getValue().getClass();
                         prepareNodePathBasedOnParentNodeClass(nodes, node, keyClass);
                     }
