@@ -18,12 +18,12 @@ public class SharedSchemaContextConfigurationYamlDao {
 
     public SharedSchemaContextConfiguration read(String filePath) throws IOException {
         SharedSchemaContextConfiguration result = mapper.readValue(new File(filePath), SharedSchemaContextConfiguration.class);
-//        validateConfigurationObject(result);
+        validateConfigurationObject(result);
         return result;
     }
 
     public void save(SharedSchemaContextConfiguration configuration, String filePath) throws IOException {
-//        validateConfigurationObject(configuration);
+        validateConfigurationObject(configuration);
         mapper.writeValue(new File(filePath), configuration);
     }
 
