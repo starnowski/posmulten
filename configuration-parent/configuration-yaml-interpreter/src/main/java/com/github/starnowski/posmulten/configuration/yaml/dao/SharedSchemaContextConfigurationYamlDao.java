@@ -19,6 +19,8 @@ import java.util.Set;
 
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
+import static javax.validation.ElementKind.CONTAINER_ELEMENT;
+import static javax.validation.ElementKind.PROPERTY;
 
 public class SharedSchemaContextConfigurationYamlDao {
 
@@ -71,7 +73,7 @@ public class SharedSchemaContextConfigurationYamlDao {
                     prepareNodePathBasedOnParentNodeClass(nodes, node, keyClass);
                 } else {
                     NodeImpl parentImpl = (NodeImpl) parent;
-                    if (ElementKind.PROPERTY.equals(parentImpl.getKind())) {
+                    if (PROPERTY.equals(parentImpl.getKind())) {
                         Class<?> keyClass = parentImpl.getValue().getClass();
                         prepareNodePathBasedOnParentNodeClass(nodes, node, keyClass);
                     }
@@ -101,12 +103,18 @@ public class SharedSchemaContextConfigurationYamlDao {
                 nodes.add(sb.toString());
             }
         } catch (NoSuchFieldException e) {
+            if (CONTAINER_ELEMENT.equals(node.getKind())) {
+                if (node.getKey() != null)
+                {
+                    nodes.add(node.getKey().toString());
+                    return;
+                }
+            }
             nodes.add(node.getName());
         }
     }
 
-    private Integer returnNodeIndex(NodeImpl nodeImpl)
-    {
+    private Integer returnNodeIndex(NodeImpl nodeImpl) {
         NodeImpl tmpNode = NodeImpl.createBeanNode(nodeImpl);
         return tmpNode.getIndex();
     }
