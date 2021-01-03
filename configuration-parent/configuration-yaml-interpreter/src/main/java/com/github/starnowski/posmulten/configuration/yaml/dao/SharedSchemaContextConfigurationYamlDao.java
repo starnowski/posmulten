@@ -12,12 +12,10 @@ import javax.validation.*;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 import static javax.validation.ElementKind.BEAN;
 
@@ -61,6 +59,7 @@ public class SharedSchemaContextConfigurationYamlDao {
         StringBuilder sb = new StringBuilder();
         Path path = error.getPropertyPath();
         if (path instanceof PathImpl) {
+            List<String> nodes = new ArrayList<>();
             PathImpl pathImpl = (PathImpl) path;
             Iterator<Path.Node> it = pathImpl.iterator();
             Path.Node parent = null;
@@ -68,32 +67,33 @@ public class SharedSchemaContextConfigurationYamlDao {
                 Path.Node node = it.next();
                 if (parent == null) {
                     Class<?> keyClass = SharedSchemaContextConfiguration.class;
-                    prepareNodePathBasedOnParentNodeClass(sb, node, keyClass);
+                    prepareNodePathBasedOnParentNodeClass(nodes, node, keyClass);
                 } else {
                     NodeImpl parentImpl = (NodeImpl) parent;
-                    if (ElementKind.BEAN.equals(parentImpl.getKind()))
+                    if (ElementKind.PROPERTY.equals(parentImpl.getKind()))
                     {
-                        Class<?> keyClass = parentImpl.getContainerClass();
-                        prepareNodePathBasedOnParentNodeClass(sb, node, keyClass);
+                        Class<?> keyClass = parentImpl.getValue().getClass();
+                        prepareNodePathBasedOnParentNodeClass(nodes, node, keyClass);
                     }
                 }
                 parent = node;
             }
+            sb.append(nodes.stream().collect(joining(".")));
         } else {
             sb.append(error.getPropertyPath());
         }
         return sb.toString();
     }
 
-    private void prepareNodePathBasedOnParentNodeClass(StringBuilder sb, Path.Node node, Class<?> keyClass) {
+    private void prepareNodePathBasedOnParentNodeClass(List<String> nodes, Path.Node node, Class<?> keyClass) {
         try {
             Field field = keyClass.getDeclaredField(node.getName());
             JsonProperty annotation = field.getAnnotation(JsonProperty.class);
             if (annotation != null) {
-                sb.append(annotation.value() == null ? node.getName() : annotation.value());
+                nodes.add(annotation.value() == null ? node.getName() : annotation.value());
             }
         } catch (NoSuchFieldException e) {
-            sb.append(node.getName());
+            nodes.add(node.getName());
         }
     }
 
