@@ -67,20 +67,12 @@ public class SharedSchemaContextConfigurationYamlDao {
                 Path.Node node = it.next();
                 if (parrent == null) {
                     Class<?> keyClass = SharedSchemaContextConfiguration.class;
-                    try {
-                        Field field = keyClass.getDeclaredField(node.getName());
-                        JsonProperty annotation = field.getAnnotation(JsonProperty.class);
-                        if (annotation != null) {
-                            sb.append(annotation.value() == null ? node.getName() : annotation.value());
-                        }
-                    } catch (NoSuchFieldException e) {
-                        sb.append(node.getName());
-                    }
+                    prepareNodePathBasedOnParrentNodeClass(sb, node, keyClass);
                 } else {
                     //TODO
                     if (BEAN.equals(parrent.getKind())) {
                         Class<? extends Object> keyClass = parrent.getKey().getClass();
-                        keyClass.getDeclaredFields();
+                        prepareNodePathBasedOnParrentNodeClass(sb, node, keyClass);
                     }
                 }
                 parrent = node;
@@ -90,4 +82,18 @@ public class SharedSchemaContextConfigurationYamlDao {
         }
         return sb.toString();
     }
+
+    private void prepareNodePathBasedOnParrentNodeClass(StringBuilder sb, Path.Node node, Class<?> keyClass) {
+        try {
+            Field field = keyClass.getDeclaredField(node.getName());
+            JsonProperty annotation = field.getAnnotation(JsonProperty.class);
+            if (annotation != null) {
+                sb.append(annotation.value() == null ? node.getName() : annotation.value());
+            }
+        } catch (NoSuchFieldException e) {
+            sb.append(node.getName());
+        }
+    }
+
+
 }
