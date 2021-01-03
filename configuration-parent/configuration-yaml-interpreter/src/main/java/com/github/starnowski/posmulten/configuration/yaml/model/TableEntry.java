@@ -8,6 +8,7 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import java.util.List;
 
@@ -25,8 +26,9 @@ public class TableEntry {
     @NotBlank
     @JsonProperty(value = "name", required = true)
     private String name;
+    @Valid
     @JsonProperty(value = "rls_policy")
     private RLSPolicy rlsPolicy;
     @JsonProperty(value = "foreign_keys")
-    private List<ForeignKeyConfiguration> foreignKeys;
+    private List<@Valid ForeignKeyConfiguration> foreignKeys;
 }

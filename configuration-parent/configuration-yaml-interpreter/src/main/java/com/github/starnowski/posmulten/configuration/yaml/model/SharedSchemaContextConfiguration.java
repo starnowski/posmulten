@@ -8,6 +8,7 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import java.util.List;
 
@@ -50,8 +51,9 @@ public class SharedSchemaContextConfiguration {
     private String grantee;
     @JsonProperty(value = "set_current_tenant_identifier_as_default_value_for_tenant_column_in_all_tables")
     private Boolean currentTenantIdentifierAsDefaultValueForTenantColumnInAllTables;
+    @Valid
     @JsonProperty(value = "valid_tenant_value_constraint")
     private ValidTenantValueConstraintConfiguration validTenantValueConstraint;
     @JsonProperty(value = "tables")
-    private List<TableEntry> tables;
+    private List<@Valid TableEntry> tables;
 }
