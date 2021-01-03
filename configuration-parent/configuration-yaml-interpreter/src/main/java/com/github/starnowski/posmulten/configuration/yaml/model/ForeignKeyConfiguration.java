@@ -29,6 +29,6 @@ public class ForeignKeyConfiguration {
     private String tableName;
     @JsonProperty(value = "foreign_key_primary_key_columns_mappings", required = true)
     @NotNull
-    @Size(min = 1)
+    @Size(min = 1, message = "must have at least one element")
     private Map<@NotBlank String, @NotBlank String> foreignKeyPrimaryKeyColumnsMappings;
 }
