@@ -23,10 +23,18 @@ public class ValidTenantValueConstraintConfiguration {
     @JsonProperty(value = "tenant_identifiers_blacklist", required = true)
     @Size(min = 1)
     private List<String> tenantIdentifiersBlacklist;
-    @NotBlank
     @JsonProperty(value = "is_tenant_valid_function_name")
-    private String isTenantValidFunctionName;
-    @NotBlank
+    private StringWrapperWithNotBlankValue isTenantValidFunctionName;
     @JsonProperty(value = "is_tenant_valid_constraint_name")
-    private String isTenantValidConstraintName;
+    private StringWrapperWithNotBlankValue isTenantValidConstraintName;
+
+    public ValidTenantValueConstraintConfiguration setIsTenantValidFunctionName(String isTenantValidFunctionName) {
+        this.isTenantValidFunctionName = new StringWrapperWithNotBlankValue(isTenantValidFunctionName);
+        return this;
+    }
+
+    public ValidTenantValueConstraintConfiguration setIsTenantValidConstraintName(String isTenantValidConstraintName) {
+        this.isTenantValidConstraintName = new StringWrapperWithNotBlankValue(isTenantValidConstraintName);
+        return this;
+    }
 }
