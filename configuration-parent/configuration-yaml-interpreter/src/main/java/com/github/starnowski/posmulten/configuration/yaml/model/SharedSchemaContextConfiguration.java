@@ -49,7 +49,6 @@ public class SharedSchemaContextConfiguration {
     private ValidTenantValueConstraintConfiguration validTenantValueConstraint;
     @JsonProperty(value = "tables")
     private List<@Valid TableEntry> tables;
-
     public SharedSchemaContextConfiguration setCurrentTenantIdPropertyType(String currentTenantIdPropertyType) {
         this.currentTenantIdPropertyType = new StringWrapperWithNotBlankValue(currentTenantIdPropertyType);
         return this;
@@ -57,6 +56,31 @@ public class SharedSchemaContextConfiguration {
 
     public SharedSchemaContextConfiguration setCurrentTenantIdProperty(String currentTenantIdProperty) {
         this.currentTenantIdProperty = new StringWrapperWithNotBlankValue(currentTenantIdProperty);
+        return this;
+    }
+
+    public SharedSchemaContextConfiguration setGetCurrentTenantIdFunctionName(String getCurrentTenantIdFunctionName) {
+        this.getCurrentTenantIdFunctionName = new StringWrapperWithNotBlankValue(getCurrentTenantIdFunctionName);
+        return this;
+    }
+
+    public SharedSchemaContextConfiguration setSetCurrentTenantIdFunctionName(String setCurrentTenantIdFunctionName) {
+        this.setCurrentTenantIdFunctionName = new StringWrapperWithNotBlankValue(setCurrentTenantIdFunctionName);
+        return this;
+    }
+
+    public SharedSchemaContextConfiguration setEqualsCurrentTenantIdentifierFunctionName(String equalsCurrentTenantIdentifierFunctionName) {
+        this.equalsCurrentTenantIdentifierFunctionName = new StringWrapperWithNotBlankValue(equalsCurrentTenantIdentifierFunctionName);
+        return this;
+    }
+
+    public SharedSchemaContextConfiguration setTenantHasAuthoritiesFunctionName(String tenantHasAuthoritiesFunctionName) {
+        this.tenantHasAuthoritiesFunctionName = new StringWrapperWithNotBlankValue(tenantHasAuthoritiesFunctionName);
+        return this;
+    }
+
+    public SharedSchemaContextConfiguration setDefaultTenantIdColumn(String defaultTenantIdColumn) {
+        this.defaultTenantIdColumn = new StringWrapperWithNotBlankValue(defaultTenantIdColumn);
         return this;
     }
 }
