@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.github.starnowski.posmulten.configuration.yaml.exceptions.YamlInvalidSchema;
 import com.github.starnowski.posmulten.configuration.yaml.model.SharedSchemaContextConfiguration;
+import org.hibernate.validator.internal.engine.path.NodeImpl;
 import org.hibernate.validator.internal.engine.path.PathImpl;
 
 import javax.validation.*;
@@ -62,20 +63,21 @@ public class SharedSchemaContextConfigurationYamlDao {
         if (path instanceof PathImpl) {
             PathImpl pathImpl = (PathImpl) path;
             Iterator<Path.Node> it = pathImpl.iterator();
-            Path.Node parrent = null;
+            Path.Node parent = null;
             for (; it.hasNext(); ) {
                 Path.Node node = it.next();
-                if (parrent == null) {
+                if (parent == null) {
                     Class<?> keyClass = SharedSchemaContextConfiguration.class;
-                    prepareNodePathBasedOnParrentNodeClass(sb, node, keyClass);
+                    prepareNodePathBasedOnParentNodeClass(sb, node, keyClass);
                 } else {
-                    //TODO
-                    if (BEAN.equals(parrent.getKind())) {
-                        Class<? extends Object> keyClass = parrent.getKey().getClass();
-                        prepareNodePathBasedOnParrentNodeClass(sb, node, keyClass);
+                    NodeImpl parentImpl = (NodeImpl) parent;
+                    if (ElementKind.BEAN.equals(parentImpl.getKind()))
+                    {
+                        Class<?> keyClass = parentImpl.getContainerClass();
+                        prepareNodePathBasedOnParentNodeClass(sb, node, keyClass);
                     }
                 }
-                parrent = node;
+                parent = node;
             }
         } else {
             sb.append(error.getPropertyPath());
@@ -83,7 +85,7 @@ public class SharedSchemaContextConfigurationYamlDao {
         return sb.toString();
     }
 
-    private void prepareNodePathBasedOnParrentNodeClass(StringBuilder sb, Path.Node node, Class<?> keyClass) {
+    private void prepareNodePathBasedOnParentNodeClass(StringBuilder sb, Path.Node node, Class<?> keyClass) {
         try {
             Field field = keyClass.getDeclaredField(node.getName());
             JsonProperty annotation = field.getAnnotation(JsonProperty.class);
