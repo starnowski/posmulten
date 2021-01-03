@@ -6,7 +6,10 @@ import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSche
 public class ValidTenantValueConstraintConfigurationEnricher {
 
     public DefaultSharedSchemaContextBuilder enrich(DefaultSharedSchemaContextBuilder builder, ValidTenantValueConstraintConfiguration configuration) {
-        //TODO
-        return null;
+        if (configuration != null)
+        {
+            builder.createValidTenantValueConstraint(configuration.getTenantIdentifiersBlacklist(), configuration.getIsTenantValidFunctionName(), configuration.getIsTenantValidConstraintName());
+        }
+        return builder;
     }
 }
