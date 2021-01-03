@@ -23,20 +23,27 @@ public class SharedSchemaContextConfiguration {
     @NotBlank
     @JsonProperty(value = "default_schema", required = true)
     private String defaultSchema;
+    @Valid
     @JsonProperty(value = "current_tenant_id_property_type")
     private StringWrapperWithNotBlankValue currentTenantIdPropertyType;
+    @Valid
     @JsonProperty(value = "current_tenant_id_property")
     private StringWrapperWithNotBlankValue currentTenantIdProperty;
+    @Valid
     @JsonProperty(value = "get_current_tenant_id_function_name")
     private StringWrapperWithNotBlankValue getCurrentTenantIdFunctionName;
+    @Valid
     @JsonProperty(value = "set_current_tenant_id_function_name")
     private StringWrapperWithNotBlankValue setCurrentTenantIdFunctionName;
+    @Valid
     @JsonProperty(value = "equals_current_tenant_identifier_function_name")
     private StringWrapperWithNotBlankValue equalsCurrentTenantIdentifierFunctionName;
+    @Valid
     @JsonProperty(value = "tenant_has_authorities_function_name")
     private StringWrapperWithNotBlankValue tenantHasAuthoritiesFunctionName;
     @JsonProperty(value = "force_row_level_security_for_table_owner")
     private Boolean forceRowLevelSecurityForTableOwner;
+    @Valid
     @JsonProperty(value = "default_tenant_id_column")
     private StringWrapperWithNotBlankValue defaultTenantIdColumn;
     @NotBlank
