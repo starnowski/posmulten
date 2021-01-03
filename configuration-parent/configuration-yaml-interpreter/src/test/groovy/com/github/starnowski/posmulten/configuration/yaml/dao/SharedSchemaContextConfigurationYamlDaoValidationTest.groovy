@@ -64,7 +64,7 @@ class SharedSchemaContextConfigurationYamlDaoValidationTest extends spock.lang.S
             ex.getErrorMessages().contains(errorMessage)
 
         where:
-            errorMessage << ["valid_tenant_value_constraint.tenant_identifiers_blacklist must not be blank"]
+            errorMessage << ["valid_tenant_value_constraint.tenant_identifiers_blacklist must have at least one element"]
     }
 
     private String resolveFilePath(String filePath) {
