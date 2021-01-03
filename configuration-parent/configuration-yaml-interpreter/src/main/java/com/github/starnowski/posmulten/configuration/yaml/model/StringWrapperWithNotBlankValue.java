@@ -7,12 +7,12 @@ import lombok.ToString;
 
 @EqualsAndHashCode
 @ToString
-public class StringWrapper {
+public class StringWrapperWithNotBlankValue {
 
     private final String value;
 
     @JsonCreator
-    public StringWrapper(String value) {
+    public StringWrapperWithNotBlankValue(String value) {
         this.value = value;
     }
 
