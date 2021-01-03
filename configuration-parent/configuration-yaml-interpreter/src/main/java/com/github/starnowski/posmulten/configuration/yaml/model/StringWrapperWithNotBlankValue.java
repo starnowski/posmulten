@@ -7,7 +7,7 @@ import lombok.EqualsAndHashCode;
 import javax.validation.constraints.NotBlank;
 
 @EqualsAndHashCode
-public class StringWrapperWithNotBlankValue {
+public final class StringWrapperWithNotBlankValue {
 
     @NotBlank
     private final String value;
