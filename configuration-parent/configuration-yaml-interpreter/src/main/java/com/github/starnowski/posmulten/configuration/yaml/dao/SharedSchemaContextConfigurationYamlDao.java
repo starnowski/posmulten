@@ -63,28 +63,22 @@ public class SharedSchemaContextConfigurationYamlDao {
             PathImpl pathImpl = (PathImpl) path;
             Iterator<Path.Node> it = pathImpl.iterator();
             Path.Node parrent = null;
-            for (; it.hasNext();)
-            {
+            for (; it.hasNext(); ) {
                 Path.Node node = it.next();
-                if (parrent == null)
-                {
+                if (parrent == null) {
                     Class<?> keyClass = SharedSchemaContextConfiguration.class;
                     try {
                         Field field = keyClass.getDeclaredField(node.getName());
                         JsonProperty annotation = field.getAnnotation(JsonProperty.class);
-                        if (annotation != null)
-                        {
+                        if (annotation != null) {
                             sb.append(annotation.value() == null ? node.getName() : annotation.value());
                         }
                     } catch (NoSuchFieldException e) {
-                        e.printStackTrace();
+                        sb.append(node.getName());
                     }
-                }
-                if (parrent != null)
-                {
+                } else {
                     //TODO
-                    if (BEAN.equals(parrent.getKind()))
-                    {
+                    if (BEAN.equals(parrent.getKind())) {
                         Class<? extends Object> keyClass = parrent.getKey().getClass();
                         keyClass.getDeclaredFields();
                     }
