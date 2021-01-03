@@ -11,3 +11,4 @@ grantee: "application-user"
 set_current_tenant_identifier_as_default_value_for_tenant_column_in_all_tables: true
 valid_tenant_value_constraint:
   is_tenant_valid_function_name:
+  is_tenant_valid_constraint_name:  "      "
