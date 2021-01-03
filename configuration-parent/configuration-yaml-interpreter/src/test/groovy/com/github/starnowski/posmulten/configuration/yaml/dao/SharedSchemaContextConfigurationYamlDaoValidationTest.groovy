@@ -26,7 +26,7 @@ class SharedSchemaContextConfigurationYamlDaoValidationTest extends spock.lang.S
             ex.getErrorMessages().contains(errorMessage)
 
         where:
-            errorMessage << ["grantee must not be blank", "default_schema must not be blank"]
+            errorMessage << ["grantee must not be blank", "default_schema must not be blank", "get_current_tenant_id_function_name must not be blank", "set_current_tenant_id_function_name must not be blank", "equals_current_tenant_identifier_function_name must not be blank"]
     }
 
     private String resolveFilePath(String filePath) {
