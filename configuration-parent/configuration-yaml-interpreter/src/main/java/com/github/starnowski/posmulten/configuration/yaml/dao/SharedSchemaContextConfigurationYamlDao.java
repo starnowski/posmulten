@@ -22,6 +22,8 @@ import static java.util.stream.Collectors.toList;
 
 public class SharedSchemaContextConfigurationYamlDao {
 
+    private static final String REGEXP_PATTERN = ".*(\\\\[\\d*\\])";
+
     private final ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
 
     public SharedSchemaContextConfiguration read(String filePath) throws IOException {
@@ -85,16 +87,30 @@ public class SharedSchemaContextConfigurationYamlDao {
         return sb.toString();
     }
 
-    private void prepareNodePathBasedOnParentNodeClass(List<String> nodes, Path.Node node, Class<?> keyClass) {
+    private void prepareNodePathBasedOnParentNodeClass(List<String> nodes, Path.Node node, Class<?> parentNodeClass) {
         try {
-            Field field = keyClass.getDeclaredField(node.getName());
+            Field field = parentNodeClass.getDeclaredField(node.getName());
             JsonProperty annotation = field.getAnnotation(JsonProperty.class);
             if (annotation != null) {
-                nodes.add(annotation.value() == null ? node.getName() : annotation.value());
+                StringBuilder sb = new StringBuilder();
+                sb.append(annotation.value() == null ? node.getName() : annotation.value());
+                NodeImpl nodeImpl = (NodeImpl) node;
+                if (nodeImpl.isIterable() && returnNodeIndex(nodeImpl) != null) {
+                    sb.append("[");
+                    sb.append(returnNodeIndex(nodeImpl));
+                    sb.append("]");
+                }
+                nodes.add(sb.toString());
             }
         } catch (NoSuchFieldException e) {
             nodes.add(node.getName());
         }
+    }
+
+    private Integer returnNodeIndex(NodeImpl nodeImpl)
+    {
+        NodeImpl tmpNode = NodeImpl.createBeanNode(nodeImpl);
+        return tmpNode.getIndex();
     }
 
 
