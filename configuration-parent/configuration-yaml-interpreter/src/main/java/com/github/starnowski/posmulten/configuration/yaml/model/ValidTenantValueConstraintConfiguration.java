@@ -8,7 +8,10 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
 
@@ -21,12 +24,23 @@ import java.util.List;
 public class ValidTenantValueConstraintConfiguration {
 
     @JsonProperty(value = "tenant_identifiers_blacklist", required = true)
-    @Size(min = 1)
+    @Size(min = 1, message = "must have at least one element")
+    @NotNull
     private List<String> tenantIdentifiersBlacklist;
-    @NotBlank
+    @Valid
     @JsonProperty(value = "is_tenant_valid_function_name")
-    private String isTenantValidFunctionName;
-    @NotBlank
+    private StringWrapperWithNotBlankValue isTenantValidFunctionName;
+    @Valid
     @JsonProperty(value = "is_tenant_valid_constraint_name")
-    private String isTenantValidConstraintName;
+    private StringWrapperWithNotBlankValue isTenantValidConstraintName;
+
+    public ValidTenantValueConstraintConfiguration setIsTenantValidFunctionName(String isTenantValidFunctionName) {
+        this.isTenantValidFunctionName = new StringWrapperWithNotBlankValue(isTenantValidFunctionName);
+        return this;
+    }
+
+    public ValidTenantValueConstraintConfiguration setIsTenantValidConstraintName(String isTenantValidConstraintName) {
+        this.isTenantValidConstraintName = new StringWrapperWithNotBlankValue(isTenantValidConstraintName);
+        return this;
+    }
 }

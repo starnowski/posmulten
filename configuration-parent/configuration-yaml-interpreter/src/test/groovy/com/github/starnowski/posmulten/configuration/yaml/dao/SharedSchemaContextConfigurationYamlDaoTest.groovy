@@ -3,6 +3,7 @@ package com.github.starnowski.posmulten.configuration.yaml.dao
 import com.github.starnowski.posmulten.configuration.yaml.model.ForeignKeyConfiguration
 import com.github.starnowski.posmulten.configuration.yaml.model.RLSPolicy
 import com.github.starnowski.posmulten.configuration.yaml.model.SharedSchemaContextConfiguration
+import com.github.starnowski.posmulten.configuration.yaml.model.StringWrapperWithNotBlankValue
 import com.github.starnowski.posmulten.configuration.yaml.model.TableEntry
 import com.github.starnowski.posmulten.configuration.yaml.model.ValidTenantValueConstraintConfiguration
 import org.jeasy.random.EasyRandom
@@ -81,9 +82,9 @@ class SharedSchemaContextConfigurationYamlDaoTest extends spock.lang.Specificati
             result.getSetCurrentTenantIdFunctionName() == setCurrentTenantIdFunctionName
 
         where:
-            filePath                        |   defaultSchema   |   currentTenantIdProperty |   currentTenantIdPropertyType |   getCurrentTenantIdFunctionName  |   setCurrentTenantIdFunctionName
-            ALL_FIELDS_FILE_PATH            |   "public"        |   "pos.c.ten"             |   "VARCHAR(255)"              |   "get_ten_id"                    |   "set_tenant"
-            ONLY_MANDATORY_FIELDS_FILE_PATH |   "non_public"    |   null                    |   null                        |   null                            |   null
+            filePath                        |   defaultSchema   |   currentTenantIdProperty                 |   currentTenantIdPropertyType         |   getCurrentTenantIdFunctionName                              |   setCurrentTenantIdFunctionName
+            ALL_FIELDS_FILE_PATH            |   "public"        |   stringWrapper("pos.c.ten")          |   stringWrapper("VARCHAR(255)") |   stringWrapper("get_ten_id")    |   stringWrapper("set_tenant")
+            ONLY_MANDATORY_FIELDS_FILE_PATH |   "non_public"    |   null                                    |   null                                |   null            |   null
     }
 
     @Unroll
@@ -104,9 +105,9 @@ class SharedSchemaContextConfigurationYamlDaoTest extends spock.lang.Specificati
             result.getCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables() == setCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables
 
         where:
-            filePath                        |   equalsCurrentTenantIdentifierFunctionName   |   tenantHasAuthoritiesFunctionName    |   forceRowLevelSecurityForTableOwner  |   defaultTenantIdColumn   |   grantee             |   setCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables
-            ALL_FIELDS_FILE_PATH            |   "equals_cur_tenant"                         |   "_tenant_hast_auth"                 |   true                                |   "tenant_id"             |   "application-user"  |   true
-            ONLY_MANDATORY_FIELDS_FILE_PATH |   null                                        |   null                                |   null                                |   null                    |   "db-user"           |   null
+            filePath                        |   equalsCurrentTenantIdentifierFunctionName       |   tenantHasAuthoritiesFunctionName            |   forceRowLevelSecurityForTableOwner  |   defaultTenantIdColumn               |   grantee             |   setCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables
+            ALL_FIELDS_FILE_PATH            |   stringWrapper("equals_cur_tenant")          |   stringWrapper("_tenant_hast_auth")  |   true                                |   stringWrapper("tenant_id")      |   "application-user"  |   true
+            ONLY_MANDATORY_FIELDS_FILE_PATH |   null                                            |   null                                        |   null                                |   null                                |   "db-user"           |   null
     }
 
     @Unroll
@@ -185,8 +186,8 @@ class SharedSchemaContextConfigurationYamlDaoTest extends spock.lang.Specificati
             result == testObject
 
         where:
-            testObject << [ new SharedSchemaContextConfiguration().setCurrentTenantIdPropertyType("xxx").setDefaultSchema("shema1").setTables(asList(new TableEntry().setName("tab1"))),
-                            new SharedSchemaContextConfiguration().setDefaultSchema("public").setTables(asList(new TableEntry().setName("users")))
+            testObject << [ new SharedSchemaContextConfiguration().setCurrentTenantIdPropertyType("xxx").setDefaultSchema("shema1").setTables(asList(new TableEntry().setName("tab1"))).setGrantee("db-user"),
+                            new SharedSchemaContextConfiguration().setDefaultSchema("public").setTables(asList(new TableEntry().setName("users"))).setGrantee("ps-user")
             ]
     }
 
@@ -210,5 +211,10 @@ class SharedSchemaContextConfigurationYamlDaoTest extends spock.lang.Specificati
 
     private String resolveFilePath(String filePath) {
         Paths.get(this.class.getResource(filePath).toURI()).toFile().getPath()
+    }
+
+    private StringWrapperWithNotBlankValue stringWrapper(String value)
+    {
+        new StringWrapperWithNotBlankValue(value)
     }
 }
