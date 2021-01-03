@@ -106,8 +106,12 @@ public class SharedSchemaContextConfigurationYamlDao {
             if (CONTAINER_ELEMENT.equals(node.getKind())) {
                 if (node.getKey() != null)
                 {
-                    nodes.add(node.getKey().toString());
-                    return;
+                    NodeImpl nodeImpl = (NodeImpl) node;
+                    //nodeImpl.getTypeArgumentIndex() == 0 <- map key, nodeImpl.getTypeArgumentIndex() == 1 <- map value
+                    if (nodeImpl.getTypeArgumentIndex() != null && nodeImpl.getTypeArgumentIndex() != 0) {
+                        nodes.add(node.getKey().toString());
+                        return;
+                    }
                 }
             }
             nodes.add(node.getName());
