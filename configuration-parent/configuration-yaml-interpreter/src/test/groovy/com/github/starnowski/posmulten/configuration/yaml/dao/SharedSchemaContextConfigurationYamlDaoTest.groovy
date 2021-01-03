@@ -75,8 +75,8 @@ class SharedSchemaContextConfigurationYamlDaoTest extends spock.lang.Specificati
 
         then:
             result.getDefaultSchema() == defaultSchema
-            result.getCurrentTenantIdProperty() == currentTenantIdProperty
-            result.getCurrentTenantIdPropertyType() == currentTenantIdPropertyType
+            result.getCurrentTenantIdProperty().getValue() == currentTenantIdProperty
+            result.getCurrentTenantIdPropertyType().getValue() == currentTenantIdPropertyType
             result.getGetCurrentTenantIdFunctionName() == getCurrentTenantIdFunctionName
             result.getSetCurrentTenantIdFunctionName() == setCurrentTenantIdFunctionName
 
@@ -185,8 +185,8 @@ class SharedSchemaContextConfigurationYamlDaoTest extends spock.lang.Specificati
             result == testObject
 
         where:
-            testObject << [ new SharedSchemaContextConfiguration().setCurrentTenantIdPropertyType("xxx").setDefaultSchema("shema1").setTables(asList(new TableEntry().setName("tab1"))),
-                            new SharedSchemaContextConfiguration().setDefaultSchema("public").setTables(asList(new TableEntry().setName("users")))
+            testObject << [ new SharedSchemaContextConfiguration().setCurrentTenantIdPropertyType("xxx").setDefaultSchema("shema1").setTables(asList(new TableEntry().setName("tab1"))).setGrantee("db-user"),
+                            new SharedSchemaContextConfiguration().setDefaultSchema("public").setTables(asList(new TableEntry().setName("users"))).setGrantee("ps-user")
             ]
     }
 
