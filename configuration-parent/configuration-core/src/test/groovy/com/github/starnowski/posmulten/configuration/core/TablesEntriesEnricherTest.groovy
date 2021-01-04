@@ -5,8 +5,6 @@ import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSche
 import spock.lang.Specification
 import spock.lang.Unroll
 
-import java.util.stream.Collectors
-
 import static java.util.Arrays.asList
 import static java.util.stream.Collectors.toList
 
