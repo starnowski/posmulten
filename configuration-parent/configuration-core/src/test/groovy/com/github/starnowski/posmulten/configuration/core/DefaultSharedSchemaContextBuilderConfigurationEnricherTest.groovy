@@ -1,6 +1,5 @@
 package com.github.starnowski.posmulten.configuration.core
 
-import com.github.starnowski.posmulten.configuration.core.DefaultSharedSchemaContextBuilderConfigurationEnricher
 import com.github.starnowski.posmulten.configuration.core.model.SharedSchemaContextConfiguration
 import com.github.starnowski.posmulten.configuration.core.model.TableEntry
 import com.github.starnowski.posmulten.configuration.core.model.ValidTenantValueConstraintConfiguration
