@@ -21,7 +21,9 @@ public class TablesEntriesEnricher {
     }
 
     public DefaultSharedSchemaContextBuilder enrich(DefaultSharedSchemaContextBuilder builder, List<TableEntry> tableEntries) {
-        tableEntries.forEach(tableEntry -> enrichers.forEach(enricher -> enricher.enrich(builder, tableEntry)));
+        if (tableEntries != null) {
+            tableEntries.forEach(tableEntry -> enrichers.forEach(enricher -> enricher.enrich(builder, tableEntry)));
+        }
         return builder;
     }
 }
