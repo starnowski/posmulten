@@ -26,4 +26,8 @@ public class TablesEntriesEnricher {
         }
         return builder;
     }
+
+    public List<ITableEntryEnricher> getEnrichers() {
+        return enrichers;
+    }
 }
