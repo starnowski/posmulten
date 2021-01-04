@@ -3,6 +3,7 @@ package com.github.starnowski.posmulten.configuration.core
 import com.github.starnowski.posmulten.configuration.core.model.TableEntry
 import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder
 import spock.lang.Specification
+import spock.lang.Unroll
 
 import static java.util.Arrays.asList
 
@@ -33,5 +34,26 @@ class TablesEntriesEnricherTest extends Specification {
             1 * enricher2.enrich(builder, tableEntry2)
             1 * enricher3.enrich(builder, tableEntry1)
             1 * enricher3.enrich(builder, tableEntry2)
+    }
+
+    @Unroll
+    def "should not invoke enrichers components when there is no table entries (#tableEntries)"() {
+        given:
+            def enricher1 = Mock(ITableEntryEnricher)
+            def enricher2 = Mock(ITableEntryEnricher)
+            tested = new TablesEntriesEnricher(asList(enricher1, enricher2))
+            def builder = Mock(DefaultSharedSchemaContextBuilder)
+
+        when:
+            def result = tested.enrich(builder, tableEntries)
+
+        then:
+            result
+            result.is(builder)
+            0 * enricher1.enrich(builder, _)
+            0 * enricher2.enrich(builder, _)
+
+        where:
+            tableEntries << [null, []]
     }
 }
