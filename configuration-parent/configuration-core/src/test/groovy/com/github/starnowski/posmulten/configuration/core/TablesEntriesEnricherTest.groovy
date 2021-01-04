@@ -5,7 +5,10 @@ import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSche
 import spock.lang.Specification
 import spock.lang.Unroll
 
+import java.util.stream.Collectors
+
 import static java.util.Arrays.asList
+import static java.util.stream.Collectors.toList
 
 class TablesEntriesEnricherTest extends Specification {
 
@@ -55,5 +58,19 @@ class TablesEntriesEnricherTest extends Specification {
 
         where:
             tableEntries << [null, []]
+    }
+
+    def "should be initialized with expected component types"()
+    {
+        given:
+            def expectedComponentsTypes = Arrays.asList(RLSPolicyConfigurationEnricher.class, ForeignKeyConfigurationsEnricher.class)
+
+        when:
+            def result = new TablesEntriesEnricher()
+
+        then:
+            result
+            result.getEnrichers().stream().map({component -> component.getClass()}).collect(toList()).containsAll(expectedComponentsTypes)
+
     }
 }
