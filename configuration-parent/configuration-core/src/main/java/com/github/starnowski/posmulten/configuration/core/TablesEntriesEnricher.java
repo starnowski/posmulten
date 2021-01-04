@@ -7,6 +7,12 @@ import java.util.List;
 
 public class TablesEntriesEnricher {
 
+    private final List<ITableEntryEnricher> enrichers;
+
+    public TablesEntriesEnricher(List<ITableEntryEnricher> enrichers) {
+        this.enrichers = enrichers;
+    }
+
     public DefaultSharedSchemaContextBuilder enrich(DefaultSharedSchemaContextBuilder builder, List<TableEntry> tableEntries) {
         //TODO
         return null;
