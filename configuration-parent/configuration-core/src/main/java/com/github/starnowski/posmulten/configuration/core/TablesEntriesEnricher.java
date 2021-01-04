@@ -12,8 +12,7 @@ public class TablesEntriesEnricher {
 
     private final List<ITableEntryEnricher> enrichers;
 
-    public TablesEntriesEnricher()
-    {
+    public TablesEntriesEnricher() {
         this(Arrays.asList(new RLSPolicyConfigurationEnricher(), new ForeignKeyConfigurationsEnricher()));
     }
 
@@ -22,7 +21,7 @@ public class TablesEntriesEnricher {
     }
 
     public DefaultSharedSchemaContextBuilder enrich(DefaultSharedSchemaContextBuilder builder, List<TableEntry> tableEntries) {
-        //TODO
-        return null;
+        tableEntries.forEach(tableEntry -> enrichers.forEach(enricher -> enricher.enrich(builder, tableEntry)));
+        return builder;
     }
 }
