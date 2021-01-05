@@ -91,4 +91,6 @@ class RLSPolicyConfigurationEnricherTest extends AbstractBaseTest {
             "t1"        |   "rls_pol"       |   "col_for_ten"   |   MapBuilder.mapBuilder().put("user_id", "int").build()
             "comments"  |   "row_level_pol" |   "ten_id"        |   MapBuilder.mapBuilder().put("tab_id", "bigint").put("uuid", "UUID").build()
     }
+
+    //TODO No invocations
 }
