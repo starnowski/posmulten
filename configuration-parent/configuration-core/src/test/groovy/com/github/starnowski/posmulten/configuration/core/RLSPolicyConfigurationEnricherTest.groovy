@@ -37,8 +37,9 @@ class RLSPolicyConfigurationEnricherTest extends AbstractBaseTest {
 
 
         where:
-            tableName   |   rlsPolicyName   |   tenantColumn    |   primaryKeyColumnsNameToTypeMap                                  |   createTenantColumnForTable  |   nameForFunctionThatChecksIfRecordExistsInTable  |   validTenantValueConstraintName  |   skipAddingOfTenantColumnDefaultValue
-            "t1"        |   "rls_pol"       |   "tenant_co"     |   MapBuilder.mapBuilder().put("id", "bigint").build()             |   false                       |   "is_record_exists"                              |   "table_ten_is_valid_con"        |   true
+            tableName   |   rlsPolicyName   |   tenantColumn    |   primaryKeyColumnsNameToTypeMap                                              |   createTenantColumnForTable  |   nameForFunctionThatChecksIfRecordExistsInTable  |   validTenantValueConstraintName  |   skipAddingOfTenantColumnDefaultValue
+            "t1"        |   "rls_pol"       |   "tenant_co"     |   MapBuilder.mapBuilder().put("id", "bigint").build()                         |   false                       |   "is_record_exists"                              |   "table_ten_is_valid_con"        |   true
+            "table1"    |   "table_rls_pol" |   "ten_id"        |   MapBuilder.mapBuilder().put("tab_id", "bigint").put("uuid", "UUID").build() |   true                        |   "is_table_exists"                               |   "tenant_table_shoul_be_valid"   |   false
     }
 
 }
