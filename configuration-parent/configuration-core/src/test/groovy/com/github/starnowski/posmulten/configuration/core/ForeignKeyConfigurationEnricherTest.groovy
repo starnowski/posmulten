@@ -22,7 +22,7 @@ class ForeignKeyConfigurationEnricherTest extends AbstractBaseTest {
 
         then:
             result == builder
-            1 * builder.createSameTenantConstraintForForeignKey(table, foreignKeyTable, foreignKeyPrimaryKeyColumnsMappings, constraintName)
+            1 * builder.createSameTenantConstraintForForeignKey(table, foreignKeyTable, foreignKeyPrimaryKeyColumnsMappings, constraintName) >> builder
 
         and: "do not invoke builder with other methods"
             0 * builder._
