@@ -42,4 +42,32 @@ class RLSPolicyConfigurationEnricherTest extends AbstractBaseTest {
             "table1"    |   "table_rls_pol" |   "ten_id"        |   MapBuilder.mapBuilder().put("tab_id", "bigint").put("uuid", "UUID").build() |   null                        |   "is_table_exists"                               |   "tenant_table_shoul_be_valid"   |   false
     }
 
+    @Unroll
+    def "should invoke createTenantColumnForTable method when property createTenantColumnForTable is set with the 'true' value for table name '#tableName', rls policy name '#rlsPolicyName', tenant column '#tenantColumn', primaryKeyColumnsNameToTypeMap '#primaryKeyColumnsNameToTypeMap'"()
+    {
+        given:
+            def builder = prepareBuilderMockWithZeroExpectationOfMethodsInvocation()
+            def entry = new TableEntry().setName(tableName)
+                    .setRlsPolicy(new RLSPolicy()
+                            .setName(rlsPolicyName)
+                            .setTenantColumn(tenantColumn)
+                            .setPrimaryKeyColumnsNameToTypeMap(primaryKeyColumnsNameToTypeMap)
+                            .setCreateTenantColumnForTable(true))
+
+        when:
+            def result = tested.enrich(builder, entry)
+
+        then:
+            result == builder
+            1 * builder.createRLSPolicyForTable(tableName, primaryKeyColumnsNameToTypeMap, tenantColumn, rlsPolicyName)
+            1 * builder.createTenantColumnForTable(tableName)
+    //        1 * builder.skipAddingOfTenantColumnDefaultValueForTable(tableName)
+
+
+        where:
+            tableName   |   rlsPolicyName   |   tenantColumn    |   primaryKeyColumnsNameToTypeMap
+            "t1"        |   "rls_pol"       |   "tenant_co"     |   MapBuilder.mapBuilder().put("user_id", "int").build()
+            "table1"    |   "table_rls_pol" |   "ten_id"        |   MapBuilder.mapBuilder().put("tab_id", "bigint").put("uuid", "UUID").build()
+    }
+
 }
