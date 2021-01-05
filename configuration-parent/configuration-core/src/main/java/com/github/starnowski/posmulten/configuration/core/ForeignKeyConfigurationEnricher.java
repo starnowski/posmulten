@@ -6,6 +6,6 @@ import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSche
 public class ForeignKeyConfigurationEnricher {
 
     public DefaultSharedSchemaContextBuilder enrich(DefaultSharedSchemaContextBuilder builder, String tableName, ForeignKeyConfiguration foreignKeyConfiguration) {
-        return null;
+        return builder.createSameTenantConstraintForForeignKey(tableName, foreignKeyConfiguration.getTableName(), foreignKeyConfiguration.getForeignKeyPrimaryKeyColumnsMappings(), foreignKeyConfiguration.getConstraintName());
     }
 }
