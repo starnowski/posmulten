@@ -22,4 +22,8 @@ public class ForeignKeyConfigurationsEnricher implements ITableEntryEnricher {
         }
         return builder;
     }
+
+    public ForeignKeyConfigurationEnricher getForeignKeyConfigurationEnricher() {
+        return foreignKeyConfigurationEnricher;
+    }
 }

@@ -58,4 +58,17 @@ class ForeignKeyConfigurationsEnricherTest extends AbstractBaseTest {
             new TableEntry()                                                            |   "table entry with null collection of foreign keys"
             new TableEntry().setForeignKeys(new ArrayList<ForeignKeyConfiguration>())   |   "table entry with empty collection of foreign keys"
     }
+
+    def "should use correct component type"()
+    {
+        given:
+            def tested = new ForeignKeyConfigurationsEnricher()
+
+        when:
+            def result = tested.getForeignKeyConfigurationEnricher()
+
+        then:
+            result
+            result.getClass().equals(ForeignKeyConfigurationEnricher.class)
+    }
 }
