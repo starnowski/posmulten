@@ -92,5 +92,22 @@ class RLSPolicyConfigurationEnricherTest extends AbstractBaseTest {
             "comments"  |   "row_level_pol" |   "ten_id"        |   MapBuilder.mapBuilder().put("tab_id", "bigint").put("uuid", "UUID").build()
     }
 
-    //TODO No invocations
+    @Unroll
+    def "should not invoke any builder's component method when invalid object is passed (#message)"()
+    {
+        given:
+            def builder = prepareBuilderMockWithZeroExpectationOfMethodsInvocation()
+
+        when:
+            def result = tested.enrich(builder, entry)
+
+        then:
+            result == builder
+            0 * builder._
+
+        where:
+            entry               |   message
+            null                |   "null object"
+            new TableEntry()    |   "table entry without rls policy object"
+    }
 }
