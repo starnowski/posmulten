@@ -12,7 +12,7 @@ class DefaultSharedSchemaContextBuilderConfigurationInitializingBeanTest extends
     def "should return builder for schema '#schema'"()
     {
         given:
-            def configuration = new SharedSchemaContextConfiguration().setDefaultTenantIdColumn(schema)
+            def configuration = new SharedSchemaContextConfiguration().setDefaultSchema(schema)
 
         when:
             def result = tested.produce(configuration)
