@@ -33,4 +33,29 @@ class ForeignKeyConfigurationsEnricherTest extends AbstractBaseTest {
         where:
             table << ["tab1", "users"]
     }
+
+    @Unroll
+    def "should not invoke any builder's component method when invalid object is passed (#message)"()
+    {
+        given:
+            def component = Mock(ForeignKeyConfigurationEnricher)
+            def tested = new ForeignKeyConfigurationsEnricher(component)
+            def builder = prepareBuilderMockWithZeroExpectationOfMethodsInvocation()
+
+        when:
+            def result = tested.enrich(builder, entry)
+
+        then:
+            result == builder
+            0 * component._
+
+        and: "do not invoke builder"
+            0 * builder._
+
+        where:
+            entry                                                                       |   message
+            null                                                                        |   "null object"
+            new TableEntry()                                                            |   "table entry with null collection of foreign keys"
+            new TableEntry().setForeignKeys(new ArrayList<ForeignKeyConfiguration>())   |   "table entry with empty collection of foreign keys"
+    }
 }
