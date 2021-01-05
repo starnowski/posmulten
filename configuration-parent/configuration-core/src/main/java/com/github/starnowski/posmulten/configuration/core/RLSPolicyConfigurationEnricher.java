@@ -20,6 +20,9 @@ public class RLSPolicyConfigurationEnricher implements ITableEntryEnricher {
             if (rlsPolicy.getValidTenantValueConstraintName() != null) {
                 builder.registerCustomValidTenantValueConstraintNameForTable(tableEntry.getName(), rlsPolicy.getValidTenantValueConstraintName());
             }
+            if (Boolean.TRUE.equals(rlsPolicy.getSkipAddingOfTenantColumnDefaultValue())) {
+                builder.skipAddingOfTenantColumnDefaultValueForTable(tableEntry.getName());
+            }
         }
         return builder;
     }
