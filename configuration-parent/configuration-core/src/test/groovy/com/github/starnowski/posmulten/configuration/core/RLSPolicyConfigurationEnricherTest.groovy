@@ -30,6 +30,10 @@ class RLSPolicyConfigurationEnricherTest extends AbstractBaseTest {
         then:
             result == builder
             1 * builder.createRLSPolicyForTable(tableName, primaryKeyColumnsNameToTypeMap, tenantColumn, rlsPolicyName)
+            1 * builder.createTenantColumnForTable(tableName)
+            1 * builder.setNameForFunctionThatChecksIfRecordExistsInTable(tableName, nameForFunctionThatChecksIfRecordExistsInTable)
+            1 * builder.registerCustomValidTenantValueConstraintNameForTable(tableName, validTenantValueConstraintName)
+            1 * builder.skipAddingOfTenantColumnDefaultValueForTable(tableName)
 
 
         where:
