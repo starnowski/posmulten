@@ -32,8 +32,6 @@ class RLSPolicyConfigurationEnricherTest extends AbstractBaseTest {
             1 * builder.createRLSPolicyForTable(tableName, primaryKeyColumnsNameToTypeMap, tenantColumn, rlsPolicyName)
             1 * builder.setNameForFunctionThatChecksIfRecordExistsInTable(tableName, nameForFunctionThatChecksIfRecordExistsInTable)
             1 * builder.registerCustomValidTenantValueConstraintNameForTable(tableName, validTenantValueConstraintName)
-//        1 * builder.createTenantColumnForTable(tableName)
-//        1 * builder.skipAddingOfTenantColumnDefaultValueForTable(tableName)
 
 
         where:
@@ -61,8 +59,6 @@ class RLSPolicyConfigurationEnricherTest extends AbstractBaseTest {
             result == builder
             1 * builder.createRLSPolicyForTable(tableName, primaryKeyColumnsNameToTypeMap, tenantColumn, rlsPolicyName)
             1 * builder.createTenantColumnForTable(tableName)
-    //        1 * builder.skipAddingOfTenantColumnDefaultValueForTable(tableName)
-
 
         where:
             tableName   |   rlsPolicyName   |   tenantColumn    |   primaryKeyColumnsNameToTypeMap
@@ -70,4 +66,29 @@ class RLSPolicyConfigurationEnricherTest extends AbstractBaseTest {
             "table1"    |   "table_rls_pol" |   "ten_id"        |   MapBuilder.mapBuilder().put("tab_id", "bigint").put("uuid", "UUID").build()
     }
 
+    @Unroll
+    def "should invoke skipAddingOfTenantColumnDefaultValueForTable method when property skipAddingOfTenantColumnDefaultValue is set with the 'true' value for table name '#tableName', rls policy name '#rlsPolicyName', tenant column '#tenantColumn', primaryKeyColumnsNameToTypeMap '#primaryKeyColumnsNameToTypeMap'"()
+    {
+        given:
+            def builder = prepareBuilderMockWithZeroExpectationOfMethodsInvocation()
+            def entry = new TableEntry().setName(tableName)
+                    .setRlsPolicy(new RLSPolicy()
+                            .setName(rlsPolicyName)
+                            .setTenantColumn(tenantColumn)
+                            .setPrimaryKeyColumnsNameToTypeMap(primaryKeyColumnsNameToTypeMap)
+                            .setSkipAddingOfTenantColumnDefaultValue(true))
+
+        when:
+            def result = tested.enrich(builder, entry)
+
+        then:
+            result == builder
+            1 * builder.createRLSPolicyForTable(tableName, primaryKeyColumnsNameToTypeMap, tenantColumn, rlsPolicyName)
+            1 * builder.skipAddingOfTenantColumnDefaultValueForTable(tableName)
+
+        where:
+            tableName   |   rlsPolicyName   |   tenantColumn    |   primaryKeyColumnsNameToTypeMap
+            "t1"        |   "rls_pol"       |   "col_for_ten"   |   MapBuilder.mapBuilder().put("user_id", "int").build()
+            "comments"  |   "row_level_pol" |   "ten_id"        |   MapBuilder.mapBuilder().put("tab_id", "bigint").put("uuid", "UUID").build()
+    }
 }
