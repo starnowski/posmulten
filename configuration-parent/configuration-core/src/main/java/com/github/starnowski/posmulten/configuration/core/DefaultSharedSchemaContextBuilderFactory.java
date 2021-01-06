@@ -15,7 +15,7 @@ public class DefaultSharedSchemaContextBuilderFactory {
 
     public DefaultSharedSchemaContextBuilder build(SharedSchemaContextConfiguration contextConfiguration)
     {
-        //TODO
-        return null;
+        DefaultSharedSchemaContextBuilder builder = defaultSharedSchemaContextBuilderConfigurationInitializingBean.produce(contextConfiguration);
+        return defaultSharedSchemaContextBuilderConfigurationEnricher.enrich(builder, contextConfiguration);
     }
 }
