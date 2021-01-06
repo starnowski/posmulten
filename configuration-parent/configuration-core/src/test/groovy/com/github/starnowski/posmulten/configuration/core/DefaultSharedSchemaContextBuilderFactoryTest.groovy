@@ -28,4 +28,18 @@ class DefaultSharedSchemaContextBuilderFactoryTest extends Specification {
         and: "do not invoke builder component"
             0 * builder._
     }
+
+    def "should use correct components"()
+    {
+        given:
+            def tested = new DefaultSharedSchemaContextBuilderFactory()
+
+        when:
+            def defaultSharedSchemaContextBuilderConfigurationEnricher = tested.getDefaultSharedSchemaContextBuilderConfigurationEnricher()
+            def defaultSharedSchemaContextBuilderConfigurationInitializingBean = tested.getDefaultSharedSchemaContextBuilderConfigurationInitializingBean()
+
+        then:
+            defaultSharedSchemaContextBuilderConfigurationEnricher.getClass().equals(DefaultSharedSchemaContextBuilderConfigurationEnricher.class)
+            defaultSharedSchemaContextBuilderConfigurationInitializingBean.getClass().equals(DefaultSharedSchemaContextBuilderConfigurationInitializingBean.class)
+    }
 }
