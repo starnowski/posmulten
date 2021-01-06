@@ -5,17 +5,30 @@ import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSche
 
 public class DefaultSharedSchemaContextBuilderFactory {
 
+    private final DefaultSharedSchemaContextBuilderConfigurationEnricher defaultSharedSchemaContextBuilderConfigurationEnricher;
+    private final DefaultSharedSchemaContextBuilderConfigurationInitializingBean defaultSharedSchemaContextBuilderConfigurationInitializingBean;
+
+    public DefaultSharedSchemaContextBuilderFactory()
+    {
+        this(new DefaultSharedSchemaContextBuilderConfigurationEnricher(), new DefaultSharedSchemaContextBuilderConfigurationInitializingBean());
+    }
+
     public DefaultSharedSchemaContextBuilderFactory(DefaultSharedSchemaContextBuilderConfigurationEnricher defaultSharedSchemaContextBuilderConfigurationEnricher, DefaultSharedSchemaContextBuilderConfigurationInitializingBean defaultSharedSchemaContextBuilderConfigurationInitializingBean) {
         this.defaultSharedSchemaContextBuilderConfigurationEnricher = defaultSharedSchemaContextBuilderConfigurationEnricher;
         this.defaultSharedSchemaContextBuilderConfigurationInitializingBean = defaultSharedSchemaContextBuilderConfigurationInitializingBean;
     }
 
-    private final DefaultSharedSchemaContextBuilderConfigurationEnricher defaultSharedSchemaContextBuilderConfigurationEnricher;
-    private final DefaultSharedSchemaContextBuilderConfigurationInitializingBean defaultSharedSchemaContextBuilderConfigurationInitializingBean;
-
     public DefaultSharedSchemaContextBuilder build(SharedSchemaContextConfiguration contextConfiguration)
     {
         DefaultSharedSchemaContextBuilder builder = defaultSharedSchemaContextBuilderConfigurationInitializingBean.produce(contextConfiguration);
         return defaultSharedSchemaContextBuilderConfigurationEnricher.enrich(builder, contextConfiguration);
+    }
+
+    public DefaultSharedSchemaContextBuilderConfigurationEnricher getDefaultSharedSchemaContextBuilderConfigurationEnricher() {
+        return defaultSharedSchemaContextBuilderConfigurationEnricher;
+    }
+
+    public DefaultSharedSchemaContextBuilderConfigurationInitializingBean getDefaultSharedSchemaContextBuilderConfigurationInitializingBean() {
+        return defaultSharedSchemaContextBuilderConfigurationInitializingBean;
     }
 }
