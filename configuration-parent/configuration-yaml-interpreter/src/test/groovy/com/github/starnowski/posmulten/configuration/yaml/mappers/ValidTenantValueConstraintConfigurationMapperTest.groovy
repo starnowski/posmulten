@@ -7,23 +7,6 @@ import static java.util.Arrays.asList
 
 class ValidTenantValueConstraintConfigurationMapperTest extends AbstractConfigurationMapperTest<ValidTenantValueConstraintConfiguration, com.github.starnowski.posmulten.configuration.core.model.ValidTenantValueConstraintConfiguration, ValidTenantValueConstraintConfigurationMapper> {
 
-    def "should unmap random generated yaml configuration object"()
-    {
-        given:
-            ValidTenantValueConstraintConfigurationMapper tested = new ValidTenantValueConstraintConfigurationMapper()
-            EasyRandom easyRandom = new EasyRandom()
-            ValidTenantValueConstraintConfiguration yamlConfiguration = easyRandom.nextObject(ValidTenantValueConstraintConfiguration)
-
-        when:
-            def configuration = tested.unmap(yamlConfiguration)
-
-        then:
-            configuration
-
-        and: "unmapped object should be able to map to an equal object"
-            yamlConfiguration == tested.map(configuration)
-    }
-
     def "should map random generated configuration object"()
     {
         given:
@@ -42,13 +25,13 @@ class ValidTenantValueConstraintConfigurationMapperTest extends AbstractConfigur
     }
 
     @Override
-    protected Class<ValidTenantValueConstraintConfiguration> getConfigurationObjectClass() {
-        ValidTenantValueConstraintConfiguration.class
+    protected Class<com.github.starnowski.posmulten.configuration.core.model.ValidTenantValueConstraintConfiguration> getConfigurationObjectClass() {
+        com.github.starnowski.posmulten.configuration.core.model.ValidTenantValueConstraintConfiguration.class
     }
 
     @Override
-    protected Class<com.github.starnowski.posmulten.configuration.core.model.ValidTenantValueConstraintConfiguration> getYamlConfigurationObjectClass() {
-        com.github.starnowski.posmulten.configuration.core.model.ValidTenantValueConstraintConfiguration.class
+    protected Class<ValidTenantValueConstraintConfiguration> getYamlConfigurationObjectClass() {
+        ValidTenantValueConstraintConfiguration.class
     }
 
     @Override
