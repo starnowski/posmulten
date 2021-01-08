@@ -1,14 +1,12 @@
 package com.github.starnowski.posmulten.configuration.yaml.mappers
 
-
 import com.github.starnowski.posmulten.configuration.yaml.model.ValidTenantValueConstraintConfiguration
 import org.jeasy.random.EasyRandom
-import spock.lang.Specification
 
 import static java.util.Arrays.asList
 import static java.util.stream.Collectors.toList
 
-class ValidTenantValueConstraintConfigurationMapperTest extends Specification {
+class ValidTenantValueConstraintConfigurationMapperTest extends AbstractConfigurationMapperTest<ValidTenantValueConstraintConfiguration, com.github.starnowski.posmulten.configuration.core.model.ValidTenantValueConstraintConfiguration, ValidTenantValueConstraintConfigurationMapper> {
 
     def "should unmap yaml objects to expected configuration objects"() {
         given:
@@ -68,6 +66,21 @@ class ValidTenantValueConstraintConfigurationMapperTest extends Specification {
 
         and: "mapped object should be able to unmap to an equal object"
             configuration == tested.unmap(yamlConfiguration)
+    }
+
+    @Override
+    protected Class<ValidTenantValueConstraintConfiguration> getConfigurationObjectClass() {
+        ValidTenantValueConstraintConfiguration.class
+    }
+
+    @Override
+    protected Class<com.github.starnowski.posmulten.configuration.core.model.ValidTenantValueConstraintConfiguration> getYamlConfigurationObjectClass() {
+        com.github.starnowski.posmulten.configuration.core.model.ValidTenantValueConstraintConfiguration.class
+    }
+
+    @Override
+    protected ValidTenantValueConstraintConfigurationMapper getTestedObject() {
+        new ValidTenantValueConstraintConfigurationMapper()
     }
 
     protected List<ValidTenantValueConstraintConfiguration> prepareExpectedMappedObjectsList() {
