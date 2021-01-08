@@ -8,48 +8,44 @@ import static java.util.stream.Collectors.toList
 
 class ValidTenantValueConstraintConfigurationMapperTest extends Specification {
 
-    def "should unmap yaml objects to expected configuration objects"()
-    {
+    def "should unmap yaml objects to expected configuration objects"() {
         given:
             def tested = new ValidTenantValueConstraintConfigurationMapper()
             List<ValidTenantValueConstraintConfiguration> yamlObjects = prepareExpectedMappedObjectsList()
             List<com.github.starnowski.posmulten.configuration.core.model.ValidTenantValueConstraintConfiguration> expectedObjects = prepareExpectedUmnappeddObjectsList()
 
         when:
-            def actualObjects = yamlObjects.stream().map({yamlObject -> tested.unmap(yamlObject)}).collect(toList())
+            def actualObjects = yamlObjects.stream().map({ yamlObject -> tested.unmap(yamlObject) }).collect(toList())
 
         then:
             actualObjects == expectedObjects
     }
 
-    def "should map yaml objects to expected configuration objects"()
-    {
+    def "should map yaml objects to expected configuration objects"() {
         given:
-        def tested = new ValidTenantValueConstraintConfigurationMapper()
+            def tested = new ValidTenantValueConstraintConfigurationMapper()
             List<ValidTenantValueConstraintConfiguration> expectedYamlObjects = prepareExpectedMappedObjectsList()
             List<com.github.starnowski.posmulten.configuration.core.model.ValidTenantValueConstraintConfiguration> configurationObjects = prepareExpectedUmnappeddObjectsList()
 
         when:
-            def actualObjects = configurationObjects.stream().map({configurationObject -> tested.map(configurationObject)}).collect(toList())
+            def actualObjects = configurationObjects.stream().map({ configurationObject -> tested.map(configurationObject) }).collect(toList())
 
         then:
             actualObjects == expectedYamlObjects
     }
 
-    protected List<ValidTenantValueConstraintConfiguration> prepareExpectedMappedObjectsList()
-    {
+    protected List<ValidTenantValueConstraintConfiguration> prepareExpectedMappedObjectsList() {
         [
                 new ValidTenantValueConstraintConfiguration(),
                 new ValidTenantValueConstraintConfiguration().setIsTenantValidConstraintName("tenant_x_id"),
                 new ValidTenantValueConstraintConfiguration().setIsTenantValidConstraintName("i_t_v_constraint"),
                 new ValidTenantValueConstraintConfiguration().setIsTenantValidConstraintName("i_t_v_constraint")
-                                                            .setIsTenantValidFunctionName("function_name_is_tenant_valid")
-                                                            .setTenantIdentifiersBlacklist(asList("XXX", "invalid_tenant"))
+                        .setIsTenantValidFunctionName("function_name_is_tenant_valid")
+                        .setTenantIdentifiersBlacklist(asList("XXX", "invalid_tenant"))
         ]
     }
 
-    protected List<com.github.starnowski.posmulten.configuration.core.model.ValidTenantValueConstraintConfiguration> prepareExpectedUmnappeddObjectsList()
-    {
+    protected List<com.github.starnowski.posmulten.configuration.core.model.ValidTenantValueConstraintConfiguration> prepareExpectedUmnappeddObjectsList() {
         [
                 new com.github.starnowski.posmulten.configuration.core.model.ValidTenantValueConstraintConfiguration(),
                 new com.github.starnowski.posmulten.configuration.core.model.ValidTenantValueConstraintConfiguration().setIsTenantValidConstraintName("tenant_x_id"),
