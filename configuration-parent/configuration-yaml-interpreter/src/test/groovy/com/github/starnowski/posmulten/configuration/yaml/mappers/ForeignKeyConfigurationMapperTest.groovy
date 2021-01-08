@@ -24,6 +24,10 @@ class ForeignKeyConfigurationMapperTest extends AbstractConfigurationMapperTest<
     @Override
     protected List<com.github.starnowski.posmulten.configuration.yaml.model.ForeignKeyConfiguration> prepareExpectedMappedObjectsList() {
         [
+                new com.github.starnowski.posmulten.configuration.yaml.model.ForeignKeyConfiguration(),
+                new com.github.starnowski.posmulten.configuration.yaml.model.ForeignKeyConfiguration(),
+                new com.github.starnowski.posmulten.configuration.yaml.model.ForeignKeyConfiguration().setConstraintName("asfxzvz")
+                        .setTableName("ccc"),
                 new com.github.starnowski.posmulten.configuration.yaml.model.ForeignKeyConfiguration().setConstraintName("fk_constraint")
                         .setTableName("some_table")
                         .setForeignKeyPrimaryKeyColumnsMappings(mapBuilder().put("user_id", "id").build())
@@ -33,6 +37,11 @@ class ForeignKeyConfigurationMapperTest extends AbstractConfigurationMapperTest<
     @Override
     protected List<ForeignKeyConfiguration> prepareExpectedUmnappeddObjectsList() {
         [
+                new ForeignKeyConfiguration(),
+                new ForeignKeyConfiguration().setConstraintName(null)
+                        .setTableName(null),
+                new ForeignKeyConfiguration().setConstraintName("asfxzvz")
+                        .setTableName("ccc"),
                 new ForeignKeyConfiguration().setConstraintName("fk_constraint")
                         .setTableName("some_table")
                         .setForeignKeyPrimaryKeyColumnsMappings(mapBuilder().put("user_id", "id").build())
