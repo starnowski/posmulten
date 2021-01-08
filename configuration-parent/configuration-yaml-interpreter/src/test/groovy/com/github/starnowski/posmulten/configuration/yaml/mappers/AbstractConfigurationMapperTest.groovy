@@ -1,7 +1,6 @@
 package com.github.starnowski.posmulten.configuration.yaml.mappers
 
 import com.github.starnowski.posmulten.configuration.yaml.IConfigurationMapper
-import com.github.starnowski.posmulten.configuration.yaml.model.ValidTenantValueConstraintConfiguration
 import org.jeasy.random.EasyRandom
 import spock.lang.Specification
 
@@ -75,7 +74,7 @@ abstract class AbstractConfigurationMapperTest<I, O, T extends IConfigurationMap
 
     abstract protected T getTestedObject()
 
-    abstract protected List<ValidTenantValueConstraintConfiguration> prepareExpectedMappedObjectsList()
+    abstract protected List<I> prepareExpectedMappedObjectsList()
 
-    abstract protected List<com.github.starnowski.posmulten.configuration.core.model.ValidTenantValueConstraintConfiguration> prepareExpectedUmnappeddObjectsList()
+    abstract protected List<O> prepareExpectedUmnappeddObjectsList()
 }
