@@ -22,6 +22,20 @@ class ValidTenantValueConstraintConfigurationMapperTest extends Specification {
             actualObjects == expectedObjects
     }
 
+    def "should map yaml objects to expected configuration objects"()
+    {
+        given:
+        def tested = new ValidTenantValueConstraintConfigurationMapper()
+            List<ValidTenantValueConstraintConfiguration> expectedYamlObjects = prepareExpectedMappedObjectsList()
+            List<com.github.starnowski.posmulten.configuration.core.model.ValidTenantValueConstraintConfiguration> configurationObjects = prepareExpectedUmnappeddObjectsList()
+
+        when:
+            def actualObjects = configurationObjects.stream().map({configurationObject -> tested.map(configurationObject)}).collect(toList())
+
+        then:
+            actualObjects == expectedYamlObjects
+    }
+
     protected List<ValidTenantValueConstraintConfiguration> prepareExpectedMappedObjectsList()
     {
         [
