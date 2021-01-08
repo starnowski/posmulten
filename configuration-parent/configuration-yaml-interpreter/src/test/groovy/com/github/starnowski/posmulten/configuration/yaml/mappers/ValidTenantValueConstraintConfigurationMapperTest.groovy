@@ -8,19 +8,6 @@ import static java.util.stream.Collectors.toList
 
 class ValidTenantValueConstraintConfigurationMapperTest extends AbstractConfigurationMapperTest<ValidTenantValueConstraintConfiguration, com.github.starnowski.posmulten.configuration.core.model.ValidTenantValueConstraintConfiguration, ValidTenantValueConstraintConfigurationMapper> {
 
-    def "should unmap yaml objects to expected configuration objects"() {
-        given:
-            ValidTenantValueConstraintConfigurationMapper tested = new ValidTenantValueConstraintConfigurationMapper()
-            List<ValidTenantValueConstraintConfiguration> yamlObjects = prepareExpectedMappedObjectsList()
-            List<com.github.starnowski.posmulten.configuration.core.model.ValidTenantValueConstraintConfiguration> expectedObjects = prepareExpectedUmnappeddObjectsList()
-
-        when:
-            def actualObjects = yamlObjects.stream().map({ yamlObject -> tested.unmap(yamlObject) }).collect(toList())
-
-        then:
-            actualObjects == expectedObjects
-    }
-
     def "should map yaml objects to expected configuration objects"() {
         given:
             ValidTenantValueConstraintConfigurationMapper tested = new ValidTenantValueConstraintConfigurationMapper()
