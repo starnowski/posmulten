@@ -1,6 +1,8 @@
 package com.github.starnowski.posmulten.configuration.yaml.mappers
 
+
 import com.github.starnowski.posmulten.configuration.yaml.model.ValidTenantValueConstraintConfiguration
+import org.jeasy.random.EasyRandom
 import spock.lang.Specification
 
 import static java.util.Arrays.asList
@@ -10,7 +12,7 @@ class ValidTenantValueConstraintConfigurationMapperTest extends Specification {
 
     def "should unmap yaml objects to expected configuration objects"() {
         given:
-            def tested = new ValidTenantValueConstraintConfigurationMapper()
+            ValidTenantValueConstraintConfigurationMapper tested = new ValidTenantValueConstraintConfigurationMapper()
             List<ValidTenantValueConstraintConfiguration> yamlObjects = prepareExpectedMappedObjectsList()
             List<com.github.starnowski.posmulten.configuration.core.model.ValidTenantValueConstraintConfiguration> expectedObjects = prepareExpectedUmnappeddObjectsList()
 
@@ -23,7 +25,7 @@ class ValidTenantValueConstraintConfigurationMapperTest extends Specification {
 
     def "should map yaml objects to expected configuration objects"() {
         given:
-            def tested = new ValidTenantValueConstraintConfigurationMapper()
+            ValidTenantValueConstraintConfigurationMapper tested = new ValidTenantValueConstraintConfigurationMapper()
             List<ValidTenantValueConstraintConfiguration> expectedYamlObjects = prepareExpectedMappedObjectsList()
             List<com.github.starnowski.posmulten.configuration.core.model.ValidTenantValueConstraintConfiguration> configurationObjects = prepareExpectedUmnappeddObjectsList()
 
@@ -32,6 +34,23 @@ class ValidTenantValueConstraintConfigurationMapperTest extends Specification {
 
         then:
             actualObjects == expectedYamlObjects
+    }
+
+    def "should unmap random generated configuration object"()
+    {
+        given:
+            ValidTenantValueConstraintConfigurationMapper tested = new ValidTenantValueConstraintConfigurationMapper()
+            EasyRandom easyRandom = new EasyRandom()
+            ValidTenantValueConstraintConfiguration yamlConfiguration = easyRandom.nextObject(ValidTenantValueConstraintConfiguration)
+
+        when:
+            def configuration = tested.unmap(yamlConfiguration)
+
+        then:
+            configuration
+
+        and: "unmapped object should be able to map to an equal object"
+            yamlConfiguration == tested.map(configuration)
     }
 
     protected List<ValidTenantValueConstraintConfiguration> prepareExpectedMappedObjectsList() {
