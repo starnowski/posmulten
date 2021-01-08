@@ -11,6 +11,9 @@ public class ValidTenantValueConstraintConfigurationMapper implements IConfigura
 
     @Override
     public com.github.starnowski.posmulten.configuration.core.model.ValidTenantValueConstraintConfiguration unmap(ValidTenantValueConstraintConfiguration output) {
-        return null;
+        return output == null ? null : new com.github.starnowski.posmulten.configuration.core.model.ValidTenantValueConstraintConfiguration()
+                .setIsTenantValidConstraintName(output.getIsTenantValidConstraintName() == null ? null : output.getIsTenantValidConstraintName().getValue())
+                .setIsTenantValidFunctionName(output.getIsTenantValidFunctionName() == null ? null : output.getIsTenantValidFunctionName().getValue())
+                .setTenantIdentifiersBlacklist(output.getTenantIdentifiersBlacklist());
     }
 }
