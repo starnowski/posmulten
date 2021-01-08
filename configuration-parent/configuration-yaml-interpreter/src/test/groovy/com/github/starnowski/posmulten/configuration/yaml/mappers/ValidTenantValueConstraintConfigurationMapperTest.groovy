@@ -4,22 +4,8 @@ import com.github.starnowski.posmulten.configuration.yaml.model.ValidTenantValue
 import org.jeasy.random.EasyRandom
 
 import static java.util.Arrays.asList
-import static java.util.stream.Collectors.toList
 
 class ValidTenantValueConstraintConfigurationMapperTest extends AbstractConfigurationMapperTest<ValidTenantValueConstraintConfiguration, com.github.starnowski.posmulten.configuration.core.model.ValidTenantValueConstraintConfiguration, ValidTenantValueConstraintConfigurationMapper> {
-
-    def "should map yaml objects to expected configuration objects"() {
-        given:
-            ValidTenantValueConstraintConfigurationMapper tested = new ValidTenantValueConstraintConfigurationMapper()
-            List<ValidTenantValueConstraintConfiguration> expectedYamlObjects = prepareExpectedMappedObjectsList()
-            List<com.github.starnowski.posmulten.configuration.core.model.ValidTenantValueConstraintConfiguration> configurationObjects = prepareExpectedUmnappeddObjectsList()
-
-        when:
-            def actualObjects = configurationObjects.stream().map({ configurationObject -> tested.map(configurationObject) }).collect(toList())
-
-        then:
-            actualObjects == expectedYamlObjects
-    }
 
     def "should unmap random generated yaml configuration object"()
     {

@@ -21,6 +21,19 @@ abstract class AbstractConfigurationMapperTest<I, O, T extends IConfigurationMap
             actualObjects == expectedObjects
     }
 
+    def "should map yaml objects to expected configuration objects"() {
+        given:
+            T tested = new ValidTenantValueConstraintConfigurationMapper()
+            List<I> expectedYamlObjects = prepareExpectedMappedObjectsList()
+            List<O> configurationObjects = prepareExpectedUmnappeddObjectsList()
+
+        when:
+            def actualObjects = configurationObjects.stream().map({ configurationObject -> tested.map(configurationObject) }).collect(toList())
+
+        then:
+            actualObjects == expectedYamlObjects
+    }
+
     abstract protected Class<I> getConfigurationObjectClass()
 
     abstract protected Class<O> getYamlConfigurationObjectClass()
