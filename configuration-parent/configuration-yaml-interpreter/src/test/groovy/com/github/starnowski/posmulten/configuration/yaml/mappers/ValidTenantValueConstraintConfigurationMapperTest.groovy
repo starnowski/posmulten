@@ -13,13 +13,13 @@ class ValidTenantValueConstraintConfigurationMapperTest extends Specification {
         given:
             def tested = new ValidTenantValueConstraintConfigurationMapper()
             List<ValidTenantValueConstraintConfiguration> yamlObjects = prepareExpectedMappedObjectsList()
-            List<com.github.starnowski.posmulten.configuration.core.model.ValidTenantValueConstraintConfiguration> expectedbjects = prepareExpectedUmnappeddObjectsList()
+            List<com.github.starnowski.posmulten.configuration.core.model.ValidTenantValueConstraintConfiguration> expectedObjects = prepareExpectedUmnappeddObjectsList()
 
         when:
             def actualObjects = yamlObjects.stream().map({yamlObject -> tested.unmap(yamlObject)}).collect(toList())
 
         then:
-            actualObjects == expectedbjects
+            actualObjects == expectedObjects
     }
 
     protected List<ValidTenantValueConstraintConfiguration> prepareExpectedMappedObjectsList()
