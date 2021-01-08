@@ -6,7 +6,7 @@ import com.github.starnowski.posmulten.configuration.yaml.model.ForeignKeyConfig
 public class ForeignKeyConfigurationMapper implements IConfigurationMapper<com.github.starnowski.posmulten.configuration.core.model.ForeignKeyConfiguration, ForeignKeyConfiguration> {
     @Override
     public ForeignKeyConfiguration map(com.github.starnowski.posmulten.configuration.core.model.ForeignKeyConfiguration input) {
-        return null;
+        return input == null ? null : new ForeignKeyConfiguration().setConstraintName(input.getConstraintName());
     }
 
     @Override
