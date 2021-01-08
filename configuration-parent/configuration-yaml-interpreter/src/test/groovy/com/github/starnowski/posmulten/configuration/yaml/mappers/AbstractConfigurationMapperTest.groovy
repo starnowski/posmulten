@@ -24,7 +24,7 @@ abstract class AbstractConfigurationMapperTest<I, O, T extends IConfigurationMap
 
     def "should map yaml objects to expected configuration objects"() {
         given:
-            T tested = new ValidTenantValueConstraintConfigurationMapper()
+            T tested = getTestedObject()
             List<I> expectedYamlObjects = prepareExpectedMappedObjectsList()
             List<O> configurationObjects = prepareExpectedUmnappeddObjectsList()
 
@@ -38,7 +38,7 @@ abstract class AbstractConfigurationMapperTest<I, O, T extends IConfigurationMap
     def "should unmap random generated yaml configuration object"()
     {
         given:
-            T tested = new ValidTenantValueConstraintConfigurationMapper()
+            T tested = getTestedObject()
             EasyRandom easyRandom = new EasyRandom()
             O yamlConfiguration = easyRandom.nextObject(getYamlConfigurationObjectClass())
 
@@ -50,6 +50,23 @@ abstract class AbstractConfigurationMapperTest<I, O, T extends IConfigurationMap
 
         and: "unmapped object should be able to map to an equal object"
             yamlConfiguration == tested.map(configuration)
+    }
+
+    def "should map random generated configuration object"()
+    {
+        given:
+            T tested = getTestedObject()
+            EasyRandom easyRandom = new EasyRandom()
+            I configuration = easyRandom.nextObject(getConfigurationObjectClass())
+
+        when:
+            def yamlConfiguration = tested.map(configuration)
+
+        then:
+            yamlConfiguration
+
+        and: "mapped object should be able to unmap to an equal object"
+            configuration == tested.unmap(yamlConfiguration)
     }
 
     abstract protected Class<O> getConfigurationObjectClass()

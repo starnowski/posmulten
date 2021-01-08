@@ -1,28 +1,10 @@
 package com.github.starnowski.posmulten.configuration.yaml.mappers
 
 import com.github.starnowski.posmulten.configuration.yaml.model.ValidTenantValueConstraintConfiguration
-import org.jeasy.random.EasyRandom
 
 import static java.util.Arrays.asList
 
 class ValidTenantValueConstraintConfigurationMapperTest extends AbstractConfigurationMapperTest<ValidTenantValueConstraintConfiguration, com.github.starnowski.posmulten.configuration.core.model.ValidTenantValueConstraintConfiguration, ValidTenantValueConstraintConfigurationMapper> {
-
-    def "should map random generated configuration object"()
-    {
-        given:
-            ValidTenantValueConstraintConfigurationMapper tested = new ValidTenantValueConstraintConfigurationMapper()
-            EasyRandom easyRandom = new EasyRandom()
-            com.github.starnowski.posmulten.configuration.core.model.ValidTenantValueConstraintConfiguration configuration = easyRandom.nextObject(com.github.starnowski.posmulten.configuration.core.model.ValidTenantValueConstraintConfiguration)
-
-        when:
-            def yamlConfiguration = tested.map(configuration)
-
-        then:
-            yamlConfiguration
-
-        and: "mapped object should be able to unmap to an equal object"
-            configuration == tested.unmap(yamlConfiguration)
-    }
 
     @Override
     protected Class<com.github.starnowski.posmulten.configuration.core.model.ValidTenantValueConstraintConfiguration> getConfigurationObjectClass() {
