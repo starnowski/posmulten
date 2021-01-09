@@ -68,6 +68,26 @@ abstract class AbstractConfigurationMapperTest<I, O, T extends IConfigurationMap
             configuration == tested.unmap(yamlConfiguration)
     }
 
+    def "should map null object where parameter is null"()
+    {
+        given:
+            T tested = getTestedObject()
+
+        expect:
+            null == tested.map(null)
+
+    }
+
+    def "should unmap null object where parameter is null"()
+    {
+        given:
+            T tested = getTestedObject()
+
+        expect:
+            null == tested.unmap(null)
+
+    }
+
     abstract protected Class<O> getConfigurationObjectClass()
 
     abstract protected Class<I> getYamlConfigurationObjectClass()
