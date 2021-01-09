@@ -49,7 +49,10 @@
         <profile>
             <id>cobertura</id>
             <activation>
-                <activeByDefault>true</activeByDefault>
+                <property>
+                    <name>cobertura.active</name>
+                    <value>true</value>
+                </property>
             </activation>
             <build>
                 <plugins>
