@@ -30,7 +30,10 @@ class ForeignKeyConfigurationMapperTest extends AbstractConfigurationMapperTest<
                         .setTableName("ccc"),
                 new com.github.starnowski.posmulten.configuration.yaml.model.ForeignKeyConfiguration().setConstraintName("fk_constraint")
                         .setTableName("some_table")
-                        .setForeignKeyPrimaryKeyColumnsMappings(mapBuilder().put("user_id", "id").build())
+                        .setForeignKeyPrimaryKeyColumnsMappings(mapBuilder().put("user_id", "id").build()),
+                new com.github.starnowski.posmulten.configuration.yaml.model.ForeignKeyConfiguration().setConstraintName("users_fk")
+                        .setTableName("users_po_table")
+                        .setForeignKeyPrimaryKeyColumnsMappings(mapBuilder().put("sss", "uuid").put("some_id", "primary_key_col_id").build())
         ]
     }
 
@@ -44,7 +47,10 @@ class ForeignKeyConfigurationMapperTest extends AbstractConfigurationMapperTest<
                         .setTableName("ccc"),
                 new ForeignKeyConfiguration().setConstraintName("fk_constraint")
                         .setTableName("some_table")
-                        .setForeignKeyPrimaryKeyColumnsMappings(mapBuilder().put("user_id", "id").build())
+                        .setForeignKeyPrimaryKeyColumnsMappings(mapBuilder().put("user_id", "id").build()),
+                new ForeignKeyConfiguration().setConstraintName("users_fk")
+                        .setTableName("users_po_table")
+                        .setForeignKeyPrimaryKeyColumnsMappings(mapBuilder().put("sss", "uuid").put("some_id", "primary_key_col_id").build())
         ]
     }
 }
