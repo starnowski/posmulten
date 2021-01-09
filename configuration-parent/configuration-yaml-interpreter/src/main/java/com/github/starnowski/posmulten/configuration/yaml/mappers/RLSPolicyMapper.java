@@ -19,6 +19,13 @@ public class RLSPolicyMapper implements IConfigurationMapper<com.github.starnows
 
     @Override
     public com.github.starnowski.posmulten.configuration.core.model.RLSPolicy unmap(RLSPolicy output) {
-        return null;
+        return output == null ? null : new com.github.starnowski.posmulten.configuration.core.model.RLSPolicy()
+                .setName(output.getName())
+                .setCreateTenantColumnForTable(output.getCreateTenantColumnForTable())
+                .setNameForFunctionThatChecksIfRecordExistsInTable(output.getNameForFunctionThatChecksIfRecordExistsInTable())
+                .setPrimaryKeyColumnsNameToTypeMap(output.getPrimaryKeyColumnsNameToTypeMap())
+                .setSkipAddingOfTenantColumnDefaultValue(output.getSkipAddingOfTenantColumnDefaultValue())
+                .setTenantColumn(output.getTenantColumn() == null ? null : output.getTenantColumn().getValue())
+                .setValidTenantValueConstraintName(output.getValidTenantValueConstraintName() == null ? null : output.getValidTenantValueConstraintName().getValue());
     }
 }
