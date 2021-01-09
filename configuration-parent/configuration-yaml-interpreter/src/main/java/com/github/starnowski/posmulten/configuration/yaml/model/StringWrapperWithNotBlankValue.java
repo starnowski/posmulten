@@ -26,4 +26,9 @@ public final class StringWrapperWithNotBlankValue {
     public String toString() {
         return value;
     }
+
+    public static StringWrapperWithNotBlankValue valueOf(String value)
+    {
+        return new StringWrapperWithNotBlankValue(value);
+    }
 }

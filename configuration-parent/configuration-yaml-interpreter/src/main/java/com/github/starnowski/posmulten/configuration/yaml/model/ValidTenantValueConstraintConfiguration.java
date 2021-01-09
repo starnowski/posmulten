@@ -9,8 +9,6 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
@@ -33,7 +31,6 @@ public class ValidTenantValueConstraintConfiguration {
     @Valid
     @JsonProperty(value = "is_tenant_valid_constraint_name")
     private StringWrapperWithNotBlankValue isTenantValidConstraintName;
-
     public ValidTenantValueConstraintConfiguration setIsTenantValidFunctionName(String isTenantValidFunctionName) {
         this.isTenantValidFunctionName = new StringWrapperWithNotBlankValue(isTenantValidFunctionName);
         return this;
@@ -41,6 +38,16 @@ public class ValidTenantValueConstraintConfiguration {
 
     public ValidTenantValueConstraintConfiguration setIsTenantValidConstraintName(String isTenantValidConstraintName) {
         this.isTenantValidConstraintName = new StringWrapperWithNotBlankValue(isTenantValidConstraintName);
+        return this;
+    }
+
+    public ValidTenantValueConstraintConfiguration setIsTenantValidFunctionName(StringWrapperWithNotBlankValue isTenantValidFunctionName) {
+        this.isTenantValidFunctionName = isTenantValidFunctionName;
+        return this;
+    }
+
+    public ValidTenantValueConstraintConfiguration setIsTenantValidConstraintName(StringWrapperWithNotBlankValue isTenantValidConstraintName) {
+        this.isTenantValidConstraintName = isTenantValidConstraintName;
         return this;
     }
 }

@@ -37,7 +37,6 @@ public class RLSPolicy {
     private StringWrapperWithNotBlankValue validTenantValueConstraintName;
     @JsonProperty(value = "skip_adding_of_tenant_column_default_value")
     private Boolean skipAddingOfTenantColumnDefaultValue;
-
     public RLSPolicy setTenantColumn(String tenantColumn) {
         this.tenantColumn = new StringWrapperWithNotBlankValue(tenantColumn);
         return this;
@@ -45,6 +44,16 @@ public class RLSPolicy {
 
     public RLSPolicy setValidTenantValueConstraintName(String validTenantValueConstraintName) {
         this.validTenantValueConstraintName = new StringWrapperWithNotBlankValue(validTenantValueConstraintName);
+        return this;
+    }
+
+    public RLSPolicy setTenantColumn(StringWrapperWithNotBlankValue tenantColumn) {
+        this.tenantColumn = tenantColumn;
+        return this;
+    }
+
+    public RLSPolicy setValidTenantValueConstraintName(StringWrapperWithNotBlankValue validTenantValueConstraintName) {
+        this.validTenantValueConstraintName = validTenantValueConstraintName;
         return this;
     }
 }

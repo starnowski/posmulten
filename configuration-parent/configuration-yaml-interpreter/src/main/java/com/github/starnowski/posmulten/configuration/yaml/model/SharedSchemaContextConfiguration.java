@@ -91,4 +91,39 @@ public class SharedSchemaContextConfiguration {
         this.defaultTenantIdColumn = new StringWrapperWithNotBlankValue(defaultTenantIdColumn);
         return this;
     }
+
+    public SharedSchemaContextConfiguration setCurrentTenantIdPropertyType(StringWrapperWithNotBlankValue currentTenantIdPropertyType) {
+        this.currentTenantIdPropertyType = currentTenantIdPropertyType;
+        return this;
+    }
+
+    public SharedSchemaContextConfiguration setCurrentTenantIdProperty(StringWrapperWithNotBlankValue currentTenantIdProperty) {
+        this.currentTenantIdProperty = currentTenantIdProperty;
+        return this;
+    }
+
+    public SharedSchemaContextConfiguration setGetCurrentTenantIdFunctionName(StringWrapperWithNotBlankValue getCurrentTenantIdFunctionName) {
+        this.getCurrentTenantIdFunctionName = getCurrentTenantIdFunctionName;
+        return this;
+    }
+
+    public SharedSchemaContextConfiguration setSetCurrentTenantIdFunctionName(StringWrapperWithNotBlankValue setCurrentTenantIdFunctionName) {
+        this.setCurrentTenantIdFunctionName = setCurrentTenantIdFunctionName;
+        return this;
+    }
+
+    public SharedSchemaContextConfiguration setEqualsCurrentTenantIdentifierFunctionName(StringWrapperWithNotBlankValue equalsCurrentTenantIdentifierFunctionName) {
+        this.equalsCurrentTenantIdentifierFunctionName = equalsCurrentTenantIdentifierFunctionName;
+        return this;
+    }
+
+    public SharedSchemaContextConfiguration setTenantHasAuthoritiesFunctionName(StringWrapperWithNotBlankValue tenantHasAuthoritiesFunctionName) {
+        this.tenantHasAuthoritiesFunctionName = tenantHasAuthoritiesFunctionName;
+        return this;
+    }
+
+    public SharedSchemaContextConfiguration setDefaultTenantIdColumn(StringWrapperWithNotBlankValue defaultTenantIdColumn) {
+        this.defaultTenantIdColumn = defaultTenantIdColumn;
+        return this;
+    }
 }
