@@ -1,6 +1,8 @@
 package com.github.starnowski.posmulten.configuration.yaml.mappers
 
 import com.github.starnowski.posmulten.configuration.core.model.SharedSchemaContextConfiguration
+import com.github.starnowski.posmulten.configuration.core.model.TableEntry
+import com.github.starnowski.posmulten.configuration.core.model.ValidTenantValueConstraintConfiguration
 
 import static java.util.Arrays.asList
 
@@ -41,6 +43,20 @@ class SharedSchemaContextConfigurationMapperTest extends AbstractConfigurationMa
 
     @Override
     protected List<SharedSchemaContextConfiguration> prepareExpectedUnmappeddObjectsList() {
-        return null
+        [
+                new SharedSchemaContextConfiguration(),
+                new SharedSchemaContextConfiguration().setSetCurrentTenantIdFunctionName("set_current_f_t_id_fun_na"),
+                new SharedSchemaContextConfiguration().setSetCurrentTenantIdFunctionName("ggxx").setGrantee("db-user"),
+                new SharedSchemaContextConfiguration().setGrantee("db-user").setCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables(true),
+                new SharedSchemaContextConfiguration().setCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables(false).setCurrentTenantIdProperty("ccte.property"),
+                new SharedSchemaContextConfiguration().setCurrentTenantIdProperty("posmulten.property").setDefaultTenantIdColumn("tenant_col_id"),
+                new SharedSchemaContextConfiguration().setDefaultTenantIdColumn("tenant").setCurrentTenantIdPropertyType("VARCHAR(127)"),
+                new SharedSchemaContextConfiguration().setCurrentTenantIdPropertyType("VARCHAR(127)").setEqualsCurrentTenantIdentifierFunctionName("equals_cur_t"),
+                new SharedSchemaContextConfiguration().setEqualsCurrentTenantIdentifierFunctionName("equals_cur_t").setGetCurrentTenantIdFunctionName("get_tenant"),
+                new SharedSchemaContextConfiguration().setGetCurrentTenantIdFunctionName("get_tenant").setSetCurrentTenantIdFunctionName("this_is_a_tenant"),
+                new SharedSchemaContextConfiguration().setSetCurrentTenantIdFunctionName("set_cur_tenant").setForceRowLevelSecurityForTableOwner(true),
+                new SharedSchemaContextConfiguration().setForceRowLevelSecurityForTableOwner(false).setValidTenantValueConstraint(new ValidTenantValueConstraintConfiguration().setTenantIdentifiersBlacklist(asList("Invalid"))),
+                new SharedSchemaContextConfiguration().setTables(asList(new TableEntry().setName("table_1"))),
+        ]
     }
 }
