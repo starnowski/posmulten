@@ -32,7 +32,7 @@ class ValidTenantValueConstraintConfigurationMapperTest extends AbstractConfigur
         ]
     }
 
-    protected List<com.github.starnowski.posmulten.configuration.core.model.ValidTenantValueConstraintConfiguration> prepareExpectedUmnappeddObjectsList() {
+    protected List<com.github.starnowski.posmulten.configuration.core.model.ValidTenantValueConstraintConfiguration> prepareExpectedUnmappeddObjectsList() {
         [
                 new com.github.starnowski.posmulten.configuration.core.model.ValidTenantValueConstraintConfiguration(),
                 new com.github.starnowski.posmulten.configuration.core.model.ValidTenantValueConstraintConfiguration().setIsTenantValidConstraintName("tenant_x_id"),

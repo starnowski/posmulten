@@ -12,7 +12,7 @@ abstract class AbstractConfigurationMapperTest<I, O, T extends IConfigurationMap
         given:
             T tested = getTestedObject()
             List<O> yamlObjects = prepareExpectedMappedObjectsList()
-            List<I> expectedObjects = prepareExpectedUmnappeddObjectsList()
+            List<I> expectedObjects = prepareExpectedUnmappeddObjectsList()
 
         when:
             def actualObjects = yamlObjects.stream().map({ yamlObject -> tested.unmap(yamlObject) }).collect(toList())
@@ -25,7 +25,7 @@ abstract class AbstractConfigurationMapperTest<I, O, T extends IConfigurationMap
         given:
             T tested = getTestedObject()
             List<I> expectedYamlObjects = prepareExpectedMappedObjectsList()
-            List<O> configurationObjects = prepareExpectedUmnappeddObjectsList()
+            List<O> configurationObjects = prepareExpectedUnmappeddObjectsList()
 
         when:
             def actualObjects = configurationObjects.stream().map({ configurationObject -> tested.map(configurationObject) }).collect(toList())
@@ -76,5 +76,5 @@ abstract class AbstractConfigurationMapperTest<I, O, T extends IConfigurationMap
 
     abstract protected List<I> prepareExpectedMappedObjectsList()
 
-    abstract protected List<O> prepareExpectedUmnappeddObjectsList()
+    abstract protected List<O> prepareExpectedUnmappeddObjectsList()
 }

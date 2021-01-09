@@ -35,7 +35,7 @@ class ForeignKeyConfigurationMapperTest extends AbstractConfigurationMapperTest<
     }
 
     @Override
-    protected List<ForeignKeyConfiguration> prepareExpectedUmnappeddObjectsList() {
+    protected List<ForeignKeyConfiguration> prepareExpectedUnmappeddObjectsList() {
         [
                 new ForeignKeyConfiguration(),
                 new ForeignKeyConfiguration().setConstraintName(null)
