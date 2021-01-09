@@ -26,12 +26,24 @@ public class SharedSchemaContextConfigurationMapper implements IConfigurationMap
                 .setSetCurrentTenantIdFunctionName(input.getSetCurrentTenantIdFunctionName() == null ? null : valueOf(input.getSetCurrentTenantIdFunctionName()))
                 .setTenantHasAuthoritiesFunctionName(input.getTenantHasAuthoritiesFunctionName() == null ? null : valueOf(input.getTenantHasAuthoritiesFunctionName()))
                 .setTables(input.getTables() == null ? null : input.getTables().stream().map(tableEntry -> tableEntryMapper.map(tableEntry)).collect(toList()))
-                .setValidTenantValueConstraint(validTenantValueConstraintConfigurationMapper.map(input.getValidTenantValueConstraint()))
-                ;
+                .setValidTenantValueConstraint(validTenantValueConstraintConfigurationMapper.map(input.getValidTenantValueConstraint()));
     }
 
     @Override
     public com.github.starnowski.posmulten.configuration.core.model.SharedSchemaContextConfiguration unmap(SharedSchemaContextConfiguration output) {
-        return null;
+        return output == null ? null : new com.github.starnowski.posmulten.configuration.core.model.SharedSchemaContextConfiguration()
+                .setCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables(output.getCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables())
+                .setCurrentTenantIdProperty(output.getCurrentTenantIdProperty() == null ? null : output.getCurrentTenantIdProperty().getValue())
+                .setCurrentTenantIdPropertyType(output.getCurrentTenantIdPropertyType() == null ? null : output.getCurrentTenantIdPropertyType().getValue())
+                .setDefaultSchema(output.getDefaultSchema())
+                .setDefaultTenantIdColumn(output.getDefaultTenantIdColumn() == null ? null : output.getDefaultTenantIdColumn().getValue())
+                .setEqualsCurrentTenantIdentifierFunctionName(output.getEqualsCurrentTenantIdentifierFunctionName() == null ? null : output.getEqualsCurrentTenantIdentifierFunctionName().getValue())
+                .setForceRowLevelSecurityForTableOwner(output.getForceRowLevelSecurityForTableOwner())
+                .setGetCurrentTenantIdFunctionName(output.getGetCurrentTenantIdFunctionName() == null ? null : output.getGetCurrentTenantIdFunctionName().getValue())
+                .setGrantee(output.getGrantee())
+                .setSetCurrentTenantIdFunctionName(output.getSetCurrentTenantIdFunctionName() == null ? null : output.getSetCurrentTenantIdFunctionName().getValue())
+                .setTenantHasAuthoritiesFunctionName(output.getTenantHasAuthoritiesFunctionName() == null ? null : output.getTenantHasAuthoritiesFunctionName().getValue())
+                .setTables(output.getTables() == null ? null : output.getTables().stream().map(tableEntry -> tableEntryMapper.unmap(tableEntry)).collect(toList()))
+                .setValidTenantValueConstraint(validTenantValueConstraintConfigurationMapper.unmap(output.getValidTenantValueConstraint()));
     }
 }
