@@ -11,7 +11,7 @@ import static java.util.Arrays.asList;
 public class YamlConfigurationDefaultSharedSchemaContextBuilderFactorySupplier extends AbstractDefaultSharedSchemaContextBuilderFactorySupplier {
     @Override
     public Supplier<IDefaultSharedSchemaContextBuilderFactory> getFactorySupplier() {
-        return null;
+        return YamlConfigurationDefaultSharedSchemaContextBuilderFactory::new;
     }
 
     @Override
