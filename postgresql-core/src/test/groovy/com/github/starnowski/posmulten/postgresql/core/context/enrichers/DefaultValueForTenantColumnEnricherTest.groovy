@@ -90,8 +90,8 @@ class DefaultValueForTenantColumnEnricherTest extends Specification {
         where:
             schema          |   defaultTenantColumn     |   tableNameTenantNamePairs                                        ||  expectedPassedParameters
             null            |   "default_ten_col"       |   [new Pair("users", "tenant_id"), new Pair("leads", null)]       ||  [key("users", "tenant_id", "some_fun(1)", null), key("leads", "default_ten_col", "some_fun(1)", null)]
-            "public"        |   "column_tent"           |   [new Pair("users", null), new Pair("leads", "t_xxx")]           ||  [key("users", "column_tent", "def_fun()", "public"), key("leads", "t_xxx", "def_fun()", "public")]
-            "some_schema"   |   "tenant_uuid"           |   [new Pair("users", null), new Pair("leads", null)]              ||  [key("users", "tenant_uuid", "CONST", "some_schema"), key("leads", "tenant_uuid", "CONST", "some_schema")]
+            "public"        |   "column_tent"           |   [new Pair("users", null), new Pair("leads", "t_xxx")]           ||  [key("users", "column_tent", "some_fun(1)", "public"), key("leads", "t_xxx", "some_fun(1)", "public")]
+            "some_schema"   |   "tenant_uuid"           |   [new Pair("users", null), new Pair("leads", null)]              ||  [key("users", "tenant_uuid", "some_fun(1)", "some_schema"), key("leads", "tenant_uuid", "some_fun(1)", "some_schema")]
     }
 
     @Unroll
