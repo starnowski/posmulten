@@ -350,7 +350,7 @@ You can use it just by adding it as a dependency in the project descriptor file 
         <dependency>
             <groupId>com.github.starnowski.posmulten</groupId>
             <artifactId>postgresql-core</artifactId>
-            <version>0.2.0</version>
+            <version>0.2.2</version>
         </dependency>
 ```
 
