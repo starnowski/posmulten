@@ -1,11 +1,6 @@
 package com.github.starnowski.posmulten.configuration.yaml.dao
 
-import com.github.starnowski.posmulten.configuration.yaml.model.ForeignKeyConfiguration
-import com.github.starnowski.posmulten.configuration.yaml.model.RLSPolicy
-import com.github.starnowski.posmulten.configuration.yaml.model.SharedSchemaContextConfiguration
-import com.github.starnowski.posmulten.configuration.yaml.model.StringWrapperWithNotBlankValue
-import com.github.starnowski.posmulten.configuration.yaml.model.TableEntry
-import com.github.starnowski.posmulten.configuration.yaml.model.ValidTenantValueConstraintConfiguration
+import com.github.starnowski.posmulten.configuration.yaml.model.*
 import org.jeasy.random.EasyRandom
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
@@ -13,14 +8,13 @@ import spock.lang.Unroll
 
 import java.nio.file.Paths
 
+import static com.github.starnowski.posmulten.configuration.yaml.TestProperties.ALL_FIELDS_FILE_PATH
+import static com.github.starnowski.posmulten.configuration.yaml.TestProperties.ONLY_MANDATORY_FIELDS_FILE_PATH
 import static com.github.starnowski.posmulten.postgresql.test.utils.MapBuilder.mapBuilder
 import static java.util.Arrays.asList
 import static java.util.stream.Collectors.toList
 
 class SharedSchemaContextConfigurationYamlDaoTest extends spock.lang.Specification {
-
-    public static final ALL_FIELDS_FILE_PATH = "/com/github/starnowski/posmulten/configuration/yaml/all-fields.yaml"
-    public static final ONLY_MANDATORY_FIELDS_FILE_PATH = "/com/github/starnowski/posmulten/configuration/yaml/only-mandatory-fields.yaml"
 
     @Rule
     public TemporaryFolder tempFolder = new TemporaryFolder()
