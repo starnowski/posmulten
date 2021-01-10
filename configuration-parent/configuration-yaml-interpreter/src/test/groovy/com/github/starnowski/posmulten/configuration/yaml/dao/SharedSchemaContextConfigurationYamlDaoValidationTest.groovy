@@ -1,5 +1,6 @@
 package com.github.starnowski.posmulten.configuration.yaml.dao
 
+import com.github.starnowski.posmulten.configuration.yaml.AbstractSpecification
 import com.github.starnowski.posmulten.configuration.yaml.exceptions.YamlInvalidSchema
 import spock.lang.Unroll
 
@@ -11,7 +12,7 @@ import static com.github.starnowski.posmulten.configuration.yaml.TestProperties.
 import static com.github.starnowski.posmulten.configuration.yaml.TestProperties.INVALID_NESTED_NODE_BLANK_FIELDS_FILE_PATH
 import static com.github.starnowski.posmulten.configuration.yaml.TestProperties.INVALID_NESTED_NODE_EMPTY_LIST_FILE_PATH
 
-class SharedSchemaContextConfigurationYamlDaoValidationTest extends spock.lang.Specification {
+class SharedSchemaContextConfigurationYamlDaoValidationTest extends AbstractSpecification {
 
     def tested = new SharedSchemaContextConfigurationYamlDao()
 
@@ -111,9 +112,5 @@ class SharedSchemaContextConfigurationYamlDaoValidationTest extends spock.lang.S
                              "tables[2].foreign_keys[2].foreign_key_primary_key_columns_mappings.<map key> must not be blank",
                              "tables[1].foreign_keys[0].constraint_name must not be blank"
             ]
-    }
-
-    private String resolveFilePath(String filePath) {
-        Paths.get(this.class.getResource(filePath).toURI()).toFile().getPath()
     }
 }

@@ -1,12 +1,12 @@
 package com.github.starnowski.posmulten.configuration.yaml.dao
 
+import com.github.starnowski.posmulten.configuration.yaml.AbstractSpecification
 import com.github.starnowski.posmulten.configuration.yaml.model.*
 import org.jeasy.random.EasyRandom
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import spock.lang.Unroll
 
-import java.nio.file.Paths
 
 import static com.github.starnowski.posmulten.configuration.yaml.TestProperties.ALL_FIELDS_FILE_PATH
 import static com.github.starnowski.posmulten.configuration.yaml.TestProperties.ONLY_MANDATORY_FIELDS_FILE_PATH
@@ -14,7 +14,7 @@ import static com.github.starnowski.posmulten.postgresql.test.utils.MapBuilder.m
 import static java.util.Arrays.asList
 import static java.util.stream.Collectors.toList
 
-class SharedSchemaContextConfigurationYamlDaoTest extends spock.lang.Specification {
+class SharedSchemaContextConfigurationYamlDaoTest extends AbstractSpecification {
 
     @Rule
     public TemporaryFolder tempFolder = new TemporaryFolder()
@@ -201,10 +201,6 @@ class SharedSchemaContextConfigurationYamlDaoTest extends spock.lang.Specificati
 
         and: "tests objects should be equal"
             result == randomObject
-    }
-
-    private String resolveFilePath(String filePath) {
-        Paths.get(this.class.getResource(filePath).toURI()).toFile().getPath()
     }
 
     private StringWrapperWithNotBlankValue stringWrapper(String value)
