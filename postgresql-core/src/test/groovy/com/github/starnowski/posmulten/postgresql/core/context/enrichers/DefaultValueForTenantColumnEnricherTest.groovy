@@ -59,6 +59,7 @@ class DefaultValueForTenantColumnEnricherTest extends Specification {
         given:
             def builder = (new DefaultSharedSchemaContextBuilder(schema))
                     .setCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables(true)
+                    .setDefaultTenantIdColumn(defaultTenantColumn)
             for (Pair tableNameTenantNamePair : tableNameTenantNamePairs)
             {
                 builder.createRLSPolicyForTable(tableNameTenantNamePair.key, [:], tableNameTenantNamePair.value, null)
