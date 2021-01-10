@@ -5,13 +5,13 @@ import spock.lang.Unroll
 
 import java.nio.file.Paths
 
-class SharedSchemaContextConfigurationYamlDaoValidationTest extends spock.lang.Specification {
+import static com.github.starnowski.posmulten.configuration.yaml.TestProperties.INVALID_LIST_NODES_BLANK_FIELDS_PATH
+import static com.github.starnowski.posmulten.configuration.yaml.TestProperties.INVALID_MAP_BLANK_FIELDS_PATH
+import static com.github.starnowski.posmulten.configuration.yaml.TestProperties.INVALID_ROOT_NODE_BLANK_FIELDS_FILE_PATH
+import static com.github.starnowski.posmulten.configuration.yaml.TestProperties.INVALID_NESTED_NODE_BLANK_FIELDS_FILE_PATH
+import static com.github.starnowski.posmulten.configuration.yaml.TestProperties.INVALID_NESTED_NODE_EMPTY_LIST_FILE_PATH
 
-    public static final INVALID_ROOT_NODE_BLANK_FIELDS_FILE_PATH = "/com/github/starnowski/posmulten/configuration/yaml/invalid-root-node-blank-fields.yaml"
-    public static final INVALID_NESTED_NODE_BLANK_FIELDS_FILE_PATH = "/com/github/starnowski/posmulten/configuration/yaml/invalid-nested-node-blank-fields.yaml"
-    public static final INVALID_NESTED_NODE_EMPTY_LIST_FILE_PATH = "/com/github/starnowski/posmulten/configuration/yaml/invalid-nested-node-empty-list.yaml"
-    public static final INVALID_LIST_NODES_BLANK_FIELDS_PATH = "/com/github/starnowski/posmulten/configuration/yaml/invalid-list-nodes-blank-fields.yaml"
-    public static final INVALID_MAP_BLANK_FIELDS_PATH = "/com/github/starnowski/posmulten/configuration/yaml/invalid-map-blank-fields.yaml"
+class SharedSchemaContextConfigurationYamlDaoValidationTest extends spock.lang.Specification {
 
     def tested = new SharedSchemaContextConfigurationYamlDao()
 
