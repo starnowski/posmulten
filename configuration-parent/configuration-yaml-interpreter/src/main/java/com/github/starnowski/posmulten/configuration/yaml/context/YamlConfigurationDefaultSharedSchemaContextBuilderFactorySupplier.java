@@ -6,6 +6,8 @@ import com.github.starnowski.posmulten.configuration.core.context.IDefaultShared
 import java.util.List;
 import java.util.function.Supplier;
 
+import static java.util.Arrays.asList;
+
 public class YamlConfigurationDefaultSharedSchemaContextBuilderFactorySupplier extends AbstractDefaultSharedSchemaContextBuilderFactorySupplier {
     @Override
     public Supplier<IDefaultSharedSchemaContextBuilderFactory> getFactorySupplier() {
@@ -14,6 +16,6 @@ public class YamlConfigurationDefaultSharedSchemaContextBuilderFactorySupplier e
 
     @Override
     public List<String> getSupportedFileExtensions() {
-        return null;
+        return asList("yaml", "yml");
     }
 }
