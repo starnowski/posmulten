@@ -12,6 +12,7 @@
     <modules>
         <module>configuration-yaml-interpreter</module>
         <module>configuration-core</module>
+        <module>configuration</module>
     </modules>
     <groupId>com.github.starnowski.posmulten.configuration</groupId>
     <artifactId>configuration-parent</artifactId>
