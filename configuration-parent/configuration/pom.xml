@@ -11,6 +11,10 @@
 
     <artifactId>configuration</artifactId>
 
+    <properties>
+        <org.reflections.reflections>0.9.12</org.reflections.reflections>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>com.github.starnowski.posmulten.configuration</groupId>
@@ -38,6 +42,11 @@
         <dependency>
             <groupId>net.bytebuddy</groupId>
             <artifactId>byte-buddy</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
+            <version>${org.reflections.reflections}</version>
         </dependency>
     </dependencies>
 
