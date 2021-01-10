@@ -27,4 +27,16 @@ class YamlConfigurationDefaultSharedSchemaContextBuilderFactorySupplierTest exte
             results.size() == expectedExtensions.size()
             results.containsAll(expectedExtensions)
     }
+
+    def "should return factory supplier"()
+    {
+        when:
+            def supplier = tested.getFactorySupplier()
+
+        then:
+            supplier
+
+        and: "supplier creates object of correct type"
+            YamlConfigurationDefaultSharedSchemaContextBuilderFactory.class.equals(supplier.get().getClass())
+    }
 }
