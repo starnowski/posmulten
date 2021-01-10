@@ -5,12 +5,13 @@ import com.github.starnowski.posmulten.configuration.core.context.IDefaultShared
 import java.util.Comparator;
 import java.util.Set;
 
+import static java.util.Comparator.comparingInt;
+
 public class DefaultSharedSchemaContextBuilderFactorySupplierResolver {
 
-    public IDefaultSharedSchemaContextBuilderFactorySupplier resolveSupplierBasedOnPriorityForFile(String file, Set<IDefaultSharedSchemaContextBuilderFactorySupplier> suppliers)
-    {
+    public IDefaultSharedSchemaContextBuilderFactorySupplier resolveSupplierBasedOnPriorityForFile(String file, Set<IDefaultSharedSchemaContextBuilderFactorySupplier> suppliers) {
         //TODO
-        Comparator<IDefaultSharedSchemaContextBuilderFactorySupplier> priorityComparator = Comparator.comparingInt(supplier -> supplier.getPriority());
-        return suppliers.stream().sorted(priorityComparator.reversed()).findFirst().orElse(null);
+        Comparator<IDefaultSharedSchemaContextBuilderFactorySupplier> priorityComparator = comparingInt(IDefaultSharedSchemaContextBuilderFactorySupplier::getPriority);
+        return suppliers.stream().max(priorityComparator).orElse(null);
     }
 }
