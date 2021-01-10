@@ -4,8 +4,6 @@ import com.github.starnowski.posmulten.configuration.yaml.AbstractSpecification
 import com.github.starnowski.posmulten.configuration.yaml.exceptions.YamlInvalidSchema
 import spock.lang.Unroll
 
-import java.nio.file.Paths
-
 import static com.github.starnowski.posmulten.configuration.yaml.TestProperties.INVALID_LIST_NODES_BLANK_FIELDS_PATH
 import static com.github.starnowski.posmulten.configuration.yaml.TestProperties.INVALID_MAP_BLANK_FIELDS_PATH
 import static com.github.starnowski.posmulten.configuration.yaml.TestProperties.INVALID_ROOT_NODE_BLANK_FIELDS_FILE_PATH
