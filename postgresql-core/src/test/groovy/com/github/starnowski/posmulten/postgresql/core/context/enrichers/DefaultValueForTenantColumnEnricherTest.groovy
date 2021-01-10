@@ -54,6 +54,47 @@ class DefaultValueForTenantColumnEnricherTest extends Specification {
     }
 
     @Unroll
+    def "should create sql definitions that add default value declaration for schema '#schema' for all tables (#tableNameTenantNamePairs) and sets default tenant column name (#defaultTenantColumn) if tables does not have specified tenant column name" ()
+    {
+        given:
+            def builder = (new DefaultSharedSchemaContextBuilder(schema))
+                    .setCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables(true)
+                    .setDefaultTenantIdColumn(defaultTenantColumn)
+            for (Pair tableNameTenantNamePair : tableNameTenantNamePairs)
+            {
+                builder.createRLSPolicyForTable(tableNameTenantNamePair.key, [:], tableNameTenantNamePair.value, null)
+            }
+            Set<IIsTenantIdentifierValidConstraintProducerParameters> capturedParameters = new HashSet<>()
+            SetDefaultStatementProducer producer = Mock(SetDefaultStatementProducer)
+            SQLDefinition mockedSQLDefinition = Mock(SQLDefinition)
+            IGetCurrentTenantIdFunctionInvocationFactory getCurrentTenantIdFunctionInvocationFactory = Mock(IGetCurrentTenantIdFunctionInvocationFactory)
+            getCurrentTenantIdFunctionInvocationFactory.returnGetCurrentTenantIdFunctionInvocation() >> "some_fun(1)"
+            def sharedSchemaContextRequest = builder.getSharedSchemaContextRequestCopy()
+            def context = new SharedSchemaContext()
+            context.setIGetCurrentTenantIdFunctionInvocationFactory(getCurrentTenantIdFunctionInvocationFactory)
+            def tested = new DefaultValueForTenantColumnEnricher(producer)
+
+        when:
+            def result = tested.enrich(context, sharedSchemaContextRequest)
+
+        then:
+            tableNameTenantNamePairs.size() * producer.produce(_) >>  {
+                parameters ->
+                    capturedParameters.add(key(parameters[0]))
+                    mockedSQLDefinition
+            }
+            result.getSqlDefinitions().size() == tableNameTenantNamePairs.size()
+            capturedParameters == new HashSet(expectedPassedParameters)
+
+
+        where:
+            schema          |   defaultTenantColumn     |   tableNameTenantNamePairs                                        ||  expectedPassedParameters
+            null            |   "default_ten_col"       |   [new Pair("users", "tenant_id"), new Pair("leads", null)]       ||  [key("users", "tenant_id", "some_fun(1)", null), key("leads", "default_ten_col", "some_fun(1)", null)]
+            "public"        |   "column_tent"           |   [new Pair("users", null), new Pair("leads", "t_xxx")]           ||  [key("users", "column_tent", "some_fun(1)", "public"), key("leads", "t_xxx", "some_fun(1)", "public")]
+            "some_schema"   |   "tenant_uuid"           |   [new Pair("users", null), new Pair("leads", null)]              ||  [key("users", "tenant_uuid", "some_fun(1)", "some_schema"), key("leads", "tenant_uuid", "some_fun(1)", "some_schema")]
+    }
+
+    @Unroll
     def "should create sql definitions that add default value declaration '#defaultValue' for schema '#schema' for tables which tenant column should be created (#tablesThatRequiredTenantColumn) amongst tables (#tableNameTenantNamePairs)" ()
     {
         given:
