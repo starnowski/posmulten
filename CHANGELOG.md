@@ -8,10 +8,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 https://keepachangelog.com/en/1.0.0/
 https://www.markdownguide.org/basic-syntax/
 
+* [0.2.2](#022---2021-01-10)
 * [0.2.1](#021---2020-12-23)
 * [0.2.0](#020---2020-11-14)
 
 ## [Unreleased]
+
+## [0.2.2] - 2021-01-10
+### Fixed
+
+-   Using default tenant column name in com.github.starnowski.posmulten.postgresql.core.context.enrichers.DefaultValueForTenantColumnEnricher#enrich(ISharedSchemaContext, SharedSchemaContextRequest) method when tenant column name is not defined for table.
+    [174](https://github.com/starnowski/posmulten/issues/174)
 
 ## [0.2.1] - 2020-12-23
 ### Added
