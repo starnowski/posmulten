@@ -1,9 +1,6 @@
 package com.github.starnowski.posmulten.configuration.core
 
-import com.github.starnowski.posmulten.configuration.core.model.RLSPolicy
-import com.github.starnowski.posmulten.configuration.core.model.SharedSchemaContextConfiguration
-import com.github.starnowski.posmulten.configuration.core.model.TableEntry
-import com.github.starnowski.posmulten.configuration.core.model.ValidTenantValueConstraintConfiguration
+import com.github.starnowski.posmulten.configuration.core.model.*
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -53,7 +50,30 @@ class DefaultSharedSchemaContextBuilderFactorySmokeTest extends Specification {
                                     .setName("tweet_rls_policy")
                                     .setNameForFunctionThatChecksIfRecordExistsInTable("does_tweet_record_exists")
                                     .setPrimaryKeyColumnsNameToTypeMap(mapBuilder().put("uuid", "UUID").build())))
-                            )
+                    ),
+                    new SharedSchemaContextConfiguration().setDefaultSchema("public")
+                            .setGrantee("postgres-user")
+                            .setForceRowLevelSecurityForTableOwner(true)
+                            .setDefaultTenantIdColumn("tenant")
+                            .setValidTenantValueConstraint(new ValidTenantValueConstraintConfiguration()
+                            .setTenantIdentifiersBlacklist(asList("INVALID_Ten", "John_1234_Doe")))
+                            .setTables(asList(new TableEntry().setName("users_info")
+                            .setRlsPolicy(new RLSPolicy()
+                            .setName("users_info_rls")
+                            .setNameForFunctionThatChecksIfRecordExistsInTable("does_users_record_exists")
+                            .setPrimaryKeyColumnsNameToTypeMap(mapBuilder().put("id", "biging").build())),
+                            new TableEntry().setName("tweet")
+                                    .setRlsPolicy(new RLSPolicy()
+                                    .setName("tweet_rls_policy")
+                                    .setNameForFunctionThatChecksIfRecordExistsInTable("does_tweet_record_exists")
+                                    .setPrimaryKeyColumnsNameToTypeMap(mapBuilder().put("uuid", "UUID").build()))
+                                    .setForeignKeys(asList(new ForeignKeyConfiguration()
+                                    .setTableName("users_info")
+                                    .setConstraintName("tweet_users_info_fk")
+                                    .setForeignKeyPrimaryKeyColumnsMappings(mapBuilder().put("user_info_id", "id").build())
+                            ))
+                    )
+                    )
             ]
     }
 }
