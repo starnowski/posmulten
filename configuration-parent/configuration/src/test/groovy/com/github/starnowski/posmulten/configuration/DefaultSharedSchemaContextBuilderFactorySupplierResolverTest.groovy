@@ -25,8 +25,12 @@ class DefaultSharedSchemaContextBuilderFactorySupplierResolverTest extends Speci
             result.is(expectedSupplier)
 
         where:
-            filePath                |   suppliers                                   ||  expectedSupplier
-            "somePath/file.yml"     |   [supplier(1, "yml")]    ||  supplier(49, "yml")
+            filePath                    |   suppliers                                                           ||  expectedSupplier
+            "somePath/file.yml"         |   [supplier(1, "yml")]                                                ||  supplier(49, "yml")
+            "somePath/file.yml"         |   [supplier(1, "yml")]                                                ||  supplier(49, "YML")
+            "somePath/file.yml"         |   [supplier(1, "yml")]                                                ||  supplier(49, "yaml", "yml")
+            "somePath/file.yml"         |   [supplier(1, "yml"), supplier(50, "yaml")]                          ||  supplier(49, "yml")
+            "somePath/someFile.xml"     |   [supplier(32, "json"), supplier(67, "tf"), supplier(12, "xml")]     ||  supplier(37, "xml")
     }
 
     private IDefaultSharedSchemaContextBuilderFactorySupplier supplier(int priority, String... extensions)
