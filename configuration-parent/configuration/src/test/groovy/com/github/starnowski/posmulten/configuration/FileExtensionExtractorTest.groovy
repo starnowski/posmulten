@@ -22,6 +22,7 @@ class FileExtensionExtractorTest extends Specification {
             "/home/cfg.xml"                 ||  "xml"
             "/var/cfg.XML"                  ||  "XML"
             ""                              ||  null
+            "yml"                           ||  null
             "     "                         ||  null
             null                            ||  null
     }
