@@ -23,6 +23,8 @@ class FileExtensionExtractorTest extends Specification {
             "/var/cfg.XML"                  ||  "XML"
             ""                              ||  null
             "yml"                           ||  null
+            "."                             ||  null
+            ".   "                          ||  null
             "     "                         ||  null
             null                            ||  null
     }
