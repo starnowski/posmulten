@@ -36,7 +36,7 @@ class DefaultSharedSchemaContextBuilderFactoryResolverContextTest extends Specif
         then:
             result
             result.getSuppliers()
-            result.getSuppliers().stream().map({it -> testObject(it.factorySupplier, it.priority, it.supportedFileExtensions.toArray(new String[0]))}).collect(toList()) == suppliers
+            result.getSuppliers().stream().map({it -> testObject(it.factorySupplier, it.priority, it.supportedFileExtensions)}).collect(toList()) == suppliers
 
         where:
             suppliers << [[testObject({it -> Mock(IDefaultSharedSchemaContextBuilderFactory)}, 45, ["sddfs", "yml"])],
