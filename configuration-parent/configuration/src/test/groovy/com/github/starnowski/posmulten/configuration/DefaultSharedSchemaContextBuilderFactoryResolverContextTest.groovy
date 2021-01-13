@@ -45,7 +45,7 @@ class DefaultSharedSchemaContextBuilderFactoryResolverContextTest extends Specif
             ]
     }
 
-    private static DefaultSharedSchemaContextBuilderFactoryResolverContextTestObject testObject(Supplier<IDefaultSharedSchemaContextBuilderFactory> factorySupplier, int priority, List<String> extensions)
+    static DefaultSharedSchemaContextBuilderFactoryResolverContextTestObject testObject(Supplier<IDefaultSharedSchemaContextBuilderFactory> factorySupplier, int priority, List<String> extensions)
     {
         new DefaultSharedSchemaContextBuilderFactoryResolverContextTestObject(factorySupplier, priority, extensions)
     }
