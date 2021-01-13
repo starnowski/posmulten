@@ -6,10 +6,12 @@ import com.github.starnowski.posmulten.configuration.core.context.IDefaultShared
 import spock.lang.Specification
 import spock.lang.Unroll
 
+import java.util.function.Supplier
+
 class DefaultSharedSchemaContextBuilderFactoryResolverTest extends Specification {
 
     @Unroll
-    def "should use specific components with correct order and pass correct parameters: loaded suppliers #loadedSuppliers, custom suppliers #customSuppliers, file path #filePath"()
+    def "should use specific components and pass correct parameters: loaded suppliers #loadedSuppliers, custom suppliers #customSuppliers, file path #filePath"()
     {
         given:
             Set<IDefaultSharedSchemaContextBuilderFactorySupplier> expectedSuppliers = new HashSet<>()
@@ -23,18 +25,22 @@ class DefaultSharedSchemaContextBuilderFactoryResolverTest extends Specification
             context.getDefaultSharedSchemaContextBuilderFactorySupplierResolver() >> defaultSharedSchemaContextBuilderFactorySupplierResolver
             context.getSuppliers() >> customSuppliers
             def tested = new DefaultSharedSchemaContextBuilderFactoryResolver(context)
+            IDefaultSharedSchemaContextBuilderFactorySupplier result = Mock(IDefaultSharedSchemaContextBuilderFactorySupplier)
+            result.getFactorySupplier() >> new Supplier<IDefaultSharedSchemaContextBuilderFactory>(){
+
+                @Override
+                IDefaultSharedSchemaContextBuilderFactory get() {
+                    expectedResult
+                }
+            }
 
         when:
             def actualResult = tested.resolve(filePath)
 
         then:
             actualResult == expectedResult
-
-        then:
-            1 * defaultSharedSchemaContextBuilderFactorySupplierClasspathSearcher.findDefaultSharedSchemaContextBuilderFactorySuppliers() >> loadedSuppliers
-
-        then:
-            1 * defaultSharedSchemaContextBuilderFactorySupplierResolver.resolveSupplierBasedOnPriorityForFile(filePath, expectedSuppliers) >> expectedResult
+            1 * defaultSharedSchemaContextBuilderFactorySupplierClasspathSearcher.findDefaultSharedSchemaContextBuilderFactorySuppliers() >> new HashSet<>(loadedSuppliers)
+            1 * defaultSharedSchemaContextBuilderFactorySupplierResolver.resolveSupplierBasedOnPriorityForFile(filePath, expectedSuppliers) >> result
 
         where:
             filePath        |   loadedSuppliers                                     |   customSuppliers
