@@ -73,8 +73,8 @@ class DDLWriterTest extends Specification {
 
         where:
             ddlStatementsEntries                                                                        ||  expectedFileLines
-            [te("create some ...", "drop this record"), te("CREATE RLS_POLICY", "REVOKE Policy")]       ||  ["REVOKE Policy", "REVOKE Policy"]
-            [te("Alter table etc;", "drop this record"), te("CREATE RLS_POLICY", "DROP some object")]   ||  ["drop this record", "DROP some object"]
+            [te("create some ...", "drop this record"), te("CREATE RLS_POLICY", "REVOKE Policy")]       ||  ["REVOKE Policy", "drop this record"]
+            [te("Alter table etc;", "drop this record"), te("CREATE RLS_POLICY", "DROP some object")]   ||  ["DROP some object", "drop this record"]
             [te("grant privilege to object ", "revoke privilege")]                                      ||  ["revoke privilege"]
     }
 
