@@ -10,8 +10,7 @@ import java.io.IOException;
 
 public class DDLScriptsGenerator {
 
-    public DDLScriptsGenerator()
-    {
+    public DDLScriptsGenerator() {
         this(new DefaultSharedSchemaContextBuilderFactoryResolver(), new DDLWriter());
     }
 
@@ -27,7 +26,11 @@ public class DDLScriptsGenerator {
         IDefaultSharedSchemaContextBuilderFactory factory = defaultSharedSchemaContextBuilderFactoryResolver.resolve(configurationFilePath);
         DefaultSharedSchemaContextBuilder builder = factory.build(configurationFilePath);
         ISharedSchemaContext context = builder.build();
-        ddlWriter.saveCreteScripts(createScripsFilePath, context);
-        ddlWriter.saveDropScripts(dropScripsFilePath, context);
+        if (createScripsFilePath != null) {
+            ddlWriter.saveCreteScripts(createScripsFilePath, context);
+        }
+        if (dropScripsFilePath != null) {
+            ddlWriter.saveDropScripts(dropScripsFilePath, context);
+        }
     }
 }
