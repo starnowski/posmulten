@@ -37,6 +37,9 @@ class DDLWriterTest extends Specification {
             List<String> actualFileLines = returnFileLines(tmpFile)
             expectedFileLines == actualFileLines
 
+        and: "file does not contain any DDL statements that drop definitions"
+            !ddlStatementsEntries.stream().map({it -> it.getDropScript()}).anyMatch({it -> actualFileLines.contains(it)})
+
         where:
             ddlStatementsEntries                                                                        ||  expectedFileLines
             [te("create some ...", "drop this record"), te("CREATE RLS_POLICY", "REVOKE Policy")]       ||  ["create some ...", "CREATE RLS_POLICY"]
