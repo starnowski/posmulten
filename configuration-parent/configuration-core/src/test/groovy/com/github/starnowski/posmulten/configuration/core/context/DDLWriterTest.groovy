@@ -46,7 +46,7 @@ class DDLWriterTest extends Specification {
 
     List<String> returnFileLines(File file)
     {
-        Scanner scanner = new Scanner(tmpFile)
+        Scanner scanner = new Scanner(file)
         List<String> lines = new ArrayList<>()
         while (scanner.hasNextLine()) {
             lines.add(scanner.nextLine())
