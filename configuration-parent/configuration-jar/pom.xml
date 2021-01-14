@@ -124,18 +124,26 @@
             <plugin >
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>3.1.0</version>
-                <configuration>
-                    <descriptorRefs>
-                        <descriptorRef>configuration-executable-jar</descriptorRef>
-                    </descriptorRefs>
-                    <archive>
-                        <manifest>
-                            <mainClass>
-                                com.github.starnowski.posmulten.configuration.jar.DDLScriptsGeneratorRunner
-                            </mainClass>
-                        </manifest>
-                    </archive>
-                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <descriptorRefs>
+                                <descriptorRef>jar-with-dependencies</descriptorRef>
+                            </descriptorRefs>
+                            <archive>
+                                <manifest>
+                                    <mainClass>
+                                        com.github.starnowski.posmulten.configuration.jar.DDLScriptsGeneratorRunner
+                                    </mainClass>
+                                </manifest>
+                            </archive>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
 
             <plugin>
