@@ -47,6 +47,37 @@ class DDLWriterTest extends Specification {
             [te("grant privilege to object ", "revoke privilege")]                                      ||  ["grant privilege to object "]
     }
 
+    @Unroll
+    def "should save all DDL statements that drops shared schema strategy to file"()
+    {
+        given:
+            def tmpFile = tempFolder.newFile("output.sql")
+            def context = Mock(ISharedSchemaContext)
+            List<SQLDefinition> mockedSQLDefinitions = ddlStatementsEntries.stream().map({it ->
+                def mockedDefinition = Mock(SQLDefinition)
+                mockedDefinition.getCreateScript() >> it.getCreateScript()
+                mockedDefinition.getDropScript() >> it.getDropScript()
+                mockedDefinition
+            }).collect(toList())
+            context.getSqlDefinitions() >> mockedSQLDefinitions
+
+        when:
+            tested.saveDropScripts(tmpFile.getAbsolutePath(), context)
+
+        then:
+            List<String> actualFileLines = returnFileLines(tmpFile)
+            expectedFileLines == actualFileLines
+
+        and: "file does not contain any DDL statements that drop definitions"
+            !ddlStatementsEntries.stream().map({it -> it.getCreateScript()}).anyMatch({it -> actualFileLines.contains(it)})
+
+        where:
+            ddlStatementsEntries                                                                        ||  expectedFileLines
+            [te("create some ...", "drop this record"), te("CREATE RLS_POLICY", "REVOKE Policy")]       ||  ["REVOKE Policy", "REVOKE Policy"]
+            [te("Alter table etc;", "drop this record"), te("CREATE RLS_POLICY", "DROP some object")]   ||  ["drop this record", "DROP some object"]
+            [te("grant privilege to object ", "revoke privilege")]                                      ||  ["revoke privilege"]
+    }
+
     List<String> returnFileLines(File file)
     {
         Scanner scanner = new Scanner(file)
