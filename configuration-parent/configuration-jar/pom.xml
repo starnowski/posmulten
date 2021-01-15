@@ -9,12 +9,17 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>configuration-core</artifactId>
+    <artifactId>configuration-jar</artifactId>
 
     <dependencies>
         <dependency>
-            <groupId>com.github.starnowski.posmulten</groupId>
-            <artifactId>postgresql-core</artifactId>
+            <groupId>com.github.starnowski.posmulten.configuration</groupId>
+            <artifactId>configuration</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.starnowski.posmulten.configuration</groupId>
+            <artifactId>configuration-yaml-interpreter</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -34,10 +39,6 @@
         <dependency>
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-all</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.jeasy</groupId>
-            <artifactId>easy-random-core</artifactId>
         </dependency>
         <dependency>
             <groupId>net.bytebuddy</groupId>
@@ -119,6 +120,30 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.22.1</version>
+            </plugin>
+            <plugin >
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <descriptorRefs>
+                                <descriptorRef>jar-with-dependencies</descriptorRef>
+                            </descriptorRefs>
+                            <archive>
+                                <manifest>
+                                    <mainClass>
+                                        com.github.starnowski.posmulten.configuration.jar.DDLScriptsGeneratorRunner
+                                    </mainClass>
+                                </manifest>
+                            </archive>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
 
             <plugin>

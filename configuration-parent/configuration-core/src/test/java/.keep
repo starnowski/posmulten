@@ -1,0 +1,1 @@
+Added dummy file so that the pitest plugin could be work correctly (see https://github.com/hcoles/pitest/issues/361)

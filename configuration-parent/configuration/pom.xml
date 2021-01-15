@@ -9,12 +9,16 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>configuration-core</artifactId>
+    <artifactId>configuration</artifactId>
+
+    <properties>
+        <org.reflections.reflections>0.9.12</org.reflections.reflections>
+    </properties>
 
     <dependencies>
         <dependency>
-            <groupId>com.github.starnowski.posmulten</groupId>
-            <artifactId>postgresql-core</artifactId>
+            <groupId>com.github.starnowski.posmulten.configuration</groupId>
+            <artifactId>configuration-core</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -36,12 +40,13 @@
             <artifactId>groovy-all</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.jeasy</groupId>
-            <artifactId>easy-random-core</artifactId>
-        </dependency>
-        <dependency>
             <groupId>net.bytebuddy</groupId>
             <artifactId>byte-buddy</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
+            <version>${org.reflections.reflections}</version>
         </dependency>
     </dependencies>
 
