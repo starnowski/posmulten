@@ -1,6 +1,7 @@
 package com.github.starnowski.posmulten.configuration.jar;
 
 import com.github.starnowski.posmulten.configuration.DDLScriptsGenerator;
+import com.github.starnowski.posmulten.configuration.core.exceptions.InvalidConfigurationException;
 import com.github.starnowski.posmulten.postgresql.core.context.exceptions.SharedSchemaContextBuilderException;
 
 import java.io.IOException;
@@ -12,6 +13,10 @@ public class DDLScriptsGeneratorRunner {
         String createScriptPath = System.getProperty("posmulten.configuration.create.script.path");
         String dropScriptPath = System.getProperty("posmulten.configuration.drop.script.path");
         DDLScriptsGenerator ddlScriptsGenerator = new DDLScriptsGenerator();
-        ddlScriptsGenerator.generate(configFilePath, createScriptPath, dropScriptPath);
+        try {
+            ddlScriptsGenerator.generate(configFilePath, createScriptPath, dropScriptPath);
+        } catch (InvalidConfigurationException e) {
+            //TODO
+        }
     }
 }
