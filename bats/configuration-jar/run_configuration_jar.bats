@@ -10,16 +10,23 @@ function setup {
   mkdir -p "$BATS_TMPDIR/$TIMESTAMP"
 }
 
-@test "Run executable jar file" {
+@test "Run executable jar file with passed java properties for valid configuration file" {
   #given
-
+  CONFIGURATION_FILE_PATH="$CONFIGURATION_YAML_TEST_RESOURCES_DIR_PATH/all-fields.yaml"
+  [ -f "$CONFIGURATION_FILE_PATH" ]
+  #TODO Specific fields in configuration data
+  # Results files
+  [ ! -f "$BATS_TMPDIR/$TIMESTAMP/create_script.sql" ]
+  [ ! -f "$BATS_TMPDIR/$TIMESTAMP/drop_script.sql" ]
 
   #when
-  run java -jar "$CONFIGURATION_JAR_NAME"
+  run java -Dposmulten.configuration.config.file.path="$CONFIGURATION_FILE_PATH" -Dposmulten.configuration.create.script.path="$BATS_TMPDIR/$TIMESTAMP/create_script.sql" -Dposmulten.configuration.drop.script.path="$BATS_TMPDIR/$TIMESTAMP/drop_script.sql" -jar "$CONFIGURATION_JAR_NAME"
 
   #then
   echo "output is --> $output <--"  >&3
   [ "$status" -eq 0 ]
+  [ -f "$BATS_TMPDIR/$TIMESTAMP/create_script.sql" ]
+  [ -f "$BATS_TMPDIR/$TIMESTAMP/drop_script.sql" ]
   [ "$output" = "t" ]
 }
 
