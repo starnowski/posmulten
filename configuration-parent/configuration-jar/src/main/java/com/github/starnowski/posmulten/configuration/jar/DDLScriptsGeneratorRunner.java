@@ -3,9 +3,12 @@ package com.github.starnowski.posmulten.configuration.jar;
 import com.github.starnowski.posmulten.configuration.DDLScriptsGenerator;
 import com.github.starnowski.posmulten.configuration.core.exceptions.InvalidConfigurationException;
 import com.github.starnowski.posmulten.postgresql.core.context.exceptions.SharedSchemaContextBuilderException;
+import lombok.extern.java.Log;
 
 import java.io.IOException;
+import java.util.logging.Level;
 
+@Log
 public class DDLScriptsGeneratorRunner {
 
     public static void main(String[] args) throws SharedSchemaContextBuilderException, IOException {
@@ -16,7 +19,8 @@ public class DDLScriptsGeneratorRunner {
         try {
             ddlScriptsGenerator.generate(configFilePath, createScriptPath, dropScriptPath);
         } catch (InvalidConfigurationException e) {
-            //TODO
+            log.log(Level.SEVERE, "Posmulten invalid configuration");
+            System.exit(1);
         }
     }
 }
