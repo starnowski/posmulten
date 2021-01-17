@@ -27,7 +27,12 @@ function setup {
   [ "$status" -eq 0 ]
   [ -f "$BATS_TMPDIR/$TIMESTAMP/create_script.sql" ]
   [ -f "$BATS_TMPDIR/$TIMESTAMP/drop_script.sql" ]
-  [ "$output" = "t" ]
+
+  #Smoke tests for scripts content
+  grep 'CREATE POLICY' "$BATS_TMPDIR/$TIMESTAMP/create_script.sql"
+  [ "$?" -eq 0 ]
+  grep 'DROP POLICY IF EXISTS' "$BATS_TMPDIR/$TIMESTAMP/drop_script.sql"
+  [ "$?" -eq 0 ]
 }
 
 function teardown {
