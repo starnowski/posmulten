@@ -52,6 +52,11 @@ function setup {
   [ ! -f "$BATS_TMPDIR/$TIMESTAMP/drop_script.sql" ]
 
   #Smoke tests for validation messages
+  echo "$output" > "$BATS_TMPDIR/$TIMESTAMP/output"
+  grep 'SEVERE: Posmulten invalid configuration' "$BATS_TMPDIR/$TIMESTAMP/output"
+  [ "$?" -eq 0 ]
+  grep 'SEVERE: Configuration error: tables[3].rls_policy.name_for_function_that_checks_if_record_exists_in_table must not be blank' "$BATS_TMPDIR/$TIMESTAMP/output"
+  [ "$?" -eq 0 ]
 }
 
 function teardown {
