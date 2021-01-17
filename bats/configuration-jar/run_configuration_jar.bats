@@ -29,9 +29,7 @@ function setup {
 
   #Smoke tests for scripts content
   grep 'CREATE POLICY' "$BATS_TMPDIR/$TIMESTAMP/create_script.sql"
-  [ "$?" -eq 0 ]
   grep 'DROP POLICY IF EXISTS' "$BATS_TMPDIR/$TIMESTAMP/drop_script.sql"
-  [ "$?" -eq 0 ]
 }
 
 @test "Run executable jar file with passed java properties for invalid configuration file" {
@@ -54,9 +52,7 @@ function setup {
   #Smoke tests for validation messages
   echo "$output" > "$BATS_TMPDIR/$TIMESTAMP/output"
   grep 'SEVERE: Posmulten invalid configuration' "$BATS_TMPDIR/$TIMESTAMP/output"
-  [ "$?" -eq 0 ]
-  grep 'SEVERE: Configuration error: tables[3].rls_policy.name_for_function_that_checks_if_record_exists_in_table must not be blank' "$BATS_TMPDIR/$TIMESTAMP/output"
-  [ "$?" -eq 0 ]
+  grep 'SEVERE: Configuration error: tables\[3\].rls_policy.name_for_function_that_checks_if_record_exists_in_table must not be blank' "$BATS_TMPDIR/$TIMESTAMP/output"
 }
 
 function teardown {
