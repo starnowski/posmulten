@@ -92,7 +92,8 @@ function setup {
 
   #Smoke tests for validation messages
   echo "$output" > "$BATS_TMPDIR/$TIMESTAMP/output"
-  [ ! -s "$BATS_TMPDIR/$TIMESTAMP/output" ]
+  #File is empty or blank
+  ! grep -q '[^[:space:]]' < "$BATS_TMPDIR/$TIMESTAMP/output"
 }
 
 function teardown {
