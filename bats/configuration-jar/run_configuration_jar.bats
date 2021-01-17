@@ -14,7 +14,6 @@ function setup {
   #given
   CONFIGURATION_FILE_PATH="$CONFIGURATION_YAML_TEST_RESOURCES_DIR_PATH/all-fields.yaml"
   [ -f "$CONFIGURATION_FILE_PATH" ]
-  #TODO Specific fields in configuration data
   # Results files
   [ ! -f "$BATS_TMPDIR/$TIMESTAMP/create_script.sql" ]
   [ ! -f "$BATS_TMPDIR/$TIMESTAMP/drop_script.sql" ]
