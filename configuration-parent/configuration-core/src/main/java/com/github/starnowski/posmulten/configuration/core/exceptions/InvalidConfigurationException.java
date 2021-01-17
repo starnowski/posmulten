@@ -1,5 +1,7 @@
 package com.github.starnowski.posmulten.configuration.core.exceptions;
 
+import java.util.List;
+
 public abstract class InvalidConfigurationException extends Exception {
 
     public InvalidConfigurationException() {
@@ -16,4 +18,6 @@ public abstract class InvalidConfigurationException extends Exception {
     public InvalidConfigurationException(Throwable cause) {
         super(cause);
     }
+
+    public abstract List<String> getErrorMessages();
 }

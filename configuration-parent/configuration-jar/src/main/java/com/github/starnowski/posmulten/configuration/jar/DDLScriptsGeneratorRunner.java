@@ -20,6 +20,9 @@ public class DDLScriptsGeneratorRunner {
             ddlScriptsGenerator.generate(configFilePath, createScriptPath, dropScriptPath);
         } catch (InvalidConfigurationException e) {
             log.log(Level.SEVERE, "Posmulten invalid configuration");
+            e.getErrorMessages().forEach(message ->
+                    log.log(Level.SEVERE, "Configuration error: {0}", message)
+            );
             System.exit(1);
         }
     }
