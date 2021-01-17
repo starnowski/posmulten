@@ -72,6 +72,29 @@ function setup {
   grep 'SEVERE: Configuration error: tables\[3\].rls_policy.name_for_function_that_checks_if_record_exists_in_table must not be blank' "$BATS_TMPDIR/$TIMESTAMP/output"
 }
 
+@test "The executable jar file should not log any content for silent mode for invalid configuration file" {
+  #given
+  CONFIGURATION_FILE_PATH="$CONFIGURATION_YAML_TEST_RESOURCES_DIR_PATH/invalid-list-nodes-blank-fields.yaml"
+  [ -f "$CONFIGURATION_FILE_PATH" ]
+  # Results files
+  [ ! -f "$BATS_TMPDIR/$TIMESTAMP/create_script.sql" ]
+  [ ! -f "$BATS_TMPDIR/$TIMESTAMP/drop_script.sql" ]
+  unzip -p "$CONFIGURATION_JAR_NAME" silent-logging.properties >"$BATS_TMPDIR/$TIMESTAMP/silent-logging.properties"
+
+  #when
+  run java -Djava.util.logging.config.file="$BATS_TMPDIR/$TIMESTAMP/silent-logging.properties" -Dposmulten.configuration.config.file.path="$CONFIGURATION_FILE_PATH" -Dposmulten.configuration.create.script.path="$BATS_TMPDIR/$TIMESTAMP/create_script.sql" -Dposmulten.configuration.drop.script.path="$BATS_TMPDIR/$TIMESTAMP/drop_script.sql" -jar "$CONFIGURATION_JAR_NAME"
+
+  #then
+  echo "output is --> $output <--"  >&3
+  [ "$status" -eq 1 ]
+  [ ! -f "$BATS_TMPDIR/$TIMESTAMP/create_script.sql" ]
+  [ ! -f "$BATS_TMPDIR/$TIMESTAMP/drop_script.sql" ]
+
+  #Smoke tests for validation messages
+  echo "$output" > "$BATS_TMPDIR/$TIMESTAMP/output"
+  [ ! -s "$BATS_TMPDIR/$TIMESTAMP/output" ]
+}
+
 function teardown {
   rm -rf "$BATS_TMPDIR/$TIMESTAMP"
 }
