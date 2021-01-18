@@ -62,6 +62,7 @@ tables:
 | Property name |   Required    |   Nullable    |   Description |
 |---------------|---------------|---------------|---------------|
 |[default_schema](#setting-default-database-schema) |   Yes         |   Yes         |   Name of the database schema for which changes should be applied. |
+|[current_tenant_id_property_type](#setting-current-tenant-id-property-type) |   No         |   No         |   Type of column that stores tenant identifier and it is also the type of parameters for some generated functions. |
 
 ### Setting default database schema
 Name of the database schema for which changes should be applied.
@@ -77,6 +78,27 @@ default_schema:
 ```
 
 For more information please check [setting default schema](https://github.com/starnowski/posmulten/tree/master#setting-default-database-schema).
+
+### Setting current tenant id property type
+Type of column that stores tenant identifier and it is also the type of parameters for some generated functions.
+For example, for the below entries:
+
+```yaml
+current_tenant_id_property_type:  "VARCHAR(255)"
+get_current_tenant_id_function_name: "get_ten_id"
+```
+
+the framework generates the below function:
+
+```sql
+CREATE OR REPLACE FUNCTION get_current_tenant_id() RETURNS UUID AS $$
+SELECT current_setting('c.c_ten')
+$$ LANGUAGE sql
+STABLE
+PARALLEL SAFE;
+```
+
+For more information please check [setting of type for tenant identifier value](https://github.com/starnowski/posmulten/tree/master#setting-of-type-for-tenant-identifier-value).
 
 #TODO valid_tenant_value_constraint
 #TODO tables
