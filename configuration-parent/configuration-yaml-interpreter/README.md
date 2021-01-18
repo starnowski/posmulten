@@ -68,7 +68,8 @@ tables:
 |[default_schema](#default_schema) |    String  |   Yes |   Yes |   Name of the database schema for which changes should be applied. |
 |[current_tenant_id_property_type](#current_tenant_id_property_type) |  String  |   No    |   No  |   Type of column that stores tenant identifier and it is also the type of parameters for some generated functions. |
 |[current_tenant_id_property](#current_tenant_id_property) |  String  |   No    |   No  |   Property name that stores the value of tenant identifier in the database connection. |
-|[get_current_tenant_id_function_name](#get_current_tenant_id_function_name) |  String  |   No    |   No  |   Name of function that returns the current tenant identifier. |
+|[get_current_tenant_id_function_name](#get_current_tenant_id_function_name) |  String  |   No    |   No  |   Name of the function that returns the current tenant identifier. |
+|[set_current_tenant_id_function_name](#set_current_tenant_id_function_name) |  String  |   No    |   No  |   Name of the function that sets the current tenant identifier. |
 
 ### default_schema
 Name of the database schema for which changes should be applied.
@@ -115,7 +116,7 @@ current_tenant_id_property: "pos.c.ten"
 For more information please check [setting the property name that stores tenant identifier value](https://github.com/starnowski/posmulten#setting-the-property-name-that-stores-tenant-identifier-value).
 
 ### get_current_tenant_id_function_name
-Name of function that returns the current tenant identifier.
+Name of the function that returns the current tenant identifier.
 For example, for the below entries:
 
 ```yaml
@@ -130,6 +131,25 @@ SELECT current_setting('c.c_ten')
 $$ LANGUAGE sql
 STABLE
 PARALLEL SAFE;
+```
+
+### set_current_tenant_id_function_name
+Name of the function that sets the current tenant identifier.
+For example, for the below entries:
+
+```yaml
+set_current_tenant_id_function_name: "this_will_be_tenant"
+```
+
+the framework generates the below function:
+
+```sql
+CREATE OR REPLACE FUNCTION this_will_be_tenant(VARCHAR(255)) RETURNS VOID AS $$
+BEGIN
+PERFORM set_config('c.c_ten', $1, false);
+END
+$$ LANGUAGE plpgsql
+VOLATILE;
 ```
 
 #TODO valid_tenant_value_constraint
