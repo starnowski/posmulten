@@ -70,6 +70,7 @@ tables:
 |[current_tenant_id_property](#current_tenant_id_property) |  String  |   No    |   No  |   Property name that stores the value of tenant identifier in the database connection. |
 |[get_current_tenant_id_function_name](#get_current_tenant_id_function_name) |  String  |   No    |   No  |   Name of the function that returns the current tenant identifier. |
 |[set_current_tenant_id_function_name](#set_current_tenant_id_function_name) |  String  |   No    |   No  |   Name of the function that sets the current tenant identifier. |
+|[equals_current_tenant_identifier_function_name](#equals_current_tenant_identifier_function_name) |  String  |   No    |   No  |   Name of the function name that checks if passed identifier is the same as the current tenant identifier. |
 
 ### default_schema
 Name of the database schema for which changes should be applied.
@@ -150,6 +151,24 @@ PERFORM set_config('c.c_ten', $1, false);
 END
 $$ LANGUAGE plpgsql
 VOLATILE;
+```
+
+### equals_current_tenant_identifier_function_name
+Name of the function name that checks if passed identifier is the same as the current tenant identifier.
+For example, for the below entries:
+
+```yaml
+equals_current_tenant_identifier_function_name: "is_tenant_equals"
+```
+
+the framework generates the below function:
+
+```sql
+CREATE OR REPLACE FUNCTION is_tenant_equals(VARCHAR(255)) RETURNS BOOLEAN AS $$
+SELECT $1 = get_current_tenant_id()
+$$ LANGUAGE sql
+STABLE
+PARALLEL SAFE;
 ```
 
 #TODO valid_tenant_value_constraint
