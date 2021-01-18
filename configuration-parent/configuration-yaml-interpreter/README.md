@@ -111,7 +111,7 @@ Example:
 ```yaml
 current_tenant_id_property: "pos.c.ten"
 ```
-For more information please check ["setting the property name that stores tenant identifier value"](https://github.com/starnowski/posmulten#setting-the-property-name-that-stores-tenant-identifier-value).
+For more information please check [setting the property name that stores tenant identifier value](https://github.com/starnowski/posmulten#setting-the-property-name-that-stores-tenant-identifier-value).
 
 
 #TODO valid_tenant_value_constraint
