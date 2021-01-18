@@ -83,7 +83,7 @@ class SharedSchemaContextConfigurationYamlDaoValidationTest extends AbstractSpec
             ex.getErrorMessages().contains(errorMessage)
 
         where:
-            errorMessage << ["tables[3].rls_policy.name_for_function_that_checks_if_record_exists_in_table must not be blank", "tables[2].rls_policy.name must not be blank", "tables[0].name must not be blank"]
+            errorMessage << ["tables[3].rls_policy.primary_key_definition.name_for_function_that_checks_if_record_exists_in_table must not be blank", "tables[2].rls_policy.name must not be blank", "tables[0].name must not be blank"]
     }
 
     @Unroll

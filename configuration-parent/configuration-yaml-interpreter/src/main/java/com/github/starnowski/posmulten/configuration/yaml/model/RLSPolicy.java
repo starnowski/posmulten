@@ -10,7 +10,6 @@ import lombok.experimental.Accessors;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
-import java.util.Map;
 
 @Accessors(chain = true)
 @Getter
@@ -25,18 +24,16 @@ public class RLSPolicy {
     @Valid
     @JsonProperty(value = "tenant_column")
     private StringWrapperWithNotBlankValue tenantColumn;
-    @JsonProperty(value = "pk_columns_name_to_type")
-    private Map<String, String> primaryKeyColumnsNameToTypeMap;
     @JsonProperty(value = "create_tenant_column_for_table")
     private Boolean createTenantColumnForTable;
-    @NotBlank
-    @JsonProperty(value = "name_for_function_that_checks_if_record_exists_in_table", required = true)
-    private String nameForFunctionThatChecksIfRecordExistsInTable;
     @Valid
     @JsonProperty(value = "valid_tenant_value_constraint_name")
     private StringWrapperWithNotBlankValue validTenantValueConstraintName;
     @JsonProperty(value = "skip_adding_of_tenant_column_default_value")
     private Boolean skipAddingOfTenantColumnDefaultValue;
+    @Valid
+    @JsonProperty(value = "primary_key_definition")
+    private PrimaryKeyDefinition primaryKeyDefinition;
     public RLSPolicy setTenantColumn(String tenantColumn) {
         this.tenantColumn = new StringWrapperWithNotBlankValue(tenantColumn);
         return this;

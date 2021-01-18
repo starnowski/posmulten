@@ -6,8 +6,6 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
-import java.util.Map;
-
 @Accessors(chain = true)
 @Getter
 @Setter
@@ -16,9 +14,8 @@ import java.util.Map;
 public class RLSPolicy {
     private String name;
     private String tenantColumn;
-    private Map<String, String> primaryKeyColumnsNameToTypeMap;
     private Boolean createTenantColumnForTable;
-    private String nameForFunctionThatChecksIfRecordExistsInTable;
     private String validTenantValueConstraintName;
     private Boolean skipAddingOfTenantColumnDefaultValue;
+    private PrimaryKeyDefinition primaryKeyDefinition;
 }

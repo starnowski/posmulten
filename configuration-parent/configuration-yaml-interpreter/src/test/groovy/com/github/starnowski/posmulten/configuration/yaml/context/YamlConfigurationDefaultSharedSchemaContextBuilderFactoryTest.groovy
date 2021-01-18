@@ -56,7 +56,7 @@ class YamlConfigurationDefaultSharedSchemaContextBuilderFactoryTest extends Abst
             INVALID_NESTED_NODE_BLANK_FIELDS_FILE_PATH      ||  "valid_tenant_value_constraint.is_tenant_valid_function_name must not be blank"
             INVALID_NESTED_NODE_BLANK_FIELDS_FILE_PATH      ||  "valid_tenant_value_constraint.tenant_identifiers_blacklist must not be null"
             INVALID_NESTED_NODE_EMPTY_LIST_FILE_PATH        ||  "valid_tenant_value_constraint.tenant_identifiers_blacklist must have at least one element"
-            INVALID_LIST_NODES_BLANK_FIELDS_PATH            ||  "tables[3].rls_policy.name_for_function_that_checks_if_record_exists_in_table must not be blank"
+            INVALID_LIST_NODES_BLANK_FIELDS_PATH            ||  "tables[3].rls_policy.primary_key_definition.name_for_function_that_checks_if_record_exists_in_table must not be blank"
             INVALID_LIST_NODES_BLANK_FIELDS_PATH            ||  "tables[0].name must not be blank"
             INVALID_MAP_BLANK_FIELDS_PATH                   ||  "tables[0].foreign_keys[0].foreign_key_primary_key_columns_mappings must have at least one element"
             INVALID_MAP_BLANK_FIELDS_PATH                   ||  "tables[2].foreign_keys[2].foreign_key_primary_key_columns_mappings.<map key> must not be blank"

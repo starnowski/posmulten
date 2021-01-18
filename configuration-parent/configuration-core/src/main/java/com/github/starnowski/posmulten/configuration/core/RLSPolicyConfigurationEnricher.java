@@ -9,13 +9,13 @@ public class RLSPolicyConfigurationEnricher implements ITableEntryEnricher {
     public DefaultSharedSchemaContextBuilder enrich(DefaultSharedSchemaContextBuilder builder, TableEntry tableEntry) {
         if (tableEntry != null && tableEntry.getRlsPolicy() != null) {
             RLSPolicy rlsPolicy = tableEntry.getRlsPolicy();
-            builder.createRLSPolicyForTable(tableEntry.getName(), rlsPolicy.getPrimaryKeyColumnsNameToTypeMap(), rlsPolicy.getTenantColumn(), rlsPolicy.getName());
+            builder.createRLSPolicyForTable(tableEntry.getName(), rlsPolicy.getPrimaryKeyDefinition() == null ? null : rlsPolicy.getPrimaryKeyDefinition().getPrimaryKeyColumnsNameToTypeMap(), rlsPolicy.getTenantColumn(), rlsPolicy.getName());
 
             if (Boolean.TRUE.equals(rlsPolicy.getCreateTenantColumnForTable())) {
                 builder.createTenantColumnForTable(tableEntry.getName());
             }
-            if (rlsPolicy.getNameForFunctionThatChecksIfRecordExistsInTable() != null) {
-                builder.setNameForFunctionThatChecksIfRecordExistsInTable(tableEntry.getName(), rlsPolicy.getNameForFunctionThatChecksIfRecordExistsInTable());
+            if (rlsPolicy.getPrimaryKeyDefinition() != null && rlsPolicy.getPrimaryKeyDefinition().getNameForFunctionThatChecksIfRecordExistsInTable() != null) {
+                builder.setNameForFunctionThatChecksIfRecordExistsInTable(tableEntry.getName(), rlsPolicy.getPrimaryKeyDefinition().getNameForFunctionThatChecksIfRecordExistsInTable());
             }
             if (rlsPolicy.getValidTenantValueConstraintName() != null) {
                 builder.registerCustomValidTenantValueConstraintNameForTable(tableEntry.getName(), rlsPolicy.getValidTenantValueConstraintName());
