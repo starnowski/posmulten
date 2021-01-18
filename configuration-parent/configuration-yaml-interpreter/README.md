@@ -20,6 +20,7 @@ tables:
   - name: users
     rls_policy:
       name: users_table_rls_policy
+      create_tenant_column_for_table: true
       primary_key_definition:
         name_for_function_that_checks_if_record_exists_in_table: "is_user_exists"
         pk_columns_name_to_type:
@@ -27,6 +28,7 @@ tables:
   - name: posts
     rls_policy:
       name: "posts_table_rls_policy"
+      create_tenant_column_for_table: true
       skip_adding_of_tenant_column_default_value: false
       primary_key_definition:
         name_for_function_that_checks_if_record_exists_in_table: "is_post_exists"
@@ -40,6 +42,7 @@ tables:
   - name: groups
     rls_policy:
       name: groups_table_rls_policy
+      create_tenant_column_for_table: true
       primary_key_definition:
         name_for_function_that_checks_if_record_exists_in_table: "is_group_exists"
         pk_columns_name_to_type:
@@ -47,6 +50,7 @@ tables:
   - name: users_groups
     rls_policy:
       name: groups_table_rls_policy
+      create_tenant_column_for_table: true
     foreign_keys:
       - constraint_name:  "users_tenant_constraint"
         table_name: "users"
