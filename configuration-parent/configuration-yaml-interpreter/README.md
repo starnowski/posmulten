@@ -70,12 +70,15 @@ tables:
 |[current_tenant_id_property](#current_tenant_id_property) |  String  |   No    |   No  |   Property name that stores the value of tenant identifier in the database connection. |
 |[get_current_tenant_id_function_name](#get_current_tenant_id_function_name) |  String  |   No    |   No  |   Name of the function that returns the current tenant identifier. |
 |[set_current_tenant_id_function_name](#set_current_tenant_id_function_name) |  String  |   No    |   No  |   Name of the function that sets the current tenant identifier. |
-|[equals_current_tenant_identifier_function_name](#equals_current_tenant_identifier_function_name) |  String  |   No    |   No  |   Name of the function name that checks if passed identifier is the same as the current tenant identifier. |
 |[tenant_has_authorities_function_name](#tenant_has_authorities_function_name) |  String  |   No    |   No  |   Name of the function name that checks if the current tenant has authority to a table row. |
-|[force_row_level_security_for_table_owner](#force_row_level_security_for_table_owner) |  Boolean  |   No    |   No  |   Option that force RLS policy for table owner. |
+|[force_row_level_security_for_table_owner](#force_row_level_security_for_table_owner) |  Boolean  |   No    |   Yes  |   Option that force RLS policy for table owner. |
 |[default_tenant_id_column](#default_tenant_id_column) |  String  |   No    |   No  |   Default name of column that stores tenant identifier. |
 |[grantee](#grantee) |  String  |   Yes    |   No  |   Database user for which RLS policy is going to be created. |
-|[set_current_tenant_identifier_as_default_value_for_tenant_column_in_all_tables](#set_current_tenant_identifier_as_default_value_for_tenant_column_in_all_tables) |  Boolean  |   No    |   No  |   Generate a statement that sets a default value for the tenant column in all tables. |
+
+| Property name |   Type    |   Required    |   Nullable    |   Description |
+|---------------|-----------|---------------|---------------|---------------|
+|[equals_current_tenant_identifier_function_name](#equals_current_tenant_identifier_function_name) |  String  |   No    |   No  |   Name of the function name that checks if passed identifier is the same as the current tenant identifier. |
+|[set_current_tenant_identifier_as_default_value_for_tenant_column_in_all_tables](#set_current_tenant_identifier_as_default_value_for_tenant_column_in_all_tables) |  Boolean  |   No    |   Yes  |   Generate a statement that sets a default value for the tenant column in all tables. |
 
 ### default_schema
 Name of the database schema for which changes should be applied.
