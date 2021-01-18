@@ -56,6 +56,10 @@ tables:
 ```
 
 #TODO Root properties
+| Property name |   Required    |   Nullable    |   Description |
+|---------------|---------------|---------------|---------------|
+|[default_schema](#setting-default-database-schema) |   Yes         |   Yes         |               |
+
 ### Setting default database schema
 
 ```yaml
