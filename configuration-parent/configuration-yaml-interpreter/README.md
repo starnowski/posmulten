@@ -74,6 +74,7 @@ tables:
 |[tenant_has_authorities_function_name](#tenant_has_authorities_function_name) |  String  |   No    |   No  |   Name of the function name that checks if the current tenant has authority to a table row. |
 |[force_row_level_security_for_table_owner](#force_row_level_security_for_table_owner) |  Boolean  |   No    |   No  |   Option that force RLS policy for table owner. |
 |[default_tenant_id_column](#default_tenant_id_column) |  String  |   No    |   No  |   Default name of column that stores tenant identifier. |
+|[grantee](#grantee) |  String  |   Yes    |   No  |   Database user for which RLS policy is going to be created. |
 
 ### default_schema
 Name of the database schema for which changes should be applied.
@@ -210,6 +211,14 @@ Example:
 default_tenant_id_column: "tenant_uuid"
 ```
 For more information please check [setting default tenant column name](https://github.com/starnowski/posmulten#setting-default-tenant-column-name).
+
+### grantee
+Database user for which RLS policy is going to be created.
+Example:
+```yaml
+grantee: "application-user"
+```
+For more information please check [setting default database user for RLS policy](https://github.com/starnowski/posmulten#setting-default-database-user-for-rls-policy).
 
 #TODO valid_tenant_value_constraint
 #TODO tables
