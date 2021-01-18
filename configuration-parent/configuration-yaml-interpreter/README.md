@@ -1,9 +1,12 @@
-#TODO Simple case
 The configuration-yaml-interpreter module can interpreted configuration file in yaml format and based on that it creates
 DDL statements that allows to create the shared schema strategy.
 The YAML schema description is below   
 
 ## Simple example:
+Bellow, there is a configuration example for a schema with the name "public".
+The schema contains four tables, users, posts, groups, and users_groups (many-to-many relation).
+All generated changes are going to be applied for the database user with the name "application-user".
+
 ```yaml
 default_schema: public
 default_tenant_id_column: "tenant_id"
@@ -58,13 +61,22 @@ tables:
 #TODO Root properties
 | Property name |   Required    |   Nullable    |   Description |
 |---------------|---------------|---------------|---------------|
-|[default_schema](#setting-default-database-schema) |   Yes         |   Yes         |               |
+|[default_schema](#setting-default-database-schema) |   Yes         |   Yes         |   Name of the database schema for which changes should be applied. |
 
 ### Setting default database schema
+Name of the database schema for which changes should be applied.
 
 ```yaml
-default_schema: public
+default_schema: my_db_schema
 ```
+
+Value can be null, in such case the changes are going to be applied to default schema (public).
+
+```yaml
+default_schema:
+```
+
+For more information please check [setting default schema](https://github.com/starnowski/posmulten/tree/master#setting-default-database-schema).
 
 #TODO valid_tenant_value_constraint
 #TODO tables
