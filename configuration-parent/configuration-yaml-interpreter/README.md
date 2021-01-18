@@ -71,6 +71,7 @@ tables:
 |[get_current_tenant_id_function_name](#get_current_tenant_id_function_name) |  String  |   No    |   No  |   Name of the function that returns the current tenant identifier. |
 |[set_current_tenant_id_function_name](#set_current_tenant_id_function_name) |  String  |   No    |   No  |   Name of the function that sets the current tenant identifier. |
 |[equals_current_tenant_identifier_function_name](#equals_current_tenant_identifier_function_name) |  String  |   No    |   No  |   Name of the function name that checks if passed identifier is the same as the current tenant identifier. |
+|[tenant_has_authorities_function_name](#tenant_has_authorities_function_name) |  String  |   No    |   No  |   Name of the function name that checks if the current tenant has authority to a table row. |
 
 ### default_schema
 Name of the database schema for which changes should be applied.
@@ -166,6 +167,24 @@ the framework generates the below function:
 ```sql
 CREATE OR REPLACE FUNCTION is_tenant_equals(VARCHAR(255)) RETURNS BOOLEAN AS $$
 SELECT $1 = get_current_tenant_id()
+$$ LANGUAGE sql
+STABLE
+PARALLEL SAFE;
+```
+
+### tenant_has_authorities_function_name
+Name of the function name that checks if the current tenant has authority to a table row.
+For example, for the below entries:
+
+```yaml
+tenant_has_authorities_function_name: "ten_has_auth"
+```
+
+the framework generates the below function:
+
+```sql
+CREATE OR REPLACE FUNCTION ten_has_auth(VARCHAR(255), VARCHAR(255), VARCHAR(255), VARCHAR(255), VARCHAR(255)) RETURNS BOOLEAN AS $$
+SELECT is_id_equals_current_tenant_id($1)
 $$ LANGUAGE sql
 STABLE
 PARALLEL SAFE;
