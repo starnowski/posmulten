@@ -72,6 +72,7 @@ tables:
 |[set_current_tenant_id_function_name](#set_current_tenant_id_function_name) |  String  |   No    |   No  |   Name of the function that sets the current tenant identifier. |
 |[equals_current_tenant_identifier_function_name](#equals_current_tenant_identifier_function_name) |  String  |   No    |   No  |   Name of the function name that checks if passed identifier is the same as the current tenant identifier. |
 |[tenant_has_authorities_function_name](#tenant_has_authorities_function_name) |  String  |   No    |   No  |   Name of the function name that checks if the current tenant has authority to a table row. |
+|[force_row_level_security_for_table_owner](#force_row_level_security_for_table_owner) |  Boolean  |   No    |   No  |   Option that force RLS policy for table owner. |
 
 ### default_schema
 Name of the database schema for which changes should be applied.
@@ -189,6 +190,16 @@ $$ LANGUAGE sql
 STABLE
 PARALLEL SAFE;
 ```
+
+### force_row_level_security_for_table_owner
+Option that force RLS policy for table owner.
+This option is required if the database user for which RLS is created is also a table owner.
+By default option is turned off.
+Example:
+```yaml
+force_row_level_security_for_table_owner: true
+```
+For more information please check [force RLS Policy for table owner](https://github.com/starnowski/posmulten#force-rls-policy-for-table-owner).
 
 #TODO valid_tenant_value_constraint
 #TODO tables
