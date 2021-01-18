@@ -65,10 +65,10 @@ tables:
 #TODO Root properties
 | Property name |   Required    |   Nullable    |   Description |
 |---------------|---------------|---------------|---------------|
-|[default_schema](#setting-default-database-schema) |   Yes         |   Yes         |   Name of the database schema for which changes should be applied. |
-|[current_tenant_id_property_type](#setting-current-tenant-id-property-type) |   No         |   No         |   Type of column that stores tenant identifier and it is also the type of parameters for some generated functions. |
+|[default_schema](#default-schema) |   Yes         |   Yes         |   Name of the database schema for which changes should be applied. |
+|[current_tenant_id_property_type](#current-tenant-id-property-type) |   No         |   No         |   Type of column that stores tenant identifier and it is also the type of parameters for some generated functions. |
 
-### Setting default database schema
+### default_schema
 Name of the database schema for which changes should be applied.
 
 ```yaml
@@ -83,7 +83,7 @@ default_schema:
 
 For more information please check [setting default schema](https://github.com/starnowski/posmulten/tree/master#setting-default-database-schema).
 
-### Setting current tenant id property type
+### current_tenant_id_property_type
 Type of column that stores tenant identifier and it is also the type of parameters for some generated functions.
 For example, for the below entries:
 
