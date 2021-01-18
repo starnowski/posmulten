@@ -73,6 +73,7 @@ tables:
 |[equals_current_tenant_identifier_function_name](#equals_current_tenant_identifier_function_name) |  String  |   No    |   No  |   Name of the function name that checks if passed identifier is the same as the current tenant identifier. |
 |[tenant_has_authorities_function_name](#tenant_has_authorities_function_name) |  String  |   No    |   No  |   Name of the function name that checks if the current tenant has authority to a table row. |
 |[force_row_level_security_for_table_owner](#force_row_level_security_for_table_owner) |  Boolean  |   No    |   No  |   Option that force RLS policy for table owner. |
+|[default_tenant_id_column](#default_tenant_id_column) |  String  |   No    |   No  |   Default name of column that stores tenant identifier. |
 
 ### default_schema
 Name of the database schema for which changes should be applied.
@@ -200,6 +201,15 @@ Example:
 force_row_level_security_for_table_owner: true
 ```
 For more information please check [force RLS Policy for table owner](https://github.com/starnowski/posmulten#force-rls-policy-for-table-owner).
+
+### default_tenant_id_column
+The default name of the column that stores the tenant identifier.
+This name is used when the table does not have a specified custom name for the column that stores the tenant identifier.
+Example:
+```yaml
+default_tenant_id_column: "tenant_uuid"
+```
+For more information please check [setting default tenant column name](https://github.com/starnowski/posmulten#setting-default-tenant-column-name).
 
 #TODO valid_tenant_value_constraint
 #TODO tables
