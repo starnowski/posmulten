@@ -63,10 +63,10 @@ tables:
 ```
 
 #TODO Root properties
-| Property name |   Required    |   Nullable    |   Description |
-|---------------|---------------|---------------|---------------|
-|[default_schema](#default_schema) |   Yes         |   Yes         |   Name of the database schema for which changes should be applied. |
-|[current_tenant_id_property_type](#current_tenant_id_property_type) |   No         |   No         |   Type of column that stores tenant identifier and it is also the type of parameters for some generated functions. |
+| Property name |   Type    |   Required    |   Nullable    |   Description |
+|---------------|-----------|---------------|---------------|---------------|
+|[default_schema](#default_schema) |    String  |   Yes |   Yes |   Name of the database schema for which changes should be applied. |
+|[current_tenant_id_property_type](#current_tenant_id_property_type) |  String  |   No    |   No  |   Type of column that stores tenant identifier and it is also the type of parameters for some generated functions. |
 
 ### default_schema
 Name of the database schema for which changes should be applied.
