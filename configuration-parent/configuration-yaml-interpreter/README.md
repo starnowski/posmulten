@@ -105,7 +105,7 @@ PARALLEL SAFE;
 
 For more information please check [setting of type for tenant identifier value](https://github.com/starnowski/posmulten/tree/master#setting-of-type-for-tenant-identifier-value).
 
-#current_tenant_id_property
+### current_tenant_id_property
 Property name that stores the value of tenant identifier in the database connection.
 Example:
 ```yaml
