@@ -75,6 +75,7 @@ tables:
 |[force_row_level_security_for_table_owner](#force_row_level_security_for_table_owner) |  Boolean  |   No    |   No  |   Option that force RLS policy for table owner. |
 |[default_tenant_id_column](#default_tenant_id_column) |  String  |   No    |   No  |   Default name of column that stores tenant identifier. |
 |[grantee](#grantee) |  String  |   Yes    |   No  |   Database user for which RLS policy is going to be created. |
+|[set_current_tenant_identifier_as_default_value_for_tenant_column_in_all_tables](#set_current_tenant_identifier_as_default_value_for_tenant_column_in_all_tables) |  Boolean  |   No    |   No  |   Generate a statement that sets a default value for the tenant column in all tables. |
 
 ### default_schema
 Name of the database schema for which changes should be applied.
@@ -219,6 +220,16 @@ Example:
 grantee: "application-user"
 ```
 For more information please check [setting default database user for RLS policy](https://github.com/starnowski/posmulten#setting-default-database-user-for-rls-policy).
+
+### set_current_tenant_identifier_as_default_value_for_tenant_column_in_all_tables
+Generate a statement that sets a default value for the tenant column in all tables.
+This functionality is useful when we don't always want to specified tenant id value in the insert statement.
+By default option is turned off.
+Example:
+```yaml
+set_current_tenant_identifier_as_default_value_for_tenant_column_in_all_tables: true
+```
+For more information please check [adding default value for tenant column](https://github.com/starnowski/posmulten#adding-default-value-for-tenant-column).
 
 #TODO valid_tenant_value_constraint
 #TODO tables
