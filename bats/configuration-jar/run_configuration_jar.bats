@@ -4,6 +4,7 @@ function setup {
   PREVIOUS_PGPASSWORD="$PGPASSWORD"
   export TIMESTAMP=`date +%s`
   export CONFIGURATION_JAR_TARGET_DIR="$BATS_TEST_DIRNAME/../../configuration-parent/configuration-jar/target"
+  export CONFIGURATION_JAR_DIR="$BATS_TEST_DIRNAME/../../configuration-parent/configuration-jar"
   export CONFIGURATION_JAR_NAME=`find "$CONFIGURATION_JAR_TARGET_DIR" -name '*-jar-with-dependencies.jar'`
   #TODO directory with tests configuration
   export CONFIGURATION_YAML_TEST_RESOURCES_DIR_PATH="$BATS_TEST_DIRNAME/../../configuration-parent/configuration-yaml-interpreter/src/test/resources/com/github/starnowski/posmulten/configuration/yaml"
@@ -69,7 +70,7 @@ function setup {
   #Smoke tests for validation messages
   echo "$output" > "$BATS_TMPDIR/$TIMESTAMP/output"
   grep 'SEVERE: Posmulten invalid configuration' "$BATS_TMPDIR/$TIMESTAMP/output"
-  grep 'SEVERE: Configuration error: tables\[3\].rls_policy.name_for_function_that_checks_if_record_exists_in_table must not be blank' "$BATS_TMPDIR/$TIMESTAMP/output"
+  grep 'SEVERE: Configuration error: tables\[3\].rls_policy.primary_key_definition.name_for_function_that_checks_if_record_exists_in_table must not be blank' "$BATS_TMPDIR/$TIMESTAMP/output"
 }
 
 @test "The executable jar file should not log any content for silent mode for invalid configuration file" {
@@ -94,6 +95,22 @@ function setup {
   echo "$output" > "$BATS_TMPDIR/$TIMESTAMP/output"
   #File is empty or blank
   ! grep -q '[^[:space:]]' < "$BATS_TMPDIR/$TIMESTAMP/output"
+}
+
+@test "The executable jar should print correct version number" {
+  #given
+  CONFIGURATION_FILE_PATH="$CONFIGURATION_YAML_TEST_RESOURCES_DIR_PATH/invalid-list-nodes-blank-fields.yaml"
+  [ -f "$CONFIGURATION_FILE_PATH" ]
+  #Resolve version
+  EXPECTED_VERSION_NUMBER=`xmllint --xpath "string(/*[local-name()='project']/*[local-name()='parent']/*[local-name()='version'])" $CONFIGURATION_JAR_DIR/pom.xml`
+
+  #when
+  run java -Dposmulten.configuration.config.version.print="true" -jar "$CONFIGURATION_JAR_NAME"
+
+  #then
+  echo "output is --> $output <--"  >&3
+  [ "$status" -eq 0 ]
+  [ "${lines[0]}" = "$EXPECTED_VERSION_NUMBER" ]
 }
 
 function teardown {
