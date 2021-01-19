@@ -92,6 +92,7 @@ Constraint keeps tenant column value valid.
 | Property name |   Type    |   Required    |   Nullable    |   Description |
 |---------------|-----------|---------------|---------------|---------------|
 |tenant_identifiers_blacklist|  Arrays of strings   |   Yes |   No  |   An array of invalid values for tenant identifier. Array need have at least one element |
+|[is_tenant_valid_function_name](#is_tenant_valid_function_name)|  String   |   No |   No  |   Name of the function that checks if passed tenant identifier is valid |
 
 
 TODO
@@ -256,3 +257,27 @@ Example:
 set_current_tenant_identifier_as_default_value_for_tenant_column_in_all_tables: true
 ```
 For more information please check [adding default value for tenant column](https://github.com/starnowski/posmulten#adding-default-value-for-tenant-column).
+
+### is_tenant_valid_function_name
+Name of the function that checks if passed tenant identifier is valid.
+For example, for the below entries:
+
+```yaml
+valid_tenant_value_constraint:
+  is_tenant_valid_function_name:  is_this_tenant_valid
+  tenant_identifiers_blacklist:
+    - DUMMMY_TENANT
+    - "XXX-INVAlid_tenant"
+```
+
+the framework generates the below function:
+
+```sql
+CREATE OR REPLACE FUNCTION is_this_tenant_valid(VARCHAR(255)) RETURNS BOOLEAN AS $$
+SELECT $1 <> CAST ('DUMMMY_TENANT' AS VARCHAR(255)) AND $1 <> CAST ('XXX-INVAlid_tenant' AS VARCHAR(255))
+$$ LANGUAGE sql
+IMMUTABLE
+PARALLEL SAFE;
+```
+
+For more information please check [setting a list of invalid tenant identifier values](https://github.com/starnowski/posmulten#setting-a-list-of-invalid-tenant-identifier-values).
