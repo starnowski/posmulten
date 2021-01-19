@@ -99,8 +99,6 @@ function setup {
 
 @test "The executable jar should print correct version number" {
   #given
-  CONFIGURATION_FILE_PATH="$CONFIGURATION_YAML_TEST_RESOURCES_DIR_PATH/invalid-list-nodes-blank-fields.yaml"
-  [ -f "$CONFIGURATION_FILE_PATH" ]
   #Resolve version
   EXPECTED_VERSION_NUMBER=`xmllint --xpath "string(/*[local-name()='project']/*[local-name()='parent']/*[local-name()='version'])" $CONFIGURATION_JAR_DIR/pom.xml`
 
