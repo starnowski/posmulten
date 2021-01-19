@@ -5,6 +5,7 @@ The YAML schema description is below.
 
 *   [Simple example](#simple-example)
 *   [Root properties](#root-properties)
+*   [Setting a list of invalid tenant identifier values](#setting-a-list-of-invalid-tenant-identifier-values)
 *   [Details](#details)
 
 ## Simple example:
@@ -106,7 +107,12 @@ valid_tenant_value_constraint:
 
 For more information please check [setting a list of invalid tenant identifier values](https://github.com/starnowski/posmulten#setting-a-list-of-invalid-tenant-identifier-values).
 
-#TODO valid_tenant_value_constraint
+#Tables configure
+The __tables__ property is an array of objects that each references to a single table.
+The table object ables to configure things like the RLS policy or the constraint that checks if the foreign key belongs to the same tenant as a current logged tenant.
+It is not mandatory to configure all tables. In some cases, there is no sense to create an entry for the table.
+For example, tables that are supposed to use by all tenants, like dictionary tables, do not need to have a configured RLS policy.
+
 #TODO tables
 
 ## Details
