@@ -53,6 +53,10 @@ jobs:
       before_install:
         # Install bats-core with version 1.1.0 when package will be available (see https://github.com/bats-core/bats-core/issues/103)
         - .travis/bats/bats-core-installation.sh "$TRAVIS_BUILD_DIR/.travis/bats"
+        - sudo apt-get -y install libxml2-utils
+      addons:
+        apt:
+          update: true
       cache:
         directories:
           - $HOME/.m2
