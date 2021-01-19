@@ -1,6 +1,11 @@
+# Configuration-yaml-interpreter
 The configuration-yaml-interpreter module can interpreted configuration file in yaml format and based on that it creates
 DDL statements that allows to create the shared schema strategy.
-The YAML schema description is below   
+The YAML schema description is below.
+
+*   [Simple example](#simple-example)
+*   [Root properties](#root-properties)
+*   [Details](#details)
 
 ## Simple example:
 Bellow, there is a configuration example for a schema with the name "public".
@@ -62,7 +67,7 @@ tables:
           group_id:  uuid
 ```
 
-#TODO Root properties
+## Root properties
 | Property name |   Type    |   Required    |   Nullable    |   Description |
 |---------------|-----------|---------------|---------------|---------------|
 |[default_schema](#default_schema) |    String  |   Yes |   Yes |   Name of the database schema for which changes should be applied. |
@@ -79,6 +84,12 @@ tables:
 |---------------|-----------|---------------|---------------|---------------|
 |[equals_current_tenant_identifier_function_name](#equals_current_tenant_identifier_function_name) |  String  |   No    |   No  |   Name of the function name that checks if passed identifier is the same as the current tenant identifier. |
 |[set_current_tenant_identifier_as_default_value_for_tenant_column_in_all_tables](#set_current_tenant_identifier_as_default_value_for_tenant_column_in_all_tables) |  Boolean  |   No    |   Yes  |   Generate a statement that sets a default value for the tenant column in all tables. |
+
+
+#TODO valid_tenant_value_constraint
+#TODO tables
+
+## Details
 
 ### default_schema
 Name of the database schema for which changes should be applied.
@@ -233,8 +244,3 @@ Example:
 set_current_tenant_identifier_as_default_value_for_tenant_column_in_all_tables: true
 ```
 For more information please check [adding default value for tenant column](https://github.com/starnowski/posmulten#adding-default-value-for-tenant-column).
-
-#TODO valid_tenant_value_constraint
-#TODO tables
-
-## Details
