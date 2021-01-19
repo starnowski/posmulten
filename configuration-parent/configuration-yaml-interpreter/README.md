@@ -91,12 +91,18 @@ Constraint keeps tenant column value valid.
 
 | Property name |   Type    |   Required    |   Nullable    |   Description |
 |---------------|-----------|---------------|---------------|---------------|
-|tenant_identifiers_blacklist|  Arrays of strings   |   Yes |   No  |   An array of invalid values for tenant identifier. Array need have at least one element |
+|tenant_identifiers_blacklist|  Array of strings   |   Yes |   No  |   An array of invalid values for tenant identifier. Array need have at least one element |
 |[is_tenant_valid_function_name](#is_tenant_valid_function_name)|  String   |   No |   No  |   Name of the function that checks if passed tenant identifier is valid |
 |[is_tenant_valid_constraint_name](#is_tenant_valid_constraint_name)|  String   |   No |   No  |   Name of the constraint that checks if the tenant column has a valid value |
 
+For example, if we want to specify "ROOT", "some_id" as invalid values for tenant identifier, the configuration should look just like below:
 
-TODO
+```yaml
+valid_tenant_value_constraint:
+  tenant_identifiers_blacklist:
+    - ROOT
+    - "some_id"
+```
 
 For more information please check [setting a list of invalid tenant identifier values](https://github.com/starnowski/posmulten#setting-a-list-of-invalid-tenant-identifier-values).
 
