@@ -93,6 +93,7 @@ Constraint keeps tenant column value valid.
 |---------------|-----------|---------------|---------------|---------------|
 |tenant_identifiers_blacklist|  Arrays of strings   |   Yes |   No  |   An array of invalid values for tenant identifier. Array need have at least one element |
 |[is_tenant_valid_function_name](#is_tenant_valid_function_name)|  String   |   No |   No  |   Name of the function that checks if passed tenant identifier is valid |
+|[is_tenant_valid_constraint_name](#is_tenant_valid_constraint_name)|  String   |   No |   No  |   Name of the constraint that checks if the tenant column has a valid value |
 
 
 TODO
@@ -278,6 +279,26 @@ SELECT $1 <> CAST ('DUMMMY_TENANT' AS VARCHAR(255)) AND $1 <> CAST ('XXX-INVAlid
 $$ LANGUAGE sql
 IMMUTABLE
 PARALLEL SAFE;
+```
+
+For more information please check [setting a list of invalid tenant identifier values](https://github.com/starnowski/posmulten#setting-a-list-of-invalid-tenant-identifier-values).
+
+### is_tenant_valid_constraint_name
+Name of the constraint that checks if the tenant column has a valid value.
+For example, for the below entries:
+
+```yaml
+valid_tenant_value_constraint:
+  is_tenant_valid_constraint_name:  tenant_must_be_valid
+  is_tenant_valid_function_name:  is_this_tenant_valid
+  tenant_identifiers_blacklist:
+    - .....
+```
+
+the framework generates the below function:
+
+```sql
+ALTER TABLE "posts" ADD CONSTRAINT tenant_must_be_valid CHECK (tenant_id IS NULL OR is_this_tenant_valid(tenant_id));
 ```
 
 For more information please check [setting a list of invalid tenant identifier values](https://github.com/starnowski/posmulten#setting-a-list-of-invalid-tenant-identifier-values).
