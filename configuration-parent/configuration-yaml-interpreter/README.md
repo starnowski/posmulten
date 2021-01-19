@@ -85,6 +85,18 @@ tables:
 |[equals_current_tenant_identifier_function_name](#equals_current_tenant_identifier_function_name) |  String  |   No    |   No  |   Name of the function name that checks if passed identifier is the same as the current tenant identifier. |
 |[set_current_tenant_identifier_as_default_value_for_tenant_column_in_all_tables](#set_current_tenant_identifier_as_default_value_for_tenant_column_in_all_tables) |  Boolean  |   No    |   Yes  |   Generate a statement that sets a default value for the tenant column in all tables. |
 
+## Setting a list of invalid tenant identifier values
+The __valid_tenant_value_constraint__ object is used to configure constraint that will be added to all tenant column in all tables (TODO mention about skipping option).
+Constraint keeps tenant column value valid.
+
+| Property name |   Type    |   Required    |   Nullable    |   Description |
+|---------------|-----------|---------------|---------------|---------------|
+|tenant_identifiers_blacklist|  Arrays of strings   |   Yes |   No  |   An array of invalid values for tenant identifier. Array need have at least one element |
+
+
+TODO
+
+For more information please check [setting a list of invalid tenant identifier values](https://github.com/starnowski/posmulten#setting-a-list-of-invalid-tenant-identifier-values).
 
 #TODO valid_tenant_value_constraint
 #TODO tables
