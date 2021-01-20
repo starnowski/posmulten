@@ -6,6 +6,7 @@ The YAML schema description is below.
 *   [Simple example](#simple-example)
 *   [Root properties](#root-properties)
 *   [Setting a list of invalid tenant identifier values](#setting-a-list-of-invalid-tenant-identifier-values)
+*   [Tables configuration](#tables-configuration)
 *   [Details](#details)
 
 ## Simple example:
@@ -107,11 +108,26 @@ valid_tenant_value_constraint:
 
 For more information please check [setting a list of invalid tenant identifier values](https://github.com/starnowski/posmulten#setting-a-list-of-invalid-tenant-identifier-values).
 
-#Tables configure
+## Tables configuration
 The __tables__ property is an array of objects that each references to a single table.
 The table object ables to configure things like the RLS policy or the constraint that checks if the foreign key belongs to the same tenant as a current logged tenant.
 It is not mandatory to configure all tables. In some cases, there is no sense to create an entry for the table.
 For example, tables that are supposed to use by all tenants, like dictionary tables, do not need to have a configured RLS policy.
+
+__Table object__
+
+| Property name |   Type    |   Required    |   Nullable    |   Description |
+|---------------|-----------|---------------|---------------|---------------|
+|name   |   String  |   Yes |   No  |   Name of table   |
+|[rls_policy](#rls_policy)   |   Object  |   No |   No  |   Object that defines RLS for table   |
+|foreign_keys(TODO)   |   Array of objects  |   No |   No  |   Object that defines RLS for table   |
+
+### rls_policy
+The rls_policy entry is required to specify the RLS policy for table.
+
+| Property name |   Type    |   Required    |   Nullable    |   Description |
+|---------------|-----------|---------------|---------------|---------------|
+|name   |   String  |   Yes |   No  |   Name of the RLS policy   |
 
 #TODO tables
 
