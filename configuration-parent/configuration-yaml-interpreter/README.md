@@ -128,6 +128,8 @@ The rls_policy entry is required to specify the RLS policy for table.
 | Property name |   Type    |   Required    |   Nullable    |   Description |
 |---------------|-----------|---------------|---------------|---------------|
 |name   |   String  |   Yes |   No  |   Name of the RLS policy   |
+|tenant_column   |   String  |   No |   No  |   Name of the column that stores tenant identifier. This property overrides the value of the [default schema](#default_schema) for its table  |
+|[create_tenant_column_for_table](#create_tenant_column_for_table)   |   Boolean  |   No |   No  | Option force to create tenant column for table    |
 
 #TODO tables
 
@@ -330,3 +332,8 @@ ALTER TABLE "posts" ADD CONSTRAINT tenant_must_be_valid CHECK (tenant_id IS NULL
 ```
 
 For more information please check [setting a list of invalid tenant identifier values](https://github.com/starnowski/posmulten#setting-a-list-of-invalid-tenant-identifier-values).
+
+### create_tenant_column_for_table
+Option force to create tenant column for the table.
+By default, the Posmulten library assumes that the tenant column exists.
+To check what kind of DDL statements are generated for tenant column definition please check the [adding tenant column to tenant table](https://github.com/starnowski/posmulten#adding-tenant-column-to-tenant-table).
