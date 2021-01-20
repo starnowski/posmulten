@@ -120,7 +120,7 @@ __Table object__
 |---------------|-----------|---------------|---------------|---------------|
 |name   |   String  |   Yes |   No  |   Name of table   |
 |[rls_policy](#rls_policy)   |   Object  |   No |   No  |   Object that defines RLS for table   |
-|foreign_keys(TODO)   |   Array of objects  |   No |   No  |   Object that defines RLS for table   |
+|foreign_keys(TODO)   |   Array of objects  |   No |   No  |   An array of objects that defines foreign key constraint for a table with RLS policy  |
 
 ### rls_policy
 The rls_policy entry is required to specify the RLS policy for table.
