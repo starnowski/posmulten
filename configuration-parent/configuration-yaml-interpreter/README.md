@@ -342,4 +342,6 @@ To check what kind of DDL statements are generated for tenant column definition 
 
 ### skip_adding_of_tenant_column_default_value
 Option force to skip adding default value to tenant column for table.
-TODO
+This option make sense to use when the [set_current_tenant_identifier_as_default_value_for_tenant_column_in_all_tables](#set_current_tenant_identifier_as_default_value_for_tenant_column_in_all_tables) option is turned on.
+It simply allows to skip adding default value definition for tenant column is specified table.
+For more information please check [skipping adding default value for tenant column for a single table](https://github.com/starnowski/posmulten#skipping-adding-default-value-for-tenant-column-for-a-single-table).
