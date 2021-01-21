@@ -131,7 +131,7 @@ The rls_policy entry is required to specify the RLS policy for table.
 |tenant_column   |   String  |   No |   No  |   Name of the column that stores tenant identifier. This property overrides the value of the [default schema](#default_schema) for its table  |
 |[create_tenant_column_for_table](#create_tenant_column_for_table)   |   Boolean  |   No |   No  | Option force to create tenant column for table    |
 |valid_tenant_value_constraint_name   |   String  |   No |   No  |   Name of the constraint that checks if the tenant column has a valid value. This property overrides the value of the [is_tenant_valid_constraint_name](#is_tenant_valid_constraint_name) for its table  |
-|[skip_adding_of_tenant_column_default_value](#skip_adding_of_tenant_column_default_value)   |   Boolean  |   No |   No  | Option force to skip adding default value to tenant column for table    |
+|[skip_adding_of_tenant_column_default_value](#skip_adding_of_tenant_column_default_value)   |   Boolean  |   No |   No  | Option force to skip adding default value to tenant column for a table    |
 
 #TODO tables
 
