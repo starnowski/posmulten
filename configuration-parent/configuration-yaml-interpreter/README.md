@@ -132,6 +132,12 @@ The rls_policy entry is required to specify the RLS policy for table.
 |[create_tenant_column_for_table](#create_tenant_column_for_table)   |   Boolean  |   No |   No  | Option force to create tenant column for table    |
 |valid_tenant_value_constraint_name   |   String  |   No |   No  |   Name of the constraint that checks if the tenant column has a valid value. This property overrides the value of the [is_tenant_valid_constraint_name](#is_tenant_valid_constraint_name) for its table  |
 |[skip_adding_of_tenant_column_default_value](#skip_adding_of_tenant_column_default_value)   |   Boolean  |   No |   No  | Option force to skip adding default value to tenant column for a table    |
+|[primary_key_definition](#primary_key_definition)   |   Object  |   No |   No  | Object that defines primary keys for a table |
+
+### primary_key_definition
+| Property name |   Type    |   Required    |   Nullable    |   Description |
+|---------------|-----------|---------------|---------------|---------------|
+|[pk_columns_name_to_type](#pk_columns_name_to_type)   |   Map  |   No |   Yes  |   Map of primary key columns where the key is column name and value is its type   |
 
 #TODO tables
 
@@ -345,3 +351,9 @@ Option force to skip adding default value to tenant column for table.
 This option make sense to use when the [set_current_tenant_identifier_as_default_value_for_tenant_column_in_all_tables](#set_current_tenant_identifier_as_default_value_for_tenant_column_in_all_tables) option is turned on.
 It simply allows to skip adding default value definition for tenant column is specified table.
 For more information please check [skipping adding default value for tenant column for a single table](https://github.com/starnowski/posmulten#skipping-adding-default-value-for-tenant-column-for-a-single-table).
+
+### pk_columns_name_to_type
+Map of primary key columns where the key is column name and value is its type.
+The map can be empty or even null. 
+This is a valid case for example for a many-to-many relation table without any primary key, just with foreign keys for tables that it refers to.
+*   [adding constraints for foreign key columns](https://github.com/starnowski/posmulten#adding-constraints-for-foreign-key-columns)
