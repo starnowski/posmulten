@@ -88,7 +88,7 @@ tables:
 |[set_current_tenant_identifier_as_default_value_for_tenant_column_in_all_tables](#set_current_tenant_identifier_as_default_value_for_tenant_column_in_all_tables) |  Boolean  |   No    |   Yes  |   Generate a statement that sets a default value for the tenant column in all tables. |
 
 ## Setting a list of invalid tenant identifier values
-The __valid_tenant_value_constraint__ object is used to configure constraint that will be added to all tenant column in all tables (TODO mention about skipping option).
+The __valid_tenant_value_constraint__ object is used to configure constraint that will be added to all tenant column in all tables.
 Constraint keeps tenant column value valid.
 
 | Property name |   Type    |   Required    |   Nullable    |   Description |
@@ -139,6 +139,15 @@ The rls_policy entry is required to specify the RLS policy for table.
 |---------------|-----------|---------------|---------------|---------------|
 |[pk_columns_name_to_type](#pk_columns_name_to_type)   |   Map  |   No |   Yes  |   Map of primary key columns where the key is column name and value is its type   |
 |[name_for_function_that_checks_if_record_exists_in_table](#name_for_function_that_checks_if_record_exists_in_table)   |   String  |   Yes |   No  |   Function name that checks if passed primary key for a specific table exists for the current tenant   |
+
+### foreign_keys
+An array of objects that defines foreign key constraint for a table with RLS policy.
+Based on each array object, there is going to be created constraint that checks if a foreign key value refers to a record that exists for the current logged tenant.
+| Property name |   Type    |   Required    |   Nullable    |   Description |
+|---------------|-----------|---------------|---------------|---------------|
+|constraint_name   |   String  |   Yes |   No  |   Name of the constraint  |
+|table_name   |   String  |   Yes |   No  |   Name of table that foreign key refers to  |
+|foreign_key_primary_key_columns_mappings   |   Map  |   Yes |   No  |   The map that defines reference between foreign key and primary key columns. The map key is the foreign key column name and the value is the primary key column name  |
 
 #TODO tables
 
