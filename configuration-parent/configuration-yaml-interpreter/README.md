@@ -359,8 +359,8 @@ The map can be empty or even null.
 This is a valid case for example for a many-to-many relation table without any primary key, just with foreign keys for tables that it refers to.
 
 ### name_for_function_that_checks_if_record_exists_in_table
-Function name that checks if passed primary key for a specific table exists for the current tenant.
-This function is generated only when some other table has foreign key (TODO) that refers to primaries key table.
+Function name that checks if passed primary key for a specific table exists for the current tenant. 
+This function is generated only when some other table has a foreign key (TODO) that refers to the primary key table.
 
 For more information please check:
 *   [adding constraints for foreign key columns](https://github.com/starnowski/posmulten#adding-constraints-for-foreign-key-columns)
