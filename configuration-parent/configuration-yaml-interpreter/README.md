@@ -138,6 +138,7 @@ The rls_policy entry is required to specify the RLS policy for table.
 | Property name |   Type    |   Required    |   Nullable    |   Description |
 |---------------|-----------|---------------|---------------|---------------|
 |[pk_columns_name_to_type](#pk_columns_name_to_type)   |   Map  |   No |   Yes  |   Map of primary key columns where the key is column name and value is its type   |
+|[name_for_function_that_checks_if_record_exists_in_table](#name_for_function_that_checks_if_record_exists_in_table)   |   String  |   Yes |   No  |   Function name that checks if passed primary key for a specific table exists for the current tenant   |
 
 #TODO tables
 
@@ -356,4 +357,11 @@ For more information please check [skipping adding default value for tenant colu
 Map of primary key columns where the key is column name and value is its type.
 The map can be empty or even null. 
 This is a valid case for example for a many-to-many relation table without any primary key, just with foreign keys for tables that it refers to.
+
+### name_for_function_that_checks_if_record_exists_in_table
+Function name that checks if passed primary key for a specific table exists for the current tenant.
+This function is generated only when some other table has foreign key (TODO) that refers to primaries key table.
+
+For more information please check:
 *   [adding constraints for foreign key columns](https://github.com/starnowski/posmulten#adding-constraints-for-foreign-key-columns)
+*   [setting function name that checks if passed primary key for a specific table exists for the current tenant](https://github.com/starnowski/posmulten#setting-function-name-that-checks-if-passed-primary-key-for-a-specific-table-exists-for-the-current-tenant)
