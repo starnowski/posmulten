@@ -199,8 +199,6 @@ tables:
           parent_comment_random_uuid:  random_uuid
 ```
 
-#TODO tables
-
 ## Details
 
 ### default_schema
