@@ -27,7 +27,7 @@ The DDL statements that create the shared schema strategy are going to be stored
 java -Dposmulten.configuration.config.file.path="/path/to/file/some-conf.yml" -Dposmulten.configuration.create.script.path="/some/dir/create_script.sql" -Dposmulten.configuration.drop.script.path="path/for/drop/script/drop_script.sql" -jar "/some/path/configuration-jar-jar-with-dependencies.jar"
 ```
 
-Printing version:
+Printing the jar file version:
 
 __Property required to print jar version__
 | Property name |   Required    |   Description |
