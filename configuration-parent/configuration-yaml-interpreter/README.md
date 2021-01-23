@@ -120,7 +120,7 @@ __Table object__
 |---------------|-----------|---------------|---------------|---------------|
 |name   |   String  |   Yes |   No  |   Name of table   |
 |[rls_policy](#rls_policy)   |   Object  |   No |   No  |   Object that defines RLS for table   |
-|foreign_keys(TODO)   |   Array of objects  |   No |   No  |   An array of objects that defines foreign key constraint for a table with RLS policy  |
+|[foreign_keys](#foreign_keys)   |   Array of objects  |   No |   No  |   An array of objects that defines foreign key constraint for a table with RLS policy  |
 
 ### rls_policy
 The rls_policy entry is required to specify the RLS policy for table.
@@ -369,7 +369,7 @@ This is a valid case for example for a many-to-many relation table without any p
 
 ### name_for_function_that_checks_if_record_exists_in_table
 Function name that checks if passed primary key for a specific table exists for the current tenant. 
-This function is generated only when some other table has a foreign key (TODO) that refers to the primary key table.
+This function is generated only when some other table has a [foreign key](#foreign_keys) that refers to the primary key table.
 
 For more information please check:
 *   [adding constraints for foreign key columns](https://github.com/starnowski/posmulten#adding-constraints-for-foreign-key-columns)
