@@ -38,6 +38,10 @@ Example:
 
 ```bash
 java -Dposmulten.configuration.config.version.print="true" -jar "/some/path/configuration-jar-jar-with-dependencies.jar"
-0.3.0
 ```
 
+Output:
+
+```bash
+0.3.0
+```
