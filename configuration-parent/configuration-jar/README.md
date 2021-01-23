@@ -29,7 +29,7 @@ Printing the jar file version:
 __Property required to print jar version__
 | Property name |   Required    |   Description |
 |---------------|-----------|---------------|
-|configuration.jar.project.version   |   Yes |   Property that force the jar file to print its version. Property required to have assigned value __true__  |
+|posmulten.configuration.config.version.print   |   Yes |   Property that force the jar file to print its version. Property required to have assigned value __true__  |
 
 Example:
 
