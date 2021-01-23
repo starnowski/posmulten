@@ -149,6 +149,56 @@ Based on each array object, there is going to be created constraint that checks 
 |table_name   |   String  |   Yes |   No  |   Name of table that foreign key refers to  |
 |foreign_key_primary_key_columns_mappings   |   Map  |   Yes |   No  |   The map that defines reference between foreign key and primary key columns. The map key is the foreign key column name and the value is the primary key column name  |
 
+Below there are two examples of foreign keys configuration:
+First is a simple example where we have table "users" and table "posts" that has a reference (foreign key) to the "users" table (user_id -> id)
+
+```yaml
+default_schema: public
+grantee: "application-user"
+tables:
+  - name: users
+    rls_policy:
+      name: users_table_rls_policy
+      primary_key_definition:
+        name_for_function_that_checks_if_record_exists_in_table: "is_user_exists"
+        pk_columns_name_to_type:
+          id: bigint
+  - name: posts
+    rls_policy:
+      name: "posts_table_rls_policy"
+      primary_key_definition:
+        name_for_function_that_checks_if_record_exists_in_table: "is_post_exists"
+        pk_columns_name_to_type:
+          id: bigint
+    foreign_keys:
+      - constraint_name:  "posts_users_tenant_constraint"
+        table_name: "users"
+        foreign_key_primary_key_columns_mappings:
+          user_id:  id
+```
+
+The second example shows a table that has a foreign key with two columns but also it has reference to itself (we assume that comment can have parent comment).
+
+```yaml
+default_schema: public
+grantee: "application-user"
+tables:
+  - name: "comments"
+    rls_policy:
+      name: comments_table_rls_policy
+      primary_key_definition:
+        name_for_function_that_checks_if_record_exists_in_table: "is_comment_exists"
+        pk_columns_name_to_type:
+          id: int
+          random_uuid: UUID
+    foreign_keys:
+      - constraint_name:  "comments_comment_parent_tenant_constraint"
+        table_name: comments
+        foreign_key_primary_key_columns_mappings:
+          parent_comment_id:  id
+          parent_comment_random_uuid:  random_uuid
+```
+
 #TODO tables
 
 ## Details
