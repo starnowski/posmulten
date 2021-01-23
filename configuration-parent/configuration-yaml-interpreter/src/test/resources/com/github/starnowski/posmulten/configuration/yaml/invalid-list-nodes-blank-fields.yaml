@@ -20,17 +20,19 @@ tables:
   - rls_policy: # Without name
       name: users_table_rls_policy
       tenant_column:  tenant_id
-      name_for_function_that_checks_if_record_exists_in_table: "is_user_exists"
-      pk_columns_name_to_type:
-        id: bigint
+      primary_key_definition:
+        name_for_function_that_checks_if_record_exists_in_table: "is_user_exists"
+        pk_columns_name_to_type:
+          id: bigint
   - name: posts
     rls_policy:
       name: "posts_table_rls_policy"
       tenant_column:  tenant_id
-      name_for_function_that_checks_if_record_exists_in_table: "is_post_exists"
       skip_adding_of_tenant_column_default_value: false
-      pk_columns_name_to_type:
-        id: bigint
+      primary_key_definition:
+        name_for_function_that_checks_if_record_exists_in_table: "is_post_exists"
+        pk_columns_name_to_type:
+          id: bigint
     foreign_keys:
       - constraint_name:  "posts_users_tenant_constraint"
         table_name: "users"
@@ -39,11 +41,12 @@ tables:
   - name: "comments"
     rls_policy: # Without rls_policy.name
       tenant_column:  tenant
-      name_for_function_that_checks_if_record_exists_in_table: "is_comment_exists"
       skip_adding_of_tenant_column_default_value: true
-      pk_columns_name_to_type:
-        id: int
-        user_id: bigint
+      primary_key_definition:
+        name_for_function_that_checks_if_record_exists_in_table: "is_comment_exists"
+        pk_columns_name_to_type:
+          id: int
+          user_id: bigint
     foreign_keys:
       - constraint_name:  "comments_users_tenant_constraint"
         table_name: users
@@ -62,11 +65,12 @@ tables:
     rls_policy:
       name: notifications_table_rls_policy
       tenant_column:  tenant
-      name_for_function_that_checks_if_record_exists_in_table: "      " # name_for_function_that_checks_if_record_exists_in_table can not be null
       create_tenant_column_for_table: true
       valid_tenant_value_constraint_name: "is_tenant_id_valid"
-      pk_columns_name_to_type:
-        uuid: uuid
+      primary_key_definition:
+        name_for_function_that_checks_if_record_exists_in_table: "      " # name_for_function_that_checks_if_record_exists_in_table can not be null
+        pk_columns_name_to_type:
+          uuid: uuid
     foreign_keys:
       - constraint_name:  "notifications_users_tenant_constraint"
         table_name: users

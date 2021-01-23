@@ -1,5 +1,6 @@
 package com.github.starnowski.posmulten.configuration.core
 
+import com.github.starnowski.posmulten.configuration.core.model.PrimaryKeyDefinition
 import com.github.starnowski.posmulten.configuration.core.model.RLSPolicy
 import com.github.starnowski.posmulten.configuration.core.model.TableEntry
 import com.github.starnowski.posmulten.postgresql.test.utils.MapBuilder
@@ -18,9 +19,10 @@ class RLSPolicyConfigurationEnricherTest extends AbstractBaseTest {
                     .setRlsPolicy(new RLSPolicy()
                                     .setName(rlsPolicyName)
                                     .setTenantColumn(tenantColumn)
-                                    .setPrimaryKeyColumnsNameToTypeMap(primaryKeyColumnsNameToTypeMap)
+                                    .setPrimaryKeyDefinition(new PrimaryKeyDefinition()
+                                            .setPrimaryKeyColumnsNameToTypeMap(primaryKeyColumnsNameToTypeMap)
+                                            .setNameForFunctionThatChecksIfRecordExistsInTable(nameForFunctionThatChecksIfRecordExistsInTable))
                                     .setCreateTenantColumnForTable(createTenantColumnForTable)
-                                    .setNameForFunctionThatChecksIfRecordExistsInTable(nameForFunctionThatChecksIfRecordExistsInTable)
                                     .setValidTenantValueConstraintName(validTenantValueConstraintName)
                                     .setSkipAddingOfTenantColumnDefaultValue(skipAddingOfTenantColumnDefaultValue))
 
@@ -49,7 +51,8 @@ class RLSPolicyConfigurationEnricherTest extends AbstractBaseTest {
                     .setRlsPolicy(new RLSPolicy()
                             .setName(rlsPolicyName)
                             .setTenantColumn(tenantColumn)
-                            .setPrimaryKeyColumnsNameToTypeMap(primaryKeyColumnsNameToTypeMap)
+                            .setPrimaryKeyDefinition(new PrimaryKeyDefinition()
+                                    .setPrimaryKeyColumnsNameToTypeMap(primaryKeyColumnsNameToTypeMap))
                             .setCreateTenantColumnForTable(true))
 
         when:
@@ -75,7 +78,7 @@ class RLSPolicyConfigurationEnricherTest extends AbstractBaseTest {
                     .setRlsPolicy(new RLSPolicy()
                             .setName(rlsPolicyName)
                             .setTenantColumn(tenantColumn)
-                            .setPrimaryKeyColumnsNameToTypeMap(primaryKeyColumnsNameToTypeMap)
+                            .setPrimaryKeyDefinition(new PrimaryKeyDefinition().setPrimaryKeyColumnsNameToTypeMap(primaryKeyColumnsNameToTypeMap))
                             .setSkipAddingOfTenantColumnDefaultValue(true))
 
         when:

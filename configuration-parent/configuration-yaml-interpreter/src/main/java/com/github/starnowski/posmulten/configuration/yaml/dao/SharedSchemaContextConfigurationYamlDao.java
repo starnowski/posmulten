@@ -26,18 +26,18 @@ public class SharedSchemaContextConfigurationYamlDao {
 
     private final ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
 
-    public SharedSchemaContextConfiguration read(String filePath) throws IOException {
+    public SharedSchemaContextConfiguration read(String filePath) throws IOException, YamlInvalidSchema {
         SharedSchemaContextConfiguration result = mapper.readValue(new File(filePath), SharedSchemaContextConfiguration.class);
         validateConfigurationObject(result);
         return result;
     }
 
-    public void save(SharedSchemaContextConfiguration configuration, String filePath) throws IOException {
+    public void save(SharedSchemaContextConfiguration configuration, String filePath) throws IOException, YamlInvalidSchema {
         validateConfigurationObject(configuration);
         mapper.writeValue(new File(filePath), configuration);
     }
 
-    private void validateConfigurationObject(SharedSchemaContextConfiguration configuration) {
+    private void validateConfigurationObject(SharedSchemaContextConfiguration configuration) throws YamlInvalidSchema {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
         Set<ConstraintViolation<SharedSchemaContextConfiguration>> errors = validator.validate(configuration);

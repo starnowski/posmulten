@@ -1,0 +1,48 @@
+default_schema: public
+default_tenant_id_column: "tenant_id"
+grantee: "application-user"
+set_current_tenant_identifier_as_default_value_for_tenant_column_in_all_tables: true
+valid_tenant_value_constraint:
+  tenant_identifiers_blacklist:
+    - invalid_tenant
+    - "wrong tenant ID"
+tables:
+  - name: users
+    rls_policy:
+      name: users_table_rls_policy
+      primary_key_definition:
+        name_for_function_that_checks_if_record_exists_in_table: "is_user_exists"
+        pk_columns_name_to_type:
+          id: bigint
+  - name: posts
+    rls_policy:
+      name: "posts_table_rls_policy"
+      skip_adding_of_tenant_column_default_value: false
+      primary_key_definition:
+        name_for_function_that_checks_if_record_exists_in_table: "is_post_exists"
+        pk_columns_name_to_type:
+          id: bigint
+    foreign_keys:
+      - constraint_name:  "posts_users_tenant_constraint"
+        table_name: "users"
+        foreign_key_primary_key_columns_mappings:
+          user_id:  id
+  - name: groups
+    rls_policy:
+      name: groups_table_rls_policy
+      primary_key_definition:
+        name_for_function_that_checks_if_record_exists_in_table: "is_group_exists"
+        pk_columns_name_to_type:
+          uuid: UUID
+  - name: users_groups
+    rls_policy:
+      name: groups_table_rls_policy
+    foreign_keys:
+      - constraint_name:  "users_tenant_constraint"
+        table_name: "users"
+        foreign_key_primary_key_columns_mappings:
+          user_id:  id
+      - constraint_name:  "groups_tenant_constraint"
+        table_name: "groups"
+        foreign_key_primary_key_columns_mappings:
+          group_id:  uuid

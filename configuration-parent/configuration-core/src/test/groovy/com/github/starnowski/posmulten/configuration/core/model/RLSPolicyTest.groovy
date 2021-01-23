@@ -14,15 +14,15 @@ class RLSPolicyTest extends Specification {
             ob1.equals(ob2) && ob2.equals(ob1)
 
         where:
-            ob1                                                                                                                                 |   ob2
-            new RLSPolicy()                                                                                                                     |   new RLSPolicy()
-            new RLSPolicy().setName("table_rls_policy")                                                                                         |   new RLSPolicy().setName("table_rls_policy")
-            new RLSPolicy().setTenantColumn("xxx_tenant").setCreateTenantColumnForTable(true)                                                   |   new RLSPolicy().setTenantColumn("xxx_tenant").setCreateTenantColumnForTable(true)
-            new RLSPolicy().setTenantColumn("xxx_tenant").setCreateTenantColumnForTable(false)                                                  |   new RLSPolicy().setTenantColumn("xxx_tenant").setCreateTenantColumnForTable(false)
-            new RLSPolicy().setNameForFunctionThatChecksIfRecordExistsInTable("is_record_exists").setValidTenantValueConstraintName("t_valid")  |   new RLSPolicy().setNameForFunctionThatChecksIfRecordExistsInTable("is_record_exists").setValidTenantValueConstraintName("t_valid")
-            new RLSPolicy().setSkipAddingOfTenantColumnDefaultValue(true)                                                                       |   new RLSPolicy().setSkipAddingOfTenantColumnDefaultValue(true)
-            new RLSPolicy().setSkipAddingOfTenantColumnDefaultValue(false)                                                                      |   new RLSPolicy().setSkipAddingOfTenantColumnDefaultValue(false)
-            new RLSPolicy().setPrimaryKeyColumnsNameToTypeMap(mapBuilder().put("id", "bigint").put("record_uuid", "UUID").build())              |   new RLSPolicy().setPrimaryKeyColumnsNameToTypeMap(mapBuilder().put("id", "bigint").put("record_uuid", "UUID").build())
+            ob1                                                                                                                                                                                     |   ob2
+            new RLSPolicy()                                                                                                                                                                         |   new RLSPolicy()
+            new RLSPolicy().setName("table_rls_policy")                                                                                                                                             |   new RLSPolicy().setName("table_rls_policy")
+            new RLSPolicy().setTenantColumn("xxx_tenant").setCreateTenantColumnForTable(true)                                                                                                       |   new RLSPolicy().setTenantColumn("xxx_tenant").setCreateTenantColumnForTable(true)
+            new RLSPolicy().setTenantColumn("xxx_tenant").setCreateTenantColumnForTable(false)                                                                                                      |   new RLSPolicy().setTenantColumn("xxx_tenant").setCreateTenantColumnForTable(false)
+            new RLSPolicy().setPrimaryKeyDefinition(new PrimaryKeyDefinition().setNameForFunctionThatChecksIfRecordExistsInTable("is_record_exists")).setValidTenantValueConstraintName("t_valid")  |   new RLSPolicy().setPrimaryKeyDefinition(new PrimaryKeyDefinition().setNameForFunctionThatChecksIfRecordExistsInTable("is_record_exists")).setValidTenantValueConstraintName("t_valid")
+            new RLSPolicy().setSkipAddingOfTenantColumnDefaultValue(true)                                                                                                                           |   new RLSPolicy().setSkipAddingOfTenantColumnDefaultValue(true)
+            new RLSPolicy().setSkipAddingOfTenantColumnDefaultValue(false)                                                                                                                          |   new RLSPolicy().setSkipAddingOfTenantColumnDefaultValue(false)
+            new RLSPolicy().setPrimaryKeyDefinition(new PrimaryKeyDefinition().setPrimaryKeyColumnsNameToTypeMap(mapBuilder().put("id", "bigint").put("record_uuid", "UUID").build()))              |   new RLSPolicy().setPrimaryKeyDefinition(new PrimaryKeyDefinition().setPrimaryKeyColumnsNameToTypeMap(mapBuilder().put("id", "bigint").put("record_uuid", "UUID").build()))
 
     }
 
@@ -33,15 +33,15 @@ class RLSPolicyTest extends Specification {
             ob1.hashCode() == ob2.hashCode()
 
         where:
-            ob1                                                                                                                                 |   ob2
-            new RLSPolicy()                                                                                                                     |   new RLSPolicy()
-            new RLSPolicy().setName("table_rls_policy")                                                                                         |   new RLSPolicy().setName("table_rls_policy")
-            new RLSPolicy().setTenantColumn("xxx_tenant").setCreateTenantColumnForTable(true)                                                   |   new RLSPolicy().setTenantColumn("xxx_tenant").setCreateTenantColumnForTable(true)
-            new RLSPolicy().setTenantColumn("xxx_tenant").setCreateTenantColumnForTable(false)                                                  |   new RLSPolicy().setTenantColumn("xxx_tenant").setCreateTenantColumnForTable(false)
-            new RLSPolicy().setNameForFunctionThatChecksIfRecordExistsInTable("is_record_exists").setValidTenantValueConstraintName("t_valid")  |   new RLSPolicy().setNameForFunctionThatChecksIfRecordExistsInTable("is_record_exists").setValidTenantValueConstraintName("t_valid")
-            new RLSPolicy().setSkipAddingOfTenantColumnDefaultValue(true)                                                                       |   new RLSPolicy().setSkipAddingOfTenantColumnDefaultValue(true)
-            new RLSPolicy().setSkipAddingOfTenantColumnDefaultValue(false)                                                                      |   new RLSPolicy().setSkipAddingOfTenantColumnDefaultValue(false)
-            new RLSPolicy().setPrimaryKeyColumnsNameToTypeMap(mapBuilder().put("id", "bigint").put("record_uuid", "UUID").build())              |   new RLSPolicy().setPrimaryKeyColumnsNameToTypeMap(mapBuilder().put("id", "bigint").put("record_uuid", "UUID").build())
+            ob1                                                                                                                                                                                     |   ob2
+            new RLSPolicy()                                                                                                                                                                         |   new RLSPolicy()
+            new RLSPolicy().setName("table_rls_policy")                                                                                                                                             |   new RLSPolicy().setName("table_rls_policy")
+            new RLSPolicy().setTenantColumn("xxx_tenant").setCreateTenantColumnForTable(true)                                                                                                       |   new RLSPolicy().setTenantColumn("xxx_tenant").setCreateTenantColumnForTable(true)
+            new RLSPolicy().setTenantColumn("xxx_tenant").setCreateTenantColumnForTable(false)                                                                                                      |   new RLSPolicy().setTenantColumn("xxx_tenant").setCreateTenantColumnForTable(false)
+            new RLSPolicy().setPrimaryKeyDefinition(new PrimaryKeyDefinition().setNameForFunctionThatChecksIfRecordExistsInTable("is_record_exists")).setValidTenantValueConstraintName("t_valid")  |   new RLSPolicy().setPrimaryKeyDefinition(new PrimaryKeyDefinition().setNameForFunctionThatChecksIfRecordExistsInTable("is_record_exists")).setValidTenantValueConstraintName("t_valid")
+            new RLSPolicy().setSkipAddingOfTenantColumnDefaultValue(true)                                                                                                                           |   new RLSPolicy().setSkipAddingOfTenantColumnDefaultValue(true)
+            new RLSPolicy().setSkipAddingOfTenantColumnDefaultValue(false)                                                                                                                          |   new RLSPolicy().setSkipAddingOfTenantColumnDefaultValue(false)
+            new RLSPolicy().setPrimaryKeyDefinition(new PrimaryKeyDefinition().setPrimaryKeyColumnsNameToTypeMap(mapBuilder().put("id", "bigint").put("record_uuid", "UUID").build()))              |   new RLSPolicy().setPrimaryKeyDefinition(new PrimaryKeyDefinition().setPrimaryKeyColumnsNameToTypeMap(mapBuilder().put("id", "bigint").put("record_uuid", "UUID").build()))
     }
 
     @Unroll
@@ -51,13 +51,13 @@ class RLSPolicyTest extends Specification {
             !ob1.equals(ob2) && !ob2.equals(ob1)
 
         where:
-            ob1                                                                                                                                 |   ob2
-            new RLSPolicy().setName("table_rls_policy")                                                                                         |   new RLSPolicy().setName("tab_rls_policy")
-            new RLSPolicy().setTenantColumn("xxx_tenant").setCreateTenantColumnForTable(true)                                                   |   new RLSPolicy().setTenantColumn("yyy_tenant").setCreateTenantColumnForTable(true)
-            new RLSPolicy().setTenantColumn("xxx_tenant").setCreateTenantColumnForTable(false)                                                  |   new RLSPolicy().setTenantColumn("xxx_tenant").setCreateTenantColumnForTable(true)
-            new RLSPolicy().setNameForFunctionThatChecksIfRecordExistsInTable("is_record_exists").setValidTenantValueConstraintName("t_valid")  |   new RLSPolicy().setNameForFunctionThatChecksIfRecordExistsInTable("is_exists").setValidTenantValueConstraintName("t_valid")
-            new RLSPolicy().setNameForFunctionThatChecksIfRecordExistsInTable("is_record_exists").setValidTenantValueConstraintName("t_valid")  |   new RLSPolicy().setNameForFunctionThatChecksIfRecordExistsInTable("is_record_exists").setValidTenantValueConstraintName("tvalid")
-            new RLSPolicy().setSkipAddingOfTenantColumnDefaultValue(true)                                                                       |   new RLSPolicy().setSkipAddingOfTenantColumnDefaultValue(false)
-            new RLSPolicy().setPrimaryKeyColumnsNameToTypeMap(mapBuilder().put("id", "VARCHAR(255)").put("record_uuid", "UUID").build())        |   new RLSPolicy().setPrimaryKeyColumnsNameToTypeMap(mapBuilder().put("id", "bigint").put("record_uuid", "UUID").build())
+            ob1                                                                                                                                                                                     |   ob2
+            new RLSPolicy().setName("table_rls_policy")                                                                                                                                             |   new RLSPolicy().setName("tab_rls_policy")
+            new RLSPolicy().setTenantColumn("xxx_tenant").setCreateTenantColumnForTable(true)                                                                                                       |   new RLSPolicy().setTenantColumn("yyy_tenant").setCreateTenantColumnForTable(true)
+            new RLSPolicy().setTenantColumn("xxx_tenant").setCreateTenantColumnForTable(false)                                                                                                      |   new RLSPolicy().setTenantColumn("xxx_tenant").setCreateTenantColumnForTable(true)
+            new RLSPolicy().setPrimaryKeyDefinition(new PrimaryKeyDefinition().setNameForFunctionThatChecksIfRecordExistsInTable("is_record_exists")).setValidTenantValueConstraintName("t_valid")  |   new RLSPolicy().setPrimaryKeyDefinition(new PrimaryKeyDefinition().setNameForFunctionThatChecksIfRecordExistsInTable("is_exists")).setValidTenantValueConstraintName("t_valid")
+            new RLSPolicy().setPrimaryKeyDefinition(new PrimaryKeyDefinition().setNameForFunctionThatChecksIfRecordExistsInTable("is_record_exists")).setValidTenantValueConstraintName("t_valid")  |   new RLSPolicy().setPrimaryKeyDefinition(new PrimaryKeyDefinition().setNameForFunctionThatChecksIfRecordExistsInTable("is_record_exists")).setValidTenantValueConstraintName("tvalid")
+            new RLSPolicy().setSkipAddingOfTenantColumnDefaultValue(true)                                                                                                                           |   new RLSPolicy().setSkipAddingOfTenantColumnDefaultValue(false)
+            new RLSPolicy().setPrimaryKeyDefinition(new PrimaryKeyDefinition().setPrimaryKeyColumnsNameToTypeMap(mapBuilder().put("id", "VARCHAR(255)").put("record_uuid", "UUID").build()))        |   new RLSPolicy().setPrimaryKeyDefinition(new PrimaryKeyDefinition().setPrimaryKeyColumnsNameToTypeMap(mapBuilder().put("id", "bigint").put("record_uuid", "UUID").build()))
     }
 }

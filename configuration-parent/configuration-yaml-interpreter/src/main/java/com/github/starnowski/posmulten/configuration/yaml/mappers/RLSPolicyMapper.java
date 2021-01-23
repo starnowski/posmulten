@@ -5,13 +5,15 @@ import com.github.starnowski.posmulten.configuration.yaml.model.RLSPolicy;
 import com.github.starnowski.posmulten.configuration.yaml.model.StringWrapperWithNotBlankValue;
 
 public class RLSPolicyMapper implements IConfigurationMapper<com.github.starnowski.posmulten.configuration.core.model.RLSPolicy, RLSPolicy> {
+
+    private final PrimaryKeyDefinitionMapper primaryKeyDefinitionMapper = new PrimaryKeyDefinitionMapper();
+
     @Override
     public RLSPolicy map(com.github.starnowski.posmulten.configuration.core.model.RLSPolicy input) {
         return input == null ? null : new RLSPolicy()
                 .setName(input.getName())
                 .setCreateTenantColumnForTable(input.getCreateTenantColumnForTable())
-                .setNameForFunctionThatChecksIfRecordExistsInTable(input.getNameForFunctionThatChecksIfRecordExistsInTable())
-                .setPrimaryKeyColumnsNameToTypeMap(input.getPrimaryKeyColumnsNameToTypeMap())
+                .setPrimaryKeyDefinition(input.getPrimaryKeyDefinition() == null ? null : primaryKeyDefinitionMapper.map(input.getPrimaryKeyDefinition()))
                 .setSkipAddingOfTenantColumnDefaultValue(input.getSkipAddingOfTenantColumnDefaultValue())
                 .setTenantColumn(input.getTenantColumn() == null ? null : new StringWrapperWithNotBlankValue(input.getTenantColumn()))
                 .setValidTenantValueConstraintName(input.getValidTenantValueConstraintName() == null ? null : new StringWrapperWithNotBlankValue(input.getValidTenantValueConstraintName()));
@@ -22,8 +24,7 @@ public class RLSPolicyMapper implements IConfigurationMapper<com.github.starnows
         return output == null ? null : new com.github.starnowski.posmulten.configuration.core.model.RLSPolicy()
                 .setName(output.getName())
                 .setCreateTenantColumnForTable(output.getCreateTenantColumnForTable())
-                .setNameForFunctionThatChecksIfRecordExistsInTable(output.getNameForFunctionThatChecksIfRecordExistsInTable())
-                .setPrimaryKeyColumnsNameToTypeMap(output.getPrimaryKeyColumnsNameToTypeMap())
+                .setPrimaryKeyDefinition(output.getPrimaryKeyDefinition() == null ? null : primaryKeyDefinitionMapper.unmap(output.getPrimaryKeyDefinition()))
                 .setSkipAddingOfTenantColumnDefaultValue(output.getSkipAddingOfTenantColumnDefaultValue())
                 .setTenantColumn(output.getTenantColumn() == null ? null : output.getTenantColumn().getValue())
                 .setValidTenantValueConstraintName(output.getValidTenantValueConstraintName() == null ? null : output.getValidTenantValueConstraintName().getValue());
