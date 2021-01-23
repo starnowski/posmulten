@@ -19,8 +19,9 @@ __Properties required to generate scripts__
 |posmulten.configuration.drop.script.path   |   Yes |   File path to generated script that drops the shared schema strategy |
 
 Example:
-Generate scripts for some-conf.yml configuration file.
-The DDL statements that creates the shared schema strategy are going to be stored in the create_script.sql file and those one that drops it are going to be stored in drop_script.sql file.
+
+Generate scripts for the some-conf.yml configuration file. 
+The DDL statements that create the shared schema strategy are going to be stored in the create_script.sql file and those ones that drop it are going to be stored in the drop_script.sql file.
 
 ```bash
 java -Dposmulten.configuration.config.file.path="/path/to/file/some-conf.yml" -Dposmulten.configuration.create.script.path="/some/dir/create_script.sql" -Dposmulten.configuration.drop.script.path="path/for/drop/script/drop_script.sql" -jar "/some/path/configuration-jar-jar-with-dependencies.jar"
