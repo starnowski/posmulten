@@ -50,17 +50,25 @@ class DefaultSharedSchemaContextBuilderFactoryResolverTest extends Specification
             "zxvzv"         |   [loadedSupplier("files")]                           |   []
     }
 
-    private AbstractDefaultSharedSchemaContextBuilderFactorySupplier loadedSupplier(String name)
+    private AbstractDefaultSharedSchemaContextBuilderFactorySupplier loadedSupplier(String name, String... supportedFileExtensions)
     {
         def result = Mock(AbstractDefaultSharedSchemaContextBuilderFactorySupplier)
         result.toString() >> name
+        if (supportedFileExtensions != null)
+        {
+            result.getSupportedFileExtensions() >> Arrays.asList(supportedFileExtensions)
+        }
         result
     }
 
-    private IDefaultSharedSchemaContextBuilderFactorySupplier customSupplier(String name)
+    private IDefaultSharedSchemaContextBuilderFactorySupplier customSupplier(String name, String... supportedFileExtensions)
     {
         def result = Mock(IDefaultSharedSchemaContextBuilderFactorySupplier)
         result.toString() >> name
+        if (supportedFileExtensions != null)
+        {
+            result.getSupportedFileExtensions() >> Arrays.asList(supportedFileExtensions)
+        }
         result
     }
 }
