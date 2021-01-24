@@ -33,13 +33,10 @@ public class DDLScriptsGeneratorRunner {
                         log.log(Level.SEVERE, "Configuration error: {0}", message)
                 );
                 System.exit(1);
-            } catch (SharedSchemaContextBuilderException e) {
+            } catch (SharedSchemaContextBuilderException | NoDefaultSharedSchemaContextBuilderFactorySupplierException e) {
                 log.log(Level.SEVERE, "Posmulten invalid configuration");
                 log.log(Level.SEVERE, "Configuration error: {0}", e.getMessage());
                 System.exit(1);
-            } catch (NoDefaultSharedSchemaContextBuilderFactorySupplierException e) {
-                //TODO
-                e.printStackTrace();
             }
         }
     }
