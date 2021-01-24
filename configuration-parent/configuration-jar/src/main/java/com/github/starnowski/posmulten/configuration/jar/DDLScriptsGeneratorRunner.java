@@ -1,6 +1,7 @@
 package com.github.starnowski.posmulten.configuration.jar;
 
 import com.github.starnowski.posmulten.configuration.DDLScriptsGenerator;
+import com.github.starnowski.posmulten.configuration.NoDefaultSharedSchemaContextBuilderFactorySupplierException;
 import com.github.starnowski.posmulten.configuration.core.exceptions.InvalidConfigurationException;
 import com.github.starnowski.posmulten.postgresql.core.context.exceptions.SharedSchemaContextBuilderException;
 import lombok.extern.java.Log;
@@ -36,6 +37,9 @@ public class DDLScriptsGeneratorRunner {
                 log.log(Level.SEVERE, "Posmulten invalid configuration");
                 log.log(Level.SEVERE, "Configuration error: {0}", e.getMessage());
                 System.exit(1);
+            } catch (NoDefaultSharedSchemaContextBuilderFactorySupplierException e) {
+                //TODO
+                e.printStackTrace();
             }
         }
     }

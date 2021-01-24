@@ -22,7 +22,7 @@ public class DefaultSharedSchemaContextBuilderFactoryResolver {
         this.context = context;
     }
 
-    public IDefaultSharedSchemaContextBuilderFactory resolve(String filePath)
+    public IDefaultSharedSchemaContextBuilderFactory resolve(String filePath) throws NoDefaultSharedSchemaContextBuilderFactorySupplierException
     {
         Set<IDefaultSharedSchemaContextBuilderFactorySupplier> suppliers = new HashSet<>();
         Set<AbstractDefaultSharedSchemaContextBuilderFactorySupplier> loadedSuppliers = context.getDefaultSharedSchemaContextBuilderFactorySupplierClasspathSearcher().findDefaultSharedSchemaContextBuilderFactorySuppliers();
