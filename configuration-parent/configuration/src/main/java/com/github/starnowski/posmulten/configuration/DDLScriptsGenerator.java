@@ -26,7 +26,7 @@ public class DDLScriptsGenerator {
     private final DefaultSharedSchemaContextBuilderFactoryResolver defaultSharedSchemaContextBuilderFactoryResolver;
     private final DDLWriter ddlWriter;
 
-    public void generate(String configurationFilePath, String createScripsFilePath, String dropScripsFilePath) throws SharedSchemaContextBuilderException, IOException, InvalidConfigurationException {
+    public void generate(String configurationFilePath, String createScripsFilePath, String dropScripsFilePath) throws SharedSchemaContextBuilderException, IOException, InvalidConfigurationException, NoDefaultSharedSchemaContextBuilderFactorySupplierException {
         log.log(Level.INFO, "Generate DDL statements based on file: {0}", new Object[]{configurationFilePath});
         IDefaultSharedSchemaContextBuilderFactory factory = defaultSharedSchemaContextBuilderFactoryResolver.resolve(configurationFilePath);
         DefaultSharedSchemaContextBuilder builder = factory.build(configurationFilePath);
