@@ -1,14 +1,16 @@
 package com.github.starnowski.posmulten.configuration;
 
-import java.util.List;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 public class NoDefaultSharedSchemaContextBuilderFactorySupplierException extends Exception {
 
     private final String filePath;
-    private final List<String> supportedFileExtensions;
+    private final Set<String> supportedFileExtensions;
 
-    public NoDefaultSharedSchemaContextBuilderFactorySupplierException(String filePath, List<String> supportedFileExtensions) {
+    public NoDefaultSharedSchemaContextBuilderFactorySupplierException(String filePath, Set<String> supportedFileExtensions) {
         this.filePath = filePath;
-        this.supportedFileExtensions = supportedFileExtensions;
+        this.supportedFileExtensions = Collections.unmodifiableSet(supportedFileExtensions == null ? new HashSet<>() : supportedFileExtensions);
     }
 }

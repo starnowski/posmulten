@@ -7,8 +7,10 @@ import com.github.starnowski.posmulten.configuration.core.context.IDefaultShared
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.github.starnowski.posmulten.configuration.DefaultSharedSchemaContextBuilderFactoryResolverContext.builder;
+import static java.util.stream.Collectors.toSet;
 
 public class DefaultSharedSchemaContextBuilderFactoryResolver {
 
@@ -36,6 +38,10 @@ public class DefaultSharedSchemaContextBuilderFactoryResolver {
             suppliers.addAll(customSuppliers);
         }
         IDefaultSharedSchemaContextBuilderFactorySupplier supplier = context.getDefaultSharedSchemaContextBuilderFactorySupplierResolver().resolveSupplierBasedOnPriorityForFile(filePath, suppliers);
+        if (supplier == null)
+        {
+            throw new NoDefaultSharedSchemaContextBuilderFactorySupplierException(filePath, suppliers.stream().flatMap(sup -> sup.getSupportedFileExtensions().stream()).collect(toSet()));
+        }
         return supplier == null ? null : supplier.getFactorySupplier().get() ;
     }
 }
