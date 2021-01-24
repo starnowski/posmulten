@@ -96,6 +96,29 @@ function setup {
   grep 'SEVERE: Configuration error: There is mismatch between foreign keys column mapping' "$BATS_TMPDIR/$TIMESTAMP/output"
 }
 
+@test "Run executable jar file with passed java properties for invalid configuration file where extensions is not supported" {
+  #given
+  CONFIGURATION_FILE_PATH="$BATS_TEST_DIRNAME/unkonw-conf.nosuchext"
+  [ -f "$CONFIGURATION_FILE_PATH" ]
+  # Results files
+  [ ! -f "$BATS_TMPDIR/$TIMESTAMP/create_script.sql" ]
+  [ ! -f "$BATS_TMPDIR/$TIMESTAMP/drop_script.sql" ]
+
+  #when
+  run java -Dposmulten.configuration.config.file.path="$CONFIGURATION_FILE_PATH" -Dposmulten.configuration.create.script.path="$BATS_TMPDIR/$TIMESTAMP/create_script.sql" -Dposmulten.configuration.drop.script.path="$BATS_TMPDIR/$TIMESTAMP/drop_script.sql" -jar "$CONFIGURATION_JAR_NAME"
+
+  #then
+  echo "output is --> $output <--"  >&3
+  [ "$status" -eq 1 ]
+  [ ! -f "$BATS_TMPDIR/$TIMESTAMP/create_script.sql" ]
+  [ ! -f "$BATS_TMPDIR/$TIMESTAMP/drop_script.sql" ]
+
+  #Smoke tests for validation messages
+  echo "$output" > "$BATS_TMPDIR/$TIMESTAMP/output"
+  grep 'SEVERE: Posmulten invalid configuration' "$BATS_TMPDIR/$TIMESTAMP/output"
+  grep 'SEVERE: No supplier was found, able to handle file' "$BATS_TMPDIR/$TIMESTAMP/output"
+}
+
 @test "The executable jar file should not log any content for silent mode for invalid configuration file" {
   #given
   CONFIGURATION_FILE_PATH="$CONFIGURATION_YAML_TEST_RESOURCES_DIR_PATH/invalid-list-nodes-blank-fields.yaml"

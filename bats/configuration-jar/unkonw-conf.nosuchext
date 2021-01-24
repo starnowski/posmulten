@@ -1,0 +1,25 @@
+default_schema: public
+grantee: "application-user"
+tables:
+  - name: users
+    rls_policy:
+      name: users_table_rls_policy
+      tenant_column:  tenant_id
+      primary_key_definition:
+        name_for_function_that_checks_if_record_exists_in_table: "is_user_exists"
+        pk_columns_name_to_type:
+          id: bigint
+  - name: posts
+    rls_policy:
+      name: "posts_table_rls_policy"
+      tenant_column:  tenant_id
+      skip_adding_of_tenant_column_default_value: false
+      primary_key_definition:
+        name_for_function_that_checks_if_record_exists_in_table: "is_post_exists"
+        pk_columns_name_to_type:
+          id: bigint
+    foreign_keys:
+      - constraint_name:  "posts_users_tenant_constraint"
+        table_name: "users"
+        foreign_key_primary_key_columns_mappings:
+          user_id:  no_such_primary_key_column
