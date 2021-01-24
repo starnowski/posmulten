@@ -116,7 +116,7 @@ function setup {
   #Smoke tests for validation messages
   echo "$output" > "$BATS_TMPDIR/$TIMESTAMP/output"
   grep 'SEVERE: Posmulten invalid configuration' "$BATS_TMPDIR/$TIMESTAMP/output"
-  grep 'SEVERE: No supplier was found, able to handle file' "$BATS_TMPDIR/$TIMESTAMP/output"
+  grep 'SEVERE: Configuration error: No supplier was found, able to handle file ' "$BATS_TMPDIR/$TIMESTAMP/output"
 }
 
 @test "The executable jar file should not log any content for silent mode for invalid configuration file" {
