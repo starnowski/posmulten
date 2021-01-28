@@ -9,6 +9,7 @@ import spock.lang.Unroll
 
 
 import static com.github.starnowski.posmulten.configuration.yaml.TestProperties.ALL_FIELDS_FILE_PATH
+import static com.github.starnowski.posmulten.configuration.yaml.TestProperties.INTEGRATION_TESTS_FILE_PATH
 import static com.github.starnowski.posmulten.configuration.yaml.TestProperties.ONLY_MANDATORY_FIELDS_FILE_PATH
 import static com.github.starnowski.posmulten.postgresql.test.utils.MapBuilder.mapBuilder
 import static java.util.Arrays.asList
@@ -34,7 +35,7 @@ class SharedSchemaContextConfigurationYamlDaoTest extends AbstractSpecification 
             result
 
         where:
-            filePath << [ALL_FIELDS_FILE_PATH, ONLY_MANDATORY_FIELDS_FILE_PATH]
+            filePath << [ALL_FIELDS_FILE_PATH, ONLY_MANDATORY_FIELDS_FILE_PATH, INTEGRATION_TESTS_FILE_PATH]
     }
 
     @Unroll
