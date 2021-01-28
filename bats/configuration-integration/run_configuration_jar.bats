@@ -6,7 +6,6 @@ function setup {
   export CONFIGURATION_JAR_TARGET_DIR="$BATS_TEST_DIRNAME/../../configuration-parent/configuration-jar/target"
   export CONFIGURATION_JAR_DIR="$BATS_TEST_DIRNAME/../../configuration-parent/configuration-jar"
   export CONFIGURATION_JAR_NAME=`find "$CONFIGURATION_JAR_TARGET_DIR" -name '*-jar-with-dependencies.jar'`
-  #TODO directory with tests configuration
   export CONFIGURATION_YAML_TEST_RESOURCES_DIR_PATH="$BATS_TEST_DIRNAME/../../configuration-parent/configuration-yaml-interpreter/src/test/resources/com/github/starnowski/posmulten/configuration/yaml"
   mkdir -p "$BATS_TMPDIR/$TIMESTAMP"
 }
@@ -15,7 +14,7 @@ function setup {
   #given
   export DOCKER_DB_IP="${DOCKER_DB_IP:-127.0.0.1}"
   export PGPASSWORD="${PGPASSWORD:-owner123}"
-  export DATABASE_PORT="${DATABASE_PORT:-owner123}"
+  export DATABASE_PORT="${DATABASE_PORT:-5432}"
   CONFIGURATION_FILE_PATH="$CONFIGURATION_YAML_TEST_RESOURCES_DIR_PATH/integration-tests-configuration.yaml"
   [ -f "$CONFIGURATION_FILE_PATH" ]
   # Results files

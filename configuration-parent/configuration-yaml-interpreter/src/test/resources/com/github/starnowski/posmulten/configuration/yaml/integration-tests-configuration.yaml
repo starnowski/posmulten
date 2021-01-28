@@ -15,7 +15,6 @@ valid_tenant_value_constraint:
   tenant_identifiers_blacklist:
     - invalid_tenant
     - "Some strange tenant ID"
-    - "'; DROP ALL TABLES"
 tables:
   - name: users
     rls_policy:
