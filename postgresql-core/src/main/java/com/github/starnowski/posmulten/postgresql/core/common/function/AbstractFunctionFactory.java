@@ -58,7 +58,7 @@ public abstract class AbstractFunctionFactory<P extends IFunctionFactoryParamete
 
     protected String returnDropScript(P parameters) {
         List<IFunctionArgument> arguments = prepareFunctionArguments(parameters);
-        return format("DROP FUNCTION IF EXISTS %s(%s)", returnFunctionReference(parameters), prepareArgumentsPhrase(arguments));
+        return format("DROP FUNCTION IF EXISTS %s(%s);", returnFunctionReference(parameters), prepareArgumentsPhrase(arguments));
     }
 
     protected String prepareArgumentsPhrase(List<IFunctionArgument> functionArguments)
