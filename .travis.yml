@@ -81,24 +81,6 @@ jobs:
           - $HOME/.m2
       script: mvn -DskipTests --quiet clean install && export PATH="$TRAVIS_BUILD_DIR/.travis/bats/bats-core/bin:$PATH" && bats -tr bats/configuration-integration
 
-    - stage: "integration and functional tests"
-      name: "Testing configuration jar"
-      dist: trusty # https://docs.travis-ci.com/user/reference/trusty/#jvm-clojure-groovy-java-scala-images - Trusty supports java 8
-      language: java
-      jdk: oraclejdk8
-      install: skip
-      before_install:
-        # Install bats-core with version 1.1.0 when package will be available (see https://github.com/bats-core/bats-core/issues/103)
-        - .travis/bats/bats-core-installation.sh "$TRAVIS_BUILD_DIR/.travis/bats"
-        - sudo apt-get -y install libxml2-utils
-      addons:
-        apt:
-          update: true
-      cache:
-        directories:
-          - $HOME/.m2
-      script: mvn -DskipTests --quiet clean install && export PATH="$TRAVIS_BUILD_DIR/.travis/bats/bats-core/bin:$PATH" && bats -tr bats/configuration-jar
-
     - stage: "compatibility tests"
       name: "Running integration and functional tests that checks if code is compatible with postgres versions 10, 11, 12, 13"
       dist: trusty # https://docs.travis-ci.com/user/reference/trusty/#jvm-clojure-groovy-java-scala-images - Trusty supports java 8
