@@ -154,7 +154,7 @@ abstract class AbstractFunctionFactoryTest extends Specification {
             parameters.getFunctionName() >> functionName
             def functionDefinition = tested.produce(parameters)
             String functionReference = functionDefinition.getFunctionReference()
-            String expectedDropFunctionStatement = format("DROP FUNCTION IF EXISTS %s(%s)", functionReference, prepareArgumentsPhrase(functionDefinition.getFunctionArguments()))
+            String expectedDropFunctionStatement = format("DROP FUNCTION IF EXISTS %s(%s);", functionReference, prepareArgumentsPhrase(functionDefinition.getFunctionArguments()))
 
         expect:
             functionDefinition.getDropScript() == expectedDropFunctionStatement
