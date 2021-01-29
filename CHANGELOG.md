@@ -60,6 +60,8 @@ https://www.markdownguide.org/basic-syntax/
         [158](https://github.com/starnowski/posmulten/issues/158)
     -   Added type com.github.starnowski.posmulten.configuration.core.context.IDefaultSharedSchemaContextBuilderFactory
         [158](https://github.com/starnowski/posmulten/issues/158)
+    -   Added type com.github.starnowski.posmulten.configuration.core.context.IDefaultSharedSchemaContextBuilderFactorySupplier
+        [158](https://github.com/starnowski/posmulten/issues/158)
         
         
 ## [0.2.2] - 2021-01-10
