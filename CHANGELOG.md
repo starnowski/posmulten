@@ -72,7 +72,7 @@ https://www.markdownguide.org/basic-syntax/
     -   Added type com.github.starnowski.posmulten.configuration.yaml.mappers.ValidTenantValueConstraintConfigurationMapper
         [156](https://github.com/starnowski/posmulten/issues/156)
         
--   Create the configuration-jar module. [158](https://github.com/starnowski/posmulten/issues/158)
+-   Created the configuration-jar module. [158](https://github.com/starnowski/posmulten/issues/158)
 
     -   Added type com.github.starnowski.posmulten.configuration.core.context.AbstractDefaultSharedSchemaContextBuilderFactory
         [158](https://github.com/starnowski/posmulten/issues/158)
@@ -103,7 +103,7 @@ https://www.markdownguide.org/basic-syntax/
     -   Added type com.github.starnowski.posmulten.configuration.FileExtensionExtractor
         [158](https://github.com/starnowski/posmulten/issues/158)
         
--   Create the configuration module. [157](https://github.com/starnowski/posmulten/issues/157)
+-   Created the configuration module. [157](https://github.com/starnowski/posmulten/issues/157)
 
     -   Added type com.github.starnowski.posmulten.configuration.core.exceptions.InvalidConfigurationException
         [157](https://github.com/starnowski/posmulten/issues/157)
@@ -116,7 +116,7 @@ https://www.markdownguide.org/basic-syntax/
     -   Added type com.github.starnowski.posmulten.configuration.yaml.model.PrimaryKeyDefinition
         [157](https://github.com/starnowski/posmulten/issues/157)
         
--   Create the configuration-yaml-interpreter module. [155](https://github.com/starnowski/posmulten/issues/155)
+-   Created the configuration-yaml-interpreter module. [155](https://github.com/starnowski/posmulten/issues/155)
 
     -   Added type com.github.starnowski.posmulten.configuration.yaml.dao.SharedSchemaContextConfigurationYamlDao
         [155](https://github.com/starnowski/posmulten/issues/155)
@@ -131,10 +131,15 @@ https://www.markdownguide.org/basic-syntax/
     -   Added type com.github.starnowski.posmulten.configuration.yaml.model.ValidTenantValueConstraintConfiguration
         [155](https://github.com/starnowski/posmulten/issues/155)
         
--   Add yaml validation to configuration-yaml-interpreter module. [168](https://github.com/starnowski/posmulten/issues/168)
+-   Added yaml validation to configuration-yaml-interpreter module. [168](https://github.com/starnowski/posmulten/issues/168)
 
     -   Added type com.github.starnowski.posmulten.configuration.yaml.model.StringWrapperWithNotBlankValue
         [168](https://github.com/starnowski/posmulten/issues/168)
+        
+-   Added logging of the SharedSchemaContextBuilderException exception. [182](https://github.com/starnowski/posmulten/issues/182)
+
+    -   Added type com.github.starnowski.posmulten.configuration.NoDefaultSharedSchemaContextBuilderFactorySupplierException
+        [182](https://github.com/starnowski/posmulten/issues/182)
         
 ## [0.2.2] - 2021-01-10
 ### Fixed
