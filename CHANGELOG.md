@@ -61,6 +61,8 @@ https://www.markdownguide.org/basic-syntax/
         [156](https://github.com/starnowski/posmulten/issues/156)
     -   Added type com.github.starnowski.posmulten.configuration.yaml.IConfigurationMapper
         [156](https://github.com/starnowski/posmulten/issues/156)
+    -   Added type com.github.starnowski.posmulten.configuration.yaml.mappers.ForeignKeyConfigurationMapper
+        [156](https://github.com/starnowski/posmulten/issues/156)
         
 -   Create the configuration-jar module. [158](https://github.com/starnowski/posmulten/issues/158)
 
