@@ -100,6 +100,8 @@ https://www.markdownguide.org/basic-syntax/
         [158](https://github.com/starnowski/posmulten/issues/158)
     -   Added type com.github.starnowski.posmulten.configuration.DefaultSharedSchemaContextBuilderFactorySupplierClasspathSearcher
         [158](https://github.com/starnowski/posmulten/issues/158)
+    -   Added type com.github.starnowski.posmulten.configuration.FileExtensionExtractor
+        [158](https://github.com/starnowski/posmulten/issues/158)
         
 -   Create the configuration module. [157](https://github.com/starnowski/posmulten/issues/157)
 
