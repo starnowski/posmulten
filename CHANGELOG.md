@@ -71,7 +71,6 @@ https://www.markdownguide.org/basic-syntax/
         [156](https://github.com/starnowski/posmulten/issues/156)
     -   Added type com.github.starnowski.posmulten.configuration.yaml.mappers.ValidTenantValueConstraintConfigurationMapper
         [156](https://github.com/starnowski/posmulten/issues/156)
-      
         
 -   Create the configuration-jar module. [158](https://github.com/starnowski/posmulten/issues/158)
 
@@ -108,6 +107,8 @@ https://www.markdownguide.org/basic-syntax/
 -   Create the configuration-yaml-interpreter module. [155](https://github.com/starnowski/posmulten/issues/155)
 
     -   Added type com.github.starnowski.posmulten.configuration.yaml.dao.SharedSchemaContextConfigurationYamlDao
+        [155](https://github.com/starnowski/posmulten/issues/155)
+    -   Added type com.github.starnowski.posmulten.configuration.yaml.model.ForeignKeyConfiguration
         [155](https://github.com/starnowski/posmulten/issues/155)
         
 ## [0.2.2] - 2021-01-10
