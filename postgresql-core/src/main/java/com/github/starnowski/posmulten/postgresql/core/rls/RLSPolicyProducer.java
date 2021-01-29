@@ -100,7 +100,7 @@ public class RLSPolicyProducer {
 
     private String prepareDropScript(RLSPolicyProducerParameters parameters) {
         String tableReference = prepareTableReference(parameters);
-        return format("DROP POLICY IF EXISTS %1$s ON %2$s", parameters.getPolicyName(), tableReference);
+        return format("DROP POLICY IF EXISTS %1$s ON %2$s;", parameters.getPolicyName(), tableReference);
     }
 
     private String prepareTableReference(RLSPolicyProducerParameters parameters) {
