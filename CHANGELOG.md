@@ -89,6 +89,8 @@ https://www.markdownguide.org/basic-syntax/
         [157](https://github.com/starnowski/posmulten/issues/157)
     -   Added type com.github.starnowski.posmulten.configuration.core.model.PrimaryKeyDefinition
         [157](https://github.com/starnowski/posmulten/issues/157)
+    -   Added type com.github.starnowski.posmulten.configuration.yaml.exceptions.YamlInvalidSchema
+        [157](https://github.com/starnowski/posmulten/issues/157)
         
 -   Create the configuration-yaml-interpreter module. [155](https://github.com/starnowski/posmulten/issues/155)
 
