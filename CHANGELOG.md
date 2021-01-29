@@ -26,6 +26,13 @@ https://www.markdownguide.org/basic-syntax/
         
 -   Fixed logging level in file debug-logging.properties in the com.github.starnowski.posmulten.configuration.configuration-jar module.[187](https://github.com/starnowski/posmulten/issues/187) 
 
+## [0.3.0] - 2021-01-24
+### Added
+
+-   Create the configuration-core module. [156](https://github.com/starnowski/posmulten/issues/156)
+    -   Added type com.github.starnowski.posmulten.configuration.core.DefaultSharedSchemaContextBuilderConfigurationEnricher
+        [156](https://github.com/starnowski/posmulten/issues/156)
+
 ## [0.2.2] - 2021-01-10
 ### Fixed
 
