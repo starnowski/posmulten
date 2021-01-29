@@ -118,6 +118,8 @@ https://www.markdownguide.org/basic-syntax/
         [155](https://github.com/starnowski/posmulten/issues/155)
     -   Added type com.github.starnowski.posmulten.configuration.yaml.model.TableEntry
         [155](https://github.com/starnowski/posmulten/issues/155)
+    -   Added type com.github.starnowski.posmulten.configuration.yaml.model.ValidTenantValueConstraintConfiguration
+        [155](https://github.com/starnowski/posmulten/issues/155)
         
 -   Add yaml validation to configuration-yaml-interpreter module. [168](https://github.com/starnowski/posmulten/issues/168)
 
