@@ -141,6 +141,10 @@ https://www.markdownguide.org/basic-syntax/
     -   Added type com.github.starnowski.posmulten.configuration.NoDefaultSharedSchemaContextBuilderFactorySupplierException
         [182](https://github.com/starnowski/posmulten/issues/182)
         
+        
+-   Add default constructor to class com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder
+    The constructor should invoke a parameterized constructor with the value null. [135](https://github.com/starnowski/posmulten/issues/135) 
+        
 ## [0.2.2] - 2021-01-10
 ### Fixed
 
