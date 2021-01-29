@@ -59,6 +59,8 @@ https://www.markdownguide.org/basic-syntax/
         [156](https://github.com/starnowski/posmulten/issues/156)
     -   Added type com.github.starnowski.posmulten.configuration.core.model.ValidTenantValueConstraintConfiguration
         [156](https://github.com/starnowski/posmulten/issues/156)
+    -   Added type com.github.starnowski.posmulten.configuration.yaml.IConfigurationMapper
+        [156](https://github.com/starnowski/posmulten/issues/156)
         
 -   Create the configuration-jar module. [158](https://github.com/starnowski/posmulten/issues/158)
 
@@ -75,6 +77,8 @@ https://www.markdownguide.org/basic-syntax/
     -   Added type com.github.starnowski.posmulten.configuration.jar.DDLScriptsGeneratorRunner
         [158](https://github.com/starnowski/posmulten/issues/158)
     -   Added the silent-logging.properties file
+        [158](https://github.com/starnowski/posmulten/issues/158)
+    -   Added type com.github.starnowski.posmulten.configuration.yaml.context.YamlConfigurationDefaultSharedSchemaContextBuilderFactory
         [158](https://github.com/starnowski/posmulten/issues/158)
         
 -   Create the configuration module. [157](https://github.com/starnowski/posmulten/issues/157)
