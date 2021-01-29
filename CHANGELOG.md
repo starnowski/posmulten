@@ -144,6 +144,9 @@ https://www.markdownguide.org/basic-syntax/
         
 -   Add default constructor to class com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder
     The constructor should invoke a parameterized constructor with the value null. [135](https://github.com/starnowski/posmulten/issues/135) 
+    
+-   Remove unnecessary parameter (3rd) from method #produce(TableKey tableKey, ITableColumns tableColumns, String defaultTenantColumnValue, String defaultTenantColumn, String defaultTenantColumnType)
+    [136](https://github.com/starnowski/posmulten/issues/136) 
         
 ## [0.2.2] - 2021-01-10
 ### Fixed
