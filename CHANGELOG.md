@@ -112,6 +112,8 @@ https://www.markdownguide.org/basic-syntax/
         [155](https://github.com/starnowski/posmulten/issues/155)
     -   Added type com.github.starnowski.posmulten.configuration.yaml.model.ForeignKeyConfiguration
         [155](https://github.com/starnowski/posmulten/issues/155)
+    -   Added type com.github.starnowski.posmulten.configuration.yaml.model.RLSPolicy
+        [155](https://github.com/starnowski/posmulten/issues/155)
         
 ## [0.2.2] - 2021-01-10
 ### Fixed
