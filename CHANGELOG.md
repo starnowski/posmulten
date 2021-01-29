@@ -49,8 +49,11 @@ https://www.markdownguide.org/basic-syntax/
         [156](https://github.com/starnowski/posmulten/issues/156)
     -   Added type com.github.starnowski.posmulten.configuration.core.ValidTenantValueConstraintConfigurationEnricher
         [156](https://github.com/starnowski/posmulten/issues/156)
+    -   Added type com.github.starnowski.posmulten.configuration.core.model.ForeignKeyConfiguration
+        [156](https://github.com/starnowski/posmulten/issues/156)
+
         
--   Create the "configuration-jar" module. [158](https://github.com/starnowski/posmulten/issues/158)
+-   Create the configuration-jar module. [158](https://github.com/starnowski/posmulten/issues/158)
 
     -   Added type com.github.starnowski.posmulten.configuration.core.context.AbstractDefaultSharedSchemaContextBuilderFactory
         [158](https://github.com/starnowski/posmulten/issues/158)
@@ -62,6 +65,11 @@ https://www.markdownguide.org/basic-syntax/
         [158](https://github.com/starnowski/posmulten/issues/158)
     -   Added type com.github.starnowski.posmulten.configuration.core.context.IDefaultSharedSchemaContextBuilderFactorySupplier
         [158](https://github.com/starnowski/posmulten/issues/158)
+        
+-   Create the configuration module. [157](https://github.com/starnowski/posmulten/issues/157)
+
+    -   Added type com.github.starnowski.posmulten.configuration.core.exceptions.InvalidConfigurationException
+        [157](https://github.com/starnowski/posmulten/issues/157)
         
         
 ## [0.2.2] - 2021-01-10
