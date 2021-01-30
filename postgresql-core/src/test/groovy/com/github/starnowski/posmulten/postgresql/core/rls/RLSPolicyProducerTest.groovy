@@ -123,15 +123,15 @@ class RLSPolicyProducerTest extends Specification {
 
         where:
             schema                  |   policyName              |   table           ||  expectedStatement
-            null                    |   "users_policy"          |   "users"         || "DROP POLICY IF EXISTS users_policy ON users"
-            "public"                |   "users_policy"          |   "users"         || "DROP POLICY IF EXISTS users_policy ON public.users"
-            "non_public_schema"     |   "users_policy"          |   "users"         || "DROP POLICY IF EXISTS users_policy ON non_public_schema.users"
-            null                    |   "u_policy"              |   "users"         || "DROP POLICY IF EXISTS u_policy ON users"
-            "public"                |   "u_policy"              |   "users"         || "DROP POLICY IF EXISTS u_policy ON public.users"
-            "non_public_schema"     |   "u_policy"              |   "users"         || "DROP POLICY IF EXISTS u_policy ON non_public_schema.users"
-            null                    |   "u_policy"              |   "users_groups"  || "DROP POLICY IF EXISTS u_policy ON users_groups"
-            "public"                |   "u_policy"              |   "users_groups"  || "DROP POLICY IF EXISTS u_policy ON public.users_groups"
-            "non_public_schema"     |   "u_policy"              |   "users_groups"  || "DROP POLICY IF EXISTS u_policy ON non_public_schema.users_groups"
+            null                    |   "users_policy"          |   "users"         || "DROP POLICY IF EXISTS users_policy ON users;"
+            "public"                |   "users_policy"          |   "users"         || "DROP POLICY IF EXISTS users_policy ON public.users;"
+            "non_public_schema"     |   "users_policy"          |   "users"         || "DROP POLICY IF EXISTS users_policy ON non_public_schema.users;"
+            null                    |   "u_policy"              |   "users"         || "DROP POLICY IF EXISTS u_policy ON users;"
+            "public"                |   "u_policy"              |   "users"         || "DROP POLICY IF EXISTS u_policy ON public.users;"
+            "non_public_schema"     |   "u_policy"              |   "users"         || "DROP POLICY IF EXISTS u_policy ON non_public_schema.users;"
+            null                    |   "u_policy"              |   "users_groups"  || "DROP POLICY IF EXISTS u_policy ON users_groups;"
+            "public"                |   "u_policy"              |   "users_groups"  || "DROP POLICY IF EXISTS u_policy ON public.users_groups;"
+            "non_public_schema"     |   "u_policy"              |   "users_groups"  || "DROP POLICY IF EXISTS u_policy ON non_public_schema.users_groups;"
     }
 
     def "should generate drop script for random values" ()
@@ -141,7 +141,7 @@ class RLSPolicyProducerTest extends Specification {
             def policyName = r.nextString()
             def schema = r.nextString()
             def table = r.nextString()
-            def expectedStatement = format("DROP POLICY IF EXISTS %1\$s ON %2\$s.%3\$s", policyName, schema, table)
+            def expectedStatement = format("DROP POLICY IF EXISTS %1\$s ON %2\$s.%3\$s;", policyName, schema, table)
             logger.log(java.util.logging.Level.INFO, "Random policy name: " + policyName)
             logger.log(java.util.logging.Level.INFO, "Random schema name: " + schema)
             logger.log(java.util.logging.Level.INFO, "Random table name: " + table)
