@@ -845,7 +845,7 @@ $$ LANGUAGE sql
 STABLE
 PARALLEL SAFE;
 --
-ALTER TABLE "comments" ADD CONSTRAINT comments_parent_comments_fk_cu CHECK ((parent_comment_id IS NULL AND parent_comment_user_id IS NULL) OR (is_comment_belongs_to_current_tenant(parent_comment_user_id, parent_comment_id)));
+ALTER TABLE "comments" ADD CONSTRAINT comments_parent_comments_fk_cu CHECK ((parent_comment_id IS NULL OR parent_comment_user_id IS NULL) OR (is_comment_belongs_to_current_tenant(parent_comment_user_id, parent_comment_id)));
 ```
 
 ### Setting of type for tenant identifier value
