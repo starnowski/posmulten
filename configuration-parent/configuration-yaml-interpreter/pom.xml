@@ -14,7 +14,7 @@
 
     <properties>
         <com.fasterxml.jackson.dataformat.jackson-dataformat-yaml.version>2.11.1</com.fasterxml.jackson.dataformat.jackson-dataformat-yaml.version>
-        <org.hibernate.validator.version>6.0.18.Final</org.hibernate.validator.version>
+        <org.hibernate.validator.version>6.0.20.Final</org.hibernate.validator.version>
     </properties>
 
     <dependencies>
