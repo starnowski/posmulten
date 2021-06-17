@@ -29,5 +29,10 @@ misc.xml
 modules.xml
 *.iml
 
+# idea subdirectories
+**/.idea/*
+
 #maven
 target/*
+
+**/target/*
