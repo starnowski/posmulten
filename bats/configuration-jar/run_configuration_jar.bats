@@ -143,7 +143,7 @@ function setup {
   ! grep -q '[^[:space:]]' < "$BATS_TMPDIR/$TIMESTAMP/output"
 }
 
-@test "The executable jar file should log content with INFO level for invalid configuration file" {
+@test "The executable jar file should log content with a higher logging level for the invalid configuration file" {
   #given
   CONFIGURATION_FILE_PATH="$CONFIGURATION_YAML_TEST_RESOURCES_DIR_PATH/invalid-list-nodes-blank-fields.yaml"
   [ -f "$CONFIGURATION_FILE_PATH" ]
@@ -164,7 +164,9 @@ function setup {
   #Smoke tests for validation messages
   echo "$output" > "$BATS_TMPDIR/$TIMESTAMP/output"
   #File is empty or blank
-  grep 'INFO:' "$BATS_TMPDIR/$TIMESTAMP/output"
+  grep 'TRACE:' "$BATS_TMPDIR/$TIMESTAMP/output"
+  grep 'DEBUG:' "$BATS_TMPDIR/$TIMESTAMP/output"
+  grep 'SEVERE:' "$BATS_TMPDIR/$TIMESTAMP/output"
 }
 
 @test "The executable jar should print correct version number" {

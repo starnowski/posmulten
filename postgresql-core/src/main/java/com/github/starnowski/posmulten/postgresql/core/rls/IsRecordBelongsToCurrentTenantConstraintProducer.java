@@ -35,7 +35,7 @@ public class IsRecordBelongsToCurrentTenantConstraintProducer extends AbstractCo
     protected String prepareConstraintBody(IsRecordBelongsToCurrentTenantConstraintProducerParameters parameters) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("(");
-        stringBuilder.append(parameters.getPrimaryColumnsValuesMap().entrySet().stream().map(Map.Entry::getValue).map(FunctionArgumentValueToStringMapper::mapToString).sorted().map(s -> s + " IS NULL").collect(joining(" AND ")));
+        stringBuilder.append(parameters.getPrimaryColumnsValuesMap().entrySet().stream().map(Map.Entry::getValue).map(FunctionArgumentValueToStringMapper::mapToString).sorted().map(s -> s + " IS NULL").collect(joining(" OR ")));
         stringBuilder.append(")");
         stringBuilder.append(" OR ");
         stringBuilder.append("(");
