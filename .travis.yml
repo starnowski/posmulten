@@ -15,7 +15,7 @@ jobs:
       cache:
         directories:
           - $HOME/.m2
-      script: mvn clean install
+      script: mvn clean install -DskipTests --quiet && mvn test
 
     - stage: "compilation, unit tests, database creation tests"
       name: "Database creation tests for multiple postgres versions 9.6, 10, 11, 12, 13"
