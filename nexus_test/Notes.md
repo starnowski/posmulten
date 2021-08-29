@@ -18,6 +18,7 @@ nx-repository-view-maven2-maven-releases-*
 
 ### test
 mvnw versions:set -DnewVersion=19.0.0
+mvnw versions:set -DnewVersion=0.5.0-SNAPSHOT
 
 ### run tests default-deploy test-deploy
 mvnw clean install -DskipTests=true
