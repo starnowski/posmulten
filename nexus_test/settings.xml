@@ -1,0 +1,9 @@
+<settings>
+    <servers>
+        <server>
+            <id>posmulten-local-nexus-test</id>
+            <username>projectUser</username>
+            <password>xxx</password>
+        </server>
+    </servers>
+</settings>
