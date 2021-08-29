@@ -1,6 +1,7 @@
 
+
 ### Resolve admin password
-docker exec ece9d5836ff9 cat /nexus-data/admin.password
+docker exec {container id} cat /nexus-data/admin.password
 
 ### Project user
 
@@ -16,9 +17,15 @@ nx-repository-view-maven2-maven-releases-*
 
 
 ### test
-mvn versions:set -DnewVersion=19.0.0
+mvnw versions:set -DnewVersion=19.0.0
 
 ### run tests default-deploy test-deploy
-mvn deploy -P '!maven-central-deploy,test-deploy' --settings nexus_test/settings.xml -DperformRelease=true -DskipTests=true
+mvnw clean install -DskipTests=true
+mvnw deploy -P '!maven-central-depl**oy,test-deploy' --settings nexus_test/settings.xml -DperformRelease=true -DskipTests=true
 
+mvnw -P '!maven-central-depl**oy,test-deploy' --settings nexus_test/settings.xml -DperformRelease=true -DskipTests=true
+
+
+###
+https://blog.sonatype.com/four-steps-to-get-started-with-nexus-repo-using-new-rest-apis
 
