@@ -23,11 +23,13 @@
  */
 package com.github.starnowski.posmulten.postgresql.core.common.function;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static java.lang.String.format;
 import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
 
 public abstract class AbstractFunctionFactory<P extends IFunctionFactoryParameters, R extends DefaultFunctionDefinition> implements FunctionFactory<P,R> {
 
@@ -41,6 +43,7 @@ public abstract class AbstractFunctionFactory<P extends IFunctionFactoryParamete
                 .withCreateScript(createScript)
                 .withFunctionReference(functionReference)
                 .withDropScript(dropScript)
+                .withCheckingStatements(returnCheckingStatements(parameters))
                 .withFunctionArguments(prepareFunctionArguments(parameters))
                 .build());
     }
@@ -59,6 +62,25 @@ public abstract class AbstractFunctionFactory<P extends IFunctionFactoryParamete
     protected String returnDropScript(P parameters) {
         List<IFunctionArgument> arguments = prepareFunctionArguments(parameters);
         return format("DROP FUNCTION IF EXISTS %s(%s);", returnFunctionReference(parameters), prepareArgumentsPhrase(arguments));
+    }
+
+    protected List<String> returnCheckingStatements(P parameters) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("SELECT COUNT(1) FROM pg_proc pg, pg_catalog.pg_namespace pgn WHERE ");
+        sb.append("pg.proname = '");
+        sb.append(parameters.getFunctionName());
+        sb.append("' AND ");
+        if (parameters.getSchema() == null)
+        {
+            sb.append("pgn.nspname = 'public'");
+        } else {
+            sb.append("pgn.nspname = '");
+            sb.append(parameters.getSchema());
+            sb.append("'");
+        }
+        sb.append(" AND ");
+        sb.append("pg.pronamespace =  pgn.oid");
+        return singletonList(sb.toString());
     }
 
     protected String prepareArgumentsPhrase(List<IFunctionArgument> functionArguments)
