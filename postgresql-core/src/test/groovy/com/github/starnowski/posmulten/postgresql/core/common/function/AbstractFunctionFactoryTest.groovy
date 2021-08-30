@@ -169,6 +169,49 @@ abstract class AbstractFunctionFactoryTest extends Specification {
             "sch"       |   "this_is_function"
     }
 
+    @Unroll
+    def "should create correct statement that check if function was created for schema #schema and function #functionName"()
+    {
+        given:
+            AbstractFunctionFactory tested = returnTestedObject()
+            IFunctionFactoryParameters parameters = returnCorrectParametersSpyObject()
+            parameters.getSchema() >> schema
+            parameters.getFunctionName() >> functionName
+            StringBuilder sb = new StringBuilder();
+            sb.append("SELECT COUNT(1) FROM pg_proc pg, pg_catalog.pg_namespace pgn WHERE ")
+            sb.append("pg.proname = '")
+            sb.append(functionName)
+            sb.append("' AND ")
+            if (schema == null)
+            {
+                sb.append("pgn.nspname = 'public'")
+            } else {
+                sb.append("pgn.nspname = '")
+                sb.append(schema)
+                sb.append("'")
+            }
+            sb.append(" AND ")
+            sb.append("pg.pronamespace =  pgn.oid")
+            String expectedCheckingStatement = sb.toString()
+
+        when:
+            def functionDefinition = tested.produce(parameters)
+
+        then:
+            functionDefinition.getCheckingStatements()
+            functionDefinition.getCheckingStatements().size() == 1
+            functionDefinition.getCheckingStatements()[0] == expectedCheckingStatement
+
+        where:
+            schema      |   functionName
+            null        |   "fun1"
+            "public"    |   "fun1"
+            "sch"       |   "fun1"
+            null        |   "this_is_function"
+            "public"    |   "this_is_function"
+            "sch"       |   "this_is_function"
+    }
+
     private String prepareArgumentsPhrase(List<IFunctionArgument> functionArguments)
     {
         ofNullable(functionArguments).orElse(new ArrayList<IFunctionArgument>()).stream().map({ argument -> argument.getType() }).collect(Collectors.joining( ", " ))

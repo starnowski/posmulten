@@ -32,4 +32,6 @@ public interface IFunctionDefinition extends SQLDefinition {
     String getFunctionReference();
 
     List<IFunctionArgument> getFunctionArguments();
+
+    List<String> getCheckingStatements();
 }

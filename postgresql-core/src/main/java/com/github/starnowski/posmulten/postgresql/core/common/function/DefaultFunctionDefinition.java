@@ -32,6 +32,7 @@ public class DefaultFunctionDefinition implements IFunctionDefinition{
     private final String createScript;
     private final String functionReference;
     private final String dropScript;
+    private final List<String> checkingStatements;
     private final List<IFunctionArgument> functionArguments;
 
     public DefaultFunctionDefinition(IFunctionDefinition functionDefinition)
@@ -39,6 +40,7 @@ public class DefaultFunctionDefinition implements IFunctionDefinition{
         this.createScript = functionDefinition.getCreateScript();
         this.functionReference = functionDefinition.getFunctionReference();
         this.dropScript = functionDefinition.getDropScript();
+        this.checkingStatements = functionDefinition.getCheckingStatements();
         this.functionArguments = new ArrayList<>(Optional.ofNullable(functionDefinition.getFunctionArguments()).orElseThrow(() -> new IllegalArgumentException("Function argument collection cannot be null")));
     }
 
@@ -55,6 +57,11 @@ public class DefaultFunctionDefinition implements IFunctionDefinition{
     @Override
     public List<IFunctionArgument> getFunctionArguments() {
         return new ArrayList<>(functionArguments);
+    }
+
+    @Override
+    public List<String> getCheckingStatements() {
+        return checkingStatements;
     }
 
     @Override
