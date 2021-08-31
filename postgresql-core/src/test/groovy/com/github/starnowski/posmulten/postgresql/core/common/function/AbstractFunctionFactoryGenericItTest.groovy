@@ -33,7 +33,7 @@ abstract class AbstractFunctionFactoryGenericItTest extends Specification {
         when:
             jdbcTemplate.execute(functionDefinition.getCreateScript())
             def functionWasCreated = isFunctionExists(jdbcTemplate, functionName, schema)
-            sqlUtils.assertAllCheckingStatementsArePassing(functionDefinition.getCheckingStatements())
+            sqlUtils.assertAllCheckingStatementsArePassing(functionDefinition)
             jdbcTemplate.execute(functionDefinition.getDropScript())
             def functionWasDeleted = !isFunctionExists(jdbcTemplate, functionName, schema)
 

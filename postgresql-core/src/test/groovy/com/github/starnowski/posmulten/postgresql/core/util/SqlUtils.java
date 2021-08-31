@@ -1,5 +1,6 @@
 package com.github.starnowski.posmulten.postgresql.core.util;
 
+import com.github.starnowski.posmulten.postgresql.core.common.function.IFunctionDefinition;
 import org.junit.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -15,6 +16,10 @@ public class SqlUtils {
 
     @Autowired
     JdbcTemplate jdbcTemplate;
+
+    public void assertAllCheckingStatementsArePassing(IFunctionDefinition functionDefinition) {
+        assertAllCheckingStatementsArePassing(functionDefinition.getCheckingStatements());
+    }
 
     public void assertAllCheckingStatementsArePassing(List<String> selectStatements) {
         Map<String, Long> resultsMap = selectAndReturnMapOfStatementsAndItResultsForListOfSelectStatements(jdbcTemplate, selectStatements);
