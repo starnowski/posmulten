@@ -7,8 +7,11 @@ import org.springframework.jdbc.core.StatementCallback;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static java.lang.String.format;
+import static java.util.stream.Collectors.toList;
 
 public class TestUtils {
 
@@ -97,6 +100,19 @@ public class TestUtils {
                 return rs.getLong(1);
             }
         });
+    }
+
+    public static List<Long> selectAndReturnListOfLongObjectForListOfSelectStatements(JdbcTemplate jdbcTemplate, List<String> selectStatements)
+    {
+        return selectStatements.stream().map(selectStatement -> jdbcTemplate.execute(new StatementCallback<Long>() {
+            @Override
+            public Long doInStatement(Statement statement) throws SQLException, DataAccessException {
+                ResultSet rs = statement.executeQuery(selectStatement);
+                rs.next();
+                return rs.getLong(1);
+            }
+        })
+        ).collect(toList());
     }
 
     public static void dropFunction(JdbcTemplate jdbcTemplate, String functionName, String schema, String... argumentsTypes)
