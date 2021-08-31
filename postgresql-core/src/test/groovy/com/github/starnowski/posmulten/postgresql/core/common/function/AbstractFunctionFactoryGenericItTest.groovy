@@ -31,6 +31,7 @@ abstract class AbstractFunctionFactoryGenericItTest extends Specification {
             assertEquals(false, isFunctionExists(jdbcTemplate, functionName, schema))
 
         when:
+            sqlUtils.assertAllResultForCheckingStatementsAreEqualZero(functionDefinition)
             jdbcTemplate.execute(functionDefinition.getCreateScript())
             def functionWasCreated = isFunctionExists(jdbcTemplate, functionName, schema)
             sqlUtils.assertAllCheckingStatementsArePassing(functionDefinition)

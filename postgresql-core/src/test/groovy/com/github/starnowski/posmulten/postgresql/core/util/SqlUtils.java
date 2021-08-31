@@ -17,6 +17,17 @@ public class SqlUtils {
     @Autowired
     JdbcTemplate jdbcTemplate;
 
+    public void assertAllResultForCheckingStatementsAreEqualZero(IFunctionDefinition functionDefinition) {
+        assertAllResultForCheckingStatementsAreEqualZero(functionDefinition.getCheckingStatements());
+    }
+
+    public void assertAllResultForCheckingStatementsAreEqualZero(List<String> selectStatements) {
+        Map<String, Long> resultsMap = selectAndReturnMapOfStatementsAndItResultsForListOfSelectStatements(jdbcTemplate, selectStatements);
+        for (Map.Entry<String, Long> entry : resultsMap.entrySet()) {
+            Assert.assertTrue(String.format("Result was not equal to zero for statement %s", entry.getKey()), entry.getValue() == 0);
+        }
+    }
+
     public void assertAllCheckingStatementsArePassing(IFunctionDefinition functionDefinition) {
         assertAllCheckingStatementsArePassing(functionDefinition.getCheckingStatements());
     }
