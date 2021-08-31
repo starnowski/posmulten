@@ -4,6 +4,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.StatementCallback;
 
 import java.sql.ResultSet;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static java.lang.String.format;
 
@@ -80,6 +83,18 @@ public class TestUtils {
         });
     }
 
+    public static Map<String, Long> selectAndReturnMapOfStatementsAndItResultsForListOfSelectStatements(JdbcTemplate jdbcTemplate, List<String> selectStatements) {
+        return selectStatements.stream().map(selectStatement -> {
+                    Long result = jdbcTemplate.execute((StatementCallback<Long>) statement -> {
+                        ResultSet rs = statement.executeQuery(selectStatement);
+                        rs.next();
+                        return rs.getLong(1);
+                    });
+                    return new StatementAndItLongResult(selectStatement, result);
+                }
+        ).collect(Collectors.toMap(sr -> sr.statement, sr -> sr.result));
+    }
+
     public static void dropFunction(JdbcTemplate jdbcTemplate, String functionName, String schema, String... argumentsTypes) {
         String functionReference = returnFunctionReference(functionName, schema);
         String argumentsTypesPhrase = argumentsTypes == null ? "" : String.join(",", argumentsTypes);
@@ -96,5 +111,15 @@ public class TestUtils {
                 "\t\tWHERE table_schema = '%s' AND table_name = '%s' AND constraint_name = '%s'";
         String selectStatement = format(template, schema == null ? "public" : schema, table, constraintName);
         return isAnyRecordExists(jdbcTemplate, selectStatement);
+    }
+
+    private static class StatementAndItLongResult {
+        public StatementAndItLongResult(String statement, Long result) {
+            this.statement = statement;
+            this.result = result;
+        }
+
+        private final String statement;
+        private final Long result;
     }
 }
