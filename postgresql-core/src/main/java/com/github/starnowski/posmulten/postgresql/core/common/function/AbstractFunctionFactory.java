@@ -23,7 +23,6 @@
  */
 package com.github.starnowski.posmulten.postgresql.core.common.function;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
