@@ -115,7 +115,7 @@ class EnableRowLevelSecurityProducerTest extends Specification {
     private static String expectedCheckingStatement(String schema, String table)
     {
         StringBuilder sb = new StringBuilder()
-        sb.append("SELECT pc.relrowsecurity FROM pg_class pc, pg_catalog.pg_namespace pg ")
+        sb.append("SELECT COUNT(1) FROM pg_class pc, pg_catalog.pg_namespace pg ")
         sb.append("WHERE")
         sb.append(" pc.relname = '")
         sb.append(table)
@@ -124,7 +124,8 @@ class EnableRowLevelSecurityProducerTest extends Specification {
             sb.append("public")
         else
             sb.append(schema)
-        sb.append("';")
+        sb.append("' AND pc.relrowsecurity = 't'")
+        sb.append(";")
         sb.toString()
     }
 }

@@ -1,5 +1,6 @@
 package com.github.starnowski.posmulten.postgresql.core.util;
 
+import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition;
 import com.github.starnowski.posmulten.postgresql.core.common.function.IFunctionDefinition;
 import org.junit.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +18,8 @@ public class SqlUtils {
     @Autowired
     JdbcTemplate jdbcTemplate;
 
-    public void assertAllResultForCheckingStatementsAreEqualZero(IFunctionDefinition functionDefinition) {
-        assertAllResultForCheckingStatementsAreEqualZero(functionDefinition.getCheckingStatements());
+    public void assertAllResultForCheckingStatementsAreEqualZero(SQLDefinition sqlDefinition) {
+        assertAllResultForCheckingStatementsAreEqualZero(sqlDefinition.getCheckingStatements());
     }
 
     public void assertAllResultForCheckingStatementsAreEqualZero(List<String> selectStatements) {
@@ -28,7 +29,7 @@ public class SqlUtils {
         }
     }
 
-    public void assertAllCheckingStatementsArePassing(IFunctionDefinition functionDefinition) {
+    public void assertAllCheckingStatementsArePassing(SQLDefinition functionDefinition) {
         assertAllCheckingStatementsArePassing(functionDefinition.getCheckingStatements());
     }
 

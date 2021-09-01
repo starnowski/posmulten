@@ -67,7 +67,7 @@ public class EnableRowLevelSecurityProducer {
 
     private List<String> prepareCheckingStatements(String table, String schema) {
         StringBuilder sb = new StringBuilder();
-        sb.append("SELECT pc.relrowsecurity FROM pg_class pc, pg_catalog.pg_namespace pg ");
+        sb.append("SELECT COUNT(1) FROM pg_class pc, pg_catalog.pg_namespace pg ");
         sb.append("WHERE");
         sb.append(" pc.relname = '");
         sb.append(table);
@@ -76,7 +76,8 @@ public class EnableRowLevelSecurityProducer {
             sb.append("public");
         else
             sb.append(schema);
-        sb.append("';");
+        sb.append("' AND pc.relrowsecurity = 't'");
+        sb.append(";");
         return singletonList(sb.toString());
     }
 
