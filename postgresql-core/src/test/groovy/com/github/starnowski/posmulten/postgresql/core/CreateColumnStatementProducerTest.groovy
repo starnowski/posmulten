@@ -49,6 +49,32 @@ class CreateColumnStatementProducerTest extends Specification {
             "groups"    |   "col1"      |   "text"                      | "secondary"       ||  "ALTER TABLE secondary.groups DROP COLUMN col1;"
     }
 
+    @Unroll
+    def "should return statement '#expectedStatement' that checks if '#column' exists for table '#table' and schema '#schema' with type '#columnType'" () {
+        when:
+            def definition = tested.produce(new CreateColumnStatementProducerParameters(table, column, columnType, schema))
+
+        then:
+            definition.getCheckingStatements()
+            definition.getCheckingStatements().size() == 1
+            definition.getCheckingStatements()[0] == expectedStatement
+
+        where:
+            table       |   column      |   columnType                  | schema            ||  expectedStatement
+            "users"     |   "tenant_id" |   "character varying(255)"    | null              ||  expectedCheckingStatement("users", "tenant_id", null)
+            "groups"    |   "tenant_id" |   "text"                      | null              ||  expectedCheckingStatement("groups", "tenant_id", null)
+            "users"     |   "col1"      |   "character varying(255)"    | null              ||  expectedCheckingStatement("users", "col1", null)
+            "groups"    |   "col1"      |   "text"                      | null              ||  expectedCheckingStatement("groups", "col1", null)
+            "users"     |   "tenant_id" |   "character varying(255)"    | "public"          ||  expectedCheckingStatement("users", "tenant_id", "public")
+            "groups"    |   "tenant_id" |   "text"                      | "public"          ||  expectedCheckingStatement("groups", "tenant_id", "public")
+            "users"     |   "col1"      |   "character varying(255)"    | "public"          ||  expectedCheckingStatement("users", "col1", "public")
+            "groups"    |   "col1"      |   "text"                      | "public"          ||  expectedCheckingStatement("groups", "col1", "public")
+            "users"     |   "tenant_id" |   "character varying(255)"    | "secondary"       ||  expectedCheckingStatement("users", "tenant_id", "secondary")
+            "groups"    |   "tenant_id" |   "text"                      | "secondary"       ||  expectedCheckingStatement("groups", "tenant_id", "secondary")
+            "users"     |   "col1"      |   "character varying(255)"    | "secondary"       ||  expectedCheckingStatement("users", "col1", "secondary")
+            "groups"    |   "col1"      |   "text"                      | "secondary"       ||  expectedCheckingStatement("groups", "col1", "secondary")
+    }
+
     def "should throw exception of type 'IllegalArgumentException' when parameters object is null" ()
     {
         when:
@@ -185,5 +211,28 @@ class CreateColumnStatementProducerTest extends Specification {
             "user_groups"   | ""            |   "tenant_id"
             "user_groups"   | " "           |   "co1"
             "user_groups"   | "         "   |   "tenant_id"
+    }
+
+    private static String expectedCheckingStatement(String table, String column, String schema)
+    {
+        StringBuilder sb = new StringBuilder()
+        sb.append("SELECT COUNT(1) FROM information_schema.columns WHERE ")
+        sb.append("table_catalog = 'postgresql_core' AND ")
+        if (schema == null)
+        {
+            sb.append("table_schema = 'public'")
+        } else {
+            sb.append("table_schema = '")
+            sb.append(schema)
+            sb.append("'")
+        }
+        sb.append(" AND ")
+        sb.append("table_name = '")
+        sb.append(table)
+        sb.append("' AND ")
+        sb.append("column_name = '")
+        sb.append(column)
+        sb.append("'")
+        sb.toString()
     }
 }
