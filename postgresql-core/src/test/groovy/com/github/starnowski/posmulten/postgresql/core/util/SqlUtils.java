@@ -1,7 +1,6 @@
 package com.github.starnowski.posmulten.postgresql.core.util;
 
 import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition;
-import com.github.starnowski.posmulten.postgresql.core.common.function.IFunctionDefinition;
 import org.junit.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -25,7 +24,7 @@ public class SqlUtils {
     public void assertAllResultForCheckingStatementsAreEqualZero(List<String> selectStatements) {
         Map<String, Long> resultsMap = selectAndReturnMapOfStatementsAndItResultsForListOfSelectStatements(jdbcTemplate, selectStatements);
         for (Map.Entry<String, Long> entry : resultsMap.entrySet()) {
-            Assert.assertTrue(String.format("Result was not equal to zero for statement %s", entry.getKey()), entry.getValue() == 0);
+            Assert.assertEquals(String.format("Result was not equal to zero for statement %s", entry.getKey()), 0, (long) entry.getValue());
         }
     }
 
