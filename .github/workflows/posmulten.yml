@@ -23,9 +23,9 @@ jobs:
       - name: Git checkout
         uses: actions/checkout@v2
       - name: Install bats
-        run: .travis/bats/bats-core-installation.sh "$GITHUB_ACTION_PATH/.travis/bats"
+        run: .travis/bats/bats-core-installation.sh "$GITHUB_WORKSPACE/.travis/bats"
       - name: Run bats tests
-        run: export PATH="$GITHUB_ACTION_PATH/.travis/bats/bats-core/bin:$PATH" && bats/run_bats_test_for_all_db_version.sh
+        run: export PATH="$GITHUB_WORKSPACE/.travis/bats/bats-core/bin:$PATH" && bats/run_bats_test_for_all_db_version.sh
 
 #  build:
 #    runs-on: ubuntu-latest
