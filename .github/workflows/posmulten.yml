@@ -1,4 +1,4 @@
-name: Run tests for posmulten-hibernate4-spring-boot
+name: Run tests for posmulten
 
 on:
   push:
