@@ -64,6 +64,9 @@ jobs:
         with:
           java-version: 1.8
 
+      - name: Install library for postgres
+        run: sudo apt-get install libpq-dev
+
       - name: Create database
         run: psql -f 'db_scripts/prepare_postgresql-core_db.sql' -U postgres
 
