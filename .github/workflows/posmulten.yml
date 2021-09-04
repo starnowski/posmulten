@@ -26,6 +26,18 @@ jobs:
         run: .travis/bats/bats-core-installation.sh "$GITHUB_WORKSPACE/.travis/bats"
       - name: Run bats tests
         run: export PATH="$GITHUB_WORKSPACE/.travis/bats/bats-core/bin:$PATH" && bats/run_bats_test_for_all_db_version.sh
+  testing_configuration_jar:
+    runs-on: ubuntu-latest
+    name: "Testing configuration jar"
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v2
+      - name: Install bats
+        run: .travis/bats/bats-core-installation.sh "$GITHUB_WORKSPACE/.travis/bats"
+      - name: Install other libs
+        run:  sudo apt-get -y install libxml2-utils
+      - name: Run bats tests
+        run:  ./mvnw -DskipTests --quiet clean install && export PATH="$GITHUB_WORKSPACE/.travis/bats/bats-core/bin:$PATH" && bats -tr bats/configuration-jar
 
 #  build:
 #    runs-on: ubuntu-latest
