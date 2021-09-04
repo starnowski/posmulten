@@ -69,7 +69,7 @@ jobs:
         run: sudo apt-get -y install libpq-dev postgresql-client
 
       - name: Create database
-        run: psql -f 'db_scripts/prepare_postgresql-core_db.sql' -U postgres -h postgres
+        run: psql -f 'db_scripts/prepare_postgresql-core_db.sql' -U postgres -h 127.0.0.1
 
       - name: Run tests
         run: ./mvnw -DskipTests --quiet clean install && ./mvnw -pl :postgresql-core -P !unit-tests,integration-tests test && ./mvnw -pl :postgresql-core-functional-tests -P !unit-tests,functional-tests test
