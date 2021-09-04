@@ -39,6 +39,7 @@ jobs:
       - name: Run bats tests
         run:  ./mvnw -DskipTests --quiet clean install && export PATH="$GITHUB_WORKSPACE/.travis/bats/bats-core/bin:$PATH" && bats -tr bats/configuration-jar
   integraion_tests:
+    needs: [compilation_and_unit_tests, database_tests, testing_configuration_jar]
     runs-on: ubuntu-latest
     name: "Integration and functional tests in postgresql-core module"
     services:
