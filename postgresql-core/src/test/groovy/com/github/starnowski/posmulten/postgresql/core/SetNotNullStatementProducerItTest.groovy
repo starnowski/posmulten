@@ -1,6 +1,7 @@
 package com.github.starnowski.posmulten.postgresql.core
 
 import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition
+import com.github.starnowski.posmulten.postgresql.core.util.SqlUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.jdbc.core.JdbcTemplate
@@ -15,6 +16,8 @@ class SetNotNullStatementProducerItTest extends Specification {
 
     @Autowired
     JdbcTemplate jdbcTemplate
+    @Autowired
+    SqlUtils sqlUtils
 
     def tested = new SetNotNullStatementProducer()
 
@@ -33,10 +36,12 @@ class SetNotNullStatementProducerItTest extends Specification {
 
         when:
             sqlDefinition = tested.produce(new SetNotNullStatementProducerParameters(testTable, testColumn, testSchema))
+            sqlUtils.assertAllResultForCheckingStatementsAreEqualZero(sqlDefinition)
             jdbcTemplate.execute(sqlDefinition.getCreateScript())
 
         then:
             isAnyRecordExists(jdbcTemplate, selectStatement(table, column, schema, false))
+            sqlUtils.assertAllCheckingStatementsArePassing(sqlDefinition)
 
         where:
             testTable       |   testColumn  |   testSchema
