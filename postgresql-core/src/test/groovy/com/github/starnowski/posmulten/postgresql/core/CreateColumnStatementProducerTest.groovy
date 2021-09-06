@@ -232,7 +232,7 @@ class CreateColumnStatementProducerTest extends Specification {
         sb.append("' AND ")
         sb.append("column_name = '")
         sb.append(column)
-        sb.append("'")
+        sb.append("';")
         sb.toString()
     }
 }

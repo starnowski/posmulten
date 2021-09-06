@@ -93,7 +93,7 @@ public class CreateColumnStatementProducer {
         sb.append("' AND ");
         sb.append("column_name = '");
         sb.append(parameters.getColumn());
-        sb.append("'");
+        sb.append("';");
         return Collections.singletonList(sb.toString());
     }
 }
