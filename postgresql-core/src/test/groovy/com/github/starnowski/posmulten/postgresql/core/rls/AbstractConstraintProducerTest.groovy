@@ -31,6 +31,32 @@ abstract class AbstractConstraintProducerTest<X extends IConstraintProducerParam
             "notifications" |   "other_schema"  |    "fk_constraint"        ||  "ALTER TABLE \"other_schema\".\"notifications\" DROP CONSTRAINT IF EXISTS fk_constraint;"   |   /ALTER TABLE "other_schema"\."notifications" ADD CONSTRAINT fk_constraint CHECK .*;/
     }
 
+    @Unroll
+    def "should return correct checking statements based on the generic parameters object for table #table and schema #schema with constraint name #constraintName"()
+    {
+        given:
+            def parameters = returnCorrectParametersMockObject()
+
+        when:
+            def definition = returnTestedObject().produce(parameters)
+
+        then:
+            _ * parameters.getConstraintName() >> constraintName
+            _ * parameters.getTableName() >> table
+            _ * parameters.getTableSchema() >> schema
+            definition.getCheckingStatements()
+            definition.getCheckingStatements().size() >= 1
+            definition.getCheckingStatements().contains(expectedStatement)
+
+        where:
+            table           |   schema          |   constraintName          ||  expectedStatement
+            "users"         |   "public"        |    "const_1"              ||  checkingStatement("public", "users", "const_1")
+            "users"         |   null            |    "const_1"              ||  checkingStatement(null, "users", "const_1")
+            "users"         |   null            |    "constraint_222"       ||  checkingStatement(null, "users", "constraint_222")
+            "notifications" |   null            |    "constraint_XXX"       ||  checkingStatement(null, "notifications", "constraint_XXX")
+            "notifications" |   "other_schema"  |    "fk_constraint"        ||  checkingStatement("other_schema", "notifications", "fk_constraint")
+    }
+
     def "should throw an exception of type 'IllegalArgumentException' when the parameters object is null" () {
         when:
             returnTestedObject().produce(null)
@@ -132,4 +158,12 @@ abstract class AbstractConstraintProducerTest<X extends IConstraintProducerParam
     protected abstract P returnTestedObject()
 
     protected abstract X returnCorrectParametersMockObject()
+
+    private static String checkingStatement(String schema, String table, String constraintName)
+    {
+        def template = "SELECT 1\n" +
+                "\t\tFROM information_schema.table_constraints\n" +
+                "\t\tWHERE table_schema = '%s' AND table_name = '%s' AND constraint_name = '%s'"
+        String.format(template, schema == null ? "public" : schema, table, constraintName)
+    }
 }
