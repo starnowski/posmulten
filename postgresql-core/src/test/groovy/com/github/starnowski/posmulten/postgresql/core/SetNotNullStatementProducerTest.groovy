@@ -183,7 +183,7 @@ class SetNotNullStatementProducerTest extends Specification {
         sb.append("column_name = '")
         sb.append(column)
         sb.append("' AND ")
-        sb.append("is_nullable = 'NO'")
+        sb.append("is_nullable = 'NO';")
         sb.toString()
     }
 }

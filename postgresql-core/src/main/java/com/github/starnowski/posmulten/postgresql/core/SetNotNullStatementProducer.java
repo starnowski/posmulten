@@ -85,7 +85,7 @@ public class SetNotNullStatementProducer {
         sb.append("column_name = '");
         sb.append(parameters.getColumn());
         sb.append("' AND ");
-        sb.append("is_nullable = 'NO'");
+        sb.append("is_nullable = 'NO';");
         String query = sb.toString();
         return Collections.singletonList(query);
     }
