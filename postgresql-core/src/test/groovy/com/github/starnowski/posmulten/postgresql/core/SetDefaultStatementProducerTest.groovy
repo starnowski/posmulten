@@ -49,6 +49,32 @@ class SetDefaultStatementProducerTest extends Specification {
             "groups"    |   "col1"      |   "'xxx1'"                                        | "secondary"       ||  "ALTER TABLE secondary.groups ALTER COLUMN col1 DROP DEFAULT;"
     }
 
+    @Unroll
+    def "should return checking statement '#expectedStatement' for table '#table' and column '#column', schema '#schema'" () {
+        when:
+            def sqlDefinition = tested.produce(new SetDefaultStatementProducerParameters(table, column, defaultValue, schema))
+
+        then:
+            sqlDefinition.getCheckingStatements()
+            sqlDefinition.getCheckingStatements().size() == 1
+            sqlDefinition.getCheckingStatements()[0] == expectedStatement
+
+        where:
+            table       |   column      |   defaultValue                                    | schema            ||  expectedStatement
+            "users"     |   "tenant_id" |   "current_setting('posmulten.current_tenant')"   | null              ||  checkingStatement(null, "users", "tenant_id")
+            "groups"    |   "tenant_id" |   "'value'"                                       | null              ||  checkingStatement(null, "groups", "tenant_id")
+            "users"     |   "col1"      |   "current_setting('posmulten.current_tenant')"   | null              ||  checkingStatement(null, "users", "col1")
+            "groups"    |   "col1"      |   "'xxx1'"                                        | null              ||  checkingStatement(null, "groups", "col1")
+            "users"     |   "tenant_id" |   "current_setting('posmulten.current_tenant')"   | "public"          ||  checkingStatement("public", "users", "tenant_id")
+            "groups"    |   "tenant_id" |   "'value'"                                       | "public"          ||  checkingStatement("public", "groups", "tenant_id")
+            "users"     |   "col1"      |   "current_setting('posmulten.current_tenant')"   | "public"          ||  checkingStatement("public", "users", "col1")
+            "groups"    |   "col1"      |   "'xxx1'"                                        | "public"          ||  checkingStatement("public", "groups", "col1")
+            "users"     |   "tenant_id" |   "current_setting('posmulten.current_tenant')"   | "secondary"       ||  checkingStatement("secondary", "users", "tenant_id")
+            "groups"    |   "tenant_id" |   "'value'"                                       | "secondary"       ||  checkingStatement("secondary", "groups", "tenant_id")
+            "users"     |   "col1"      |   "current_setting('posmulten.current_tenant')"   | "secondary"       ||  checkingStatement("secondary", "users", "col1")
+            "groups"    |   "col1"      |   "'xxx1'"                                        | "secondary"       ||  checkingStatement("secondary", "groups", "col1")
+    }
+
     def "should throw exception of type 'IllegalArgumentException' when parameters object is null" ()
     {
         when:
@@ -185,5 +211,29 @@ class SetDefaultStatementProducerTest extends Specification {
             "user_groups"   | ""            |   "tenant_id"
             "user_groups"   | " "           |   "co1"
             "user_groups"   | "         "   |   "tenant_id"
+    }
+
+    private static String checkingStatement(String schema, String table, String column)
+    {
+        StringBuilder sb = new StringBuilder()
+        sb.append("SELECT COUNT(1) FROM information_schema.columns WHERE ")
+        sb.append("table_catalog = 'postgresql_core' AND ")
+        if (schema == null)
+        {
+            sb.append("table_schema = 'public'")
+        } else {
+            sb.append("table_schema = '")
+            sb.append(schema)
+            sb.append("'")
+        }
+        sb.append(" AND ")
+        sb.append("table_name = '")
+        sb.append(table)
+        sb.append("' AND ")
+        sb.append("column_name = '")
+        sb.append(column)
+        sb.append("' AND ")
+        sb.append("column_default IS NULL;")
+        sb.toString()
     }
 }
