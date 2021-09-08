@@ -5,6 +5,7 @@ import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition
 import com.github.starnowski.posmulten.postgresql.core.rls.function.EqualsCurrentTenantIdentifierFunctionInvocationFactory
 import com.github.starnowski.posmulten.postgresql.core.rls.function.TenantHasAuthoritiesFunctionProducer
 import com.github.starnowski.posmulten.postgresql.core.rls.function.TenantHasAuthoritiesFunctionProducerParameters
+import com.github.starnowski.posmulten.postgresql.core.util.SqlUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.jdbc.core.JdbcTemplate
@@ -39,6 +40,8 @@ class RLSPolicyProducerItTest extends Specification {
 
     @Autowired
     JdbcTemplate jdbcTemplate
+    @Autowired
+    SqlUtils sqlUtils
 
     def setup()
     {
@@ -74,11 +77,13 @@ class RLSPolicyProducerItTest extends Specification {
                                                         .withUsingExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory1)
                                                         .withWithCheckExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory2)
                                                         .build())
+            sqlUtils.assertAllResultForCheckingStatementsAreEqualZero(policyDefinition)
             jdbcTemplate.execute(policyDefinition.getCreateScript())
 
         then:
             isRLSPolicyExists(jdbcTemplate, policyName, table, schema)
             isRLSPolicyForGranteeExists(jdbcTemplate, policyName, table, schema, grantee)
+            sqlUtils.assertAllCheckingStatementsArePassing(policyDefinition)
 
         where:
             testSchema              |   testPolicyName          |   testTable       |   grantee
