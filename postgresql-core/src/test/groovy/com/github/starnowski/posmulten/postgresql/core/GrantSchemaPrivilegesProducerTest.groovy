@@ -66,6 +66,40 @@ class GrantSchemaPrivilegesProducerTest extends Specification {
     }
 
     @Unroll
+    def "should return checking statements '#expectedStatements' for schema '#schema' and user '#policyTargetUsername' with specified privileges '#privileges'" () {
+        when:
+            def definition = tested.produce(schema, policyTargetUsername, privileges)
+
+        then:
+            definition.getCheckingStatements()
+            definition.getCheckingStatements().size() == expectedStatements.size()
+            definition.getCheckingStatements().containsAll(expectedStatements)
+
+        where:
+            privileges	        |	schema	    | policyTargetUsername  ||	expectedStatements
+            ["ALL"]	            |	"public"	| "pos-user"	        ||	[checkingStatement("pos-user", "public", "USAGE"), checkingStatement("pos-user", "public", "CREATE")]
+            ["ALL PRIVILEGES"]	|	"public"	| "pos-user"	        ||	[checkingStatement("pos-user", "public", "USAGE"), checkingStatement("pos-user", "public", "CREATE")]
+            ["CREATE"]	        |	"public"	| "pos-user"	        ||	[checkingStatement("pos-user", "public", "CREATE")]
+            ["USAGE"]	        |	"public"	| "pos-user"	        ||	[checkingStatement("pos-user", "public", "USAGE")]
+            ["CREATE", "USAGE"]	|	"public"	| "pos-user"	        ||	[checkingStatement("pos-user", "public", "USAGE"), checkingStatement("pos-user", "public", "CREATE")]
+            ["USAGE", "CREATE"]	|	"public"	| "pos-user"	        ||	[checkingStatement("pos-user", "public", "USAGE"), checkingStatement("pos-user", "public", "CREATE")]
+            // other schema
+            ["ALL"]	            |	"secondary"	| "pos-user"	        ||	[checkingStatement("pos-user", "secondary", "USAGE"), checkingStatement("pos-user", "secondary", "CREATE")]
+            ["ALL PRIVILEGES"]	|	"secondary"	| "pos-user"	        ||	[checkingStatement("pos-user", "secondary", "USAGE"), checkingStatement("pos-user", "secondary", "CREATE")]
+            ["CREATE"]	        |	"secondary"	| "pos-user"	        ||	[checkingStatement("pos-user", "secondary", "CREATE")]
+            ["USAGE"]	        |	"secondary"	| "pos-user"	        ||	[checkingStatement("pos-user", "secondary", "USAGE")]
+            ["CREATE", "USAGE"]	|	"secondary"	| "pos-user"	        ||	[checkingStatement("pos-user", "secondary", "USAGE"), checkingStatement("pos-user", "secondary", "CREATE")]
+            ["USAGE", "CREATE"]	|	"secondary"	| "pos-user"	        ||	[checkingStatement("pos-user", "secondary", "USAGE"), checkingStatement("pos-user", "secondary", "CREATE")]
+            // other user
+            ["ALL"]	            |	"secondary"	| "john-doe"	        ||	[checkingStatement("john-doe", "secondary", "USAGE"), checkingStatement("john-doe", "secondary", "CREATE")]
+            ["ALL PRIVILEGES"]	|	"secondary"	| "john-doe"	        ||	[checkingStatement("john-doe", "secondary", "USAGE"), checkingStatement("john-doe", "secondary", "CREATE")]
+            ["CREATE"]	        |	"secondary"	| "john-doe"	        ||	[checkingStatement("john-doe", "secondary", "CREATE")]
+            ["USAGE"]	        |	"secondary"	| "john-doe"	        ||	[checkingStatement("john-doe", "secondary", "USAGE")]
+            ["CREATE", "USAGE"]	|	"secondary"	| "john-doe"	        ||	[checkingStatement("john-doe", "secondary", "USAGE"), checkingStatement("john-doe", "secondary", "CREATE")]
+            ["USAGE", "CREATE"]	|	"secondary"	| "john-doe"	        ||	[checkingStatement("john-doe", "secondary", "USAGE"), checkingStatement("john-doe", "secondary", "CREATE")]
+    }
+
+    @Unroll
     def "should throw exception of type 'IllegalArgumentException' when schema name is null, no matter if user name \"#user\" or privileges \"#privileges\" are correct"()
     {
         when:
