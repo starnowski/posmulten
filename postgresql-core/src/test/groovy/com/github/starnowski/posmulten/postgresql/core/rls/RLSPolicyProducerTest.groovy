@@ -64,6 +64,35 @@ class RLSPolicyProducerTest extends Specification {
     }
 
     @Unroll
+    def "for policy name '#policyName' for schema '#schema' and table #table for grantee #grantee and permission command #permissionCommand should create checking statements : #expectedStatements" ()
+    {
+        expect:
+        tested.produce(builder().withPolicyName(policyName)
+                .withPolicySchema(schema)
+                .withPolicyTable(table)
+                .withGrantee(grantee)
+                .withPermissionCommandPolicy(permissionCommand)
+                .withUsingExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory1)
+                .withWithCheckExpressionTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory1)
+                .build()).getCreateScript() == expectedStatement
+
+        where:
+        schema                  |   policyName              |   table           |   grantee                 |   permissionCommand   ||  expectedStatement
+        null                    |   "users_policy"          |   "users"         |   "postgresql-core-user"  |   ALL                 || [prepareStatementThatChecksIfPolicyExists("users_policy", "users", null), prepareStatementThatChecksIfPolicyWithSpecifiedCmdExists("users_policy", "users", null, ALL), prepareStatementThatChecksIfPolicyForGranteeExists("users_policy", "users", null, "postgresql-core-user")]
+        "public"                |   "users_policy"          |   "users"         |   "postgresql-core-user"  |   INSERT              || [prepareStatementThatChecksIfPolicyExists("users_policy", "users", "public"), prepareStatementThatChecksIfPolicyWithSpecifiedCmdExists("users_policy", "users", "public", INSERT), prepareStatementThatChecksIfPolicyForGranteeExists("users_policy", "users", "public", "postgresql-core-user")]
+        "non_public_schema"     |   "users_policy"          |   "users"         |   "postgresql-core-user"  |   SELECT              || [prepareStatementThatChecksIfPolicyExists("users_policy", "users", "non_public_schema"), prepareStatementThatChecksIfPolicyWithSpecifiedCmdExists("users_policy", "users", "non_public_schema", SELECT), prepareStatementThatChecksIfPolicyForGranteeExists("users_policy", "users", "non_public_schema", "postgresql-core-user")]
+        null                    |   "users_policy"          |   "users"         |   "postgresql-core-owner" |   UPDATE              || [prepareStatementThatChecksIfPolicyExists("users_policy", "users", null), prepareStatementThatChecksIfPolicyWithSpecifiedCmdExists("users_policy", "users", null, UPDATE), prepareStatementThatChecksIfPolicyForGranteeExists("users_policy", "users", null, "postgresql-core-owner")]
+        "public"                |   "users_policy"          |   "users"         |   "postgresql-core-owner" |   DELETE              || [prepareStatementThatChecksIfPolicyExists("users_policy", "users", "public"), prepareStatementThatChecksIfPolicyWithSpecifiedCmdExists("users_policy", "users", "public", DELETE), prepareStatementThatChecksIfPolicyForGranteeExists("users_policy", "users", "public", "postgresql-core-owner")]
+        "non_public_schema"     |   "users_policy"          |   "users"         |   "postgresql-core-owner" |   ALL                 || [prepareStatementThatChecksIfPolicyExists("users_policy", "users", "non_public_schema"), prepareStatementThatChecksIfPolicyWithSpecifiedCmdExists("users_policy", "users", "non_public_schema", ALL), prepareStatementThatChecksIfPolicyForGranteeExists("users_policy", "users", "non_public_schema", "postgresql-core-owner")]
+        null                    |   "users_groups_policy"   |   "users_groups"  |   "postgresql-core-user"  |   INSERT              || [prepareStatementThatChecksIfPolicyExists("users_groups_policy", "users_groups", null), prepareStatementThatChecksIfPolicyWithSpecifiedCmdExists("users_groups_policy", "users_groups", null, INSERT), prepareStatementThatChecksIfPolicyForGranteeExists("users_groups_policy", "users_groups", null, "postgresql-core-user")]
+        "public"                |   "users_groups_policy"   |   "users_groups"  |   "postgresql-core-user"  |   SELECT              || [prepareStatementThatChecksIfPolicyExists("users_groups_policy", "users_groups", "public"), prepareStatementThatChecksIfPolicyWithSpecifiedCmdExists("users_groups_policy", "users_groups", "public", SELECT), prepareStatementThatChecksIfPolicyForGranteeExists("users_groups_policy", "users_groups", "public", "postgresql-core-user")]
+        "non_public_schema"     |   "users_groups_policy"   |   "users_groups"  |   "postgresql-core-user"  |   UPDATE              || [prepareStatementThatChecksIfPolicyExists("users_groups_policy", "users_groups", "non_public_schema"), prepareStatementThatChecksIfPolicyWithSpecifiedCmdExists("users_groups_policy", "users_groups", "non_public_schema", UPDATE), prepareStatementThatChecksIfPolicyForGranteeExists("users_groups_policy", "users_groups", "non_public_schema", "postgresql-core-user")]
+        null                    |   "users_groups_policy"   |   "users_groups"  |   "postgresql-core-owner" |   DELETE              || [prepareStatementThatChecksIfPolicyExists("users_groups_policy", "users_groups", null), prepareStatementThatChecksIfPolicyWithSpecifiedCmdExists("users_groups_policy", "users_groups", null, DELETE), prepareStatementThatChecksIfPolicyForGranteeExists("users_groups_policy", "users_groups", null, "postgresql-core-owner")]
+        "public"                |   "users_groups_policy"   |   "users_groups"  |   "postgresql-core-owner" |   ALL                 || [prepareStatementThatChecksIfPolicyExists("users_groups_policy", "users_groups", "public"), prepareStatementThatChecksIfPolicyWithSpecifiedCmdExists("users_groups_policy", "users_groups", "public", ALL), prepareStatementThatChecksIfPolicyForGranteeExists("users_groups_policy", "users_groups", "public", "postgresql-core-owner")]
+        "non_public_schema"     |   "users_groups_policy"   |   "users_groups"  |   "postgresql-core-owner" |   INSERT              || [prepareStatementThatChecksIfPolicyExists("users_groups_policy", "users_groups", "non_public_schema"), prepareStatementThatChecksIfPolicyWithSpecifiedCmdExists("users_groups_policy", "users_groups", "non_public_schema", INSERT), prepareStatementThatChecksIfPolicyForGranteeExists("users_groups_policy", "users_groups", "non_public_schema", "postgresql-core-owner")]
+    }
+
+    @Unroll
     def "for policy name '#policyName' for schema '#schema' and table #table and tenant id column #tenantIdColumn should create statement : #expectedStatement" ()
     {
         expect:
@@ -193,6 +222,42 @@ class RLSPolicyProducerTest extends Specification {
         { tenantIdValue, permissionCommandPolicy, rlsExpressionType, table, schema ->
             IS_TENANT_ID_CORRECT_TEST_FUNCTION + "(" + mapToString(tenantIdValue) + ")"
         }
+    }
+
+    private static String prepareStatementThatChecksIfPolicyExists(String name, String table, String schema)
+    {
+        def schemaName = schema == null ? "public" : schema
+        format("SELECT COUNT(1) FROM pg_catalog.pg_policy pg, pg_class pc, pg_catalog.pg_namespace pn WHERE pg.polrelid = pc.oid AND pc.relnamespace = pn.oid AND pg.polname = '%1\$s' AND pc.relname = '%2\$s' AND pn.nspname = '%3\$s'", name, table, schemaName)
+    }
+
+    private static String prepareStatementThatChecksIfPolicyWithSpecifiedCmdExists(String name, String table, String schema, PermissionCommandPolicyEnum permissionCommandPolicy)
+    {
+        def schemaName = schema == null ? "public" : schema
+        def cmd
+        switch (permissionCommandPolicy)
+        {
+            case ALL:
+                cmd = "*"
+                break
+            case SELECT:
+                cmd = "r"
+                break
+            case INSERT:
+                cmd = "a"
+                break
+            case UPDATE:
+                cmd = "w"
+                break
+            case DELETE:
+                cmd = "d"
+        }
+        format("SELECT COUNT(1) FROM pg_catalog.pg_policy pg, pg_class pc, pg_catalog.pg_namespace pn WHERE pg.polrelid = pc.oid AND pc.relnamespace = pn.oid AND pg.polname = '%1\$s' AND pc.relname = '%2\$s' AND pn.nspname = '%3\$s' AND pg.polcmd = '%4\$s'", name, table, schemaName, cmd)
+    }
+
+    private static String prepareStatementThatChecksIfPolicyForGranteeExists(String name, String table, String schema, String grantee)
+    {
+        def schemaName = schema == null ? "public" : schema
+        format("SELECT COUNT(1) FROM pg_catalog.pg_policy pg, pg_class pc, pg_catalog.pg_namespace pn, pg_roles ro WHERE pg.polrelid = pc.oid AND pc.relnamespace = pn.oid AND pg.polname = '%1\$s' AND pc.relname = '%2\$s' AND pn.nspname = '%3\$s' AND ro.oid = ANY(pg.polroles) AND ro.rolname = '%4\$s'", name, table, schemaName, grantee)
     }
 
 }
