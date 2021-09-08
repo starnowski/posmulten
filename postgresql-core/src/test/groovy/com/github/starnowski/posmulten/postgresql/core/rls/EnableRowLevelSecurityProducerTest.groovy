@@ -44,7 +44,7 @@ class EnableRowLevelSecurityProducerTest extends Specification {
             def sqlDefinition = tested.produce(table, schema)
 
         then:
-            sqlDefinition.getCheckingStatements().size() == 1
+            sqlDefinition.getCheckingStatements().size() >= 1
             sqlDefinition.getCheckingStatements()[0] == expectedStatement
 
         where:

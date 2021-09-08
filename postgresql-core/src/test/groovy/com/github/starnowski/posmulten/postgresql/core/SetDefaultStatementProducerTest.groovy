@@ -56,7 +56,7 @@ class SetDefaultStatementProducerTest extends Specification {
 
         then:
             sqlDefinition.getCheckingStatements()
-            sqlDefinition.getCheckingStatements().size() == 1
+            sqlDefinition.getCheckingStatements().size() >= 1
             sqlDefinition.getCheckingStatements()[0] == expectedStatement
 
         where:

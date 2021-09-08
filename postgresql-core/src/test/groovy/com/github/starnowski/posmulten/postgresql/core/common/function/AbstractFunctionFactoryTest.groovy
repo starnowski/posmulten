@@ -199,7 +199,7 @@ abstract class AbstractFunctionFactoryTest extends Specification {
 
         then:
             functionDefinition.getCheckingStatements()
-            functionDefinition.getCheckingStatements().size() == 1
+            functionDefinition.getCheckingStatements().size() >= 1
             functionDefinition.getCheckingStatements()[0] == expectedCheckingStatement
 
         where:
