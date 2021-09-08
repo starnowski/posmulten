@@ -189,4 +189,20 @@ class GrantSchemaPrivilegesProducerTest extends Specification {
             "non_public"    |   "owner"
             "non_public"    |   "pos-user"
     }
+
+    private static checkingStatement(String user, String schema, String privilege)
+    {
+        StringBuilder sb = new StringBuilder()
+        sb.append("SELECT COUNT(1) FROM ('")
+        sb.append("SELECT pg_catalog.has_schema_privilege('")
+        sb.append(user)
+        sb.append("', '")
+        sb.append(schema)
+        sb.append("', '")
+        sb.append(privilege)
+        sb.append("') AS USER_HAS_PRIVILEGE)")
+        sb.append(" WHERE USER_HAS_PRIVILEGE = 't'")
+        sb.append(";")
+        sb.toString()
+    }
 }
