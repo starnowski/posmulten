@@ -1,6 +1,7 @@
 package com.github.starnowski.posmulten.postgresql.core
 
 import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition
+import com.github.starnowski.posmulten.postgresql.core.util.SqlUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.jdbc.core.JdbcTemplate
@@ -15,6 +16,8 @@ class GrantTablePrivilegesProducerItTest extends Specification {
 
     @Autowired
     JdbcTemplate jdbcTemplate
+    @Autowired
+    SqlUtils sqlUtils
 
     def tested = new GrantTablePrivilegesProducer()
 
@@ -39,12 +42,14 @@ class GrantTablePrivilegesProducerItTest extends Specification {
 
         when:
             sqlDefinition = tested.produce(testSchema, testTable, testUser, testPrivileges)
+            sqlUtils.assertAllResultForCheckingStatementsAreEqualZero(sqlDefinition)
             jdbcTemplate.execute(sqlDefinition.getCreateScript())
 
         then:
             for (String privilege : testExpectedPrivileges) {
                 assertEquals("User " + testUser + " has privilege " + privilege, true, isAnyRecordExists(jdbcTemplate, selectStatement(user, table, schema, privilege)))
             }
+            sqlUtils.assertAllCheckingStatementsArePassing(sqlDefinition)
 
         where:
             testUser                        |   testSchema                  |   testTable   |   testPrivileges              ||  testExpectedPrivileges
