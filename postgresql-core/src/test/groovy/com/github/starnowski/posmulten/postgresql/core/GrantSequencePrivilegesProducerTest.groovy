@@ -34,6 +34,24 @@ class GrantSequencePrivilegesProducerTest extends Specification {
     }
 
     @Unroll
+    def "should return checking statement '#expectedStatement' for sequence #sequence, user '#user', schema '#schema' with 'ALL PRIVILGES'" () {
+        when:
+            def definition = tested.produce(schema, sequence, user)
+
+        then:
+            definition.getCheckingStatements()
+            definition.getCheckingStatements().size() == 1
+            definition.getCheckingStatements()[0] == expectedStatement
+
+        where:
+            schema                  | user          | sequence      ||	expectedStatement
+            null                    | "user1"       | "primary"     || checkingStatement("user1", null, "primary")
+            "public"                | "user1"       | "primary"     || checkingStatement("user1", "public", "primary")
+            "non_public_schema"     | "johndoe"     | "primary"     || checkingStatement("johndoe", "non_public_schema", "primary")
+            "non_public_schema"     | "johndoe"     | "secondary"   || checkingStatement("johndoe", "non_public_schema", "secondary")
+    }
+
+    @Unroll
     def "should throw exception of type 'IllegalArgumentException' when table schema is blank"()
     {
         when:
@@ -131,6 +149,12 @@ class GrantSequencePrivilegesProducerTest extends Specification {
         "public"        | "user1"       |   "   "
         "secondary"     | "postgres"    |   ""
         "secondary"     | "user1"       |   "   "
+    }
+
+    private static checkingStatement(String user, String schema, String sequence)
+    {
+        def pattern = "SELECT COUNT(1) FROM  information_schema.usage_privileges WHERE  grantee = '%1s' AND object_schema = '%2s' AND object_name = '%3s' AND object_type = 'SEQUENCE' AND privilege_type = 'USAGE';"
+        String.format(pattern, user, schema, sequence)
     }
 
 }
