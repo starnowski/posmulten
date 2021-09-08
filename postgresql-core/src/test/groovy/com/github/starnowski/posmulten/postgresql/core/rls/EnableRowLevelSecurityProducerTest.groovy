@@ -45,7 +45,7 @@ class EnableRowLevelSecurityProducerTest extends Specification {
 
         then:
             sqlDefinition.getCheckingStatements().size() >= 1
-            sqlDefinition.getCheckingStatements()[0] == expectedStatement
+            sqlDefinition.getCheckingStatements().contains(expectedStatement)
 
         where:
             schema      | table     ||	expectedStatement

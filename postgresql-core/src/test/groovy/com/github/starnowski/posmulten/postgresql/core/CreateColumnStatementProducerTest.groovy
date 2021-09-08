@@ -57,7 +57,7 @@ class CreateColumnStatementProducerTest extends Specification {
         then:
             definition.getCheckingStatements()
             definition.getCheckingStatements().size() >= 1
-            definition.getCheckingStatements()[0] == expectedStatement
+            definition.getCheckingStatements().contains(expectedStatement)
 
         where:
             table       |   column      |   columnType                  | schema            ||  expectedStatement

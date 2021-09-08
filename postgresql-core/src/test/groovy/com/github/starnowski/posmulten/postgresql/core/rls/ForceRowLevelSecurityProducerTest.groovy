@@ -46,7 +46,7 @@ class ForceRowLevelSecurityProducerTest extends Specification {
         then:
             sqlDefinition.getCheckingStatements()
             sqlDefinition.getCheckingStatements().size() >= 1
-            sqlDefinition.getCheckingStatements()[0] == expectedStatement
+            sqlDefinition.getCheckingStatements().contains(expectedStatement)
 
         where:
             schema      | table     ||	expectedStatement
