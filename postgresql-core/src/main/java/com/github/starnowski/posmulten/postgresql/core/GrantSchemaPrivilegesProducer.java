@@ -94,14 +94,14 @@ public class GrantSchemaPrivilegesProducer {
 
     private String prepareCheckingStatement(String user, String schema, String privilege) {
         StringBuilder sb = new StringBuilder();
-        sb.append("SELECT COUNT(1) FROM ('");
+        sb.append("SELECT COUNT(1) FROM (");
         sb.append("SELECT pg_catalog.has_schema_privilege('");
         sb.append(user);
         sb.append("', '");
         sb.append(schema);
         sb.append("', '");
         sb.append(privilege);
-        sb.append("') AS USER_HAS_PRIVILEGE)");
+        sb.append("') AS USER_HAS_PRIVILEGE) AS sub_query_tab_has_schema_privilege");
         sb.append(" WHERE USER_HAS_PRIVILEGE = 't'");
         sb.append(";");
         return sb.toString();
