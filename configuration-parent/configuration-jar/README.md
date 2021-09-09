@@ -12,8 +12,9 @@ __Properties required to generate scripts__
 | Property name |   Required    |   Description |
 |---------------|-----------|---------------|
 |posmulten.configuration.config.file.path   |   Yes |   File path to configuration file  |
-|posmulten.configuration.create.script.path |   Yes |   File path to generated script that creates the shared schema strategy |
-|posmulten.configuration.drop.script.path   |   Yes |   File path to generated script that drops the shared schema strategy |
+|posmulten.configuration.create.script.path |   No |   File path to generated script that creates the shared schema strategy |
+|posmulten.configuration.drop.script.path   |   No |   File path to generated script that drops the shared schema strategy |
+|posmulten.configuration.validation.statements.path  |   No |   File path to script that contains validation queries for the shared schema strategy |
 
 Example:
 
