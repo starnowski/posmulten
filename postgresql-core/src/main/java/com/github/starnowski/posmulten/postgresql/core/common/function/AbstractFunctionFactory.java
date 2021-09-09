@@ -76,7 +76,7 @@ public abstract class AbstractFunctionFactory<P extends IFunctionFactoryParamete
             sb.append("'");
         }
         sb.append(" AND ");
-        sb.append("pg.pronamespace =  pgn.oid");
+        sb.append("pg.pronamespace =  pgn.oid;");
         return singletonList(sb.toString());
     }
 
