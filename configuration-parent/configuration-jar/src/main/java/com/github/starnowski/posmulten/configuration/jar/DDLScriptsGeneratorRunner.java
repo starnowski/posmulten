@@ -26,7 +26,7 @@ public class DDLScriptsGeneratorRunner {
             String dropScriptPath = System.getProperty("posmulten.configuration.drop.script.path");
             DDLScriptsGenerator ddlScriptsGenerator = new DDLScriptsGenerator();
             try {
-                ddlScriptsGenerator.generate(configFilePath, createScriptPath, dropScriptPath);
+                ddlScriptsGenerator.generate(configFilePath, createScriptPath, dropScriptPath, null);
             } catch (InvalidConfigurationException e) {
                 log.log(Level.SEVERE, "Posmulten invalid configuration");
                 e.getErrorMessages().forEach(message ->

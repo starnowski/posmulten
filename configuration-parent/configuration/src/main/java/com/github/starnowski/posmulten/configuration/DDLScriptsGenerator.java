@@ -26,7 +26,7 @@ public class DDLScriptsGenerator {
     private final DefaultSharedSchemaContextBuilderFactoryResolver defaultSharedSchemaContextBuilderFactoryResolver;
     private final DDLWriter ddlWriter;
 
-    public void generate(String configurationFilePath, String createScripsFilePath, String dropScripsFilePath) throws SharedSchemaContextBuilderException, IOException, InvalidConfigurationException, NoDefaultSharedSchemaContextBuilderFactorySupplierException {
+    public void generate(String configurationFilePath, String createScripsFilePath, String dropScripsFilePath, String checkingStatementsFilePath) throws SharedSchemaContextBuilderException, IOException, InvalidConfigurationException, NoDefaultSharedSchemaContextBuilderFactorySupplierException {
         log.log(Level.INFO, "Generate DDL statements based on file: {0}", new Object[]{configurationFilePath});
         IDefaultSharedSchemaContextBuilderFactory factory = defaultSharedSchemaContextBuilderFactoryResolver.resolve(configurationFilePath);
         DefaultSharedSchemaContextBuilder builder = factory.build(configurationFilePath);
@@ -38,6 +38,10 @@ public class DDLScriptsGenerator {
         if (dropScripsFilePath != null) {
             log.log(Level.INFO, "Saving DDL statements that drop the shared schema strategy to {0}", dropScripsFilePath);
             ddlWriter.saveDropScripts(dropScripsFilePath, context);
+        }
+        if (checkingStatementsFilePath != null) {
+            log.log(Level.INFO, "Saving checking statements that checks if the changes were applied to {0}", checkingStatementsFilePath);
+            ddlWriter.saveCheckingStatements(checkingStatementsFilePath, context);
         }
     }
 }
