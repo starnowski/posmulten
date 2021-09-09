@@ -5,7 +5,7 @@ To see how to prepare a configuration file, please check the [configuration-yaml
 The jar file required JAVA version 8 or newer.
 
 ### Usage
-Executable jar based on configuration generates two SQL script files that contain DDL statements that create the shared schema strategy. 
+Executable jar based on configuration generates SQL script files that contain DDL statements that create the shared schema strategy. 
 The other one has a DDL statement that drops strategy.
 
 __Properties required to generate scripts__
