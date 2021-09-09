@@ -94,7 +94,7 @@ public class SetDefaultStatementProducer {
         sb.append("column_name = '");
         sb.append(parameters.getColumn());
         sb.append("' AND ");
-        sb.append("column_default IS NULL;");
+        sb.append("column_default IS NOT NULL;");
         return Collections.singletonList(sb.toString());
     }
 }
