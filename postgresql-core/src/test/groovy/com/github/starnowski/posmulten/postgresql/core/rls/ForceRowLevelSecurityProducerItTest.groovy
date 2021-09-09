@@ -2,6 +2,7 @@ package com.github.starnowski.posmulten.postgresql.core.rls
 
 import com.github.starnowski.posmulten.postgresql.core.TestApplication
 import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition
+import com.github.starnowski.posmulten.postgresql.core.util.SqlUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.jdbc.core.JdbcTemplate
@@ -16,6 +17,8 @@ class ForceRowLevelSecurityProducerItTest extends Specification {
 
     @Autowired
     JdbcTemplate jdbcTemplate
+    @Autowired
+    SqlUtils sqlUtils
 
     def tested = new ForceRowLevelSecurityProducer()
 
@@ -32,10 +35,12 @@ class ForceRowLevelSecurityProducerItTest extends Specification {
 
         when:
             sqlDefinition = tested.produce(testTable, testSchema)
+            sqlUtils.assertAllResultForCheckingStatementsAreEqualZero(sqlDefinition)
             jdbcTemplate.execute(sqlDefinition.getCreateScript())
 
         then:
             assertEquals("Table " + testTable + " does not have forced row level security", "t", selectAndReturnFirstRecordAsString(jdbcTemplate, selectStatement(table, schema)))
+            sqlUtils.assertAllCheckingStatementsArePassing(sqlDefinition)
 
         where:
             testTable           |   testSchema

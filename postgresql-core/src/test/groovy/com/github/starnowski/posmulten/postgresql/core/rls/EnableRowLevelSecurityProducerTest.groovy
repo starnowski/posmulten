@@ -38,6 +38,25 @@ class EnableRowLevelSecurityProducerTest extends Specification {
     }
 
     @Unroll
+    def "should return statement (#expectedStatement) that checks if row level security mode for table (#table) and schema (#schema) is applied"()
+    {
+        when:
+            def sqlDefinition = tested.produce(table, schema)
+
+        then:
+            sqlDefinition.getCheckingStatements().size() >= 1
+            sqlDefinition.getCheckingStatements().contains(expectedStatement)
+
+        where:
+            schema      | table     ||	expectedStatement
+            null        | "users"   ||  expectedCheckingStatement(null, "users")
+            null        | "posts"   ||  expectedCheckingStatement(null, "posts")
+            "secondary" | "users"   ||  expectedCheckingStatement("secondary", "users")
+            "secondary" | "posts"   ||  expectedCheckingStatement("secondary", "posts")
+            "public"    | "posts"   ||  expectedCheckingStatement("public", "posts")
+    }
+
+    @Unroll
     def "should throw exception of type 'IllegalArgumentException' when schema name is blank '#schema', no matter if table \"#table\" is correct"()
     {
         when:
@@ -91,5 +110,22 @@ class EnableRowLevelSecurityProducerTest extends Specification {
 
         where:
             schema  << ["public", "secondary"]
+    }
+
+    private static String expectedCheckingStatement(String schema, String table)
+    {
+        StringBuilder sb = new StringBuilder()
+        sb.append("SELECT COUNT(1) FROM pg_class pc, pg_catalog.pg_namespace pg ")
+        sb.append("WHERE")
+        sb.append(" pc.relname = '")
+        sb.append(table)
+        sb.append("' AND pc.relnamespace = pg.oid AND pg.nspname = '")
+        if (schema == null)
+            sb.append("public")
+        else
+            sb.append(schema)
+        sb.append("' AND pc.relrowsecurity = 't'")
+        sb.append(";")
+        sb.toString()
     }
 }

@@ -17,17 +17,12 @@ class DDLWriterTest extends Specification {
     def tested = new DDLWriter()
 
     @Unroll
-    def "should save all DDL statements that creates shared schema strategy to file"()
+    def "should save all DDL statements that creates shared schema strategy to file, expected lines : #expectedFileLines"()
     {
         given:
             def tmpFile = tempFolder.newFile("output.sql")
             def context = Mock(ISharedSchemaContext)
-            List<SQLDefinition> mockedSQLDefinitions = ddlStatementsEntries.stream().map({it ->
-                def mockedDefinition = Mock(SQLDefinition)
-                mockedDefinition.getCreateScript() >> it.getCreateScript()
-                mockedDefinition.getDropScript() >> it.getDropScript()
-                mockedDefinition
-            }).collect(toList())
+            List<SQLDefinition> mockedSQLDefinitions = mockSQLDefinitions(ddlStatementsEntries)
             context.getSqlDefinitions() >> mockedSQLDefinitions
 
         when:
@@ -48,17 +43,12 @@ class DDLWriterTest extends Specification {
     }
 
     @Unroll
-    def "should save all DDL statements that drops shared schema strategy to file"()
+    def "should save all DDL statements that drops shared schema strategy to file, expected lines : #expectedFileLines"()
     {
         given:
             def tmpFile = tempFolder.newFile("output.sql")
             def context = Mock(ISharedSchemaContext)
-            List<SQLDefinition> mockedSQLDefinitions = ddlStatementsEntries.stream().map({it ->
-                def mockedDefinition = Mock(SQLDefinition)
-                mockedDefinition.getCreateScript() >> it.getCreateScript()
-                mockedDefinition.getDropScript() >> it.getDropScript()
-                mockedDefinition
-            }).collect(toList())
+            List<SQLDefinition> mockedSQLDefinitions = mockSQLDefinitions(ddlStatementsEntries)
             context.getSqlDefinitions() >> mockedSQLDefinitions
 
         when:
@@ -68,7 +58,7 @@ class DDLWriterTest extends Specification {
             List<String> actualFileLines = returnFileLines(tmpFile)
             expectedFileLines == actualFileLines
 
-        and: "file does not contain any DDL statements that drop definitions"
+        and: "file does not contain any DDL statements that creates definitions"
             !ddlStatementsEntries.stream().map({it -> it.getCreateScript()}).anyMatch({it -> actualFileLines.contains(it)})
 
         where:
@@ -76,6 +66,46 @@ class DDLWriterTest extends Specification {
             [te("create some ...", "drop this record"), te("CREATE RLS_POLICY", "REVOKE Policy")]       ||  ["REVOKE Policy", "drop this record"]
             [te("Alter table etc;", "drop this record"), te("CREATE RLS_POLICY", "DROP some object")]   ||  ["DROP some object", "drop this record"]
             [te("grant privilege to object ", "revoke privilege")]                                      ||  ["revoke privilege"]
+    }
+
+    @Unroll
+    def "should save all checking statements to file, expected lines : #expectedFileLines"()
+    {
+        given:
+            def tmpFile = tempFolder.newFile("output.sql")
+            def context = Mock(ISharedSchemaContext)
+            List<SQLDefinition> mockedSQLDefinitions = mockSQLDefinitions(ddlStatementsEntries)
+            context.getSqlDefinitions() >> mockedSQLDefinitions
+
+        when:
+            tested.saveCheckingStatements(tmpFile.getAbsolutePath(), context)
+
+        then:
+            List<String> actualFileLines = returnFileLines(tmpFile)
+            expectedFileLines == actualFileLines
+
+        and: "file does not contain any DDL statements that creates definitions"
+            !ddlStatementsEntries.stream().map({it -> it.getCreateScript()}).anyMatch({it -> actualFileLines.contains(it)})
+
+        and: "file does not contain any DDL statements that drop definitions"
+            !ddlStatementsEntries.stream().map({it -> it.getDropScript()}).anyMatch({it -> actualFileLines.contains(it)})
+
+        where:
+            ddlStatementsEntries                                                                                                                                ||  expectedFileLines
+            [te("create some ...", "drop this record", ["SELECT COUNT(1)"]), te("CREATE RLS_POLICY", "REVOKE Policy", ["SELECT 1555"])]                         ||  ["SELECT COUNT(1)", "SELECT 1555"]
+            [te("Alter table etc;", "drop this record", ["SELECT 87"]), te("CREATE RLS_POLICY", "DROP some object", ["SELECT COUNT(*)", "SELECT COUNT(6)"])]    ||  ["SELECT 87", "SELECT COUNT(*)", "SELECT COUNT(6)"]
+            [te("grant privilege to object ", "revoke privilege", ["xxxxx 1555"])]                                                                              ||  ["xxxxx 1555"]
+    }
+
+    List<SQLDefinition> mockSQLDefinitions(List<TestEntry> testEntries)
+    {
+        testEntries.stream().map({it ->
+            def mockedDefinition = Mock(SQLDefinition)
+            mockedDefinition.getCreateScript() >> it.getCreateScript()
+            mockedDefinition.getDropScript() >> it.getDropScript()
+            mockedDefinition.getCheckingStatements() >> it.getCheckingStatements()
+            mockedDefinition
+        }).collect(toList())
     }
 
     List<String> returnFileLines(File file)
@@ -93,14 +123,25 @@ class DDLWriterTest extends Specification {
         new TestEntry(createScript, dropScript)
     }
 
+    static TestEntry te(String createScript, String dropScript, List<String> checkingStatements)
+    {
+        new TestEntry(createScript, dropScript, checkingStatements)
+    }
+
     static class TestEntry
     {
         private String createScript
         private String dropScript
+        private List<String> checkingStatements
 
         TestEntry(String createScript, String dropScript) {
+            this(createScript, dropScript, ["SELECT COUNT(1)"])
+        }
+
+        TestEntry(String createScript, String dropScript, List<String> checkingStatements) {
             this.createScript = createScript
             this.dropScript = dropScript
+            this.checkingStatements = checkingStatements
         }
 
         String getCreateScript() {
@@ -111,11 +152,16 @@ class DDLWriterTest extends Specification {
             return dropScript
         }
 
+        List<String> getCheckingStatements() {
+            return checkingStatements
+        }
+
         @Override
-        public String toString() {
+        String toString() {
             return "TestEntry{" +
                     "createScript='" + createScript + '\'' +
                     ", dropScript='" + dropScript + '\'' +
+                    ", checkingStatements='" + checkingStatements + '\'' +
                     '}';
         }
     }

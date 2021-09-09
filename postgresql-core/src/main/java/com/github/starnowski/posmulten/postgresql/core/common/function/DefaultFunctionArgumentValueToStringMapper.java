@@ -2,10 +2,8 @@ package com.github.starnowski.posmulten.postgresql.core.common.function;
 
 public class DefaultFunctionArgumentValueToStringMapper {
 
-    public String map(FunctionArgumentValue value)
-    {
-        switch (value.getType())
-        {
+    public String map(FunctionArgumentValue value) {
+        switch (value.getType()) {
             case STRING:
                 return "'" + value.getValue() + "'";
             case NUMERIC:
@@ -15,8 +13,7 @@ public class DefaultFunctionArgumentValueToStringMapper {
         return null;
     }
 
-    public static String mapFunctionArgumentToString(FunctionArgumentValue value)
-    {
+    public static String mapFunctionArgumentToString(FunctionArgumentValue value) {
         return (new DefaultFunctionArgumentValueToStringMapper()).map(value);
     }
 }

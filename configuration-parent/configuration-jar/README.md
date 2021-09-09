@@ -5,15 +5,16 @@ To see how to prepare a configuration file, please check the [configuration-yaml
 The jar file required JAVA version 8 or newer.
 
 ### Usage
-Executable jar based on configuration generates two SQL script files that contain DDL statements that create the shared schema strategy. 
+Executable jar based on configuration generates SQL script files that contain DDL statements that create the shared schema strategy. 
 The other one has a DDL statement that drops strategy.
 
 __Properties required to generate scripts__
 | Property name |   Required    |   Description |
 |---------------|-----------|---------------|
 |posmulten.configuration.config.file.path   |   Yes |   File path to configuration file  |
-|posmulten.configuration.create.script.path |   Yes |   File path to generated script that creates the shared schema strategy |
-|posmulten.configuration.drop.script.path   |   Yes |   File path to generated script that drops the shared schema strategy |
+|posmulten.configuration.create.script.path |   No |   File path to generated script that creates the shared schema strategy |
+|posmulten.configuration.drop.script.path   |   No |   File path to generated script that drops the shared schema strategy |
+|posmulten.configuration.validation.statements.path  |   No |   File path to script that contains validation queries for the shared schema strategy |
 
 Example:
 

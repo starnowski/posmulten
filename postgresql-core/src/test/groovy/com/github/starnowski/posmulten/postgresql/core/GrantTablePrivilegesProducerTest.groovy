@@ -3,6 +3,9 @@ package com.github.starnowski.posmulten.postgresql.core
 import spock.lang.Specification
 import spock.lang.Unroll
 
+import static java.util.Arrays.asList
+import static java.util.stream.Collectors.toList
+
 class GrantTablePrivilegesProducerTest extends Specification {
 
     def tested = new GrantTablePrivilegesProducer()
@@ -45,6 +48,31 @@ class GrantTablePrivilegesProducerTest extends Specification {
         "public"    | "user1"       | "players"     | ["INSERT"]                                                                        || "REVOKE INSERT ON public.\"players\" FROM \"user1\";"
         "other_she" | "user1"       | "players"     | ["INSERT"]                                                                        || "REVOKE INSERT ON other_she.\"players\" FROM \"user1\";"
         "other_she" | "bro"         | "posts"       | ["UPDATE", "SELECT"]                                                              || "REVOKE UPDATE, SELECT ON other_she.\"posts\" FROM \"bro\";"
+    }
+
+    @Unroll
+    def "should return checking statements '#expectedStatements' for table '#table', user '#user', schema '#schema' with specified privileges '#privileges'" () {
+        when:
+            def definition = tested.produce(schema, table, user, privileges)
+
+        then:
+            definition.getCheckingStatements()
+            definition.getCheckingStatements().size() == expectedStatements.size()
+            definition.getCheckingStatements().containsAll(expectedStatements)
+
+        where:
+            schema      | user          | table         | privileges                                                                        ||	expectedStatements
+            null        | "user1"       | "players"     | ["INSERT"]                                                                        || chSts("user1", "players", null, "INSERT")
+            null        | "john_doe"    | "players"     | ["INSERT"]                                                                        || chSts("john_doe", "players", null, "INSERT")
+            null        | "user1"       | "users"       | ["INSERT"]                                                                        || chSts("user1", "users", null, "INSERT")
+            null        | "user1"       | "players"     | ["UPDATE"]                                                                        || chSts("user1", "players", null, "UPDATE")
+            null        | "user1"       | "players"     | ["SELECT", "INSERT", "UPDATE", "DELETE", "TRUNCATE", "REFERENCES", "TRIGGER"]     || chSts("user1", "players", null, "SELECT", "INSERT", "UPDATE", "DELETE", "TRUNCATE", "REFERENCES", "TRIGGER")
+            null        | "user1"       | "players"     | ["SELECT", "TRIGGER"]                                                             || chSts("user1", "players", null, "SELECT", "TRIGGER")
+            null        | "user1"       | "players"     | ["ALL"]                                                                           || chSts("user1", "players", null, "SELECT", "INSERT", "UPDATE", "DELETE", "TRUNCATE", "REFERENCES", "TRIGGER")
+            null        | "user1"       | "players"     | ["ALL PRIVILEGES"]                                                                || chSts("user1", "players", null, "SELECT", "INSERT", "UPDATE", "DELETE", "TRUNCATE", "REFERENCES", "TRIGGER")
+            "public"    | "user1"       | "players"     | ["INSERT"]                                                                        || chSts("user1", "players", "public", "INSERT")
+            "other_she" | "user1"       | "players"     | ["INSERT"]                                                                        || chSts("user1", "players", "other_she", "INSERT")
+            "other_she" | "bro"         | "posts"       | ["UPDATE", "SELECT"]                                                              || chSts("bro", "posts", "other_she", "UPDATE", "SELECT")
     }
 
     @Unroll
@@ -213,5 +241,36 @@ class GrantTablePrivilegesProducerTest extends Specification {
         user      | table         |   privileges              |   schema
         "user1"        | "posts"       |   ["INSERT"]              | ""
         "user1"        | "users"       |   ["UPDATE"]              | "   "
+    }
+
+    private static String chSt(String user, String table, String schema, String privilege)
+    {
+        StringBuilder sb = new StringBuilder()
+        sb.append("SELECT COUNT(1) ")
+        sb.append("FROM   information_schema.table_privileges ")
+        sb.append(" WHERE ")
+        sb.append(" table_schema = '")
+        if (schema == null || schema.trim().isEmpty())
+        {
+            sb.append("public")
+        } else {
+            sb.append(schema)
+        }
+        sb.append("' AND ")
+        sb.append(" table_name = '")
+        sb.append(table)
+        sb.append("' AND ")
+        sb.append(" privilege_type = '")
+        sb.append(privilege)
+        sb.append("' AND ")
+        sb.append(" grantee = '")
+        sb.append(user)
+        sb.append("'")
+        sb.toString()
+    }
+
+    private static List<String> chSts(String user, String table, String schema, String... privileges)
+    {
+        asList(privileges).stream().map({p -> chSt(user, table, schema, p)}).collect(toList())
     }
 }

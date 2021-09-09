@@ -1,6 +1,7 @@
 package com.github.starnowski.posmulten.postgresql.core.common.function
 
 import com.github.starnowski.posmulten.postgresql.core.TestApplication
+import com.github.starnowski.posmulten.postgresql.core.util.SqlUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.jdbc.core.JdbcTemplate
@@ -15,6 +16,8 @@ abstract class AbstractFunctionFactoryGenericItTest extends Specification {
 
     @Autowired
     JdbcTemplate jdbcTemplate
+    @Autowired
+    SqlUtils sqlUtils
 
     @Unroll
     def "should create correctly the creation and drop statements for schema #schema and function #functionName"()
@@ -28,8 +31,10 @@ abstract class AbstractFunctionFactoryGenericItTest extends Specification {
             assertEquals(false, isFunctionExists(jdbcTemplate, functionName, schema))
 
         when:
+            sqlUtils.assertAllResultForCheckingStatementsAreEqualZero(functionDefinition)
             jdbcTemplate.execute(functionDefinition.getCreateScript())
             def functionWasCreated = isFunctionExists(jdbcTemplate, functionName, schema)
+            sqlUtils.assertAllCheckingStatementsArePassing(functionDefinition)
             jdbcTemplate.execute(functionDefinition.getDropScript())
             def functionWasDeleted = !isFunctionExists(jdbcTemplate, functionName, schema)
 

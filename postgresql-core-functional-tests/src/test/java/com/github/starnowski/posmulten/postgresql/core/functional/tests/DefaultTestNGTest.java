@@ -1,11 +1,13 @@
 package com.github.starnowski.posmulten.postgresql.core.functional.tests;
 
 import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition;
+import org.junit.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
+import static com.github.starnowski.posmulten.postgresql.test.utils.TestUtils.selectAndReturnMapOfStatementsAndItResultsForListOfSelectStatements;
 import static java.lang.String.format;
 
 public class DefaultTestNGTest extends TestNGSpringContextWithoutGenericTransactionalSupportTests{
@@ -38,6 +40,22 @@ public class DefaultTestNGTest extends TestNGSpringContextWithoutGenericTransact
             log.info("Executing creation script: " + sqlDefinition.getCreateScript());
             jdbcTemplate.execute(sqlDefinition.getCreateScript());
         });
+        log.info("Executing checking statements:");
+        sqlDefinitions.forEach(sqlDefinition ->
+        {
+            assertAllCheckingStatementsArePassing(sqlDefinition);
+        });
+    }
+
+    public void assertAllCheckingStatementsArePassing(SQLDefinition functionDefinition) {
+        assertAllCheckingStatementsArePassing(functionDefinition.getCheckingStatements());
+    }
+
+    public void assertAllCheckingStatementsArePassing(List<String> selectStatements) {
+        Map<String, Long> resultsMap = selectAndReturnMapOfStatementsAndItResultsForListOfSelectStatements(jdbcTemplate, selectStatements);
+        for (Map.Entry<String, Long> entry : resultsMap.entrySet()) {
+            Assert.assertTrue(String.format("Result was lower or equal to zero for statement %s", entry.getKey()), entry.getValue() > 0);
+        }
     }
 
     //    @AfterTest(alwaysRun = true, inheritGroups = false)

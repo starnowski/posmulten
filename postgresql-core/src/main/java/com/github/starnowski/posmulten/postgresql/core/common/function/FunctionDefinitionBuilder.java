@@ -33,11 +33,13 @@ public class FunctionDefinitionBuilder {
 
     private String dropScript;
 
+    private List<String> checkingStatements;
+
     private List<IFunctionArgument> functionArguments;
 
     public IFunctionDefinition build()
     {
-        return new InnerFunctionDefinition(createScript, functionReference, dropScript, functionArguments);
+        return new InnerFunctionDefinition(createScript, functionReference, dropScript, checkingStatements, functionArguments);
     }
 
     public FunctionDefinitionBuilder withCreateScript(String createScript) {
@@ -60,17 +62,24 @@ public class FunctionDefinitionBuilder {
         return this;
     }
 
+    public FunctionDefinitionBuilder withCheckingStatements(List<String> checkingStatements) {
+        this.checkingStatements = checkingStatements;
+        return this;
+    }
+
     private static class InnerFunctionDefinition implements IFunctionDefinition
     {
         private final String createScript;
         private final String functionReference;
         private final String dropScript;
+        private final List<String> checkingStatements;
         private final List<IFunctionArgument> functionArguments;
 
-        public InnerFunctionDefinition(String createScript, String functionReference, String dropScript, List<IFunctionArgument> functionArguments) {
+        public InnerFunctionDefinition(String createScript, String functionReference, String dropScript, List<String> checkingStatements, List<IFunctionArgument> functionArguments) {
             this.createScript = createScript;
             this.functionReference = functionReference;
             this.dropScript = dropScript;
+            this.checkingStatements = checkingStatements;
             this.functionArguments = functionArguments;
         }
 
@@ -87,6 +96,11 @@ public class FunctionDefinitionBuilder {
         @Override
         public List<IFunctionArgument> getFunctionArguments() {
             return functionArguments;
+        }
+
+        @Override
+        public List<String> getCheckingStatements() {
+            return checkingStatements;
         }
 
         @Override

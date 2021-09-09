@@ -1,6 +1,7 @@
 package com.github.starnowski.posmulten.postgresql.core.rls
 
 import com.github.starnowski.posmulten.postgresql.core.TestApplication
+import com.github.starnowski.posmulten.postgresql.core.util.SqlUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.jdbc.core.JdbcTemplate
@@ -15,6 +16,8 @@ abstract class AbstractConstraintProducerGenericItTest<X extends IConstraintProd
 
     @Autowired
     JdbcTemplate jdbcTemplate
+    @Autowired
+    SqlUtils sqlUtils
 
     @Unroll
     def "should create correct the drop statements for schema #schema and table #table and constraint #constraintName"()
@@ -25,15 +28,18 @@ abstract class AbstractConstraintProducerGenericItTest<X extends IConstraintProd
             parameters.getTableSchema() >> schema
             parameters.getTableName() >> table
             parameters.getConstraintName() >> constraintName
-            def functionDefinition = tested.produce(parameters)
-            jdbcTemplate.execute(functionDefinition.getCreateScript())
+            def sqlDefinition = tested.produce(parameters)
+            sqlUtils.assertAllResultForCheckingStatementsAreEqualZero(sqlDefinition)
+            jdbcTemplate.execute(sqlDefinition.getCreateScript())
+            sqlUtils.assertAllCheckingStatementsArePassing(sqlDefinition)
             assertEquals(true, isAnyRecordExists(jdbcTemplate, createSelectStatement(schema, table, constraintName)))
 
         when:
-            jdbcTemplate.execute(functionDefinition.getDropScript())
+            jdbcTemplate.execute(sqlDefinition.getDropScript())
 
         then:
             assertEquals(false, isAnyRecordExists(jdbcTemplate, createSelectStatement(schema, table, constraintName)))
+            sqlUtils.assertAllResultForCheckingStatementsAreEqualZero(sqlDefinition)
 
         where:
             schema                      |   table       |   constraintName

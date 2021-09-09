@@ -10,7 +10,7 @@ import spock.lang.Unroll
 class DDLScriptsGeneratorTest extends Specification {
 
     @Unroll
-    def "should create DDL scripts for file #configFilePath and save creation script in file #creationScriptPath and dropping script in file #droppingScriptPath"()
+    def "should create DDL scripts for file #configFilePath and save creation script in file #creationScriptPath and dropping script in file #droppingScriptPath and file with checking statements #checkinStatementsPath"()
     {
         given:
             def defaultSharedSchemaContextBuilderFactoryResolver = Mock(DefaultSharedSchemaContextBuilderFactoryResolver)
@@ -21,7 +21,7 @@ class DDLScriptsGeneratorTest extends Specification {
             ISharedSchemaContext context = Mock(ISharedSchemaContext)
 
         when:
-            tested.generate(configFilePath, creationScriptPath, droppingScriptPath)
+            tested.generate(configFilePath, creationScriptPath, droppingScriptPath, checkinStatementsPath)
 
         then:
             1 * defaultSharedSchemaContextBuilderFactoryResolver.resolve(configFilePath) >> defaultSharedSchemaContextBuilderFactory
@@ -29,11 +29,12 @@ class DDLScriptsGeneratorTest extends Specification {
             1 * builder.build() >> context
             1 * ddlWriter.saveCreteScripts(creationScriptPath, context)
             1 * ddlWriter.saveDropScripts(droppingScriptPath, context)
+            1 * ddlWriter.saveCheckingStatements(checkinStatementsPath, context)
 
         where:
-            configFilePath                  |   creationScriptPath              |   droppingScriptPath
-            "C:\\some\\path\\config.yml"    |   "Z:\\create-shared-schema.sql"  |   ".\\drop-shared-schema.sql"
-            "dir/cofing.xml"                |   "create-schema.sql"             |   "drop-schema.sql"
+            configFilePath                  |   creationScriptPath              |   droppingScriptPath          |   checkinStatementsPath
+            "C:\\some\\path\\config.yml"    |   "Z:\\create-shared-schema.sql"  |   ".\\drop-shared-schema.sql" |   "X:\\XXX\\checking\\sanitary_check.sql"
+            "dir/cofing.xml"                |   "create-schema.sql"             |   "drop-schema.sql"           |   "check.sql"
     }
 
     @Unroll
@@ -48,7 +49,7 @@ class DDLScriptsGeneratorTest extends Specification {
             ISharedSchemaContext context = Mock(ISharedSchemaContext)
 
         when:
-            tested.generate(configFilePath, creationScriptPath, null)
+            tested.generate(configFilePath, creationScriptPath, null, null)
 
         then:
             1 * defaultSharedSchemaContextBuilderFactoryResolver.resolve(configFilePath) >> defaultSharedSchemaContextBuilderFactory
@@ -56,6 +57,9 @@ class DDLScriptsGeneratorTest extends Specification {
             1 * builder.build() >> context
             1 * ddlWriter.saveCreteScripts(creationScriptPath, context)
             0 * ddlWriter.saveDropScripts(_, context)
+
+        and: "file with checking statements should not be created"
+            0 * ddlWriter.saveCheckingStatements(_, context)
 
         where:
             configFilePath                  |   creationScriptPath
@@ -75,7 +79,7 @@ class DDLScriptsGeneratorTest extends Specification {
             ISharedSchemaContext context = Mock(ISharedSchemaContext)
 
         when:
-            tested.generate(configFilePath, null, droppingScriptPath)
+            tested.generate(configFilePath, null, droppingScriptPath, null)
 
         then:
             1 * defaultSharedSchemaContextBuilderFactoryResolver.resolve(configFilePath) >> defaultSharedSchemaContextBuilderFactory
@@ -83,6 +87,9 @@ class DDLScriptsGeneratorTest extends Specification {
             1 * builder.build() >> context
             0 * ddlWriter.saveCreteScripts(_, context)
             1 * ddlWriter.saveDropScripts(droppingScriptPath, context)
+
+        and: "file with checking statements should not be created"
+            0 * ddlWriter.saveCheckingStatements(_, context)
 
         where:
             configFilePath                  |   droppingScriptPath

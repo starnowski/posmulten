@@ -49,6 +49,32 @@ class SetNotNullStatementProducerTest extends Specification {
             "groups"    |   "col1"      |   "secondary"     ||  "ALTER TABLE secondary.groups ALTER COLUMN col1 DROP NOT NULL;"
     }
 
+    @Unroll
+    def "should return checking statement '#expectedStatement' for table '#table', schema '#schema' and column '#column'" () {
+        when:
+            def sqlDefinition = tested.produce(new SetNotNullStatementProducerParameters(table, column, schema))
+
+        then:
+            sqlDefinition.getCheckingStatements()
+            sqlDefinition.getCheckingStatements().size() >= 1
+            sqlDefinition.getCheckingStatements().contains(expectedStatement)
+
+        where:
+            table       |   column      | schema            ||  expectedStatement
+            "users"     |   "tenant_id" |   null            ||  expectedCheckingStatement("users", "tenant_id", null)
+            "groups"    |   "tenant_id" |   null            ||  expectedCheckingStatement("groups", "tenant_id", null)
+            "users"     |   "col1"      |   null            ||  expectedCheckingStatement("users", "col1", null)
+            "groups"    |   "col1"      |   null            ||  expectedCheckingStatement("groups", "col1", null)
+            "users"     |   "tenant_id" |   "public"        ||  expectedCheckingStatement("users", "tenant_id", "public" )
+            "groups"    |   "tenant_id" |   "public"        ||  expectedCheckingStatement("groups", "tenant_id", "public" )
+            "users"     |   "col1"      |   "public"        ||  expectedCheckingStatement("users", "col1", "public" )
+            "groups"    |   "col1"      |   "public"        ||  expectedCheckingStatement("groups", "col1", "public" )
+            "users"     |   "tenant_id" |   "secondary"     ||  expectedCheckingStatement("users", "tenant_id", "secondary" )
+            "groups"    |   "tenant_id" |   "secondary"     ||  expectedCheckingStatement("groups", "tenant_id", "secondary" )
+            "users"     |   "col1"      |   "secondary"     ||  expectedCheckingStatement("users", "col1", "secondary" )
+            "groups"    |   "col1"      |   "secondary"     ||  expectedCheckingStatement("groups", "col1", "secondary" )
+    }
+
     def "should throw exception of type 'IllegalArgumentException' when parameters object is null" ()
     {
         when:
@@ -135,5 +161,29 @@ class SetNotNullStatementProducerTest extends Specification {
             "user_groups"   | ""
             "user_groups"   | " "
             "user_groups"   | "         "
+    }
+
+    private static String expectedCheckingStatement(String table, String column, String schema)
+    {
+        StringBuilder sb = new StringBuilder()
+        sb.append("SELECT COUNT(1) FROM information_schema.columns WHERE ")
+        sb.append("table_catalog = 'postgresql_core' AND ")
+        if (schema == null)
+        {
+            sb.append("table_schema = 'public'")
+        } else {
+            sb.append("table_schema = '")
+            sb.append(schema)
+            sb.append("'")
+        }
+        sb.append(" AND ")
+        sb.append("table_name = '")
+        sb.append(table)
+        sb.append("' AND ")
+        sb.append("column_name = '")
+        sb.append(column)
+        sb.append("' AND ")
+        sb.append("is_nullable = 'NO';")
+        sb.toString()
     }
 }

@@ -24,9 +24,10 @@ public class DDLScriptsGeneratorRunner {
             String configFilePath = System.getProperty("posmulten.configuration.config.file.path");
             String createScriptPath = System.getProperty("posmulten.configuration.create.script.path");
             String dropScriptPath = System.getProperty("posmulten.configuration.drop.script.path");
+            String validationStatementsPath = System.getProperty("posmulten.configuration.validation.statements.path");
             DDLScriptsGenerator ddlScriptsGenerator = new DDLScriptsGenerator();
             try {
-                ddlScriptsGenerator.generate(configFilePath, createScriptPath, dropScriptPath);
+                ddlScriptsGenerator.generate(configFilePath, createScriptPath, dropScriptPath, validationStatementsPath);
             } catch (InvalidConfigurationException e) {
                 log.log(Level.SEVERE, "Posmulten invalid configuration");
                 e.getErrorMessages().forEach(message ->

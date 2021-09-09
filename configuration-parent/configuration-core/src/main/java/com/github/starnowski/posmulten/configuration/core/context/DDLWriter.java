@@ -6,8 +6,10 @@ import com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaCont
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 import static java.nio.file.Files.write;
 import static java.util.stream.Collectors.toList;
@@ -24,6 +26,11 @@ public class DDLWriter {
         LinkedList<SQLDefinition> stack = new LinkedList<>();
         sharedSchemaContext.getSqlDefinitions().forEach(stack::push);
         List<String> lines = stack.stream().map(SQLDefinition::getDropScript).collect(toList());
+        write(Paths.get(new File(filePath).toURI()), lines);
+    }
+
+    public void saveCheckingStatements(String filePath, ISharedSchemaContext sharedSchemaContext) throws IOException {
+        List<String> lines = sharedSchemaContext.getSqlDefinitions().stream().map(SQLDefinition::getCheckingStatements).filter(Objects::nonNull).flatMap(Collection::stream).collect(toList());
         write(Paths.get(new File(filePath).toURI()), lines);
     }
 }

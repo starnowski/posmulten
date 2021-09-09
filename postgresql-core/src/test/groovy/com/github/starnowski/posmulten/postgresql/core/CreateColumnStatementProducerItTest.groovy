@@ -1,6 +1,7 @@
 package com.github.starnowski.posmulten.postgresql.core
 
 import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition
+import com.github.starnowski.posmulten.postgresql.core.util.SqlUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.jdbc.core.JdbcTemplate
@@ -16,6 +17,8 @@ class CreateColumnStatementProducerItTest extends Specification {
 
     @Autowired
     JdbcTemplate jdbcTemplate
+    @Autowired
+    SqlUtils sqlUtils
 
     def tested = new CreateColumnStatementProducer()
 
@@ -34,11 +37,13 @@ class CreateColumnStatementProducerItTest extends Specification {
 
         when:
             sqlDefinition = tested.produce(new CreateColumnStatementProducerParameters(testTable, testColumn, columnType, testSchema))
+            sqlUtils.assertAllResultForCheckingStatementsAreEqualZero(sqlDefinition)
             jdbcTemplate.execute(sqlDefinition.getCreateScript())
 
         then:
             isAnyRecordExists(jdbcTemplate, selectStatement(table, column, schema))
             selectAndReturnFirstRecordAsString(jdbcTemplate, selectStatement(table, column, schema)) == expectedConcatenationOfColumnNameAndType
+            sqlUtils.assertAllCheckingStatementsArePassing(sqlDefinition)
 
         where:
             testTable       |   testColumn      |   columnType                  | testSchema                    ||  expectedConcatenationOfColumnNameAndType

@@ -38,6 +38,26 @@ class ForceRowLevelSecurityProducerTest extends Specification {
     }
 
     @Unroll
+    def "should return checking statement (#expectedStatement) for table (#table) and schema (#schema)"()
+    {
+        when:
+            def sqlDefinition = tested.produce(table, schema)
+
+        then:
+            sqlDefinition.getCheckingStatements()
+            sqlDefinition.getCheckingStatements().size() >= 1
+            sqlDefinition.getCheckingStatements().contains(expectedStatement)
+
+        where:
+            schema      | table     ||	expectedStatement
+            null        | "users"   ||  prepareCheckingStatements(null, "users")
+            null        | "posts"   ||  prepareCheckingStatements(null, "posts")
+            "secondary" | "users"   ||  prepareCheckingStatements("secondary", "users")
+            "secondary" | "posts"   ||  prepareCheckingStatements("secondary", "posts")
+            "public"    | "posts"   ||  prepareCheckingStatements("public", "posts")
+    }
+
+    @Unroll
     def "should throw exception of type 'IllegalArgumentException' when schema name is blank '#schema', no matter if table \"#table\" is correct"()
     {
         when:
@@ -91,5 +111,21 @@ class ForceRowLevelSecurityProducerTest extends Specification {
 
         where:
             schema  << ["public", "secondary"]
+    }
+
+    private static String prepareCheckingStatements(String schema, String table)
+    {
+        StringBuilder sb = new StringBuilder()
+        sb.append("SELECT COUNT(1) FROM pg_class pc, pg_catalog.pg_namespace pg ")
+        sb.append("WHERE")
+        sb.append(" pc.relname = '")
+        sb.append(table)
+        sb.append("' AND pc.relnamespace = pg.oid AND pg.nspname = '")
+        if (schema == null)
+            sb.append("public")
+        else
+            sb.append(schema)
+        sb.append("' AND pc.relforcerowsecurity = 't';")
+        sb.toString()
     }
 }
