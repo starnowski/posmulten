@@ -22,12 +22,7 @@ class DDLWriterTest extends Specification {
         given:
             def tmpFile = tempFolder.newFile("output.sql")
             def context = Mock(ISharedSchemaContext)
-            List<SQLDefinition> mockedSQLDefinitions = ddlStatementsEntries.stream().map({it ->
-                def mockedDefinition = Mock(SQLDefinition)
-                mockedDefinition.getCreateScript() >> it.getCreateScript()
-                mockedDefinition.getDropScript() >> it.getDropScript()
-                mockedDefinition
-            }).collect(toList())
+            List<SQLDefinition> mockedSQLDefinitions = mockSQLDefinitions(ddlStatementsEntries)
             context.getSqlDefinitions() >> mockedSQLDefinitions
 
         when:
@@ -53,12 +48,7 @@ class DDLWriterTest extends Specification {
         given:
             def tmpFile = tempFolder.newFile("output.sql")
             def context = Mock(ISharedSchemaContext)
-            List<SQLDefinition> mockedSQLDefinitions = ddlStatementsEntries.stream().map({it ->
-                def mockedDefinition = Mock(SQLDefinition)
-                mockedDefinition.getCreateScript() >> it.getCreateScript()
-                mockedDefinition.getDropScript() >> it.getDropScript()
-                mockedDefinition
-            }).collect(toList())
+            List<SQLDefinition> mockedSQLDefinitions = mockSQLDefinitions(ddlStatementsEntries)
             context.getSqlDefinitions() >> mockedSQLDefinitions
 
         when:
@@ -76,6 +66,16 @@ class DDLWriterTest extends Specification {
             [te("create some ...", "drop this record"), te("CREATE RLS_POLICY", "REVOKE Policy")]       ||  ["REVOKE Policy", "drop this record"]
             [te("Alter table etc;", "drop this record"), te("CREATE RLS_POLICY", "DROP some object")]   ||  ["DROP some object", "drop this record"]
             [te("grant privilege to object ", "revoke privilege")]                                      ||  ["revoke privilege"]
+    }
+
+    List<SQLDefinition> mockSQLDefinitions(List<TestEntry> testEntries)
+    {
+        testEntries.stream().map({it ->
+            def mockedDefinition = Mock(SQLDefinition)
+            mockedDefinition.getCreateScript() >> it.getCreateScript()
+            mockedDefinition.getDropScript() >> it.getDropScript()
+            mockedDefinition
+        }).collect(toList())
     }
 
     List<String> returnFileLines(File file)
@@ -118,7 +118,7 @@ class DDLWriterTest extends Specification {
         }
 
         @Override
-        public String toString() {
+        String toString() {
             return "TestEntry{" +
                     "createScript='" + createScript + '\'' +
                     ", dropScript='" + dropScript + '\'' +
