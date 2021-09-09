@@ -163,7 +163,7 @@ abstract class AbstractConstraintProducerTest<X extends IConstraintProducerParam
     {
         def template = "SELECT COUNT(1)\n" +
                 "\t\tFROM information_schema.table_constraints\n" +
-                "\t\tWHERE table_schema = '%s' AND table_name = '%s' AND constraint_name = '%s'"
+                "\t\tWHERE table_schema = '%s' AND table_name = '%s' AND constraint_name = '%s';"
         String.format(template, schema == null ? "public" : schema, table, constraintName)
     }
 }
