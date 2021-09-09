@@ -161,7 +161,7 @@ abstract class AbstractConstraintProducerTest<X extends IConstraintProducerParam
 
     private static String checkingStatement(String schema, String table, String constraintName)
     {
-        def template = "SELECT 1\n" +
+        def template = "SELECT COUNT(1)\n" +
                 "\t\tFROM information_schema.table_constraints\n" +
                 "\t\tWHERE table_schema = '%s' AND table_name = '%s' AND constraint_name = '%s'"
         String.format(template, schema == null ? "public" : schema, table, constraintName)
