@@ -31,7 +31,7 @@ public abstract class AbstractConstraintProducer<P extends IConstraintProducerPa
     protected List<String> prepareCheckingStatements(P parameters) {
         String template = "SELECT COUNT(1)\n" +
                 "\t\tFROM information_schema.table_constraints\n" +
-                "\t\tWHERE table_schema = '%s' AND table_name = '%s' AND constraint_name = '%s'";
+                "\t\tWHERE table_schema = '%s' AND table_name = '%s' AND constraint_name = '%s';";
         return Collections.singletonList(String.format(template, parameters.getTableSchema() == null ? "public" : parameters.getTableSchema(), parameters.getTableName(), parameters.getConstraintName()));
     }
 
