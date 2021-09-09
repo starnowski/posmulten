@@ -17,7 +17,7 @@ class DDLWriterTest extends Specification {
     def tested = new DDLWriter()
 
     @Unroll
-    def "should save all DDL statements that creates shared schema strategy to file"()
+    def "should save all DDL statements that creates shared schema strategy to file, expected lines : #expectedFileLines"()
     {
         given:
             def tmpFile = tempFolder.newFile("output.sql")
@@ -48,7 +48,7 @@ class DDLWriterTest extends Specification {
     }
 
     @Unroll
-    def "should save all DDL statements that drops shared schema strategy to file"()
+    def "should save all DDL statements that drops shared schema strategy to file, expected lines : #expectedFileLines"()
     {
         given:
             def tmpFile = tempFolder.newFile("output.sql")
