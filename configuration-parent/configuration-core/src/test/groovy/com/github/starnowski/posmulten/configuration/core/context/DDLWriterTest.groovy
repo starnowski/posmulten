@@ -103,6 +103,7 @@ class DDLWriterTest extends Specification {
             def mockedDefinition = Mock(SQLDefinition)
             mockedDefinition.getCreateScript() >> it.getCreateScript()
             mockedDefinition.getDropScript() >> it.getDropScript()
+            mockedDefinition.getCheckingStatements() >> it.getCheckingStatements()
             mockedDefinition
         }).collect(toList())
     }
@@ -149,6 +150,10 @@ class DDLWriterTest extends Specification {
 
         String getDropScript() {
             return dropScript
+        }
+
+        List<String> getCheckingStatements() {
+            return checkingStatements
         }
 
         @Override
