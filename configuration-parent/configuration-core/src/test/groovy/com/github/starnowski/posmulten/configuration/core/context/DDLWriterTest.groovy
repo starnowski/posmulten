@@ -97,10 +97,16 @@ class DDLWriterTest extends Specification {
     {
         private String createScript
         private String dropScript
+        private List<String> checkingStatements
 
         TestEntry(String createScript, String dropScript) {
+            this(createScript, dropScript, ["SELECT COUNT(1)"])
+        }
+
+        TestEntry(String createScript, String dropScript, List<String> checkingStatements) {
             this.createScript = createScript
             this.dropScript = dropScript
+            this.checkingStatements = checkingStatements
         }
 
         String getCreateScript() {
@@ -116,6 +122,7 @@ class DDLWriterTest extends Specification {
             return "TestEntry{" +
                     "createScript='" + createScript + '\'' +
                     ", dropScript='" + dropScript + '\'' +
+                    ", checkingStatements='" + checkingStatements + '\'' +
                     '}';
         }
     }
