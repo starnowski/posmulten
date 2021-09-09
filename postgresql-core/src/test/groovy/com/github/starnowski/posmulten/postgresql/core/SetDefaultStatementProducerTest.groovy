@@ -233,7 +233,7 @@ class SetDefaultStatementProducerTest extends Specification {
         sb.append("column_name = '")
         sb.append(column)
         sb.append("' AND ")
-        sb.append("column_default IS NULL;")
+        sb.append("column_default IS NOT NULL;")
         sb.toString()
     }
 }
