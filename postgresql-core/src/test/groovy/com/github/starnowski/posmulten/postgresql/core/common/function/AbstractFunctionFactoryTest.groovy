@@ -191,7 +191,7 @@ abstract class AbstractFunctionFactoryTest extends Specification {
                 sb.append("'")
             }
             sb.append(" AND ")
-            sb.append("pg.pronamespace =  pgn.oid")
+            sb.append("pg.pronamespace =  pgn.oid;")
             String expectedCheckingStatement = sb.toString()
 
         when:
