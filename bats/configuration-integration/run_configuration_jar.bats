@@ -18,9 +18,10 @@ function setup {
   CONFIGURATION_FILE_PATH="$CONFIGURATION_YAML_TEST_RESOURCES_DIR_PATH/integration-tests-configuration.yaml"
   [ -f "$CONFIGURATION_FILE_PATH" ]
   # Results files
-  java -Dposmulten.configuration.config.file.path="$CONFIGURATION_FILE_PATH" -Dposmulten.configuration.create.script.path="$BATS_TMPDIR/$TIMESTAMP/create_script.sql" -Dposmulten.configuration.drop.script.path="$BATS_TMPDIR/$TIMESTAMP/drop_script.sql" -jar "$CONFIGURATION_JAR_NAME"
+  java -Dposmulten.configuration.config.file.path="$CONFIGURATION_FILE_PATH" -Dposmulten.configuration.create.script.path="$BATS_TMPDIR/$TIMESTAMP/create_script.sql" -Dposmulten.configuration.drop.script.path="$BATS_TMPDIR/$TIMESTAMP/drop_script.sql" -Dposmulten.configuration.validation.statements.path="$BATS_TMPDIR/$TIMESTAMP/valid_ss.sql" -jar "$CONFIGURATION_JAR_NAME"
   [ -f "$BATS_TMPDIR/$TIMESTAMP/create_script.sql" ]
   [ -f "$BATS_TMPDIR/$TIMESTAMP/drop_script.sql" ]
+  [ -f "$BATS_TMPDIR/$TIMESTAMP/valid_ss.sql" ]
 
   #when - apply shared schema
   echo "create_script:" >&3
@@ -28,6 +29,13 @@ function setup {
   run psql -f "$BATS_TMPDIR/$TIMESTAMP/create_script.sql" -U "postgresql-core-owner" -d postgresql_core --host="$DOCKER_DB_IP" -p $DATABASE_PORT -v "ON_ERROR_STOP=1" >&3
   create_script_status="$status"
   echo "output for creating shared schema is --> $output <--"  >&3
+
+  #when - validate if shared schema was created
+  echo "valid_ss:" >&3
+  cat "$BATS_TMPDIR/$TIMESTAMP/valid_ss.sql" >&3
+  run psql -f "$BATS_TMPDIR/$TIMESTAMP/valid_ss.sql" -U "postgresql-core-owner" -d postgresql_core --host="$DOCKER_DB_IP" -p $DATABASE_PORT -v "ON_ERROR_STOP=1" >&3
+  validation_status="$status"
+  echo "output for validation of shared schema is --> $output <--"  >&3
 
   #when - dropping shared schema
   echo "drop_script:" >&3
@@ -38,6 +46,7 @@ function setup {
 
   #then
   [ "$create_script_status" -eq 0 ]
+  [ "$validation_status" -eq 0 ]
   [ "$drop_script_status" -eq 0 ]
 }
 
