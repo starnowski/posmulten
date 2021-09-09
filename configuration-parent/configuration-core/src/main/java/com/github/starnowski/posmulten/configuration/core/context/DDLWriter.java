@@ -26,4 +26,8 @@ public class DDLWriter {
         List<String> lines = stack.stream().map(SQLDefinition::getDropScript).collect(toList());
         write(Paths.get(new File(filePath).toURI()), lines);
     }
+
+    public void saveCheckingStatements(String filePath, ISharedSchemaContext sharedSchemaContext) {
+
+    }
 }
