@@ -1,6 +1,7 @@
 # Posmulten
 
 [![Build Status](https://app.travis-ci.com/starnowski/posmulten.svg?branch=master)](https://app.travis-ci.com/starnowski/posmulten)
+[![Run tests for posmulten](https://github.com/starnowski/posmulten/actions/workflows/posmulten.yml/badge.svg)](https://github.com/starnowski/posmulten/actions/workflows/posmulten.yml)
 [![Maven Central](https://img.shields.io/maven-central/v/com.github.starnowski.posmulten/postgresql-core.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22com.github.starnowski.posmulten%22%20AND%20a:%22postgresql-core%22)
 [![CodeQL](https://github.com/starnowski/posmulten/workflows/CodeQL/badge.svg)](https://github.com/starnowski/posmulten/actions?query=workflow%3ACodeQL)
 
