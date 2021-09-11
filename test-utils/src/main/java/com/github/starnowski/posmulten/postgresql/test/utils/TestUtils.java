@@ -12,18 +12,12 @@ import static java.lang.String.format;
 
 public class TestUtils {
 
-    public static String VALID_CURRENT_TENANT_ID_PROPERTY_NAME = "c.c_ten";
     public static final String CLEAR_DATABASE_SCRIPT_PATH = "/com/github/starnowski/posmulten/postgresql/core/clean-database.sql";
+    public static String VALID_CURRENT_TENANT_ID_PROPERTY_NAME = "c.c_ten";
 
     public static boolean isAnyRecordExists(JdbcTemplate jdbcTemplate, final String sql) {
         return jdbcTemplate.execute((StatementCallback<Boolean>) statement -> {
-            StringBuilder sb = new StringBuilder();
-            sb.append("SELECT EXISTS ( ");
-            sb.append(sql);
-            sb.append(")");
-            ResultSet rs = statement.executeQuery(sb.toString());
-            rs.next();
-            return rs.getBoolean(1);
+            return statement.executeQuery(sql).isBeforeFirst();
         });
     }
 
@@ -114,12 +108,12 @@ public class TestUtils {
     }
 
     private static class StatementAndItLongResult {
+        private final String statement;
+        private final Long result;
+
         public StatementAndItLongResult(String statement, Long result) {
             this.statement = statement;
             this.result = result;
         }
-
-        private final String statement;
-        private final Long result;
     }
 }
