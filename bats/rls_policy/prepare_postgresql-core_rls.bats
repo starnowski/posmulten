@@ -9,9 +9,10 @@ function setup {
 @test "Create rls policy with command ALL and USING" {
   #given
   export PGPASSWORD=postgres_posmulten
+  export TEST_SCRIPT_DATABASE_USER='"postgresql-core-user"'
   cat << SQL > "$BATS_TMPDIR/$TMP_SQL_FILE"
     CREATE POLICY users_policy ON
-    ${DATABASE_TESTS_SCHEMA_NAME}.users FOR ALL TO "\""postgresql-core-user"\"" USING tenant_id = 'xxxx';
+    ${DATABASE_TESTS_SCHEMA_NAME}.users FOR ALL TO ${TEST_SCRIPT_DATABASE_USER} USING (tenant_id = 'xxxx');
 SQL
 
   #when
