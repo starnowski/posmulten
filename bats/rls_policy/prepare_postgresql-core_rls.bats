@@ -10,8 +10,8 @@ function setup {
   #given
   export PGPASSWORD=postgres_posmulten
   cat << SQL > "$BATS_TMPDIR/$TMP_SQL_FILE"
-    CREATE POLICY ${DATABASE_TESTS_SCHEMA_NAME}.users_policy ON
-    users FOR ALL TO "postgresql-core-user USING tenant_id = 'xxxx'';
+    CREATE POLICY users_policy ON
+    ${DATABASE_TESTS_SCHEMA_NAME}.users FOR ALL TO "postgresql-core-user USING tenant_id = 'xxxx'';
 SQL
 
   #when
@@ -27,7 +27,7 @@ SQL
 
 function teardown {
 cat << SQL > "$BATS_TMPDIR/$TMP_SQL_FILE"
-    DROP POLICY IF EXISTS ${DATABASE_TESTS_SCHEMA_NAME}.users_policy ON users;
+    DROP POLICY IF EXISTS users_policy ON ${DATABASE_TESTS_SCHEMA_NAME}.users;
 SQL
   psql -qtAX -d postgresql_core -U "postgres" --host="$DOCKER_DB_IP" -p $DATABASE_PORT -f "$BATS_TMPDIR/$TMP_SQL_FILE"
   #Restore previous password
