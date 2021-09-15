@@ -32,7 +32,7 @@ SQL
   export TEST_SCRIPT_DATABASE_USER='"postgresql-core-user"'
   cat << SQL > "$BATS_TMPDIR/$TMP_SQL_FILE"
     CREATE POLICY users_policy ON
-    ${DATABASE_TESTS_SCHEMA_NAME}.users FOR ALL TO ${TEST_SCRIPT_DATABASE_USER} USING (tenant_id = 'xxxx');
+    ${DATABASE_TESTS_SCHEMA_NAME}.users FOR UPDATE TO ${TEST_SCRIPT_DATABASE_USER} USING (tenant_id = 'xxxx');
 SQL
 
   #when
