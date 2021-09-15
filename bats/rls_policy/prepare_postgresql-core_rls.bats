@@ -186,7 +186,7 @@ SQL
   [ "$output" = "0" ]
 }
 
-@test "should not be able to create rls policy with permission commands INSERT and WITH CHECK expression" {
+@test "Create rls policy with permission commands INSERT and WITH CHECK expression" {
   #given
   export PGPASSWORD=postgres_posmulten
   export TEST_SCRIPT_DATABASE_USER='"postgresql-core-user"'
