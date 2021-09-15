@@ -11,7 +11,7 @@ function setup {
   export PGPASSWORD=postgres_posmulten
   cat << SQL > "$BATS_TMPDIR/$TMP_SQL_FILE"
     CREATE POLICY users_policy ON
-    ${DATABASE_TESTS_SCHEMA_NAME}.users FOR ALL TO \"postgresql-core-user\" USING tenant_id = 'xxxx'';
+    ${DATABASE_TESTS_SCHEMA_NAME}.users FOR ALL TO \\"postgresql-core-user\\" USING tenant_id = 'xxxx'';
 SQL
 
   #when
