@@ -1,8 +1,10 @@
 package com.github.starnowski.posmulten.postgresql.core.context;
 
-public interface AbstractIdentifierValidator {
+public abstract class AbstractIdentifierValidator {
 
-    ValidationResult validate(String identifier);
+    public abstract void init(SharedSchemaContextRequest sharedSchemaContextRequest);
+
+    public abstract ValidationResult validate(String identifier);
 
     class ValidationResult {
         private final boolean valid;
