@@ -1,6 +1,6 @@
 package com.github.starnowski.posmulten.postgresql.core.common;
 
-public interface IIdentifierValidator {
+public interface AbstractIdentifierValidator {
 
     ValidationResult validate(String identifier);
 
