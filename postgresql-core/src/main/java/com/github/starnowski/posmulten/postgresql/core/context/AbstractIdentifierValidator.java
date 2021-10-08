@@ -1,4 +1,4 @@
-package com.github.starnowski.posmulten.postgresql.core.common;
+package com.github.starnowski.posmulten.postgresql.core.context;
 
 public interface AbstractIdentifierValidator {
 
