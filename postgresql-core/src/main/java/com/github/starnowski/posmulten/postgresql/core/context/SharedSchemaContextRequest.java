@@ -24,7 +24,6 @@
 package com.github.starnowski.posmulten.postgresql.core.context;
 
 import java.util.*;
-import java.util.List;
 
 public class SharedSchemaContextRequest implements Cloneable{
 
@@ -162,6 +161,18 @@ public class SharedSchemaContextRequest implements Cloneable{
      * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.DefaultValueForTenantColumnEnricher
      */
     private Set<TableKey> tablesThatAddingOfTenantColumnDefaultValueShouldBeSkipped = new HashSet<>();
+
+    /**
+     * Maximum allowed length for the identifier.
+     * @see IdentifierLengthValidator
+     */
+    private Integer identifierMaxLength;
+
+    /**
+     * Minimum allowed length for the identifier.
+     * @see IdentifierLengthValidator
+     */
+    private Integer identifierMinLength;
 
     public String getDefaultTenantIdColumn() {
         return defaultTenantIdColumn;
@@ -314,5 +325,21 @@ public class SharedSchemaContextRequest implements Cloneable{
 
     public Set<TableKey> getTablesThatAddingOfTenantColumnDefaultValueShouldBeSkipped() {
         return tablesThatAddingOfTenantColumnDefaultValueShouldBeSkipped;
+    }
+
+    public Integer getIdentifierMaxLength() {
+        return identifierMaxLength;
+    }
+
+    public void setIdentifierMaxLength(Integer identifierMaxLength) {
+        this.identifierMaxLength = identifierMaxLength;
+    }
+
+    public Integer getIdentifierMinLength() {
+        return identifierMinLength;
+    }
+
+    public void setIdentifierMinLength(Integer identifierMinLength) {
+        this.identifierMinLength = identifierMinLength;
     }
 }
