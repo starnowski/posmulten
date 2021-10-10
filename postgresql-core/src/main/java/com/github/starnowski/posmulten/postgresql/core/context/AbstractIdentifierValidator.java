@@ -1,8 +1,10 @@
 package com.github.starnowski.posmulten.postgresql.core.context;
 
+import com.github.starnowski.posmulten.postgresql.core.context.exceptions.InvalidSharedSchemaContextRequestException;
+
 public abstract class AbstractIdentifierValidator {
 
-    public abstract void init(SharedSchemaContextRequest sharedSchemaContextRequest);
+    public abstract void init(SharedSchemaContextRequest sharedSchemaContextRequest) throws InvalidSharedSchemaContextRequestException;
 
     public abstract ValidationResult validate(String identifier);
 
