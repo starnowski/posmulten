@@ -9,6 +9,20 @@ class IdentifierLengthValidatorTest extends Specification {
     def tested = new IdentifierLengthValidator()
 
     @Unroll
+    def "should by default init validator with default maxium number of characters allowed in postgres"()
+    {
+        given:
+            SharedSchemaContextRequest request = new SharedSchemaContextRequest();
+
+        when:
+            tested.init(request)
+
+        then:
+            tested.getIdentifierMaxLength() == 63
+            tested.getIdentifierMinLength() == 1
+    }
+
+    @Unroll
     def "should throw exception of type 'SharedSchemaContextBuilderException' when identifierMinLength is less or equal to zero (#identifierMinLength)"()
     {
         given:

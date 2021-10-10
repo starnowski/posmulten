@@ -4,6 +4,8 @@ import com.github.starnowski.posmulten.postgresql.core.context.exceptions.Invali
 
 public class IdentifierLengthValidator extends AbstractIdentifierValidator {
 
+    public static final int DEFAULT_MAXIMUM_NUMBER_OF_IDENTIFIER_CHARACTERS = 63;
+
     int identifierMaxLength;
     int identifierMinLength;
 
@@ -19,9 +21,13 @@ public class IdentifierLengthValidator extends AbstractIdentifierValidator {
     public void init(SharedSchemaContextRequest sharedSchemaContextRequest) throws InvalidSharedSchemaContextRequestException {
         if (sharedSchemaContextRequest.getIdentifierMinLength() != null && sharedSchemaContextRequest.getIdentifierMinLength() <= 0) {
             throw new InvalidSharedSchemaContextRequestException("The identifierMinLength property value can not be less or equal to zero");
+        } else {
+            this.identifierMinLength = 1;
         }
         if (sharedSchemaContextRequest.getIdentifierMaxLength() != null && sharedSchemaContextRequest.getIdentifierMaxLength() <= 0) {
             throw new InvalidSharedSchemaContextRequestException("The identifierMaxLength property value can not be less or equal to zero");
+        } else {
+            this.identifierMaxLength = DEFAULT_MAXIMUM_NUMBER_OF_IDENTIFIER_CHARACTERS;
         }
     }
 
