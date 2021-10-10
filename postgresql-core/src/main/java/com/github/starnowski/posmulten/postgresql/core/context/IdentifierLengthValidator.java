@@ -20,6 +20,9 @@ public class IdentifierLengthValidator extends AbstractIdentifierValidator {
         if (sharedSchemaContextRequest.getIdentifierMinLength() != null && sharedSchemaContextRequest.getIdentifierMinLength() <= 0) {
             throw new InvalidSharedSchemaContextRequestException("The identifierMinLength property value can not be less or equal to zero");
         }
+        if (sharedSchemaContextRequest.getIdentifierMaxLength() != null && sharedSchemaContextRequest.getIdentifierMaxLength() <= 0) {
+            throw new InvalidSharedSchemaContextRequestException("The identifierMaxLength property value can not be less or equal to zero");
+        }
     }
 
     @Override

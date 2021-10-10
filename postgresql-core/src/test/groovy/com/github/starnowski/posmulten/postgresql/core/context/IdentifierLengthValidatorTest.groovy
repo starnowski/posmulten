@@ -27,4 +27,24 @@ class IdentifierLengthValidatorTest extends Specification {
         where:
             identifierMinLength << [0, -1, -100]
     }
+
+    @Unroll
+    def "should throw exception of type 'SharedSchemaContextBuilderException' when identifierMaxLength is less or equal to zero (#identifierMaxLength)"()
+    {
+        given:
+            SharedSchemaContextRequest request = new SharedSchemaContextRequest();
+            request.setIdentifierMaxLength(identifierMaxLength)
+
+        when:
+            tested.init(request)
+
+        then:
+            def ex = thrown(InvalidSharedSchemaContextRequestException.class)
+
+        and: "exception should have correct message"
+            ex.message == "The identifierMaxLength property value can not be less or equal to zero"
+
+        where:
+            identifierMaxLength << [0, -1, -100]
+    }
 }
