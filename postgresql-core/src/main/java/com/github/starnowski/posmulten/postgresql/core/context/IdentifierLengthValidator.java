@@ -39,6 +39,13 @@ public class IdentifierLengthValidator extends AbstractIdentifierValidator {
 
     @Override
     public ValidationResult validate(String identifier) {
+        if (identifier != null) {
+            int length = identifier.length();
+            if (length >= identifierMinLength && length <= identifierMaxLength)
+            {
+                return new ValidationResult(true, "Valid");
+            }
+        }
         return null;
     }
 }
