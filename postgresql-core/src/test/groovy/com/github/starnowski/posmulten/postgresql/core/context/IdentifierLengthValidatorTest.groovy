@@ -12,7 +12,7 @@ class IdentifierLengthValidatorTest extends Specification {
     def "should by default init validator with default maxium number of characters allowed in postgres"()
     {
         given:
-            SharedSchemaContextRequest request = new SharedSchemaContextRequest();
+            SharedSchemaContextRequest request = new SharedSchemaContextRequest()
 
         when:
             tested.init(request)
@@ -23,10 +23,32 @@ class IdentifierLengthValidatorTest extends Specification {
     }
 
     @Unroll
+    def "should init validator with default maximum number #maxNumber and minimum number #minNumber"()
+    {
+        given:
+            SharedSchemaContextRequest request = new SharedSchemaContextRequest()
+            request.setIdentifierMinLength(minNumber)
+            request.setIdentifierMaxLength(maxNumber)
+
+        when:
+            tested.init(request)
+
+        then:
+            tested.getIdentifierMaxLength() == maxNumber
+            tested.getIdentifierMinLength() == minNumber
+
+        where:
+            minNumber   |   maxNumber
+            1           |   3
+            5           |   73
+            4           |   210
+    }
+
+    @Unroll
     def "should throw exception of type 'SharedSchemaContextBuilderException' when identifierMinLength is less or equal to zero (#identifierMinLength)"()
     {
         given:
-            SharedSchemaContextRequest request = new SharedSchemaContextRequest();
+            SharedSchemaContextRequest request = new SharedSchemaContextRequest()
             request.setIdentifierMinLength(identifierMinLength)
 
         when:
@@ -46,7 +68,7 @@ class IdentifierLengthValidatorTest extends Specification {
     def "should throw exception of type 'SharedSchemaContextBuilderException' when identifierMaxLength is less or equal to zero (#identifierMaxLength)"()
     {
         given:
-            SharedSchemaContextRequest request = new SharedSchemaContextRequest();
+            SharedSchemaContextRequest request = new SharedSchemaContextRequest()
             request.setIdentifierMaxLength(identifierMaxLength)
 
         when:
