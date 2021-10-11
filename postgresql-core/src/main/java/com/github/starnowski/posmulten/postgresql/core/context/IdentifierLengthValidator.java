@@ -49,6 +49,6 @@ public class IdentifierLengthValidator extends AbstractIdentifierValidator {
                 return new ValidationResult(false, format("Identifier '%s' is invalid, the length must be between %d and %d", identifier, identifierMinLength, identifierMaxLength));
             }
         }
-        return null;
+        return new ValidationResult(false, "Identifier cannot be null");
     }
 }

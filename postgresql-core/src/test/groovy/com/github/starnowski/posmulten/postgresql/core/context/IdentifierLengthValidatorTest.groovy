@@ -91,6 +91,21 @@ class IdentifierLengthValidatorTest extends Specification {
     }
 
     @Unroll
+    def "should confirm that null string is invalid"()
+    {
+        given:
+            SharedSchemaContextRequest request = new SharedSchemaContextRequest()
+            tested.init(request)
+
+        when:
+            def result = tested.validate(null)
+
+        then:
+            !result.valid
+            result.message == "Identifier cannot be null"
+    }
+
+    @Unroll
     def "should throw exception of type 'SharedSchemaContextBuilderException' when identifierMinLength is less or equal to zero (#identifierMinLength)"()
     {
         given:
