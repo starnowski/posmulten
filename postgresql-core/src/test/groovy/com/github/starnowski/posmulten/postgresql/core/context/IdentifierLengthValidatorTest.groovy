@@ -63,6 +63,8 @@ class IdentifierLengthValidatorTest extends Specification {
         where:
             minNumber   |   maxNumber   |   value
             1           |   3           |   "x1"
+            1           |   3           |   "1"
+            1           |   3           |   "123"
             5           |   73          |   "asdlfkjalskdjl;zxjcvlkxcjvasdkfjasldfajs;ldkjf"
             4           |   210         |   "asdlfkjalskdjl;zxjcvlkxcjvasdkfjasldfajs;ldkjf11111111111111111111111111111111111111111"
     }
