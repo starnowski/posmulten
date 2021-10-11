@@ -68,6 +68,29 @@ class IdentifierLengthValidatorTest extends Specification {
     }
 
     @Unroll
+    def "should confirm that string #value is invalid when maximum number is #maxNumber and minimum number is #minNumber"()
+    {
+        given:
+            SharedSchemaContextRequest request = new SharedSchemaContextRequest()
+            request.setIdentifierMinLength(minNumber)
+            request.setIdentifierMaxLength(maxNumber)
+            tested.init(request)
+
+        when:
+            def result = tested.validate(value)
+
+        then:
+            !result.valid
+            result.message == message
+
+        where:
+            minNumber   |   maxNumber   |   value                                   ||  message
+            1           |   3           |   "x1xxxc"                                ||  "Identifier 'x1xxxc' is invalid, the length must be between 1 and 3"
+            5           |   20          |   "Tooo_large_string_______ddddssxxz"     ||  "Identifier 'Tooo_large_string_______ddddssxxz' is invalid, the length must be between 5 and 20"
+            4           |   30          |   "asdlfkjalskdjl;zxjcvlkxcjvasdkfjas"    ||  "Identifier 'asdlfkjalskdjl;zxjcvlkxcjvasdkfjas' is invalid, the length must be between 4 and 30"
+    }
+
+    @Unroll
     def "should throw exception of type 'SharedSchemaContextBuilderException' when identifierMinLength is less or equal to zero (#identifierMinLength)"()
     {
         given:
