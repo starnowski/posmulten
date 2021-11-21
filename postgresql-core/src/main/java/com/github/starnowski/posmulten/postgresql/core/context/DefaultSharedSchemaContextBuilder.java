@@ -25,10 +25,7 @@ package com.github.starnowski.posmulten.postgresql.core.context;
 
 import com.github.starnowski.posmulten.postgresql.core.context.enrichers.*;
 import com.github.starnowski.posmulten.postgresql.core.context.exceptions.SharedSchemaContextBuilderException;
-import com.github.starnowski.posmulten.postgresql.core.context.validators.CreateTenantColumnTableMappingSharedSchemaContextRequestValidator;
-import com.github.starnowski.posmulten.postgresql.core.context.validators.ForeignKeysMappingSharedSchemaContextRequestValidator;
-import com.github.starnowski.posmulten.postgresql.core.context.validators.ISharedSchemaContextRequestValidator;
-import com.github.starnowski.posmulten.postgresql.core.context.validators.TablesThatAddingOfTenantColumnDefaultValueShouldBeSkippedSharedSchemaContextRequestValidator;
+import com.github.starnowski.posmulten.postgresql.core.context.validators.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,6 +50,11 @@ public class DefaultSharedSchemaContextBuilder {
      * Collection that stores objects of type {@link ISharedSchemaContextRequestValidator} used for validation of request object (type {@link SharedSchemaContextRequest}) in {@link #build()} method.
      */
     private List<ISharedSchemaContextRequestValidator> validators = asList(new ForeignKeysMappingSharedSchemaContextRequestValidator(), new CreateTenantColumnTableMappingSharedSchemaContextRequestValidator(), new TablesThatAddingOfTenantColumnDefaultValueShouldBeSkippedSharedSchemaContextRequestValidator());
+
+    /**
+     * Collection that stores objects of type {@link ISQLDefinitionsValidator} used for validation of generated SQL definitions ({@link #build()} method).
+     */
+    private List<ISQLDefinitionsValidator> sqlDefinitionsValidators = new ArrayList<>();
 
     private final SharedSchemaContextRequest sharedSchemaContextRequest = new SharedSchemaContextRequest();
 
@@ -94,6 +96,13 @@ public class DefaultSharedSchemaContextBuilder {
         {
             SharedSchemaContextRequest request = getSharedSchemaContextRequestCopyOrNull(sharedSchemaContextRequestCopy);
             context = enricher.enrich(context, request);
+        }
+        List<ISQLDefinitionsValidator> sqlDefinitionsValidators = getSqlDefinitionsValidatorsCopy();
+        for (ISQLDefinitionsValidator validator : sqlDefinitionsValidators)
+        {
+            //TODO Add tests
+            SharedSchemaContextRequest request = getSharedSchemaContextRequestCopyOrNull(sharedSchemaContextRequestCopy);
+            validator.validate(context.getSqlDefinitions());
         }
         return context;
     }
@@ -367,6 +376,24 @@ public class DefaultSharedSchemaContextBuilder {
      */
     public DefaultSharedSchemaContextBuilder skipAddingOfTenantColumnDefaultValueForTable(String value) {
         sharedSchemaContextRequest.getTablesThatAddingOfTenantColumnDefaultValueShouldBeSkipped().add(new TableKey(value, sharedSchemaContextRequest.getDefaultSchema()));
+        return this;
+    }
+
+    /**
+     *
+     * @return copy of the {@link #sqlDefinitionsValidators} collection
+     */
+    public List<ISQLDefinitionsValidator> getSqlDefinitionsValidatorsCopy() {
+        return sqlDefinitionsValidators == null ? new ArrayList<>() : new ArrayList<>(sqlDefinitionsValidators);
+    }
+
+    /**
+     * Setting the {@link #sqlDefinitionsValidators} collection
+     * @param sqlDefinitionsValidators new validators lists
+     * @return builder object for which method was invoked
+     */
+    public DefaultSharedSchemaContextBuilder setSqlDefinitionsValidators(List<ISQLDefinitionsValidator> sqlDefinitionsValidators) {
+        this.sqlDefinitionsValidators = sqlDefinitionsValidators;
         return this;
     }
 
