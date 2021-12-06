@@ -101,7 +101,6 @@ public class DefaultSharedSchemaContextBuilder {
         for (ISQLDefinitionsValidator validator : sqlDefinitionsValidators)
         {
             //TODO Add tests
-            SharedSchemaContextRequest request = getSharedSchemaContextRequestCopyOrNull(sharedSchemaContextRequestCopy);
             validator.validate(context.getSqlDefinitions());
         }
         return context;
