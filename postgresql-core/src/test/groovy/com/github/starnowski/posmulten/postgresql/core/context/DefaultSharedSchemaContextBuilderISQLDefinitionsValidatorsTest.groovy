@@ -4,7 +4,6 @@ import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition
 import com.github.starnowski.posmulten.postgresql.core.context.enrichers.ISharedSchemaContextEnricher
 import com.github.starnowski.posmulten.postgresql.core.context.exceptions.SharedSchemaContextBuilderException
 import com.github.starnowski.posmulten.postgresql.core.context.validators.ISQLDefinitionsValidator
-import com.github.starnowski.posmulten.postgresql.core.context.validators.ISharedSchemaContextRequestValidator
 import spock.lang.Ignore
 import spock.lang.Specification
 
@@ -45,21 +44,26 @@ class DefaultSharedSchemaContextBuilderISQLDefinitionsValidatorsTest extends Spe
             secondEnricherCapturedRequest == sqlDefinitions
     }
 
-    @Ignore("Add implementations")
     def "should rethrow exception thrown by validator in middle"()
     {
         given:
-            ISharedSchemaContextRequestValidator firstValidator = Mock(ISharedSchemaContextRequestValidator)
-            ISharedSchemaContextRequestValidator secondValidator = Mock(ISharedSchemaContextRequestValidator)
-            ISharedSchemaContextRequestValidator thirdValidator = Mock(ISharedSchemaContextRequestValidator)
+            ISQLDefinitionsValidator firstValidator = Mock(ISQLDefinitionsValidator)
+            ISQLDefinitionsValidator secondValidator = Mock(ISQLDefinitionsValidator)
+            ISQLDefinitionsValidator thirdValidator = Mock(ISQLDefinitionsValidator)
             ISharedSchemaContextEnricher sharedSchemaContextEnricher = Mock(ISharedSchemaContextEnricher)
             DefaultSharedSchemaContextBuilder builder = new DefaultSharedSchemaContextBuilder()
-                .setValidators([firstValidator, secondValidator,thirdValidator])
+                .setSqlDefinitionsValidators([firstValidator, secondValidator,thirdValidator])
                 .setEnrichers([sharedSchemaContextEnricher])
             def exception = Mock(SharedSchemaContextBuilderException)
+            ISharedSchemaContext sharedSchemaContext = Mock(ISharedSchemaContext)
+            List<SQLDefinition> sqlDefinitions = [Mock(SQLDefinition), Mock(SQLDefinition), Mock(SQLDefinition)]
+            sharedSchemaContext.getSqlDefinitions() >> sqlDefinitions
 
         when:
             builder.build()
+
+        then:
+            1 * sharedSchemaContextEnricher.enrich(_, _) >> sharedSchemaContext
 
         then:
             1 * firstValidator.validate(_)
@@ -70,7 +74,7 @@ class DefaultSharedSchemaContextBuilderISQLDefinitionsValidatorsTest extends Spe
             ex.is(exception)
 
         then:
-            0 * sharedSchemaContextEnricher.enrich(_, _)
+            0 * thirdValidator.validate(_)
     }
 
     @Ignore("Add implementations")
