@@ -5,26 +5,27 @@ import com.github.starnowski.posmulten.postgresql.core.common.function.IFunction
 import com.github.starnowski.posmulten.postgresql.core.context.IIdentifierValidator
 import spock.lang.Specification
 
-class FunctionDefinitionValidatorTest extends Specification {
+import static java.util.Arrays.asList
 
+class FunctionDefinitionValidatorTest extends Specification {
 
     FunctionDefinitionValidator prepareSQLDefinitionsValidator(IIdentifierValidator... identifierValidators)
     {
-        new FunctionDefinitionValidator(identifierValidators)
+        new FunctionDefinitionValidator(asList(identifierValidators))
     }
 
     List<String> expectedNames()
     {
-        Arrays.asList("fun1", "my_fun", "your_function")
+        asList("fun1", "my_fun", "your_function")
     }
 
-    List<SQLDefinition> expectedSQLDefinition(String... names)
+    List<SQLDefinition> expectedSQLDefinition(List<String> names)
     {
         Set<SQLDefinition> mocks = new HashSet<>()
-        for (int i = 0; i < names.length; i++)
+        for (int i = 0; i < names.size(); i++)
         {
             def mock = Mock(IFunctionDefinition)
-            mock.getFunctionReference() >> (i % 2 == 0 ? names[i] : "some_schema." + names[i])
+            mock.getFunctionReference() >> (i % 2 == 0 ? names.get(i) : "some_schema." + names.get(i))
             mocks.add(mock)
         }
         mocks.toList()
@@ -41,8 +42,8 @@ class FunctionDefinitionValidatorTest extends Specification {
             IIdentifierValidator identifierValidator = Mock(IIdentifierValidator)
             def tested = prepareSQLDefinitionsValidator(identifierValidator)
             Set<SQLDefinition> allDefinitions = new HashSet<>()
-            def ignoredDefinitions = ignoredSQLDefinition()
-            def expectedSQLDefinition = expectedSQLDefinition(expectedNames())
+            List<SQLDefinition> ignoredDefinitions = ignoredSQLDefinition()
+            List<SQLDefinition> expectedSQLDefinition = expectedSQLDefinition(expectedNames())
             allDefinitions.addAll(ignoredDefinitions)
             allDefinitions.addAll(expectedSQLDefinition)
 
