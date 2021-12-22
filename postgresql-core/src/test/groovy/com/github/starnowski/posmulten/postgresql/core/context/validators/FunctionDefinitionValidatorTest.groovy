@@ -13,10 +13,21 @@ class FunctionDefinitionValidatorTest extends Specification {
         new FunctionDefinitionValidator(identifierValidators)
     }
 
+    List<String> expectedNames()
+    {
+        Arrays.asList("fun1", "my_fun", "your_function")
+    }
+
     List<SQLDefinition> expectedSQLDefinition(String... names)
     {
-        //TODO
-        (List<SQLDefinition>)[Mock(IFunctionDefinition), Mock(IFunctionDefinition)]
+        Set<SQLDefinition> mocks = new HashSet<>()
+        for (int i = 0; i < names.length; i++)
+        {
+            def mock = Mock(IFunctionDefinition)
+            mock.getFunctionReference() >> (i % 2 == 0 ? names[i] : "some_schema." + names[i])
+            mocks.add(mock)
+        }
+        mocks.toList()
     }
 
     List<SQLDefinition> ignoredSQLDefinition()
@@ -31,7 +42,7 @@ class FunctionDefinitionValidatorTest extends Specification {
             def tested = prepareSQLDefinitionsValidator(identifierValidator)
             Set<SQLDefinition> allDefinitions = new HashSet<>()
             def ignoredDefinitions = ignoredSQLDefinition()
-            def expectedSQLDefinition = expectedSQLDefinition()
+            def expectedSQLDefinition = expectedSQLDefinition(expectedNames())
             allDefinitions.addAll(ignoredDefinitions)
             allDefinitions.addAll(expectedSQLDefinition)
 
@@ -39,9 +50,8 @@ class FunctionDefinitionValidatorTest extends Specification {
             tested.validate(allDefinitions.toList())
 
         then:
-            for (SQLDefinition sqlDefinition : ignoredDefinitions) {
-                //TODO
-                0 * identifierValidator.validate()
+            for (String name : expectedNames()) {
+                1 * identifierValidator.validate(name)
             }
     }
 }
