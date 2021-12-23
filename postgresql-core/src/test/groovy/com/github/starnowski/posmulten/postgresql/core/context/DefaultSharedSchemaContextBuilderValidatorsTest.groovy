@@ -46,6 +46,7 @@ class DefaultSharedSchemaContextBuilderValidatorsTest extends Specification {
             ISharedSchemaContextRequestValidator firstValidator = Mock(ISharedSchemaContextRequestValidator)
             ISharedSchemaContextRequestValidator secondValidator = Mock(ISharedSchemaContextRequestValidator)
             ISharedSchemaContextEnricher sharedSchemaContextEnricher = Mock(ISharedSchemaContextEnricher)
+            ISharedSchemaContext firstSharedSchemaContext = Mock(ISharedSchemaContext)
             DefaultSharedSchemaContextBuilder builder = new DefaultSharedSchemaContextBuilder()
                 .setValidators([firstValidator, secondValidator])
                 .setEnrichers([sharedSchemaContextEnricher])
@@ -67,6 +68,9 @@ class DefaultSharedSchemaContextBuilderValidatorsTest extends Specification {
                         secondEnricherCapturedRequest = parameters[0]
                     }
             !firstEnricherCapturedRequest.is(secondEnricherCapturedRequest)
+
+        then:
+            1 * sharedSchemaContextEnricher.enrich(_, _) >> firstSharedSchemaContext
     }
 
     def "should rethrow exception thrown by validator in middle"()
