@@ -2,8 +2,9 @@ package com.github.starnowski.posmulten.postgresql.core.context.validators.facto
 
 import com.github.starnowski.posmulten.postgresql.core.context.IIdentifierValidator;
 import com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContextRequest;
+import com.github.starnowski.posmulten.postgresql.core.context.exceptions.InvalidSharedSchemaContextRequestException;
 
 public interface IIdentifierValidatorFactory <T extends IIdentifierValidator> {
 
-    T build(SharedSchemaContextRequest sharedSchemaContextRequest);
+    T build(SharedSchemaContextRequest sharedSchemaContextRequest) throws InvalidSharedSchemaContextRequestException;
 }
