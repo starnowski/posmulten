@@ -16,7 +16,7 @@ class FunctionDefinitionValidatorTest extends Specification {
 
     List<String> expectedNames()
     {
-        asList("fun1", "my_fun", "your_function")
+        asList("fun1", "my_fun", "your_function", "", "")
     }
 
     List<SQLDefinition> expectedSQLDefinition(List<String> names)

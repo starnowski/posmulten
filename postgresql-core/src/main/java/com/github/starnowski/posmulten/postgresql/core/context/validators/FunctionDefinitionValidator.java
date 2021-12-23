@@ -20,7 +20,7 @@ public class FunctionDefinitionValidator implements ISQLDefinitionsValidator {
         for (SQLDefinition definition : sqlDefinitions) {
             if (definition instanceof IFunctionDefinition) {
                 String functionReference = ((IFunctionDefinition) definition).getFunctionReference();
-                String functionName = !functionReference.contains(".") ? functionReference : functionReference.substring(functionReference.indexOf(".") + 1);
+                String functionName = !functionReference.contains(".") ? functionReference : functionReference.indexOf(".") + 1 == functionReference.length() ? "" : functionReference.substring(functionReference.indexOf(".") + 1);
                 for (IIdentifierValidator identifierValidator : iIdentifierValidators) {
                     identifierValidator.validate(functionName);
                 }
