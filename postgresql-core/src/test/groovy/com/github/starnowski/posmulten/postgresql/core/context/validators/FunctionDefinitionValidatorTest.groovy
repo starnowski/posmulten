@@ -33,6 +33,18 @@ class FunctionDefinitionValidatorTest extends Specification {
         mocks.toList()
     }
 
+    List<SQLDefinition> expectedSQLDefinitionWithFunctionReferences(List<String> functionReferences)
+    {
+        Set<SQLDefinition> mocks = new HashSet<>()
+        for (String fr : functionReferences)
+        {
+            def mock = Mock(IFunctionDefinition)
+            mock.getFunctionReference() >> fr
+            mocks.add(mock)
+        }
+        mocks.toList()
+    }
+
     List<SQLDefinition> ignoredSQLDefinition()
     {
         (List<SQLDefinition>)[Mock(SQLDefinition), Mock(SQLDefinition)]
@@ -69,7 +81,7 @@ class FunctionDefinitionValidatorTest extends Specification {
             def tested = prepareSQLDefinitionsValidator(identifierValidator1)
             Set<SQLDefinition> allDefinitions = new HashSet<>()
             List<SQLDefinition> ignoredDefinitions = ignoredSQLDefinition()
-            List<SQLDefinition> expectedSQLDefinition = expectedSQLDefinition(names)
+            List<SQLDefinition> expectedSQLDefinition = expectedSQLDefinitionWithFunctionReferences(names)
             allDefinitions.addAll(ignoredDefinitions)
             allDefinitions.addAll(expectedSQLDefinition)
             IIdentifierValidator.ValidationResult dummyValidResult = new IIdentifierValidator.ValidationResult(true, "dummy result")
@@ -96,7 +108,8 @@ class FunctionDefinitionValidatorTest extends Specification {
             }
 
         where:
-            names               |   invalidNames    ||   expectedMessageParts
-            ["XXX", "fun2"]     |   ["XXX"]         ||  "invalid name: XXX"
+            functionReferences                      |   names                           |   invalidNames            ||   expectedMessageParts
+            ["XXX", "fun2"]                         |   ["XXX", "fun2"]                 |   ["XXX"]                 ||  ["Invalid identifier for function XXX:", "invalid name: XXX"]
+            ["schema.x1", "fun", "public.fun1"]     |   ["x1", "fun", "fun1"]           |   ["fun1", "fun"]         ||  ["Invalid identifier for function fun:", "invalid name: fun", "Invalid identifier for function public.fun1:", "invalid name: fun1"]
     }
 }
