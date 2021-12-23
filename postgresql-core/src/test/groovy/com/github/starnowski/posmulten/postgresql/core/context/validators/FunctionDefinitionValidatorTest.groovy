@@ -111,4 +111,19 @@ class FunctionDefinitionValidatorTest extends Specification {
             ["XXX", "fun2"]                         |   ["XXX", "fun2"]                 |   ["XXX"]                 ||  ["Invalid identifier for function XXX:", "invalid name: XXX"]
             ["schema.x1", "fun", "public.fun1"]     |   ["x1", "fun", "fun1"]           |   ["fun1", "fun"]         ||  ["Invalid identifier for function fun:", "invalid name: fun", "Invalid identifier for function public.fun1:", "invalid name: fun1"]
     }
+
+    def "should run validation for null object without an exception"()
+    {
+        given:
+            IIdentifierValidator identifierValidator1 = Mock(IIdentifierValidator)
+            IIdentifierValidator identifierValidator2 = Mock(IIdentifierValidator)
+            def tested = prepareSQLDefinitionsValidator(identifierValidator1, identifierValidator2)
+
+        when:
+            tested.validate(null)
+
+        then:
+            0 * identifierValidator1.validate(_)
+            0 * identifierValidator2.validate(_)
+    }
 }
