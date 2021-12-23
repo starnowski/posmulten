@@ -24,10 +24,13 @@
 package com.github.starnowski.posmulten.postgresql.core.context;
 
 import com.github.starnowski.posmulten.postgresql.core.context.enrichers.*;
+import com.github.starnowski.posmulten.postgresql.core.context.exceptions.InvalidSharedSchemaContextRequestException;
 import com.github.starnowski.posmulten.postgresql.core.context.exceptions.SharedSchemaContextBuilderException;
 import com.github.starnowski.posmulten.postgresql.core.context.validators.*;
+import com.github.starnowski.posmulten.postgresql.core.context.validators.factories.IdentifierLengthValidatorFactory;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -55,6 +58,8 @@ public class DefaultSharedSchemaContextBuilder {
      * Collection that stores objects of type {@link ISQLDefinitionsValidator} used for validation of generated SQL definitions ({@link #build()} method).
      */
     private List<ISQLDefinitionsValidator> sqlDefinitionsValidators = new ArrayList<>();
+
+    private boolean disableDefaultSqlDefinitionsValidators = false;
 
     private final SharedSchemaContextRequest sharedSchemaContextRequest = new SharedSchemaContextRequest();
 
@@ -97,7 +102,7 @@ public class DefaultSharedSchemaContextBuilder {
             SharedSchemaContextRequest request = getSharedSchemaContextRequestCopyOrNull(sharedSchemaContextRequestCopy);
             context = enricher.enrich(context, request);
         }
-        List<ISQLDefinitionsValidator> sqlDefinitionsValidators = getSqlDefinitionsValidatorsCopy();
+        List<ISQLDefinitionsValidator> sqlDefinitionsValidators = prepareSqlDefinitionsValidators(sharedSchemaContextRequestCopy);
         for (ISQLDefinitionsValidator validator : sqlDefinitionsValidators)
         {
             //TODO Add tests
@@ -386,6 +391,13 @@ public class DefaultSharedSchemaContextBuilder {
         return sqlDefinitionsValidators == null ? new ArrayList<>() : new ArrayList<>(sqlDefinitionsValidators);
     }
 
+    protected List<ISQLDefinitionsValidator> prepareSqlDefinitionsValidators(SharedSchemaContextRequest request) throws InvalidSharedSchemaContextRequestException {
+        if (this.disableDefaultSqlDefinitionsValidators) {
+            return Arrays.asList(new FunctionDefinitionValidator(Arrays.asList((new IdentifierLengthValidatorFactory()).build(request))));
+        }
+        return getSqlDefinitionsValidatorsCopy();
+    }
+
     /**
      * Setting the {@link #sqlDefinitionsValidators} collection
      * @param sqlDefinitionsValidators new validators lists
@@ -393,6 +405,7 @@ public class DefaultSharedSchemaContextBuilder {
      */
     public DefaultSharedSchemaContextBuilder setSqlDefinitionsValidators(List<ISQLDefinitionsValidator> sqlDefinitionsValidators) {
         this.sqlDefinitionsValidators = sqlDefinitionsValidators;
+        this.disableDefaultSqlDefinitionsValidators = true;
         return this;
     }
 
