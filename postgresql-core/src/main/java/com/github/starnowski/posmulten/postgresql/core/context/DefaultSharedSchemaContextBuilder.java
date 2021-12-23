@@ -30,7 +30,6 @@ import com.github.starnowski.posmulten.postgresql.core.context.validators.*;
 import com.github.starnowski.posmulten.postgresql.core.context.validators.factories.IdentifierLengthValidatorFactory;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -68,6 +67,7 @@ public class DefaultSharedSchemaContextBuilder {
 
     /**
      * Constructor that ables to specify the default schema
+     *
      * @param defaultSchema name of default schema used during building process
      */
     public DefaultSharedSchemaContextBuilder(String defaultSchema) {
@@ -79,6 +79,7 @@ public class DefaultSharedSchemaContextBuilder {
      * Context is enricher in the loop by each enricher from {@link #enrichers}  collection by an order which they were
      * added into the collection.
      * Before enriching the result object the request object is validated by all validators stored in the {@link #validators} collection.
+     *
      * @return object of type {@link ISharedSchemaContext}
      * @throws SharedSchemaContextBuilderException exceptions thrown by enrichers and validators
      */
@@ -104,7 +105,6 @@ public class DefaultSharedSchemaContextBuilder {
     }
 
     /**
-     *
      * @return copy of the {@link #enrichers} collection
      */
     public List<ISharedSchemaContextEnricher> getEnrichersCopy() {
@@ -112,7 +112,6 @@ public class DefaultSharedSchemaContextBuilder {
     }
 
     /**
-     *
      * @return copy of the {@link #validators} collection
      */
     public List<ISharedSchemaContextRequestValidator> getValidatorsCopy() {
@@ -121,6 +120,7 @@ public class DefaultSharedSchemaContextBuilder {
 
     /**
      * Setting the {@link #enrichers} collection
+     *
      * @param enrichers new enrichers lists
      * @return builder object for which method was invoked
      */
@@ -130,7 +130,6 @@ public class DefaultSharedSchemaContextBuilder {
     }
 
     /**
-     *
      * @return copy of the {@link #sharedSchemaContextRequest} property
      */
     public SharedSchemaContextRequest getSharedSchemaContextRequestCopy() {
@@ -139,6 +138,7 @@ public class DefaultSharedSchemaContextBuilder {
 
     /**
      * Setting the type of column that stores the tenant identifier
+     *
      * @param currentTenantIdPropertyType type of column that stores the tenant identifier
      * @return builder object for which method was invoked
      * @see SharedSchemaContextRequest#currentTenantIdPropertyType
@@ -154,6 +154,7 @@ public class DefaultSharedSchemaContextBuilder {
 
     /**
      * Setting the name of the property that stores the current tenant identifier
+     *
      * @param currentTenantIdProperty name of the property that stores the current tenant identifier
      * @return builder object for which method was invoked
      * @see SharedSchemaContextRequest#currentTenantIdProperty
@@ -168,6 +169,7 @@ public class DefaultSharedSchemaContextBuilder {
 
     /**
      * Setting the name of the function that returns current tenant identifier
+     *
      * @param getCurrentTenantIdFunctionName name of function that returns current tenant identifier
      * @return builder object for which method was invoked
      * @see SharedSchemaContextRequest#getCurrentTenantIdFunctionName
@@ -180,6 +182,7 @@ public class DefaultSharedSchemaContextBuilder {
 
     /**
      * Setting the name of the function that set current tenant identifier
+     *
      * @param setCurrentTenantIdFunctionName name of the function that set current tenant identifier
      * @return builder object for which method was invoked
      * @see SharedSchemaContextRequest#setCurrentTenantIdFunctionName
@@ -192,6 +195,7 @@ public class DefaultSharedSchemaContextBuilder {
 
     /**
      * Setting the name of the function that checks if passed identifier is equal to the current tenant identifier
+     *
      * @param equalsCurrentTenantIdentifierFunctionName name of the function that checks if passed identifier is equal to the current tenant identifier
      * @return builder object for which method was invoked
      * @see SharedSchemaContextRequest#equalsCurrentTenantIdentifierFunctionName
@@ -204,6 +208,7 @@ public class DefaultSharedSchemaContextBuilder {
 
     /**
      * Setting the name of the function that checks if the current tenant is allowed to process database table row.
+     *
      * @param tenantHasAuthoritiesFunctionName name of the function that checks if the current tenant is allowed to process database table row
      * @return builder object for which method was invoked
      * @see SharedSchemaContextRequest#tenantHasAuthoritiesFunctionName
@@ -216,6 +221,7 @@ public class DefaultSharedSchemaContextBuilder {
 
     /**
      * Marking specific table from defined default schema for builder ({@link SharedSchemaContextRequest#defaultSchema}) as table where a column for tenant identifier should be added.
+     *
      * @param table name of table where a column for tenant identifier should be added.
      * @return builder object for which method was invoked
      * @see SharedSchemaContextRequest#createTenantColumnTableLists
@@ -230,10 +236,11 @@ public class DefaultSharedSchemaContextBuilder {
     /**
      * Register table that should have create row level security policy.
      * Table belongs to defined default schema for builder ({@link SharedSchemaContextRequest#defaultSchema}).
-     * @param table name of table
+     *
+     * @param table                 name of table
      * @param primaryKeyColumnsList map of primary key columns and their types in table. Column name is the map key and column type is its value
-     * @param tenantColumnName name of column that stores tenant identifier in table
-     * @param rlsPolicyName name of row level security policy
+     * @param tenantColumnName      name of column that stores tenant identifier in table
+     * @param rlsPolicyName         name of row level security policy
      * @return builder object for which method was invoked
      * @see SharedSchemaContextRequest#tableColumnsList
      * @see SharedSchemaContextRequest#tableRLSPolicies
@@ -250,6 +257,7 @@ public class DefaultSharedSchemaContextBuilder {
     /**
      * Setting if builder should <a href="https://www.postgresql.org/docs/9.6/ddl-rowsecurity.html">force row level security for table owner</a>.
      * By default, the builder does not do this.
+     *
      * @param forceRowLevelSecurityForTableOwner true if builder should force row level security for table owner
      * @return builder object for which method was invoked
      * @see SharedSchemaContextRequest#forceRowLevelSecurityForTableOwner
@@ -262,6 +270,7 @@ public class DefaultSharedSchemaContextBuilder {
 
     /**
      * Setting the default name for the column that stores the tenant identifier for table row.
+     *
      * @param defaultTenantIdColumn name for column that stores the tenant identifier for table row
      * @return builder object for which method was invoked
      * @see SharedSchemaContextRequest#defaultTenantIdColumn
@@ -274,6 +283,7 @@ public class DefaultSharedSchemaContextBuilder {
 
     /**
      * Setting the default grantee for which the row level security should be added.
+     *
      * @param grantee grantee for which the row level security should be added
      * @return builder object for which method was invoked
      * @see SharedSchemaContextRequest#grantee
@@ -287,10 +297,11 @@ public class DefaultSharedSchemaContextBuilder {
     /**
      * Register the request for creation of constraint that checks if foreign key in the main table refers to record
      * that exists in the foreign table and which belongs to the current tenant.
-     * @param mainTable name of the main table that contains columns with foreign key
-     * @param foreignKeyTable name of the foreign table
+     *
+     * @param mainTable                           name of the main table that contains columns with foreign key
+     * @param foreignKeyTable                     name of the foreign table
      * @param foreignKeyPrimaryKeyColumnsMappings map contains information about which foreign key column refers to specific primary key column. The foreign key column is the map key and the primary key column is its value.
-     * @param constraintName constraint name
+     * @param constraintName                      constraint name
      * @return builder object for which method was invoked
      * @see SharedSchemaContextRequest#sameTenantConstraintForForeignKeyProperties
      * @see IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher
@@ -303,7 +314,8 @@ public class DefaultSharedSchemaContextBuilder {
     /**
      * Setting the name for a function that checks if there is a record with a specified identifier that is assigned to
      * the current tenant for the specified table that exists in default schema  ({@link SharedSchemaContextRequest#defaultSchema}).
-     * @param recordTable table name in default schema ({@link SharedSchemaContextRequest#defaultSchema})
+     *
+     * @param recordTable  table name in default schema ({@link SharedSchemaContextRequest#defaultSchema})
      * @param functionName function name
      * @return builder object for which method was invoked
      * @see SharedSchemaContextRequest#functionThatChecksIfRecordExistsInTableNames
@@ -315,6 +327,7 @@ public class DefaultSharedSchemaContextBuilder {
 
     /**
      * Setting the {@link #validators} collection
+     *
      * @param validators new validators lists
      * @return builder object for which method was invoked
      */
@@ -326,8 +339,9 @@ public class DefaultSharedSchemaContextBuilder {
     /**
      * Register the request for creation of constraints that are going to check if tenant column has valid value in all
      * tables that require rls policy.
-     * @param tenantValuesBlacklist list of invalid tenant identifiers
-     * @param isTenantValidFunctionName default name of function that check if tenant identifier is valid
+     *
+     * @param tenantValuesBlacklist       list of invalid tenant identifiers
+     * @param isTenantValidFunctionName   default name of function that check if tenant identifier is valid
      * @param isTenantValidConstraintName default name of constraint that check if tenant identifier is valid
      * @return builder object for which method was invoked
      */
@@ -342,7 +356,8 @@ public class DefaultSharedSchemaContextBuilder {
     /**
      * Register custom name for constraint that are going to check if tenant column has valid value in specified
      * table that require rls policy.
-     * @param table table name
+     *
+     * @param table          table name
      * @param constraintName constraint name
      * @return builder object for which method was invoked
      */
@@ -354,6 +369,7 @@ public class DefaultSharedSchemaContextBuilder {
     /**
      * Setting if builder should add default value declaration for tenant column in all tables that required rls policy.
      * Default value is going to be current tenant identifier.
+     *
      * @param value true if builder should add default declaration
      * @return builder object for which method was invoked
      */
@@ -364,6 +380,7 @@ public class DefaultSharedSchemaContextBuilder {
 
     /**
      * Specify for which table the adding of default value declaration should be skipped.
+     *
      * @param value table name
      * @return builder object for which method was invoked
      * @see #setCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables(boolean)
@@ -374,7 +391,6 @@ public class DefaultSharedSchemaContextBuilder {
     }
 
     /**
-     *
      * @return copy of the {@link #sqlDefinitionsValidators} collection
      */
     public List<ISQLDefinitionsValidator> getSqlDefinitionsValidatorsCopy() {
@@ -385,11 +401,12 @@ public class DefaultSharedSchemaContextBuilder {
         if (this.disableDefaultSqlDefinitionsValidators) {
             return getSqlDefinitionsValidatorsCopy();
         }
-        return Arrays.asList(new FunctionDefinitionValidator(Arrays.asList((new IdentifierLengthValidatorFactory()).build(request))));
+        return asList(new FunctionDefinitionValidator(asList((new IdentifierLengthValidatorFactory()).build(request))));
     }
 
     /**
      * Setting the {@link #sqlDefinitionsValidators} collection
+     *
      * @param sqlDefinitionsValidators new validators lists
      * @return builder object for which method was invoked
      */
