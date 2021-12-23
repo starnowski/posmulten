@@ -10,7 +10,7 @@ public class IdentifierLengthValidator implements IIdentifierValidator {
     private final int identifierMinLength;
 
     public IdentifierLengthValidator() {
-        this(0, DEFAULT_MAXIMUM_NUMBER_OF_IDENTIFIER_CHARACTERS);
+        this(1, DEFAULT_MAXIMUM_NUMBER_OF_IDENTIFIER_CHARACTERS);
     }
 
     public IdentifierLengthValidator(int identifierMinLength, int identifierMaxLength) {
