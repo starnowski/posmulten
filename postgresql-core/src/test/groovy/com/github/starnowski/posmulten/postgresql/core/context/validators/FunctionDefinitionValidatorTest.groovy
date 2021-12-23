@@ -3,7 +3,9 @@ package com.github.starnowski.posmulten.postgresql.core.context.validators
 import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition
 import com.github.starnowski.posmulten.postgresql.core.common.function.IFunctionDefinition
 import com.github.starnowski.posmulten.postgresql.core.context.IIdentifierValidator
+import com.github.starnowski.posmulten.postgresql.core.context.exceptions.SharedSchemaContextBuilderException
 import spock.lang.Specification
+import spock.lang.Unroll
 
 import static java.util.Arrays.asList
 
@@ -47,14 +49,54 @@ class FunctionDefinitionValidatorTest extends Specification {
             List<SQLDefinition> expectedSQLDefinition = expectedSQLDefinition(expectedNames())
             allDefinitions.addAll(ignoredDefinitions)
             allDefinitions.addAll(expectedSQLDefinition)
+            IIdentifierValidator.ValidationResult dummyValidResult = new IIdentifierValidator.ValidationResult(true, "dummy result")
 
         when:
             tested.validate(allDefinitions.toList())
 
         then:
             for (String name : expectedNames()) {
-                1 * identifierValidator1.validate(name)
-                1 * identifierValidator2.validate(name)
+                1 * identifierValidator1.validate(name) >> dummyValidResult
+                1 * identifierValidator2.validate(name) >> dummyValidResult
             }
+    }
+
+    @Unroll
+    def "should throw an exception for invalid sql definitions names [#invalidNames]"()
+    {
+        given:
+            IIdentifierValidator identifierValidator1 = Mock(IIdentifierValidator)
+            def tested = prepareSQLDefinitionsValidator(identifierValidator1)
+            Set<SQLDefinition> allDefinitions = new HashSet<>()
+            List<SQLDefinition> ignoredDefinitions = ignoredSQLDefinition()
+            List<SQLDefinition> expectedSQLDefinition = expectedSQLDefinition(names)
+            allDefinitions.addAll(ignoredDefinitions)
+            allDefinitions.addAll(expectedSQLDefinition)
+            IIdentifierValidator.ValidationResult dummyValidResult = new IIdentifierValidator.ValidationResult(true, "dummy result")
+
+        when:
+            tested.validate(allDefinitions.toList())
+
+        then:
+            for (String name : names) {
+                if (!invalidNames.contains(name)) {
+                    1 * identifierValidator1.validate(name) >> dummyValidResult
+                }
+            }
+            for (String name : invalidNames) {
+                1 * identifierValidator1.validate(name) >> new IIdentifierValidator.ValidationResult(false, "invalid name: " + name)
+            }
+        then:
+            def ex = thrown(SharedSchemaContextBuilderException)
+
+        and: "exception should have correct message"
+            for (String messagePart : expectedMessageParts)
+            {
+                ex.message.contains(messagePart)
+            }
+
+        where:
+            names               |   invalidNames    ||   expectedMessageParts
+            ["XXX", "fun2"]     |   ["XXX"]         ||  "invalid name: XXX"
     }
 }
