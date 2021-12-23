@@ -39,8 +39,9 @@ class FunctionDefinitionValidatorTest extends Specification {
     def "should invoke validator for expected sql definitions objects"()
     {
         given:
-            IIdentifierValidator identifierValidator = Mock(IIdentifierValidator)
-            def tested = prepareSQLDefinitionsValidator(identifierValidator)
+            IIdentifierValidator identifierValidator1 = Mock(IIdentifierValidator)
+            IIdentifierValidator identifierValidator2 = Mock(IIdentifierValidator)
+            def tested = prepareSQLDefinitionsValidator(identifierValidator1, identifierValidator2)
             Set<SQLDefinition> allDefinitions = new HashSet<>()
             List<SQLDefinition> ignoredDefinitions = ignoredSQLDefinition()
             List<SQLDefinition> expectedSQLDefinition = expectedSQLDefinition(expectedNames())
@@ -52,7 +53,8 @@ class FunctionDefinitionValidatorTest extends Specification {
 
         then:
             for (String name : expectedNames()) {
-                1 * identifierValidator.validate(name)
+                1 * identifierValidator1.validate(name)
+                1 * identifierValidator2.validate(name)
             }
     }
 }
