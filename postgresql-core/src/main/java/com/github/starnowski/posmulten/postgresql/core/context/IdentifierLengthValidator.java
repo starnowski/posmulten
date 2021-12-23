@@ -2,7 +2,7 @@ package com.github.starnowski.posmulten.postgresql.core.context;
 
 import static java.lang.String.format;
 
-public class IdentifierLengthValidator extends AbstractIdentifierValidator {
+public class IdentifierLengthValidator implements IIdentifierValidator {
 
     public static final int DEFAULT_MAXIMUM_NUMBER_OF_IDENTIFIER_CHARACTERS = 63;
 
