@@ -383,9 +383,9 @@ public class DefaultSharedSchemaContextBuilder {
 
     protected List<ISQLDefinitionsValidator> prepareSqlDefinitionsValidators(SharedSchemaContextRequest request) throws InvalidSharedSchemaContextRequestException {
         if (this.disableDefaultSqlDefinitionsValidators) {
-            return Arrays.asList(new FunctionDefinitionValidator(Arrays.asList((new IdentifierLengthValidatorFactory()).build(request))));
+            return getSqlDefinitionsValidatorsCopy();
         }
-        return getSqlDefinitionsValidatorsCopy();
+        return Arrays.asList(new FunctionDefinitionValidator(Arrays.asList((new IdentifierLengthValidatorFactory()).build(request))));
     }
 
     /**
