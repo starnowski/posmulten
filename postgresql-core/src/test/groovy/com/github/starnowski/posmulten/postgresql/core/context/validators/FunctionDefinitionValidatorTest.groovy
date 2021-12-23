@@ -81,7 +81,7 @@ class FunctionDefinitionValidatorTest extends Specification {
             def tested = prepareSQLDefinitionsValidator(identifierValidator1)
             Set<SQLDefinition> allDefinitions = new HashSet<>()
             List<SQLDefinition> ignoredDefinitions = ignoredSQLDefinition()
-            List<SQLDefinition> expectedSQLDefinition = expectedSQLDefinitionWithFunctionReferences(names)
+            List<SQLDefinition> expectedSQLDefinition = expectedSQLDefinitionWithFunctionReferences(functionReferences)
             allDefinitions.addAll(ignoredDefinitions)
             allDefinitions.addAll(expectedSQLDefinition)
             IIdentifierValidator.ValidationResult dummyValidResult = new IIdentifierValidator.ValidationResult(true, "dummy result")
@@ -102,9 +102,8 @@ class FunctionDefinitionValidatorTest extends Specification {
             def ex = thrown(SharedSchemaContextBuilderException)
 
         and: "exception should have correct message"
-            for (String messagePart : expectedMessageParts)
-            {
-                ex.message.contains(messagePart)
+            expectedMessageParts.every {
+                ex.message.contains(it)
             }
 
         where:
