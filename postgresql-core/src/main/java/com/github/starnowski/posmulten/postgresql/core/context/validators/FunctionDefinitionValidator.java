@@ -21,7 +21,7 @@ public class FunctionDefinitionValidator implements ISQLDefinitionsValidator {
 
     @Override
     public void validate(List<SQLDefinition> sqlDefinitions) throws SharedSchemaContextBuilderException {
-        if (sqlDefinitions == null) {
+        if (sqlDefinitions == null || this.iIdentifierValidators == null) {
             return;
         }
         boolean valid = true;

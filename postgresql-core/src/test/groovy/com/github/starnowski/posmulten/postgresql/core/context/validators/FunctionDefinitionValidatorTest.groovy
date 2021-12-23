@@ -16,6 +16,11 @@ class FunctionDefinitionValidatorTest extends Specification {
         new FunctionDefinitionValidator(asList(identifierValidators))
     }
 
+    FunctionDefinitionValidator prepareSQLDefinitionsValidatorWithoutValidators()
+    {
+        new FunctionDefinitionValidator(null)
+    }
+
     List<String> expectedNames()
     {
         asList("fun1", "my_fun", "your_function", "", "")
@@ -125,5 +130,22 @@ class FunctionDefinitionValidatorTest extends Specification {
         then:
             0 * identifierValidator1.validate(_)
             0 * identifierValidator2.validate(_)
+    }
+
+    def "should run validate method when no validator were passed without an exception"()
+    {
+        given:
+            Set<SQLDefinition> allDefinitions = new HashSet<>()
+            List<SQLDefinition> ignoredDefinitions = ignoredSQLDefinition()
+            List<SQLDefinition> expectedSQLDefinition = expectedSQLDefinition(expectedNames())
+            allDefinitions.addAll(ignoredDefinitions)
+            allDefinitions.addAll(expectedSQLDefinition)
+            def tested = prepareSQLDefinitionsValidatorWithoutValidators()
+
+        when:
+            tested.validate(allDefinitions.toList())
+
+        then:
+            assert true
     }
 }
