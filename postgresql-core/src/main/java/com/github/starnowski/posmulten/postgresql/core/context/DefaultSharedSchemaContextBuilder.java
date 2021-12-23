@@ -1,25 +1,25 @@
 /**
- *     Posmulten library is an open-source project for the generation
- *     of SQL DDL statements that make it easy for implementation of
- *     Shared Schema Multi-tenancy strategy via the Row Security
- *     Policies in the Postgres database.
- *
- *     Copyright (C) 2020  Szymon Tarnowski
- *
- *     This library is free software; you can redistribute it and/or
- *     modify it under the terms of the GNU Lesser General Public
- *     License as published by the Free Software Foundation; either
- *     version 2.1 of the License, or (at your option) any later version.
- *
- *     This library is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *     Lesser General Public License for more details.
- *
- *     You should have received a copy of the GNU Lesser General Public
- *     License along with this library; if not, write to the Free Software
- *     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301
- *     USA
+ * Posmulten library is an open-source project for the generation
+ * of SQL DDL statements that make it easy for implementation of
+ * Shared Schema Multi-tenancy strategy via the Row Security
+ * Policies in the Postgres database.
+ * <p>
+ * Copyright (C) 2020  Szymon Tarnowski
+ * <p>
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ * <p>
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301
+ * USA
  */
 package com.github.starnowski.posmulten.postgresql.core.context;
 
@@ -44,24 +44,20 @@ import static java.util.Arrays.asList;
  */
 public class DefaultSharedSchemaContextBuilder {
 
+    private final SharedSchemaContextRequest sharedSchemaContextRequest = new SharedSchemaContextRequest();
     /**
      * Collection that stores objects of type {@link ISharedSchemaContextEnricher} used for enriching result object ({@link #build()} method).
      */
     private List<ISharedSchemaContextEnricher> enrichers = asList(new GetCurrentTenantIdFunctionDefinitionEnricher(), new SetCurrentTenantIdFunctionDefinitionEnricher(), new TenantHasAuthoritiesFunctionDefinitionEnricher(), new IsTenantValidFunctionInvocationFactoryEnricher(), new TenantColumnSQLDefinitionsEnricher(), new TableRLSSettingsSQLDefinitionsEnricher(), new TableRLSPolicyEnricher(), new IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricher(), new IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher(), new IsTenantIdentifierValidConstraintEnricher(), new DefaultValueForTenantColumnEnricher());
-
     /**
      * Collection that stores objects of type {@link ISharedSchemaContextRequestValidator} used for validation of request object (type {@link SharedSchemaContextRequest}) in {@link #build()} method.
      */
     private List<ISharedSchemaContextRequestValidator> validators = asList(new ForeignKeysMappingSharedSchemaContextRequestValidator(), new CreateTenantColumnTableMappingSharedSchemaContextRequestValidator(), new TablesThatAddingOfTenantColumnDefaultValueShouldBeSkippedSharedSchemaContextRequestValidator());
-
     /**
      * Collection that stores objects of type {@link ISQLDefinitionsValidator} used for validation of generated SQL definitions ({@link #build()} method).
      */
     private List<ISQLDefinitionsValidator> sqlDefinitionsValidators = new ArrayList<>();
-
     private boolean disableDefaultSqlDefinitionsValidators = false;
-
-    private final SharedSchemaContextRequest sharedSchemaContextRequest = new SharedSchemaContextRequest();
 
     /**
      * Constructor set value null for the default schema
@@ -86,25 +82,21 @@ public class DefaultSharedSchemaContextBuilder {
      * @return object of type {@link ISharedSchemaContext}
      * @throws SharedSchemaContextBuilderException exceptions thrown by enrichers and validators
      */
-    public ISharedSchemaContext build() throws SharedSchemaContextBuilderException
-    {
+    public ISharedSchemaContext build() throws SharedSchemaContextBuilderException {
         ISharedSchemaContext context = new SharedSchemaContext();
         SharedSchemaContextRequest sharedSchemaContextRequestCopy = getSharedSchemaContextRequestCopy();
-        List<ISharedSchemaContextRequestValidator>validators = getValidatorsCopy();
-        for (ISharedSchemaContextRequestValidator validator : validators)
-        {
+        List<ISharedSchemaContextRequestValidator> validators = getValidatorsCopy();
+        for (ISharedSchemaContextRequestValidator validator : validators) {
             SharedSchemaContextRequest request = getSharedSchemaContextRequestCopyOrNull(sharedSchemaContextRequestCopy);
             validator.validate(request);
         }
-        List<ISharedSchemaContextEnricher> enrichers  = getEnrichersCopy();
-        for (ISharedSchemaContextEnricher enricher : enrichers)
-        {
+        List<ISharedSchemaContextEnricher> enrichers = getEnrichersCopy();
+        for (ISharedSchemaContextEnricher enricher : enrichers) {
             SharedSchemaContextRequest request = getSharedSchemaContextRequestCopyOrNull(sharedSchemaContextRequestCopy);
             context = enricher.enrich(context, request);
         }
         List<ISQLDefinitionsValidator> sqlDefinitionsValidators = prepareSqlDefinitionsValidators(sharedSchemaContextRequestCopy);
-        for (ISQLDefinitionsValidator validator : sqlDefinitionsValidators)
-        {
+        for (ISQLDefinitionsValidator validator : sqlDefinitionsValidators) {
             //TODO Add tests
             validator.validate(context.getSqlDefinitions());
         }
@@ -229,8 +221,7 @@ public class DefaultSharedSchemaContextBuilder {
      * @see SharedSchemaContextRequest#createTenantColumnTableLists
      * @see TenantColumnSQLDefinitionsEnricher
      */
-    public DefaultSharedSchemaContextBuilder createTenantColumnForTable(String table)
-    {
+    public DefaultSharedSchemaContextBuilder createTenantColumnForTable(String table) {
         TableKey tableKey = new TableKey(table, sharedSchemaContextRequest.getDefaultSchema());
         sharedSchemaContextRequest.getCreateTenantColumnTableLists().add(tableKey);
         return this;
@@ -249,8 +240,7 @@ public class DefaultSharedSchemaContextBuilder {
      * @see TableRLSPolicyEnricher
      * @see TableRLSSettingsSQLDefinitionsEnricher
      */
-    public DefaultSharedSchemaContextBuilder createRLSPolicyForTable(String table, Map<String, String> primaryKeyColumnsList, String tenantColumnName, String rlsPolicyName)
-    {
+    public DefaultSharedSchemaContextBuilder createRLSPolicyForTable(String table, Map<String, String> primaryKeyColumnsList, String tenantColumnName, String rlsPolicyName) {
         TableKey tableKey = new TableKey(table, sharedSchemaContextRequest.getDefaultSchema());
         sharedSchemaContextRequest.getTableColumnsList().put(tableKey, new DefaultTableColumns(tenantColumnName, primaryKeyColumnsList));
         sharedSchemaContextRequest.getTableRLSPolicies().put(tableKey, new DefaultTableRLSPolicyProperties(rlsPolicyName));
