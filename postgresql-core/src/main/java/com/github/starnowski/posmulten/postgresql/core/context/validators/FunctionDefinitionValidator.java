@@ -6,7 +6,10 @@ import com.github.starnowski.posmulten.postgresql.core.context.IIdentifierValida
 import com.github.starnowski.posmulten.postgresql.core.context.exceptions.InvalidIdentifierException;
 import com.github.starnowski.posmulten.postgresql.core.context.exceptions.SharedSchemaContextBuilderException;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import static java.lang.String.join;
 
 public class FunctionDefinitionValidator implements ISQLDefinitionsValidator {
 
@@ -19,31 +22,31 @@ public class FunctionDefinitionValidator implements ISQLDefinitionsValidator {
     @Override
     public void validate(List<SQLDefinition> sqlDefinitions) throws SharedSchemaContextBuilderException {
         boolean valid = true;
-        StringBuilder exceptionMessageBuilder = new StringBuilder();
+        List<String> exceptionMessages = new ArrayList<>();
         for (SQLDefinition definition : sqlDefinitions) {
             if (definition instanceof IFunctionDefinition) {
                 String functionReference = ((IFunctionDefinition) definition).getFunctionReference();
                 String functionName = !functionReference.contains(".") ? functionReference : functionReference.indexOf(".") + 1 == functionReference.length() ? "" : functionReference.substring(functionReference.indexOf(".") + 1);
                 boolean isFunctionNameValid = true;
                 StringBuilder exceptionPartMessageBuilder = new StringBuilder();
-                exceptionPartMessageBuilder.append("Invalid identifier for function XXX:");
+                exceptionPartMessageBuilder.append("Invalid identifier for function ");
                 exceptionPartMessageBuilder.append(functionReference);
                 exceptionPartMessageBuilder.append(": ");
                 for (IIdentifierValidator identifierValidator : iIdentifierValidators) {
                     IIdentifierValidator.ValidationResult result = identifierValidator.validate(functionName);
-                    valid ^= result.isValid();
-                    isFunctionNameValid ^= result.isValid();
+                    valid &= result.isValid();
+                    isFunctionNameValid &= result.isValid();
                     if (!result.isValid()) {
                         exceptionPartMessageBuilder.append(result.getMessage());
                     }
                 }
                 if (!isFunctionNameValid) {
-                    exceptionMessageBuilder.append(exceptionPartMessageBuilder.toString());
+                    exceptionMessages.add(exceptionPartMessageBuilder.toString());
                 }
             }
         }
         if (!valid) {
-            throw new InvalidIdentifierException(exceptionMessageBuilder.toString());
+            throw new InvalidIdentifierException(join(",", exceptionMessages));
         }
     }
 }
