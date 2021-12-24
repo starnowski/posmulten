@@ -88,6 +88,29 @@ class DefaultSharedSchemaContextBuilderISQLDefinitionsValidatorsTest extends Spe
         then:
             results.size() == 1
             results.get(0) instanceof FunctionDefinitionValidator
-        //TODO
+    }
+
+    def "should disable validators by setting null list"()
+    {
+        given:
+            DefaultSharedSchemaContextBuilder tested = new DefaultSharedSchemaContextBuilder().setSqlDefinitionsValidators(null)
+
+        when:
+            def results = tested.prepareSqlDefinitionsValidators(new SharedSchemaContextRequest())
+
+        then:
+            results.isEmpty()
+    }
+
+    def "should disable validators by setting empty list"()
+    {
+        given:
+            DefaultSharedSchemaContextBuilder tested = new DefaultSharedSchemaContextBuilder().setSqlDefinitionsValidators(null)
+
+        when:
+            def results = tested.prepareSqlDefinitionsValidators(new SharedSchemaContextRequest())
+
+        then:
+            results.isEmpty()
     }
 }
