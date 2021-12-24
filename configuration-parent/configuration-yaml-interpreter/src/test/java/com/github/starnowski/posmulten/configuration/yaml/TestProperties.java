@@ -13,4 +13,5 @@ public class TestProperties {
     public static final String INVALID_NESTED_NODE_EMPTY_LIST_FILE_PATH = "/com/github/starnowski/posmulten/configuration/yaml/invalid-nested-node-empty-list.yaml";
     public static final String INVALID_LIST_NODES_BLANK_FIELDS_PATH = "/com/github/starnowski/posmulten/configuration/yaml/invalid-list-nodes-blank-fields.yaml";
     public static final String INVALID_MAP_BLANK_FIELDS_PATH = "/com/github/starnowski/posmulten/configuration/yaml/invalid-map-blank-fields.yaml";
+    public static final String SQL_DEFINITIONS_VALIDATION_WITH_INVALID_CONSTRAINTS_PATH = "/com/github/starnowski/posmulten/configuration/yaml/sql-definitions-validation-with-invalid-constraints.yaml";
 }

@@ -14,6 +14,7 @@ import static com.github.starnowski.posmulten.configuration.yaml.TestProperties.
 import static com.github.starnowski.posmulten.configuration.yaml.TestProperties.MANY_TO_MANY_TABLES_FILE_PATH
 import static com.github.starnowski.posmulten.configuration.yaml.TestProperties.DISABLED_SQL_DEFINITIONS_VALIDATION_FILE_PATH
 import static com.github.starnowski.posmulten.configuration.yaml.TestProperties.SQL_DEFINITIONS_VALIDATION_WITH_CUSTOM_CONSTRAINTS_FILE_PATH
+import static com.github.starnowski.posmulten.configuration.yaml.TestProperties.SQL_DEFINITIONS_VALIDATION_WITH_INVALID_CONSTRAINTS_PATH
 
 class YamlConfigurationDefaultSharedSchemaContextBuilderFactoryTest extends AbstractSpecification {
 
@@ -53,15 +54,16 @@ class YamlConfigurationDefaultSharedSchemaContextBuilderFactoryTest extends Abst
             ex.getErrorMessages().contains(errorMessage)
 
         where:
-            filePath                                        ||   errorMessage
-            INVALID_ROOT_NODE_BLANK_FIELDS_FILE_PATH        ||  "grantee must not be blank"
-            INVALID_ROOT_NODE_BLANK_FIELDS_FILE_PATH        ||  "equals_current_tenant_identifier_function_name must not be blank"
-            INVALID_NESTED_NODE_BLANK_FIELDS_FILE_PATH      ||  "valid_tenant_value_constraint.is_tenant_valid_function_name must not be blank"
-            INVALID_NESTED_NODE_BLANK_FIELDS_FILE_PATH      ||  "valid_tenant_value_constraint.tenant_identifiers_blacklist must not be null"
-            INVALID_NESTED_NODE_EMPTY_LIST_FILE_PATH        ||  "valid_tenant_value_constraint.tenant_identifiers_blacklist must have at least one element"
-            INVALID_LIST_NODES_BLANK_FIELDS_PATH            ||  "tables[3].rls_policy.primary_key_definition.name_for_function_that_checks_if_record_exists_in_table must not be blank"
-            INVALID_LIST_NODES_BLANK_FIELDS_PATH            ||  "tables[0].name must not be blank"
-            INVALID_MAP_BLANK_FIELDS_PATH                   ||  "tables[0].foreign_keys[0].foreign_key_primary_key_columns_mappings must have at least one element"
-            INVALID_MAP_BLANK_FIELDS_PATH                   ||  "tables[2].foreign_keys[2].foreign_key_primary_key_columns_mappings.<map key> must not be blank"
+            filePath                                                    ||   errorMessage
+            INVALID_ROOT_NODE_BLANK_FIELDS_FILE_PATH                    ||  "grantee must not be blank"
+            INVALID_ROOT_NODE_BLANK_FIELDS_FILE_PATH                    ||  "equals_current_tenant_identifier_function_name must not be blank"
+            INVALID_NESTED_NODE_BLANK_FIELDS_FILE_PATH                  ||  "valid_tenant_value_constraint.is_tenant_valid_function_name must not be blank"
+            INVALID_NESTED_NODE_BLANK_FIELDS_FILE_PATH                  ||  "valid_tenant_value_constraint.tenant_identifiers_blacklist must not be null"
+            INVALID_NESTED_NODE_EMPTY_LIST_FILE_PATH                    ||  "valid_tenant_value_constraint.tenant_identifiers_blacklist must have at least one element"
+            INVALID_LIST_NODES_BLANK_FIELDS_PATH                        ||  "tables[3].rls_policy.primary_key_definition.name_for_function_that_checks_if_record_exists_in_table must not be blank"
+            INVALID_LIST_NODES_BLANK_FIELDS_PATH                        ||  "tables[0].name must not be blank"
+            INVALID_MAP_BLANK_FIELDS_PATH                               ||  "tables[0].foreign_keys[0].foreign_key_primary_key_columns_mappings must have at least one element"
+            INVALID_MAP_BLANK_FIELDS_PATH                               ||  "tables[2].foreign_keys[2].foreign_key_primary_key_columns_mappings.<map key> must not be blank"
+            SQL_DEFINITIONS_VALIDATION_WITH_INVALID_CONSTRAINTS_PATH    ||  "sql_definitions_validation.identifier_min_length must be greater than or equal to 1"
     }
 }
