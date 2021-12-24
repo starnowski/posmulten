@@ -3,8 +3,8 @@ package com.github.starnowski.posmulten.postgresql.core.context
 import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition
 import com.github.starnowski.posmulten.postgresql.core.context.enrichers.ISharedSchemaContextEnricher
 import com.github.starnowski.posmulten.postgresql.core.context.exceptions.SharedSchemaContextBuilderException
+import com.github.starnowski.posmulten.postgresql.core.context.validators.FunctionDefinitionValidator
 import com.github.starnowski.posmulten.postgresql.core.context.validators.ISQLDefinitionsValidator
-import spock.lang.Ignore
 import spock.lang.Specification
 
 class DefaultSharedSchemaContextBuilderISQLDefinitionsValidatorsTest extends Specification {
@@ -77,9 +77,17 @@ class DefaultSharedSchemaContextBuilderISQLDefinitionsValidatorsTest extends Spe
             0 * thirdValidator.validate(_)
     }
 
-    @Ignore("Add implementations")
-    def "should have configured the list of validators with correct order"()
+    def "should have default list of validators"()
     {
+        given:
+            DefaultSharedSchemaContextBuilder tested = new DefaultSharedSchemaContextBuilder()
+
+        when:
+            def results = tested.prepareSqlDefinitionsValidators(new SharedSchemaContextRequest())
+
+        then:
+            results.size() == 1
+            results.get(0) instanceof FunctionDefinitionValidator
         //TODO
     }
 }

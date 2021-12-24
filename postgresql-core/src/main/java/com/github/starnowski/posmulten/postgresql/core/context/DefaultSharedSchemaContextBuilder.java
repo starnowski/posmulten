@@ -55,7 +55,7 @@ public class DefaultSharedSchemaContextBuilder {
     /**
      * Collection that stores objects of type {@link ISQLDefinitionsValidator} used for validation of generated SQL definitions ({@link #build()} method).
      */
-    private List<ISQLDefinitionsValidator> sqlDefinitionsValidators = new ArrayList<>();
+    private List<ISQLDefinitionsValidator> sqlDefinitionsValidators = null;
     private boolean disableDefaultSqlDefinitionsValidators = false;
 
     /**
