@@ -405,7 +405,8 @@ public class DefaultSharedSchemaContextBuilder {
     }
 
     /**
-     * Setting the {@link #sqlDefinitionsValidators} collection
+     * Setting the {@link #sqlDefinitionsValidators} collection.
+     * SQL definitions validation can be disabled by setting null or empty list.
      *
      * @param sqlDefinitionsValidators new validators lists
      * @return builder object for which method was invoked
