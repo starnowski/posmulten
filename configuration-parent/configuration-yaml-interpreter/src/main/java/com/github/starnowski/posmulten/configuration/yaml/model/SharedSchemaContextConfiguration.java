@@ -56,6 +56,9 @@ public class SharedSchemaContextConfiguration {
     private ValidTenantValueConstraintConfiguration validTenantValueConstraint;
     @JsonProperty(value = "tables")
     private List<@Valid TableEntry> tables;
+    @Valid
+    @JsonProperty(value = "sql_definitions_validation")
+    private SqlDefinitionsValidation sqlDefinitionsValidation;
 
     public SharedSchemaContextConfiguration setCurrentTenantIdPropertyType(String currentTenantIdPropertyType) {
         this.currentTenantIdPropertyType = new StringWrapperWithNotBlankValue(currentTenantIdPropertyType);

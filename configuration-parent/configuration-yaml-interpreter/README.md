@@ -7,6 +7,7 @@ The YAML schema description is below.
 *   [Root properties](#root-properties)
 *   [Setting a list of invalid tenant identifier values](#setting-a-list-of-invalid-tenant-identifier-values)
 *   [Tables configuration](#tables-configuration)
+*   [SQL definitions validation](#sql-definitions-validation)
 *   [Details](#details)
 
 ## Simple example:
@@ -198,6 +199,26 @@ tables:
           parent_comment_id:  id
           parent_comment_random_uuid:  random_uuid
 ```
+
+## SQL definitions validation
+The **sql_definitions_validation** property is used to configure the validation of generated sql definitions.
+It is a complex type.
+
+| Property name |   Type    |   Required    |   Nullable    |   Description |
+|---------------|-----------|---------------|---------------|---------------|
+|disabled   |   Boolean  |   No |   No  |   Validation toggle, by default property has value **false** which means that validation is enabled |
+|identifier_max_length   |   Integer  |   No |   No  |   Maximum allowed length for the identifier |
+|identifier_min_length   |   Integer  |   No |   No  |   Minimum allowed length for the identifier |
+
+Example:
+
+```yaml
+sql_definitions_validation:
+  identifier_max_length:  76
+  identifier_min_length:  5
+  disabled: false
+```
+
 
 ## Details
 

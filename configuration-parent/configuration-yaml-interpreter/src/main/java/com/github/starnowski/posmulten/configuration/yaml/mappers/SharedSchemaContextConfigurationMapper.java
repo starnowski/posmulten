@@ -10,6 +10,7 @@ public class SharedSchemaContextConfigurationMapper implements IConfigurationMap
 
     private final TableEntryMapper tableEntryMapper = new TableEntryMapper();
     private final ValidTenantValueConstraintConfigurationMapper validTenantValueConstraintConfigurationMapper = new ValidTenantValueConstraintConfigurationMapper();
+    private final SqlDefinitionsValidationMapper sqlDefinitionsValidationMapper = new SqlDefinitionsValidationMapper();
 
     @Override
     public SharedSchemaContextConfiguration map(com.github.starnowski.posmulten.configuration.core.model.SharedSchemaContextConfiguration input) {
@@ -26,7 +27,8 @@ public class SharedSchemaContextConfigurationMapper implements IConfigurationMap
                 .setSetCurrentTenantIdFunctionName(input.getSetCurrentTenantIdFunctionName() == null ? null : valueOf(input.getSetCurrentTenantIdFunctionName()))
                 .setTenantHasAuthoritiesFunctionName(input.getTenantHasAuthoritiesFunctionName() == null ? null : valueOf(input.getTenantHasAuthoritiesFunctionName()))
                 .setTables(input.getTables() == null ? null : input.getTables().stream().map(tableEntry -> tableEntryMapper.map(tableEntry)).collect(toList()))
-                .setValidTenantValueConstraint(validTenantValueConstraintConfigurationMapper.map(input.getValidTenantValueConstraint()));
+                .setValidTenantValueConstraint(validTenantValueConstraintConfigurationMapper.map(input.getValidTenantValueConstraint()))
+                .setSqlDefinitionsValidation(sqlDefinitionsValidationMapper.map(input.getSqlDefinitionsValidation()));
     }
 
     @Override
@@ -44,6 +46,7 @@ public class SharedSchemaContextConfigurationMapper implements IConfigurationMap
                 .setSetCurrentTenantIdFunctionName(output.getSetCurrentTenantIdFunctionName() == null ? null : output.getSetCurrentTenantIdFunctionName().getValue())
                 .setTenantHasAuthoritiesFunctionName(output.getTenantHasAuthoritiesFunctionName() == null ? null : output.getTenantHasAuthoritiesFunctionName().getValue())
                 .setTables(output.getTables() == null ? null : output.getTables().stream().map(tableEntry -> tableEntryMapper.unmap(tableEntry)).collect(toList()))
-                .setValidTenantValueConstraint(validTenantValueConstraintConfigurationMapper.unmap(output.getValidTenantValueConstraint()));
+                .setValidTenantValueConstraint(validTenantValueConstraintConfigurationMapper.unmap(output.getValidTenantValueConstraint()))
+                .setSqlDefinitionsValidation(sqlDefinitionsValidationMapper.unmap(output.getSqlDefinitionsValidation()));
     }
 }

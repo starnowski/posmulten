@@ -1,16 +1,16 @@
 package com.github.starnowski.posmulten.configuration.yaml.dao
 
 import com.github.starnowski.posmulten.configuration.yaml.AbstractSpecification
+import com.github.starnowski.posmulten.configuration.yaml.IntegerRandomizer
 import com.github.starnowski.posmulten.configuration.yaml.model.*
 import org.jeasy.random.EasyRandom
+import org.jeasy.random.EasyRandomParameters
+import org.jeasy.random.FieldPredicates
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import spock.lang.Unroll
 
-
-import static com.github.starnowski.posmulten.configuration.yaml.TestProperties.ALL_FIELDS_FILE_PATH
-import static com.github.starnowski.posmulten.configuration.yaml.TestProperties.INTEGRATION_TESTS_FILE_PATH
-import static com.github.starnowski.posmulten.configuration.yaml.TestProperties.ONLY_MANDATORY_FIELDS_FILE_PATH
+import static com.github.starnowski.posmulten.configuration.yaml.TestProperties.*
 import static com.github.starnowski.posmulten.postgresql.test.utils.MapBuilder.mapBuilder
 import static java.util.Arrays.asList
 import static java.util.stream.Collectors.toList
@@ -189,7 +189,10 @@ class SharedSchemaContextConfigurationYamlDaoTest extends AbstractSpecification 
     def "should return object based on file which was created based on random generated object"()
     {
         given:
-            EasyRandom easyRandom = new EasyRandom()
+            EasyRandomParameters parameters = new EasyRandomParameters()
+                    .randomize(FieldPredicates.named("identifierMaxLength").and(FieldPredicates.ofType(Integer.class)).and(FieldPredicates.inClass(SqlDefinitionsValidation.class)), new IntegerRandomizer(1, 255))
+                    .randomize(FieldPredicates.named("identifierMinLength").and(FieldPredicates.ofType(Integer.class)).and(FieldPredicates.inClass(SqlDefinitionsValidation.class)), new IntegerRandomizer(1, 255))
+            EasyRandom easyRandom = new EasyRandom(parameters)
             def randomObject = easyRandom.nextObject(SharedSchemaContextConfiguration)
             def tmpFile = tempFolder.newFile("rand-temp-config.yaml")
             tested.save(randomObject, tmpFile.getAbsoluteFile().getAbsolutePath())

@@ -48,7 +48,6 @@
     * [Setting a list of invalid tenant identifier values](#setting-a-list-of-invalid-tenant-identifier-values)
         * [Setting custom name for table tenant column constraint](#setting-custom-name-for-table-tenant-column-constraint)
     * [Naming convention and its constraints](#naming-convention-and-its-constraints)
-    * [Other maven repositories](#other-maven-repositories)
 * [Reporting issues](#reporting-issues)
 * [Project contribution](#project-contribution)
 
@@ -1099,10 +1098,16 @@ ALTER TABLE "posts" ADD CONSTRAINT posts_tenant_is_valid CHECK (tenant_id IS NUL
 ```
 
 ### Naming convention and its constraints
-TODO - [Create a validator component that checks if the passed identifier has the correct name.](https://github.com/starnowski/posmulten/issues/137)
-
-### Other maven repositories
-TODO
+By default function name can have a length from 1 to 63 characters. 
+SQL definitions validation can be disabled by using method:
+```javadoc
+com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#setDisableDefaultSqlDefinitionsValidators(boolean disableDefaultSqlDefinitionsValidators)
+```
+it can be also disabled by setting null or empty list by method.
+```javadoc
+com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#setSqlDefinitionsValidators(List<ISQLDefinitionsValidator> sqlDefinitionsValidators)
+```
+By using this method there is also the possibility of customization for validation.
 
 # Reporting issues
 * Any new issues please report in [GitHub site](https://github.com/starnowski/posmulten/issues)

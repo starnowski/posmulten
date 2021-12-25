@@ -28,4 +28,5 @@ public class SharedSchemaContextConfiguration {
     private Boolean currentTenantIdentifierAsDefaultValueForTenantColumnInAllTables;
     private ValidTenantValueConstraintConfiguration validTenantValueConstraint;
     private List<TableEntry> tables;
+    private SqlDefinitionsValidation sqlDefinitionsValidation;
 }

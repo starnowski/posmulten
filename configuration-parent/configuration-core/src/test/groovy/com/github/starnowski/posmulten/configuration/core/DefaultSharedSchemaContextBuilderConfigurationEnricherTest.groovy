@@ -1,6 +1,7 @@
 package com.github.starnowski.posmulten.configuration.core
 
 import com.github.starnowski.posmulten.configuration.core.model.SharedSchemaContextConfiguration
+import com.github.starnowski.posmulten.configuration.core.model.SqlDefinitionsValidation
 import com.github.starnowski.posmulten.configuration.core.model.TableEntry
 import com.github.starnowski.posmulten.configuration.core.model.ValidTenantValueConstraintConfiguration
 import spock.lang.Unroll
@@ -12,11 +13,12 @@ class DefaultSharedSchemaContextBuilderConfigurationEnricherTest extends Abstrac
 
     def tablesEntriesEnricher = Mock(TablesEntriesEnricher)
     def validTenantValueConstraintConfigurationEnricher = Mock(ValidTenantValueConstraintConfigurationEnricher)
+    def sqlDefinitionsValidationEnricher = Mock(SqlDefinitionsValidationEnricher)
     DefaultSharedSchemaContextBuilderConfigurationEnricher tested
 
     def setup()
     {
-        tested = new DefaultSharedSchemaContextBuilderConfigurationEnricher(tablesEntriesEnricher, validTenantValueConstraintConfigurationEnricher)
+        tested = new DefaultSharedSchemaContextBuilderConfigurationEnricher(tablesEntriesEnricher, validTenantValueConstraintConfigurationEnricher, sqlDefinitionsValidationEnricher)
     }
 
     @Unroll
@@ -101,5 +103,21 @@ class DefaultSharedSchemaContextBuilderConfigurationEnricherTest extends Abstrac
             null                                            |   null
             new ValidTenantValueConstraintConfiguration()   |   []
             new ValidTenantValueConstraintConfiguration()   |   [new TableEntry()]
+    }
+
+    def "should use enricher components to set sql definitions validation"()
+    {
+        given:
+            def validationConfiguration = new SqlDefinitionsValidation().setIdentifierMinLength(1).setIdentifierMaxLength(54).setDisabled(true)
+            def builder = prepareBuilderMockWithZeroExpectationOfMethodsInvocation()
+            def configuration = new SharedSchemaContextConfiguration()
+                    .setSqlDefinitionsValidation(validationConfiguration)
+
+        when:
+            def result = tested.enrich(builder, configuration)
+
+        then:
+            result == builder
+            1 * sqlDefinitionsValidationEnricher.enrich(builder, validationConfiguration)
     }
 }
