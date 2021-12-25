@@ -199,6 +199,16 @@ tables:
           parent_comment_random_uuid:  random_uuid
 ```
 
+## SQL definitions validation
+The **sql_definitions_validation** property is used to configure the validation of generated sql definitions.
+It is a complex type.
+
+| Property name |   Type    |   Required    |   Nullable    |   Description |
+|---------------|-----------|---------------|---------------|---------------|
+|disabled   |   Boolean  |   No |   No  |   Validation toggle, by default property has value **false** which means that validation is enabled |
+|identifier_max_length   |   Integer  |   No |   No  |   Maximum allowed length for the identifier |
+|identifier_min_length   |   Integer  |   No |   No  |   Minimum allowed length for the identifier |
+
 ## Details
 
 ### default_schema
@@ -418,8 +428,6 @@ This is a valid case for example for a many-to-many relation table without any p
 ### name_for_function_that_checks_if_record_exists_in_table
 Function name that checks if passed primary key for a specific table exists for the current tenant. 
 This function is generated only when some other table has a [foreign key](#foreign_keys) that refers to the primary key table.
-
-TODO Validation
 
 For more information please check:
 *   [adding constraints for foreign key columns](https://github.com/starnowski/posmulten#adding-constraints-for-foreign-key-columns)
