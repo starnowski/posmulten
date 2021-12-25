@@ -24,12 +24,12 @@ class SqlDefinitionsValidationEnricherTest extends Specification {
             builder.isDisableDefaultSqlDefinitionsValidators() == disabled
 
         where:
-        sqlDefinitionsValidation    ||   identifierMaxLength |   identifierMinLength    |   disabled
-        new SqlDefinitionsValidation()  ||  null |   null  |   false
-        new SqlDefinitionsValidation().setIdentifierMinLength(15)  ||  null |   15  |   false
-        new SqlDefinitionsValidation().setIdentifierMaxLength(23).setDisabled(true)  ||  23 |   null  |   true
-        new SqlDefinitionsValidation().setIdentifierMinLength(12).setIdentifierMaxLength(332).setDisabled(false)  ||  332 |   12  |   false
-        new SqlDefinitionsValidation().setIdentifierMinLength(1).setIdentifierMaxLength(54).setDisabled(true)  ||  54 |   1  |   true
-        new SqlDefinitionsValidation().setIdentifierMinLength(12).setIdentifierMaxLength(332).setDisabled(true)  ||  332 |   12  |   true
+            sqlDefinitionsValidation                                                                                    ||   identifierMaxLength |   identifierMinLength    |   disabled
+            new SqlDefinitionsValidation()                                                                              ||  null |   null  |   false
+            new SqlDefinitionsValidation().setIdentifierMinLength(15)                                                   ||  null |   15  |   false
+            new SqlDefinitionsValidation().setIdentifierMaxLength(23).setDisabled(true)                                 ||  23 |   null  |   true
+            new SqlDefinitionsValidation().setIdentifierMinLength(12).setIdentifierMaxLength(332).setDisabled(false)    ||  332 |   12  |   false
+            new SqlDefinitionsValidation().setIdentifierMinLength(1).setIdentifierMaxLength(54).setDisabled(true)       ||  54 |   1  |   true
+            new SqlDefinitionsValidation().setIdentifierMinLength(12).setIdentifierMaxLength(332).setDisabled(true)     ||  332 |   12  |   true
     }
 }

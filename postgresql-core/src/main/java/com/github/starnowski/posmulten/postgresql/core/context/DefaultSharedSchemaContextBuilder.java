@@ -427,6 +427,26 @@ public class DefaultSharedSchemaContextBuilder {
         return this;
     }
 
+    /**
+     * TODO
+     * @param identifierMaxLength
+     * @return
+     */
+    public DefaultSharedSchemaContextBuilder setIdentifierMaxLength(Integer identifierMaxLength) {
+        this.sharedSchemaContextRequest.setIdentifierMaxLength(identifierMaxLength);
+        return this;
+    }
+
+    /**
+     * TODO
+     * @param identifierMinLength
+     * @return
+     */
+    public DefaultSharedSchemaContextBuilder setIdentifierMinLength(Integer identifierMinLength) {
+        this.sharedSchemaContextRequest.setIdentifierMinLength(identifierMinLength);
+        return this;
+    }
+
     protected SharedSchemaContextRequest getSharedSchemaContextRequestCopyOrNull(SharedSchemaContextRequest request) {
         try {
             return (SharedSchemaContextRequest) request.clone();
