@@ -56,6 +56,7 @@ public class DefaultSharedSchemaContextBuilder {
      * Collection that stores objects of type {@link ISQLDefinitionsValidator} used for validation of generated SQL definitions ({@link #build()} method).
      */
     private List<ISQLDefinitionsValidator> sqlDefinitionsValidators = null;
+
     private boolean disableDefaultSqlDefinitionsValidators = false;
 
     /**
@@ -414,6 +415,15 @@ public class DefaultSharedSchemaContextBuilder {
     public DefaultSharedSchemaContextBuilder setSqlDefinitionsValidators(List<ISQLDefinitionsValidator> sqlDefinitionsValidators) {
         this.sqlDefinitionsValidators = sqlDefinitionsValidators;
         this.disableDefaultSqlDefinitionsValidators = true;
+        return this;
+    }
+
+    public boolean isDisableDefaultSqlDefinitionsValidators() {
+        return disableDefaultSqlDefinitionsValidators;
+    }
+
+    public DefaultSharedSchemaContextBuilder setDisableDefaultSqlDefinitionsValidators(boolean disableDefaultSqlDefinitionsValidators) {
+        this.disableDefaultSqlDefinitionsValidators = disableDefaultSqlDefinitionsValidators;
         return this;
     }
 
