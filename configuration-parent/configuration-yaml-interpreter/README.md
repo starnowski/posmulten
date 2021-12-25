@@ -419,6 +419,8 @@ This is a valid case for example for a many-to-many relation table without any p
 Function name that checks if passed primary key for a specific table exists for the current tenant. 
 This function is generated only when some other table has a [foreign key](#foreign_keys) that refers to the primary key table.
 
+TODO Validation
+
 For more information please check:
 *   [adding constraints for foreign key columns](https://github.com/starnowski/posmulten#adding-constraints-for-foreign-key-columns)
 *   [setting function name that checks if passed primary key for a specific table exists for the current tenant](https://github.com/starnowski/posmulten#setting-function-name-that-checks-if-passed-primary-key-for-a-specific-table-exists-for-the-current-tenant)
