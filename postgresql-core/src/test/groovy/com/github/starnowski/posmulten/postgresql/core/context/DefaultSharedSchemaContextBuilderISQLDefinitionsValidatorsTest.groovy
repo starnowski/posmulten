@@ -6,6 +6,7 @@ import com.github.starnowski.posmulten.postgresql.core.context.exceptions.Shared
 import com.github.starnowski.posmulten.postgresql.core.context.validators.FunctionDefinitionValidator
 import com.github.starnowski.posmulten.postgresql.core.context.validators.ISQLDefinitionsValidator
 import spock.lang.Specification
+import spock.lang.Unroll
 
 import static java.util.Collections.emptyList
 
@@ -117,5 +118,22 @@ class DefaultSharedSchemaContextBuilderISQLDefinitionsValidatorsTest extends Spe
         then:
             results.isEmpty()
             tested.isDisableDefaultSqlDefinitionsValidators()
+    }
+
+    @Unroll
+    def "should disable (true) on enabled sql definitions validation: expected #disabled"()
+    {
+        given:
+            DefaultSharedSchemaContextBuilder tested = new DefaultSharedSchemaContextBuilder()
+                    .setDisableDefaultSqlDefinitionsValidators(disabled)
+
+        when:
+            def result = tested.isDisableDefaultSqlDefinitionsValidators()
+
+        then:
+            result == disabled
+
+        where:
+            disabled    << [true, false]
     }
 }
