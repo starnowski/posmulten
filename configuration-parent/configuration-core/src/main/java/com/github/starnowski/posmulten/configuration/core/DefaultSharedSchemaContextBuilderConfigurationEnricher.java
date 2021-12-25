@@ -7,15 +7,17 @@ public class DefaultSharedSchemaContextBuilderConfigurationEnricher {
 
     private final TablesEntriesEnricher tablesEntriesEnricher;
     private final ValidTenantValueConstraintConfigurationEnricher validTenantValueConstraintConfigurationEnricher;
+    private final SqlDefinitionsValidationEnricher sqlDefinitionsValidationEnricher;
 
-    public DefaultSharedSchemaContextBuilderConfigurationEnricher()
-    {
-        this(new TablesEntriesEnricher(), new ValidTenantValueConstraintConfigurationEnricher());
+    public DefaultSharedSchemaContextBuilderConfigurationEnricher() {
+        this(new TablesEntriesEnricher(), new ValidTenantValueConstraintConfigurationEnricher(), new SqlDefinitionsValidationEnricher());
     }
 
-    public DefaultSharedSchemaContextBuilderConfigurationEnricher(TablesEntriesEnricher tablesEntriesEnricher, ValidTenantValueConstraintConfigurationEnricher validTenantValueConstraintConfigurationEnricher) {
+    public DefaultSharedSchemaContextBuilderConfigurationEnricher(TablesEntriesEnricher tablesEntriesEnricher, ValidTenantValueConstraintConfigurationEnricher validTenantValueConstraintConfigurationEnricher,
+                                                                  SqlDefinitionsValidationEnricher sqlDefinitionsValidationEnricher) {
         this.tablesEntriesEnricher = tablesEntriesEnricher;
         this.validTenantValueConstraintConfigurationEnricher = validTenantValueConstraintConfigurationEnricher;
+        this.sqlDefinitionsValidationEnricher = sqlDefinitionsValidationEnricher;
     }
 
     public DefaultSharedSchemaContextBuilder enrich(DefaultSharedSchemaContextBuilder builder, SharedSchemaContextConfiguration contextConfiguration) {
@@ -28,37 +30,30 @@ public class DefaultSharedSchemaContextBuilderConfigurationEnricher {
         if (contextConfiguration.getGetCurrentTenantIdFunctionName() != null) {
             builder.setGetCurrentTenantIdFunctionName(contextConfiguration.getGetCurrentTenantIdFunctionName());
         }
-        if (contextConfiguration.getSetCurrentTenantIdFunctionName() != null)
-        {
+        if (contextConfiguration.getSetCurrentTenantIdFunctionName() != null) {
             builder.setSetCurrentTenantIdFunctionName(contextConfiguration.getSetCurrentTenantIdFunctionName());
         }
-        if (contextConfiguration.getEqualsCurrentTenantIdentifierFunctionName() != null)
-        {
+        if (contextConfiguration.getEqualsCurrentTenantIdentifierFunctionName() != null) {
             builder.setEqualsCurrentTenantIdentifierFunctionName(contextConfiguration.getEqualsCurrentTenantIdentifierFunctionName());
         }
-        if (contextConfiguration.getTenantHasAuthoritiesFunctionName() != null)
-        {
+        if (contextConfiguration.getTenantHasAuthoritiesFunctionName() != null) {
             builder.setTenantHasAuthoritiesFunctionName(contextConfiguration.getTenantHasAuthoritiesFunctionName());
         }
-        if (contextConfiguration.getForceRowLevelSecurityForTableOwner() != null)
-        {
+        if (contextConfiguration.getForceRowLevelSecurityForTableOwner() != null) {
             builder.setForceRowLevelSecurityForTableOwner(contextConfiguration.getForceRowLevelSecurityForTableOwner());
         }
-        if (contextConfiguration.getDefaultTenantIdColumn() != null)
-        {
+        if (contextConfiguration.getDefaultTenantIdColumn() != null) {
             builder.setDefaultTenantIdColumn(contextConfiguration.getDefaultTenantIdColumn());
         }
-        if (contextConfiguration.getGrantee() != null)
-        {
+        if (contextConfiguration.getGrantee() != null) {
             builder.setGrantee(contextConfiguration.getGrantee());
         }
-        if (contextConfiguration.getCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables() != null)
-        {
+        if (contextConfiguration.getCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables() != null) {
             builder.setCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables(contextConfiguration.getCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables());
         }
         validTenantValueConstraintConfigurationEnricher.enrich(builder, contextConfiguration.getValidTenantValueConstraint());
         tablesEntriesEnricher.enrich(builder, contextConfiguration.getTables());
-        //TODO SQLValidationEnrichers
+        sqlDefinitionsValidationEnricher.enrich(builder, contextConfiguration.getSqlDefinitionsValidation());
         return builder;
     }
 }
