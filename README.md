@@ -1099,7 +1099,11 @@ ALTER TABLE "posts" ADD CONSTRAINT posts_tenant_is_valid CHECK (tenant_id IS NUL
 
 ### Naming convention and its constraints
 By default function name can have a length from 1 to 63 characters. 
-SQL definitions validation can be disabled by setting null or empty list by method.
+SQL definitions validation can be disabled by using method:
+```javadoc
+com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#setDisableDefaultSqlDefinitionsValidators(boolean disableDefaultSqlDefinitionsValidators)
+```
+it can be also disabled by setting null or empty list by method.
 ```javadoc
 com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#setSqlDefinitionsValidators(List<ISQLDefinitionsValidator> sqlDefinitionsValidators)
 ```
