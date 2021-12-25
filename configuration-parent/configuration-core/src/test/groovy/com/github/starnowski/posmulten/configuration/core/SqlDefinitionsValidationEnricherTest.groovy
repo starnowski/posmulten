@@ -46,6 +46,4 @@ class SqlDefinitionsValidationEnricherTest extends AbstractBaseTest {
             0 * builder.setIdentifierMinLength(_)
             0 * builder.setDisableDefaultSqlDefinitionsValidators(_)
     }
-
-    //TODO Test null object
 }
