@@ -20,7 +20,7 @@ class SqlDefinitionsValidationEnricherTest extends Specification {
 
         then:
             builder.getSharedSchemaContextRequestCopy().getIdentifierMinLength() == identifierMinLength
-            builder.getSharedSchemaContextRequestCopy().getIdentifierMaxLength() == identifierMinLength
+            builder.getSharedSchemaContextRequestCopy().getIdentifierMaxLength() == identifierMaxLength
             builder.isDisableDefaultSqlDefinitionsValidators() == disabled
 
         where:
@@ -30,6 +30,6 @@ class SqlDefinitionsValidationEnricherTest extends Specification {
         new SqlDefinitionsValidation().setIdentifierMaxLength(23).setDisabled(true)  ||  23 |   null  |   true
         new SqlDefinitionsValidation().setIdentifierMinLength(12).setIdentifierMaxLength(332).setDisabled(false)  ||  332 |   12  |   false
         new SqlDefinitionsValidation().setIdentifierMinLength(1).setIdentifierMaxLength(54).setDisabled(true)  ||  54 |   1  |   true
-        new SqlDefinitionsValidation().setDisabled(true)  ||  332 |   12  |   true
+        new SqlDefinitionsValidation().setIdentifierMinLength(12).setIdentifierMaxLength(332).setDisabled(true)  ||  332 |   12  |   true
     }
 }
