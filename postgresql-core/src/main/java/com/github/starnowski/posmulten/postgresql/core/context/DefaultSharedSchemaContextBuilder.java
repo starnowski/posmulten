@@ -428,9 +428,9 @@ public class DefaultSharedSchemaContextBuilder {
     }
 
     /**
-     * TODO
-     * @param identifierMaxLength
-     * @return
+     * Setting value for property {@link SharedSchemaContextRequest#identifierMaxLength}
+     * @param identifierMaxLength - Maximum allowed length for the identifier
+     * @return builder object for which method was invoked
      */
     public DefaultSharedSchemaContextBuilder setIdentifierMaxLength(Integer identifierMaxLength) {
         this.sharedSchemaContextRequest.setIdentifierMaxLength(identifierMaxLength);
@@ -438,9 +438,9 @@ public class DefaultSharedSchemaContextBuilder {
     }
 
     /**
-     * TODO
-     * @param identifierMinLength
-     * @return
+     * Setting value for property {@link SharedSchemaContextRequest#identifierMinLength}
+     * @param identifierMinLength - Minimum allowed length for the identifier.
+     * @return builder object for which method was invoked
      */
     public DefaultSharedSchemaContextBuilder setIdentifierMinLength(Integer identifierMinLength) {
         this.sharedSchemaContextRequest.setIdentifierMinLength(identifierMinLength);
