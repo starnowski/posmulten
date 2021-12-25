@@ -90,6 +90,7 @@ class DefaultSharedSchemaContextBuilderISQLDefinitionsValidatorsTest extends Spe
         then:
             results.size() == 1
             results.get(0) instanceof FunctionDefinitionValidator
+            !tested.isDisableDefaultSqlDefinitionsValidators()
     }
 
     def "should disable validators by setting null list"()
@@ -102,6 +103,7 @@ class DefaultSharedSchemaContextBuilderISQLDefinitionsValidatorsTest extends Spe
 
         then:
             results.isEmpty()
+            tested.isDisableDefaultSqlDefinitionsValidators()
     }
 
     def "should disable validators by setting empty list"()
@@ -114,5 +116,6 @@ class DefaultSharedSchemaContextBuilderISQLDefinitionsValidatorsTest extends Spe
 
         then:
             results.isEmpty()
+            tested.isDisableDefaultSqlDefinitionsValidators()
     }
 }
