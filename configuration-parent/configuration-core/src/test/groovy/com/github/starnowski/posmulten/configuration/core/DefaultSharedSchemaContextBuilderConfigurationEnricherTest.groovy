@@ -102,4 +102,6 @@ class DefaultSharedSchemaContextBuilderConfigurationEnricherTest extends Abstrac
             new ValidTenantValueConstraintConfiguration()   |   []
             new ValidTenantValueConstraintConfiguration()   |   [new TableEntry()]
     }
+
+    //TODO Add tests for SQLDefinitionsValidation
 }

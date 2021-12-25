@@ -32,4 +32,6 @@ class SqlDefinitionsValidationEnricherTest extends Specification {
             new SqlDefinitionsValidation().setIdentifierMinLength(1).setIdentifierMaxLength(54).setDisabled(true)       ||  54 |   1  |   true
             new SqlDefinitionsValidation().setIdentifierMinLength(12).setIdentifierMaxLength(332).setDisabled(true)     ||  332 |   12  |   true
     }
+
+    //TODO Test null object
 }
