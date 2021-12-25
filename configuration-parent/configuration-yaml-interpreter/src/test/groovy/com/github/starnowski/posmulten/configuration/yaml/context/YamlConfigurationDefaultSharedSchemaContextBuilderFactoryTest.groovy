@@ -15,6 +15,7 @@ import static com.github.starnowski.posmulten.configuration.yaml.TestProperties.
 import static com.github.starnowski.posmulten.configuration.yaml.TestProperties.DISABLED_SQL_DEFINITIONS_VALIDATION_FILE_PATH
 import static com.github.starnowski.posmulten.configuration.yaml.TestProperties.SQL_DEFINITIONS_VALIDATION_WITH_CUSTOM_CONSTRAINTS_FILE_PATH
 import static com.github.starnowski.posmulten.configuration.yaml.TestProperties.SQL_DEFINITIONS_VALIDATION_WITH_INVALID_CONSTRAINTS_PATH
+import static com.github.starnowski.posmulten.configuration.yaml.TestProperties.SQL_DEFINITIONS_VALIDATION_WITH_NULL_VALUES_PATH
 
 class YamlConfigurationDefaultSharedSchemaContextBuilderFactoryTest extends AbstractSpecification {
 
@@ -36,7 +37,7 @@ class YamlConfigurationDefaultSharedSchemaContextBuilderFactoryTest extends Abst
             !builder.build().getSqlDefinitions().isEmpty()
 
         where:
-            filePath << [ALL_FIELDS_FILE_PATH, ONLY_MANDATORY_FIELDS_FILE_PATH, MANY_TO_MANY_TABLES_FILE_PATH, DISABLED_SQL_DEFINITIONS_VALIDATION_FILE_PATH, SQL_DEFINITIONS_VALIDATION_WITH_CUSTOM_CONSTRAINTS_FILE_PATH]
+            filePath << [ALL_FIELDS_FILE_PATH, ONLY_MANDATORY_FIELDS_FILE_PATH, MANY_TO_MANY_TABLES_FILE_PATH, DISABLED_SQL_DEFINITIONS_VALIDATION_FILE_PATH, SQL_DEFINITIONS_VALIDATION_WITH_CUSTOM_CONSTRAINTS_FILE_PATH, SQL_DEFINITIONS_VALIDATION_WITH_NULL_VALUES_PATH]
     }
 
     @Unroll
