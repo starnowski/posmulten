@@ -43,8 +43,8 @@ class TablesThatAddingOfTenantColumnDefaultValueShouldBeSkippedSharedSchemaConte
             {
                 builder.createRLSPolicyForTable(table, [id: null], null, null)
             }
-            builder.skipAddingOfTenantColumnDefaultValueForTable(tablesForWhichTenantColumnCreationShouldBeSkipped)
-            SharedSchemaContextRequest request = builder.getSharedSchemaContextRequestCopy()
+            SharedSchemaContextRequest request = builder.skipAddingOfTenantColumnDefaultValueForTable(tablesForWhichTenantColumnCreationShouldBeSkipped)
+                .getSharedSchemaContextRequestCopy()
 
         when:
             tested.validate(request)

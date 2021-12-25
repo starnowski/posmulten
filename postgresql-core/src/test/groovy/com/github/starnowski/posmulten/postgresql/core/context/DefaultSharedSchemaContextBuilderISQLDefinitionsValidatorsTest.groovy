@@ -7,6 +7,8 @@ import com.github.starnowski.posmulten.postgresql.core.context.validators.Functi
 import com.github.starnowski.posmulten.postgresql.core.context.validators.ISQLDefinitionsValidator
 import spock.lang.Specification
 
+import static java.util.Collections.emptyList
+
 class DefaultSharedSchemaContextBuilderISQLDefinitionsValidatorsTest extends Specification {
 
     def "should pass generated sql definitions to each validator"()
@@ -105,7 +107,7 @@ class DefaultSharedSchemaContextBuilderISQLDefinitionsValidatorsTest extends Spe
     def "should disable validators by setting empty list"()
     {
         given:
-            DefaultSharedSchemaContextBuilder tested = new DefaultSharedSchemaContextBuilder().setSqlDefinitionsValidators(null)
+            DefaultSharedSchemaContextBuilder tested = new DefaultSharedSchemaContextBuilder().setSqlDefinitionsValidators(emptyList())
 
         when:
             def results = tested.prepareSqlDefinitionsValidators(new SharedSchemaContextRequest())

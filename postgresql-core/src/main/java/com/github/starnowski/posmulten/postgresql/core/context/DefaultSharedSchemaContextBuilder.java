@@ -99,7 +99,6 @@ public class DefaultSharedSchemaContextBuilder {
         }
         List<ISQLDefinitionsValidator> sqlDefinitionsValidators = prepareSqlDefinitionsValidators(sharedSchemaContextRequestCopy);
         for (ISQLDefinitionsValidator validator : sqlDefinitionsValidators) {
-            //TODO Add tests
             validator.validate(context.getSqlDefinitions());
         }
         return context;
