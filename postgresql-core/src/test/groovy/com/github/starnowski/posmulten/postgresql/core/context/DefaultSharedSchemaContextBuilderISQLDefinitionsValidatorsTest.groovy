@@ -128,12 +128,44 @@ class DefaultSharedSchemaContextBuilderISQLDefinitionsValidatorsTest extends Spe
                     .setDisableDefaultSqlDefinitionsValidators(disabled)
 
         when:
-            def result = tested.isDisableDefaultSqlDefinitionsValidators()
+            tested.setDisableDefaultSqlDefinitionsValidators(disabled)
 
         then:
-            result == disabled
+            tested.isDisableDefaultSqlDefinitionsValidators() == disabled
 
         where:
             disabled    << [true, false]
+    }
+
+    @Unroll
+    def "should set identifierMaxLength property, expected #identifierMaxLength"()
+    {
+        given:
+            DefaultSharedSchemaContextBuilder tested = new DefaultSharedSchemaContextBuilder()
+
+        when:
+            tested.setIdentifierMaxLength(identifierMaxLength)
+
+        then:
+            tested.getSharedSchemaContextRequestCopy().getIdentifierMaxLength() == identifierMaxLength
+
+        where:
+            identifierMaxLength << [1, 33, 991, 22]
+    }
+
+    @Unroll
+    def "should set identifierMinLength property, expected #identifierMinLength"()
+    {
+        given:
+            DefaultSharedSchemaContextBuilder tested = new DefaultSharedSchemaContextBuilder()
+
+        when:
+            tested.setIdentifierMinLength(identifierMinLength)
+
+        then:
+            tested.getSharedSchemaContextRequestCopy().getIdentifierMinLength() == identifierMinLength
+
+        where:
+            identifierMinLength << [1, 33, 991, 22]
     }
 }
