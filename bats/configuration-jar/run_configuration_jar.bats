@@ -238,7 +238,7 @@ function setup {
   echo "output is --> $output <--"  >&3
   echo "$output" > "$BATS_TMPDIR/$TIMESTAMP/output"
   [ "$status" -eq 0 ]
-  cmp -s "$BATS_TMPDIR/$TIMESTAMP/output" "$YAML_SYNTAX_GUIDE_PATH"
+  cmp "$BATS_TMPDIR/$TIMESTAMP/output" "$YAML_SYNTAX_GUIDE_PATH"
 }
 
 function teardown {
