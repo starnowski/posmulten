@@ -230,6 +230,9 @@ function setup {
 @test "The executable jar should print yaml syntax guide" {
   #given
   YAML_SYNTAX_GUIDE_PATH="${CONFIGURATION_JAR_DIR}/src/main/resources/configuration-yaml-interpreter-readme.txt"
+  cp "$YAML_SYNTAX_GUIDE_PATH" "$BATS_TMPDIR/$TIMESTAMP/"
+  YAML_SYNTAX_GUIDE_PATH="$BATS_TMPDIR/$TIMESTAMP/configuration-yaml-interpreter-readme.txt"
+  sed -e '$a\'  "${YAML_SYNTAX_GUIDE_PATH}"
 
   #when
   run java -Dposmulten.configuration.config.yaml.syntax.guide.print="true" -jar "$CONFIGURATION_JAR_NAME"
