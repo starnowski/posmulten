@@ -232,7 +232,7 @@ function setup {
   YAML_SYNTAX_GUIDE_PATH="${CONFIGURATION_JAR_DIR}/src/main/resources/configuration-yaml-interpreter-readme.txt"
   cp "$YAML_SYNTAX_GUIDE_PATH" "$BATS_TMPDIR/$TIMESTAMP/"
   YAML_SYNTAX_GUIDE_PATH="$BATS_TMPDIR/$TIMESTAMP/configuration-yaml-interpreter-readme.txt"
-  sed -e '$a\'  "${YAML_SYNTAX_GUIDE_PATH}"
+#  sed -e '$a\'  "${YAML_SYNTAX_GUIDE_PATH}"
 
   #when
   run java -Dposmulten.configuration.config.yaml.syntax.guide.print="true" -jar "$CONFIGURATION_JAR_NAME"
@@ -241,6 +241,7 @@ function setup {
   echo "output is --> $output <--"  >&3
   echo "$output" > "$BATS_TMPDIR/$TIMESTAMP/output"
   [ "$status" -eq 0 ]
+  sed -e '$a\'  "$BATS_TMPDIR/$TIMESTAMP/output"
   cmp -b "$BATS_TMPDIR/$TIMESTAMP/output" "$YAML_SYNTAX_GUIDE_PATH"
 }
 
