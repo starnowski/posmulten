@@ -227,6 +227,20 @@ function setup {
   [ "${lines[0]}" = "$EXPECTED_VERSION_NUMBER" ]
 }
 
+@test "The executable jar should print yaml syntax guide" {
+  #given
+  YAML_SYNTAX_GUIDE_PATH="${CONFIGURATION_JAR_DIR}/src/main/resources/configuration-yaml-interpreter-readme.txt"
+
+  #when
+  run java -Dposmulten.configuration.config.yaml.syntax.guide.print="true" -jar "$CONFIGURATION_JAR_NAME"
+
+  #then
+  echo "output is --> $output <--"  >&3
+  echo "$output" > "$BATS_TMPDIR/$TIMESTAMP/output"
+  [ "$status" -eq 0 ]
+  cmp -s "$BATS_TMPDIR/$TIMESTAMP/output" "$YAML_SYNTAX_GUIDE_PATH"
+}
+
 function teardown {
   rm -rf "$BATS_TMPDIR/$TIMESTAMP"
 }
