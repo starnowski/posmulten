@@ -6,8 +6,8 @@
     "markdown-to-ansi": "1.0.0"
   },
   "engines": {
-    "node": ">=8"
+    "node": ">=14"
   },
-  "scripts": {
-  }
+  "type": "module",
+  "scripts": {}
 }
