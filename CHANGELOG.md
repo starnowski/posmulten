@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 https://keepachangelog.com/en/1.0.0/
 https://www.markdownguide.org/basic-syntax/
 
+* [Unreleased](#unreleased)
 * [0.4.1](#041---2021-08-29)
 * [0.4.0](#040---2021-01-30)
 * [0.3.1](#031---2021-01-29)
