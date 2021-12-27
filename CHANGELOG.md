@@ -24,6 +24,8 @@ https://www.markdownguide.org/basic-syntax/
     This change is not backward compatible.
     -   Added method com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition#getCheckingStatements()
         [65](https://github.com/starnowski/posmulten/issues/65)   
+    -   Added method com.github.starnowski.posmulten.configuration.core.context.DDLWriter#saveCheckingStatements(String filePath, ISharedSchemaContext sharedSchemaContext)
+        [65](https://github.com/starnowski/posmulten/issues/65)  
     -   Checking system property "posmulten.configuration.validation.statements.path" in com.github.starnowski.posmulten.configuration.jar.DDLWriter#main(String[] args).
         Property value points to the output file path where SQL statements that validate schema are going to be stored.
         [65](https://github.com/starnowski/posmulten/issues/65)   
