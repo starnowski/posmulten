@@ -27,6 +27,10 @@ https://www.markdownguide.org/basic-syntax/
         [137](https://github.com/starnowski/posmulten/issues/137)  
     -   Added type com.github.starnowski.posmulten.configuration.core.model.SqlDefinitionsValidation
         [137](https://github.com/starnowski/posmulten/issues/137)  
+    -   Added usage of com.github.starnowski.posmulten.configuration.yaml.mappers.SqlDefinitionsValidationMapper in methods 
+        com.github.starnowski.posmulten.configuration.yaml.mappers.SharedSchemaContextConfigurationMapper#map(com.github.starnowski.posmulten.configuration.core.model.SharedSchemaContextConfiguration input)
+        com.github.starnowski.posmulten.configuration.yaml.mappers.SharedSchemaContextConfigurationMapper#unmap(SharedSchemaContextConfiguration output)
+        [137](https://github.com/starnowski/posmulten/issues/137)  
 
 
 -   Added method to the SQLDefinition interface that returns statement which checks if SQL definition was applied correctly.
