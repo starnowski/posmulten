@@ -20,8 +20,11 @@ https://www.markdownguide.org/basic-syntax/
 ## [Unreleased]
 
 ### Added
+-   Added validator component that checks if the passed identifier has the correct name.
+    -   Added type com.github.starnowski.posmulten.configuration.core.SqlDefinitionsValidationEnricher
+        [137](https://github.com/starnowski/posmulten/issues/137)  
+
 -   Added method to the SQLDefinition interface that returns statement which checks if SQL definition was applied correctly.
-    This change is not backward compatible.
     -   Added method com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition#getCheckingStatements()
         [65](https://github.com/starnowski/posmulten/issues/65)   
     -   Added method com.github.starnowski.posmulten.configuration.core.context.DDLWriter#saveCheckingStatements(String filePath, ISharedSchemaContext sharedSchemaContext)
@@ -31,6 +34,9 @@ https://www.markdownguide.org/basic-syntax/
         [65](https://github.com/starnowski/posmulten/issues/65)   
         
 ### Changed
+
+-  Added parameter of type com.github.starnowski.posmulten.configuration.core.SqlDefinitionsValidationEnricher to constructor #DefaultSharedSchemaContextBuilderConfigurationEnricher(TablesEntriesEnricher tablesEntriesEnricher, ValidTenantValueConstraintConfigurationEnricher validTenantValueConstraintConfigurationEnricher)
+   [137](https://github.com/starnowski/posmulten/issues/137)  
 
 -  Added parameter of type string to method com.github.starnowski.posmulten.configuration.DDLScriptsGenerator#generate(String configurationFilePath, String createScripsFilePath, String dropScripsFilePath)
    Parameter value points to the output file path where SQL statements that validate schema are going to be stored. [65](https://github.com/starnowski/posmulten/issues/65)  
