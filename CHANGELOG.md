@@ -53,6 +53,8 @@ https://www.markdownguide.org/basic-syntax/
         [137](https://github.com/starnowski/posmulten/issues/137) 
     -   Added property identifierMaxLength of type java.lang.Integer to com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContextRequest and setter and getter methods
         [137](https://github.com/starnowski/posmulten/issues/137)  
+    -   Added property identifierMinLength of type java.lang.Integer to com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContextRequest and setter and getter methods
+        [137](https://github.com/starnowski/posmulten/issues/137)  
 
 -   Added method to the SQLDefinition interface that returns statement which checks if SQL definition was applied correctly.
     -   Added method com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition#getCheckingStatements()
