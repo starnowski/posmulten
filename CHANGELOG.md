@@ -37,7 +37,8 @@ https://www.markdownguide.org/basic-syntax/
         [137](https://github.com/starnowski/posmulten/issues/137)  
     -   Added type com.github.starnowski.posmulten.configuration.yaml.model.SqlDefinitionsValidation
         [137](https://github.com/starnowski/posmulten/issues/137)  
-
+    -   Added property disableDefaultSqlDefinitionsValidators of type boolean in to com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder and setter and getter methods
+        [137](https://github.com/starnowski/posmulten/issues/137)  
 
 -   Added method to the SQLDefinition interface that returns statement which checks if SQL definition was applied correctly.
     -   Added method com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition#getCheckingStatements()
