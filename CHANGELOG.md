@@ -23,7 +23,7 @@ https://www.markdownguide.org/basic-syntax/
 -   Added validator component that checks if the passed identifier has the correct name.
     -   Added type com.github.starnowski.posmulten.configuration.core.SqlDefinitionsValidationEnricher
         [137](https://github.com/starnowski/posmulten/issues/137)  
-    -   Added property sqlDefinitionsValidation of type com.github.starnowski.posmulten.configuration.core.model.SqlDefinitionsValidation in to com.github.starnowski.posmulten.configuration.core.model.SharedSchemaContextConfiguration
+    -   Added property sqlDefinitionsValidation of type com.github.starnowski.posmulten.configuration.core.model.SqlDefinitionsValidation to com.github.starnowski.posmulten.configuration.core.model.SharedSchemaContextConfiguration
         [137](https://github.com/starnowski/posmulten/issues/137)  
     -   Added type com.github.starnowski.posmulten.configuration.core.model.SqlDefinitionsValidation
         [137](https://github.com/starnowski/posmulten/issues/137)  
@@ -33,11 +33,11 @@ https://www.markdownguide.org/basic-syntax/
         [137](https://github.com/starnowski/posmulten/issues/137)  
     -   Added type com.github.starnowski.posmulten.configuration.yaml.mappers.SqlDefinitionsValidationMapper
         [137](https://github.com/starnowski/posmulten/issues/137)  
-    -   Added property sqlDefinitionsValidation of type com.github.starnowski.posmulten.configuration.yaml.model.SqlDefinitionsValidation in to com.github.starnowski.posmulten.configuration.yaml.model.SharedSchemaContextConfiguration
+    -   Added property sqlDefinitionsValidation of type com.github.starnowski.posmulten.configuration.yaml.model.SqlDefinitionsValidation to com.github.starnowski.posmulten.configuration.yaml.model.SharedSchemaContextConfiguration
         [137](https://github.com/starnowski/posmulten/issues/137)  
     -   Added type com.github.starnowski.posmulten.configuration.yaml.model.SqlDefinitionsValidation
         [137](https://github.com/starnowski/posmulten/issues/137)  
-    -   Added property disableDefaultSqlDefinitionsValidators of type boolean in to com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder and setter and getter methods
+    -   Added property disableDefaultSqlDefinitionsValidators of type boolean to com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder and setter and getter methods
         [137](https://github.com/starnowski/posmulten/issues/137)  
     -   Added method com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#setIdentifierMaxLength(Integer identifierMaxLength)
         [137](https://github.com/starnowski/posmulten/issues/137) 
@@ -51,6 +51,8 @@ https://www.markdownguide.org/basic-syntax/
         [137](https://github.com/starnowski/posmulten/issues/137) 
     -   Added type com.github.starnowski.posmulten.postgresql.core.context.IdentifierLengthValidator
         [137](https://github.com/starnowski/posmulten/issues/137) 
+    -   Added property identifierMaxLength of type java.lang.Integer to com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContextRequest and setter and getter methods
+        [137](https://github.com/starnowski/posmulten/issues/137)  
 
 -   Added method to the SQLDefinition interface that returns statement which checks if SQL definition was applied correctly.
     -   Added method com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition#getCheckingStatements()
