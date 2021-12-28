@@ -20,6 +20,11 @@ https://www.markdownguide.org/basic-syntax/
 ## [Unreleased]
 
 ### Added
+-   Printing the content of configuration-yaml-interpreter module README.md file converted to ANSI
+    -   Printing the content of configuration-yaml-interpreter module README.md file when setting "posmulten.configuration.config.yaml.syntax.guide.print"
+        system property in com.github.starnowski.posmulten.configuration.jar.DDLScriptsGeneratorRunner#main(String[] args) method
+        [216](https://github.com/starnowski/posmulten/issues/216)  
+
 -   Added validator component that checks if the passed identifier has the correct name.
     -   Added type com.github.starnowski.posmulten.configuration.core.SqlDefinitionsValidationEnricher
         [137](https://github.com/starnowski/posmulten/issues/137)  
