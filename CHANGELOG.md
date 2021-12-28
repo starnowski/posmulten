@@ -41,6 +41,8 @@ https://www.markdownguide.org/basic-syntax/
         [137](https://github.com/starnowski/posmulten/issues/137)  
     -   Added method com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#setIdentifierMaxLength(Integer identifierMaxLength)
         [137](https://github.com/starnowski/posmulten/issues/137) 
+    -   Added method com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#setIdentifierMinLength(Integer identifierMinLength)
+        [137](https://github.com/starnowski/posmulten/issues/137) 
 
 -   Added method to the SQLDefinition interface that returns statement which checks if SQL definition was applied correctly.
     -   Added method com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition#getCheckingStatements()
