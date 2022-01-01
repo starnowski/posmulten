@@ -71,4 +71,16 @@ public interface ISharedSchemaContext {
     IIsTenantValidFunctionInvocationFactory getIIsTenantValidFunctionInvocationFactory();
 
     void setIIsTenantValidFunctionInvocationFactory(IIsTenantValidFunctionInvocationFactory factory);
+
+    /**
+     * Returns tenant identifier column type
+     * @return tenant identifier column type
+     */
+    String getCurrentTenantIdPropertyType();
+
+    /**
+     * Set  tenant identifier column type
+     * @param currentTenantIdPropertyType tenant identifier column type
+     */
+    void setCurrentTenantIdPropertyType(String currentTenantIdPropertyType);
 }
