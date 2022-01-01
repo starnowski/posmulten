@@ -19,7 +19,7 @@ class CurrentTenantIdPropertyTypeEnricherTest extends Specification {
             def result = tested.enrich(context, request)
 
         then:
-            result.currentTenantIdPropertyType == expected
+            result.getCurrentTenantIdPropertyType() == expected
 
         and: "enricher should return the same context object (same instance)"
             result.is(context)
