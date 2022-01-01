@@ -20,6 +20,14 @@ https://www.markdownguide.org/basic-syntax/
 ## [Unreleased]
 
 ### Added
+-   Added to ISharedSchemaContext interface method which returns Tenant Column type
+    -   Added method com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaContext#setCurrentTenantIdPropertyType(String currentTenantIdPropertyType)
+        [218](https://github.com/starnowski/posmulten/issues/218)  
+    -   Added method com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaContext#getCurrentTenantIdPropertyType()
+        [218](https://github.com/starnowski/posmulten/issues/218)
+    -   Added type com.github.starnowski.posmulten.postgresql.core.context.enrichers.CurrentTenantIdPropertyTypeEnricher
+        [218](https://github.com/starnowski/posmulten/issues/218)
+
 -   Printing the content of configuration-yaml-interpreter module README.md file converted to ANSI
     -   Printing the content of configuration-yaml-interpreter module README.md file when setting "posmulten.configuration.config.yaml.syntax.guide.print"
         system property in com.github.starnowski.posmulten.configuration.jar.DDLScriptsGeneratorRunner#main(String[] args) method
