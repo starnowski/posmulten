@@ -41,6 +41,7 @@ public class SharedSchemaContext implements ISharedSchemaContext {
     private List<SQLDefinition> sqlDefinitions = new ArrayList<>();
     private Map<TableKey, IsRecordBelongsToCurrentTenantFunctionInvocationFactory> tableKeysIsRecordBelongsToCurrentTenantFunctionInvocationFactoryMap = new HashMap();
     private IIsTenantValidFunctionInvocationFactory iIsTenantValidFunctionInvocationFactory;
+    private String currentTenantIdPropertyType;
 
     @Override
     public List<SQLDefinition> getSqlDefinitions() {
@@ -102,5 +103,15 @@ public class SharedSchemaContext implements ISharedSchemaContext {
     @Override
     public void setIIsTenantValidFunctionInvocationFactory(IIsTenantValidFunctionInvocationFactory factory) {
         this.iIsTenantValidFunctionInvocationFactory = factory;
+    }
+
+    @Override
+    public String getCurrentTenantIdPropertyType() {
+        return currentTenantIdPropertyType;
+    }
+
+    @Override
+    public void setCurrentTenantIdPropertyType(String currentTenantIdPropertyType) {
+        this.currentTenantIdPropertyType = currentTenantIdPropertyType;
     }
 }
