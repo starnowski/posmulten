@@ -1,4 +1,4 @@
-[1m# Configuration-yaml-interpreter[22m
+# Configuration-yaml-interpreter
 
 The configuration-yaml-interpreter module can interpreted configuration file in yaml format and based on that it creates
 DDL statements that allows to create the shared schema strategy.
@@ -11,7 +11,7 @@ The YAML schema description is below.
 - #sql-definitions-validation
 - #details
 
-[1m## Simple example:[22m
+## Simple example:
 
 Bellow, there is a configuration example for a schema with the name "public".
 The schema contains four tables, users, posts, groups, and users\_groups (many-to-many relation).
@@ -72,7 +72,7 @@ tables:
           group_id:  uuid
 ```
 
-[1m## Root properties[22m
+## Root properties
 
 | Property name |   Type    |   Required    |   Nullable    |   Description |
 |---------------|-----------|---------------|---------------|---------------|
@@ -91,9 +91,9 @@ tables:
 |#equals_current_tenant_identifier_function_name |  String  |   No    |   No  |   Name of the function name that checks if passed identifier is the same as the current tenant identifier. |
 |#set_current_tenant_identifier_as_default_value_for_tenant_column_in_all_tables |  Boolean  |   No    |   Yes  |   Generate a statement that sets a default value for the tenant column in all tables. |
 
-[1m## Setting a list of invalid tenant identifier values[22m
+## Setting a list of invalid tenant identifier values
 
-The [1mvalid_tenant_value_constraint[22m object is used to configure constraint that will be added to all tenant column in all tables.
+The valid_tenant_value_constraint object is used to configure constraint that will be added to all tenant column in all tables.
 Constraint keeps tenant column value valid.
 
 | Property name |   Type    |   Required    |   Nullable    |   Description |
@@ -113,14 +113,14 @@ valid_tenant_value_constraint:
 
 For more information please check https://github.com/starnowski/posmulten#setting-a-list-of-invalid-tenant-identifier-values.
 
-[1m## Tables configuration[22m
+## Tables configuration
 
-The [1mtables[22m property is an array of objects that each references to a single table.
+The tables property is an array of objects that each references to a single table.
 The table object ables to configure things like the RLS policy or the constraint that checks if the foreign key belongs to the same tenant as a current logged tenant.
 It is not mandatory to configure all tables. In some cases, there is no sense to create an entry for the table.
 For example, tables that are supposed to use by all tenants, like dictionary tables, do not need to have a configured RLS policy.
 
-[1mTable object[22m
+Table object
 
 | Property name |   Type    |   Required    |   Nullable    |   Description |
 |---------------|-----------|---------------|---------------|---------------|
@@ -128,7 +128,7 @@ For example, tables that are supposed to use by all tenants, like dictionary tab
 |#rls_policy   |   Object  |   No |   No  |   Object that defines RLS for table   |
 |#foreign_keys   |   Array of objects  |   No |   No  |   An array of objects that defines foreign key constraint for a table with RLS policy  |
 
-[1m### rls_policy[22m
+### rls_policy
 
 The rls\_policy entry is required to specify the RLS policy for table.
 
@@ -141,14 +141,14 @@ The rls\_policy entry is required to specify the RLS policy for table.
 |#skip_adding_of_tenant_column_default_value   |   Boolean  |   No |   No  | Option force to skip adding default value to tenant column for a table    |
 |#primary_key_definition   |   Object  |   No |   No  | Object that defines primary keys for a table |
 
-[1m### primary_key_definition[22m
+### primary_key_definition
 
 | Property name |   Type    |   Required    |   Nullable    |   Description |
 |---------------|-----------|---------------|---------------|---------------|
 |#pk_columns_name_to_type   |   Map  |   No |   Yes  |   Map of primary key columns where the key is column name and value is its type   |
 |#name_for_function_that_checks_if_record_exists_in_table   |   String  |   Yes |   No  |   Function name that checks if passed primary key for a specific table exists for the current tenant   |
 
-[1m### foreign_keys[22m
+### foreign_keys
 
 An array of objects that defines foreign key constraint for a table with RLS policy.
 Based on each array object, there is going to be created constraint that checks if a foreign key value refers to a record that exists for the current logged tenant.
@@ -208,14 +208,14 @@ tables:
           parent_comment_random_uuid:  random_uuid
 ```
 
-[1m## SQL definitions validation[22m
+## SQL definitions validation
 
-The [1msql_definitions_validation[22m property is used to configure the validation of generated sql definitions.
+The sql_definitions_validation property is used to configure the validation of generated sql definitions.
 It is a complex type.
 
 | Property name |   Type    |   Required    |   Nullable    |   Description |
 |---------------|-----------|---------------|---------------|---------------|
-|disabled   |   Boolean  |   No |   No  |   Validation toggle, by default property has value [1mfalse[22m which means that validation is enabled |
+|disabled   |   Boolean  |   No |   No  |   Validation toggle, by default property has value false which means that validation is enabled |
 |identifier\_max\_length   |   Integer  |   No |   No  |   Maximum allowed length for the identifier |
 |identifier\_min\_length   |   Integer  |   No |   No  |   Minimum allowed length for the identifier |
 
@@ -228,9 +228,9 @@ sql_definitions_validation:
   disabled: false
 ```
 
-[1m## Details[22m
+## Details
 
-[1m### default_schema[22m
+### default_schema
 
 Name of the database schema for which changes should be applied.
 
@@ -246,7 +246,7 @@ default_schema:
 
 For more information please check https://github.com/starnowski/posmulten/tree/master#setting-default-database-schema.
 
-[1m### current_tenant_id_property_type[22m
+### current_tenant_id_property_type
 
 Type of column that stores tenant identifier and it is also the type of parameters for some generated functions.
 For example, for the below entries:
@@ -268,7 +268,7 @@ PARALLEL SAFE;
 
 For more information please check https://github.com/starnowski/posmulten/tree/master#setting-of-type-for-tenant-identifier-value.
 
-[1m### current_tenant_id_property[22m
+### current_tenant_id_property
 
 Property name that stores the value of tenant identifier in the database connection.
 Example:
@@ -279,7 +279,7 @@ current_tenant_id_property: "pos.c.ten"
 
 For more information please check https://github.com/starnowski/posmulten#setting-the-property-name-that-stores-tenant-identifier-value.
 
-[1m### get_current_tenant_id_function_name[22m
+### get_current_tenant_id_function_name
 
 Name of the function that returns the current tenant identifier.
 For example, for the below entries:
@@ -298,7 +298,7 @@ STABLE
 PARALLEL SAFE;
 ```
 
-[1m### set_current_tenant_id_function_name[22m
+### set_current_tenant_id_function_name
 
 Name of the function that sets the current tenant identifier.
 For example, for the below entries:
@@ -318,7 +318,7 @@ $$ LANGUAGE plpgsql
 VOLATILE;
 ```
 
-[1m### equals_current_tenant_identifier_function_name[22m
+### equals_current_tenant_identifier_function_name
 
 Name of the function name that checks if passed identifier is the same as the current tenant identifier.
 For example, for the below entries:
@@ -337,7 +337,7 @@ STABLE
 PARALLEL SAFE;
 ```
 
-[1m### tenant_has_authorities_function_name[22m
+### tenant_has_authorities_function_name
 
 Name of the function name that checks if the current tenant has authority to a table row.
 For example, for the below entries:
@@ -356,7 +356,7 @@ STABLE
 PARALLEL SAFE;
 ```
 
-[1m### force_row_level_security_for_table_owner[22m
+### force_row_level_security_for_table_owner
 
 Option that force RLS policy for table owner.
 This option is required if the database user for which RLS is created is also a table owner.
@@ -369,7 +369,7 @@ force_row_level_security_for_table_owner: true
 
 For more information please check https://github.com/starnowski/posmulten#force-rls-policy-for-table-owner.
 
-[1m### default_tenant_id_column[22m
+### default_tenant_id_column
 
 The default name of the column that stores the tenant identifier.
 This name is used when the table does not have a specified custom name for the column that stores the tenant identifier.
@@ -381,7 +381,7 @@ default_tenant_id_column: "tenant_uuid"
 
 For more information please check https://github.com/starnowski/posmulten#setting-default-tenant-column-name.
 
-[1m### grantee[22m
+### grantee
 
 Database user for which RLS policy is going to be created.
 Example:
@@ -392,7 +392,7 @@ grantee: "application-user"
 
 For more information please check https://github.com/starnowski/posmulten#setting-default-database-user-for-rls-policy.
 
-[1m### set_current_tenant_identifier_as_default_value_for_tenant_column_in_all_tables[22m
+### set_current_tenant_identifier_as_default_value_for_tenant_column_in_all_tables
 
 Generate a statement that sets a default value for the tenant column in all tables.
 This functionality is useful when we don't always want to specified tenant id value in the insert statement.
@@ -405,7 +405,7 @@ set_current_tenant_identifier_as_default_value_for_tenant_column_in_all_tables: 
 
 For more information please check https://github.com/starnowski/posmulten#adding-default-value-for-tenant-column.
 
-[1m### is_tenant_valid_function_name[22m
+### is_tenant_valid_function_name
 
 Name of the function that checks if passed tenant identifier is valid.
 For example, for the below entries:
@@ -430,7 +430,7 @@ PARALLEL SAFE;
 
 For more information please check https://github.com/starnowski/posmulten#setting-a-list-of-invalid-tenant-identifier-values.
 
-[1m### is_tenant_valid_constraint_name[22m
+### is_tenant_valid_constraint_name
 
 Name of the constraint that checks if the tenant column has a valid value.
 For example, for the below entries:
@@ -451,26 +451,26 @@ ALTER TABLE "posts" ADD CONSTRAINT tenant_must_be_valid CHECK (tenant_id IS NULL
 
 For more information please check https://github.com/starnowski/posmulten#setting-a-list-of-invalid-tenant-identifier-values.
 
-[1m### create_tenant_column_for_table[22m
+### create_tenant_column_for_table
 
 Option force to create tenant column for the table.
 By default, the Posmulten library assumes that the tenant column exists.
 To check what kind of DDL statements are generated for tenant column definition please check the https://github.com/starnowski/posmulten#adding-tenant-column-to-tenant-table.
 
-[1m### skip_adding_of_tenant_column_default_value[22m
+### skip_adding_of_tenant_column_default_value
 
 Option force to skip adding default value to tenant column for table.
 This option make sense to use when the #set_current_tenant_identifier_as_default_value_for_tenant_column_in_all_tables option is turned on.
 It simply allows to skip adding default value definition for tenant column is specified table.
 For more information please check https://github.com/starnowski/posmulten#skipping-adding-default-value-for-tenant-column-for-a-single-table.
 
-[1m### pk_columns_name_to_type[22m
+### pk_columns_name_to_type
 
 Map of primary key columns where the key is column name and value is its type.
 The map can be empty or even null.
 This is a valid case for example for a many-to-many relation table without any primary key, just with foreign keys for tables that it refers to.
 
-[1m### name_for_function_that_checks_if_record_exists_in_table[22m
+### name_for_function_that_checks_if_record_exists_in_table
 
 Function name that checks if passed primary key for a specific table exists for the current tenant.
 This function is generated only when some other table has a #foreign_keys that refers to the primary key table.
