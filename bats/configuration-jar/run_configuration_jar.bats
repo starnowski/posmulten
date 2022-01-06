@@ -239,9 +239,8 @@ function setup {
 
   #then
   echo "output is --> $output <--"  >&3
-  echo "$output" > "$BATS_TMPDIR/$TIMESTAMP/output"
+  echo -n "$output" > "$BATS_TMPDIR/$TIMESTAMP/output"
   [ "$status" -eq 0 ]
-  sed -e '$a\'  "$BATS_TMPDIR/$TIMESTAMP/output"
   cmp -b "$BATS_TMPDIR/$TIMESTAMP/output" "$YAML_SYNTAX_GUIDE_PATH"
 }
 
