@@ -20,6 +20,16 @@ public class DDLScriptsGeneratorRunner {
             p.load(is);
             String version = p.getProperty("configuration.jar.project.version");
             System.out.print(version);
+        } else if (Boolean.TRUE.equals(Boolean.valueOf(System.getProperty("posmulten.configuration.config.yaml.syntax.guide.print")))) {
+            java.io.InputStream input = DDLScriptsGeneratorRunner.class.getClassLoader().getResourceAsStream("configuration-yaml-interpreter-readme.txt");
+            byte[] buffer = new byte[8192];
+            try {
+                for (int length = 0; (length = input.read(buffer)) != -1; ) {
+                    System.out.write(buffer, 0, length);
+                }
+            } finally {
+                input.close();
+            }
         } else {
             String configFilePath = System.getProperty("posmulten.configuration.config.file.path");
             String createScriptPath = System.getProperty("posmulten.configuration.create.script.path");

@@ -1,0 +1,13 @@
+{
+  "name": "@posmulten/configuration-yaml-interpreter-readme-converter",
+  "description": "Yaml configuration README.md file converter",
+  "version": "0.0.1",
+  "devDependencies": {
+    "markdown-to-ansi": "1.0.0"
+  },
+  "engines": {
+    "node": ">=14"
+  },
+  "type": "module",
+  "scripts": {}
+}
