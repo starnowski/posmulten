@@ -339,7 +339,11 @@ For example, the library can add a statement that [adds default value](#adding-d
 
 # How to start using posmulten
 Posmulten is a java project, so besides other projects written in java, you can also use the project as a dependency on projects written in languages executed on java virtual machine.
-The project required at least java 8.
+The project required at least java 8. 
+
+<b>IMPORTANT!</b>
+<br/>
+There is also [posmulten-ddl wrapper script](https://github.com/starnowski/posmulten-ddl) that gives the possibility of using the Posmulten library outside the java project.
 
 ### Setting maven dependency
 The project is available in the central maven repository.
