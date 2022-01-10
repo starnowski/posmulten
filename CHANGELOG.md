@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 https://keepachangelog.com/en/1.0.0/
 https://www.markdownguide.org/basic-syntax/
 
+* [Unreleased](#unreleased)
+* [0.4.1](#041---2021-08-29)
 * [0.4.0](#040---2021-01-30)
 * [0.3.1](#031---2021-01-29)
 * [0.3.0](#030---2021-01-24)
@@ -16,6 +18,90 @@ https://www.markdownguide.org/basic-syntax/
 * [0.2.0](#020---2020-11-14)
 
 ## [Unreleased]
+
+### Added
+-   Added to ISharedSchemaContext interface method which returns Tenant Column type
+    -   Added method com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaContext#setCurrentTenantIdPropertyType(String currentTenantIdPropertyType)
+        [218](https://github.com/starnowski/posmulten/issues/218)  
+    -   Added method com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaContext#getCurrentTenantIdPropertyType()
+        [218](https://github.com/starnowski/posmulten/issues/218)
+    -   Added type com.github.starnowski.posmulten.postgresql.core.context.enrichers.CurrentTenantIdPropertyTypeEnricher
+        [218](https://github.com/starnowski/posmulten/issues/218)
+
+-   Printing the content of configuration-yaml-interpreter module README.md file converted to ANSI
+    -   Printing the content of configuration-yaml-interpreter module README.md file when setting "posmulten.configuration.config.yaml.syntax.guide.print"
+        system property in com.github.starnowski.posmulten.configuration.jar.DDLScriptsGeneratorRunner#main(String[] args) method
+        [216](https://github.com/starnowski/posmulten/issues/216)  
+
+-   Added validator component that checks if the passed identifier has the correct name.
+    -   Added type com.github.starnowski.posmulten.configuration.core.SqlDefinitionsValidationEnricher
+        [137](https://github.com/starnowski/posmulten/issues/137)  
+    -   Added property sqlDefinitionsValidation of type com.github.starnowski.posmulten.configuration.core.model.SqlDefinitionsValidation to com.github.starnowski.posmulten.configuration.core.model.SharedSchemaContextConfiguration
+        [137](https://github.com/starnowski/posmulten/issues/137)  
+    -   Added type com.github.starnowski.posmulten.configuration.core.model.SqlDefinitionsValidation
+        [137](https://github.com/starnowski/posmulten/issues/137)  
+    -   Added usage of com.github.starnowski.posmulten.configuration.yaml.mappers.SqlDefinitionsValidationMapper in methods 
+        com.github.starnowski.posmulten.configuration.yaml.mappers.SharedSchemaContextConfigurationMapper#map(com.github.starnowski.posmulten.configuration.core.model.SharedSchemaContextConfiguration input)
+        com.github.starnowski.posmulten.configuration.yaml.mappers.SharedSchemaContextConfigurationMapper#unmap(SharedSchemaContextConfiguration output)
+        [137](https://github.com/starnowski/posmulten/issues/137)  
+    -   Added type com.github.starnowski.posmulten.configuration.yaml.mappers.SqlDefinitionsValidationMapper
+        [137](https://github.com/starnowski/posmulten/issues/137)  
+    -   Added property sqlDefinitionsValidation of type com.github.starnowski.posmulten.configuration.yaml.model.SqlDefinitionsValidation to com.github.starnowski.posmulten.configuration.yaml.model.SharedSchemaContextConfiguration
+        [137](https://github.com/starnowski/posmulten/issues/137)  
+    -   Added type com.github.starnowski.posmulten.configuration.yaml.model.SqlDefinitionsValidation
+        [137](https://github.com/starnowski/posmulten/issues/137)  
+    -   Added property disableDefaultSqlDefinitionsValidators of type boolean to com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder and setter and getter methods
+        [137](https://github.com/starnowski/posmulten/issues/137)  
+    -   Added method com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#setIdentifierMaxLength(Integer identifierMaxLength)
+        [137](https://github.com/starnowski/posmulten/issues/137) 
+    -   Added method com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#setIdentifierMinLength(Integer identifierMinLength)
+        [137](https://github.com/starnowski/posmulten/issues/137) 
+    -   Added method com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#getSqlDefinitionsValidatorsCopy()
+        [137](https://github.com/starnowski/posmulten/issues/137) 
+    -   Added method com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#setSqlDefinitionsValidators(List<ISQLDefinitionsValidator> sqlDefinitionsValidators)
+        [137](https://github.com/starnowski/posmulten/issues/137) 
+    -   Added interface com.github.starnowski.posmulten.postgresql.core.context.IIdentifierValidator
+        [137](https://github.com/starnowski/posmulten/issues/137) 
+    -   Added type com.github.starnowski.posmulten.postgresql.core.context.IdentifierLengthValidator
+        [137](https://github.com/starnowski/posmulten/issues/137) 
+    -   Added property identifierMaxLength of type java.lang.Integer to com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContextRequest and setter and getter methods
+        [137](https://github.com/starnowski/posmulten/issues/137)  
+    -   Added property identifierMinLength of type java.lang.Integer to com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContextRequest and setter and getter methods
+        [137](https://github.com/starnowski/posmulten/issues/137)  
+    -   Added type com.github.starnowski.posmulten.postgresql.core.context.exceptions.InvalidIdentifierException
+        [137](https://github.com/starnowski/posmulten/issues/137) 
+    -   Added type com.github.starnowski.posmulten.postgresql.core.context.exceptions.InvalidSharedSchemaContextRequestException
+        [137](https://github.com/starnowski/posmulten/issues/137) 
+    -   Added type com.github.starnowski.posmulten.postgresql.core.context.validators.FunctionDefinitionValidator
+        [137](https://github.com/starnowski/posmulten/issues/137) 
+    -   Added interface com.github.starnowski.posmulten.postgresql.core.context.validators.ISQLDefinitionsValidator
+        [137](https://github.com/starnowski/posmulten/issues/137) 
+    -   Added interface com.github.starnowski.posmulten.postgresql.core.context.validators.factories.IIdentifierValidatorFactory
+        [137](https://github.com/starnowski/posmulten/issues/137) 
+    -   Added type com.github.starnowski.posmulten.postgresql.core.context.validators.factories.IdentifierLengthValidatorFactory
+        [137](https://github.com/starnowski/posmulten/issues/137) 
+
+-   Added method to the SQLDefinition interface that returns statement which checks if SQL definition was applied correctly.
+    -   Added method com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition#getCheckingStatements()
+        [65](https://github.com/starnowski/posmulten/issues/65)   
+    -   Added method com.github.starnowski.posmulten.configuration.core.context.DDLWriter#saveCheckingStatements(String filePath, ISharedSchemaContext sharedSchemaContext)
+        [65](https://github.com/starnowski/posmulten/issues/65)  
+    -   Checking system property "posmulten.configuration.validation.statements.path" in com.github.starnowski.posmulten.configuration.jar.DDLWriter#main(String[] args).
+        Property value points to the output file path where SQL statements that validate schema are going to be stored.
+        [65](https://github.com/starnowski/posmulten/issues/65)   
+        
+### Changed
+
+-  Added parameter of type com.github.starnowski.posmulten.configuration.core.SqlDefinitionsValidationEnricher to constructor #DefaultSharedSchemaContextBuilderConfigurationEnricher(TablesEntriesEnricher tablesEntriesEnricher, ValidTenantValueConstraintConfigurationEnricher validTenantValueConstraintConfigurationEnricher)
+   [137](https://github.com/starnowski/posmulten/issues/137)  
+
+-  Added parameter of type string to method com.github.starnowski.posmulten.configuration.DDLScriptsGenerator#generate(String configurationFilePath, String createScripsFilePath, String dropScripsFilePath)
+   Parameter value points to the output file path where SQL statements that validate schema are going to be stored. [65](https://github.com/starnowski/posmulten/issues/65)  
+
+## [0.4.1] - 2021-08-29
+### Fixed
+
+- Updated hibernate-validator library from 6.0.18.Final to 6.0.20.Final in configuration-parent/configuration-yaml-interpreter
 
 ## [0.4.0] - 2021-01-30
 ### Fixed
