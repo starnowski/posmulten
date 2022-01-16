@@ -4,176 +4,176 @@ on:
   push:
 
 jobs:
-#  compilation_and_unit_tests:
-#    runs-on: ubuntu-latest
-#    name: "Compilation and unit tests"
-#    steps:
-#      - name: Git checkout
-#        uses: actions/checkout@v2
-#      - name: Set up JDK 1.8
-#        uses: actions/setup-java@v1
-#        with:
-#          java-version: 1.8
-#      - name: Build with Maven
-#        run: ./mvnw clean install -DskipTests --quiet && ./mvnw test
-#
-#  database_tests:
-#    runs-on: ubuntu-latest
-#    name: "Database creation tests for multiple postgres versions 9.6, 10, 11, 12, 13"
-#    steps:
-#      - name: Git checkout
-#        uses: actions/checkout@v2
-#      - name: Install bats
-#        run: .travis/bats/bats-core-installation.sh "$GITHUB_WORKSPACE/.travis/bats"
-#      - name: Run bats tests
-#        run: export PATH="$GITHUB_WORKSPACE/.travis/bats/bats-core/bin:$PATH" && bats/run_bats_test_for_all_db_version.sh
-#
-#  testing_configuration_jar:
-#    runs-on: ubuntu-latest
-#    name: "Testing configuration jar"
-#    steps:
-#      - name: Git checkout
-#        uses: actions/checkout@v2
-#      - name: Install bats
-#        run: .travis/bats/bats-core-installation.sh "$GITHUB_WORKSPACE/.travis/bats"
-#      - name: Install other libs
-#        run:  sudo apt-get -y install libxml2-utils
-#      - name: Run bats tests
-#        run:  ./mvnw -DskipTests --quiet clean install && export PATH="$GITHUB_WORKSPACE/.travis/bats/bats-core/bin:$PATH" && bats -tr bats/configuration-jar
-#
-#  integraion_tests:
-#    needs: [compilation_and_unit_tests, database_tests, testing_configuration_jar]
-#    runs-on: ubuntu-latest
-#    name: "Integration and functional tests in postgresql-core module"
-#    services:
-#      postgres:
-#        image: postgres:9.6
-#        env:
-#          POSTGRES_DB: postgres
-#          POSTGRES_PASSWORD: postgres
-#          POSTGRES_USER: postgres
-#          POSTGRES_HOST: localhost
-#        ports:
-#          - 5432:5432
-#        options: >-
-#          --health-cmd pg_isready
-#          --health-interval 10s
-#          --health-timeout 5s
-#          --health-retries 5
-#    steps:
-#      - name: Git checkout
-#        uses: actions/checkout@v2
-#
-#      - name: Set up JDK 1.8
-#        uses: actions/setup-java@v1
-#        with:
-#          java-version: 1.8
-#
-#      - name: Install library for postgres
-#        run: sudo apt-get -y install libpq-dev postgresql-client
-#
-#      - name: Create database
-#        run: export PGPASSWORD=postgres && psql -f 'db_scripts/prepare_postgresql-core_db.sql' -U postgres -h 127.0.0.1
-#
-#      - name: Run tests
-#        run: ./mvnw -DskipTests --quiet clean install && ./mvnw -pl :postgresql-core -P !unit-tests,integration-tests test && ./mvnw -pl :postgresql-core-functional-tests -P !unit-tests,functional-tests test
-#
-#  configuration_e2e_tests:
-#    needs: [compilation_and_unit_tests, database_tests, testing_configuration_jar]
-#    runs-on: ubuntu-latest
-#    name: "E2E smoke tests for configuration jar"
-#    services:
-#      postgres:
-#        image: postgres:9.6
-#        env:
-#          POSTGRES_DB: postgres
-#          POSTGRES_PASSWORD: postgres
-#          POSTGRES_USER: postgres
-#          POSTGRES_HOST: localhost
-#        ports:
-#          - 5432:5432
-#        options: >-
-#          --health-cmd pg_isready
-#          --health-interval 10s
-#          --health-timeout 5s
-#          --health-retries 5
-#    steps:
-#      - name: Git checkout
-#        uses: actions/checkout@v2
-#
-#      - name: Set up JDK 1.8
-#        uses: actions/setup-java@v1
-#        with:
-#          java-version: 1.8
-#
-#      - name: Install bats
-#        run: .travis/bats/bats-core-installation.sh "$GITHUB_WORKSPACE/.travis/bats"
-#
-#      - name: Install library for postgres
-#        run: sudo apt-get -y install libpq-dev postgresql-client
-#
-#      - name: Create database
-#        run: export PGPASSWORD=postgres && psql -f 'db_scripts/prepare_postgresql-core_db.sql' -U postgres -h 127.0.0.1
-#
-#      - name: Run tests
-#        run: ./mvnw -DskipTests --quiet clean install && export PATH="$GITHUB_WORKSPACE/.travis/bats/bats-core/bin:$PATH" && bats -tr bats/configuration-integration
-#
-#  documentation_tests:
-#    needs: [compilation_and_unit_tests, database_tests, testing_configuration_jar]
-#    runs-on: ubuntu-latest
-#    name: "Tests for configuration jar documentations"
-#    steps:
-#      - name: Git checkout
-#        uses: actions/checkout@v2
-#
-#      - name: Set up JDK 1.8
-#        uses: actions/setup-java@v1
-#        with:
-#          java-version: 1.8
-#
-#      - name: Install bats
-#        run: .travis/bats/bats-core-installation.sh "$GITHUB_WORKSPACE/.travis/bats"
-#
-#      - name: Use Node.js 14.x
-#        uses: actions/setup-node@v1
-#        with:
-#          node-version: 14.x
-#
-#      - run: npm install
-#        working-directory: ./configuration-parent/configuration-yaml-interpreter-readme-converter
-#        env:
-#          CI: true
-#
-#      - name: Run tests
-#        run: ./mvnw -DskipTests --quiet clean install && export PATH="$GITHUB_WORKSPACE/.travis/bats/bats-core/bin:$PATH" && bats -tr bats/configuration-documentation
-#
-#  compatibility_tests:
-#    needs: [configuration_e2e_tests, integraion_tests, documentation_tests]
-#    runs-on: ubuntu-latest
-#    name: "Running integration and functional tests that checks if code is compatible with postgres versions 10, 11, 12, 13"
-#    steps:
-#      - name: Git checkout
-#        uses: actions/checkout@v2
-#      - name: Set up JDK 1.8
-#        uses: actions/setup-java@v1
-#        with:
-#          java-version: 1.8
-#      - name: Build with Maven
-#        run: bats/run_integration_test_for_all_db_version.sh
+  compilation_and_unit_tests:
+    runs-on: ubuntu-latest
+    name: "Compilation and unit tests"
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v2
+      - name: Set up JDK 1.8
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+      - name: Build with Maven
+        run: ./mvnw clean install -DskipTests --quiet && ./mvnw test
+
+  database_tests:
+    runs-on: ubuntu-latest
+    name: "Database creation tests for multiple postgres versions 9.6, 10, 11, 12, 13"
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v2
+      - name: Install bats
+        run: .travis/bats/bats-core-installation.sh "$GITHUB_WORKSPACE/.travis/bats"
+      - name: Run bats tests
+        run: export PATH="$GITHUB_WORKSPACE/.travis/bats/bats-core/bin:$PATH" && bats/run_bats_test_for_all_db_version.sh
+
+  testing_configuration_jar:
+    runs-on: ubuntu-latest
+    name: "Testing configuration jar"
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v2
+      - name: Install bats
+        run: .travis/bats/bats-core-installation.sh "$GITHUB_WORKSPACE/.travis/bats"
+      - name: Install other libs
+        run:  sudo apt-get -y install libxml2-utils
+      - name: Run bats tests
+        run:  ./mvnw -DskipTests --quiet clean install && export PATH="$GITHUB_WORKSPACE/.travis/bats/bats-core/bin:$PATH" && bats -tr bats/configuration-jar
+
+  integraion_tests:
+    needs: [compilation_and_unit_tests, database_tests, testing_configuration_jar]
+    runs-on: ubuntu-latest
+    name: "Integration and functional tests in postgresql-core module"
+    services:
+      postgres:
+        image: postgres:9.6
+        env:
+          POSTGRES_DB: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: postgres
+          POSTGRES_HOST: localhost
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v2
+
+      - name: Set up JDK 1.8
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+
+      - name: Install library for postgres
+        run: sudo apt-get -y install libpq-dev postgresql-client
+
+      - name: Create database
+        run: export PGPASSWORD=postgres && psql -f 'db_scripts/prepare_postgresql-core_db.sql' -U postgres -h 127.0.0.1
+
+      - name: Run tests
+        run: ./mvnw -DskipTests --quiet clean install && ./mvnw -pl :postgresql-core -P !unit-tests,integration-tests test && ./mvnw -pl :postgresql-core-functional-tests -P !unit-tests,functional-tests test
+
+  configuration_e2e_tests:
+    needs: [compilation_and_unit_tests, database_tests, testing_configuration_jar]
+    runs-on: ubuntu-latest
+    name: "E2E smoke tests for configuration jar"
+    services:
+      postgres:
+        image: postgres:9.6
+        env:
+          POSTGRES_DB: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: postgres
+          POSTGRES_HOST: localhost
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v2
+
+      - name: Set up JDK 1.8
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+
+      - name: Install bats
+        run: .travis/bats/bats-core-installation.sh "$GITHUB_WORKSPACE/.travis/bats"
+
+      - name: Install library for postgres
+        run: sudo apt-get -y install libpq-dev postgresql-client
+
+      - name: Create database
+        run: export PGPASSWORD=postgres && psql -f 'db_scripts/prepare_postgresql-core_db.sql' -U postgres -h 127.0.0.1
+
+      - name: Run tests
+        run: ./mvnw -DskipTests --quiet clean install && export PATH="$GITHUB_WORKSPACE/.travis/bats/bats-core/bin:$PATH" && bats -tr bats/configuration-integration
+
+  documentation_tests:
+    needs: [compilation_and_unit_tests, database_tests, testing_configuration_jar]
+    runs-on: ubuntu-latest
+    name: "Tests for configuration jar documentations"
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v2
+
+      - name: Set up JDK 1.8
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+
+      - name: Install bats
+        run: .travis/bats/bats-core-installation.sh "$GITHUB_WORKSPACE/.travis/bats"
+
+      - name: Use Node.js 14.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+
+      - run: npm install
+        working-directory: ./configuration-parent/configuration-yaml-interpreter-readme-converter
+        env:
+          CI: true
+
+      - name: Run tests
+        run: ./mvnw -DskipTests --quiet clean install && export PATH="$GITHUB_WORKSPACE/.travis/bats/bats-core/bin:$PATH" && bats -tr bats/configuration-documentation
+
+  compatibility_tests:
+    needs: [configuration_e2e_tests, integraion_tests, documentation_tests]
+    runs-on: ubuntu-latest
+    name: "Running integration and functional tests that checks if code is compatible with postgres versions 10, 11, 12, 13"
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v2
+      - name: Set up JDK 1.8
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+      - name: Build with Maven
+        run: bats/run_integration_test_for_all_db_version.sh
   publish:
     name: "Publish to the Maven Central Repository"
-#    needs: [compatibility_tests]
+    needs: [compatibility_tests]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-#        if: startsWith(github.ref, 'refs/tags/v')
+        if: startsWith(github.ref, 'refs/tags/v')
       - name: Set up JDK 1.8
-#        if: startsWith(github.ref, 'refs/tags/v')
+        if: startsWith(github.ref, 'refs/tags/v')
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
       - name: Publish to the Maven Central Repository
-#        if: startsWith(github.ref, 'refs/tags/v')
+        if: startsWith(github.ref, 'refs/tags/v')
         run: deploy/release.sh
         env:
           MAVEN_USERNAME: '${{ secrets.POSMULTEN_MAVEN_USERNAME }}'
