@@ -9,6 +9,7 @@ https://keepachangelog.com/en/1.0.0/
 https://www.markdownguide.org/basic-syntax/
 
 * [Unreleased](#unreleased)
+* [0.5.0](#050---2022-01-16)
 * [0.4.1](#041---2021-08-29)
 * [0.4.0](#040---2021-01-30)
 * [0.3.1](#031---2021-01-29)
@@ -18,6 +19,8 @@ https://www.markdownguide.org/basic-syntax/
 * [0.2.0](#020---2020-11-14)
 
 ## [Unreleased]
+
+## [0.5.0] - 2022-01-16
 
 ### Added
 -   Added to ISharedSchemaContext interface method which returns Tenant Column type
