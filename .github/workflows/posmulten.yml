@@ -162,7 +162,7 @@ jobs:
 #        run: bats/run_integration_test_for_all_db_version.sh
   publish:
     name: "Publish to the Maven Central Repository"
-    needs: [compatibility_tests]
+#    needs: [compatibility_tests]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
