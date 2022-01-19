@@ -7,7 +7,7 @@
     <groupId>com.github.starnowski.posmulten</groupId>
     <artifactId>parent</artifactId>
     <packaging>pom</packaging>
-    <version>0.5.0-SNAPSHOT</version>
+    <version>0.6.0-SNAPHOST</version>
     <modules>
         <module>postgresql-core</module>
         <module>postgresql-core-functional-tests</module>
@@ -259,6 +259,13 @@
                                 </goals>
                             </execution>
                         </executions>
+                        <configuration>
+                            <!-- Prevent gpg from using pinentry programs -->
+                            <gpgArguments>
+                                <arg>--pinentry-mode</arg>
+                                <arg>loopback</arg>
+                            </gpgArguments>
+                        </configuration>
                     </plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>

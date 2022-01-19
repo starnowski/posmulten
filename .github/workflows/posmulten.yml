@@ -160,34 +160,24 @@ jobs:
           java-version: 1.8
       - name: Build with Maven
         run: bats/run_integration_test_for_all_db_version.sh
-#  build:
-#    runs-on: ubuntu-latest
-#    # Service containers to run with `container-job`
-#    services:
-#      postgres:
-#        image: postgres:9.6
-#        env:
-#          POSTGRES_DB: postgres
-#          POSTGRES_PASSWORD: postgres
-#          POSTGRES_USER: postgres
-#        ports:
-#          - 5432:5432
-#        # Set health checks to wait until postgres has started
-#        options: >-
-#          --health-cmd pg_isready
-#          --health-interval 10s
-#          --health-timeout 5s
-#          --health-retries 5
-#    #https://awesomeopensource.com/project/Harmon758/postgresql-action
-#    steps:
-#
-#    - name: Git checkout
-#      uses: actions/checkout@v2
-#
-#    - name: Set up JDK 1.8
-#      uses: actions/setup-java@v1
-#      with:
-#        java-version: 1.8
-#
-#    - name: Build with Maven
-#      run: ./mvnw clean install -DskipTests --quiet && ./mvnw test
+  publish:
+    name: "Publish to the Maven Central Repository"
+    needs: [compatibility_tests]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        if: startsWith(github.ref, 'refs/tags/v')
+      - name: Set up JDK 1.8
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+      - name: Publish to the Maven Central Repository
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: deploy/release.sh
+        env:
+          MAVEN_USERNAME: '${{ secrets.POSMULTEN_MAVEN_USERNAME }}'
+          MAVEN_PASSWORD: '${{ secrets.POSMULTEN_MAVEN_PASSWORD }}'
+          ENCRYPTION_PASSWORD: '${{ secrets.POSMULTEN_ENCRYPTION_PASSWORD }}'
+          GPG_KEYNAME: '${{ secrets.POSMULTEN_GPG_KEYNAME }}'
+          GPG_PASSPHRASE: '${{ secrets.POSMULTEN_GPG_PASSPHRASE }}'
