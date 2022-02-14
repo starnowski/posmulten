@@ -9,6 +9,7 @@ https://keepachangelog.com/en/1.0.0/
 https://www.markdownguide.org/basic-syntax/
 
 * [Unreleased](#unreleased)
+* [0.5.1](#051---2022-02-14)
 * [0.5.0](#050---2022-01-16)
 * [0.4.1](#041---2021-08-29)
 * [0.4.0](#040---2021-01-30)
@@ -19,6 +20,12 @@ https://www.markdownguide.org/basic-syntax/
 * [0.2.0](#020---2020-11-14)
 
 ## [Unreleased]
+
+## [0.5.1] - 2022-02-14
+
+### Changed
+
+-   Updated postgresql test dependency version from 42.2.5 to 42.2.25
 
 ## [0.5.0] - 2022-01-16
 
