@@ -342,4 +342,10 @@ public class SharedSchemaContextRequest implements Cloneable {
     public void setIdentifierMinLength(Integer identifierMinLength) {
         this.identifierMinLength = identifierMinLength;
     }
+
+    public String resolveTenantColumnByTableKey(TableKey tableKey)
+    {
+        //TODO
+        return null;
+    }
 }
