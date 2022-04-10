@@ -28,7 +28,6 @@ class SharedSchemaContextRequestTest extends Specification {
             new TableKey("users", "sch_1")  |   "tt"            |   MapBuilder.mapBuilder().put(new TableKey("users", "public"), new DefaultTableColumns("col", null)).put(new TableKey("users", "sch_1"), new DefaultTableColumns("col_for_t", null)).build()  ||  "col_for_t"
     }
 
-
     def "should return null when table key is not registed"() {
         given:
             def tested = new SharedSchemaContextRequest()
