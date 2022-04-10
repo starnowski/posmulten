@@ -345,7 +345,8 @@ public class SharedSchemaContextRequest implements Cloneable {
 
     public String resolveTenantColumnByTableKey(TableKey tableKey)
     {
+        ITableColumns tableColumns = getTableColumnsList().get(tableKey);
         //TODO
-        return null;
+        return tableColumns.getTenantColumnName() == null ? defaultTenantIdColumn : tableColumns.getTenantColumnName();
     }
 }
