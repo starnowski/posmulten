@@ -343,6 +343,11 @@ public class SharedSchemaContextRequest implements Cloneable {
         this.identifierMinLength = identifierMinLength;
     }
 
+    /**
+     * TODO - Add comment
+     * @param tableKey
+     * @return
+     */
     public String resolveTenantColumnByTableKey(TableKey tableKey)
     {
         ITableColumns tableColumns = getTableColumnsList().get(tableKey);
