@@ -25,13 +25,11 @@ public class IsTenantIdentifierValidConstraintEnricher implements ISharedSchemaC
 
     @Override
     public ISharedSchemaContext enrich(ISharedSchemaContext context, SharedSchemaContextRequest request) throws SharedSchemaContextBuilderException {
-        if (request.isConstraintForValidTenantValueShouldBeAdded())
-        {
+        if (request.isConstraintForValidTenantValueShouldBeAdded()) {
             String defaultConstraintName = request.getIsTenantValidConstraintName() == null ? "tenant_identifier_valid" : request.getIsTenantValidConstraintName();
-            for (Map.Entry<TableKey, ITableColumns> entry : request.getTableColumnsList().entrySet())
-            {
+            for (Map.Entry<TableKey, ITableColumns> entry : request.getTableColumnsList().entrySet()) {
                 String constraintName = request.getTenantValidConstraintCustomNamePerTables().getOrDefault(entry.getKey(), defaultConstraintName);
-                String tenantColumnName = entry.getValue().getTenantColumnName() == null ? request.getDefaultTenantIdColumn() : entry.getValue().getTenantColumnName();
+                String tenantColumnName = request.resolveTenantColumnByTableKey(entry.getKey());
                 context.addSQLDefinition(producer.produce(builder()
                         .withConstraintName(constraintName)
                         .withTableName(entry.getKey().getTable())

@@ -44,26 +44,31 @@ public class SharedSchemaContextRequest implements Cloneable {
     private String currentTenantIdPropertyType = "VARCHAR(255)";
     /**
      * Name of the function that returns the current tenant identifier.
+     *
      * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.GetCurrentTenantIdFunctionDefinitionEnricher
      */
     private String getCurrentTenantIdFunctionName;
     /**
      * Name of the function that set the current tenant identifier.
+     *
      * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.SetCurrentTenantIdFunctionDefinitionEnricher
      */
     private String setCurrentTenantIdFunctionName;
     /**
      * Name of the function that checks if passed identifier is equal to the current tenant identifier.
+     *
      * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.TenantHasAuthoritiesFunctionDefinitionEnricher
      */
     private String equalsCurrentTenantIdentifierFunctionName;
     /**
      * Name of the function that checks if the current tenant is allowed to process database table row.
+     *
      * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.TenantHasAuthoritiesFunctionDefinitionEnricher
      */
     private String tenantHasAuthoritiesFunctionName;
     /**
      * Name for column that stores the tenant identifier for table row.
+     *
      * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.TableRLSPolicyEnricher
      */
     private String defaultTenantIdColumn = DEFAULT_TENANT_ID_COLUMN;
@@ -71,6 +76,7 @@ public class SharedSchemaContextRequest implements Cloneable {
      * A map that stores information about columns that are required to creation of shared schema multi-tenancy strategy.
      * Information about columns are store for each table that required to have row level security policy.
      * The table identifier ({@link TableKey}) is the map key and  information ({@link ITableColumns}) about columns are its value.
+     *
      * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricher
      * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.TableRLSPolicyEnricher
      * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.TenantColumnSQLDefinitionsEnricher
@@ -78,12 +84,14 @@ public class SharedSchemaContextRequest implements Cloneable {
     private Map<TableKey, ITableColumns> tableColumnsList = new HashMap<>();
     /**
      * Collection that stores table identifiers ({@link TableKey}) for which a column for tenant identifier should be added.
+     *
      * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.TenantColumnSQLDefinitionsEnricher
      */
     private Set<TableKey> createTenantColumnTableLists = new HashSet<>();
     /**
      * The toggle, based on which builder is going to <a href="https://www.postgresql.org/docs/9.6/ddl-rowsecurity.html">force row level security for table owner</a>
      * (true) or not (false). The default value is false.
+     *
      * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.TableRLSSettingsSQLDefinitionsEnricher
      */
     private boolean forceRowLevelSecurityForTableOwner;
@@ -91,6 +99,7 @@ public class SharedSchemaContextRequest implements Cloneable {
      * A map that stores information that describes the row level security policy properties for tables.
      * Properties are store for each table that required to have row level security policy.
      * The table identifier ({@link TableKey}) is the map key and the row level security policy properties ({@link ITableRLSPolicyProperties}) are its value.
+     *
      * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.TableRLSPolicyEnricher
      */
     private Map<TableKey, ITableRLSPolicyProperties> tableRLSPolicies = new HashMap<>();
@@ -102,12 +111,14 @@ public class SharedSchemaContextRequest implements Cloneable {
      * table ({@link SameTenantConstraintForForeignKey#foreignKeyTable}) which has primary key columns. The map key also
      * contains the set of column names for the foreign key ({@link SameTenantConstraintForForeignKey#foreignKeyColumns}).
      * The object of type {@link ISameTenantConstraintForForeignKeyProperties} is the map value.
+     *
      * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricher
      * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher
      */
     private Map<SameTenantConstraintForForeignKey, ISameTenantConstraintForForeignKeyProperties> sameTenantConstraintForForeignKeyProperties = new HashMap<>();
     /**
      * Default grantee for which the row level security should be added.
+     *
      * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.TableRLSPolicyEnricher
      */
     private String grantee;
@@ -120,17 +131,20 @@ public class SharedSchemaContextRequest implements Cloneable {
 
     /**
      * A list that stores invalid tenant identifiers.
+     *
      * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.IsTenantValidFunctionInvocationFactoryEnricher
      * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.IsTenantIdentifierValidConstraintEnricher
      */
     private List<String> tenantValuesBlacklist;
     /**
      * The name of function that check if passed tenant identifier is valid.
+     *
      * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.IsTenantValidFunctionInvocationFactoryEnricher
      */
     private String isTenantValidFunctionName;
     /**
      * The name of constraint that check if passed tenant identifier is valid.
+     *
      * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.IsTenantIdentifierValidConstraintEnricher
      */
     private String isTenantValidConstraintName;
@@ -138,6 +152,7 @@ public class SharedSchemaContextRequest implements Cloneable {
     /**
      * The toggle, based on which builder is going to add constraint for all tables that required rls policy
      * (true) or not (false). The default value is false.
+     *
      * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.IsTenantIdentifierValidConstraintEnricher
      */
     private boolean constraintForValidTenantValueShouldBeAdded;
@@ -145,6 +160,7 @@ public class SharedSchemaContextRequest implements Cloneable {
     /**
      * A map that stores the custom names for a constraint that checks if the tenant identifier is valid.
      * The map key is a table identifier ({@link TableKey}), and the value is the constraint name.
+     *
      * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.IsTenantIdentifierValidConstraintEnricher
      */
     private Map<TableKey, String> tenantValidConstraintCustomNamePerTables = new HashMap<>();
@@ -152,24 +168,28 @@ public class SharedSchemaContextRequest implements Cloneable {
     /**
      * The toggle, based on which builder is going to add default value declaration for tenant column in all tables that required rls policy
      * (true) or not (false). The default value is false.
+     *
      * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.DefaultValueForTenantColumnEnricher
      */
     private boolean currentTenantIdentifierAsDefaultValueForTenantColumnInAllTables;
 
     /**
      * A set of table identifiers for which adding of default value declaration for tenant column should be skipped.
+     *
      * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.DefaultValueForTenantColumnEnricher
      */
     private Set<TableKey> tablesThatAddingOfTenantColumnDefaultValueShouldBeSkipped = new HashSet<>();
 
     /**
      * Maximum allowed length for the identifier.
+     *
      * @see IdentifierLengthValidator
      */
     private Integer identifierMaxLength;
 
     /**
      * Minimum allowed length for the identifier.
+     *
      * @see IdentifierLengthValidator
      */
     private Integer identifierMinLength;
@@ -341,5 +361,20 @@ public class SharedSchemaContextRequest implements Cloneable {
 
     public void setIdentifierMinLength(Integer identifierMinLength) {
         this.identifierMinLength = identifierMinLength;
+    }
+
+    /**
+     * Resolves name for tenant column by table key ({@link TableKey}).
+     * If there is no column name specified for the table to which the table key refers then the default column name is returned.
+     *
+     * @param tableKey - table key
+     * @return null when table key is not registered otherwise tenant column name for the table
+     */
+    public String resolveTenantColumnByTableKey(TableKey tableKey) {
+        ITableColumns tableColumns = getTableColumnsList().get(tableKey);
+        if (tableColumns == null) {
+            return null;
+        }
+        return tableColumns.getTenantColumnName() == null ? defaultTenantIdColumn : tableColumns.getTenantColumnName();
     }
 }
