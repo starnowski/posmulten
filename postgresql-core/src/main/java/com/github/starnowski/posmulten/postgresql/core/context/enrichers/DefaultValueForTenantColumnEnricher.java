@@ -5,7 +5,6 @@ import com.github.starnowski.posmulten.postgresql.core.SetDefaultStatementProduc
 import com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaContext;
 import com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContextRequest;
 import com.github.starnowski.posmulten.postgresql.core.context.TableKey;
-import com.github.starnowski.posmulten.postgresql.core.util.Pair;
 
 import java.util.List;
 
@@ -26,15 +25,15 @@ public class DefaultValueForTenantColumnEnricher implements ISharedSchemaContext
 
     @Override
     public ISharedSchemaContext enrich(ISharedSchemaContext context, SharedSchemaContextRequest request) {
-        List<Pair<TableKey, String>> tableColumnPairs = emptyList();
+        List<TableKey> tableKeys = emptyList();
         if (request.isCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables()) {
-            tableColumnPairs = request.getTableColumnsList().entrySet().stream().filter(entry -> !request.getTablesThatAddingOfTenantColumnDefaultValueShouldBeSkipped().contains(entry.getKey())).map(entry -> new Pair<>(entry.getKey(), entry.getValue().getTenantColumnName())).collect(toList());
+            tableKeys = request.getTableColumnsList().entrySet().stream().filter(entry -> !request.getTablesThatAddingOfTenantColumnDefaultValueShouldBeSkipped().contains(entry.getKey())).map(entry -> entry.getKey()).collect(toList());
         } else if (!request.getCreateTenantColumnTableLists().isEmpty()) {
-            tableColumnPairs = request.getTableColumnsList().entrySet().stream().filter(entry -> request.getCreateTenantColumnTableLists().contains(entry.getKey())).filter(entry -> !request.getTablesThatAddingOfTenantColumnDefaultValueShouldBeSkipped().contains(entry.getKey())).map(entry -> new Pair<>(entry.getKey(), entry.getValue().getTenantColumnName())).collect(toList());
+            tableKeys = request.getTableColumnsList().entrySet().stream().filter(entry -> request.getCreateTenantColumnTableLists().contains(entry.getKey())).filter(entry -> !request.getTablesThatAddingOfTenantColumnDefaultValueShouldBeSkipped().contains(entry.getKey())).map(entry -> entry.getKey()).collect(toList());
         }
-        if (!tableColumnPairs.isEmpty()) {
+        if (!tableKeys.isEmpty()) {
             String defaultTenantColumnValue = context.getIGetCurrentTenantIdFunctionInvocationFactory().returnGetCurrentTenantIdFunctionInvocation();
-            tableColumnPairs.forEach(tableColumnPair -> context.addSQLDefinition(producer.produce(new SetDefaultStatementProducerParameters(tableColumnPair.getKey().getTable(), tableColumnPair.getValue() == null ? request.getDefaultTenantIdColumn() : tableColumnPair.getValue(), defaultTenantColumnValue, tableColumnPair.getKey().getSchema()))));
+            tableKeys.forEach(tableKey -> context.addSQLDefinition(producer.produce(new SetDefaultStatementProducerParameters(tableKey.getTable(), request.resolveTenantColumnByTableKey(tableKey), defaultTenantColumnValue, tableKey.getSchema()))));
         }
         return context;
     }

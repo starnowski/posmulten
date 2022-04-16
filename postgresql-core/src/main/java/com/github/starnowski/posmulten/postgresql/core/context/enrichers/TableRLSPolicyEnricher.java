@@ -53,7 +53,7 @@ public class TableRLSPolicyEnricher implements ISharedSchemaContextEnricher {
                     .withPolicyName(request.getTableRLSPolicies().get(entry.getKey()).getPolicyName())
                     .withTableKey(entry.getKey())
                     .withTenantHasAuthoritiesFunctionInvocationFactory(context.getTenantHasAuthoritiesFunctionInvocationFactory())
-                    .withTenantIdColumn(entry.getValue().getTenantColumnName())
+                    .withTenantIdColumn(request.resolveTenantColumnByTableKey(entry.getKey()))
                     .build();
             tableRLSPolicySQLDefinitionsProducer.produce(parameters).forEach(context::addSQLDefinition);
         });
