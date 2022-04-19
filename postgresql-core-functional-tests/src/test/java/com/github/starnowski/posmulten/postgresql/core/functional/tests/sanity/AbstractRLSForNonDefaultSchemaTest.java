@@ -43,6 +43,36 @@ public abstract class AbstractRLSForNonDefaultSchemaTest extends AbstractClassWi
     @Qualifier("ownerJdbcTemplate")
     protected JdbcTemplate ownerJdbcTemplate;
 
+    @DataProvider(name = "userData")
+    protected static Object[][] userData() {
+        return new Object[][]{
+                {new User(1L, "Szymon Tarnowski", USER_TENANT), null},
+                {new User(2L, "John Doe", SECONDARY_USER_TENANT), null},
+                {new User(1L, "Szymon Tarnowski", USER_TENANT), "non_public_schema"},
+                {new User(2L, "John Doe", SECONDARY_USER_TENANT), "non_public_schema"}
+        };
+    }
+
+    @DataProvider(name = "postWithUserReferenceFromOtherTenantData")
+    protected static Object[][] postWithUserReferenceFromOtherTenantData() {
+        return new Object[][]{
+                {new Post(8L, "Some phrase", 2L, USER_TENANT), null},
+                {new Post(13L, "Some text", 1L, SECONDARY_USER_TENANT), null},
+                {new Post(8L, "Some phrase", 2L, USER_TENANT), "non_public_schema"},
+                {new Post(13L, "Some text", 1L, SECONDARY_USER_TENANT), "non_public_schema"}
+        };
+    }
+
+    @DataProvider(name = "postWithUserReferenceForSameTenantData")
+    protected static Object[][] postWithUserReferenceForSameTenantData() {
+        return new Object[][]{
+                {new Post(79L, "Some phrase", 1L, USER_TENANT), 2L, null},
+                {new Post(197L, "Some text", 2L, SECONDARY_USER_TENANT), 1L, null},
+                {new Post(79L, "Some phrase", 1L, USER_TENANT), 2L, "non_public_schema"},
+                {new Post(197L, "Some text", 2L, SECONDARY_USER_TENANT), 1L, "non_public_schema"}
+        };
+    }
+
     @Test(testName = "create SQL definitions", description = "Create SQL function that creates statements that set current tenant value, retrieve current tenant value and create the row level security policy for a table that is multi-tenant aware")
     public void createSQLDefinitions() throws SharedSchemaContextBuilderException {
         DefaultSharedSchemaContextBuilder defaultSharedSchemaContextBuilder = new DefaultSharedSchemaContextBuilder(getSchema());
@@ -56,8 +86,7 @@ public abstract class AbstractRLSForNonDefaultSchemaTest extends AbstractClassWi
         sqlDefinitions.addAll(sharedSchemaContext.getSqlDefinitions());
     }
 
-    private void appendDeclarationForSchema(DefaultSharedSchemaContextBuilder defaultSharedSchemaContextBuilder, String schema)
-    {
+    private void appendDeclarationForSchema(DefaultSharedSchemaContextBuilder defaultSharedSchemaContextBuilder, String schema) {
         defaultSharedSchemaContextBuilder.createTenantColumnForTable(new TableKey(NOTIFICATIONS_TABLE_NAME, schema));
         defaultSharedSchemaContextBuilder.createRLSPolicyForTable(new TableKey(NOTIFICATIONS_TABLE_NAME, schema), prepareIdColumnTypeForSingleColumnKey("uuid", "uuid"), CUSTOM_TENANT_COLUMN_NAME, "notifications_table_rls_policy");
         defaultSharedSchemaContextBuilder.createRLSPolicyForTable(new TableKey(USERS_TABLE_NAME, schema), prepareIdColumnTypeForSingleColumnKey("id", "bigint"), "tenant_id", "users_table_rls_policy");
@@ -65,6 +94,7 @@ public abstract class AbstractRLSForNonDefaultSchemaTest extends AbstractClassWi
         defaultSharedSchemaContextBuilder.createRLSPolicyForTable(new TableKey(GROUPS_TABLE_NAME, schema), prepareIdColumnTypeForSingleColumnKey("uuid", "uuid"), "tenant_id", "groups_table_rls_policy");
         defaultSharedSchemaContextBuilder.createRLSPolicyForTable(new TableKey(USERS_GROUPS_TABLE_NAME, schema), new HashMap<>(), "tenant_id", "users_groups_table_rls_policy");
         defaultSharedSchemaContextBuilder.createRLSPolicyForTable(new TableKey(COMMENTS_TABLE_NAME, schema), mapBuilder().put("id", "int").put("user_id", "bigint").build(), CUSTOM_TENANT_COLUMN_NAME, "comments_table_rls_policy");
+        defaultSharedSchemaContextBuilder.createSameTenantConstraintForForeignKey(new TableKey(POSTS_TABLE_NAME, schema), new TableKey(USERS_TABLE_NAME, schema), mapBuilder().put("user_id", "id").build(), POSTS_USERS_FK_CONSTRAINT_NAME);
         defaultSharedSchemaContextBuilder.createSameTenantConstraintForForeignKey(new TableKey(COMMENTS_TABLE_NAME, schema), new TableKey(USERS_TABLE_NAME, schema), mapBuilder().put("user_id", "id").build(), COMMENTS_USERS_FK_CONSTRAINT_NAME);
         defaultSharedSchemaContextBuilder.createSameTenantConstraintForForeignKey(new TableKey(COMMENTS_TABLE_NAME, schema), new TableKey(POSTS_TABLE_NAME, schema), mapBuilder().put("post_id", "id").build(), COMMENTS_POSTS_FK_CONSTRAINT_NAME);
         defaultSharedSchemaContextBuilder.createSameTenantConstraintForForeignKey(new TableKey(COMMENTS_TABLE_NAME, schema), new TableKey(COMMENTS_TABLE_NAME, schema), mapBuilder().put("parent_comment_id", "id").put("parent_comment_user_id", "user_id").build(), COMMENTS_PARENT_COMMENTS_FK_CONSTRAINT_NAME);
@@ -78,8 +108,7 @@ public abstract class AbstractRLSForNonDefaultSchemaTest extends AbstractClassWi
         defaultSharedSchemaContextBuilder.setNameForFunctionThatChecksIfRecordExistsInTable(new TableKey(GROUPS_TABLE_NAME, schema), "is_group_belongs_to_current_tenant");
     }
 
-    private Map<String, String> prepareIdColumnTypeForSingleColumnKey(String columnName, String columnType)
-    {
+    private Map<String, String> prepareIdColumnTypeForSingleColumnKey(String columnName, String columnType) {
         return mapBuilder().put(columnName, columnType).build();
     }
 
@@ -88,42 +117,8 @@ public abstract class AbstractRLSForNonDefaultSchemaTest extends AbstractClassWi
                     config = @SqlConfig(transactionMode = ISOLATED),
                     executionPhase = BEFORE_TEST_METHOD)})
     @Test(dependsOnMethods = {"createSQLDefinitions"}, testName = "execute SQL definitions")
-    public void executeSQLDefinitions()
-    {
+    public void executeSQLDefinitions() {
         super.executeSQLDefinitions();
-    }
-
-    @DataProvider(name = "userData")
-    protected static Object[][] userData()
-    {
-        return new Object[][]{
-                {new User(1L, "Szymon Tarnowski", USER_TENANT), null},
-                {new User(2L, "John Doe", SECONDARY_USER_TENANT), null},
-                {new User(1L, "Szymon Tarnowski", USER_TENANT), "non_public_schema"},
-                {new User(2L, "John Doe", SECONDARY_USER_TENANT), "non_public_schema"}
-        };
-    }
-
-    @DataProvider(name = "postWithUserReferenceFromOtherTenantData")
-    protected static Object[][] postWithUserReferenceFromOtherTenantData()
-    {
-        return new Object[][]{
-                {new Post(8L, "Some phrase", 2L, USER_TENANT), null},
-                {new Post(13L, "Some text", 1L, SECONDARY_USER_TENANT), null},
-                {new Post(8L, "Some phrase", 2L, USER_TENANT), "non_public_schema"},
-                {new Post(13L, "Some text", 1L, SECONDARY_USER_TENANT), "non_public_schema"}
-        };
-    }
-
-    @DataProvider(name = "postWithUserReferenceForSameTenantData")
-    protected static Object[][] postWithUserReferenceForSameTenantData()
-    {
-        return new Object[][]{
-                {new Post(79L, "Some phrase", 1L, USER_TENANT), 2L, null},
-                {new Post(197L, "Some text", 2L, SECONDARY_USER_TENANT), 1L, null},
-                {new Post(79L, "Some phrase", 1L, USER_TENANT), 2L, "non_public_schema"},
-                {new Post(197L, "Some text", 2L, SECONDARY_USER_TENANT), 1L, "non_public_schema"}
-        };
     }
 
     private String getUsersTableReference(String schema) {
@@ -135,16 +130,14 @@ public abstract class AbstractRLSForNonDefaultSchemaTest extends AbstractClassWi
     }
 
     @Test(dataProvider = "userData", dependsOnMethods = {"executeSQLDefinitions"}, testName = "insert data into to user table")
-    public void insertUserTestData(User user, String schema)
-    {
+    public void insertUserTestData(User user, String schema) {
         assertThat(countRowsInTableWhere(getUsersTableReference(schema), "id = " + user.getId())).isEqualTo(0);
         ownerJdbcTemplate.execute(format("%5$s INSERT INTO %4$s (id, name, tenant_id) VALUES (%1$d, '%2$s', '%3$s');", user.getId(), user.getName(), user.getTenantId(), getUsersTableReference(schema), setCurrentTenantIdFunctionInvocationFactory.generateStatementThatSetTenant(user.getTenantId())));
         assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %4$s WHERE id = %1$d AND name = '%2$s' AND tenant_id = '%3$s'", user.getId(), user.getName(), user.getTenantId(), getUsersTableReference(schema))), "The tests user should exists");
     }
 
     @Test(dataProvider = "postWithUserReferenceFromOtherTenantData", dependsOnMethods = {"insertUserTestData"}, testName = "try to insert data into the post table with reference to users table that belongs to different tenant")
-    public void tryInsertPostWithReferenceToUserFromDifferentTenant(Post post, String schema)
-    {
+    public void tryInsertPostWithReferenceToUserFromDifferentTenant(Post post, String schema) {
         assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %2$s WHERE id = %1$d", post.getUserId(), getUsersTableReference(schema))), "The tests user should exists");
         assertFalse(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %2$s WHERE id = %1$d AND tenant_id = '%3$s'", post.getUserId(), getUsersTableReference(schema), post.getTenantId())), "The tests user should not belong to same tenant as posts record");
         assertThat(countRowsInTableWhere(getPostsTableReference(schema), "id = " + post.getUserId())).isEqualTo(0);
@@ -156,8 +149,7 @@ public abstract class AbstractRLSForNonDefaultSchemaTest extends AbstractClassWi
     }
 
     @Test(dataProvider = "postWithUserReferenceForSameTenantData", dependsOnMethods = {"tryInsertPostWithReferenceToUserFromDifferentTenant"}, testName = "insert data into the post table with reference to users table that belongs to same tenant")
-    public void insertPostWithReferenceToUserFromSameTenant(Post post, Long userId, String schema)
-    {
+    public void insertPostWithReferenceToUserFromSameTenant(Post post, Long userId, String schema) {
         assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %2$s WHERE id = %1$d", post.getUserId(), getUsersTableReference(schema))), "The tests user should exists");
         assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %2$s WHERE id = %1$d AND tenant_id = '%3$s'", post.getUserId(), getUsersTableReference(schema), post.getTenantId())), "The tests user should belong to same tenant as posts record");
         assertThat(countRowsInTableWhere(getPostsTableReference(schema), "id = " + post.getUserId())).isEqualTo(0);
@@ -166,8 +158,7 @@ public abstract class AbstractRLSForNonDefaultSchemaTest extends AbstractClassWi
     }
 
     @Test(dataProvider = "postWithUserReferenceForSameTenantData", dependsOnMethods = {"insertPostWithReferenceToUserFromSameTenant"}, testName = "try to update data in the post table with reference to users table that belongs to different tenant")
-    public void tryUpdatePostWithReferenceToUserFromDifferentTenant(Post post, Long userIdForDifferentTenant, String schema)
-    {
+    public void tryUpdatePostWithReferenceToUserFromDifferentTenant(Post post, Long userIdForDifferentTenant, String schema) {
         assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %2$s WHERE id = %1$d", userIdForDifferentTenant, getUsersTableReference(schema))), "The tests user should exists");
         assertFalse(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %2$s WHERE id = %1$d AND tenant_id = '%3$s'", userIdForDifferentTenant, getUsersTableReference(schema), post.getTenantId())), "The tests user should not belong to same tenant as posts record");
         assertThat(countRowsInTableWhere(getPostsTableReference(schema), "id = " + post.getUserId())).isEqualTo(0);
@@ -188,8 +179,7 @@ public abstract class AbstractRLSForNonDefaultSchemaTest extends AbstractClassWi
             @Sql(value = CLEAR_DATABASE_SCRIPT_PATH,
                     config = @SqlConfig(transactionMode = ISOLATED),
                     executionPhase = BEFORE_TEST_METHOD)})
-    public void deleteTestData()
-    {
+    public void deleteTestData() {
         assertThat(countRowsInTable(getUsersTableReference(null))).isEqualTo(0);
         assertThat(countRowsInTable(getUsersTableReference("non_public_schema"))).isEqualTo(0);
         assertThat(countRowsInTable(getPostsTableReference(null))).isEqualTo(0);
