@@ -260,15 +260,14 @@ public class DefaultSharedSchemaContextBuilder {
      * @see TableRLSSettingsSQLDefinitionsEnricher
      */
     public DefaultSharedSchemaContextBuilder createRLSPolicyForTable(String table, Map<String, String> primaryKeyColumnsList, String tenantColumnName, String rlsPolicyName) {
-        createRLSPolicyForTable(table, sharedSchemaContextRequest.getDefaultSchema(), primaryKeyColumnsList, tenantColumnName, rlsPolicyName);
+        createRLSPolicyForTable(new TableKey(table, sharedSchemaContextRequest.getDefaultSchema()), primaryKeyColumnsList, tenantColumnName, rlsPolicyName);
         return this;
     }
 
     /**
      * Register table that should have create row level security policy.
      *
-     * @param table                 name of table
-     * @param schema                name of schema
+     * @param tableKey              table key
      * @param primaryKeyColumnsList map of primary key columns and their types in table. Column name is the map key and column type is its value
      * @param tenantColumnName      name of column that stores tenant identifier in table
      * @param rlsPolicyName         name of row level security policy
@@ -278,8 +277,7 @@ public class DefaultSharedSchemaContextBuilder {
      * @see TableRLSPolicyEnricher
      * @see TableRLSSettingsSQLDefinitionsEnricher
      */
-    public DefaultSharedSchemaContextBuilder createRLSPolicyForTable(String table, String schema, Map<String, String> primaryKeyColumnsList, String tenantColumnName, String rlsPolicyName) {
-        TableKey tableKey = new TableKey(table, schema);
+    public DefaultSharedSchemaContextBuilder createRLSPolicyForTable(TableKey tableKey, Map<String, String> primaryKeyColumnsList, String tenantColumnName, String rlsPolicyName) {
         sharedSchemaContextRequest.getTableColumnsList().put(tableKey, new DefaultTableColumns(tenantColumnName, primaryKeyColumnsList));
         sharedSchemaContextRequest.getTableRLSPolicies().put(tableKey, new DefaultTableRLSPolicyProperties(rlsPolicyName));
         return this;
