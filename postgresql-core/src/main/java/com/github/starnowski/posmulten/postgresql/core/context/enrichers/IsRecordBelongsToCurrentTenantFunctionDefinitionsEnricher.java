@@ -54,7 +54,7 @@ public class IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricher implement
             }
             ITableColumns tableProperties = request.getTableColumnsList().get(tableKey);
             String tenantColumn = request.resolveTenantColumnByTableKey(tableKey);
-            IsRecordBelongsToCurrentTenantFunctionDefinition functionDefinition = isRecordBelongsToCurrentTenantFunctionDefinitionProducer.produce(tableKey, tenantColumn, tableProperties.getIdentityColumnNameAndTypeMap(), context.getIGetCurrentTenantIdFunctionInvocationFactory(), functionName, request.getDefaultSchema());
+            IsRecordBelongsToCurrentTenantFunctionDefinition functionDefinition = isRecordBelongsToCurrentTenantFunctionDefinitionProducer.produce(tableKey, tenantColumn, tableProperties.getIdentityColumnNameAndTypeMap(), context.getIGetCurrentTenantIdFunctionInvocationFactory(), functionName, tableKey.getSchema());
             context.addSQLDefinition(functionDefinition);
             context.getTableKeysIsRecordBelongsToCurrentTenantFunctionInvocationFactoryMap().put(tableKey, functionDefinition);
         }
