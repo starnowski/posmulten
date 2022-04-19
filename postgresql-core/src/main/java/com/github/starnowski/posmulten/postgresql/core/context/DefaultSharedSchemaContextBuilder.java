@@ -464,7 +464,19 @@ public class DefaultSharedSchemaContextBuilder {
      * @see #setCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables(boolean)
      */
     public DefaultSharedSchemaContextBuilder skipAddingOfTenantColumnDefaultValueForTable(String value) {
-        sharedSchemaContextRequest.getTablesThatAddingOfTenantColumnDefaultValueShouldBeSkipped().add(new TableKey(value, sharedSchemaContextRequest.getDefaultSchema()));
+        skipAddingOfTenantColumnDefaultValueForTable(new TableKey(value, sharedSchemaContextRequest.getDefaultSchema()));
+        return this;
+    }
+
+    /**
+     * Specify for which table the adding of default value declaration should be skipped.
+     *
+     * @param tableKey table key
+     * @return builder object for which method was invoked
+     * @see #setCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables(boolean)
+     */
+    public DefaultSharedSchemaContextBuilder skipAddingOfTenantColumnDefaultValueForTable(TableKey tableKey) {
+        sharedSchemaContextRequest.getTablesThatAddingOfTenantColumnDefaultValueShouldBeSkipped().add(tableKey);
         return this;
     }
 
