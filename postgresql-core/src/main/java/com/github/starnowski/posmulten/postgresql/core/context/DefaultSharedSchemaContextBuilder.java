@@ -228,8 +228,7 @@ public class DefaultSharedSchemaContextBuilder {
      * @see TenantColumnSQLDefinitionsEnricher
      */
     public DefaultSharedSchemaContextBuilder createTenantColumnForTable(String table) {
-        createTenantColumnForTable(new TableKey(table, sharedSchemaContextRequest.getDefaultSchema()));
-        return this;
+        return createTenantColumnForTable(new TableKey(table, sharedSchemaContextRequest.getDefaultSchema()));
     }
 
     /**
@@ -260,8 +259,7 @@ public class DefaultSharedSchemaContextBuilder {
      * @see TableRLSSettingsSQLDefinitionsEnricher
      */
     public DefaultSharedSchemaContextBuilder createRLSPolicyForTable(String table, Map<String, String> primaryKeyColumnsList, String tenantColumnName, String rlsPolicyName) {
-        createRLSPolicyForTable(new TableKey(table, sharedSchemaContextRequest.getDefaultSchema()), primaryKeyColumnsList, tenantColumnName, rlsPolicyName);
-        return this;
+        return createRLSPolicyForTable(new TableKey(table, sharedSchemaContextRequest.getDefaultSchema()), primaryKeyColumnsList, tenantColumnName, rlsPolicyName);
     }
 
     /**
@@ -336,8 +334,7 @@ public class DefaultSharedSchemaContextBuilder {
      * @see IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher
      */
     public DefaultSharedSchemaContextBuilder createSameTenantConstraintForForeignKey(String mainTable, String foreignKeyTable, Map<String, String> foreignKeyPrimaryKeyColumnsMappings, String constraintName) {
-        createSameTenantConstraintForForeignKey(new TableKey(mainTable, sharedSchemaContextRequest.getDefaultSchema()), new TableKey(foreignKeyTable, sharedSchemaContextRequest.getDefaultSchema()), foreignKeyPrimaryKeyColumnsMappings, constraintName);
-        return this;
+        return createSameTenantConstraintForForeignKey(new TableKey(mainTable, sharedSchemaContextRequest.getDefaultSchema()), new TableKey(foreignKeyTable, sharedSchemaContextRequest.getDefaultSchema()), foreignKeyPrimaryKeyColumnsMappings, constraintName);
     }
 
     /**
@@ -367,8 +364,7 @@ public class DefaultSharedSchemaContextBuilder {
      * @see SharedSchemaContextRequest#functionThatChecksIfRecordExistsInTableNames
      */
     public DefaultSharedSchemaContextBuilder setNameForFunctionThatChecksIfRecordExistsInTable(String recordTable, String functionName) {
-        setNameForFunctionThatChecksIfRecordExistsInTable(new TableKey(recordTable, sharedSchemaContextRequest.getDefaultSchema()), functionName);
-        return this;
+        return setNameForFunctionThatChecksIfRecordExistsInTable(new TableKey(recordTable, sharedSchemaContextRequest.getDefaultSchema()), functionName);
     }
 
     /**
@@ -422,8 +418,7 @@ public class DefaultSharedSchemaContextBuilder {
      * @return builder object for which method was invoked
      */
     public DefaultSharedSchemaContextBuilder registerCustomValidTenantValueConstraintNameForTable(String table, String constraintName) {
-        registerCustomValidTenantValueConstraintNameForTable(new TableKey(table, sharedSchemaContextRequest.getDefaultSchema()), constraintName);
-        return this;
+        return registerCustomValidTenantValueConstraintNameForTable(new TableKey(table, sharedSchemaContextRequest.getDefaultSchema()), constraintName);
     }
 
     /**
@@ -459,8 +454,7 @@ public class DefaultSharedSchemaContextBuilder {
      * @see #setCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables(boolean)
      */
     public DefaultSharedSchemaContextBuilder skipAddingOfTenantColumnDefaultValueForTable(String value) {
-        skipAddingOfTenantColumnDefaultValueForTable(new TableKey(value, sharedSchemaContextRequest.getDefaultSchema()));
-        return this;
+        return skipAddingOfTenantColumnDefaultValueForTable(new TableKey(value, sharedSchemaContextRequest.getDefaultSchema()));
     }
 
     /**
