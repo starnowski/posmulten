@@ -228,21 +228,20 @@ public class DefaultSharedSchemaContextBuilder {
      * @see TenantColumnSQLDefinitionsEnricher
      */
     public DefaultSharedSchemaContextBuilder createTenantColumnForTable(String table) {
-        createTenantColumnForTable(table, sharedSchemaContextRequest.getDefaultSchema());
+        createTenantColumnForTable(new TableKey(table, sharedSchemaContextRequest.getDefaultSchema()));
         return this;
     }
 
     /**
      * Marking specific table as table where a column for tenant identifier should be added.
      *
-     * @param table  name of table where a column for tenant identifier should be added.
-     * @param schema name of schema where a column for tenant identifier should be added.
+     * @param tableKey table key where a column for tenant identifier should be added.
      * @return builder object for which method was invoked
      * @see SharedSchemaContextRequest#createTenantColumnTableLists
      * @see TenantColumnSQLDefinitionsEnricher
      */
-    public DefaultSharedSchemaContextBuilder createTenantColumnForTable(String table, String schema) {
-        sharedSchemaContextRequest.getCreateTenantColumnTableLists().add(new TableKey(table, schema));
+    public DefaultSharedSchemaContextBuilder createTenantColumnForTable(TableKey tableKey) {
+        sharedSchemaContextRequest.getCreateTenantColumnTableLists().add(tableKey);
         return this;
     }
 
