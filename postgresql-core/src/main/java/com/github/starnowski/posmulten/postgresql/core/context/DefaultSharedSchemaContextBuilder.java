@@ -248,7 +248,26 @@ public class DefaultSharedSchemaContextBuilder {
      * @see TableRLSSettingsSQLDefinitionsEnricher
      */
     public DefaultSharedSchemaContextBuilder createRLSPolicyForTable(String table, Map<String, String> primaryKeyColumnsList, String tenantColumnName, String rlsPolicyName) {
-        TableKey tableKey = new TableKey(table, sharedSchemaContextRequest.getDefaultSchema());
+        createRLSPolicyForTable(table, sharedSchemaContextRequest.getDefaultSchema(), primaryKeyColumnsList, tenantColumnName, rlsPolicyName);
+        return this;
+    }
+
+    /**
+     * Register table that should have create row level security policy.
+     *
+     * @param table                 name of table
+     * @param schema                name of schema
+     * @param primaryKeyColumnsList map of primary key columns and their types in table. Column name is the map key and column type is its value
+     * @param tenantColumnName      name of column that stores tenant identifier in table
+     * @param rlsPolicyName         name of row level security policy
+     * @return builder object for which method was invoked
+     * @see SharedSchemaContextRequest#tableColumnsList
+     * @see SharedSchemaContextRequest#tableRLSPolicies
+     * @see TableRLSPolicyEnricher
+     * @see TableRLSSettingsSQLDefinitionsEnricher
+     */
+    public DefaultSharedSchemaContextBuilder createRLSPolicyForTable(String table, String schema, Map<String, String> primaryKeyColumnsList, String tenantColumnName, String rlsPolicyName) {
+        TableKey tableKey = new TableKey(table, schema);
         sharedSchemaContextRequest.getTableColumnsList().put(tableKey, new DefaultTableColumns(tenantColumnName, primaryKeyColumnsList));
         sharedSchemaContextRequest.getTableRLSPolicies().put(tableKey, new DefaultTableRLSPolicyProperties(rlsPolicyName));
         return this;
@@ -428,6 +447,7 @@ public class DefaultSharedSchemaContextBuilder {
 
     /**
      * Setting value for property {@link SharedSchemaContextRequest#identifierMaxLength}
+     *
      * @param identifierMaxLength - Maximum allowed length for the identifier
      * @return builder object for which method was invoked
      */
@@ -438,6 +458,7 @@ public class DefaultSharedSchemaContextBuilder {
 
     /**
      * Setting value for property {@link SharedSchemaContextRequest#identifierMinLength}
+     *
      * @param identifierMinLength - Minimum allowed length for the identifier.
      * @return builder object for which method was invoked
      */
