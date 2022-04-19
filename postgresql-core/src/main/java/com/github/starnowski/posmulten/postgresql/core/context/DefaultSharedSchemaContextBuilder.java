@@ -372,7 +372,21 @@ public class DefaultSharedSchemaContextBuilder {
      * @see SharedSchemaContextRequest#functionThatChecksIfRecordExistsInTableNames
      */
     public DefaultSharedSchemaContextBuilder setNameForFunctionThatChecksIfRecordExistsInTable(String recordTable, String functionName) {
-        sharedSchemaContextRequest.getFunctionThatChecksIfRecordExistsInTableNames().put(new TableKey(recordTable, sharedSchemaContextRequest.getDefaultSchema()), functionName);
+        setNameForFunctionThatChecksIfRecordExistsInTable(new TableKey(recordTable, sharedSchemaContextRequest.getDefaultSchema()), functionName);
+        return this;
+    }
+
+    /**
+     * Setting the name for a function that checks if there is a record with a specified identifier that is assigned to
+     * the current tenant for the specified table
+     *
+     * @param recordTableKey key table
+     * @param functionName   function name
+     * @return builder object for which method was invoked
+     * @see SharedSchemaContextRequest#functionThatChecksIfRecordExistsInTableNames
+     */
+    public DefaultSharedSchemaContextBuilder setNameForFunctionThatChecksIfRecordExistsInTable(TableKey recordTableKey, String functionName) {
+        sharedSchemaContextRequest.getFunctionThatChecksIfRecordExistsInTableNames().put(recordTableKey, functionName);
         return this;
     }
 
