@@ -344,6 +344,25 @@ public class DefaultSharedSchemaContextBuilder {
     }
 
     /**
+     * Register the request for creation of constraint that checks if foreign key in the main table refers to record
+     * that exists in the foreign table and which belongs to the current tenant.
+     *
+     * @param mainTable                           name of the main table that contains columns with foreign key
+     * @param mainSchema                          name of the schema for main table that contains columns with foreign key
+     * @param foreignKeyTable                     name of the foreign table
+     * @param foreignKeySchema                    name of the schema for foreign table
+     * @param foreignKeyPrimaryKeyColumnsMappings map contains information about which foreign key column refers to specific primary key column. The foreign key column is the map key and the primary key column is its value.
+     * @param constraintName                      constraint name
+     * @return builder object for which method was invoked
+     * @see SharedSchemaContextRequest#sameTenantConstraintForForeignKeyProperties
+     * @see IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher
+     */
+    public DefaultSharedSchemaContextBuilder createSameTenantConstraintForForeignKey(String mainTable, String mainSchema, String foreignKeyTable, String foreignKeySchema, Map<String, String> foreignKeyPrimaryKeyColumnsMappings, String constraintName) {
+        sharedSchemaContextRequest.getSameTenantConstraintForForeignKeyProperties().put(new SameTenantConstraintForForeignKey(new TableKey(mainTable, mainSchema), new TableKey(foreignKeyTable, foreignKeySchema), foreignKeyPrimaryKeyColumnsMappings.keySet()), new SameTenantConstraintForForeignKeyProperties(constraintName, foreignKeyPrimaryKeyColumnsMappings));
+        return this;
+    }
+
+    /**
      * Setting the name for a function that checks if there is a record with a specified identifier that is assigned to
      * the current tenant for the specified table that exists in default schema  ({@link SharedSchemaContextRequest#defaultSchema}).
      *
