@@ -427,7 +427,20 @@ public class DefaultSharedSchemaContextBuilder {
      * @return builder object for which method was invoked
      */
     public DefaultSharedSchemaContextBuilder registerCustomValidTenantValueConstraintNameForTable(String table, String constraintName) {
-        sharedSchemaContextRequest.getTenantValidConstraintCustomNamePerTables().put(new TableKey(table, sharedSchemaContextRequest.getDefaultSchema()), constraintName);
+        registerCustomValidTenantValueConstraintNameForTable(new TableKey(table, sharedSchemaContextRequest.getDefaultSchema()), constraintName);
+        return this;
+    }
+
+    /**
+     * Register custom name for constraint that are going to check if tenant column has valid value in specified
+     * table that require rls policy.
+     *
+     * @param tableKey       table key
+     * @param constraintName constraint name
+     * @return builder object for which method was invoked
+     */
+    public DefaultSharedSchemaContextBuilder registerCustomValidTenantValueConstraintNameForTable(TableKey tableKey, String constraintName) {
+        sharedSchemaContextRequest.getTenantValidConstraintCustomNamePerTables().put(tableKey, constraintName);
         return this;
     }
 
