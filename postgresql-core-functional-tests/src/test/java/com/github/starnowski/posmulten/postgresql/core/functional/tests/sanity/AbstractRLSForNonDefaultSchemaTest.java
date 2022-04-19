@@ -49,27 +49,33 @@ public abstract class AbstractRLSForNonDefaultSchemaTest extends AbstractClassWi
         defaultSharedSchemaContextBuilder.setCurrentTenantIdProperty(VALID_CURRENT_TENANT_ID_PROPERTY_NAME);
         defaultSharedSchemaContextBuilder.setForceRowLevelSecurityForTableOwner(true);
         defaultSharedSchemaContextBuilder.setGrantee(CORE_OWNER_USER);
-        defaultSharedSchemaContextBuilder.createTenantColumnForTable(new TableKey(NOTIFICATIONS_TABLE_NAME, null));
-        defaultSharedSchemaContextBuilder.createRLSPolicyForTable(new TableKey(NOTIFICATIONS_TABLE_NAME, null), prepareIdColumnTypeForSingleColumnKey("uuid", "uuid"), CUSTOM_TENANT_COLUMN_NAME, "notifications_table_rls_policy");
-        defaultSharedSchemaContextBuilder.createRLSPolicyForTable(new TableKey(USERS_TABLE_NAME, null), prepareIdColumnTypeForSingleColumnKey("id", "bigint"), "tenant_id", "users_table_rls_policy");
-        defaultSharedSchemaContextBuilder.createRLSPolicyForTable(new TableKey(POSTS_TABLE_NAME, null), prepareIdColumnTypeForSingleColumnKey("id", "bigint"), "tenant_id", "posts_table_rls_policy");
-        defaultSharedSchemaContextBuilder.createRLSPolicyForTable(new TableKey(GROUPS_TABLE_NAME, null), prepareIdColumnTypeForSingleColumnKey("uuid", "uuid"), "tenant_id", "groups_table_rls_policy");
-        defaultSharedSchemaContextBuilder.createRLSPolicyForTable(new TableKey(USERS_GROUPS_TABLE_NAME, null), new HashMap<>(), "tenant_id", "users_groups_table_rls_policy");
-        defaultSharedSchemaContextBuilder.createRLSPolicyForTable(new TableKey(COMMENTS_TABLE_NAME, null), mapBuilder().put("id", "int").put("user_id", "bigint").build(), CUSTOM_TENANT_COLUMN_NAME, "comments_table_rls_policy");
-        defaultSharedSchemaContextBuilder.createSameTenantConstraintForForeignKey(new TableKey(COMMENTS_TABLE_NAME, null), new TableKey(USERS_TABLE_NAME, null), mapBuilder().put("user_id", "id").build(), COMMENTS_USERS_FK_CONSTRAINT_NAME);
-        defaultSharedSchemaContextBuilder.createSameTenantConstraintForForeignKey(new TableKey(COMMENTS_TABLE_NAME, null), new TableKey(POSTS_TABLE_NAME, null), mapBuilder().put("post_id", "id").build(), COMMENTS_POSTS_FK_CONSTRAINT_NAME);
-        defaultSharedSchemaContextBuilder.createSameTenantConstraintForForeignKey(new TableKey(COMMENTS_TABLE_NAME, null), new TableKey(COMMENTS_TABLE_NAME, null), mapBuilder().put("parent_comment_id", "id").put("parent_comment_user_id", "user_id").build(), COMMENTS_PARENT_COMMENTS_FK_CONSTRAINT_NAME);
-        defaultSharedSchemaContextBuilder.createSameTenantConstraintForForeignKey(new TableKey(NOTIFICATIONS_TABLE_NAME, null), new TableKey(USERS_TABLE_NAME, null), mapBuilder().put("user_id", "id").build(), NOTIFICATIONS_USERS_COMMENTS_FK_CONSTRAINT_NAME);
-        defaultSharedSchemaContextBuilder.createSameTenantConstraintForForeignKey(new TableKey(USERS_GROUPS_TABLE_NAME, null), new TableKey(USERS_TABLE_NAME, null), mapBuilder().put("user_id", "id").build(), USERS_GROUPS_USERS_FK_CONSTRAINT_NAME);
-        defaultSharedSchemaContextBuilder.createSameTenantConstraintForForeignKey(new TableKey(USERS_GROUPS_TABLE_NAME, null), new TableKey(GROUPS_TABLE_NAME, null), mapBuilder().put("group_id", "uuid").build(), USERS_GROUPS_GROUPS_FK_CONSTRAINT_NAME);
-
-        defaultSharedSchemaContextBuilder.setNameForFunctionThatChecksIfRecordExistsInTable(new TableKey(USERS_TABLE_NAME, null), "is_user_belongs_to_current_tenant");
-        defaultSharedSchemaContextBuilder.setNameForFunctionThatChecksIfRecordExistsInTable(new TableKey(POSTS_TABLE_NAME, null), "is_post_belongs_to_current_tenant");
-        defaultSharedSchemaContextBuilder.setNameForFunctionThatChecksIfRecordExistsInTable(new TableKey(COMMENTS_TABLE_NAME, null), "is_comment_belongs_to_current_tenant");
-        defaultSharedSchemaContextBuilder.setNameForFunctionThatChecksIfRecordExistsInTable(new TableKey(GROUPS_TABLE_NAME, null), "is_group_belongs_to_current_tenant");
+        appendDeclarationForSchema(defaultSharedSchemaContextBuilder, null);
+        appendDeclarationForSchema(defaultSharedSchemaContextBuilder, "non_public_schema");
         ISharedSchemaContext sharedSchemaContext = defaultSharedSchemaContextBuilder.build();
         setCurrentTenantIdFunctionInvocationFactory = sharedSchemaContext.getISetCurrentTenantIdFunctionInvocationFactory();
         sqlDefinitions.addAll(sharedSchemaContext.getSqlDefinitions());
+    }
+
+    private void appendDeclarationForSchema(DefaultSharedSchemaContextBuilder defaultSharedSchemaContextBuilder, String schema)
+    {
+        defaultSharedSchemaContextBuilder.createTenantColumnForTable(new TableKey(NOTIFICATIONS_TABLE_NAME, schema));
+        defaultSharedSchemaContextBuilder.createRLSPolicyForTable(new TableKey(NOTIFICATIONS_TABLE_NAME, schema), prepareIdColumnTypeForSingleColumnKey("uuid", "uuid"), CUSTOM_TENANT_COLUMN_NAME, "notifications_table_rls_policy");
+        defaultSharedSchemaContextBuilder.createRLSPolicyForTable(new TableKey(USERS_TABLE_NAME, schema), prepareIdColumnTypeForSingleColumnKey("id", "bigint"), "tenant_id", "users_table_rls_policy");
+        defaultSharedSchemaContextBuilder.createRLSPolicyForTable(new TableKey(POSTS_TABLE_NAME, schema), prepareIdColumnTypeForSingleColumnKey("id", "bigint"), "tenant_id", "posts_table_rls_policy");
+        defaultSharedSchemaContextBuilder.createRLSPolicyForTable(new TableKey(GROUPS_TABLE_NAME, schema), prepareIdColumnTypeForSingleColumnKey("uuid", "uuid"), "tenant_id", "groups_table_rls_policy");
+        defaultSharedSchemaContextBuilder.createRLSPolicyForTable(new TableKey(USERS_GROUPS_TABLE_NAME, schema), new HashMap<>(), "tenant_id", "users_groups_table_rls_policy");
+        defaultSharedSchemaContextBuilder.createRLSPolicyForTable(new TableKey(COMMENTS_TABLE_NAME, schema), mapBuilder().put("id", "int").put("user_id", "bigint").build(), CUSTOM_TENANT_COLUMN_NAME, "comments_table_rls_policy");
+        defaultSharedSchemaContextBuilder.createSameTenantConstraintForForeignKey(new TableKey(COMMENTS_TABLE_NAME, schema), new TableKey(USERS_TABLE_NAME, schema), mapBuilder().put("user_id", "id").build(), COMMENTS_USERS_FK_CONSTRAINT_NAME);
+        defaultSharedSchemaContextBuilder.createSameTenantConstraintForForeignKey(new TableKey(COMMENTS_TABLE_NAME, schema), new TableKey(POSTS_TABLE_NAME, schema), mapBuilder().put("post_id", "id").build(), COMMENTS_POSTS_FK_CONSTRAINT_NAME);
+        defaultSharedSchemaContextBuilder.createSameTenantConstraintForForeignKey(new TableKey(COMMENTS_TABLE_NAME, schema), new TableKey(COMMENTS_TABLE_NAME, schema), mapBuilder().put("parent_comment_id", "id").put("parent_comment_user_id", "user_id").build(), COMMENTS_PARENT_COMMENTS_FK_CONSTRAINT_NAME);
+        defaultSharedSchemaContextBuilder.createSameTenantConstraintForForeignKey(new TableKey(NOTIFICATIONS_TABLE_NAME, schema), new TableKey(USERS_TABLE_NAME, schema), mapBuilder().put("user_id", "id").build(), NOTIFICATIONS_USERS_COMMENTS_FK_CONSTRAINT_NAME);
+        defaultSharedSchemaContextBuilder.createSameTenantConstraintForForeignKey(new TableKey(USERS_GROUPS_TABLE_NAME, schema), new TableKey(USERS_TABLE_NAME, schema), mapBuilder().put("user_id", "id").build(), USERS_GROUPS_USERS_FK_CONSTRAINT_NAME);
+        defaultSharedSchemaContextBuilder.createSameTenantConstraintForForeignKey(new TableKey(USERS_GROUPS_TABLE_NAME, schema), new TableKey(GROUPS_TABLE_NAME, schema), mapBuilder().put("group_id", "uuid").build(), USERS_GROUPS_GROUPS_FK_CONSTRAINT_NAME);
+
+        defaultSharedSchemaContextBuilder.setNameForFunctionThatChecksIfRecordExistsInTable(new TableKey(USERS_TABLE_NAME, schema), "is_user_belongs_to_current_tenant");
+        defaultSharedSchemaContextBuilder.setNameForFunctionThatChecksIfRecordExistsInTable(new TableKey(POSTS_TABLE_NAME, schema), "is_post_belongs_to_current_tenant");
+        defaultSharedSchemaContextBuilder.setNameForFunctionThatChecksIfRecordExistsInTable(new TableKey(COMMENTS_TABLE_NAME, schema), "is_comment_belongs_to_current_tenant");
+        defaultSharedSchemaContextBuilder.setNameForFunctionThatChecksIfRecordExistsInTable(new TableKey(GROUPS_TABLE_NAME, schema), "is_group_belongs_to_current_tenant");
     }
 
     private Map<String, String> prepareIdColumnTypeForSingleColumnKey(String columnName, String columnType)
