@@ -339,7 +339,7 @@ public class DefaultSharedSchemaContextBuilder {
      * @see IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher
      */
     public DefaultSharedSchemaContextBuilder createSameTenantConstraintForForeignKey(String mainTable, String foreignKeyTable, Map<String, String> foreignKeyPrimaryKeyColumnsMappings, String constraintName) {
-        sharedSchemaContextRequest.getSameTenantConstraintForForeignKeyProperties().put(new SameTenantConstraintForForeignKey(new TableKey(mainTable, sharedSchemaContextRequest.getDefaultSchema()), new TableKey(foreignKeyTable, sharedSchemaContextRequest.getDefaultSchema()), foreignKeyPrimaryKeyColumnsMappings.keySet()), new SameTenantConstraintForForeignKeyProperties(constraintName, foreignKeyPrimaryKeyColumnsMappings));
+        createSameTenantConstraintForForeignKey(mainTable, sharedSchemaContextRequest.getDefaultSchema(), foreignKeyTable, sharedSchemaContextRequest.getDefaultSchema(), foreignKeyPrimaryKeyColumnsMappings, constraintName);
         return this;
     }
 
