@@ -45,6 +45,8 @@ class DefaultSharedSchemaContextBuilderSmokeTest extends Specification {
                 .setNameForFunctionThatChecksIfRecordExistsInTable(POSTS_TABLE_NAME, "is_post_belongs_to_current_tenant")
                 .setNameForFunctionThatChecksIfRecordExistsInTable(COMMENTS_TABLE_NAME, "is_comment_belongs_to_current_tenant")
                 .setNameForFunctionThatChecksIfRecordExistsInTable(GROUPS_TABLE_NAME, "is_group_belongs_to_current_tenant")
+                .setIdentifierMaxLength(128)
+                .setIdentifierMinLength(6)
 
         when:
             def sharedSchemaContext = tested.build()

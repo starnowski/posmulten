@@ -228,7 +228,18 @@ public class DefaultSharedSchemaContextBuilder {
      * @see TenantColumnSQLDefinitionsEnricher
      */
     public DefaultSharedSchemaContextBuilder createTenantColumnForTable(String table) {
-        TableKey tableKey = new TableKey(table, sharedSchemaContextRequest.getDefaultSchema());
+        return createTenantColumnForTable(new TableKey(table, sharedSchemaContextRequest.getDefaultSchema()));
+    }
+
+    /**
+     * Marking specific table as table where a column for tenant identifier should be added.
+     *
+     * @param tableKey table key where a column for tenant identifier should be added.
+     * @return builder object for which method was invoked
+     * @see SharedSchemaContextRequest#createTenantColumnTableLists
+     * @see TenantColumnSQLDefinitionsEnricher
+     */
+    public DefaultSharedSchemaContextBuilder createTenantColumnForTable(TableKey tableKey) {
         sharedSchemaContextRequest.getCreateTenantColumnTableLists().add(tableKey);
         return this;
     }
@@ -248,7 +259,23 @@ public class DefaultSharedSchemaContextBuilder {
      * @see TableRLSSettingsSQLDefinitionsEnricher
      */
     public DefaultSharedSchemaContextBuilder createRLSPolicyForTable(String table, Map<String, String> primaryKeyColumnsList, String tenantColumnName, String rlsPolicyName) {
-        TableKey tableKey = new TableKey(table, sharedSchemaContextRequest.getDefaultSchema());
+        return createRLSPolicyForTable(new TableKey(table, sharedSchemaContextRequest.getDefaultSchema()), primaryKeyColumnsList, tenantColumnName, rlsPolicyName);
+    }
+
+    /**
+     * Register table that should have create row level security policy.
+     *
+     * @param tableKey              table key
+     * @param primaryKeyColumnsList map of primary key columns and their types in table. Column name is the map key and column type is its value
+     * @param tenantColumnName      name of column that stores tenant identifier in table
+     * @param rlsPolicyName         name of row level security policy
+     * @return builder object for which method was invoked
+     * @see SharedSchemaContextRequest#tableColumnsList
+     * @see SharedSchemaContextRequest#tableRLSPolicies
+     * @see TableRLSPolicyEnricher
+     * @see TableRLSSettingsSQLDefinitionsEnricher
+     */
+    public DefaultSharedSchemaContextBuilder createRLSPolicyForTable(TableKey tableKey, Map<String, String> primaryKeyColumnsList, String tenantColumnName, String rlsPolicyName) {
         sharedSchemaContextRequest.getTableColumnsList().put(tableKey, new DefaultTableColumns(tenantColumnName, primaryKeyColumnsList));
         sharedSchemaContextRequest.getTableRLSPolicies().put(tableKey, new DefaultTableRLSPolicyProperties(rlsPolicyName));
         return this;
@@ -307,7 +334,23 @@ public class DefaultSharedSchemaContextBuilder {
      * @see IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher
      */
     public DefaultSharedSchemaContextBuilder createSameTenantConstraintForForeignKey(String mainTable, String foreignKeyTable, Map<String, String> foreignKeyPrimaryKeyColumnsMappings, String constraintName) {
-        sharedSchemaContextRequest.getSameTenantConstraintForForeignKeyProperties().put(new SameTenantConstraintForForeignKey(new TableKey(mainTable, sharedSchemaContextRequest.getDefaultSchema()), new TableKey(foreignKeyTable, sharedSchemaContextRequest.getDefaultSchema()), foreignKeyPrimaryKeyColumnsMappings.keySet()), new SameTenantConstraintForForeignKeyProperties(constraintName, foreignKeyPrimaryKeyColumnsMappings));
+        return createSameTenantConstraintForForeignKey(new TableKey(mainTable, sharedSchemaContextRequest.getDefaultSchema()), new TableKey(foreignKeyTable, sharedSchemaContextRequest.getDefaultSchema()), foreignKeyPrimaryKeyColumnsMappings, constraintName);
+    }
+
+    /**
+     * Register the request for creation of constraint that checks if foreign key in the main table refers to record
+     * that exists in the foreign table and which belongs to the current tenant.
+     *
+     * @param mainTableKey                        table key for the main table that contains columns with foreign key
+     * @param foreignKeyTableKey                  table key for the foreign table
+     * @param foreignKeyPrimaryKeyColumnsMappings map contains information about which foreign key column refers to specific primary key column. The foreign key column is the map key and the primary key column is its value.
+     * @param constraintName                      constraint name
+     * @return builder object for which method was invoked
+     * @see SharedSchemaContextRequest#sameTenantConstraintForForeignKeyProperties
+     * @see IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher
+     */
+    public DefaultSharedSchemaContextBuilder createSameTenantConstraintForForeignKey(TableKey mainTableKey, TableKey foreignKeyTableKey, Map<String, String> foreignKeyPrimaryKeyColumnsMappings, String constraintName) {
+        sharedSchemaContextRequest.getSameTenantConstraintForForeignKeyProperties().put(new SameTenantConstraintForForeignKey(mainTableKey, foreignKeyTableKey, foreignKeyPrimaryKeyColumnsMappings.keySet()), new SameTenantConstraintForForeignKeyProperties(constraintName, foreignKeyPrimaryKeyColumnsMappings));
         return this;
     }
 
@@ -321,7 +364,20 @@ public class DefaultSharedSchemaContextBuilder {
      * @see SharedSchemaContextRequest#functionThatChecksIfRecordExistsInTableNames
      */
     public DefaultSharedSchemaContextBuilder setNameForFunctionThatChecksIfRecordExistsInTable(String recordTable, String functionName) {
-        sharedSchemaContextRequest.getFunctionThatChecksIfRecordExistsInTableNames().put(new TableKey(recordTable, sharedSchemaContextRequest.getDefaultSchema()), functionName);
+        return setNameForFunctionThatChecksIfRecordExistsInTable(new TableKey(recordTable, sharedSchemaContextRequest.getDefaultSchema()), functionName);
+    }
+
+    /**
+     * Setting the name for a function that checks if there is a record with a specified identifier that is assigned to
+     * the current tenant for the specified table
+     *
+     * @param recordTableKey key table
+     * @param functionName   function name
+     * @return builder object for which method was invoked
+     * @see SharedSchemaContextRequest#functionThatChecksIfRecordExistsInTableNames
+     */
+    public DefaultSharedSchemaContextBuilder setNameForFunctionThatChecksIfRecordExistsInTable(TableKey recordTableKey, String functionName) {
+        sharedSchemaContextRequest.getFunctionThatChecksIfRecordExistsInTableNames().put(recordTableKey, functionName);
         return this;
     }
 
@@ -362,7 +418,19 @@ public class DefaultSharedSchemaContextBuilder {
      * @return builder object for which method was invoked
      */
     public DefaultSharedSchemaContextBuilder registerCustomValidTenantValueConstraintNameForTable(String table, String constraintName) {
-        sharedSchemaContextRequest.getTenantValidConstraintCustomNamePerTables().put(new TableKey(table, sharedSchemaContextRequest.getDefaultSchema()), constraintName);
+        return registerCustomValidTenantValueConstraintNameForTable(new TableKey(table, sharedSchemaContextRequest.getDefaultSchema()), constraintName);
+    }
+
+    /**
+     * Register custom name for constraint that are going to check if tenant column has valid value in specified
+     * table that require rls policy.
+     *
+     * @param tableKey       table key
+     * @param constraintName constraint name
+     * @return builder object for which method was invoked
+     */
+    public DefaultSharedSchemaContextBuilder registerCustomValidTenantValueConstraintNameForTable(TableKey tableKey, String constraintName) {
+        sharedSchemaContextRequest.getTenantValidConstraintCustomNamePerTables().put(tableKey, constraintName);
         return this;
     }
 
@@ -386,7 +454,18 @@ public class DefaultSharedSchemaContextBuilder {
      * @see #setCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables(boolean)
      */
     public DefaultSharedSchemaContextBuilder skipAddingOfTenantColumnDefaultValueForTable(String value) {
-        sharedSchemaContextRequest.getTablesThatAddingOfTenantColumnDefaultValueShouldBeSkipped().add(new TableKey(value, sharedSchemaContextRequest.getDefaultSchema()));
+        return skipAddingOfTenantColumnDefaultValueForTable(new TableKey(value, sharedSchemaContextRequest.getDefaultSchema()));
+    }
+
+    /**
+     * Specify for which table the adding of default value declaration should be skipped.
+     *
+     * @param tableKey table key
+     * @return builder object for which method was invoked
+     * @see #setCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables(boolean)
+     */
+    public DefaultSharedSchemaContextBuilder skipAddingOfTenantColumnDefaultValueForTable(TableKey tableKey) {
+        sharedSchemaContextRequest.getTablesThatAddingOfTenantColumnDefaultValueShouldBeSkipped().add(tableKey);
         return this;
     }
 
@@ -428,6 +507,7 @@ public class DefaultSharedSchemaContextBuilder {
 
     /**
      * Setting value for property {@link SharedSchemaContextRequest#identifierMaxLength}
+     *
      * @param identifierMaxLength - Maximum allowed length for the identifier
      * @return builder object for which method was invoked
      */
@@ -438,6 +518,7 @@ public class DefaultSharedSchemaContextBuilder {
 
     /**
      * Setting value for property {@link SharedSchemaContextRequest#identifierMinLength}
+     *
      * @param identifierMinLength - Minimum allowed length for the identifier.
      * @return builder object for which method was invoked
      */
