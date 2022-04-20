@@ -83,4 +83,10 @@
             <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.sanity.RLSPolicyAndForeignKeyConstraintInManyToManyTableInPublicSchemaTest" />
         </classes>
     </test>
+    <test name="Creation of RLS policies for multiple schemas with one builder object">
+        <classes>
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.sanity.RLSForNonDefaultSchemaInNonPublicSchemaTest" />
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.sanity.RLSForNonDefaultSchemaInPublicSchemaTest" />
+        </classes>
+    </test>
 </suite>
