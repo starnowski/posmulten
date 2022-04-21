@@ -7,7 +7,7 @@
     <groupId>com.github.starnowski.posmulten</groupId>
     <artifactId>parent</artifactId>
     <packaging>pom</packaging>
-    <version>0.5.3-SNAPSHOT</version>
+    <version>0.5.3</version>
     <modules>
         <module>postgresql-core</module>
         <module>postgresql-core-functional-tests</module>
