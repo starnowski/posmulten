@@ -9,6 +9,7 @@ https://keepachangelog.com/en/1.0.0/
 https://www.markdownguide.org/basic-syntax/
 
 * [Unreleased](#unreleased)
+* [0.5.3](#053---2022-04-21)
 * [0.5.2](#052---2022-04-11)
 * [0.5.1](#051---2022-02-14)
 * [0.5.0](#050---2022-01-16)
@@ -22,6 +23,29 @@ https://www.markdownguide.org/basic-syntax/
 
 ## [Unreleased]
 
+## [0.5.3] - 2022-04-21
+
+### Added
+
+- Added methods to schema builder that pass table key (schema and table name) similar to methods that pass only the table name
+  - Added method com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#createRLSPolicyForTable(com.github.starnowski.posmulten.postgresql.core.context.TableKey tableKey, Map<String, String> primaryKeyColumnsList, String tenantColumnName, String rlsPolicyName)
+    [239](https://github.com/starnowski/posmulten/issues/239)
+  - Added method com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#createTenantColumnForTable(com.github.starnowski.posmulten.postgresql.core.context.TableKey tableKey)
+    [239](https://github.com/starnowski/posmulten/issues/239)
+  - Added method com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#createSameTenantConstraintForForeignKey(com.github.starnowski.posmulten.postgresql.core.context.TableKey mainTableKey, com.github.starnowski.posmulten.postgresql.core.context.TableKey foreignKeyTableKey, Map<String, String> foreignKeyPrimaryKeyColumnsMappings, String constraintName)
+    [239](https://github.com/starnowski/posmulten/issues/239)
+  - Added method com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#setNameForFunctionThatChecksIfRecordExistsInTable(com.github.starnowski.posmulten.postgresql.core.context.TableKey recordTableKey, String functionName)
+    [239](https://github.com/starnowski/posmulten/issues/239)
+  - Added method com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#registerCustomValidTenantValueConstraintNameForTable(com.github.starnowski.posmulten.postgresql.core.context.TableKey tableKey, String constraintName)
+    [239](https://github.com/starnowski/posmulten/issues/239)
+  - Added method com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#skipAddingOfTenantColumnDefaultValueForTable(com.github.starnowski.posmulten.postgresql.core.context.TableKey tableKey)
+    [239](https://github.com/starnowski/posmulten/issues/239)
+
+### Changed
+
+-   Passing schema name assigned to table key, not default schema in com.github.starnowski.posmulten.postgresql.core.context.enrichers.IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricher#enrich(com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaContext context, com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContextRequest request) method
+    [239](https://github.com/starnowski/posmulten/issues/239)      
+  
 ## [0.5.2] - 2022-04-11
 
 ### Added
