@@ -41,7 +41,11 @@ https://www.markdownguide.org/basic-syntax/
   - Added method com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#skipAddingOfTenantColumnDefaultValueForTable(com.github.starnowski.posmulten.postgresql.core.context.TableKey tableKey)
     [239](https://github.com/starnowski/posmulten/issues/239)
 
-        
+### Changed
+
+-   Passing schema name assigned to table key, not default schema in com.github.starnowski.posmulten.postgresql.core.context.enrichers.IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricher#enrich(com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaContext context, com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContextRequest request) method
+    [239](https://github.com/starnowski/posmulten/issues/239)      
+  
 ## [0.5.2] - 2022-04-11
 
 ### Added
