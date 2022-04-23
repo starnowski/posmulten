@@ -49,7 +49,11 @@ public abstract class AbstractRLSForNonDefaultSchemaTest extends AbstractClassWi
                 {new User(1L, "Szymon Tarnowski", USER_TENANT), null},
                 {new User(2L, "John Doe", SECONDARY_USER_TENANT), null},
                 {new User(1L, "Szymon Tarnowski", USER_TENANT), "non_public_schema"},
-                {new User(2L, "John Doe", SECONDARY_USER_TENANT), "non_public_schema"}
+                {new User(2L, "John Doe", SECONDARY_USER_TENANT), "non_public_schema"},
+                {new User(11L, "Szymon Tarnowski", USER_TENANT), null},
+                {new User(12L, "John Doe", SECONDARY_USER_TENANT), null},
+                {new User(21L, "Szymon Tarnowski", USER_TENANT), "non_public_schema"},
+                {new User(22L, "John Doe", SECONDARY_USER_TENANT), "non_public_schema"}
         };
     }
 
@@ -60,6 +64,16 @@ public abstract class AbstractRLSForNonDefaultSchemaTest extends AbstractClassWi
                 {new Post(13L, "Some text", 1L, SECONDARY_USER_TENANT), null},
                 {new Post(8L, "Some phrase", 2L, USER_TENANT), "non_public_schema"},
                 {new Post(13L, "Some text", 1L, SECONDARY_USER_TENANT), "non_public_schema"}
+        };
+    }
+
+    @DataProvider(name = "postWithUserReferenceFromSameTenantButInDifferentSchemaData")
+    protected static Object[][] postWithUserReferenceFromSameTenantButInDifferentSchemaData() {
+        return new Object[][]{
+                {new Post(108L, "Some phrase", 22L, SECONDARY_USER_TENANT), null, "non_public_schema"},
+                {new Post(113L, "Some text", 21L, USER_TENANT), null, "non_public_schema"},
+                {new Post(108L, "Some phrase", 12L, SECONDARY_USER_TENANT), "non_public_schema", null},
+                {new Post(113L, "Some text", 11L, USER_TENANT), "non_public_schema", null}
         };
     }
 
@@ -148,7 +162,19 @@ public abstract class AbstractRLSForNonDefaultSchemaTest extends AbstractClassWi
         assertFalse(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %5$s WHERE id = %1$d AND text = '%2$s' AND tenant_id = '%3$s' AND user_id = %4$d", post.getId(), post.getText(), post.getTenantId(), post.getUserId(), getPostsTableReference(schema))), "The tests post should not exists");
     }
 
-    @Test(dataProvider = "postWithUserReferenceForSameTenantData", dependsOnMethods = {"tryInsertPostWithReferenceToUserFromDifferentTenant"}, testName = "insert data into the post table with reference to users table that belongs to same tenant")
+    @Test(dataProvider = "postWithUserReferenceFromSameTenantButInDifferentSchemaData", dependsOnMethods = {"insertUserTestData"}, testName = "try to insert data into the post table with reference to users table that belongs to different tenant")
+    public void tryInsertPostWithReferenceToUserFromSameTenantButInDifferentSchema(Post post, String schema, String differentSchema) {
+        assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %2$s WHERE id = %1$d AND tenant_id = '%3$s'", post.getUserId(), getUsersTableReference(differentSchema), post.getTenantId())), "The tests user should exists");
+        assertFalse(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %2$s WHERE id = %1$d AND tenant_id = '%3$s'", post.getUserId(), getUsersTableReference(schema), post.getTenantId())), "The tests user should belong to same tenant as posts record but in different schema");
+        assertThat(countRowsInTableWhere(getPostsTableReference(schema), "id = " + post.getUserId())).isEqualTo(0);
+        assertThatThrownBy(() ->
+                ownerJdbcTemplate.execute(format("%1$s INSERT INTO %6$s (id, user_id, text, tenant_id) VALUES (%2$d, %3$d, '%4$s', '%5$s');", setCurrentTenantIdFunctionInvocationFactory.generateStatementThatSetTenant(post.getTenantId()), post.getId(), post.getUserId(), post.getText(), post.getTenantId(), getPostsTableReference(schema)))
+        )
+                .isInstanceOf(DataIntegrityViolationException.class);
+        assertFalse(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %5$s WHERE id = %1$d AND text = '%2$s' AND tenant_id = '%3$s' AND user_id = %4$d", post.getId(), post.getText(), post.getTenantId(), post.getUserId(), getPostsTableReference(schema))), "The tests post should not exists");
+    }
+
+    @Test(dataProvider = "postWithUserReferenceForSameTenantData", dependsOnMethods = {"tryInsertPostWithReferenceToUserFromDifferentTenant", "tryInsertPostWithReferenceToUserFromSameTenantButInDifferentSchema"}, testName = "insert data into the post table with reference to users table that belongs to same tenant")
     public void insertPostWithReferenceToUserFromSameTenant(Post post, Long userId, String schema) {
         assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %2$s WHERE id = %1$d", post.getUserId(), getUsersTableReference(schema))), "The tests user should exists");
         assertTrue(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %2$s WHERE id = %1$d AND tenant_id = '%3$s'", post.getUserId(), getUsersTableReference(schema), post.getTenantId())), "The tests user should belong to same tenant as posts record");
@@ -169,7 +195,7 @@ public abstract class AbstractRLSForNonDefaultSchemaTest extends AbstractClassWi
         assertFalse(isAnyRecordExists(jdbcTemplate, format("SELECT * FROM %5$s WHERE id = %1$d AND text = '%2$s' AND tenant_id = '%3$s' AND user_id = %4$d", post.getId(), post.getText(), post.getTenantId(), userIdForDifferentTenant, getPostsTableReference(schema))), "The tests post should not exists with reference to user that belongs to different tenant");
     }
 
-    @Test(dependsOnMethods = {"tryInsertPostWithReferenceToUserFromDifferentTenant", "insertPostWithReferenceToUserFromSameTenant", "tryUpdatePostWithReferenceToUserFromDifferentTenant"}, alwaysRun = true)
+    @Test(dependsOnMethods = {"tryInsertPostWithReferenceToUserFromDifferentTenant", "insertPostWithReferenceToUserFromSameTenant", "tryUpdatePostWithReferenceToUserFromDifferentTenant", "tryInsertPostWithReferenceToUserFromSameTenantButInDifferentSchema"}, alwaysRun = true)
     public void dropAllSQLDefinitions() {
         super.dropAllSQLDefinitions();
     }
