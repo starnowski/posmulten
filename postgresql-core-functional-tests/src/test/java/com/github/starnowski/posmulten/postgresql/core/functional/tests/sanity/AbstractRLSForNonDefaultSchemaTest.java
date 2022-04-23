@@ -70,10 +70,10 @@ public abstract class AbstractRLSForNonDefaultSchemaTest extends AbstractClassWi
     @DataProvider(name = "postWithUserReferenceFromSameTenantButInDifferentSchemaData")
     protected static Object[][] postWithUserReferenceFromSameTenantButInDifferentSchemaData() {
         return new Object[][]{
-                {new Post(108L, "Some phrase", 22L, USER_TENANT), null, "non_public_schema"},
-                {new Post(113L, "Some text", 21L, SECONDARY_USER_TENANT), null, "non_public_schema"},
-                {new Post(108L, "Some phrase", 12L, USER_TENANT), "non_public_schema", null},
-                {new Post(113L, "Some text", 11L, SECONDARY_USER_TENANT), "non_public_schema", null}
+                {new Post(108L, "Some phrase", 22L, SECONDARY_USER_TENANT), null, "non_public_schema"},
+                {new Post(113L, "Some text", 21L, USER_TENANT), null, "non_public_schema"},
+                {new Post(108L, "Some phrase", 12L, SECONDARY_USER_TENANT), "non_public_schema", null},
+                {new Post(113L, "Some text", 11L, USER_TENANT), "non_public_schema", null}
         };
     }
 
