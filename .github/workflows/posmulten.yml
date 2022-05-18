@@ -37,7 +37,7 @@ jobs:
       - name: Install bats
         run: .travis/bats/bats-core-installation.sh "$GITHUB_WORKSPACE/.travis/bats"
       - name: Install other libs
-        run:  sudo apt-get -y install libxml2-utils
+        run:  sudo apt-get update && sudo apt-get -y install libxml2-utils
       - name: Run bats tests
         run:  ./mvnw -DskipTests --quiet clean install && export PATH="$GITHUB_WORKSPACE/.travis/bats/bats-core/bin:$PATH" && bats -tr bats/configuration-jar
 
