@@ -1117,8 +1117,9 @@ By using this method there is also the possibility of customization for validati
 * Any new issues please report in [GitHub site](https://github.com/starnowski/posmulten/issues)
 
 # Project contribution
-At this moment please create issue on page the [issues](https://github.com/starnowski/posmulten/issues) with "[CONTRIBUTION]".
-Or send message to me directly on [LinkedIn site](https://pl.linkedin.com/in/szymon-tarnowski-a104b4150).
-TODO
+* Look for open issues or create your own
+* Fork repository on Github and start applying your changes to master branch or release branch
+* Follow CONTRIBUTING.md document for coding rules
+* Create pull request
 
 
