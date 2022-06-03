@@ -195,7 +195,8 @@ public class SharedSchemaContextRequest implements Cloneable {
     private Integer identifierMinLength;
 
     /**
-     * List of TODO
+     * Pairs of custom SQL definitions and their positions.
+     * TODO Add enricher type
      */
     private List<CustomSQLDefinitionPair> customSQLDefinitionPairs = new ArrayList<>();
 
@@ -366,6 +367,10 @@ public class SharedSchemaContextRequest implements Cloneable {
 
     public void setIdentifierMinLength(Integer identifierMinLength) {
         this.identifierMinLength = identifierMinLength;
+    }
+
+    public List<CustomSQLDefinitionPair> getCustomSQLDefinitionPairs() {
+        return customSQLDefinitionPairs;
     }
 
     /**
