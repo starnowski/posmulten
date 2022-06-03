@@ -194,6 +194,11 @@ public class SharedSchemaContextRequest implements Cloneable {
      */
     private Integer identifierMinLength;
 
+    /**
+     * List of TODO
+     */
+    private List<CustomSQLDefinitionPair> customSQLDefinitionPairs = new ArrayList<>();
+
     public String getDefaultTenantIdColumn() {
         return defaultTenantIdColumn;
     }
