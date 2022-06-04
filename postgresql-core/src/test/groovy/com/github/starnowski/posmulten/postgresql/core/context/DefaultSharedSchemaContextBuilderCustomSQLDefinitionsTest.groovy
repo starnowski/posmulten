@@ -12,7 +12,7 @@ class DefaultSharedSchemaContextBuilderCustomSQLDefinitionsTest extends Specific
         given:
             def tested = new DefaultSharedSchemaContextBuilder()
             def sqlDefinitions = [Mock(SQLDefinition), Mock(SQLDefinition), Mock(SQLDefinition), Mock(SQLDefinition), Mock(SQLDefinition)]
-            List<CustomSQLDefinitionPairPositionProvider> positionProviders = [CustomSQLDefinitionPairDefaultPosition.AT_END, CustomSQLDefinitionPairDefaultPosition.AT_BEGINNING, {it -> "xxx"}, {it -> "test1"}, CustomSQLDefinitionPairDefaultPosition.AT_BEGINNING ]
+            List<CustomSQLDefinitionPairPositionProvider> positionProviders = [CustomSQLDefinitionPairDefaultPosition.AT_END, CustomSQLDefinitionPairDefaultPosition.AT_BEGINNING, new TestCustomSQLDefinitionPairPositionProvider("xxx"), new TestCustomSQLDefinitionPairPositionProvider("test1"), CustomSQLDefinitionPairDefaultPosition.AT_BEGINNING ]
             def expectedPositions = positionProviders.stream().map({ it -> it.getPosition() }).collect(toList())
 
         when:
@@ -23,5 +23,19 @@ class DefaultSharedSchemaContextBuilderCustomSQLDefinitionsTest extends Specific
         then:
             tested.sharedSchemaContextRequestCopy.customSQLDefinitionPairs.position == expectedPositions
             tested.sharedSchemaContextRequestCopy.customSQLDefinitionPairs.sqlDefinition == sqlDefinitions
+    }
+
+    private static class TestCustomSQLDefinitionPairPositionProvider implements CustomSQLDefinitionPairPositionProvider {
+
+        private String position
+
+        TestCustomSQLDefinitionPairPositionProvider(String position){
+            this.position = position
+        }
+
+        @Override
+        String getPosition() {
+            position
+        }
     }
 }
