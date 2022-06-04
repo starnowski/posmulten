@@ -1,5 +1,6 @@
 package com.github.starnowski.posmulten.postgresql.core.context.enrichers
 
+import com.github.starnowski.posmulten.postgresql.core.common.DefaultSQLDefinition
 import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition
 import com.github.starnowski.posmulten.postgresql.core.context.CustomSQLDefinitionPairPositionProvider
 import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder
@@ -7,6 +8,8 @@ import com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaCont
 import com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContext
 import com.github.starnowski.posmulten.postgresql.core.util.Pair
 import spock.lang.Specification
+
+import static java.util.stream.Collectors.toList
 
 abstract class AbstractCustomSQLDefinitionsEnricherTest<T extends AbstractCustomSQLDefinitionsEnricher> extends Specification {
 
@@ -27,7 +30,7 @@ abstract class AbstractCustomSQLDefinitionsEnricherTest<T extends AbstractCustom
             result.getSqlDefinitions().createScript == getExpectedCreationScripts()
 
         and: "test data should contains values that should be ignored"
-            testData.containsAll(getIgnoredCreationScripts())
+            testData.stream().map({it -> it.getValue().createScript}).collect(toList()).containsAll(getIgnoredCreationScripts())
 
         and: "collection of ignored values can not be empty"
             !getIgnoredCreationScripts().isEmpty()
@@ -41,8 +44,12 @@ abstract class AbstractCustomSQLDefinitionsEnricherTest<T extends AbstractCustom
 
     abstract List<String> getIgnoredCreationScripts()
 
-    protected static pp(String position) {
+    protected pp(String position) {
         return new ConstantCustomSQLDefinitionPairPositionProvider(position)
+    }
+
+    protected SQLDefinition definition(String createScript) {
+        new DefaultSQLDefinition(createScript, "", [""])
     }
 
     protected static class ConstantCustomSQLDefinitionPairPositionProvider implements CustomSQLDefinitionPairPositionProvider {
