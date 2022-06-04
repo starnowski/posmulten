@@ -1118,11 +1118,18 @@ By using this method there is also the possibility of customization for validati
 There is an option to pass custom SQL definition to query builder.
 
 ```javadoc
-com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#addCustomSQLDefinition(com.github.starnowski.posmulten.postgresql.core.context.CustomSQLDefinitionPairPositionProvider positionProvider, com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition sqlDefinition)
 com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#addCustomSQLDefinition(com.github.starnowski.posmulten.postgresql.core.context.CustomSQLDefinitionPairPositionProvider positionProvider, String creationScript)
 com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#addCustomSQLDefinition(com.github.starnowski.posmulten.postgresql.core.context.CustomSQLDefinitionPairPositionProvider positionProvider, String creationScript, String dropScript)
 com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#addCustomSQLDefinition(com.github.starnowski.posmulten.postgresql.core.context.CustomSQLDefinitionPairPositionProvider positionProvider, String creationScript, String dropScript, List<String> checkingStatements)
+com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#addCustomSQLDefinition(com.github.starnowski.posmulten.postgresql.core.context.CustomSQLDefinitionPairPositionProvider positionProvider, com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition sqlDefinition)
 ```
+
+Each method pass object of type com.github.starnowski.posmulten.postgresql.core.context.CustomSQLDefinitionPairPositionProvider that returns position for SQL definition.
+Default implementation of this type is com.github.starnowski.posmulten.postgresql.core.context.CustomSQLDefinitionPairDefaultPosition enum type that has two values:
+    
+    AT_BEGINNING - custom definition is being added before all definitions created by builder
+    AT_END - custom definition is being added after all definitions created by builder
+ 
 TODO
 
 # Reporting issues
