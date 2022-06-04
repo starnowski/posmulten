@@ -30,7 +30,7 @@ class DefaultSharedSchemaContextBuilderCustomSQLDefinitionsTest extends Specific
             lastBulderReference == tested
     }
 
-    def "should add custom SQL definitions defined only by their creation script and their positions "() {
+    def "should add custom SQL definitions defined only by their creation script and their positions"() {
         given:
             def tested = new DefaultSharedSchemaContextBuilder()
             def creationScripts = ["SELECT 89", "SELECT 15", "insert into some_table blablal;", "SELECT 500", "Alter TabLe"]
@@ -47,6 +47,30 @@ class DefaultSharedSchemaContextBuilderCustomSQLDefinitionsTest extends Specific
             tested.sharedSchemaContextRequestCopy.customSQLDefinitionPairs.position == expectedPositions
             tested.sharedSchemaContextRequestCopy.customSQLDefinitionPairs.sqlDefinition.createScript == creationScripts
             tested.sharedSchemaContextRequestCopy.customSQLDefinitionPairs.sqlDefinition.dropScript == [EXPECTED_DEFAULT_SQL_STATEMENT, EXPECTED_DEFAULT_SQL_STATEMENT, EXPECTED_DEFAULT_SQL_STATEMENT, EXPECTED_DEFAULT_SQL_STATEMENT, EXPECTED_DEFAULT_SQL_STATEMENT]
+            tested.sharedSchemaContextRequestCopy.customSQLDefinitionPairs.sqlDefinition.checkingStatements == [[EXPECTED_DEFAULT_SQL_STATEMENT], [EXPECTED_DEFAULT_SQL_STATEMENT], [EXPECTED_DEFAULT_SQL_STATEMENT], [EXPECTED_DEFAULT_SQL_STATEMENT], [EXPECTED_DEFAULT_SQL_STATEMENT]]
+
+        and: "reference to builder should be the same"
+            lastBulderReference == tested
+    }
+
+    def "should add custom SQL definitions defined only by their creation and drop script and their positions"() {
+        given:
+            def tested = new DefaultSharedSchemaContextBuilder()
+            def creationScripts = ["SELECT 113", "SELECT 88", "insert into some_table values;", "SELECT 500", "Alter TabLe"]
+            def dropScripts = ["DELETE", "SELECT 57", "delete FROM _xtable;", "DROP TABLE", "Alter TabLe"]
+            List<CustomSQLDefinitionPairPositionProvider> positionProviders = [CustomSQLDefinitionPairDefaultPosition.AT_END, CustomSQLDefinitionPairDefaultPosition.AT_BEGINNING, new TestCustomSQLDefinitionPairPositionProvider("xxx"), new TestCustomSQLDefinitionPairPositionProvider("test1"), CustomSQLDefinitionPairDefaultPosition.AT_BEGINNING ]
+            def expectedPositions = positionProviders.stream().map({ it -> it.getPosition() }).collect(toList())
+            def lastBulderReference = tested
+
+        when:
+            for (int i = 0; i < creationScripts.size(); i++) {
+                lastBulderReference = lastBulderReference.addCustomSQLDefinition(positionProviders[i], creationScripts[i], dropScripts[i])
+            }
+
+        then:
+            tested.sharedSchemaContextRequestCopy.customSQLDefinitionPairs.position == expectedPositions
+            tested.sharedSchemaContextRequestCopy.customSQLDefinitionPairs.sqlDefinition.createScript == creationScripts
+            tested.sharedSchemaContextRequestCopy.customSQLDefinitionPairs.sqlDefinition.dropScript == dropScripts
             tested.sharedSchemaContextRequestCopy.customSQLDefinitionPairs.sqlDefinition.checkingStatements == [[EXPECTED_DEFAULT_SQL_STATEMENT], [EXPECTED_DEFAULT_SQL_STATEMENT], [EXPECTED_DEFAULT_SQL_STATEMENT], [EXPECTED_DEFAULT_SQL_STATEMENT], [EXPECTED_DEFAULT_SQL_STATEMENT]]
 
         and: "reference to builder should be the same"

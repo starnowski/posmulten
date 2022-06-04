@@ -540,6 +540,11 @@ public class DefaultSharedSchemaContextBuilder {
         return this;
     }
 
+    public DefaultSharedSchemaContextBuilder addCustomSQLDefinition(CustomSQLDefinitionPairPositionProvider positionProvider, String creationScript, String dropScript) {
+        this.sharedSchemaContextRequest.getCustomSQLDefinitionPairs().add(new CustomSQLDefinitionPair(positionProvider.getPosition(), new DefaultSQLDefinition(creationScript, dropScript, singletonList(DEFAULT_CUSTOM_SQL_STATEMENT))));
+        return this;
+    }
+
     protected SharedSchemaContextRequest getSharedSchemaContextRequestCopyOrNull(SharedSchemaContextRequest request) {
         try {
             return (SharedSchemaContextRequest) request.clone();
