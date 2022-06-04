@@ -23,6 +23,7 @@
  */
 package com.github.starnowski.posmulten.postgresql.core.context;
 
+import com.github.starnowski.posmulten.postgresql.core.common.DefaultSQLDefinition;
 import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition;
 import com.github.starnowski.posmulten.postgresql.core.context.enrichers.*;
 import com.github.starnowski.posmulten.postgresql.core.context.exceptions.InvalidSharedSchemaContextRequestException;
@@ -30,11 +31,10 @@ import com.github.starnowski.posmulten.postgresql.core.context.exceptions.Shared
 import com.github.starnowski.posmulten.postgresql.core.context.validators.*;
 import com.github.starnowski.posmulten.postgresql.core.context.validators.factories.IdentifierLengthValidatorFactory;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 
 /**
  * The builder component responsible for creation of object of type {@link ISharedSchemaContext}.
@@ -43,6 +43,8 @@ import static java.util.Arrays.asList;
  * specified in {@link #enrichers} collection.
  */
 public class DefaultSharedSchemaContextBuilder {
+
+    public static final String DEFAULT_CUSTOM_SQL_STATEMENT = "SELECT 1";
 
     private final SharedSchemaContextRequest sharedSchemaContextRequest = new SharedSchemaContextRequest();
     /**
@@ -530,6 +532,11 @@ public class DefaultSharedSchemaContextBuilder {
 
     public DefaultSharedSchemaContextBuilder addCustomSQLDefinition(CustomSQLDefinitionPairPositionProvider positionProvider, SQLDefinition sqlDefinition) {
         this.sharedSchemaContextRequest.getCustomSQLDefinitionPairs().add(new CustomSQLDefinitionPair(positionProvider.getPosition(), sqlDefinition));
+        return this;
+    }
+
+    public DefaultSharedSchemaContextBuilder addCustomSQLDefinition(CustomSQLDefinitionPairPositionProvider positionProvider, String creationScript) {
+        this.sharedSchemaContextRequest.getCustomSQLDefinitionPairs().add(new CustomSQLDefinitionPair(positionProvider.getPosition(), new DefaultSQLDefinition(creationScript, DEFAULT_CUSTOM_SQL_STATEMENT, singletonList(DEFAULT_CUSTOM_SQL_STATEMENT))));
         return this;
     }
 
