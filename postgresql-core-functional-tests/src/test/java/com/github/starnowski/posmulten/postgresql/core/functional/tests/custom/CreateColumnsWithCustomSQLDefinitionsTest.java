@@ -35,7 +35,7 @@ public class CreateColumnsWithCustomSQLDefinitionsTest extends DefaultTestNGTest
                 .setGrantee(CORE_OWNER_USER)
                 .addCustomSQLDefinition(CustomSQLDefinitionPairDefaultPosition.AT_BEGINNING, "ALTER TABLE users ADD COLUMN custom_column1 VARCHAR(255);", "ALTER TABLE users DROP COLUMN custom_column1;",
                         singletonList("SELECT COUNT(1) FROM information_schema.columns WHERE table_catalog = 'postgresql_core' AND table_schema = 'public' AND table_name = 'users' AND column_name = 'custom_column1';"))
-                .addCustomSQLDefinition(CustomSQLDefinitionPairDefaultPosition.AT_BEGINNING, "ALTER TABLE users ADD COLUMN custom_column2 VARCHAR(255);", "ALTER TABLE users DROP COLUMN custom_column2;",
+                .addCustomSQLDefinition(CustomSQLDefinitionPairDefaultPosition.AT_END, "ALTER TABLE users ADD COLUMN custom_column2 VARCHAR(255);", "ALTER TABLE users DROP COLUMN custom_column2;",
                         singletonList("SELECT COUNT(1) FROM information_schema.columns WHERE table_catalog = 'postgresql_core' AND table_schema = 'public' AND table_name = 'users' AND column_name = 'custom_column2';"))
                 .build();
 

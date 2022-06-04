@@ -1129,7 +1129,17 @@ Default implementation of this type is com.github.starnowski.posmulten.postgresq
     
     AT_BEGINNING - custom definition is being added before all definitions created by builder
     AT_END - custom definition is being added after all definitions created by builder
- 
+
+Example:
+```javadoc
+        ISharedSchemaContext result = (new DefaultSharedSchemaContextBuilder(null))
+                .setGrantee(CORE_OWNER_USER)
+                .addCustomSQLDefinition(CustomSQLDefinitionPairDefaultPosition.AT_BEGINNING, "ALTER TABLE users ADD COLUMN custom_column1 VARCHAR(255);", "ALTER TABLE users DROP COLUMN custom_column1;",
+                        singletonList("SELECT COUNT(1) FROM information_schema.columns WHERE table_catalog = 'postgresql_core' AND table_schema = 'public' AND table_name = 'users' AND column_name = 'custom_column1';"))
+                .addCustomSQLDefinition(CustomSQLDefinitionPairDefaultPosition.AT_END, "ALTER TABLE users ADD COLUMN custom_column2 VARCHAR(255);", "ALTER TABLE users DROP COLUMN custom_column2;",
+                        singletonList("SELECT COUNT(1) FROM information_schema.columns WHERE table_catalog = 'postgresql_core' AND table_schema = 'public' AND table_name = 'users' AND column_name = 'custom_column2';"));
+```
+
 TODO
 
 # Reporting issues
