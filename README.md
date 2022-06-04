@@ -48,6 +48,7 @@
     * [Setting a list of invalid tenant identifier values](#setting-a-list-of-invalid-tenant-identifier-values)
         * [Setting custom name for table tenant column constraint](#setting-custom-name-for-table-tenant-column-constraint)
     * [Naming convention and its constraints](#naming-convention-and-its-constraints)
+* [Adding custom sql definitions](#adding-custom-sql-definitions)
 * [Reporting issues](#reporting-issues)
 * [Project contribution](#project-contribution)
 
@@ -1114,6 +1115,15 @@ com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaConte
 By using this method there is also the possibility of customization for validation.
 
 # Adding custom sql definitions
+There is an option to pass custom SQL definition to query builder.
+
+```javadoc
+com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#addCustomSQLDefinition(com.github.starnowski.posmulten.postgresql.core.context.CustomSQLDefinitionPairPositionProvider positionProvider, com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition sqlDefinition)
+com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#addCustomSQLDefinition(com.github.starnowski.posmulten.postgresql.core.context.CustomSQLDefinitionPairPositionProvider positionProvider, String creationScript)
+com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#addCustomSQLDefinition(com.github.starnowski.posmulten.postgresql.core.context.CustomSQLDefinitionPairPositionProvider positionProvider, String creationScript, String dropScript)
+com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#addCustomSQLDefinition(com.github.starnowski.posmulten.postgresql.core.context.CustomSQLDefinitionPairPositionProvider positionProvider, String creationScript, String dropScript, List<String> checkingStatements)
+```
+TODO
 
 # Reporting issues
 * Any new issues please report in [GitHub site](https://github.com/starnowski/posmulten/issues)
@@ -1121,6 +1131,3 @@ By using this method there is also the possibility of customization for validati
 # Project contribution
 At this moment please create issue on page the [issues](https://github.com/starnowski/posmulten/issues) with "[CONTRIBUTION]".
 Or send message to me directly on [LinkedIn site](https://pl.linkedin.com/in/szymon-tarnowski-a104b4150).
-TODO
-
-
