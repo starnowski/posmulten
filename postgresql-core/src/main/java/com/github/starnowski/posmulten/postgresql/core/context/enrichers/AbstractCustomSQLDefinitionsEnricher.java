@@ -5,6 +5,8 @@ import com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaCont
 import com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContextRequest;
 import com.github.starnowski.posmulten.postgresql.core.context.exceptions.SharedSchemaContextBuilderException;
 
+import java.util.Objects;
+
 public abstract class AbstractCustomSQLDefinitionsEnricher implements ISharedSchemaContextEnricher {
 
     private final CustomSQLDefinitionPairPositionProvider customSQLDefinitionPairPositionProvider;
@@ -15,7 +17,7 @@ public abstract class AbstractCustomSQLDefinitionsEnricher implements ISharedSch
 
     @Override
     public ISharedSchemaContext enrich(ISharedSchemaContext context, SharedSchemaContextRequest request) throws SharedSchemaContextBuilderException {
-        request.getCustomSQLDefinitionPairs().stream().filter(customSQLDefinitionPair -> customSQLDefinitionPair.getPosition().equals(customSQLDefinitionPairPositionProvider.getPosition()))
+        request.getCustomSQLDefinitionPairs().stream().filter(customSQLDefinitionPair -> Objects.equals(customSQLDefinitionPair.getPosition(), customSQLDefinitionPairPositionProvider.getPosition()))
                 .map(pair -> pair.getSqlDefinition())
                 .forEach(sqlDefinition -> context.addSQLDefinition(sqlDefinition));
         return context;
