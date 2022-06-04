@@ -530,6 +530,14 @@ public class DefaultSharedSchemaContextBuilder {
         return this;
     }
 
+    /**
+     * Adding custom sql definition for specific position
+     * @see  CustomSQLDefinitionPairPositionProvider
+     * @see  CustomSQLDefinitionPairDefaultPosition
+     * @param positionProvider definition position provider, default interface implementation is {@link CustomSQLDefinitionPairDefaultPosition} enum
+     * @param sqlDefinition sql definition
+     * @return builder object for which method was invoked
+     */
     public DefaultSharedSchemaContextBuilder addCustomSQLDefinition(CustomSQLDefinitionPairPositionProvider positionProvider, SQLDefinition sqlDefinition) {
         this.sharedSchemaContextRequest.getCustomSQLDefinitionPairs().add(new CustomSQLDefinitionPair(positionProvider.getPosition(), sqlDefinition));
         return this;

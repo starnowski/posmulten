@@ -1113,6 +1113,8 @@ com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaConte
 ```
 By using this method there is also the possibility of customization for validation.
 
+# Adding custom sql definitions
+
 # Reporting issues
 * Any new issues please report in [GitHub site](https://github.com/starnowski/posmulten/issues)
 
