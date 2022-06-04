@@ -17,6 +17,7 @@ import org.testng.annotations.Test;
 import static com.github.starnowski.posmulten.postgresql.core.functional.tests.TestApplication.CLEAR_DATABASE_SCRIPT_PATH;
 import static com.github.starnowski.posmulten.postgresql.test.utils.TestUtils.isAnyRecordExists;
 import static java.lang.String.format;
+import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
 import static org.springframework.test.context.jdbc.SqlConfig.TransactionMode.ISOLATED;
@@ -32,8 +33,10 @@ public class CreateColumnsWithCustomSQLDefinitionsTest extends DefaultTestNGTest
     public void createSQLDefinitions() throws SharedSchemaContextBuilderException {
         ISharedSchemaContext result = (new DefaultSharedSchemaContextBuilder(null))
                 .setGrantee(CORE_OWNER_USER)
-                .addCustomSQLDefinition(CustomSQLDefinitionPairDefaultPosition.AT_BEGINNING, "ALTER TABLE users ADD COLUMN custom_column1 VARCHAR(255);", "ALTER TABLE users DROP COLUMN custom_column1;")
-                .addCustomSQLDefinition(CustomSQLDefinitionPairDefaultPosition.AT_BEGINNING, "ALTER TABLE users ADD COLUMN custom_column2 VARCHAR(255);", "ALTER TABLE users DROP COLUMN custom_column2;")
+                .addCustomSQLDefinition(CustomSQLDefinitionPairDefaultPosition.AT_BEGINNING, "ALTER TABLE users ADD COLUMN custom_column1 VARCHAR(255);", "ALTER TABLE users DROP COLUMN custom_column1;",
+                        singletonList("SELECT COUNT(1) FROM information_schema.columns WHERE table_catalog = 'postgresql_core' AND table_schema = 'public' AND table_name = 'users' AND column_name = 'custom_column1';"))
+                .addCustomSQLDefinition(CustomSQLDefinitionPairDefaultPosition.AT_BEGINNING, "ALTER TABLE users ADD COLUMN custom_column2 VARCHAR(255);", "ALTER TABLE users DROP COLUMN custom_column2;",
+                        singletonList("SELECT COUNT(1) FROM information_schema.columns WHERE table_catalog = 'postgresql_core' AND table_schema = 'public' AND table_name = 'users' AND column_name = 'custom_column2';"))
                 .build();
 
         sqlDefinitions.addAll(result.getSqlDefinitions());
