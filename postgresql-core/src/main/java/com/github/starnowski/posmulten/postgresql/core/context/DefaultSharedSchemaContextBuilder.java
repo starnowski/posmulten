@@ -543,16 +543,43 @@ public class DefaultSharedSchemaContextBuilder {
         return this;
     }
 
+    /**
+     * Adding custom sql definition with passed creation script and default SQL {@link #DEFAULT_CUSTOM_SQL_STATEMENT} as drop and checking statements for specific position
+     * @see  CustomSQLDefinitionPairPositionProvider
+     * @see  CustomSQLDefinitionPairDefaultPosition
+     * @param positionProvider definition position provider, default interface implementation is {@link CustomSQLDefinitionPairDefaultPosition} enum
+     * @param creationScript creation script
+     * @return builder object for which method was invoked
+     */
     public DefaultSharedSchemaContextBuilder addCustomSQLDefinition(CustomSQLDefinitionPairPositionProvider positionProvider, String creationScript) {
         this.sharedSchemaContextRequest.getCustomSQLDefinitionPairs().add(new CustomSQLDefinitionPair(positionProvider.getPosition(), new DefaultSQLDefinition(creationScript, DEFAULT_CUSTOM_SQL_STATEMENT, singletonList(DEFAULT_CUSTOM_SQL_STATEMENT))));
         return this;
     }
 
+    /**
+     * Adding custom sql definition with passed creation and drop scripts and default SQL {@link #DEFAULT_CUSTOM_SQL_STATEMENT} as checking statements for specific position
+     * @see  CustomSQLDefinitionPairPositionProvider
+     * @see  CustomSQLDefinitionPairDefaultPosition
+     * @param positionProvider definition position provider, default interface implementation is {@link CustomSQLDefinitionPairDefaultPosition} enum
+     * @param creationScript creation script
+     * @param dropScript dropping DDL instruction script
+     * @return builder object for which method was invoked
+     */
     public DefaultSharedSchemaContextBuilder addCustomSQLDefinition(CustomSQLDefinitionPairPositionProvider positionProvider, String creationScript, String dropScript) {
         this.sharedSchemaContextRequest.getCustomSQLDefinitionPairs().add(new CustomSQLDefinitionPair(positionProvider.getPosition(), new DefaultSQLDefinition(creationScript, dropScript, singletonList(DEFAULT_CUSTOM_SQL_STATEMENT))));
         return this;
     }
 
+    /**
+     * Adding custom sql definition with passed creation and drop scripts and checking statements for specific position
+     * @see  CustomSQLDefinitionPairPositionProvider
+     * @see  CustomSQLDefinitionPairDefaultPosition
+     * @param positionProvider definition position provider, default interface implementation is {@link CustomSQLDefinitionPairDefaultPosition} enum
+     * @param creationScript creation script
+     * @param dropScript dropping DDL instruction script
+     * @param checkingStatements checking scripts
+     * @return builder object for which method was invoked
+     */
     public DefaultSharedSchemaContextBuilder addCustomSQLDefinition(CustomSQLDefinitionPairPositionProvider positionProvider, String creationScript, String dropScript, List<String> checkingStatements) {
         this.sharedSchemaContextRequest.getCustomSQLDefinitionPairs().add(new CustomSQLDefinitionPair(positionProvider.getPosition(), new DefaultSQLDefinition(creationScript, dropScript, checkingStatements)));
         return this;
