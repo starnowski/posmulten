@@ -1,9 +1,9 @@
 package com.github.starnowski.posmulten.postgresql.core.context.enrichers;
 
-import com.github.starnowski.posmulten.postgresql.core.context.CustomSQLDefinitionPairDefaultPosition;
+import static com.github.starnowski.posmulten.postgresql.core.context.CustomSQLDefinitionPairDefaultPosition.AT_BEGINNING;
 
 public class CustomSQLDefinitionsAtBeginningEnricher extends AbstractCustomSQLDefinitionsEnricher{
-    protected CustomSQLDefinitionsAtBeginningEnricher() {
-        super(CustomSQLDefinitionPairDefaultPosition.AT_BEGINNING);
+    public CustomSQLDefinitionsAtBeginningEnricher() {
+        super(AT_BEGINNING);
     }
 }

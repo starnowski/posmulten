@@ -18,8 +18,7 @@ class CustomSQLDefinitionsAtBeginningEnricherTest extends AbstractCustomSQLDefin
          new Pair<ConstantCustomSQLDefinitionPairPositionProvider, SQLDefinition>(AT_BEGINNING, definition("test443")),
          new Pair<ConstantCustomSQLDefinitionPairPositionProvider, SQLDefinition>(AT_BEGINNING, definition("texx13")),
          new Pair<ConstantCustomSQLDefinitionPairPositionProvider, SQLDefinition>(pp("Custom position"), definition("ignoredX13")),
-         new Pair<ConstantCustomSQLDefinitionPairPositionProvider, SQLDefinition>(AT_BEGINNING, definition("final")),
-        ]
+         new Pair<ConstantCustomSQLDefinitionPairPositionProvider, SQLDefinition>(AT_BEGINNING, definition("final"))]
     }
 
     @Override

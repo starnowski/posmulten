@@ -133,9 +133,9 @@ class DefaultSharedSchemaContextBuilderCustomSQLDefinitionsTest extends Specific
             context.getSqlDefinitions()[0].createScript == creation2
             context.getSqlDefinitions()[0].dropScript == drop2
             context.getSqlDefinitions()[0].checkingStatements == checkingStatements2
-            context.getSqlDefinitions()[2].createScript == creation3
-            context.getSqlDefinitions()[2].dropScript == drop3
-            context.getSqlDefinitions()[2].checkingStatements == checkingStatements3
+            context.getSqlDefinitions()[1].createScript == creation3
+            context.getSqlDefinitions()[1].dropScript == drop3
+            context.getSqlDefinitions()[1].checkingStatements == checkingStatements3
 
             def lastIndex = context.getSqlDefinitions().size() - 1
             context.getSqlDefinitions()[lastIndex - 1].createScript == creation1
