@@ -1115,6 +1115,7 @@ com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaConte
 By using this method there is also the possibility of customization for validation.
 
 # Adding custom sql definitions
+
 There is an option to pass custom SQL definition to query builder.
 
 ```javadoc
