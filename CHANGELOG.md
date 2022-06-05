@@ -9,6 +9,7 @@ https://keepachangelog.com/en/1.0.0/
 https://www.markdownguide.org/basic-syntax/
 
 * [Unreleased](#unreleased)
+* [0.5.4](#054---2022-06-05)
 * [0.5.3](#053---2022-04-21)
 * [0.5.2](#052---2022-04-11)
 * [0.5.1](#051---2022-02-14)
