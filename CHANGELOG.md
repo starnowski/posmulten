@@ -23,6 +23,19 @@ https://www.markdownguide.org/basic-syntax/
 
 ## [Unreleased]
 
+## [0.5.4] - 2022-06-05
+
+### Added
+
+- Added two enrichers (one at the beginning and on at the end of list) that will add custom SQL statements
+  - Added type com.github.starnowski.posmulten.postgresql.core.context.CustomSQLDefinitionPair
+    [252](https://github.com/starnowski/posmulten/issues/252)
+  - Added type com.github.starnowski.posmulten.postgresql.core.context.CustomSQLDefinitionPairDefaultPosition
+    [252](https://github.com/starnowski/posmulten/issues/252)
+  - Added type com.github.starnowski.posmulten.postgresql.core.context.CustomSQLDefinitionPairPositionProvider 
+    [252](https://github.com/starnowski/posmulten/issues/252)
+    TODO
+
 ## [0.5.3] - 2022-04-21
 
 ### Added
