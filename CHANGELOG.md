@@ -53,9 +53,12 @@ https://www.markdownguide.org/basic-syntax/
     [252](https://github.com/starnowski/posmulten/issues/252)
   - Added method com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContextRequest#getCustomSQLDefinitionPairs()
     [252](https://github.com/starnowski/posmulten/issues/252)
-    
-
-    TODO
+  - Added type com.github.starnowski.posmulten.postgresql.core.context.enrichers.AbstractCustomSQLDefinitionsEnricher
+    [252](https://github.com/starnowski/posmulten/issues/252)
+  - Added type com.github.starnowski.posmulten.postgresql.core.context.enrichers.CustomSQLDefinitionsAtBeginningEnricher
+    [252](https://github.com/starnowski/posmulten/issues/252)
+  - Added type com.github.starnowski.posmulten.postgresql.core.context.enrichers.CustomSQLDefinitionsAtEndEnricher
+    [252](https://github.com/starnowski/posmulten/issues/252)
 
 ## [0.5.3] - 2022-04-21
 
