@@ -23,17 +23,18 @@
  */
 package com.github.starnowski.posmulten.postgresql.core.context;
 
+import com.github.starnowski.posmulten.postgresql.core.common.DefaultSQLDefinition;
+import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition;
 import com.github.starnowski.posmulten.postgresql.core.context.enrichers.*;
 import com.github.starnowski.posmulten.postgresql.core.context.exceptions.InvalidSharedSchemaContextRequestException;
 import com.github.starnowski.posmulten.postgresql.core.context.exceptions.SharedSchemaContextBuilderException;
 import com.github.starnowski.posmulten.postgresql.core.context.validators.*;
 import com.github.starnowski.posmulten.postgresql.core.context.validators.factories.IdentifierLengthValidatorFactory;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 
 /**
  * The builder component responsible for creation of object of type {@link ISharedSchemaContext}.
@@ -43,11 +44,20 @@ import static java.util.Arrays.asList;
  */
 public class DefaultSharedSchemaContextBuilder {
 
+    /**
+     * Default SQL statement used for missing custom SQL definitions.
+     * @see #addCustomSQLDefinition(CustomSQLDefinitionPairPositionProvider, String)
+     * @see #addCustomSQLDefinition(CustomSQLDefinitionPairPositionProvider, String, String)
+     * @see #addCustomSQLDefinition(CustomSQLDefinitionPairPositionProvider, String, String, List)
+     * @see #addCustomSQLDefinition(CustomSQLDefinitionPairPositionProvider, SQLDefinition)
+     */
+    public static final String DEFAULT_CUSTOM_SQL_STATEMENT = "SELECT 1";
+
     private final SharedSchemaContextRequest sharedSchemaContextRequest = new SharedSchemaContextRequest();
     /**
      * Collection that stores objects of type {@link ISharedSchemaContextEnricher} used for enriching result object ({@link #build()} method).
      */
-    private List<ISharedSchemaContextEnricher> enrichers = asList(new GetCurrentTenantIdFunctionDefinitionEnricher(), new SetCurrentTenantIdFunctionDefinitionEnricher(), new TenantHasAuthoritiesFunctionDefinitionEnricher(), new IsTenantValidFunctionInvocationFactoryEnricher(), new TenantColumnSQLDefinitionsEnricher(), new TableRLSSettingsSQLDefinitionsEnricher(), new TableRLSPolicyEnricher(), new IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricher(), new IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher(), new IsTenantIdentifierValidConstraintEnricher(), new DefaultValueForTenantColumnEnricher(), new CurrentTenantIdPropertyTypeEnricher());
+    private List<ISharedSchemaContextEnricher> enrichers = asList(new CustomSQLDefinitionsAtBeginningEnricher(), new GetCurrentTenantIdFunctionDefinitionEnricher(), new SetCurrentTenantIdFunctionDefinitionEnricher(), new TenantHasAuthoritiesFunctionDefinitionEnricher(), new IsTenantValidFunctionInvocationFactoryEnricher(), new TenantColumnSQLDefinitionsEnricher(), new TableRLSSettingsSQLDefinitionsEnricher(), new TableRLSPolicyEnricher(), new IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricher(), new IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher(), new IsTenantIdentifierValidConstraintEnricher(), new DefaultValueForTenantColumnEnricher(), new CurrentTenantIdPropertyTypeEnricher(), new CustomSQLDefinitionsAtEndEnricher());
     /**
      * Collection that stores objects of type {@link ISharedSchemaContextRequestValidator} used for validation of request object (type {@link SharedSchemaContextRequest}) in {@link #build()} method.
      */
@@ -524,6 +534,61 @@ public class DefaultSharedSchemaContextBuilder {
      */
     public DefaultSharedSchemaContextBuilder setIdentifierMinLength(Integer identifierMinLength) {
         this.sharedSchemaContextRequest.setIdentifierMinLength(identifierMinLength);
+        return this;
+    }
+
+    /**
+     * Adding custom sql definition for specific position
+     * @see  CustomSQLDefinitionPairPositionProvider
+     * @see  CustomSQLDefinitionPairDefaultPosition
+     * @param positionProvider definition position provider, default interface implementation is {@link CustomSQLDefinitionPairDefaultPosition} enum
+     * @param sqlDefinition sql definition
+     * @return builder object for which method was invoked
+     */
+    public DefaultSharedSchemaContextBuilder addCustomSQLDefinition(CustomSQLDefinitionPairPositionProvider positionProvider, SQLDefinition sqlDefinition) {
+        this.sharedSchemaContextRequest.getCustomSQLDefinitionPairs().add(new CustomSQLDefinitionPair(positionProvider.getPosition(), sqlDefinition));
+        return this;
+    }
+
+    /**
+     * Adding custom sql definition with passed creation script and default SQL {@link #DEFAULT_CUSTOM_SQL_STATEMENT} as drop and checking statements for specific position
+     * @see  CustomSQLDefinitionPairPositionProvider
+     * @see  CustomSQLDefinitionPairDefaultPosition
+     * @param positionProvider definition position provider, default interface implementation is {@link CustomSQLDefinitionPairDefaultPosition} enum
+     * @param creationScript creation script
+     * @return builder object for which method was invoked
+     */
+    public DefaultSharedSchemaContextBuilder addCustomSQLDefinition(CustomSQLDefinitionPairPositionProvider positionProvider, String creationScript) {
+        this.sharedSchemaContextRequest.getCustomSQLDefinitionPairs().add(new CustomSQLDefinitionPair(positionProvider.getPosition(), new DefaultSQLDefinition(creationScript, DEFAULT_CUSTOM_SQL_STATEMENT, singletonList(DEFAULT_CUSTOM_SQL_STATEMENT))));
+        return this;
+    }
+
+    /**
+     * Adding custom sql definition with passed creation and drop scripts and default SQL {@link #DEFAULT_CUSTOM_SQL_STATEMENT} as checking statements for specific position
+     * @see  CustomSQLDefinitionPairPositionProvider
+     * @see  CustomSQLDefinitionPairDefaultPosition
+     * @param positionProvider definition position provider, default interface implementation is {@link CustomSQLDefinitionPairDefaultPosition} enum
+     * @param creationScript creation script
+     * @param dropScript dropping DDL instruction script
+     * @return builder object for which method was invoked
+     */
+    public DefaultSharedSchemaContextBuilder addCustomSQLDefinition(CustomSQLDefinitionPairPositionProvider positionProvider, String creationScript, String dropScript) {
+        this.sharedSchemaContextRequest.getCustomSQLDefinitionPairs().add(new CustomSQLDefinitionPair(positionProvider.getPosition(), new DefaultSQLDefinition(creationScript, dropScript, singletonList(DEFAULT_CUSTOM_SQL_STATEMENT))));
+        return this;
+    }
+
+    /**
+     * Adding custom sql definition with passed creation and drop scripts and checking statements for specific position
+     * @see  CustomSQLDefinitionPairPositionProvider
+     * @see  CustomSQLDefinitionPairDefaultPosition
+     * @param positionProvider definition position provider, default interface implementation is {@link CustomSQLDefinitionPairDefaultPosition} enum
+     * @param creationScript creation script
+     * @param dropScript dropping DDL instruction script
+     * @param checkingStatements checking scripts
+     * @return builder object for which method was invoked
+     */
+    public DefaultSharedSchemaContextBuilder addCustomSQLDefinition(CustomSQLDefinitionPairPositionProvider positionProvider, String creationScript, String dropScript, List<String> checkingStatements) {
+        this.sharedSchemaContextRequest.getCustomSQLDefinitionPairs().add(new CustomSQLDefinitionPair(positionProvider.getPosition(), new DefaultSQLDefinition(creationScript, dropScript, checkingStatements)));
         return this;
     }
 

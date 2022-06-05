@@ -25,6 +25,9 @@ package com.github.starnowski.posmulten.postgresql.core.common;
 
 import java.util.List;
 
+/**
+ * The default interface holds DDL statements, statements that drop applied changes, and SQL statements that verify if statements were applied correctly.
+ */
 public interface SQLDefinition {
 
     /**
