@@ -39,6 +39,17 @@ https://www.markdownguide.org/basic-syntax/
     [252](https://github.com/starnowski/posmulten/issues/252)
   - Added enricher of com.github.starnowski.posmulten.postgresql.core.context.enrichers.CustomSQLDefinitionsAtEndEnricher type as last item of com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#enrichers list
     [252](https://github.com/starnowski/posmulten/issues/252)
+  - Added constant com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#DEFAULT_CUSTOM_SQL_STATEMENT
+    [252](https://github.com/starnowski/posmulten/issues/252)
+  - Added method com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#addCustomSQLDefinition(com.github.starnowski.posmulten.postgresql.core.context.CustomSQLDefinitionPairPositionProvider, com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition)
+    [252](https://github.com/starnowski/posmulten/issues/252)
+  - Added method com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#addCustomSQLDefinition(com.github.starnowski.posmulten.postgresql.core.context.CustomSQLDefinitionPairPositionProvider, String)
+    [252](https://github.com/starnowski/posmulten/issues/252)
+  - Added method com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#addCustomSQLDefinition(com.github.starnowski.posmulten.postgresql.core.context.CustomSQLDefinitionPairPositionProvider, String, String)
+    [252](https://github.com/starnowski/posmulten/issues/252)
+  - Added method com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#addCustomSQLDefinition(com.github.starnowski.posmulten.postgresql.core.context.CustomSQLDefinitionPairPositionProvider, String, String, List)
+    [252](https://github.com/starnowski/posmulten/issues/252)
+    
     TODO
 
 ## [0.5.3] - 2022-04-21
