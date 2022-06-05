@@ -49,7 +49,12 @@ https://www.markdownguide.org/basic-syntax/
     [252](https://github.com/starnowski/posmulten/issues/252)
   - Added method com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#addCustomSQLDefinition(com.github.starnowski.posmulten.postgresql.core.context.CustomSQLDefinitionPairPositionProvider, String, String, List)
     [252](https://github.com/starnowski/posmulten/issues/252)
+  - Added property com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContextRequest#customSQLDefinitionPairs
+    [252](https://github.com/starnowski/posmulten/issues/252)
+  - Added method com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContextRequest#getCustomSQLDefinitionPairs()
+    [252](https://github.com/starnowski/posmulten/issues/252)
     
+
     TODO
 
 ## [0.5.3] - 2022-04-21
