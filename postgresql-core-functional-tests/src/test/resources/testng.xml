@@ -89,4 +89,9 @@
             <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.sanity.RLSForNonDefaultSchemaInPublicSchemaTest" />
         </classes>
     </test>
+    <test name="Creation of shared schema context with custom sql definitions">
+        <classes>
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.custom.CreateColumnsWithCustomSQLDefinitionsTest" />
+        </classes>
+    </test>
 </suite>

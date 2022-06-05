@@ -48,6 +48,7 @@
     * [Setting a list of invalid tenant identifier values](#setting-a-list-of-invalid-tenant-identifier-values)
         * [Setting custom name for table tenant column constraint](#setting-custom-name-for-table-tenant-column-constraint)
     * [Naming convention and its constraints](#naming-convention-and-its-constraints)
+* [Adding custom sql definitions](#adding-custom-sql-definitions)
 * [Reporting issues](#reporting-issues)
 * [Project contribution](#project-contribution)
 
@@ -1113,12 +1114,38 @@ com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaConte
 ```
 By using this method there is also the possibility of customization for validation.
 
+# Adding custom sql definitions
+There is an option to pass custom SQL definition to query builder.
+
+```javadoc
+com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#addCustomSQLDefinition(com.github.starnowski.posmulten.postgresql.core.context.CustomSQLDefinitionPairPositionProvider positionProvider, String creationScript)
+com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#addCustomSQLDefinition(com.github.starnowski.posmulten.postgresql.core.context.CustomSQLDefinitionPairPositionProvider positionProvider, String creationScript, String dropScript)
+com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#addCustomSQLDefinition(com.github.starnowski.posmulten.postgresql.core.context.CustomSQLDefinitionPairPositionProvider positionProvider, String creationScript, String dropScript, List<String> checkingStatements)
+com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#addCustomSQLDefinition(com.github.starnowski.posmulten.postgresql.core.context.CustomSQLDefinitionPairPositionProvider positionProvider, com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition sqlDefinition)
+```
+
+Each method pass object of type com.github.starnowski.posmulten.postgresql.core.context.CustomSQLDefinitionPairPositionProvider that returns position for SQL definition.
+Default implementation of this type is com.github.starnowski.posmulten.postgresql.core.context.CustomSQLDefinitionPairDefaultPosition enum type that has two values:
+    
+    AT_BEGINNING - custom definition is being added before all definitions created by builder
+    AT_END - custom definition is being added after all definitions created by builder
+
+Example:
+```javadoc
+        ISharedSchemaContext result = (new DefaultSharedSchemaContextBuilder(null))
+                .setGrantee(CORE_OWNER_USER)
+                .addCustomSQLDefinition(CustomSQLDefinitionPairDefaultPosition.AT_BEGINNING, "ALTER TABLE users ADD COLUMN custom_column1 VARCHAR(255);", "ALTER TABLE users DROP COLUMN custom_column1;",
+                        singletonList("SELECT COUNT(1) FROM information_schema.columns WHERE table_catalog = 'postgresql_core' AND table_schema = 'public' AND table_name = 'users' AND column_name = 'custom_column1';"))
+                .addCustomSQLDefinition(CustomSQLDefinitionPairDefaultPosition.AT_END, "ALTER TABLE users ADD COLUMN custom_column2 VARCHAR(255);", "ALTER TABLE users DROP COLUMN custom_column2;",
+                        singletonList("SELECT COUNT(1) FROM information_schema.columns WHERE table_catalog = 'postgresql_core' AND table_schema = 'public' AND table_name = 'users' AND column_name = 'custom_column2';"));
+```
+
+The method that passes only the creation script or creation and drop script for other missing scripts set "SELECT 1" as the default script.
+Whether the drop script or scripts, check if the creation script was applied correctly.
+
 # Reporting issues
 * Any new issues please report in [GitHub site](https://github.com/starnowski/posmulten/issues)
 
 # Project contribution
 At this moment please create issue on page the [issues](https://github.com/starnowski/posmulten/issues) with "[CONTRIBUTION]".
 Or send message to me directly on [LinkedIn site](https://pl.linkedin.com/in/szymon-tarnowski-a104b4150).
-TODO
-
-
