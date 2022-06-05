@@ -1140,7 +1140,8 @@ Example:
                         singletonList("SELECT COUNT(1) FROM information_schema.columns WHERE table_catalog = 'postgresql_core' AND table_schema = 'public' AND table_name = 'users' AND column_name = 'custom_column2';"));
 ```
 
-TODO
+The method that passes only the creation script or creation and drop script for other missing scripts set "SELECT 1" as the default script.
+Whether the drop script or scripts, check if the creation script was applied correctly.
 
 # Reporting issues
 * Any new issues please report in [GitHub site](https://github.com/starnowski/posmulten/issues)
