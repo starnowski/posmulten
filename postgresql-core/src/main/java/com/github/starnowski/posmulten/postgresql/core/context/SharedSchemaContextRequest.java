@@ -196,7 +196,6 @@ public class SharedSchemaContextRequest implements Cloneable {
 
     /**
      * Pairs of custom SQL definitions and their positions.
-     * TODO Add enricher type
      */
     private List<CustomSQLDefinitionPair> customSQLDefinitionPairs = new ArrayList<>();
 
