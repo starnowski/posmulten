@@ -44,6 +44,13 @@ import static java.util.Collections.singletonList;
  */
 public class DefaultSharedSchemaContextBuilder {
 
+    /**
+     * Default SQL statement used for missing custom SQL definitions.
+     * @see #addCustomSQLDefinition(CustomSQLDefinitionPairPositionProvider, String)
+     * @see #addCustomSQLDefinition(CustomSQLDefinitionPairPositionProvider, String, String)
+     * @see #addCustomSQLDefinition(CustomSQLDefinitionPairPositionProvider, String, String, List)
+     * @see #addCustomSQLDefinition(CustomSQLDefinitionPairPositionProvider, SQLDefinition)
+     */
     public static final String DEFAULT_CUSTOM_SQL_STATEMENT = "SELECT 1";
 
     private final SharedSchemaContextRequest sharedSchemaContextRequest = new SharedSchemaContextRequest();

@@ -14,6 +14,7 @@ import java.util.List;
 public interface CustomSQLDefinitionPairPositionProvider {
 
     /**
+     * Returns position for custom SQL definition.
      * @return position for custom SQL definition
      */
     String getPosition();
