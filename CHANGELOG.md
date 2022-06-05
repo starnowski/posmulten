@@ -9,6 +9,7 @@ https://keepachangelog.com/en/1.0.0/
 https://www.markdownguide.org/basic-syntax/
 
 * [Unreleased](#unreleased)
+* [0.5.5](#055---2022-06-05)
 * [0.5.4](#054---2022-06-05)
 * [0.5.3](#053---2022-04-21)
 * [0.5.2](#052---2022-04-11)
@@ -23,6 +24,12 @@ https://www.markdownguide.org/basic-syntax/
 * [0.2.0](#020---2020-11-14)
 
 ## [Unreleased]
+
+## [0.5.5] - 2022-06-05
+
+### Changed
+    
+- Updated postgres dependency to 4.3.3 [263](https://github.com/starnowski/posmulten/issues/263)
 
 ## [0.5.4] - 2022-06-05
 
