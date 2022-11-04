@@ -16,6 +16,17 @@ jobs:
           java-version: 1.8
       - name: Build with Maven
         run: ./mvnw clean install -DskipTests --quiet && ./mvnw test
+#        Running tests for a different locale https://github.com/starnowski/posmulten/issues/270
+      - name: Running tests with different locale
+        run: |
+          echo "Setting locale to de_DE.UTF-8"
+          sudo locale-gen de_DE.UTF-8
+          sudo update-locale LANG=de_DE.UTF-8
+          echo "Printing date for test"
+          date
+          ./mvnw test
+        env:
+          LANG: "de_DE.UTF-8"
 
   database_tests:
     runs-on: ubuntu-latest
