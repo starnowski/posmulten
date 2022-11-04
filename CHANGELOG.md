@@ -9,6 +9,7 @@ https://keepachangelog.com/en/1.0.0/
 https://www.markdownguide.org/basic-syntax/
 
 * [Unreleased](#unreleased)
+* [0.5.6](#056---2022-11-04)
 * [0.5.5](#055---2022-06-05)
 * [0.5.4](#054---2022-06-05)
 * [0.5.3](#053---2022-04-21)
@@ -24,6 +25,14 @@ https://www.markdownguide.org/basic-syntax/
 * [0.2.0](#020---2020-11-14)
 
 ## [Unreleased]
+
+## [0.5.6] - 2022-11-04
+
+### Changed
+
+- Can be compiled only with "-DskipTests=true" option when there are different locale setups than "en" [270](https://github.com/starnowski/posmulten/issues/270)
+  - Updated project descriptor for com.github.starnowski.posmulten.configuration:configuration-yaml-interpreter module, setting the "en" as locale setup for tests execution
+
 
 ## [0.5.5] - 2022-06-05
 
