@@ -78,3 +78,12 @@ tables:
         table_name: users
         foreign_key_primary_key_columns_mappings:
           user_id:  id
+  - name: dictionary
+    schema: no_other_schema
+    rls_policy:
+      name: dictionary_table_rls_policy
+      tenant_column:  tenant_id
+      primary_key_definition:
+        name_for_function_that_checks_if_record_exists_in_table: "is_dictionary_exists"
+        pk_columns_name_to_type:
+          id: bigint
