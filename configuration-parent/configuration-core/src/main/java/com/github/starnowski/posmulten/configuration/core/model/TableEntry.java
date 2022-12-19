@@ -19,6 +19,7 @@ public class TableEntry {
      * Table name
      */
     private String name;
+    private StringWrapper schema;
     private RLSPolicy rlsPolicy;
     private List<ForeignKeyConfiguration> foreignKeys;
 }

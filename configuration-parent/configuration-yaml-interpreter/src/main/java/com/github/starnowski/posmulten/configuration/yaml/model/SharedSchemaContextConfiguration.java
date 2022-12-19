@@ -59,7 +59,6 @@ public class SharedSchemaContextConfiguration {
     @Valid
     @JsonProperty(value = "sql_definitions_validation")
     private SqlDefinitionsValidation sqlDefinitionsValidation;
-
     public SharedSchemaContextConfiguration setCurrentTenantIdPropertyType(String currentTenantIdPropertyType) {
         this.currentTenantIdPropertyType = new StringWrapperWithNotBlankValue(currentTenantIdPropertyType);
         return this;
@@ -82,11 +81,6 @@ public class SharedSchemaContextConfiguration {
 
     public SharedSchemaContextConfiguration setEqualsCurrentTenantIdentifierFunctionName(String equalsCurrentTenantIdentifierFunctionName) {
         this.equalsCurrentTenantIdentifierFunctionName = new StringWrapperWithNotBlankValue(equalsCurrentTenantIdentifierFunctionName);
-        return this;
-    }
-
-    public SharedSchemaContextConfiguration setTenantHasAuthoritiesFunctionName(String tenantHasAuthoritiesFunctionName) {
-        this.tenantHasAuthoritiesFunctionName = new StringWrapperWithNotBlankValue(tenantHasAuthoritiesFunctionName);
         return this;
     }
 

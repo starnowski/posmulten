@@ -26,6 +26,8 @@ public class TableEntry {
     @NotBlank
     @JsonProperty(value = "name", required = true)
     private String name;
+    @JsonProperty(value = "schema")
+    private StringWrapperWithNullValue schema;
     @Valid
     @JsonProperty(value = "rls_policy")
     private RLSPolicy rlsPolicy;
