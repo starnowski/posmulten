@@ -1,5 +1,6 @@
 package com.github.starnowski.posmulten.configuration.yaml.dao;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
@@ -24,7 +25,12 @@ import static javax.validation.ElementKind.PROPERTY;
 
 public class SharedSchemaContextConfigurationYamlDao {
 
-    private final ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
+    private final ObjectMapper mapper;
+
+    public SharedSchemaContextConfigurationYamlDao() {
+        mapper = new ObjectMapper(new YAMLFactory());
+        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+    }
 
     public SharedSchemaContextConfiguration read(String filePath) throws IOException, YamlInvalidSchema {
         SharedSchemaContextConfiguration result = mapper.readValue(new File(filePath), SharedSchemaContextConfiguration.class);
@@ -104,8 +110,7 @@ public class SharedSchemaContextConfigurationYamlDao {
             }
         } catch (NoSuchFieldException e) {
             if (CONTAINER_ELEMENT.equals(node.getKind())) {
-                if (node.getKey() != null)
-                {
+                if (node.getKey() != null) {
                     NodeImpl nodeImpl = (NodeImpl) node;
                     //nodeImpl.getTypeArgumentIndex() == 0 <- map key, nodeImpl.getTypeArgumentIndex() == 1 <- map value
                     if (nodeImpl.getTypeArgumentIndex() != null && nodeImpl.getTypeArgumentIndex() != 0) {
