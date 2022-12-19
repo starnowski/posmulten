@@ -11,6 +11,7 @@ import lombok.experimental.Accessors;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import java.util.List;
+import java.util.Optional;
 
 @Accessors(chain = true)
 @Getter
@@ -27,7 +28,7 @@ public class TableEntry {
     @JsonProperty(value = "name", required = true)
     private String name;
     @JsonProperty(value = "schema")
-    private StringWrapperWithNullValue schema;
+    private Optional<String> schema;
     @Valid
     @JsonProperty(value = "rls_policy")
     private RLSPolicy rlsPolicy;

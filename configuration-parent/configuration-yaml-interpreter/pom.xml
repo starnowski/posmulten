@@ -29,6 +29,11 @@
             <version>${com.fasterxml.jackson.dataformat.jackson-dataformat-yaml.version}</version>
         </dependency>
         <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jdk8</artifactId>
+            <version>${com.fasterxml.jackson.dataformat.jackson-dataformat-yaml.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.hibernate.validator</groupId>
             <artifactId>hibernate-validator</artifactId>
             <version>${org.hibernate.validator.version}</version>

@@ -87,3 +87,23 @@ tables:
         name_for_function_that_checks_if_record_exists_in_table: "is_dictionary_exists"
         pk_columns_name_to_type:
           id: bigint
+  # table with blank (null) schema
+  - name: dictionary_1
+    schema:
+    rls_policy:
+      name: dictionary_1_table_rls_policy
+      tenant_column:  tenant_id
+      primary_key_definition:
+        name_for_function_that_checks_if_record_exists_in_table: "is_dictionary_1_exists"
+        pk_columns_name_to_type:
+          id: bigint
+  # table with null schema
+  - name: dictionary_2
+    schema:
+    rls_policy:
+      name: dictionary_2_table_rls_policy
+      tenant_column:  tenant_id
+      primary_key_definition:
+        name_for_function_that_checks_if_record_exists_in_table: "is_dictionary_2_exists"
+        pk_columns_name_to_type:
+          id: bigint
