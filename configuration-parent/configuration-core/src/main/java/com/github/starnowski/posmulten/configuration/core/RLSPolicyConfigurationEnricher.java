@@ -12,35 +12,32 @@ public class RLSPolicyConfigurationEnricher implements ITableEntryEnricher {
             RLSPolicy rlsPolicy = tableEntry.getRlsPolicy();
             if (tableEntry.getSchema() == null) {
                 builder.createRLSPolicyForTable(tableEntry.getName(), rlsPolicy.getPrimaryKeyDefinition() == null ? null : rlsPolicy.getPrimaryKeyDefinition().getPrimaryKeyColumnsNameToTypeMap(), rlsPolicy.getTenantColumn(), rlsPolicy.getName());
-            } else {
-                builder.createRLSPolicyForTable(new TableKey(tableEntry.getName(), tableEntry.getSchema().orElse(null)), rlsPolicy.getPrimaryKeyDefinition() == null ? null : rlsPolicy.getPrimaryKeyDefinition().getPrimaryKeyColumnsNameToTypeMap(), rlsPolicy.getTenantColumn(), rlsPolicy.getName());
-            }
-            if (Boolean.TRUE.equals(rlsPolicy.getCreateTenantColumnForTable())) {
-                if (tableEntry.getSchema() == null) {
+                if (Boolean.TRUE.equals(rlsPolicy.getCreateTenantColumnForTable())) {
                     builder.createTenantColumnForTable(tableEntry.getName());
-                } else {
-                    builder.createTenantColumnForTable(new TableKey(tableEntry.getName(), tableEntry.getSchema().orElse(null)));
                 }
-            }
-            if (rlsPolicy.getPrimaryKeyDefinition() != null && rlsPolicy.getPrimaryKeyDefinition().getNameForFunctionThatChecksIfRecordExistsInTable() != null) {
-                if (tableEntry.getSchema() == null) {
+                if (rlsPolicy.getPrimaryKeyDefinition() != null && rlsPolicy.getPrimaryKeyDefinition().getNameForFunctionThatChecksIfRecordExistsInTable() != null) {
                     builder.setNameForFunctionThatChecksIfRecordExistsInTable(tableEntry.getName(), rlsPolicy.getPrimaryKeyDefinition().getNameForFunctionThatChecksIfRecordExistsInTable());
-                } else {
-                    builder.setNameForFunctionThatChecksIfRecordExistsInTable(new TableKey(tableEntry.getName(), tableEntry.getSchema().orElse(null)), rlsPolicy.getPrimaryKeyDefinition().getNameForFunctionThatChecksIfRecordExistsInTable());
                 }
-            }
-            if (rlsPolicy.getValidTenantValueConstraintName() != null) {
-                if (tableEntry.getSchema() == null) {
+                if (rlsPolicy.getValidTenantValueConstraintName() != null) {
                     builder.registerCustomValidTenantValueConstraintNameForTable(tableEntry.getName(), rlsPolicy.getValidTenantValueConstraintName());
-                } else {
-                    builder.registerCustomValidTenantValueConstraintNameForTable(new TableKey(tableEntry.getName(), tableEntry.getSchema().orElse(null)), rlsPolicy.getValidTenantValueConstraintName());
                 }
-            }
-            if (Boolean.TRUE.equals(rlsPolicy.getSkipAddingOfTenantColumnDefaultValue())) {
-                if (tableEntry.getSchema() == null) {
+                if (Boolean.TRUE.equals(rlsPolicy.getSkipAddingOfTenantColumnDefaultValue())) {
                     builder.skipAddingOfTenantColumnDefaultValueForTable(tableEntry.getName());
-                } else {
-                    builder.skipAddingOfTenantColumnDefaultValueForTable(new TableKey(tableEntry.getName(), tableEntry.getSchema().orElse(null)));
+                }
+            } else {
+                TableKey tableKey = new TableKey(tableEntry.getName(), tableEntry.getSchema().orElse(null));
+                builder.createRLSPolicyForTable(tableKey, rlsPolicy.getPrimaryKeyDefinition() == null ? null : rlsPolicy.getPrimaryKeyDefinition().getPrimaryKeyColumnsNameToTypeMap(), rlsPolicy.getTenantColumn(), rlsPolicy.getName());
+                if (Boolean.TRUE.equals(rlsPolicy.getCreateTenantColumnForTable())) {
+                    builder.createTenantColumnForTable(tableKey);
+                }
+                if (rlsPolicy.getPrimaryKeyDefinition() != null && rlsPolicy.getPrimaryKeyDefinition().getNameForFunctionThatChecksIfRecordExistsInTable() != null) {
+                    builder.setNameForFunctionThatChecksIfRecordExistsInTable(tableKey, rlsPolicy.getPrimaryKeyDefinition().getNameForFunctionThatChecksIfRecordExistsInTable());
+                }
+                if (rlsPolicy.getValidTenantValueConstraintName() != null) {
+                    builder.registerCustomValidTenantValueConstraintNameForTable(tableKey, rlsPolicy.getValidTenantValueConstraintName());
+                }
+                if (Boolean.TRUE.equals(rlsPolicy.getSkipAddingOfTenantColumnDefaultValue())) {
+                    builder.skipAddingOfTenantColumnDefaultValueForTable(tableKey);
                 }
             }
         }
