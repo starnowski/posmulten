@@ -167,6 +167,7 @@ class SharedSchemaContextConfigurationYamlDaoTest extends AbstractSpecification 
             ALL_FIELDS_FILE_PATH            |   "comments"          |   new ForeignKeyConfiguration().setTableName("posts").setConstraintName("comments_posts_tenant_constraint").setForeignKeyPrimaryKeyColumnsMappings(mapBuilder().put("post_id", "id").build())
             ALL_FIELDS_FILE_PATH            |   "comments"          |   new ForeignKeyConfiguration().setTableName("comments").setConstraintName("comments_comment_parent_tenant_constraint").setForeignKeyPrimaryKeyColumnsMappings(mapBuilder().put("parent_comment_id", "id").put("parent_comment_user_id", "user_id").build())
             ALL_FIELDS_FILE_PATH            |   "notifications"     |   new ForeignKeyConfiguration().setTableName("users").setConstraintName("notifications_users_tenant_constraint").setForeignKeyPrimaryKeyColumnsMappings(mapBuilder().put("user_id", "id").build())
+            ALL_FIELDS_FILE_PATH            |   "notifications_1"   |   new ForeignKeyConfiguration().setTableName("dictionary").setTableSchema(Optional.of("no_other_schema")).setConstraintName("notifications_1_dictionary_tenant_constraint").setForeignKeyPrimaryKeyColumnsMappings(mapBuilder().put("dictionary_id", "id").build())
     }
 
     @Unroll
