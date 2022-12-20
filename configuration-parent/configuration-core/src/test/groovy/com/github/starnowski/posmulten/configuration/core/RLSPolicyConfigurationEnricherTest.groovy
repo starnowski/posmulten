@@ -161,6 +161,33 @@ class RLSPolicyConfigurationEnricherTest extends AbstractBaseTest {
     }
 
     @Unroll
+    def "should invoke skipAddingOfTenantColumnDefaultValueForTable method when property skipAddingOfTenantColumnDefaultValue is set with the 'true' value for table name '#tableName' in schema '#tableSchema', rls policy name '#rlsPolicyName', tenant column '#tenantColumn', primaryKeyColumnsNameToTypeMap '#primaryKeyColumnsNameToTypeMap'"()
+    {
+        given:
+            def builder = prepareBuilderMockWithZeroExpectationOfMethodsInvocation()
+            def entry = new TableEntry().setName(tableName)
+                    .setSchema(Optional.ofNullable(tableSchema))
+                    .setRlsPolicy(new RLSPolicy()
+                            .setName(rlsPolicyName)
+                            .setTenantColumn(tenantColumn)
+                            .setPrimaryKeyDefinition(new PrimaryKeyDefinition().setPrimaryKeyColumnsNameToTypeMap(primaryKeyColumnsNameToTypeMap))
+                            .setSkipAddingOfTenantColumnDefaultValue(true))
+
+        when:
+            def result = tested.enrich(builder, entry)
+
+        then:
+            result == builder
+            1 * builder.createRLSPolicyForTable(new TableKey(tableName, tableSchema), primaryKeyColumnsNameToTypeMap, tenantColumn, rlsPolicyName)
+            1 * builder.skipAddingOfTenantColumnDefaultValueForTable(new TableKey(tableName, tableSchema))
+
+        where:
+            tableName   |   tableSchema |   rlsPolicyName   |   tenantColumn    |   primaryKeyColumnsNameToTypeMap
+            "t1"        |   "schema"    |   "rls_pol"       |   "col_for_ten"   |   MapBuilder.mapBuilder().put("user_id", "int").build()
+            "comments"  |   null        |   "row_level_pol" |   "ten_id"        |   MapBuilder.mapBuilder().put("tab_id", "bigint").put("uuid", "UUID").build()
+    }
+
+    @Unroll
     def "should not invoke any builder's component method when invalid object is passed (#message)"()
     {
         given:
