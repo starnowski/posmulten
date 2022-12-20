@@ -7,6 +7,7 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 
 import java.util.List;
+import java.util.Optional;
 
 @Accessors(chain = true)
 @Getter
@@ -19,7 +20,7 @@ public class TableEntry {
      * Table name
      */
     private String name;
-    private StringWrapper schema;
+    private Optional<String> schema;
     private RLSPolicy rlsPolicy;
     private List<ForeignKeyConfiguration> foreignKeys;
 }

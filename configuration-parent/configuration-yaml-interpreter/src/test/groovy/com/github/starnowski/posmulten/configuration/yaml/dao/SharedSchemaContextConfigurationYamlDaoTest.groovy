@@ -198,6 +198,7 @@ class SharedSchemaContextConfigurationYamlDaoTest extends AbstractSpecification 
                     .randomize(FieldPredicates.named("identifierMaxLength").and(FieldPredicates.ofType(Integer.class)).and(FieldPredicates.inClass(SqlDefinitionsValidation.class)), new IntegerRandomizer(1, 255))
                     .randomize(FieldPredicates.named("identifierMinLength").and(FieldPredicates.ofType(Integer.class)).and(FieldPredicates.inClass(SqlDefinitionsValidation.class)), new IntegerRandomizer(1, 255))
                     .randomize(FieldPredicates.named("schema").and(FieldPredicates.ofType(Optional.class)).and(FieldPredicates.inClass(TableEntry.class)), new OptionalRandomizer(StringDelegatingRandomizer.aNewStringDelegatingRandomizer(new IntegerRandomizer(1, 255)), true))
+                    .randomize(FieldPredicates.named("tableSchema").and(FieldPredicates.ofType(Optional.class)).and(FieldPredicates.inClass(ForeignKeyConfiguration.class)), new OptionalRandomizer(StringDelegatingRandomizer.aNewStringDelegatingRandomizer(new IntegerRandomizer(1, 255)), true))
             EasyRandom easyRandom = new EasyRandom(parameters)
             def randomObject = easyRandom.nextObject(SharedSchemaContextConfiguration)
             def tmpFile = tempFolder.newFile("rand-temp-config.yaml")
