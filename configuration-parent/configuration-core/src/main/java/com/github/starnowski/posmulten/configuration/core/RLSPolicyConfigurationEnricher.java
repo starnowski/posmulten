@@ -37,7 +37,11 @@ public class RLSPolicyConfigurationEnricher implements ITableEntryEnricher {
                 }
             }
             if (Boolean.TRUE.equals(rlsPolicy.getSkipAddingOfTenantColumnDefaultValue())) {
-                builder.skipAddingOfTenantColumnDefaultValueForTable(tableEntry.getName());
+                if (tableEntry.getSchema() == null) {
+                    builder.skipAddingOfTenantColumnDefaultValueForTable(tableEntry.getName());
+                } else {
+                    builder.skipAddingOfTenantColumnDefaultValueForTable(new TableKey(tableEntry.getName(), tableEntry.getSchema().orElse(null)));
+                }
             }
         }
         return builder;
