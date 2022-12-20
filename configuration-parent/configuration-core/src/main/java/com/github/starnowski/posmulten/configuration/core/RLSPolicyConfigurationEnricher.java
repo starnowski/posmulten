@@ -16,7 +16,11 @@ public class RLSPolicyConfigurationEnricher implements ITableEntryEnricher {
                 builder.createRLSPolicyForTable(new TableKey(tableEntry.getName(), tableEntry.getSchema().orElse(null)), rlsPolicy.getPrimaryKeyDefinition() == null ? null : rlsPolicy.getPrimaryKeyDefinition().getPrimaryKeyColumnsNameToTypeMap(), rlsPolicy.getTenantColumn(), rlsPolicy.getName());
             }
             if (Boolean.TRUE.equals(rlsPolicy.getCreateTenantColumnForTable())) {
-                builder.createTenantColumnForTable(tableEntry.getName());
+                if (tableEntry.getSchema() == null) {
+                    builder.createTenantColumnForTable(tableEntry.getName());
+                } else {
+                    builder.createTenantColumnForTable(new TableKey(tableEntry.getName(), tableEntry.getSchema().orElse(null)));
+                }
             }
             if (rlsPolicy.getPrimaryKeyDefinition() != null && rlsPolicy.getPrimaryKeyDefinition().getNameForFunctionThatChecksIfRecordExistsInTable() != null) {
                 if (tableEntry.getSchema() == null) {
