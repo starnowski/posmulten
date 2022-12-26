@@ -1,6 +1,7 @@
 * [Setup project locally](#setup-project-locally)
     * [Setup maven toolchain](#setup-maven-toolchain)
     * [Build project](#build-project)
+    * [Run integration test locally](#run-integration-test-locally)
 * [Commit message](#commit-message)
 * [Branch naming convention](#branch-naming-convention)
 * [Issues or suggestions](#issues-or-suggestions)
@@ -45,6 +46,9 @@ On Windows:
 ```powershell
 mvnw.cmd clean install
 ```
+
+### Run integration test locally
+TODO
 
 ## Commit message
   * Each commit message should start with prefix which contains hash and issue number, for example "#132"
