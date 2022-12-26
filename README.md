@@ -24,6 +24,7 @@
         * [Other columns modifications](#other-columns-modifications)
 * [How to start using posmulten](#how-to-start-using-posmulten)
     * [Setting maven dependency](#setting-maven-dependency)
+    * [Building project locally](#building-project-locally)
     * [How to start using builder](#how-to-start-using-builder)
         * [Applying builder changes](#applying-builder-changes)
         * [Dropping builder changes](#dropping-builder-changes)
