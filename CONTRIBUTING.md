@@ -1,8 +1,50 @@
-[Commit message](#commit-message)
+* [Setup project locally](#setup-project-locally)
+    * [Setup maven toolchain](#setup-maven-toolchain)
+    * [Build project](#build-project)
+* [Commit message](#commit-message)
+* [Branch naming convention](#branch-naming-convention)
+* [Issues or suggestions](#issues-or-suggestions)
 
-[Branch naming convention](#branch-naming-convention)
+## Setup project locally
+Although main code is compiled to java version 8, the postgresql-core-functional-tests module required java 11.
+This module is not deployed to maven central repository. It contains only functional tests for core module.
+To build project you need to install maven (or at least setup user repository directory and required environment variables).
+There are also two jdk required to install. One for version 8 and second for version 11.
 
-[Issues or suggestions](#issues-or-suggestions)
+### Setup maven toolchain
+For build process maven would require to have configuration of [toolchain](https://maven.apache.org/guides/mini/guide-using-toolchains.html) feature.
+In your toolchains.xml file you need to have configuration for you jdk 11.
+
+```xml
+<?xml version="1.0" encoding="UTF8"?>
+<toolchains>
+    <!-- JDK toolchains -->
+    <toolchain>
+        <type>jdk</type>
+        <provides>
+            <version>11</version>
+        </provides>
+        <configuration>
+            <jdkHome>/path/to/jdk/11</jdkHome>
+        </configuration>
+    </toolchain>
+</toolchains>
+```
+
+**Important**, please bear in mind that your "JAVA_HOME" environment property should point to JDK with version 8!
+
+### Build project
+Execute maven wrapper script
+
+On Unix:
+```bash
+mvnw clean install
+```
+
+On Windows:
+```powershell
+mvnw.cmd clean install
+```
 
 ## Commit message
   * Each commit message should start with prefix which contains hash and issue number, for example "#132"
