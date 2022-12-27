@@ -24,6 +24,7 @@
         * [Other columns modifications](#other-columns-modifications)
 * [How to start using posmulten](#how-to-start-using-posmulten)
     * [Setting maven dependency](#setting-maven-dependency)
+    * [Building project locally](#building-project-locally)
     * [How to start using builder](#how-to-start-using-builder)
         * [Applying builder changes](#applying-builder-changes)
         * [Dropping builder changes](#dropping-builder-changes)
@@ -358,6 +359,9 @@ You can use it just by adding it as a dependency in the project descriptor file 
             <version>0.2.2</version>
         </dependency>
 ```
+
+### Building project locally
+If someone would like to build the project locally from the source please see the CONTRIBUTING.md file to check how to set up the project locally.
 
 ### How to start using builder
 The library's main public component is DefaultSharedSchemaContextBuilder, which produces all required DDL statements based on passed criteria.
