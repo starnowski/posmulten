@@ -17,21 +17,25 @@ class ForeignKeyConfigurationsEnricherTest extends AbstractBaseTest {
             def builder = prepareBuilderMockWithZeroExpectationOfMethodsInvocation()
             def fk1 = new ForeignKeyConfiguration().setConstraintName("fk1")
             def fk2 = new ForeignKeyConfiguration().setConstraintName("fk2")
-            def tableEntry = new TableEntry().setName(table).setForeignKeys(asList(fk1, fk2))
+            def tableEntry = new TableEntry().setName(table).setSchema(schema).setForeignKeys(asList(fk1, fk2))
 
         when:
             def result = tested.enrich(builder, tableEntry)
 
         then:
             result == builder
-            1 * component.enrich(builder, table, fk1)
-            1 * component.enrich(builder, table, fk2)
+            1 * component.enrich(builder, table, schema, fk1)
+            1 * component.enrich(builder, table, schema, fk2)
 
         and: "do not invoke builder"
             0 * builder._
 
         where:
-            table << ["tab1", "users"]
+            table       |   schema
+            "tab1"      |   null
+            "users"     |   null
+            "tab1"      |   Optional.ofNullable("XXX")
+            "users"     |   Optional.ofNullable(null)
     }
 
     @Unroll

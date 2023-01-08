@@ -9,6 +9,7 @@ public class ForeignKeyConfigurationMapper implements IConfigurationMapper<com.g
         return input == null ? null : new ForeignKeyConfiguration()
                 .setConstraintName(input.getConstraintName())
                 .setTableName(input.getTableName())
+                .setTableSchema(input.getTableSchema())
                 .setForeignKeyPrimaryKeyColumnsMappings(input.getForeignKeyPrimaryKeyColumnsMappings());
     }
 
@@ -17,6 +18,7 @@ public class ForeignKeyConfigurationMapper implements IConfigurationMapper<com.g
         return output == null ? null : new com.github.starnowski.posmulten.configuration.core.model.ForeignKeyConfiguration()
                 .setConstraintName(output.getConstraintName())
                 .setTableName(output.getTableName())
+                .setTableSchema(output.getTableSchema())
                 .setForeignKeyPrimaryKeyColumnsMappings(output.getForeignKeyPrimaryKeyColumnsMappings());
     }
 }

@@ -2,10 +2,12 @@ package com.github.starnowski.posmulten.configuration.yaml.dao
 
 import com.github.starnowski.posmulten.configuration.yaml.AbstractSpecification
 import com.github.starnowski.posmulten.configuration.yaml.IntegerRandomizer
+import com.github.starnowski.posmulten.configuration.yaml.OptionalRandomizer
 import com.github.starnowski.posmulten.configuration.yaml.model.*
 import org.jeasy.random.EasyRandom
 import org.jeasy.random.EasyRandomParameters
 import org.jeasy.random.FieldPredicates
+import org.jeasy.random.randomizers.text.StringDelegatingRandomizer
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import spock.lang.Unroll
@@ -141,6 +143,9 @@ class SharedSchemaContextConfigurationYamlDaoTest extends AbstractSpecification 
             ALL_FIELDS_FILE_PATH            |   new TableEntry().setName("posts").setRlsPolicy(new RLSPolicy().setName("posts_table_rls_policy").setTenantColumn("tenant_id").setPrimaryKeyDefinition(new PrimaryKeyDefinition().setNameForFunctionThatChecksIfRecordExistsInTable("is_post_exists").setPrimaryKeyColumnsNameToTypeMap(mapBuilder().put("id", "bigint").build())).setSkipAddingOfTenantColumnDefaultValue(false))
             ALL_FIELDS_FILE_PATH            |   new TableEntry().setName("comments").setRlsPolicy(new RLSPolicy().setName("comments_table_rls_policy").setTenantColumn("tenant").setPrimaryKeyDefinition(new PrimaryKeyDefinition().setNameForFunctionThatChecksIfRecordExistsInTable("is_comment_exists").setPrimaryKeyColumnsNameToTypeMap(mapBuilder().put("id", "int").put("user_id", "bigint").build())).setSkipAddingOfTenantColumnDefaultValue(true))
             ALL_FIELDS_FILE_PATH            |   new TableEntry().setName("notifications").setRlsPolicy(new RLSPolicy().setName("notifications_table_rls_policy").setTenantColumn("tenant").setPrimaryKeyDefinition(new PrimaryKeyDefinition().setNameForFunctionThatChecksIfRecordExistsInTable("is_notification_exists").setPrimaryKeyColumnsNameToTypeMap(mapBuilder().put("uuid", "uuid").build())).setCreateTenantColumnForTable(true).setValidTenantValueConstraintName("is_tenant_id_valid"))
+            ALL_FIELDS_FILE_PATH            |   new TableEntry().setName("dictionary").setSchema(Optional.of("no_other_schema")).setRlsPolicy(new RLSPolicy().setName("dictionary_table_rls_policy").setTenantColumn("tenant_id").setPrimaryKeyDefinition(new PrimaryKeyDefinition().setNameForFunctionThatChecksIfRecordExistsInTable("is_dictionary_exists").setPrimaryKeyColumnsNameToTypeMap(mapBuilder().put("id", "bigint").build())))
+            ALL_FIELDS_FILE_PATH            |   new TableEntry().setName("dictionary_1").setSchema(Optional.ofNullable(null)).setRlsPolicy(new RLSPolicy().setName("dictionary_1_table_rls_policy").setTenantColumn("tenant_id").setPrimaryKeyDefinition(new PrimaryKeyDefinition().setNameForFunctionThatChecksIfRecordExistsInTable("is_dictionary_1_exists").setPrimaryKeyColumnsNameToTypeMap(mapBuilder().put("id", "bigint").build())))
+            ALL_FIELDS_FILE_PATH            |   new TableEntry().setName("dictionary_2").setSchema(Optional.ofNullable(null)).setRlsPolicy(new RLSPolicy().setName("dictionary_2_table_rls_policy").setTenantColumn("tenant_id").setPrimaryKeyDefinition(new PrimaryKeyDefinition().setNameForFunctionThatChecksIfRecordExistsInTable("is_dictionary_2_exists").setPrimaryKeyColumnsNameToTypeMap(mapBuilder().put("id", "bigint").build())))
     }
 
     @Unroll
@@ -162,6 +167,7 @@ class SharedSchemaContextConfigurationYamlDaoTest extends AbstractSpecification 
             ALL_FIELDS_FILE_PATH            |   "comments"          |   new ForeignKeyConfiguration().setTableName("posts").setConstraintName("comments_posts_tenant_constraint").setForeignKeyPrimaryKeyColumnsMappings(mapBuilder().put("post_id", "id").build())
             ALL_FIELDS_FILE_PATH            |   "comments"          |   new ForeignKeyConfiguration().setTableName("comments").setConstraintName("comments_comment_parent_tenant_constraint").setForeignKeyPrimaryKeyColumnsMappings(mapBuilder().put("parent_comment_id", "id").put("parent_comment_user_id", "user_id").build())
             ALL_FIELDS_FILE_PATH            |   "notifications"     |   new ForeignKeyConfiguration().setTableName("users").setConstraintName("notifications_users_tenant_constraint").setForeignKeyPrimaryKeyColumnsMappings(mapBuilder().put("user_id", "id").build())
+            ALL_FIELDS_FILE_PATH            |   "notifications_1"   |   new ForeignKeyConfiguration().setTableName("dictionary").setTableSchema(Optional.of("no_other_schema")).setConstraintName("notifications_1_dictionary_tenant_constraint").setForeignKeyPrimaryKeyColumnsMappings(mapBuilder().put("dictionary_id", "id").build())
     }
 
     @Unroll
@@ -192,6 +198,8 @@ class SharedSchemaContextConfigurationYamlDaoTest extends AbstractSpecification 
             EasyRandomParameters parameters = new EasyRandomParameters()
                     .randomize(FieldPredicates.named("identifierMaxLength").and(FieldPredicates.ofType(Integer.class)).and(FieldPredicates.inClass(SqlDefinitionsValidation.class)), new IntegerRandomizer(1, 255))
                     .randomize(FieldPredicates.named("identifierMinLength").and(FieldPredicates.ofType(Integer.class)).and(FieldPredicates.inClass(SqlDefinitionsValidation.class)), new IntegerRandomizer(1, 255))
+                    .randomize(FieldPredicates.named("schema").and(FieldPredicates.ofType(Optional.class)).and(FieldPredicates.inClass(TableEntry.class)), new OptionalRandomizer(StringDelegatingRandomizer.aNewStringDelegatingRandomizer(new IntegerRandomizer(1, 255)), true))
+                    .randomize(FieldPredicates.named("tableSchema").and(FieldPredicates.ofType(Optional.class)).and(FieldPredicates.inClass(ForeignKeyConfiguration.class)), new OptionalRandomizer(StringDelegatingRandomizer.aNewStringDelegatingRandomizer(new IntegerRandomizer(1, 255)), true))
             EasyRandom easyRandom = new EasyRandom(parameters)
             def randomObject = easyRandom.nextObject(SharedSchemaContextConfiguration)
             def tmpFile = tempFolder.newFile("rand-temp-config.yaml")

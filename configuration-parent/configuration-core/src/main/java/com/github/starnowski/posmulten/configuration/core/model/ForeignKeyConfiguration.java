@@ -7,6 +7,7 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 
 import java.util.Map;
+import java.util.Optional;
 
 @Accessors(chain = true)
 @Getter
@@ -17,5 +18,6 @@ public class ForeignKeyConfiguration {
 
     private String constraintName;
     private String tableName;
+    private Optional<String> tableSchema;
     private Map<String, String> foreignKeyPrimaryKeyColumnsMappings;
 }

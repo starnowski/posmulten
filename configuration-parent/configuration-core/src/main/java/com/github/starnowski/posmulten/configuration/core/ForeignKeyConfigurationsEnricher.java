@@ -18,7 +18,7 @@ public class ForeignKeyConfigurationsEnricher implements ITableEntryEnricher {
     @Override
     public DefaultSharedSchemaContextBuilder enrich(DefaultSharedSchemaContextBuilder builder, TableEntry tableEntry) {
         if (tableEntry != null && tableEntry.getForeignKeys() != null) {
-            tableEntry.getForeignKeys().forEach(foreignKeyConfiguration -> foreignKeyConfigurationEnricher.enrich(builder, tableEntry.getName(), foreignKeyConfiguration));
+            tableEntry.getForeignKeys().forEach(foreignKeyConfiguration -> foreignKeyConfigurationEnricher.enrich(builder, tableEntry.getName(), tableEntry.getSchema(), foreignKeyConfiguration));
         }
         return builder;
     }

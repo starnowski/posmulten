@@ -120,6 +120,7 @@ __Table object__
 | Property name |   Type    |   Required    |   Nullable    |   Description |
 |---------------|-----------|---------------|---------------|---------------|
 |name   |   String  |   Yes |   No  |   Name of table   |
+|schema   |   String  |   No |   Yes  |   Name of schema. This property overrides the value of the [default_schema](#default_schema) for its table   |
 |[rls_policy](#rls_policy)   |   Object  |   No |   No  |   Object that defines RLS for table   |
 |[foreign_keys](#foreign_keys)   |   Array of objects  |   No |   No  |   An array of objects that defines foreign key constraint for a table with RLS policy  |
 
@@ -129,7 +130,7 @@ The rls_policy entry is required to specify the RLS policy for table.
 | Property name |   Type    |   Required    |   Nullable    |   Description |
 |---------------|-----------|---------------|---------------|---------------|
 |name   |   String  |   Yes |   No  |   Name of the RLS policy   |
-|tenant_column   |   String  |   No |   No  |   Name of the column that stores tenant identifier. This property overrides the value of the [default schema](#default_schema) for its table  |
+|tenant_column   |   String  |   No |   No  |   Name of the column that stores tenant identifier. This property overrides the value of the [default_tenant_id_column](#default_tenant_id_column) for its table  |
 |[create_tenant_column_for_table](#create_tenant_column_for_table)   |   Boolean  |   No |   No  | Option force to create tenant column for table    |
 |valid_tenant_value_constraint_name   |   String  |   No |   No  |   Name of the constraint that checks if the tenant column has a valid value. This property overrides the value of the [is_tenant_valid_constraint_name](#is_tenant_valid_constraint_name) for its table  |
 |[skip_adding_of_tenant_column_default_value](#skip_adding_of_tenant_column_default_value)   |   Boolean  |   No |   No  | Option force to skip adding default value to tenant column for a table    |
@@ -148,6 +149,7 @@ Based on each array object, there is going to be created constraint that checks 
 |---------------|-----------|---------------|---------------|---------------|
 |constraint_name   |   String  |   Yes |   No  |   Name of the constraint  |
 |table_name   |   String  |   Yes |   No  |   Name of table that foreign key refers to  |
+|table_schema   |   String  |   No |   Yes  |   Name of schema. This property overrides the value of the [default_schema](#default_schema) for its table   |
 |foreign_key_primary_key_columns_mappings   |   Map  |   Yes |   No  |   The map that defines reference between foreign key and primary key columns. The map key is the foreign key column name and the value is the primary key column name  |
 
 Below there are two examples of foreign keys configuration:

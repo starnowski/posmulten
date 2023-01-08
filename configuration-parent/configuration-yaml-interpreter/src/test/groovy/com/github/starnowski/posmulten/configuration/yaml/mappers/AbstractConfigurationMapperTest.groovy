@@ -1,7 +1,14 @@
 package com.github.starnowski.posmulten.configuration.yaml.mappers
 
 import com.github.starnowski.posmulten.configuration.yaml.IConfigurationMapper
+import com.github.starnowski.posmulten.configuration.yaml.IntegerRandomizer
+import com.github.starnowski.posmulten.configuration.yaml.OptionalRandomizer
+import com.github.starnowski.posmulten.configuration.yaml.model.TableEntry
+import com.github.starnowski.posmulten.configuration.yaml.model.ForeignKeyConfiguration
 import org.jeasy.random.EasyRandom
+import org.jeasy.random.EasyRandomParameters
+import org.jeasy.random.FieldPredicates
+import org.jeasy.random.randomizers.text.StringDelegatingRandomizer
 import spock.lang.Specification
 
 import static java.util.stream.Collectors.toList
@@ -38,7 +45,10 @@ abstract class AbstractConfigurationMapperTest<I, O, T extends IConfigurationMap
     {
         given:
             T tested = getTestedObject()
-            EasyRandom easyRandom = new EasyRandom()
+            EasyRandomParameters parameters = new EasyRandomParameters()
+                .randomize(FieldPredicates.named("schema").and(FieldPredicates.ofType(Optional.class)).and(FieldPredicates.inClass(TableEntry.class)), new OptionalRandomizer(StringDelegatingRandomizer.aNewStringDelegatingRandomizer(new IntegerRandomizer(1, 255)), true))
+                .randomize(FieldPredicates.named("tableSchema").and(FieldPredicates.ofType(Optional.class)).and(FieldPredicates.inClass(ForeignKeyConfiguration.class)), new OptionalRandomizer(StringDelegatingRandomizer.aNewStringDelegatingRandomizer(new IntegerRandomizer(1, 255)), true))
+            EasyRandom easyRandom = new EasyRandom(parameters)
             O yamlConfiguration = easyRandom.nextObject(getYamlConfigurationObjectClass())
 
         when:
@@ -55,7 +65,10 @@ abstract class AbstractConfigurationMapperTest<I, O, T extends IConfigurationMap
     {
         given:
             T tested = getTestedObject()
-            EasyRandom easyRandom = new EasyRandom()
+        EasyRandomParameters parameters = new EasyRandomParameters()
+                .randomize(FieldPredicates.named("schema").and(FieldPredicates.ofType(Optional.class)).and(FieldPredicates.inClass(com.github.starnowski.posmulten.configuration.core.model.TableEntry.class)), new OptionalRandomizer(StringDelegatingRandomizer.aNewStringDelegatingRandomizer(new IntegerRandomizer(1, 255)), true))
+                .randomize(FieldPredicates.named("tableSchema").and(FieldPredicates.ofType(Optional.class)).and(FieldPredicates.inClass(com.github.starnowski.posmulten.configuration.core.model.ForeignKeyConfiguration.class)), new OptionalRandomizer(StringDelegatingRandomizer.aNewStringDelegatingRandomizer(new IntegerRandomizer(1, 255)), true))
+        EasyRandom easyRandom = new EasyRandom(parameters)
             I configuration = easyRandom.nextObject(getConfigurationObjectClass())
 
         when:

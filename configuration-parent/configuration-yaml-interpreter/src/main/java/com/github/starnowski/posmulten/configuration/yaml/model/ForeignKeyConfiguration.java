@@ -12,6 +12,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Map;
+import java.util.Optional;
 
 @Accessors(chain = true)
 @Getter
@@ -27,6 +28,8 @@ public class ForeignKeyConfiguration {
     @NotBlank
     @JsonProperty(value = "table_name", required = true)
     private String tableName;
+    @JsonProperty(value = "table_schema")
+    private Optional<String> tableSchema;
     @JsonProperty(value = "foreign_key_primary_key_columns_mappings", required = true)
     @NotNull
     @Size(min = 1, message = "must have at least one element")
