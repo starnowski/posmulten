@@ -21,7 +21,7 @@ public class CustomDefinitionEntry {
 
     @JsonProperty(value = "position", required = true)
     @NotBlank
-    private CustomDefinitionPosition position;
+    private com.github.starnowski.posmulten.configuration.core.model.CustomDefinitionEntry.CustomDefinitionPosition position;
     @JsonProperty(value = "creation_script")
     private String creationScript;
     @JsonProperty(value = "drop_script")
@@ -30,10 +30,4 @@ public class CustomDefinitionEntry {
     private String customPosition;
     @JsonProperty(value = "validation_scripts")
     private List<String> validationScripts;
-
-    public static enum CustomDefinitionPosition {
-        AT_END,
-        AT_BEGINNING,
-        CUSTOM
-    }
 }
