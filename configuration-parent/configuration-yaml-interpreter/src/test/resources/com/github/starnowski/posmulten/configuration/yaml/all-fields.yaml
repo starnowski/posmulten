@@ -125,7 +125,7 @@ custom_sql_definitions:
   - position: AT_BEGINNING
     creation_script: |
       ALTER COLUMN ...
-    deletion_script: |
+    drop_script: |
       ALTER DROP ...
     validation_scripts:
         - |
