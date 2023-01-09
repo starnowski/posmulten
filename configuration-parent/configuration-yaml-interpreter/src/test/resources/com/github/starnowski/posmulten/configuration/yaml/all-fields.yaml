@@ -118,3 +118,20 @@ tables:
         table_schema: no_other_schema
         foreign_key_primary_key_columns_mappings:
           dictionary_id:  id
+custom_sql_definitions:
+  - position: AT_END
+    creation_script:  |
+      ALTER ...
+  - position: AT_BEGINNING
+    creation_script: |
+      ALTER COLUMN ...
+    deletion_script: |
+      ALTER DROP ...
+    validation_scripts:
+        - |
+          SELECT (13) FROM ...
+        - "SELECT (1) ..... FROM DUAL"
+  - position: CUSTOM
+    custom_position: "Some custom position"
+    creation_script:  |
+      ALTER ...
