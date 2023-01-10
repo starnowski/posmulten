@@ -11,6 +11,7 @@ public class SharedSchemaContextConfigurationMapper implements IConfigurationMap
     private final TableEntryMapper tableEntryMapper = new TableEntryMapper();
     private final ValidTenantValueConstraintConfigurationMapper validTenantValueConstraintConfigurationMapper = new ValidTenantValueConstraintConfigurationMapper();
     private final SqlDefinitionsValidationMapper sqlDefinitionsValidationMapper = new SqlDefinitionsValidationMapper();
+    private final CustomDefinitionEntryMapper customDefinitionEntryMapper = new CustomDefinitionEntryMapper();
 
     @Override
     public SharedSchemaContextConfiguration map(com.github.starnowski.posmulten.configuration.core.model.SharedSchemaContextConfiguration input) {
@@ -28,7 +29,8 @@ public class SharedSchemaContextConfigurationMapper implements IConfigurationMap
                 .setTenantHasAuthoritiesFunctionName(input.getTenantHasAuthoritiesFunctionName() == null ? null : valueOf(input.getTenantHasAuthoritiesFunctionName()))
                 .setTables(input.getTables() == null ? null : input.getTables().stream().map(tableEntry -> tableEntryMapper.map(tableEntry)).collect(toList()))
                 .setValidTenantValueConstraint(validTenantValueConstraintConfigurationMapper.map(input.getValidTenantValueConstraint()))
-                .setSqlDefinitionsValidation(sqlDefinitionsValidationMapper.map(input.getSqlDefinitionsValidation()));
+                .setSqlDefinitionsValidation(sqlDefinitionsValidationMapper.map(input.getSqlDefinitionsValidation()))
+                .setCustomSQLDefinitions(input.getCustomDefinitions() == null ? null : input.getCustomDefinitions().stream().map(customDefinitionEntry -> customDefinitionEntryMapper.map(customDefinitionEntry)).collect(toList()));
     }
 
     @Override
@@ -47,6 +49,7 @@ public class SharedSchemaContextConfigurationMapper implements IConfigurationMap
                 .setTenantHasAuthoritiesFunctionName(output.getTenantHasAuthoritiesFunctionName() == null ? null : output.getTenantHasAuthoritiesFunctionName().getValue())
                 .setTables(output.getTables() == null ? null : output.getTables().stream().map(tableEntry -> tableEntryMapper.unmap(tableEntry)).collect(toList()))
                 .setValidTenantValueConstraint(validTenantValueConstraintConfigurationMapper.unmap(output.getValidTenantValueConstraint()))
-                .setSqlDefinitionsValidation(sqlDefinitionsValidationMapper.unmap(output.getSqlDefinitionsValidation()));
+                .setSqlDefinitionsValidation(sqlDefinitionsValidationMapper.unmap(output.getSqlDefinitionsValidation()))
+                .setCustomDefinitions(output.getCustomSQLDefinitions() == null ? null : output.getCustomSQLDefinitions().stream().map(customDefinitionEntry -> customDefinitionEntryMapper.unmap(customDefinitionEntry)).collect(toList()));
     }
 }
