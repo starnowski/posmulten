@@ -8,16 +8,18 @@ public class DefaultSharedSchemaContextBuilderConfigurationEnricher {
     private final TablesEntriesEnricher tablesEntriesEnricher;
     private final ValidTenantValueConstraintConfigurationEnricher validTenantValueConstraintConfigurationEnricher;
     private final SqlDefinitionsValidationEnricher sqlDefinitionsValidationEnricher;
+    private final CustomDefinitionEntriesEnricher customDefinitionEntriesEnricher;
 
     public DefaultSharedSchemaContextBuilderConfigurationEnricher() {
-        this(new TablesEntriesEnricher(), new ValidTenantValueConstraintConfigurationEnricher(), new SqlDefinitionsValidationEnricher());
+        this(new TablesEntriesEnricher(), new ValidTenantValueConstraintConfigurationEnricher(), new SqlDefinitionsValidationEnricher(), new CustomDefinitionEntriesEnricher());
     }
 
     public DefaultSharedSchemaContextBuilderConfigurationEnricher(TablesEntriesEnricher tablesEntriesEnricher, ValidTenantValueConstraintConfigurationEnricher validTenantValueConstraintConfigurationEnricher,
-                                                                  SqlDefinitionsValidationEnricher sqlDefinitionsValidationEnricher) {
+                                                                  SqlDefinitionsValidationEnricher sqlDefinitionsValidationEnricher, CustomDefinitionEntriesEnricher customDefinitionEntriesEnricher) {
         this.tablesEntriesEnricher = tablesEntriesEnricher;
         this.validTenantValueConstraintConfigurationEnricher = validTenantValueConstraintConfigurationEnricher;
         this.sqlDefinitionsValidationEnricher = sqlDefinitionsValidationEnricher;
+        this.customDefinitionEntriesEnricher = customDefinitionEntriesEnricher;
     }
 
     public DefaultSharedSchemaContextBuilder enrich(DefaultSharedSchemaContextBuilder builder, SharedSchemaContextConfiguration contextConfiguration) {
