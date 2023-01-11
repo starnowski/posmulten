@@ -25,8 +25,8 @@ class CustomDefinitionEntryEnricherTest extends AbstractBaseTest {
 
         where:
             definition                                                                                        || expectedPosition                              | cs   |   ds |   vs
-            new CustomDefinitionEntry().setPosition(AT_END).setCreationScript("X1").setDropScript("X2")       || CustomSQLDefinitionPairDefaultPosition.AT_END | "X1" | "X2" | []
-            new CustomDefinitionEntry().setPosition(AT_BEGINNING).setCreationScript("G").setDropScript("H") || CustomSQLDefinitionPairDefaultPosition.AT_BEGINNING  | "G" | "H" | []
+            new CustomDefinitionEntry().setPosition(AT_END).setCreationScript("X1").setDropScript("X2")       || CustomSQLDefinitionPairDefaultPosition.AT_END | "X1" | "X2" | null
+            new CustomDefinitionEntry().setPosition(AT_BEGINNING).setCreationScript("G").setDropScript("H") || CustomSQLDefinitionPairDefaultPosition.AT_BEGINNING  | "G" | "H" | null
             new CustomDefinitionEntry().setPosition(AT_END).setCreationScript("X1").setValidationScripts(["14", "select 1"]) || CustomSQLDefinitionPairDefaultPosition.AT_END    | "X1" | null | ["14", "select 1"]
     }
 }
