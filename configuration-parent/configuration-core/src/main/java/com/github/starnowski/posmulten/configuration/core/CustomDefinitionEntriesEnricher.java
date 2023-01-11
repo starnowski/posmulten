@@ -21,4 +21,8 @@ public class CustomDefinitionEntriesEnricher {
 
         return builder;
     }
+
+    CustomDefinitionEntryEnricher getCustomDefinitionEntryEnricher() {
+        return customDefinitionEntryEnricher;
+    }
 }
