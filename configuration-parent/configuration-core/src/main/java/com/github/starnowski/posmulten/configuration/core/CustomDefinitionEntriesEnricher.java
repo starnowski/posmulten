@@ -4,6 +4,7 @@ import com.github.starnowski.posmulten.configuration.core.model.CustomDefinition
 import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder;
 
 import java.util.List;
+import java.util.Optional;
 
 public class CustomDefinitionEntriesEnricher {
 
@@ -18,7 +19,13 @@ public class CustomDefinitionEntriesEnricher {
     }
 
     public DefaultSharedSchemaContextBuilder enrich(DefaultSharedSchemaContextBuilder builder, List<CustomDefinitionEntry> customDefinitionEntries) {
-
+        Optional.ofNullable(customDefinitionEntries).ifPresent(entries -> {
+            if (!entries.isEmpty()) {
+                entries.forEach(cd -> {
+                    this.customDefinitionEntryEnricher.enrich(builder, cd);
+                });
+            }
+        });
         return builder;
     }
 

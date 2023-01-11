@@ -12,16 +12,18 @@ class CustomDefinitionEntriesEnricherTest extends AbstractBaseTest {
             def component = Mock(CustomDefinitionEntryEnricher)
             def tested = new CustomDefinitionEntriesEnricher(component)
             def builder = prepareBuilderMockWithZeroExpectationOfMethodsInvocation()
-            def cd1 = new CustomDefinitionEntry().setPosition("AT_BEGINING")
-            def cd2 = new CustomDefinitionEntry().setPosition("AT_END")
+            def cd1 = new CustomDefinitionEntry().setPosition(CustomDefinitionEntry.CustomDefinitionPosition.AT_BEGINNING)
+            def cd2 = new CustomDefinitionEntry().setPosition(CustomDefinitionEntry.CustomDefinitionPosition.AT_END)
+            def cd3 = new CustomDefinitionEntry().setPosition(CustomDefinitionEntry.CustomDefinitionPosition.AT_BEGINNING)
 
         when:
-        def result = tested.enrich(builder, [cd1, cd2])
+        def result = tested.enrich(builder, [cd1, cd2, cd3])
 
         then:
             result == builder
             1 * component.enrich(builder, cd1)
             1 * component.enrich(builder, cd2)
+            1 * component.enrich(builder, cd3)
 
         and: "do not invoke builder"
             0 * builder._
