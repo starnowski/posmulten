@@ -56,6 +56,7 @@ public class DefaultSharedSchemaContextBuilderConfigurationEnricher {
         validTenantValueConstraintConfigurationEnricher.enrich(builder, contextConfiguration.getValidTenantValueConstraint());
         tablesEntriesEnricher.enrich(builder, contextConfiguration.getTables());
         sqlDefinitionsValidationEnricher.enrich(builder, contextConfiguration.getSqlDefinitionsValidation());
+        customDefinitionEntriesEnricher.enrich(builder, contextConfiguration.getCustomDefinitions());
         return builder;
     }
 }
