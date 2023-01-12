@@ -13,7 +13,7 @@ public class RLSPolicyMapper implements IConfigurationMapper<com.github.starnows
         return input == null ? null : new RLSPolicy()
                 .setName(input.getName())
                 .setCreateTenantColumnForTable(input.getCreateTenantColumnForTable())
-                .setPrimaryKeyDefinition(input.getPrimaryKeyDefinition() == null ? null : primaryKeyDefinitionMapper.map(input.getPrimaryKeyDefinition()))
+                .setPrimaryKeyDefinition(primaryKeyDefinitionMapper.map(input.getPrimaryKeyDefinition()))
                 .setSkipAddingOfTenantColumnDefaultValue(input.getSkipAddingOfTenantColumnDefaultValue())
                 .setTenantColumn(input.getTenantColumn() == null ? null : new StringWrapperWithNotBlankValue(input.getTenantColumn()))
                 .setValidTenantValueConstraintName(input.getValidTenantValueConstraintName() == null ? null : new StringWrapperWithNotBlankValue(input.getValidTenantValueConstraintName()));
@@ -24,7 +24,7 @@ public class RLSPolicyMapper implements IConfigurationMapper<com.github.starnows
         return output == null ? null : new com.github.starnowski.posmulten.configuration.core.model.RLSPolicy()
                 .setName(output.getName())
                 .setCreateTenantColumnForTable(output.getCreateTenantColumnForTable())
-                .setPrimaryKeyDefinition(output.getPrimaryKeyDefinition() == null ? null : primaryKeyDefinitionMapper.unmap(output.getPrimaryKeyDefinition()))
+                .setPrimaryKeyDefinition(primaryKeyDefinitionMapper.unmap(output.getPrimaryKeyDefinition()))
                 .setSkipAddingOfTenantColumnDefaultValue(output.getSkipAddingOfTenantColumnDefaultValue())
                 .setTenantColumn(output.getTenantColumn() == null ? null : output.getTenantColumn().getValue())
                 .setValidTenantValueConstraintName(output.getValidTenantValueConstraintName() == null ? null : output.getValidTenantValueConstraintName().getValue());

@@ -67,4 +67,14 @@ class YamlConfigurationDefaultSharedSchemaContextBuilderFactoryTest extends Abst
             INVALID_MAP_BLANK_FIELDS_PATH                               ||  "tables[2].foreign_keys[2].foreign_key_primary_key_columns_mappings.<map key> must not be blank"
             SQL_DEFINITIONS_VALIDATION_WITH_INVALID_CONSTRAINTS_PATH    ||  "sql_definitions_validation.identifier_min_length must be greater than or equal to 1"
     }
+
+    @Unroll
+    def "should throw exception when there is no such file for configuration"()
+    {
+        when:
+            tested.build("no_such_file")
+
+        then:
+            def ex = thrown(RuntimeException)
+    }
 }
