@@ -90,6 +90,27 @@
                 </plugins>
             </build>
         </profile>
+        <profile>
+            <id>pitest</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.pitest</groupId>
+                        <artifactId>pitest-maven</artifactId>
+                        <version>1.9.9</version>
+                        <configuration>
+                            <mutators>
+                                <mutator>STRONGER</mutator>
+                            </mutators>
+                            <mutationThreshold>95</mutationThreshold>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
     </profiles>
 
     <build>
