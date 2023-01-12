@@ -3,6 +3,7 @@ package com.github.starnowski.posmulten.configuration.yaml.dao
 import com.github.starnowski.posmulten.configuration.yaml.AbstractSpecification
 import com.github.starnowski.posmulten.configuration.yaml.IntegerRandomizer
 import com.github.starnowski.posmulten.configuration.yaml.OptionalRandomizer
+import com.github.starnowski.posmulten.configuration.yaml.exceptions.YamlInvalidSchema
 import com.github.starnowski.posmulten.configuration.yaml.model.*
 import org.jeasy.random.EasyRandom
 import org.jeasy.random.EasyRandomParameters
@@ -58,6 +59,25 @@ class SharedSchemaContextConfigurationYamlDaoTest extends AbstractSpecification 
 
         and: "tests object should be equal"
             result == testObject
+
+        where:
+            filePath << [ALL_FIELDS_FILE_PATH, ONLY_MANDATORY_FIELDS_FILE_PATH]
+    }
+
+    @Unroll
+    def "should not save file when trying to save invalid object based on schema"()
+    {
+        given:
+            def resolvedPath = resolveFilePath(filePath)
+            def testObject = tested.read(resolvedPath)
+            def tmpFile = tempFolder.newFile("temp-config.yaml")
+            testObject.setGrantee(null)
+
+        when:
+            tested.save(testObject, tmpFile.getAbsoluteFile().getAbsolutePath())
+
+        then:
+            def ex = thrown(YamlInvalidSchema)
 
         where:
             filePath << [ALL_FIELDS_FILE_PATH, ONLY_MANDATORY_FIELDS_FILE_PATH]
