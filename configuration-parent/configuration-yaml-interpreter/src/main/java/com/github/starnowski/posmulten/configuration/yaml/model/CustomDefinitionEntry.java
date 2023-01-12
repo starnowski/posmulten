@@ -2,6 +2,7 @@ package com.github.starnowski.posmulten.configuration.yaml.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.starnowski.posmulten.configuration.yaml.validation.CustomPositionValidValue;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,6 +12,7 @@ import lombok.experimental.Accessors;
 import javax.validation.constraints.NotBlank;
 import java.util.List;
 
+@CustomPositionValidValue
 @Accessors(chain = true)
 @Getter
 @Setter
