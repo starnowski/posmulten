@@ -128,14 +128,10 @@ class SharedSchemaContextConfigurationYamlDaoValidationTest extends AbstractSpec
             ex.getErrorMessages().contains(errorMessage)
 
         where:
-            errorMessage << ["tables[0].foreign_keys[0].foreign_key_primary_key_columns_mappings must have at least one element",
-                             "tables[1].foreign_keys[0].foreign_key_primary_key_columns_mappings.user_id must not be blank",
-                             "tables[2].foreign_keys[1].constraint_name must not be blank",
-                             "tables[3].foreign_keys[0].foreign_key_primary_key_columns_mappings.user_identi must not be blank",
-                             "tables[2].foreign_keys[0].foreign_key_primary_key_columns_mappings must not be null",
-                             "tables[2].foreign_keys[2].foreign_key_primary_key_columns_mappings.parent_comment_id must not be blank",
-                             "tables[2].foreign_keys[2].foreign_key_primary_key_columns_mappings.<map key> must not be blank",
-                             "tables[1].foreign_keys[0].constraint_name must not be blank"
+            errorMessage << ["custom_sql_definitions[1].position must not be null",
+                             "custom_sql_definitions[3].position available values are AT_END, AT_BEGINNING, CUSTOM",
+                             "custom_sql_definitions[0].position must not be null",
+                             "custom_sql_definitions[2] for definition with position 'CUSTOM' the property 'custom_position' is required"
             ]
     }
 }
