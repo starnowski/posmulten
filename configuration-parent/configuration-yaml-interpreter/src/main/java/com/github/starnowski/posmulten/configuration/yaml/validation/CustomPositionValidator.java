@@ -8,6 +8,9 @@ import javax.validation.ConstraintValidatorContext;
 public class CustomPositionValidator implements ConstraintValidator<CustomPositionValidValue, CustomDefinitionEntry> {
     @Override
     public boolean isValid(CustomDefinitionEntry customDefinitionEntry, ConstraintValidatorContext constraintValidatorContext) {
+        if (customDefinitionEntry.getPosition() == null) {
+            return true;
+        }
         switch (customDefinitionEntry.getPosition()) {
             case AT_END:
             case AT_BEGINNING:

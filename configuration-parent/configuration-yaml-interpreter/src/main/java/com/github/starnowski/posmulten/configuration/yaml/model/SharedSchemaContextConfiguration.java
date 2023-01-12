@@ -59,6 +59,7 @@ public class SharedSchemaContextConfiguration {
     @Valid
     @JsonProperty(value = "sql_definitions_validation")
     private SqlDefinitionsValidation sqlDefinitionsValidation;
+    @Valid
     @JsonProperty(value = "custom_sql_definitions")
     private List<CustomDefinitionEntry> customSQLDefinitions;
 

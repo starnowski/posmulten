@@ -9,6 +9,7 @@ import static com.github.starnowski.posmulten.configuration.yaml.TestProperties.
 import static com.github.starnowski.posmulten.configuration.yaml.TestProperties.INVALID_ROOT_NODE_BLANK_FIELDS_FILE_PATH
 import static com.github.starnowski.posmulten.configuration.yaml.TestProperties.INVALID_NESTED_NODE_BLANK_FIELDS_FILE_PATH
 import static com.github.starnowski.posmulten.configuration.yaml.TestProperties.INVALID_NESTED_NODE_EMPTY_LIST_FILE_PATH
+import static com.github.starnowski.posmulten.configuration.yaml.TestProperties.INVALID_CUSTOM_DEFINITIONS_FIELDS_PATH
 
 class SharedSchemaContextConfigurationYamlDaoValidationTest extends AbstractSpecification {
 
@@ -91,6 +92,32 @@ class SharedSchemaContextConfigurationYamlDaoValidationTest extends AbstractSpec
     {
         given:
             def resolvedPath = resolveFilePath(INVALID_MAP_BLANK_FIELDS_PATH)
+
+        when:
+            tested.read(resolvedPath)
+
+        then:
+            def ex = thrown(YamlInvalidSchema)
+            ex
+            ex.getErrorMessages().contains(errorMessage)
+
+        where:
+            errorMessage << ["tables[0].foreign_keys[0].foreign_key_primary_key_columns_mappings must have at least one element",
+                             "tables[1].foreign_keys[0].foreign_key_primary_key_columns_mappings.user_id must not be blank",
+                             "tables[2].foreign_keys[1].constraint_name must not be blank",
+                             "tables[3].foreign_keys[0].foreign_key_primary_key_columns_mappings.user_identi must not be blank",
+                             "tables[2].foreign_keys[0].foreign_key_primary_key_columns_mappings must not be null",
+                             "tables[2].foreign_keys[2].foreign_key_primary_key_columns_mappings.parent_comment_id must not be blank",
+                             "tables[2].foreign_keys[2].foreign_key_primary_key_columns_mappings.<map key> must not be blank",
+                             "tables[1].foreign_keys[0].constraint_name must not be blank"
+            ]
+    }
+
+    @Unroll
+    def "should throw exception that contains error message (#errorMessage) for file invalid-custom-definitions.yaml"()
+    {
+        given:
+            def resolvedPath = resolveFilePath(INVALID_CUSTOM_DEFINITIONS_FIELDS_PATH)
 
         when:
             tested.read(resolvedPath)

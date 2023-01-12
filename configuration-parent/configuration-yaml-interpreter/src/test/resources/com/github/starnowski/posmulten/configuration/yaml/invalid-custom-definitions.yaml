@@ -1,0 +1,20 @@
+default_schema: non_public
+grantee: "db-user"
+custom_sql_definitions:
+  # Missing 'position'
+  - position:
+    creation_script:  |
+      ALTER ...
+    # Missing 'position'
+  - creation_script: |
+      ALTER COLUMN ...
+    drop_script: |
+      ALTER DROP ...
+    validation_scripts:
+      - |
+        SELECT (13) FROM ...
+      - "SELECT (1) ..... FROM DUAL"
+  - position: CUSTOM
+    # Missing 'custom_position'
+    creation_script:  |
+      ALTER ...
