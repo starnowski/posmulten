@@ -122,6 +122,9 @@ custom_sql_definitions:
   - position: AT_END
     creation_script:  |
       ALTER ...
+    validation_scripts:
+      - |
+        SELECT (6) FROM ...
   - position: AT_BEGINNING
     creation_script: |
       ALTER COLUMN ...
@@ -135,3 +138,6 @@ custom_sql_definitions:
     custom_position: "Some custom position"
     creation_script:  |
       ALTER ...
+    validation_scripts:
+      - |
+        SELECT (371) FROM ...

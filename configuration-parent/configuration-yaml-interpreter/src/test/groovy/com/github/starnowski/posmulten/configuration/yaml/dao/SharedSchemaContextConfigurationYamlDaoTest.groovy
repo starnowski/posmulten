@@ -7,6 +7,7 @@ import com.github.starnowski.posmulten.configuration.yaml.model.*
 import org.jeasy.random.EasyRandom
 import org.jeasy.random.EasyRandomParameters
 import org.jeasy.random.FieldPredicates
+import org.jeasy.random.randomizers.misc.EnumRandomizer
 import org.jeasy.random.randomizers.text.StringDelegatingRandomizer
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
@@ -200,6 +201,7 @@ class SharedSchemaContextConfigurationYamlDaoTest extends AbstractSpecification 
                     .randomize(FieldPredicates.named("identifierMinLength").and(FieldPredicates.ofType(Integer.class)).and(FieldPredicates.inClass(SqlDefinitionsValidation.class)), new IntegerRandomizer(1, 255))
                     .randomize(FieldPredicates.named("schema").and(FieldPredicates.ofType(Optional.class)).and(FieldPredicates.inClass(TableEntry.class)), new OptionalRandomizer(StringDelegatingRandomizer.aNewStringDelegatingRandomizer(new IntegerRandomizer(1, 255)), true))
                     .randomize(FieldPredicates.named("tableSchema").and(FieldPredicates.ofType(Optional.class)).and(FieldPredicates.inClass(ForeignKeyConfiguration.class)), new OptionalRandomizer(StringDelegatingRandomizer.aNewStringDelegatingRandomizer(new IntegerRandomizer(1, 255)), true))
+                    .randomize(FieldPredicates.named("position").and(FieldPredicates.ofType(String.class)).and(FieldPredicates.inClass(CustomDefinitionEntry.class)), StringDelegatingRandomizer.aNewStringDelegatingRandomizer(new EnumRandomizer(com.github.starnowski.posmulten.configuration.core.model.CustomDefinitionEntry.CustomDefinitionPosition)))
             EasyRandom easyRandom = new EasyRandom(parameters)
             def randomObject = easyRandom.nextObject(SharedSchemaContextConfiguration)
             def tmpFile = tempFolder.newFile("rand-temp-config.yaml")

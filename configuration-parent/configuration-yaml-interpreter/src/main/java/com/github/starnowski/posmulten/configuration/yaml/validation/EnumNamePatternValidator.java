@@ -7,31 +7,27 @@ import javax.validation.ConstraintValidatorContext;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class EnumNamePatternValidator implements ConstraintValidator<EnumNamePattern, Enum<?>> {
+public class EnumNamePatternValidator implements ConstraintValidator<EnumNamePattern, String> {
 
     private Class<? extends Enum> enumClass;
-    private boolean required;
 
     @Override
     public void initialize(EnumNamePattern constraintAnnotation) {
         this.enumClass = constraintAnnotation.enumType();
-        this.required = constraintAnnotation.required();
     }
 
     @Override
-    public boolean isValid(Enum<?> anEnum, ConstraintValidatorContext constraintValidatorContext) {
+    public boolean isValid(String value, ConstraintValidatorContext constraintValidatorContext) {
         boolean result = true;
-        if (anEnum == null && this.required) {
-            result = false;
+        if (value == null) {
+            return true;
         }
-        if (result && !(anEnum.getClass() == this.enumClass)) {
-            result = false;
-        }
-        if (!result) {
+        if (Stream.of(this.enumClass.getEnumConstants()).map(e -> ((Enum) e).name()).noneMatch(name -> name.equals(value))) {
             HibernateConstraintValidatorContext hibernateContext = constraintValidatorContext.unwrap(
                     HibernateConstraintValidatorContext.class );
             hibernateContext.addExpressionVariable("enumValues", Stream.of(this.enumClass.getEnumConstants()).map(e -> ((Enum) e).name()).collect(Collectors.joining(", ")));
+            return false;
         }
-        return result;
+        return true;
     }
 }

@@ -20,8 +20,6 @@ public @interface EnumNamePattern {
 
     Class<? extends java.lang.Enum> enumType();
 
-    boolean required() default true;
-
     String message() default "{error.enum.values}";
 
     Class<?>[] groups() default {};
