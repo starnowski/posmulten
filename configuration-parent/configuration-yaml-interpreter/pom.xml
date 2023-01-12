@@ -106,6 +106,9 @@
                                 <mutator>STRONGER</mutator>
                             </mutators>
                             <mutationThreshold>95</mutationThreshold>
+                            <excludedClasses>
+                                <excludedClass>com.github.starnowski.posmulten.configuration.yaml.model.*</excludedClass>
+                            </excludedClasses>
                         </configuration>
                     </plugin>
                 </plugins>

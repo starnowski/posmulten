@@ -10,6 +10,18 @@ import static com.github.starnowski.posmulten.configuration.core.model.CustomDef
 
 class CustomPositionValidatorTest extends Specification {
 
+    def "should return true when a position is null because the other validator is responsible for checking this"(){
+        given:
+            def tested = new CustomPositionValidator()
+            def entry = new CustomDefinitionEntry()
+
+        when:
+            def result = tested.isValid(entry, null)
+
+        then:
+            result
+    }
+
     @Unroll
     def "should return true when position is different than CUSTOM, #position"(){
         given:

@@ -11,13 +11,15 @@ public class CustomPositionValidator implements ConstraintValidator<CustomPositi
         if (customDefinitionEntry.getPosition() == null) {
             return true;
         }
+        boolean result = true;
         switch (customDefinitionEntry.getPosition()) {
             case AT_END:
             case AT_BEGINNING:
-                return true;
+                result = true;
+                break;
             case CUSTOM:
-                return customDefinitionEntry.getCustomPosition() != null && !customDefinitionEntry.getCustomPosition().trim().isEmpty();
+                result = customDefinitionEntry.getCustomPosition() != null && !customDefinitionEntry.getCustomPosition().trim().isEmpty();
         }
-        return false;
+        return result;
     }
 }
