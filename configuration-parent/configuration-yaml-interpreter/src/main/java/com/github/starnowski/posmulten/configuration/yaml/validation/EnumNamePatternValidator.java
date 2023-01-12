@@ -18,7 +18,6 @@ public class EnumNamePatternValidator implements ConstraintValidator<EnumNamePat
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext constraintValidatorContext) {
-        boolean result = true;
         if (value == null) {
             return true;
         }
