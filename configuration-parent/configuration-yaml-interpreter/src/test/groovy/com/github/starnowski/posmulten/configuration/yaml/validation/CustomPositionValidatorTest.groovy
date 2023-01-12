@@ -30,7 +30,7 @@ class CustomPositionValidatorTest extends Specification {
     def "should return true when position is CUSTOM and custom position is not empty '#position'"(){
         given:
             def tested = new CustomPositionValidator()
-            def entry = new CustomDefinitionEntry().setPosition(CUSTOM).setCustomPosition()
+            def entry = new CustomDefinitionEntry().setPosition(CUSTOM).setCustomPosition(position)
 
         when:
             def result = tested.isValid(entry, null)
@@ -46,7 +46,7 @@ class CustomPositionValidatorTest extends Specification {
     def "should return false when position is CUSTOM and custom position is invalid : '#position'"(){
         given:
             def tested = new CustomPositionValidator()
-            def entry = new CustomDefinitionEntry().setPosition(CUSTOM).setCustomPosition()
+            def entry = new CustomDefinitionEntry().setPosition(CUSTOM).setCustomPosition(position)
 
         when:
             def result = tested.isValid(entry, null)
