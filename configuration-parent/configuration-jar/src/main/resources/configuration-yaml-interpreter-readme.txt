@@ -9,6 +9,7 @@ The YAML schema description is below.
 - #setting-a-list-of-invalid-tenant-identifier-values
 - #tables-configuration
 - #sql-definitions-validation
+- #custom-sql-definitions
 - #details
 
 ## Simple example:
@@ -229,6 +230,47 @@ sql_definitions_validation:
   identifier_min_length:  5
   disabled: false
 ```
+
+## Custom SQL Definitions
+
+The custom_sql_definitions property is an array of objects that purpose is to define custom SQL definitions that should be added to the generated script.
+Just like the #tables-configuration property, it is also a top element of the configuration file just like in the below example.
+
+Example:
+
+```yaml
+tables:
+  - name: groups
+
+...
+
+custom_sql_definitions:
+  - position: AT_END
+    creation_script:  |
+      ALTER TABLE groups ADD COLUMN text_col text;
+    drop_script: |
+      ALTER TABLE groups DROP COLUMN text_col;
+    validation_scripts:
+      - |
+        SELECT COUNT(1) FROM information_schema.columns WHERE table_catalog = 'postgresql_core' AND table_schema = 'public' AND table_name = 'groups' AND column_name = 'text_col';
+  - position: CUSTOM
+    custom_position: "Some custom position"
+    creation_script:  |
+      ALTER ...
+    validation_scripts:
+      - |
+        SELECT (371) FROM ...
+```
+
+custom_sql_definitions object
+
+| Property name |   Type    |   Required    |   Nullable    |   Description |
+|---------------|-----------|---------------|---------------|---------------|
+|position   |   String  |   Yes |   No  |   Specify where definition should be added in generated script. Available values are AT\_END (at the end), AT\_BEGINNING (at the beginning) and CUSTOM. For the CUSTOM the custom_position property has to be also specified  |
+|creation\_script   |   String  |   Yes |   No  |   SQL statement added to creation script |
+|drop\_script   |   String  |   No |   No  |   SQL statement added to dropping script |
+|validation\_scripts   |   Array of strings  |   Yes |   No  |   SQL statements that check if changes made by creation_script were added. Each statement as result should return one integer column, value bigger than zero means that changes were applied correctly otherwise the changes were not applied |
+|custom\_position   |   String  |   Only if position has the CUSTOM value  |   No  |   Custom position of the script. This does not have to be an integer value. There might be a case that some custom component was added in the code and it handles the definition with a specific position  |
 
 ## Details
 
