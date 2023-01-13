@@ -10,6 +10,8 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Set;
@@ -32,12 +34,14 @@ public class CustomDefinitionEntry {
     @JsonProperty(value = "position", required = true)
     @EnumNamePattern(enumType = com.github.starnowski.posmulten.configuration.core.model.CustomDefinitionEntry.CustomDefinitionPosition.class)
     private String position;
+    @NotBlank
     @JsonProperty(value = "creation_script", required = true)
     private String creationScript;
     @JsonProperty(value = "drop_script")
     private String dropScript;
     @JsonProperty(value = "custom_position")
     private String customPosition;
+    @NotEmpty
     @JsonProperty(value = "validation_scripts", required = true)
     private List<String> validationScripts;
 
