@@ -33,6 +33,12 @@ https://www.markdownguide.org/basic-syntax/
 
 - Changed method signature com.github.starnowski.posmulten.configuration.core.ForeignKeyConfigurationEnricher#enrich(com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder, String, com.github.starnowski.posmulten.configuration.core.model.ForeignKeyConfiguration) to
     com.github.starnowski.posmulten.configuration.core.ForeignKeyConfigurationEnriche#enrichcom.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder, String, java.util.Optional<String>, com.github.starnowski.posmulten.configuration.core.model.ForeignKeyConfiguration)
+    [245](https://github.com/starnowski/posmulten/issues/245)
+
+### Added
+
+- Added field tableSchema of type java.util.Optional<String> to com.github.starnowski.posmulten.configuration.core.model.ForeignKeyConfiguration type. [245](https://github.com/starnowski/posmulten/issues/245)
+- Added field schema of type java.util.Optional<String> to com.github.starnowski.posmulten.configuration.core.model.TableEntry type. [245](https://github.com/starnowski/posmulten/issues/245)
 
 ## [0.5.6] - 2022-11-04
 
