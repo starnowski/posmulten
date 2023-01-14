@@ -56,6 +56,7 @@ https://www.markdownguide.org/basic-syntax/
     - Added field tableSchema of type java.util.Optional<String> to com.github.starnowski.posmulten.configuration.yaml.model.ForeignKeyConfiguration type. [245](https://github.com/starnowski/posmulten/issues/245)
     - Added field schema of type java.util.Optional<String> to com.github.starnowski.posmulten.configuration.yaml.model.TableEntry type. [245](https://github.com/starnowski/posmulten/issues/245)
     - Added com.github.starnowski.posmulten.configuration.yaml.model.StringWrapperWithNullValue type. [245](https://github.com/starnowski/posmulten/issues/245)
+    - Added ValidationMessages.properties file for default translation of error messages related to configuration-yaml-interpreter module. [245](https://github.com/starnowski/posmulten/issues/245)
 
 ## [0.5.6] - 2022-11-04
 
