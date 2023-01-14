@@ -9,6 +9,7 @@ https://keepachangelog.com/en/1.0.0/
 https://www.markdownguide.org/basic-syntax/
 
 * [Unreleased](#unreleased)
+* [0.6.0](#060---2023-01-14)
 * [0.5.6](#056---2022-11-04)
 * [0.5.5](#055---2022-06-05)
 * [0.5.4](#054---2022-06-05)
@@ -25,6 +26,37 @@ https://www.markdownguide.org/basic-syntax/
 * [0.2.0](#020---2020-11-14)
 
 ## [Unreleased]
+
+## [0.6.0] - 2023-01-14
+
+### Changed
+
+- Changed method signature com.github.starnowski.posmulten.configuration.core.ForeignKeyConfigurationEnricher#enrich(com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder, String, com.github.starnowski.posmulten.configuration.core.model.ForeignKeyConfiguration) to
+    com.github.starnowski.posmulten.configuration.core.ForeignKeyConfigurationEnriche#enrichcom.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder, String, java.util.Optional<String>, com.github.starnowski.posmulten.configuration.core.model.ForeignKeyConfiguration)
+    [245](https://github.com/starnowski/posmulten/issues/245)
+
+### Added
+
+- Added feature that allows to specify custom sql definitions in configuration file [256](https://github.com/starnowski/posmulten/issues/256)
+    - Added com.github.starnowski.posmulten.configuration.core.CustomDefinitionEntriesEnricher type. [256](https://github.com/starnowski/posmulten/issues/256)
+    - Added com.github.starnowski.posmulten.configuration.core.CustomDefinitionEntryEnricher type. [256](https://github.com/starnowski/posmulten/issues/256)
+    - Added com.github.starnowski.posmulten.configuration.core.model.CustomDefinitionEntry type. [256](https://github.com/starnowski/posmulten/issues/256)
+    - Added field customDefinitions of type java.util.List<com.github.starnowski.posmulten.configuration.core.model.CustomDefinitionEntry> to com.github.starnowski.posmulten.configuration.core.model.SharedSchemaContextConfiguration type. [256](https://github.com/starnowski/posmulten/issues/256)
+    - Added com.github.starnowski.posmulten.configuration.yaml.mappers.CustomDefinitionEntryMapper type. [256](https://github.com/starnowski/posmulten/issues/256)
+    - Added com.github.starnowski.posmulten.configuration.yaml.model.CustomDefinitionEntry type. [256](https://github.com/starnowski/posmulten/issues/256)
+    - Added field customSQLDefinitions of type java.util.List<com.github.starnowski.posmulten.configuration.yaml.CustomDefinitionEntry> to com.github.starnowski.posmulten.configuration.yaml.SharedSchemaContextConfiguration type. [256](https://github.com/starnowski/posmulten/issues/256)
+    - Added com.github.starnowski.posmulten.configuration.yaml.validation.CustomPositionValidValue type. [256](https://github.com/starnowski/posmulten/issues/256)
+    - Added com.github.starnowski.posmulten.configuration.yaml.validation.CustomPositionValidator type. [256](https://github.com/starnowski/posmulten/issues/256)
+    - Added com.github.starnowski.posmulten.configuration.yaml.validation.EnumNamePattern type. [256](https://github.com/starnowski/posmulten/issues/256)
+    - Added com.github.starnowski.posmulten.configuration.yaml.validation.EnumNamePatternValidator type. [256](https://github.com/starnowski/posmulten/issues/256)
+    
+- Added feature that allows to specify schema now in configuration file [245](https://github.com/starnowski/posmulten/issues/245)
+    - Added field tableSchema of type java.util.Optional<String> to com.github.starnowski.posmulten.configuration.core.model.ForeignKeyConfiguration type. [245](https://github.com/starnowski/posmulten/issues/245)
+    - Added field schema of type java.util.Optional<String> to com.github.starnowski.posmulten.configuration.core.model.TableEntry type. [245](https://github.com/starnowski/posmulten/issues/245)
+    - Added field tableSchema of type java.util.Optional<String> to com.github.starnowski.posmulten.configuration.yaml.model.ForeignKeyConfiguration type. [245](https://github.com/starnowski/posmulten/issues/245)
+    - Added field schema of type java.util.Optional<String> to com.github.starnowski.posmulten.configuration.yaml.model.TableEntry type. [245](https://github.com/starnowski/posmulten/issues/245)
+    - Added com.github.starnowski.posmulten.configuration.yaml.model.StringWrapperWithNullValue type. [245](https://github.com/starnowski/posmulten/issues/245)
+    - Added ValidationMessages.properties file for default translation of error messages related to configuration-yaml-interpreter module. [245](https://github.com/starnowski/posmulten/issues/245)
 
 ## [0.5.6] - 2022-11-04
 

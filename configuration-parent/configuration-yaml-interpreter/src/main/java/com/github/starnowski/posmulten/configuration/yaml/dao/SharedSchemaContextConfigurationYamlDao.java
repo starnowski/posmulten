@@ -95,7 +95,6 @@ public class SharedSchemaContextConfigurationYamlDao {
 
     private void prepareNodePathBasedOnParentNodeClass(List<String> nodes, Path.Node node, Class<?> parentNodeClass) {
         try {
-            //TODO
             if (node.getName() == null) {
                 return;
             }
