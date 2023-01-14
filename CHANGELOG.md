@@ -9,6 +9,7 @@ https://keepachangelog.com/en/1.0.0/
 https://www.markdownguide.org/basic-syntax/
 
 * [Unreleased](#unreleased)
+* [0.6.0](#060---2023-01-14)
 * [0.5.6](#056---2022-11-04)
 * [0.5.5](#055---2022-06-05)
 * [0.5.4](#054---2022-06-05)
@@ -25,6 +26,13 @@ https://www.markdownguide.org/basic-syntax/
 * [0.2.0](#020---2020-11-14)
 
 ## [Unreleased]
+
+## [0.6.0] - 2023-01-14
+
+### Changed
+
+- Changed method signature com.github.starnowski.posmulten.configuration.core.ForeignKeyConfigurationEnricher#enrich(com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder, String, com.github.starnowski.posmulten.configuration.core.model.ForeignKeyConfiguration) to
+    com.github.starnowski.posmulten.configuration.core.ForeignKeyConfigurationEnriche#enrichcom.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder, String, java.util.Optional<String>, com.github.starnowski.posmulten.configuration.core.model.ForeignKeyConfiguration)
 
 ## [0.5.6] - 2022-11-04
 
