@@ -37,11 +37,12 @@ https://www.markdownguide.org/basic-syntax/
 
 ### Added
 
-- Added field tableSchema of type java.util.Optional<String> to com.github.starnowski.posmulten.configuration.core.model.ForeignKeyConfiguration type. [245](https://github.com/starnowski/posmulten/issues/245)
-- Added field schema of type java.util.Optional<String> to com.github.starnowski.posmulten.configuration.core.model.TableEntry type. [245](https://github.com/starnowski/posmulten/issues/245)
-- Added field tableSchema of type java.util.Optional<String> to com.github.starnowski.posmulten.configuration.yaml.model.ForeignKeyConfiguration type. [245](https://github.com/starnowski/posmulten/issues/245)
-- Added field schema of type java.util.Optional<String> to com.github.starnowski.posmulten.configuration.yaml.model.TableEntry type. [245](https://github.com/starnowski/posmulten/issues/245)
-- Added com.github.starnowski.posmulten.configuration.yaml.model.StringWrapperWithNullValue type. [245](https://github.com/starnowski/posmulten/issues/245)
+- Added feature that allows to specify schema now in configuration file [245](https://github.com/starnowski/posmulten/issues/245)
+    - Added field tableSchema of type java.util.Optional<String> to com.github.starnowski.posmulten.configuration.core.model.ForeignKeyConfiguration type. [245](https://github.com/starnowski/posmulten/issues/245)
+    - Added field schema of type java.util.Optional<String> to com.github.starnowski.posmulten.configuration.core.model.TableEntry type. [245](https://github.com/starnowski/posmulten/issues/245)
+    - Added field tableSchema of type java.util.Optional<String> to com.github.starnowski.posmulten.configuration.yaml.model.ForeignKeyConfiguration type. [245](https://github.com/starnowski/posmulten/issues/245)
+    - Added field schema of type java.util.Optional<String> to com.github.starnowski.posmulten.configuration.yaml.model.TableEntry type. [245](https://github.com/starnowski/posmulten/issues/245)
+    - Added com.github.starnowski.posmulten.configuration.yaml.model.StringWrapperWithNullValue type. [245](https://github.com/starnowski/posmulten/issues/245)
 
 ## [0.5.6] - 2022-11-04
 
