@@ -1,5 +1,6 @@
 package com.github.starnowski.posmulten.configuration.core
 
+import com.github.starnowski.posmulten.configuration.core.model.CustomDefinitionEntry
 import com.github.starnowski.posmulten.configuration.core.model.SharedSchemaContextConfiguration
 import com.github.starnowski.posmulten.configuration.core.model.SqlDefinitionsValidation
 import com.github.starnowski.posmulten.configuration.core.model.TableEntry
@@ -14,11 +15,12 @@ class DefaultSharedSchemaContextBuilderConfigurationEnricherTest extends Abstrac
     def tablesEntriesEnricher = Mock(TablesEntriesEnricher)
     def validTenantValueConstraintConfigurationEnricher = Mock(ValidTenantValueConstraintConfigurationEnricher)
     def sqlDefinitionsValidationEnricher = Mock(SqlDefinitionsValidationEnricher)
+    def customDefinitionEntriesEnricher = Mock(CustomDefinitionEntriesEnricher)
     DefaultSharedSchemaContextBuilderConfigurationEnricher tested
 
     def setup()
     {
-        tested = new DefaultSharedSchemaContextBuilderConfigurationEnricher(tablesEntriesEnricher, validTenantValueConstraintConfigurationEnricher, sqlDefinitionsValidationEnricher)
+        tested = new DefaultSharedSchemaContextBuilderConfigurationEnricher(tablesEntriesEnricher, validTenantValueConstraintConfigurationEnricher, sqlDefinitionsValidationEnricher, customDefinitionEntriesEnricher)
     }
 
     @Unroll
@@ -119,5 +121,21 @@ class DefaultSharedSchemaContextBuilderConfigurationEnricherTest extends Abstrac
         then:
             result == builder
             1 * sqlDefinitionsValidationEnricher.enrich(builder, validationConfiguration)
+    }
+
+    def "should use enricher components to set custom sql definitions"()
+    {
+        given:
+            def customDefinitions = [new CustomDefinitionEntry().setCustomPosition("SSS")]
+            def builder = prepareBuilderMockWithZeroExpectationOfMethodsInvocation()
+            def configuration = new SharedSchemaContextConfiguration()
+                    .setCustomDefinitions([new CustomDefinitionEntry().setCustomPosition("SSS")])
+
+        when:
+            def result = tested.enrich(builder, configuration)
+
+        then:
+            result == builder
+            1 * customDefinitionEntriesEnricher.enrich(builder, customDefinitions)
     }
 }

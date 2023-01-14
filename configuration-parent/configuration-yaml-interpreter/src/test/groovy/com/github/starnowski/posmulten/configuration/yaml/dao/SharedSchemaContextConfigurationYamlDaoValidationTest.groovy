@@ -9,6 +9,7 @@ import static com.github.starnowski.posmulten.configuration.yaml.TestProperties.
 import static com.github.starnowski.posmulten.configuration.yaml.TestProperties.INVALID_ROOT_NODE_BLANK_FIELDS_FILE_PATH
 import static com.github.starnowski.posmulten.configuration.yaml.TestProperties.INVALID_NESTED_NODE_BLANK_FIELDS_FILE_PATH
 import static com.github.starnowski.posmulten.configuration.yaml.TestProperties.INVALID_NESTED_NODE_EMPTY_LIST_FILE_PATH
+import static com.github.starnowski.posmulten.configuration.yaml.TestProperties.INVALID_CUSTOM_DEFINITIONS_FIELDS_PATH
 
 class SharedSchemaContextConfigurationYamlDaoValidationTest extends AbstractSpecification {
 
@@ -109,6 +110,28 @@ class SharedSchemaContextConfigurationYamlDaoValidationTest extends AbstractSpec
                              "tables[2].foreign_keys[2].foreign_key_primary_key_columns_mappings.parent_comment_id must not be blank",
                              "tables[2].foreign_keys[2].foreign_key_primary_key_columns_mappings.<map key> must not be blank",
                              "tables[1].foreign_keys[0].constraint_name must not be blank"
+            ]
+    }
+
+    @Unroll
+    def "should throw exception that contains error message (#errorMessage) for file invalid-custom-definitions.yaml"()
+    {
+        given:
+            def resolvedPath = resolveFilePath(INVALID_CUSTOM_DEFINITIONS_FIELDS_PATH)
+
+        when:
+            tested.read(resolvedPath)
+
+        then:
+            def ex = thrown(YamlInvalidSchema)
+            ex
+            ex.getErrorMessages().contains(errorMessage)
+
+        where:
+            errorMessage << ["custom_sql_definitions[1].position must not be null",
+                             "custom_sql_definitions[3].position available values are AT_END, AT_BEGINNING, CUSTOM",
+                             "custom_sql_definitions[0].position must not be null",
+                             "custom_sql_definitions[2] for definition with position 'CUSTOM' the property 'custom_position' is required"
             ]
     }
 }

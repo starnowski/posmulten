@@ -8,6 +8,7 @@ The YAML schema description is below.
 *   [Setting a list of invalid tenant identifier values](#setting-a-list-of-invalid-tenant-identifier-values)
 *   [Tables configuration](#tables-configuration)
 *   [SQL definitions validation](#sql-definitions-validation)
+*   [Custom SQL definitions](#custom-sql-definitions)
 *   [Details](#details)
 
 ## Simple example:
@@ -221,6 +222,45 @@ sql_definitions_validation:
   disabled: false
 ```
 
+## Custom SQL Definitions
+
+The __custom_sql_definitions__ property is an array of objects that purpose is to define custom SQL definitions that should be added to the generated script.
+Just like the [__tables__](#tables-configuration) property, it is also a top element of the configuration file just like in the below example.
+
+Example:
+```yaml
+tables:
+  - name: groups
+
+...
+
+custom_sql_definitions:
+  - position: AT_END
+    creation_script:  |
+      ALTER TABLE groups ADD COLUMN text_col text;
+    drop_script: |
+      ALTER TABLE groups DROP COLUMN text_col;
+    validation_scripts:
+      - |
+        SELECT COUNT(1) FROM information_schema.columns WHERE table_catalog = 'postgresql_core' AND table_schema = 'public' AND table_name = 'groups' AND column_name = 'text_col';
+  - position: CUSTOM
+    custom_position: "Some custom position"
+    creation_script:  |
+      ALTER ...
+    validation_scripts:
+      - |
+        SELECT (371) FROM ...
+```
+
+__custom_sql_definitions__ object
+
+| Property name |   Type    |   Required    |   Nullable    |   Description |
+|---------------|-----------|---------------|---------------|---------------|
+|position   |   String  |   Yes |   No  |   Specify where definition should be added in generated script. Available values are AT_END (at the end), AT_BEGINNING (at the beginning) and CUSTOM. For the CUSTOM the __custom_position__ property has to be also specified  |
+|creation_script   |   String  |   Yes |   No  |   SQL statement added to creation script |
+|drop_script   |   String  |   No |   No  |   SQL statement added to dropping script |
+|validation_scripts   |   Array of strings  |   Yes |   No  |   SQL statements that check if changes made by __creation_script__ were added. Each statement as result should return one integer column, value bigger than zero means that changes were applied correctly otherwise the changes were not applied |
+|custom_position   |   String  |   Only if __position__ has the CUSTOM value  |   No  |   Custom position of the script. This does not have to be an integer value. There might be a case that some custom component was added in the code and it handles the definition with a specific position  |
 
 ## Details
 

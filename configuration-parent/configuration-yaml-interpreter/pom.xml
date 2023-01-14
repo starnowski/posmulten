@@ -90,6 +90,30 @@
                 </plugins>
             </build>
         </profile>
+        <profile>
+            <id>pitest</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.pitest</groupId>
+                        <artifactId>pitest-maven</artifactId>
+                        <version>1.9.9</version>
+                        <configuration>
+                            <mutators>
+                                <mutator>STRONGER</mutator>
+                            </mutators>
+                            <mutationThreshold>95</mutationThreshold>
+                            <excludedClasses>
+                                <excludedClass>com.github.starnowski.posmulten.configuration.yaml.model.*</excludedClass>
+                            </excludedClasses>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
     </profiles>
 
     <build>

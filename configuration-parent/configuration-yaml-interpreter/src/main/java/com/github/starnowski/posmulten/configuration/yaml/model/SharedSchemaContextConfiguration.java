@@ -59,6 +59,10 @@ public class SharedSchemaContextConfiguration {
     @Valid
     @JsonProperty(value = "sql_definitions_validation")
     private SqlDefinitionsValidation sqlDefinitionsValidation;
+    @Valid
+    @JsonProperty(value = "custom_sql_definitions")
+    private List<CustomDefinitionEntry> customSQLDefinitions;
+
     public SharedSchemaContextConfiguration setCurrentTenantIdPropertyType(String currentTenantIdPropertyType) {
         this.currentTenantIdPropertyType = new StringWrapperWithNotBlankValue(currentTenantIdPropertyType);
         return this;
@@ -121,6 +125,11 @@ public class SharedSchemaContextConfiguration {
 
     public SharedSchemaContextConfiguration setDefaultTenantIdColumn(StringWrapperWithNotBlankValue defaultTenantIdColumn) {
         this.defaultTenantIdColumn = defaultTenantIdColumn;
+        return this;
+    }
+
+    public SharedSchemaContextConfiguration withCustomSQLDefinitions(List<CustomDefinitionEntry> customSQLDefinitions) {
+        this.customSQLDefinitions = customSQLDefinitions;
         return this;
     }
 }

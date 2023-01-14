@@ -95,6 +95,10 @@ public class SharedSchemaContextConfigurationYamlDao {
 
     private void prepareNodePathBasedOnParentNodeClass(List<String> nodes, Path.Node node, Class<?> parentNodeClass) {
         try {
+            //TODO
+            if (node.getName() == null) {
+                return;
+            }
             Field field = parentNodeClass.getDeclaredField(node.getName());
             JsonProperty annotation = field.getAnnotation(JsonProperty.class);
             if (annotation != null) {

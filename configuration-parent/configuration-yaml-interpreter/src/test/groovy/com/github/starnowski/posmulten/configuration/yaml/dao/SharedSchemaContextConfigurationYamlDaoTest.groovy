@@ -3,10 +3,12 @@ package com.github.starnowski.posmulten.configuration.yaml.dao
 import com.github.starnowski.posmulten.configuration.yaml.AbstractSpecification
 import com.github.starnowski.posmulten.configuration.yaml.IntegerRandomizer
 import com.github.starnowski.posmulten.configuration.yaml.OptionalRandomizer
+import com.github.starnowski.posmulten.configuration.yaml.exceptions.YamlInvalidSchema
 import com.github.starnowski.posmulten.configuration.yaml.model.*
 import org.jeasy.random.EasyRandom
 import org.jeasy.random.EasyRandomParameters
 import org.jeasy.random.FieldPredicates
+import org.jeasy.random.randomizers.misc.EnumRandomizer
 import org.jeasy.random.randomizers.text.StringDelegatingRandomizer
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
@@ -57,6 +59,25 @@ class SharedSchemaContextConfigurationYamlDaoTest extends AbstractSpecification 
 
         and: "tests object should be equal"
             result == testObject
+
+        where:
+            filePath << [ALL_FIELDS_FILE_PATH, ONLY_MANDATORY_FIELDS_FILE_PATH]
+    }
+
+    @Unroll
+    def "should not save file when trying to save invalid object based on schema"()
+    {
+        given:
+            def resolvedPath = resolveFilePath(filePath)
+            def testObject = tested.read(resolvedPath)
+            def tmpFile = tempFolder.newFile("temp-config.yaml")
+            testObject.setGrantee(null)
+
+        when:
+            tested.save(testObject, tmpFile.getAbsoluteFile().getAbsolutePath())
+
+        then:
+            def ex = thrown(YamlInvalidSchema)
 
         where:
             filePath << [ALL_FIELDS_FILE_PATH, ONLY_MANDATORY_FIELDS_FILE_PATH]
@@ -200,6 +221,7 @@ class SharedSchemaContextConfigurationYamlDaoTest extends AbstractSpecification 
                     .randomize(FieldPredicates.named("identifierMinLength").and(FieldPredicates.ofType(Integer.class)).and(FieldPredicates.inClass(SqlDefinitionsValidation.class)), new IntegerRandomizer(1, 255))
                     .randomize(FieldPredicates.named("schema").and(FieldPredicates.ofType(Optional.class)).and(FieldPredicates.inClass(TableEntry.class)), new OptionalRandomizer(StringDelegatingRandomizer.aNewStringDelegatingRandomizer(new IntegerRandomizer(1, 255)), true))
                     .randomize(FieldPredicates.named("tableSchema").and(FieldPredicates.ofType(Optional.class)).and(FieldPredicates.inClass(ForeignKeyConfiguration.class)), new OptionalRandomizer(StringDelegatingRandomizer.aNewStringDelegatingRandomizer(new IntegerRandomizer(1, 255)), true))
+                    .randomize(FieldPredicates.named("position").and(FieldPredicates.ofType(String.class)).and(FieldPredicates.inClass(CustomDefinitionEntry.class)), StringDelegatingRandomizer.aNewStringDelegatingRandomizer(new EnumRandomizer(com.github.starnowski.posmulten.configuration.core.model.CustomDefinitionEntry.CustomDefinitionPosition)))
             EasyRandom easyRandom = new EasyRandom(parameters)
             def randomObject = easyRandom.nextObject(SharedSchemaContextConfiguration)
             def tmpFile = tempFolder.newFile("rand-temp-config.yaml")
