@@ -45,7 +45,11 @@ https://www.markdownguide.org/basic-syntax/
     - Added com.github.starnowski.posmulten.configuration.yaml.mappers.CustomDefinitionEntryMapper type. [256](https://github.com/starnowski/posmulten/issues/256)
     - Added com.github.starnowski.posmulten.configuration.yaml.model.CustomDefinitionEntry type. [256](https://github.com/starnowski/posmulten/issues/256)
     - Added field customSQLDefinitions of type java.util.List<com.github.starnowski.posmulten.configuration.yaml.CustomDefinitionEntry> to com.github.starnowski.posmulten.configuration.yaml.SharedSchemaContextConfiguration type. [256](https://github.com/starnowski/posmulten/issues/256)
-
+    - Added com.github.starnowski.posmulten.configuration.yaml.validation.CustomPositionValidValue type. [256](https://github.com/starnowski/posmulten/issues/256)
+    - Added com.github.starnowski.posmulten.configuration.yaml.validation.CustomPositionValidator type. [256](https://github.com/starnowski/posmulten/issues/256)
+    - Added com.github.starnowski.posmulten.configuration.yaml.validation.EnumNamePattern type. [256](https://github.com/starnowski/posmulten/issues/256)
+    - Added com.github.starnowski.posmulten.configuration.yaml.validation.EnumNamePatternValidator type. [256](https://github.com/starnowski/posmulten/issues/256)
+    
 - Added feature that allows to specify schema now in configuration file [245](https://github.com/starnowski/posmulten/issues/245)
     - Added field tableSchema of type java.util.Optional<String> to com.github.starnowski.posmulten.configuration.core.model.ForeignKeyConfiguration type. [245](https://github.com/starnowski/posmulten/issues/245)
     - Added field schema of type java.util.Optional<String> to com.github.starnowski.posmulten.configuration.core.model.TableEntry type. [245](https://github.com/starnowski/posmulten/issues/245)
