@@ -60,7 +60,7 @@ public abstract class AbstractSharedSchemaContextDecorator implements ISharedSch
 
     @Override
     public ISetCurrentTenantIdFunctionPreparedStatementInvocationFactory getISetCurrentTenantIdFunctionPreparedStatementInvocationFactory() {
-        return null;
+        return new DefaultSetCurrentTenantIdFunctionPreparedStatementInvocationFactoryDecorator(this.sharedSchemaContext.getISetCurrentTenantIdFunctionPreparedStatementInvocationFactory());
     }
 
     @Override
@@ -94,6 +94,18 @@ public abstract class AbstractSharedSchemaContextDecorator implements ISharedSch
     }
 
     abstract protected String convert(String statement);
+
+    class DefaultSetCurrentTenantIdFunctionPreparedStatementInvocationFactoryDecorator extends DefaultDecorator<ISetCurrentTenantIdFunctionPreparedStatementInvocationFactory> implements ISetCurrentTenantIdFunctionPreparedStatementInvocationFactory {
+
+        DefaultSetCurrentTenantIdFunctionPreparedStatementInvocationFactoryDecorator(ISetCurrentTenantIdFunctionPreparedStatementInvocationFactory value) {
+            super(value);
+        }
+
+        @Override
+        public String returnPreparedStatementThatSetCurrentTenant() {
+            return convert(value.returnPreparedStatementThatSetCurrentTenant());
+        }
+    }
 
     class DefaultTenantHasAuthoritiesFunctionInvocationFactoryDecorator extends DefaultDecorator<TenantHasAuthoritiesFunctionInvocationFactory> implements TenantHasAuthoritiesFunctionInvocationFactory {
         DefaultTenantHasAuthoritiesFunctionInvocationFactoryDecorator(TenantHasAuthoritiesFunctionInvocationFactory value) {
