@@ -85,7 +85,7 @@ public abstract class AbstractSharedSchemaContextDecorator implements ISharedSch
 
     @Override
     public String getCurrentTenantIdPropertyType() {
-        return null;
+        return convert(this.sharedSchemaContext.getCurrentTenantIdPropertyType());
     }
 
     @Override
