@@ -37,7 +37,7 @@ abstract class AbstractSharedSchemaContextDecoratorTest<T extends AbstractShared
             def result = tested.getCurrentTenantIdPropertyType()
 
         then:
-            sharedSchemaContext.getCurrentTenantIdPropertyType() >> testStatement
+            1 * sharedSchemaContext.getCurrentTenantIdPropertyType() >> testStatement
             result == expectedStatement
     }
 
