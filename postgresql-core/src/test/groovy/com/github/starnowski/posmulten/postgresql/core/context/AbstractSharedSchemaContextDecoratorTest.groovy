@@ -38,6 +38,31 @@ abstract class AbstractSharedSchemaContextDecoratorTest<T extends AbstractShared
             results.get(1).getCreateScript() == expectedStatement2
     }
 
+    def "GetSqlDefinitions - getDropScript()"() {
+        given:
+            def val1 = "Value2"
+            def val2 = "Some template}}"
+            def testStatement1 = "Drop fun( " + getFirstTemplateVariable() + "and second part " + getSecondTemplateVariable() + "end" + val2 + "end"
+            def testStatement2 = "Drop tab( " + getFirstTemplateVariable() + "and second part " + getSecondTemplateVariable() + "end" + getFirstTemplateVariable()
+            def expectedStatement1 = "Drop fun( " + val1 + "and second part " + val2 + "end" + val2 + "end"
+            def expectedStatement2 = "Drop tab( " + val1 + "and second part " + val2 + "end" + val1
+            ISharedSchemaContext sharedSchemaContext = Mock(ISharedSchemaContext)
+            def tested = prepareTestedObject(sharedSchemaContext, val1, val2)
+            SQLDefinition def1 = Mock(SQLDefinition)
+            SQLDefinition def2 = Mock(SQLDefinition)
+            def1.getDropScript() >> testStatement1
+            def2.getDropScript() >> testStatement2
+
+        when:
+            def results = tested.getSqlDefinitions()
+
+        then:
+            1 * sharedSchemaContext.getSqlDefinitions() >> [def1, def2]
+            results.size() == 2
+            results.get(0).getDropScript() == expectedStatement1
+            results.get(1).getDropScript() == expectedStatement2
+    }
+
     def "GetTenantHasAuthoritiesFunctionInvocationFactory"() {
         given:
             def val1 = "eeesdf"
