@@ -1,5 +1,6 @@
 package com.github.starnowski.posmulten.postgresql.core.context
 
+import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition
 import com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValue
 import com.github.starnowski.posmulten.postgresql.core.rls.PermissionCommandPolicyEnum
 import com.github.starnowski.posmulten.postgresql.core.rls.RLSExpressionTypeEnum
@@ -11,7 +12,30 @@ import com.github.starnowski.posmulten.postgresql.core.rls.function.ISetCurrentT
 import spock.lang.Specification
 
 abstract class AbstractSharedSchemaContextDecoratorTest<T extends AbstractSharedSchemaContextDecorator> extends Specification {
-    def "GetSqlDefinitions"() {
+
+    def "GetSqlDefinitions - getCreateScript()"() {
+        given:
+            def val1 = "Value2"
+            def val2 = "Some template}}"
+            def testStatement1 = "Select fun( " + getFirstTemplateVariable() + "and second part " + getSecondTemplateVariable() + "end"
+            def testStatement2 = "Select cs( " + getFirstTemplateVariable() + "and second part " + getSecondTemplateVariable() + "end" + getFirstTemplateVariable()
+            def expectedStatement1 = "Select fun( " + val1 + "and second part " + val2 + "end"
+            def expectedStatement2 = "Select cs( " + val1 + "and second part " + val2 + "end" + val1
+            ISharedSchemaContext sharedSchemaContext = Mock(ISharedSchemaContext)
+            def tested = prepareTestedObject(sharedSchemaContext, val1, val2)
+            SQLDefinition def1 = Mock(SQLDefinition)
+            SQLDefinition def2 = Mock(SQLDefinition)
+
+        when:
+            def results = tested.getSqlDefinitions()
+
+        then:
+            1 * def1.getCreateScript() >> testStatement1
+            1 * def2.getCreateScript() >> testStatement2
+            1 * sharedSchemaContext.getSqlDefinitions() >> [def1, def2]
+            results.size() == 2
+            results.get(0).getCreateScript() == expectedStatement1
+            results.get(1).getCreateScript() == expectedStatement2
     }
 
     def "GetTenantHasAuthoritiesFunctionInvocationFactory"() {
