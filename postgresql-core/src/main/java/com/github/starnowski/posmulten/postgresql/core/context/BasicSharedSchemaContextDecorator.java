@@ -17,6 +17,9 @@ public class BasicSharedSchemaContextDecorator extends AbstractSharedSchemaConte
 
     @Override
     protected String convert(String statement) {
+        if (statement == null) {
+            return null;
+        }
         for (Map.Entry<String, String> entry : variableValueMap.entrySet()) {
             statement = statement.replace(entry.getKey(), entry.getValue());
         }

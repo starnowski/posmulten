@@ -242,6 +242,18 @@ abstract class AbstractSharedSchemaContextDecoratorTest<T extends AbstractShared
             result == expectedStatement
     }
 
+    def "should return null when trying to covert null value"() {
+        given:
+            ISharedSchemaContext sharedSchemaContext = Mock(ISharedSchemaContext)
+            def tested = prepareTestedObject(sharedSchemaContext, "a", "z")
+
+        when:
+            def result = tested.convert(null)
+
+        then:
+            result == null
+    }
+
     abstract String getFirstTemplateVariable()
     abstract String getSecondTemplateVariable()
     abstract T prepareTestedObject(ISharedSchemaContext context, String value1, String value2)
