@@ -1,6 +1,7 @@
 package com.github.starnowski.posmulten.postgresql.core.context
 
 import com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValue
+import com.github.starnowski.posmulten.postgresql.core.rls.function.IGetCurrentTenantIdFunctionInvocationFactory
 import com.github.starnowski.posmulten.postgresql.core.rls.function.IIsTenantValidFunctionInvocationFactory
 import com.github.starnowski.posmulten.postgresql.core.rls.function.ISetCurrentTenantIdFunctionInvocationFactory
 import com.github.starnowski.posmulten.postgresql.core.rls.function.ISetCurrentTenantIdFunctionPreparedStatementInvocationFactory
@@ -14,6 +15,22 @@ abstract class AbstractSharedSchemaContextDecoratorTest<T extends AbstractShared
     }
 
     def "GetIGetCurrentTenantIdFunctionInvocationFactory"() {
+        given:
+            def val1 = "eeesdf"
+            def val2 = "dfcvz"
+            def testStatement = "UPDATE fun( " + getFirstTemplateVariable() + "and second part " + getSecondTemplateVariable() + "end"
+            def expectedStatement = "UPDATE fun( " + val1 + "and second part " + val2 + "end"
+            ISharedSchemaContext sharedSchemaContext = Mock(ISharedSchemaContext)
+            def tested = prepareTestedObject(sharedSchemaContext, val1, val2)
+            IGetCurrentTenantIdFunctionInvocationFactory factory = Mock(IGetCurrentTenantIdFunctionInvocationFactory)
+
+        when:
+            def result = tested.getIGetCurrentTenantIdFunctionInvocationFactory().returnGetCurrentTenantIdFunctionInvocation()
+
+        then:
+            1 * sharedSchemaContext.getIGetCurrentTenantIdFunctionInvocationFactory() >> factory
+            1 * factory.returnGetCurrentTenantIdFunctionInvocation() >> testStatement
+            result == expectedStatement
     }
 
     def "GetISetCurrentTenantIdFunctionInvocationFactory"() {
