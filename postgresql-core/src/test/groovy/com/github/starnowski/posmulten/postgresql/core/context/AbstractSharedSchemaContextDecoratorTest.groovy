@@ -1,6 +1,9 @@
 package com.github.starnowski.posmulten.postgresql.core.context
 
 import com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValue
+import com.github.starnowski.posmulten.postgresql.core.rls.PermissionCommandPolicyEnum
+import com.github.starnowski.posmulten.postgresql.core.rls.RLSExpressionTypeEnum
+import com.github.starnowski.posmulten.postgresql.core.rls.TenantHasAuthoritiesFunctionInvocationFactory
 import com.github.starnowski.posmulten.postgresql.core.rls.function.IGetCurrentTenantIdFunctionInvocationFactory
 import com.github.starnowski.posmulten.postgresql.core.rls.function.IIsTenantValidFunctionInvocationFactory
 import com.github.starnowski.posmulten.postgresql.core.rls.function.ISetCurrentTenantIdFunctionInvocationFactory
@@ -12,6 +15,27 @@ abstract class AbstractSharedSchemaContextDecoratorTest<T extends AbstractShared
     }
 
     def "GetTenantHasAuthoritiesFunctionInvocationFactory"() {
+        given:
+            def val1 = "eeesdf"
+            def val2 = "dfcvz"
+            def testStatement = "UPDATE fun( " + getFirstTemplateVariable() + "and second part " + getSecondTemplateVariable() + "end"
+            def expectedStatement = "UPDATE fun( " + val1 + "and second part " + val2 + "end"
+            ISharedSchemaContext sharedSchemaContext = Mock(ISharedSchemaContext)
+            def tested = prepareTestedObject(sharedSchemaContext, val1, val2)
+            TenantHasAuthoritiesFunctionInvocationFactory factory = Mock(TenantHasAuthoritiesFunctionInvocationFactory)
+            FunctionArgumentValue functionArgumentTenant = Mock(FunctionArgumentValue)
+            PermissionCommandPolicyEnum permissionCommandPolicyEnum = PermissionCommandPolicyEnum.ALL
+            RLSExpressionTypeEnum rlsExpressionTypeEnum = RLSExpressionTypeEnum.USING
+            FunctionArgumentValue functionArgumentTable = Mock(FunctionArgumentValue)
+            FunctionArgumentValue functionArgumentSchema = Mock(FunctionArgumentValue)
+
+        when:
+            def result = tested.getTenantHasAuthoritiesFunctionInvocationFactory().returnTenantHasAuthoritiesFunctionInvocation(functionArgumentTenant, permissionCommandPolicyEnum, rlsExpressionTypeEnum, functionArgumentTable, functionArgumentSchema)
+
+        then:
+            1 * sharedSchemaContext.getTenantHasAuthoritiesFunctionInvocationFactory() >> factory
+            1 * factory.returnTenantHasAuthoritiesFunctionInvocation(functionArgumentTenant, permissionCommandPolicyEnum, rlsExpressionTypeEnum, functionArgumentTable, functionArgumentSchema) >> testStatement
+            result == expectedStatement
     }
 
     def "GetIGetCurrentTenantIdFunctionInvocationFactory"() {

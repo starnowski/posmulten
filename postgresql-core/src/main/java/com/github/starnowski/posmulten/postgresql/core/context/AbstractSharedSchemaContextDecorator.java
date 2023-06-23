@@ -136,7 +136,7 @@ public abstract class AbstractSharedSchemaContextDecorator extends DefaultDecora
 
         @Override
         public String returnTenantHasAuthoritiesFunctionInvocation(FunctionArgumentValue tenantIdValue, PermissionCommandPolicyEnum permissionCommandPolicy, RLSExpressionTypeEnum rlsExpressionType, FunctionArgumentValue table, FunctionArgumentValue schema) {
-            return convert(value.returnTenantHasAuthoritiesFunctionInvocation(tenantIdValue, permissionCommandPolicy, rlsExpressionType, tenantIdValue, schema));
+            return convert(value.returnTenantHasAuthoritiesFunctionInvocation(tenantIdValue, permissionCommandPolicy, rlsExpressionType, table, schema));
         }
     }
 
