@@ -10,8 +10,8 @@ import com.github.starnowski.posmulten.postgresql.core.rls.function.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
+import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
 
 public abstract class AbstractSharedSchemaContextDecorator extends DefaultDecorator<ISharedSchemaContext> implements ISharedSchemaContext {
@@ -97,6 +97,18 @@ public abstract class AbstractSharedSchemaContextDecorator extends DefaultDecora
 
     abstract protected String convert(String statement);
 
+    class DefaultIsRecordBelongsToCurrentTenantFunctionInvocationFactoryDecorator extends DefaultDecorator<IsRecordBelongsToCurrentTenantFunctionInvocationFactory> implements IsRecordBelongsToCurrentTenantFunctionInvocationFactory {
+
+        DefaultIsRecordBelongsToCurrentTenantFunctionInvocationFactoryDecorator(IsRecordBelongsToCurrentTenantFunctionInvocationFactory value) {
+            super(value);
+        }
+
+        @Override
+        public String returnIsRecordBelongsToCurrentTenantFunctionInvocation(Map<String, FunctionArgumentValue> primaryColumnsValuesMap) {
+            return convert(value.returnIsRecordBelongsToCurrentTenantFunctionInvocation(primaryColumnsValuesMap));
+        }
+    }
+
     class DefaultSQLDefinitionDecorator extends DefaultDecorator<SQLDefinition> implements SQLDefinition {
 
         DefaultSQLDefinitionDecorator(SQLDefinition value) {
@@ -115,7 +127,7 @@ public abstract class AbstractSharedSchemaContextDecorator extends DefaultDecora
 
         @Override
         public List<String> getCheckingStatements() {
-            return Optional.ofNullable(value.getCheckingStatements()).orElse(new ArrayList<>()).stream().map(AbstractSharedSchemaContextDecorator.this::convert).collect(toList());
+            return ofNullable(value.getCheckingStatements()).orElse(new ArrayList<>()).stream().map(AbstractSharedSchemaContextDecorator.this::convert).collect(toList());
         }
     }
 

@@ -9,6 +9,8 @@ import com.github.starnowski.posmulten.postgresql.core.rls.function.IGetCurrentT
 import com.github.starnowski.posmulten.postgresql.core.rls.function.IIsTenantValidFunctionInvocationFactory
 import com.github.starnowski.posmulten.postgresql.core.rls.function.ISetCurrentTenantIdFunctionInvocationFactory
 import com.github.starnowski.posmulten.postgresql.core.rls.function.ISetCurrentTenantIdFunctionPreparedStatementInvocationFactory
+import com.github.starnowski.posmulten.postgresql.core.rls.function.IsRecordBelongsToCurrentTenantFunctionInvocationFactory
+import com.github.starnowski.posmulten.postgresql.test.utils.MapBuilder
 import spock.lang.Specification
 
 abstract class AbstractSharedSchemaContextDecoratorTest<T extends AbstractSharedSchemaContextDecorator> extends Specification {
@@ -172,8 +174,35 @@ abstract class AbstractSharedSchemaContextDecoratorTest<T extends AbstractShared
             result == expectedStatement
     }
 
-
     def "GetTableKeysIsRecordBelongsToCurrentTenantFunctionInvocationFactoryMap"() {
+        given:
+            def val1 = "emo"
+            def val2 = "cje"
+            def testStatement1 = "Select " + getFirstTemplateVariable() + "and second part " + getSecondTemplateVariable() + "end"
+            def expectedStatement1 = "Select " + val1 + "and second part " + val2 + "end"
+            def testStatement2 = "Select Fun" + getFirstTemplateVariable() + "and second part " + getSecondTemplateVariable() + "end"
+            def expectedStatement2 = "Select Fun" + val1 + "and second part " + val2 + "end"
+            ISharedSchemaContext sharedSchemaContext = Mock(ISharedSchemaContext)
+            def tested = prepareTestedObject(sharedSchemaContext, val1, val2)
+            IsRecordBelongsToCurrentTenantFunctionInvocationFactory factory1 = Mock(IsRecordBelongsToCurrentTenantFunctionInvocationFactory)
+            IsRecordBelongsToCurrentTenantFunctionInvocationFactory factory2 = Mock(IsRecordBelongsToCurrentTenantFunctionInvocationFactory)
+            TableKey tk1 = new TableKey("tab1", null)
+            TableKey tk2 = new TableKey("tab2", "some_schema")
+            factory1.returnIsRecordBelongsToCurrentTenantFunctionInvocation(_) >> testStatement1
+            factory2.returnIsRecordBelongsToCurrentTenantFunctionInvocation(_) >> testStatement2
+            Map<TableKey, IsRecordBelongsToCurrentTenantFunctionInvocationFactory> map = MapBuilder.mapBuilder()
+                .put(tk1, factory1)
+                .put(tk2, factory2)
+                .build()
+
+        when:
+            def results = tested.getTableKeysIsRecordBelongsToCurrentTenantFunctionInvocationFactoryMap()
+
+        then:
+            1 * sharedSchemaContext.getTableKeysIsRecordBelongsToCurrentTenantFunctionInvocationFactoryMap() >> map
+            results.keySet() == new HashSet(Arrays.asList(tk1, tk2))
+            results.get(tk1).returnIsRecordBelongsToCurrentTenantFunctionInvocation(new HashMap<String, FunctionArgumentValue>()) == expectedStatement1
+            results.get(tk2).returnIsRecordBelongsToCurrentTenantFunctionInvocation(new HashMap<String, FunctionArgumentValue>()) == expectedStatement2
     }
 
     def "GetIIsTenantValidFunctionInvocationFactory"() {
