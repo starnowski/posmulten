@@ -75,7 +75,7 @@ public abstract class AbstractSharedSchemaContextDecorator implements ISharedSch
 
     @Override
     public IIsTenantValidFunctionInvocationFactory getIIsTenantValidFunctionInvocationFactory() {
-        return null;
+        return new DefaultIsTenantValidFunctionInvocationFactoryDecorator(this.sharedSchemaContext.getIIsTenantValidFunctionInvocationFactory());
     }
 
     @Override
@@ -104,6 +104,18 @@ public abstract class AbstractSharedSchemaContextDecorator implements ISharedSch
         @Override
         public String returnPreparedStatementThatSetCurrentTenant() {
             return convert(value.returnPreparedStatementThatSetCurrentTenant());
+        }
+    }
+
+    class DefaultIsTenantValidFunctionInvocationFactoryDecorator extends DefaultDecorator<IIsTenantValidFunctionInvocationFactory> implements IIsTenantValidFunctionInvocationFactory {
+
+        DefaultIsTenantValidFunctionInvocationFactoryDecorator(IIsTenantValidFunctionInvocationFactory value) {
+            super(value);
+        }
+
+        @Override
+        public String returnIsTenantValidFunctionInvocation(FunctionArgumentValue argumentValue) {
+            return convert(value.returnIsTenantValidFunctionInvocation(argumentValue));
         }
     }
 
