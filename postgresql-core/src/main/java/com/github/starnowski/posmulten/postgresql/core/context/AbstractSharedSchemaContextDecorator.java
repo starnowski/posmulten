@@ -108,7 +108,7 @@ public abstract class AbstractSharedSchemaContextDecorator extends DefaultDecora
 
         @Override
         public String getDropScript() {
-            return null;
+            return convert(value.getDropScript());
         }
 
         @Override
