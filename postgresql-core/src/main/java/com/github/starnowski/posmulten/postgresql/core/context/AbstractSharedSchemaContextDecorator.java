@@ -10,6 +10,7 @@ import com.github.starnowski.posmulten.postgresql.core.rls.function.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
@@ -72,7 +73,8 @@ public abstract class AbstractSharedSchemaContextDecorator extends DefaultDecora
 
     @Override
     public Map<TableKey, IsRecordBelongsToCurrentTenantFunctionInvocationFactory> getTableKeysIsRecordBelongsToCurrentTenantFunctionInvocationFactoryMap() {
-        return null;
+        return this.value.getTableKeysIsRecordBelongsToCurrentTenantFunctionInvocationFactoryMap().entrySet().stream()
+                .collect(Collectors.toMap(entry -> entry.getKey(), entry -> new DefaultIsRecordBelongsToCurrentTenantFunctionInvocationFactoryDecorator(entry.getValue())));
     }
 
     @Override
