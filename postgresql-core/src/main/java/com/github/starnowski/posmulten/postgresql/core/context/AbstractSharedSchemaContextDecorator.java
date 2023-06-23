@@ -10,12 +10,10 @@ import com.github.starnowski.posmulten.postgresql.core.rls.function.*;
 import java.util.List;
 import java.util.Map;
 
-public abstract class AbstractSharedSchemaContextDecorator implements ISharedSchemaContext {
-
-    protected final ISharedSchemaContext sharedSchemaContext;
+public abstract class AbstractSharedSchemaContextDecorator extends DefaultDecorator<ISharedSchemaContext> implements ISharedSchemaContext {
 
     public AbstractSharedSchemaContextDecorator(ISharedSchemaContext sharedSchemaContext) {
-        this.sharedSchemaContext = sharedSchemaContext;
+        super(sharedSchemaContext);
     }
 
     @Override
@@ -25,27 +23,27 @@ public abstract class AbstractSharedSchemaContextDecorator implements ISharedSch
 
     @Override
     public void addSQLDefinition(SQLDefinition sqlDefinition) {
-        this.sharedSchemaContext.addSQLDefinition(sqlDefinition);
+        this.value.addSQLDefinition(sqlDefinition);
     }
 
     @Override
     public TenantHasAuthoritiesFunctionInvocationFactory getTenantHasAuthoritiesFunctionInvocationFactory() {
-        return new DefaultTenantHasAuthoritiesFunctionInvocationFactoryDecorator(this.sharedSchemaContext.getTenantHasAuthoritiesFunctionInvocationFactory());
+        return new DefaultTenantHasAuthoritiesFunctionInvocationFactoryDecorator(this.value.getTenantHasAuthoritiesFunctionInvocationFactory());
     }
 
     @Override
     public void setTenantHasAuthoritiesFunctionInvocationFactory(TenantHasAuthoritiesFunctionInvocationFactory factory) {
-        this.sharedSchemaContext.setTenantHasAuthoritiesFunctionInvocationFactory(factory);
+        this.value.setTenantHasAuthoritiesFunctionInvocationFactory(factory);
     }
 
     @Override
     public IGetCurrentTenantIdFunctionInvocationFactory getIGetCurrentTenantIdFunctionInvocationFactory() {
-        return new DefaultGetCurrentTenantIdFunctionInvocationFactoryDecorator(this.sharedSchemaContext.getIGetCurrentTenantIdFunctionInvocationFactory());
+        return new DefaultGetCurrentTenantIdFunctionInvocationFactoryDecorator(this.value.getIGetCurrentTenantIdFunctionInvocationFactory());
     }
 
     @Override
     public void setIGetCurrentTenantIdFunctionInvocationFactory(IGetCurrentTenantIdFunctionInvocationFactory factory) {
-        this.sharedSchemaContext.setIGetCurrentTenantIdFunctionInvocationFactory(factory);
+        this.value.setIGetCurrentTenantIdFunctionInvocationFactory(factory);
     }
 
     @Override
@@ -55,12 +53,12 @@ public abstract class AbstractSharedSchemaContextDecorator implements ISharedSch
 
     @Override
     public void setISetCurrentTenantIdFunctionInvocationFactory(ISetCurrentTenantIdFunctionInvocationFactory factory) {
-        this.sharedSchemaContext.setISetCurrentTenantIdFunctionInvocationFactory(factory);
+        this.value.setISetCurrentTenantIdFunctionInvocationFactory(factory);
     }
 
     @Override
     public ISetCurrentTenantIdFunctionPreparedStatementInvocationFactory getISetCurrentTenantIdFunctionPreparedStatementInvocationFactory() {
-        return new DefaultSetCurrentTenantIdFunctionPreparedStatementInvocationFactoryDecorator(this.sharedSchemaContext.getISetCurrentTenantIdFunctionPreparedStatementInvocationFactory());
+        return new DefaultSetCurrentTenantIdFunctionPreparedStatementInvocationFactoryDecorator(this.value.getISetCurrentTenantIdFunctionPreparedStatementInvocationFactory());
     }
 
     @Override
@@ -75,22 +73,22 @@ public abstract class AbstractSharedSchemaContextDecorator implements ISharedSch
 
     @Override
     public IIsTenantValidFunctionInvocationFactory getIIsTenantValidFunctionInvocationFactory() {
-        return new DefaultIsTenantValidFunctionInvocationFactoryDecorator(this.sharedSchemaContext.getIIsTenantValidFunctionInvocationFactory());
+        return new DefaultIsTenantValidFunctionInvocationFactoryDecorator(this.value.getIIsTenantValidFunctionInvocationFactory());
     }
 
     @Override
     public void setIIsTenantValidFunctionInvocationFactory(IIsTenantValidFunctionInvocationFactory factory) {
-        this.sharedSchemaContext.setIIsTenantValidFunctionInvocationFactory(factory);
+        this.value.setIIsTenantValidFunctionInvocationFactory(factory);
     }
 
     @Override
     public String getCurrentTenantIdPropertyType() {
-        return convert(this.sharedSchemaContext.getCurrentTenantIdPropertyType());
+        return convert(this.value.getCurrentTenantIdPropertyType());
     }
 
     @Override
     public void setCurrentTenantIdPropertyType(String currentTenantIdPropertyType) {
-        this.sharedSchemaContext.setCurrentTenantIdPropertyType(currentTenantIdPropertyType);
+        this.value.setCurrentTenantIdPropertyType(currentTenantIdPropertyType);
     }
 
     abstract protected String convert(String statement);
@@ -139,20 +137,6 @@ public abstract class AbstractSharedSchemaContextDecorator implements ISharedSch
         @Override
         public String returnGetCurrentTenantIdFunctionInvocation() {
             return convert(value.returnGetCurrentTenantIdFunctionInvocation());
-        }
-    }
-
-    class DefaultDecorator<T> implements IDecorator<T> {
-
-        protected final T value;
-
-        DefaultDecorator(T value) {
-            this.value = value;
-        }
-
-        @Override
-        public T unwrap() {
-            return value instanceof IDecorator ? ((IDecorator<T>) value).unwrap() : value;
         }
     }
 }
