@@ -25,13 +25,13 @@ abstract class AbstractSharedSchemaContextDecoratorTest<T extends AbstractShared
             def tested = prepareTestedObject(sharedSchemaContext, val1, val2)
             SQLDefinition def1 = Mock(SQLDefinition)
             SQLDefinition def2 = Mock(SQLDefinition)
+            def1.getCreateScript() >> testStatement1
+            def2.getCreateScript() >> testStatement2
 
         when:
             def results = tested.getSqlDefinitions()
 
         then:
-            1 * def1.getCreateScript() >> testStatement1
-            1 * def2.getCreateScript() >> testStatement2
             1 * sharedSchemaContext.getSqlDefinitions() >> [def1, def2]
             results.size() == 2
             results.get(0).getCreateScript() == expectedStatement1

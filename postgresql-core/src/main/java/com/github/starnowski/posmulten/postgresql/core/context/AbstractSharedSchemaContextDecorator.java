@@ -10,6 +10,8 @@ import com.github.starnowski.posmulten.postgresql.core.rls.function.*;
 import java.util.List;
 import java.util.Map;
 
+import static java.util.stream.Collectors.toList;
+
 public abstract class AbstractSharedSchemaContextDecorator extends DefaultDecorator<ISharedSchemaContext> implements ISharedSchemaContext {
 
     public AbstractSharedSchemaContextDecorator(ISharedSchemaContext sharedSchemaContext) {
@@ -18,7 +20,7 @@ public abstract class AbstractSharedSchemaContextDecorator extends DefaultDecora
 
     @Override
     public List<SQLDefinition> getSqlDefinitions() {
-        return null;
+        return value.getSqlDefinitions().stream().map(DefaultSQLDefinitionDecorator::new).collect(toList());
     }
 
     @Override
@@ -92,6 +94,28 @@ public abstract class AbstractSharedSchemaContextDecorator extends DefaultDecora
     }
 
     abstract protected String convert(String statement);
+
+    class DefaultSQLDefinitionDecorator extends DefaultDecorator<SQLDefinition> implements SQLDefinition {
+
+        DefaultSQLDefinitionDecorator(SQLDefinition value) {
+            super(value);
+        }
+
+        @Override
+        public String getCreateScript() {
+            return convert(value.getCreateScript());
+        }
+
+        @Override
+        public String getDropScript() {
+            return null;
+        }
+
+        @Override
+        public List<String> getCheckingStatements() {
+            return null;
+        }
+    }
 
     class DefaultSetCurrentTenantIdFunctionInvocationFactoryDecorator extends DefaultDecorator<ISetCurrentTenantIdFunctionInvocationFactory> implements ISetCurrentTenantIdFunctionInvocationFactory {
 
