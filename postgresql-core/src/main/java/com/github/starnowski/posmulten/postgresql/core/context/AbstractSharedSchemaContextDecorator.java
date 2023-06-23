@@ -48,7 +48,7 @@ public abstract class AbstractSharedSchemaContextDecorator extends DefaultDecora
 
     @Override
     public ISetCurrentTenantIdFunctionInvocationFactory getISetCurrentTenantIdFunctionInvocationFactory() {
-        return null;
+        return new DefaultSetCurrentTenantIdFunctionInvocationFactoryDecorator(this.value.getISetCurrentTenantIdFunctionInvocationFactory());
     }
 
     @Override
@@ -92,6 +92,18 @@ public abstract class AbstractSharedSchemaContextDecorator extends DefaultDecora
     }
 
     abstract protected String convert(String statement);
+
+    class DefaultSetCurrentTenantIdFunctionInvocationFactoryDecorator extends DefaultDecorator<ISetCurrentTenantIdFunctionInvocationFactory> implements ISetCurrentTenantIdFunctionInvocationFactory {
+
+        DefaultSetCurrentTenantIdFunctionInvocationFactoryDecorator(ISetCurrentTenantIdFunctionInvocationFactory value) {
+            super(value);
+        }
+
+        @Override
+        public String generateStatementThatSetTenant(String tenantId) {
+            return convert(this.value.generateStatementThatSetTenant(tenantId));
+        }
+    }
 
     class DefaultSetCurrentTenantIdFunctionPreparedStatementInvocationFactoryDecorator extends DefaultDecorator<ISetCurrentTenantIdFunctionPreparedStatementInvocationFactory> implements ISetCurrentTenantIdFunctionPreparedStatementInvocationFactory {
 
