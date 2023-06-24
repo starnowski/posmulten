@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class BuilderWithTemplateValuesRLSForSingleTableTest extends AbstractRLSForSingleTableTest {
     @Override
-    protected String getSchema() {
+    protected String getSchemaForSharedSchemaContextBuilderInitialization() {
         return "{{template_schema_value}}";
     }
 
@@ -30,5 +30,10 @@ public class BuilderWithTemplateValuesRLSForSingleTableTest extends AbstractRLSF
         setCurrentTenantIdFunctionInvocationFactory = sharedSchemaContext.getISetCurrentTenantIdFunctionInvocationFactory();
         sqlDefinitions.clear();
         sqlDefinitions.addAll(sharedSchemaContext.getSqlDefinitions());
+    }
+
+    @Override
+    protected String getSchema() {
+        return "non_public_schema";
     }
 }

@@ -56,9 +56,13 @@ public abstract class FullStackTest extends AbstractClassWithSQLDefinitionGenera
         return CORE_OWNER_USER;
     }
 
+    protected String getSchemaForSharedSchemaContextBuilderInitialization() {
+        return getSchema();
+    }
+
     @Test(testName = "create SQL definitions", description = "Create SQL function that creates statements that set current tenant value, retrieve current tenant value and create the row level security policy for a table that is multi-tenant aware")
     public void createSQLDefinitions() throws SharedSchemaContextBuilderException {
-        DefaultSharedSchemaContextBuilder defaultSharedSchemaContextBuilder = new DefaultSharedSchemaContextBuilder(getSchema());
+        DefaultSharedSchemaContextBuilder defaultSharedSchemaContextBuilder = new DefaultSharedSchemaContextBuilder(getSchemaForSharedSchemaContextBuilderInitialization());
         defaultSharedSchemaContextBuilder.setCurrentTenantIdProperty(VALID_CURRENT_TENANT_ID_PROPERTY_NAME);
         defaultSharedSchemaContextBuilder.setForceRowLevelSecurityForTableOwner(true);
         defaultSharedSchemaContextBuilder.setGrantee(getGranteeForSharedSchemaContextBuilderInitialization());
