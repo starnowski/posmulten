@@ -1,7 +1,7 @@
 package com.github.starnowski.posmulten.postgresql.core.functional.tests.sanity;
 
-import com.github.starnowski.posmulten.postgresql.core.context.BasicSharedSchemaContextDecorator;
-import com.github.starnowski.posmulten.postgresql.core.context.BasicSharedSchemaContextDecoratorContext;
+import com.github.starnowski.posmulten.postgresql.core.context.decorator.BasicSharedSchemaContextDecorator;
+import com.github.starnowski.posmulten.postgresql.core.context.decorator.BasicSharedSchemaContextDecoratorContext;
 import com.github.starnowski.posmulten.postgresql.core.context.exceptions.SharedSchemaContextBuilderException;
 import com.github.starnowski.posmulten.postgresql.test.utils.MapBuilder;
 

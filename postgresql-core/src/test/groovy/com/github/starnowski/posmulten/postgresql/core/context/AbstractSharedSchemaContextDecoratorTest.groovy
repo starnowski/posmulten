@@ -2,6 +2,7 @@ package com.github.starnowski.posmulten.postgresql.core.context
 
 import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition
 import com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValue
+import com.github.starnowski.posmulten.postgresql.core.context.decorator.AbstractSharedSchemaContextDecorator
 import com.github.starnowski.posmulten.postgresql.core.rls.PermissionCommandPolicyEnum
 import com.github.starnowski.posmulten.postgresql.core.rls.RLSExpressionTypeEnum
 import com.github.starnowski.posmulten.postgresql.core.rls.TenantHasAuthoritiesFunctionInvocationFactory

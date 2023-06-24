@@ -1,5 +1,7 @@
 package com.github.starnowski.posmulten.postgresql.core.context
 
+import com.github.starnowski.posmulten.postgresql.core.context.decorator.BasicSharedSchemaContextDecorator
+import com.github.starnowski.posmulten.postgresql.core.context.decorator.BasicSharedSchemaContextDecoratorContext
 import com.github.starnowski.posmulten.postgresql.test.utils.MapBuilder
 import spock.lang.Unroll
 
