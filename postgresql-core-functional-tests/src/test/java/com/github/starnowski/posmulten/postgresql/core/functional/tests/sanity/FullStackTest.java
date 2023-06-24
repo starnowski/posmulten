@@ -1,9 +1,9 @@
 package com.github.starnowski.posmulten.postgresql.core.functional.tests.sanity;
 
-import com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaContext;
 import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder;
-import com.github.starnowski.posmulten.postgresql.core.context.exceptions.SharedSchemaContextBuilderException;
+import com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaContext;
 import com.github.starnowski.posmulten.postgresql.core.context.TableKey;
+import com.github.starnowski.posmulten.postgresql.core.context.exceptions.SharedSchemaContextBuilderException;
 import com.github.starnowski.posmulten.postgresql.core.functional.tests.AbstractClassWithSQLDefinitionGenerationMethods;
 import com.github.starnowski.posmulten.postgresql.core.rls.function.ISetCurrentTenantIdFunctionInvocationFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,41 +28,40 @@ public abstract class FullStackTest extends AbstractClassWithSQLDefinitionGenera
     protected static final String USER_TENANT = "primary_tenant";
     protected static final String SECONDARY_USER_TENANT = "someXDAFAS_id";
     protected static final String CUSTOM_TENANT_COLUMN_NAME = "tenant";
-
-    abstract protected String getSchema();
-
     protected ISetCurrentTenantIdFunctionInvocationFactory setCurrentTenantIdFunctionInvocationFactory;
-
-    protected String getUsersTableReference()
-    {
-        return (getSchema() == null ? "" : getSchema() + ".") + "users";
-    }
-
-    protected String getNotificationsTableReference()
-    {
-        return (getSchema() == null ? "" : getSchema() + ".") + "notifications";
-    }
-
-    protected String getGroupsTableReference()
-    {
-        return (getSchema() == null ? "" : getSchema() + ".") + "groups";
-    }
-
-    protected String getUsersGroupsTableReference()
-    {
-        return (getSchema() == null ? "" : getSchema() + ".") + "users_groups";
-    }
-
+    protected ISharedSchemaContext sharedSchemaContext;
     @Autowired
     @Qualifier("ownerJdbcTemplate")
     protected JdbcTemplate ownerJdbcTemplate;
+
+    abstract protected String getSchema();
+
+    protected String getUsersTableReference() {
+        return (getSchema() == null ? "" : getSchema() + ".") + "users";
+    }
+
+    protected String getNotificationsTableReference() {
+        return (getSchema() == null ? "" : getSchema() + ".") + "notifications";
+    }
+
+    protected String getGroupsTableReference() {
+        return (getSchema() == null ? "" : getSchema() + ".") + "groups";
+    }
+
+    protected String getUsersGroupsTableReference() {
+        return (getSchema() == null ? "" : getSchema() + ".") + "users_groups";
+    }
+
+    protected String getGranteeForSharedSchemaContextBuilderInitialization() {
+        return CORE_OWNER_USER;
+    }
 
     @Test(testName = "create SQL definitions", description = "Create SQL function that creates statements that set current tenant value, retrieve current tenant value and create the row level security policy for a table that is multi-tenant aware")
     public void createSQLDefinitions() throws SharedSchemaContextBuilderException {
         DefaultSharedSchemaContextBuilder defaultSharedSchemaContextBuilder = new DefaultSharedSchemaContextBuilder(getSchema());
         defaultSharedSchemaContextBuilder.setCurrentTenantIdProperty(VALID_CURRENT_TENANT_ID_PROPERTY_NAME);
         defaultSharedSchemaContextBuilder.setForceRowLevelSecurityForTableOwner(true);
-        defaultSharedSchemaContextBuilder.setGrantee(CORE_OWNER_USER);
+        defaultSharedSchemaContextBuilder.setGrantee(getGranteeForSharedSchemaContextBuilderInitialization());
         defaultSharedSchemaContextBuilder.createTenantColumnForTable(NOTIFICATIONS_TABLE_NAME);
         defaultSharedSchemaContextBuilder.createRLSPolicyForTable(NOTIFICATIONS_TABLE_NAME, prepareIdColumnTypeForSingleColumnKey("uuid", "uuid"), CUSTOM_TENANT_COLUMN_NAME, "notifications_table_rls_policy");
         defaultSharedSchemaContextBuilder.createRLSPolicyForTable(USERS_TABLE_NAME, prepareIdColumnTypeForSingleColumnKey("id", "bigint"), "tenant_id", "users_table_rls_policy");
@@ -82,13 +81,12 @@ public abstract class FullStackTest extends AbstractClassWithSQLDefinitionGenera
         defaultSharedSchemaContextBuilder.setNameForFunctionThatChecksIfRecordExistsInTable(POSTS_TABLE_NAME, "is_post_belongs_to_current_tenant");
         defaultSharedSchemaContextBuilder.setNameForFunctionThatChecksIfRecordExistsInTable(COMMENTS_TABLE_NAME, "is_comment_belongs_to_current_tenant");
         defaultSharedSchemaContextBuilder.setNameForFunctionThatChecksIfRecordExistsInTable(GROUPS_TABLE_NAME, "is_group_belongs_to_current_tenant");
-        ISharedSchemaContext sharedSchemaContext = defaultSharedSchemaContextBuilder.build();
+        this.sharedSchemaContext = defaultSharedSchemaContextBuilder.build();
         setCurrentTenantIdFunctionInvocationFactory = sharedSchemaContext.getISetCurrentTenantIdFunctionInvocationFactory();
         sqlDefinitions.addAll(sharedSchemaContext.getSqlDefinitions());
     }
 
-    private Map<String, String> prepareIdColumnTypeForSingleColumnKey(String columnName, String columnType)
-    {
+    private Map<String, String> prepareIdColumnTypeForSingleColumnKey(String columnName, String columnType) {
         return mapBuilder().put(columnName, columnType).build();
     }
 
@@ -97,13 +95,11 @@ public abstract class FullStackTest extends AbstractClassWithSQLDefinitionGenera
                     config = @SqlConfig(transactionMode = ISOLATED),
                     executionPhase = BEFORE_TEST_METHOD)})
     @Test(dependsOnMethods = {"createSQLDefinitions"}, testName = "execute SQL definitions")
-    public void executeSQLDefinitions()
-    {
+    public void executeSQLDefinitions() {
         super.executeSQLDefinitions();
     }
 
-    protected TableKey tk(String table)
-    {
+    protected TableKey tk(String table) {
         return new TableKey(table, getSchema());
     }
 }
