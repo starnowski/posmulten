@@ -1,5 +1,7 @@
 package com.github.starnowski.posmulten.postgresql.core.context;
 
+import com.github.starnowski.posmulten.postgresql.core.context.decorator.IDecorator;
+
 public class DefaultDecorator<T> implements IDecorator<T> {
 
     protected final T value;
