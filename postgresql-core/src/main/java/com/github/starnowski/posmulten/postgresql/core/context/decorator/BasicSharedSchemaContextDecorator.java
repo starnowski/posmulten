@@ -17,6 +17,10 @@ public class BasicSharedSchemaContextDecorator extends AbstractSharedSchemaConte
         this.variableValueMap = unmodifiableMap(ofNullable(basicSharedSchemaContextDecoratorContext.getReplaceCharactersMap()).orElse(new HashMap<>()));
     }
 
+    Map<String, String> getVariableValueMap() {
+        return variableValueMap;
+    }
+
     @Override
     protected String convert(String statement) {
         if (statement == null) {
