@@ -14,14 +14,25 @@ class SharedSchemaContextDecoratorFactoryTest extends Specification {
             def decoratorContext = Mock(DefaultDecoratorContext)
             def decorator1 = Mock(ISharedSchemaContextDecorator)
             def decorator2 = Mock(ISharedSchemaContextDecorator)
-            def decoratorFactory = new SharedSchemaContextDecoratorFactory(factories)
+            def tested = new SharedSchemaContextDecoratorFactory(factories)
 
         when:
-            def result = decoratorFactory.build(sharedSchemaContext, decoratorContext)
+            def result = tested.build(sharedSchemaContext, decoratorContext)
 
         then:
             1 * factory1.build(sharedSchemaContext, decoratorContext) >> decorator1
             1 * factory2.build(decorator1, decoratorContext) >> decorator2
             result == decorator2
+    }
+
+    def "should correctly initialized factories array"(){
+        given:
+            def tested = new SharedSchemaContextDecoratorFactory()
+
+        when:
+            def results = tested.getFactories()
+
+        then:
+            results.collect { it.getClass() } == [BasicSharedSchemaContextDecoratorFactory]
     }
 }
