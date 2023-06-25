@@ -1,8 +1,9 @@
-package com.github.starnowski.posmulten.postgresql.core.context
+package com.github.starnowski.posmulten.postgresql.core.context.decorator
 
 import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition
 import com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValue
-import com.github.starnowski.posmulten.postgresql.core.context.decorator.AbstractSharedSchemaContextDecorator
+import com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaContext
+import com.github.starnowski.posmulten.postgresql.core.context.TableKey
 import com.github.starnowski.posmulten.postgresql.core.rls.PermissionCommandPolicyEnum
 import com.github.starnowski.posmulten.postgresql.core.rls.RLSExpressionTypeEnum
 import com.github.starnowski.posmulten.postgresql.core.rls.TenantHasAuthoritiesFunctionInvocationFactory
@@ -24,7 +25,7 @@ abstract class AbstractSharedSchemaContextDecoratorTest<T extends AbstractShared
             def testStatement2 = "Select cs( " + getFirstTemplateVariable() + "and second part " + getSecondTemplateVariable() + "end" + getFirstTemplateVariable()
             def expectedStatement1 = "Select fun( " + val1 + "and second part " + val2 + "end"
             def expectedStatement2 = "Select cs( " + val1 + "and second part " + val2 + "end" + val1
-            ISharedSchemaContext sharedSchemaContext = Mock(ISharedSchemaContext)
+        ISharedSchemaContext sharedSchemaContext = Mock(ISharedSchemaContext)
             def tested = prepareTestedObject(sharedSchemaContext, val1, val2)
             SQLDefinition def1 = Mock(SQLDefinition)
             SQLDefinition def2 = Mock(SQLDefinition)
@@ -187,7 +188,7 @@ abstract class AbstractSharedSchemaContextDecoratorTest<T extends AbstractShared
             def tested = prepareTestedObject(sharedSchemaContext, val1, val2)
             IsRecordBelongsToCurrentTenantFunctionInvocationFactory factory1 = Mock(IsRecordBelongsToCurrentTenantFunctionInvocationFactory)
             IsRecordBelongsToCurrentTenantFunctionInvocationFactory factory2 = Mock(IsRecordBelongsToCurrentTenantFunctionInvocationFactory)
-            TableKey tk1 = new TableKey("tab1", null)
+        TableKey tk1 = new TableKey("tab1", null)
             TableKey tk2 = new TableKey("tab2", "some_schema")
             factory1.returnIsRecordBelongsToCurrentTenantFunctionInvocation(_) >> testStatement1
             factory2.returnIsRecordBelongsToCurrentTenantFunctionInvocation(_) >> testStatement2

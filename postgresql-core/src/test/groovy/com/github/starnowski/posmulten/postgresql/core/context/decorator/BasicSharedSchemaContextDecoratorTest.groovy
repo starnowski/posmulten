@@ -1,7 +1,6 @@
-package com.github.starnowski.posmulten.postgresql.core.context
+package com.github.starnowski.posmulten.postgresql.core.context.decorator
 
-import com.github.starnowski.posmulten.postgresql.core.context.decorator.BasicSharedSchemaContextDecorator
-import com.github.starnowski.posmulten.postgresql.core.context.decorator.BasicSharedSchemaContextDecoratorContext
+import com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaContext
 import com.github.starnowski.posmulten.postgresql.test.utils.MapBuilder
 import spock.lang.Unroll
 
@@ -20,7 +19,7 @@ class BasicSharedSchemaContextDecoratorTest extends AbstractSharedSchemaContextD
     BasicSharedSchemaContextDecorator prepareTestedObject(ISharedSchemaContext context, String value1, String value2) {
         new BasicSharedSchemaContextDecorator(context, new BasicSharedSchemaContextDecoratorContext() {
             @Override
-            Map<String, String> getVariableValueMap() {
+            Map<String, String> getReplaceCharactersMap() {
                 MapBuilder.mapBuilder().put("{{testValue1}}", value1).put("someTemplateVar}}test", value2).build()
             }
         })
@@ -33,7 +32,7 @@ class BasicSharedSchemaContextDecoratorTest extends AbstractSharedSchemaContextD
             def map = variableValueMap
             def tested = new BasicSharedSchemaContextDecorator(context, new BasicSharedSchemaContextDecoratorContext() {
                 @Override
-                Map<String, String> getVariableValueMap() {
+                Map<String, String> getReplaceCharactersMap() {
                     map
                 }
             })

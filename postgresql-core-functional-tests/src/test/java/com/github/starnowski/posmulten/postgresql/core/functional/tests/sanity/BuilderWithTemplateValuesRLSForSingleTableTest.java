@@ -23,7 +23,7 @@ public class BuilderWithTemplateValuesRLSForSingleTableTest extends AbstractRLSF
         super.createSQLDefinitions();
         sharedSchemaContext = new BasicSharedSchemaContextDecorator(sharedSchemaContext, new BasicSharedSchemaContextDecoratorContext() {
             @Override
-            public Map<String, String> getVariableValueMap() {
+            public Map<String, String> getReplaceCharactersMap() {
                 return MapBuilder.mapBuilder().put("{{template_schema_value}}", "non_public_schema").put("{{template_user_grantee}}", CORE_OWNER_USER).build();
             }
         });

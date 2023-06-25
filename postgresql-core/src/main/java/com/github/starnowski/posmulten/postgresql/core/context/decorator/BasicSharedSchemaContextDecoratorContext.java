@@ -4,5 +4,5 @@ import java.util.Map;
 
 public interface BasicSharedSchemaContextDecoratorContext {
 
-    Map<String, String> getVariableValueMap();
+    Map<String, String> getReplaceCharactersMap();
 }

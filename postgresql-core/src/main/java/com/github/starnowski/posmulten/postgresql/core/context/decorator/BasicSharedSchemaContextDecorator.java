@@ -14,7 +14,7 @@ public class BasicSharedSchemaContextDecorator extends AbstractSharedSchemaConte
 
     public BasicSharedSchemaContextDecorator(ISharedSchemaContext sharedSchemaContext, BasicSharedSchemaContextDecoratorContext basicSharedSchemaContextDecoratorContext) {
         super(sharedSchemaContext);
-        this.variableValueMap = unmodifiableMap(ofNullable(basicSharedSchemaContextDecoratorContext.getVariableValueMap()).orElse(new HashMap<>()));
+        this.variableValueMap = unmodifiableMap(ofNullable(basicSharedSchemaContextDecoratorContext.getReplaceCharactersMap()).orElse(new HashMap<>()));
     }
 
     @Override
