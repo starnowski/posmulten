@@ -263,10 +263,13 @@ abstract class AbstractSharedSchemaContextDecoratorTest<T extends AbstractShared
             ISharedSchemaContext sharedSchemaContext = new SharedSchemaContext()
             def tested = prepareTestedObject(sharedSchemaContext, "1", "2")
             SQLDefinition sqlDefinition = Mock(SQLDefinition)
+            TenantHasAuthoritiesFunctionInvocationFactory tenantHasAuthoritiesFunctionInvocationFactory = Mock(TenantHasAuthoritiesFunctionInvocationFactory)
+            IGetCurrentTenantIdFunctionInvocationFactory getCurrentTenantIdFunctionInvocationFactory = Mock(IGetCurrentTenantIdFunctionInvocationFactory)
 
         when:
             tested.addSQLDefinition(sqlDefinition)
-
+            tested.setTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory)
+            tested.setIGetCurrentTenantIdFunctionInvocationFactory(getCurrentTenantIdFunctionInvocationFactory)
             def result = ((ISharedSchemaContextDecorator)tested).unwrap()
 
         then:
@@ -274,6 +277,12 @@ abstract class AbstractSharedSchemaContextDecoratorTest<T extends AbstractShared
 
         and: "should pass correctly sqlDefinition to wrapped object"
             result.getSqlDefinitions() == [sqlDefinition]
+
+        and: "should pass correctly tenantHasAuthoritiesFunctionInvocationFactory to wrapped object"
+            result.getTenantHasAuthoritiesFunctionInvocationFactory() == tenantHasAuthoritiesFunctionInvocationFactory
+
+        and: "should pass correctly getCurrentTenantIdFunctionInvocationFactory to wrapped object"
+        result.getIGetCurrentTenantIdFunctionInvocationFactory() == getCurrentTenantIdFunctionInvocationFactory
     }
 
     abstract String getFirstTemplateVariable()
