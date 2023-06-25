@@ -17,25 +17,24 @@ class BasicSharedSchemaContextDecoratorTest extends AbstractSharedSchemaContextD
 
     @Override
     BasicSharedSchemaContextDecorator prepareTestedObject(ISharedSchemaContext context, String value1, String value2) {
-        new BasicSharedSchemaContextDecorator(context, new BasicSharedSchemaContextDecoratorContext() {
-            @Override
-            Map<String, String> getReplaceCharactersMap() {
-                MapBuilder.mapBuilder().put("{{testValue1}}", value1).put("someTemplateVar}}test", value2).build()
-            }
-        })
+        DefaultDecoratorContext decoratorContext = DefaultDecoratorContext.builder()
+                .withReplaceCharactersMap(
+                        MapBuilder.mapBuilder()
+                        .put("{{testValue1}}", value1)
+                        .put("someTemplateVar}}test", value2)
+                        .build())
+                .build()
+        new BasicSharedSchemaContextDecorator(context, decoratorContext)
     }
 
     @Unroll
     def "should covert statement '#statement' to expected statement: '#expected', parameters mapping #variableValueMap"(){
         given:
             ISharedSchemaContext context = Mock(ISharedSchemaContext)
-            def map = variableValueMap
-            def tested = new BasicSharedSchemaContextDecorator(context, new BasicSharedSchemaContextDecoratorContext() {
-                @Override
-                Map<String, String> getReplaceCharactersMap() {
-                    map
-                }
-            })
+            DefaultDecoratorContext decoratorContext = DefaultDecoratorContext.builder()
+                .withReplaceCharactersMap(variableValueMap)
+                .build()
+            def tested = new BasicSharedSchemaContextDecorator(context, decoratorContext)
 
         when:
             def result = tested.convert(statement)
