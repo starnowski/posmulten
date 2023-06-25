@@ -2,7 +2,9 @@ package com.github.starnowski.posmulten.postgresql.core.context.decorator
 
 import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition
 import com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValue
+import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder
 import com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaContext
+import com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContext
 import com.github.starnowski.posmulten.postgresql.core.context.TableKey
 import com.github.starnowski.posmulten.postgresql.core.rls.PermissionCommandPolicyEnum
 import com.github.starnowski.posmulten.postgresql.core.rls.RLSExpressionTypeEnum
@@ -254,6 +256,24 @@ abstract class AbstractSharedSchemaContextDecoratorTest<T extends AbstractShared
 
         then:
             result == null
+    }
+
+    def "should wrap all methods for wrapped shared context that set its values"() {
+        given:
+            ISharedSchemaContext sharedSchemaContext = new SharedSchemaContext()
+            def tested = prepareTestedObject(sharedSchemaContext, "1", "2")
+            SQLDefinition sqlDefinition = Mock(SQLDefinition)
+
+        when:
+            tested.addSQLDefinition(sqlDefinition)
+
+            def result = ((ISharedSchemaContextDecorator)tested).unwrap()
+
+        then:
+            result.is(sharedSchemaContext)
+
+        and: "should pass correctly sqlDefinition to wrapped object"
+            result.getSqlDefinitions() == [sqlDefinition]
     }
 
     abstract String getFirstTemplateVariable()
