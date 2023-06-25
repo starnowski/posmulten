@@ -70,7 +70,7 @@ public abstract class AbstractSharedSchemaContextDecorator extends DefaultDecora
 
     @Override
     public void setISetCurrentTenantIdFunctionPreparedStatementInvocationFactory(ISetCurrentTenantIdFunctionPreparedStatementInvocationFactory factory) {
-        this.setISetCurrentTenantIdFunctionPreparedStatementInvocationFactory(factory);
+        this.value.setISetCurrentTenantIdFunctionPreparedStatementInvocationFactory(factory);
     }
 
     @Override

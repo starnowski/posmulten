@@ -265,11 +265,17 @@ abstract class AbstractSharedSchemaContextDecoratorTest<T extends AbstractShared
             SQLDefinition sqlDefinition = Mock(SQLDefinition)
             TenantHasAuthoritiesFunctionInvocationFactory tenantHasAuthoritiesFunctionInvocationFactory = Mock(TenantHasAuthoritiesFunctionInvocationFactory)
             IGetCurrentTenantIdFunctionInvocationFactory getCurrentTenantIdFunctionInvocationFactory = Mock(IGetCurrentTenantIdFunctionInvocationFactory)
+            ISetCurrentTenantIdFunctionInvocationFactory setCurrentTenantIdFunctionInvocationFactory = Mock(ISetCurrentTenantIdFunctionInvocationFactory)
+            ISetCurrentTenantIdFunctionPreparedStatementInvocationFactory setCurrentTenantIdFunctionPreparedStatementInvocationFactory = Mock(ISetCurrentTenantIdFunctionPreparedStatementInvocationFactory)
+            IIsTenantValidFunctionInvocationFactory isTenantValidFunctionInvocationFactory = Mock(IIsTenantValidFunctionInvocationFactory)
 
         when:
             tested.addSQLDefinition(sqlDefinition)
             tested.setTenantHasAuthoritiesFunctionInvocationFactory(tenantHasAuthoritiesFunctionInvocationFactory)
             tested.setIGetCurrentTenantIdFunctionInvocationFactory(getCurrentTenantIdFunctionInvocationFactory)
+            tested.setISetCurrentTenantIdFunctionInvocationFactory(setCurrentTenantIdFunctionInvocationFactory)
+            tested.setISetCurrentTenantIdFunctionPreparedStatementInvocationFactory(setCurrentTenantIdFunctionPreparedStatementInvocationFactory)
+            tested.setIIsTenantValidFunctionInvocationFactory(isTenantValidFunctionInvocationFactory)
             def result = ((ISharedSchemaContextDecorator)tested).unwrap()
 
         then:
@@ -282,7 +288,16 @@ abstract class AbstractSharedSchemaContextDecoratorTest<T extends AbstractShared
             result.getTenantHasAuthoritiesFunctionInvocationFactory() == tenantHasAuthoritiesFunctionInvocationFactory
 
         and: "should pass correctly getCurrentTenantIdFunctionInvocationFactory to wrapped object"
-        result.getIGetCurrentTenantIdFunctionInvocationFactory() == getCurrentTenantIdFunctionInvocationFactory
+            result.getIGetCurrentTenantIdFunctionInvocationFactory() == getCurrentTenantIdFunctionInvocationFactory
+
+        and: "should pass correctly setCurrentTenantIdFunctionInvocationFactory to wrapped object"
+            result.getISetCurrentTenantIdFunctionInvocationFactory() == setCurrentTenantIdFunctionInvocationFactory
+
+        and: "should pass correctly setCurrentTenantIdFunctionPreparedStatementInvocationFactory to wrapped object"
+            result.getISetCurrentTenantIdFunctionPreparedStatementInvocationFactory() == setCurrentTenantIdFunctionPreparedStatementInvocationFactory
+
+        and: "should pass correctly isTenantValidFunctionInvocationFactory to wrapped object"
+            result.getIIsTenantValidFunctionInvocationFactory() == isTenantValidFunctionInvocationFactory
     }
 
     abstract String getFirstTemplateVariable()
