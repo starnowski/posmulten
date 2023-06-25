@@ -268,6 +268,7 @@ abstract class AbstractSharedSchemaContextDecoratorTest<T extends AbstractShared
             ISetCurrentTenantIdFunctionInvocationFactory setCurrentTenantIdFunctionInvocationFactory = Mock(ISetCurrentTenantIdFunctionInvocationFactory)
             ISetCurrentTenantIdFunctionPreparedStatementInvocationFactory setCurrentTenantIdFunctionPreparedStatementInvocationFactory = Mock(ISetCurrentTenantIdFunctionPreparedStatementInvocationFactory)
             IIsTenantValidFunctionInvocationFactory isTenantValidFunctionInvocationFactory = Mock(IIsTenantValidFunctionInvocationFactory)
+            def currentTenantIdPropertyType = "text"
 
         when:
             tested.addSQLDefinition(sqlDefinition)
@@ -276,6 +277,7 @@ abstract class AbstractSharedSchemaContextDecoratorTest<T extends AbstractShared
             tested.setISetCurrentTenantIdFunctionInvocationFactory(setCurrentTenantIdFunctionInvocationFactory)
             tested.setISetCurrentTenantIdFunctionPreparedStatementInvocationFactory(setCurrentTenantIdFunctionPreparedStatementInvocationFactory)
             tested.setIIsTenantValidFunctionInvocationFactory(isTenantValidFunctionInvocationFactory)
+            tested.setCurrentTenantIdPropertyType(currentTenantIdPropertyType)
             def result = ((ISharedSchemaContextDecorator)tested).unwrap()
 
         then:
@@ -298,6 +300,9 @@ abstract class AbstractSharedSchemaContextDecoratorTest<T extends AbstractShared
 
         and: "should pass correctly isTenantValidFunctionInvocationFactory to wrapped object"
             result.getIIsTenantValidFunctionInvocationFactory() == isTenantValidFunctionInvocationFactory
+
+        and: "should pass correctly currentTenantIdPropertyType to wrapped object"
+            result.getCurrentTenantIdPropertyType() == currentTenantIdPropertyType
     }
 
     abstract String getFirstTemplateVariable()
