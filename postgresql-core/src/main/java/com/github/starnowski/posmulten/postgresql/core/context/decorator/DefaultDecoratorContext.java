@@ -25,7 +25,7 @@ public class DefaultDecoratorContext implements BasicSharedSchemaContextDecorato
         return new DefaultDecoratorContextBuilder();
     }
 
-    private static class DefaultDecoratorContextBuilder {
+    public static class DefaultDecoratorContextBuilder {
         private Map<String, String> replaceCharactersMap;
 
         public DefaultDecoratorContextBuilder withReplaceCharactersMap(Map<String, String> replaceCharactersMap) {
