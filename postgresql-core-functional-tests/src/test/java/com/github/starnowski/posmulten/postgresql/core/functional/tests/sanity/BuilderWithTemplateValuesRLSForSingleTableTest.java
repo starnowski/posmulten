@@ -1,7 +1,7 @@
 package com.github.starnowski.posmulten.postgresql.core.functional.tests.sanity;
 
-import com.github.starnowski.posmulten.postgresql.core.context.decorator.BasicSharedSchemaContextDecorator;
 import com.github.starnowski.posmulten.postgresql.core.context.decorator.DefaultDecoratorContext;
+import com.github.starnowski.posmulten.postgresql.core.context.decorator.SharedSchemaContextDecoratorFactory;
 import com.github.starnowski.posmulten.postgresql.core.context.exceptions.SharedSchemaContextBuilderException;
 import com.github.starnowski.posmulten.postgresql.test.utils.MapBuilder;
 
@@ -25,7 +25,8 @@ public class BuilderWithTemplateValuesRLSForSingleTableTest extends AbstractRLSF
                         .put("{{template_user_grantee}}", CORE_OWNER_USER)
                         .build())
                 .build();
-        sharedSchemaContext = new BasicSharedSchemaContextDecorator(sharedSchemaContext, decoratorContext);
+        SharedSchemaContextDecoratorFactory sharedSchemaContextDecoratorFactory = new SharedSchemaContextDecoratorFactory();
+        sharedSchemaContext = sharedSchemaContextDecoratorFactory.build(sharedSchemaContext, decoratorContext);
         setCurrentTenantIdFunctionInvocationFactory = sharedSchemaContext.getISetCurrentTenantIdFunctionInvocationFactory();
         sqlDefinitions.clear();
         sqlDefinitions.addAll(sharedSchemaContext.getSqlDefinitions());
