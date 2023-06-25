@@ -5,6 +5,8 @@ import com.github.starnowski.posmulten.configuration.core.context.IDefaultShared
 import com.github.starnowski.posmulten.configuration.core.exceptions.InvalidConfigurationException;
 import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder;
 import com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaContext;
+import com.github.starnowski.posmulten.postgresql.core.context.decorator.DefaultDecoratorContext;
+import com.github.starnowski.posmulten.postgresql.core.context.decorator.SharedSchemaContextDecoratorFactory;
 import com.github.starnowski.posmulten.postgresql.core.context.exceptions.SharedSchemaContextBuilderException;
 import lombok.extern.java.Log;
 
@@ -14,23 +16,36 @@ import java.util.logging.Level;
 @Log
 public class DDLScriptsGenerator {
 
+    private final DefaultSharedSchemaContextBuilderFactoryResolver defaultSharedSchemaContextBuilderFactoryResolver;
+    private final DDLWriter ddlWriter;
+    private final SharedSchemaContextDecoratorFactory sharedSchemaContextDecoratorFactory;
+
     public DDLScriptsGenerator() {
         this(new DefaultSharedSchemaContextBuilderFactoryResolver(), new DDLWriter());
     }
 
     public DDLScriptsGenerator(DefaultSharedSchemaContextBuilderFactoryResolver defaultSharedSchemaContextBuilderFactoryResolver, DDLWriter ddlWriter) {
-        this.defaultSharedSchemaContextBuilderFactoryResolver = defaultSharedSchemaContextBuilderFactoryResolver;
-        this.ddlWriter = ddlWriter;
+        this(defaultSharedSchemaContextBuilderFactoryResolver, ddlWriter, new SharedSchemaContextDecoratorFactory());
     }
 
-    private final DefaultSharedSchemaContextBuilderFactoryResolver defaultSharedSchemaContextBuilderFactoryResolver;
-    private final DDLWriter ddlWriter;
+    public DDLScriptsGenerator(DefaultSharedSchemaContextBuilderFactoryResolver defaultSharedSchemaContextBuilderFactoryResolver, DDLWriter ddlWriter, SharedSchemaContextDecoratorFactory sharedSchemaContextDecoratorFactory) {
+        this.defaultSharedSchemaContextBuilderFactoryResolver = defaultSharedSchemaContextBuilderFactoryResolver;
+        this.ddlWriter = ddlWriter;
+        this.sharedSchemaContextDecoratorFactory = sharedSchemaContextDecoratorFactory;
+    }
 
     public void generate(String configurationFilePath, String createScripsFilePath, String dropScripsFilePath, String checkingStatementsFilePath) throws SharedSchemaContextBuilderException, IOException, InvalidConfigurationException, NoDefaultSharedSchemaContextBuilderFactorySupplierException {
+        this.generate(configurationFilePath, createScripsFilePath, dropScripsFilePath, checkingStatementsFilePath, null);
+    }
+
+    public void generate(String configurationFilePath, String createScripsFilePath, String dropScripsFilePath, String checkingStatementsFilePath, DefaultDecoratorContext decoratorContext) throws SharedSchemaContextBuilderException, IOException, InvalidConfigurationException, NoDefaultSharedSchemaContextBuilderFactorySupplierException {
         log.log(Level.INFO, "Generate DDL statements based on file: {0}", new Object[]{configurationFilePath});
         IDefaultSharedSchemaContextBuilderFactory factory = defaultSharedSchemaContextBuilderFactoryResolver.resolve(configurationFilePath);
         DefaultSharedSchemaContextBuilder builder = factory.build(configurationFilePath);
         ISharedSchemaContext context = builder.build();
+        if (decoratorContext != null) {
+            context = sharedSchemaContextDecoratorFactory.build(context, decoratorContext);
+        }
         if (createScripsFilePath != null) {
             log.log(Level.INFO, "Saving DDL statements that creates the shared schema strategy to {0}", createScripsFilePath);
             ddlWriter.saveCreteScripts(createScripsFilePath, context);
