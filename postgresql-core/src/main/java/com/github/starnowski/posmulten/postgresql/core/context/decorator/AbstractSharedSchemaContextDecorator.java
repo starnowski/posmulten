@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
 
-public abstract class AbstractSharedSchemaContextDecorator extends DefaultDecorator<ISharedSchemaContext> implements ISharedSchemaContext {
+public abstract class AbstractSharedSchemaContextDecorator extends DefaultDecorator<ISharedSchemaContext> implements ISharedSchemaContextDecorator {
 
     public AbstractSharedSchemaContextDecorator(ISharedSchemaContext sharedSchemaContext) {
         super(sharedSchemaContext);
