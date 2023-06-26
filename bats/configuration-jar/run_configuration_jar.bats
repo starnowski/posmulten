@@ -86,7 +86,7 @@ function setup {
   [ ! -f "$BATS_TMPDIR/$TIMESTAMP/valid_ss.sql" ]
 
   #when
-  run java -Dposmulten.configuration.config.file.path="$CONFIGURATION_FILE_PATH" -Dposmulten.configuration.create.script.path="$BATS_TMPDIR/$TIMESTAMP/create_script.sql" -Dposmulten.configuration.validation.statements.path="$BATS_TMPDIR/$TIMESTAMP/valid_ss.sql" -Dposmulten.configuration.config.context.decorator.replaceCharactersMap='{{db_grantee}}=my_user,{{db_schema}}=some_schema' -jar "$CONFIGURATION_JAR_NAME"
+  run java -Dposmulten.configuration.config.file.path="$CONFIGURATION_FILE_PATH" -Dposmulten.configuration.create.script.path="$BATS_TMPDIR/$TIMESTAMP/create_script.sql" -Dposmulten.configuration.validation.statements.path="$BATS_TMPDIR/$TIMESTAMP/valid_ss.sql" -Dposmulten.configuration.config.context.decorator.replaceCharactersMap='{{db_rls_grantee}}=my_user,{{db_schema}}=some_schema' -jar "$CONFIGURATION_JAR_NAME"
 
   #then
   echo "output is --> $output <--"  >&3

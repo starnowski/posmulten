@@ -121,6 +121,7 @@ class SharedSchemaContextConfigurationYamlDaoTest extends AbstractSpecification 
         where:
             filePath                                                |   defaultSchema       |   grantee
             ONLY_MANDATORY_FIELDS_WITH_TEMPLATE_VALUES_FILE_PATH    |   "{{db_schema}}"     |   "{{db_grantee}}"
+            CONFIGURATION_WITH_TEMPLATE_VALUES_FILE_PATH            |   "{{db_schema}}"     |   "{{db_rls_grantee}}"
     }
 
     @Unroll
