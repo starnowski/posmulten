@@ -39,7 +39,7 @@ class SharedSchemaContextConfigurationYamlDaoTest extends AbstractSpecification 
             result
 
         where:
-            filePath << [ALL_FIELDS_FILE_PATH, ONLY_MANDATORY_FIELDS_FILE_PATH, INTEGRATION_TESTS_FILE_PATH]
+            filePath << [ALL_FIELDS_FILE_PATH, ONLY_MANDATORY_FIELDS_FILE_PATH, INTEGRATION_TESTS_FILE_PATH, ONLY_MANDATORY_FIELDS_WITH_TEMPLATE_VALUES_FILE_PATH]
     }
 
     @Unroll
@@ -103,6 +103,24 @@ class SharedSchemaContextConfigurationYamlDaoTest extends AbstractSpecification 
             filePath                        |   defaultSchema   |   currentTenantIdProperty                 |   currentTenantIdPropertyType         |   getCurrentTenantIdFunctionName                              |   setCurrentTenantIdFunctionName
             ALL_FIELDS_FILE_PATH            |   "public"        |   stringWrapper("pos.c.ten")          |   stringWrapper("VARCHAR(255)") |   stringWrapper("get_ten_id")    |   stringWrapper("set_tenant")
             ONLY_MANDATORY_FIELDS_FILE_PATH |   "non_public"    |   null                                    |   null                                |   null            |   null
+    }
+
+    @Unroll
+    def "for file '#filePath' should return object with expected fields : defaultSchema (#defaultSchema), grantee (#grantee)"()
+    {
+        given:
+            def resolvedPath = resolveFilePath(filePath)
+
+        when:
+            def result = tested.read(resolvedPath)
+
+        then:
+            result.getDefaultSchema() == defaultSchema
+            result.getGrantee() == grantee
+
+        where:
+            filePath                                                |   defaultSchema       |   grantee
+            ONLY_MANDATORY_FIELDS_WITH_TEMPLATE_VALUES_FILE_PATH    |   "{{db_schema}}"     |   "{{db_grantee}}"
     }
 
     @Unroll
