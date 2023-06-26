@@ -13,6 +13,8 @@
 
     <properties>
         <org.reflections.reflections>0.9.12</org.reflections.reflections>
+        <bmunit.extension.project.version>1.1.1</bmunit.extension.project.version>
+        <org.jboss.byteman.version>3.0.10</org.jboss.byteman.version>
     </properties>
 
     <dependencies>
@@ -48,6 +50,27 @@
             <artifactId>reflections</artifactId>
             <version>${org.reflections.reflections}</version>
         </dependency>
+
+        <!-- Tests -->
+        <dependency>
+            <groupId>org.jboss.byteman</groupId>
+            <artifactId>byteman-bmunit</artifactId>
+            <version>${org.jboss.byteman.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.starnowski.bmunit.extension</groupId>
+            <artifactId>junit4-rule</artifactId>
+            <version>${bmunit.extension.project.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.starnowski.bmunit.extension</groupId>
+            <artifactId>utils</artifactId>
+            <version>${bmunit.extension.project.version}</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <profiles>
@@ -98,6 +121,10 @@
                                 <mutator>EXPERIMENTAL_ARGUMENT_PROPAGATION</mutator>
                                 <mutator>EXPERIMENTAL_NAKED_RECEIVER</mutator>
                             </mutators>
+                            <excludedTestClasses>
+                                <param>com.github.starnowski.posmulten.configuration.*BMUnitTest</param>
+                                <param>com.github.starnowski.posmulten.configuration.**.*BMUnitTest</param>
+                            </excludedTestClasses>
                         </configuration>
                     </plugin>
                 </plugins>
