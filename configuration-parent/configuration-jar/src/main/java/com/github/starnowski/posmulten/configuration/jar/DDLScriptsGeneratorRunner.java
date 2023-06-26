@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.util.Properties;
 import java.util.logging.Level;
 
+import static com.github.starnowski.posmulten.configuration.jar.Constants.*;
+
 @Log
 public class DDLScriptsGeneratorRunner {
 
@@ -31,10 +33,10 @@ public class DDLScriptsGeneratorRunner {
                 input.close();
             }
         } else {
-            String configFilePath = System.getProperty("posmulten.configuration.config.file.path");
-            String createScriptPath = System.getProperty("posmulten.configuration.create.script.path");
-            String dropScriptPath = System.getProperty("posmulten.configuration.drop.script.path");
-            String validationStatementsPath = System.getProperty("posmulten.configuration.validation.statements.path");
+            String configFilePath = System.getProperty(CONFIG_FILE_PATH_PROPERTY);
+            String createScriptPath = System.getProperty(CREATE_SCRIPT_PATH_PROPERTY);
+            String dropScriptPath = System.getProperty(DROP_SCRIPT_PATH_PROPERTY);
+            String validationStatementsPath = System.getProperty(VALIDATION_STATEMENTS_PATH_PROPERTY);
             DDLScriptsGenerator ddlScriptsGenerator = new DDLScriptsGenerator();
             try {
                 ddlScriptsGenerator.generate(configFilePath, createScriptPath, dropScriptPath, validationStatementsPath);
