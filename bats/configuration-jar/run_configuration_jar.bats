@@ -77,6 +77,30 @@ function setup {
   grep 'SELECT COUNT(1) ' "$BATS_TMPDIR/$TIMESTAMP/valid_ss.sql"
 }
 
+@test "Run executable jar file with passed java properties for valid configuration file to generate creation script and sql file with validation statements for template parameters" {
+  #given
+  CONFIGURATION_FILE_PATH="$CONFIGURATION_YAML_TEST_RESOURCES_DIR_PATH/only-mandatory-fields-with-template-values.yaml"
+  [ -f "$CONFIGURATION_FILE_PATH" ]
+  # Results files
+  [ ! -f "$BATS_TMPDIR/$TIMESTAMP/create_script.sql" ]
+  [ ! -f "$BATS_TMPDIR/$TIMESTAMP/valid_ss.sql" ]
+
+  #when
+  run java -Dposmulten.configuration.config.file.path="$CONFIGURATION_FILE_PATH" -Dposmulten.configuration.create.script.path="$BATS_TMPDIR/$TIMESTAMP/create_script.sql" -Dposmulten.configuration.validation.statements.path="$BATS_TMPDIR/$TIMESTAMP/valid_ss.sql" -Dposmulten.configuration.config.context.decorator.replaceCharactersMap='{{db_grantee}}=my_user,{{db_schema}}=some_schema' -jar "$CONFIGURATION_JAR_NAME"
+
+  #then
+  echo "output is --> $output <--"  >&3
+  [ "$status" -eq 0 ]
+  [ -f "$BATS_TMPDIR/$TIMESTAMP/create_script.sql" ]
+  [ -f "$BATS_TMPDIR/$TIMESTAMP/valid_ss.sql" ]
+
+  #Smoke tests for scripts content
+  grep 'some_schema' "$BATS_TMPDIR/$TIMESTAMP/create_script.sql"
+  grep 'my_user' "$BATS_TMPDIR/$TIMESTAMP/create_script.sql"
+  grep 'some_schema' "$BATS_TMPDIR/$TIMESTAMP/valid_ss.sql"
+  grep 'my_user' "$BATS_TMPDIR/$TIMESTAMP/valid_ss.sql"
+}
+
 @test "The executable jar file should log basic info messages for valid configuration file" {
   #given
   CONFIGURATION_FILE_PATH="$CONFIGURATION_YAML_TEST_RESOURCES_DIR_PATH/all-fields.yaml"
