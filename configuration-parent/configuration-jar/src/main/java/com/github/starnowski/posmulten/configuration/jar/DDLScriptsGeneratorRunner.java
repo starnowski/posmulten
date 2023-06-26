@@ -38,15 +38,17 @@ public class DDLScriptsGeneratorRunner {
             String dropScriptPath = System.getProperty(DROP_SCRIPT_PATH_PROPERTY);
             String validationStatementsPath = System.getProperty(VALIDATION_STATEMENTS_PATH_PROPERTY);
             DDLScriptsGenerator ddlScriptsGenerator = new DDLScriptsGenerator();
+            SystemPropertiesDefaultDecoratorContextSupplier systemPropertiesDefaultDecoratorContextSupplier = new SystemPropertiesDefaultDecoratorContextSupplier();
             try {
-                ddlScriptsGenerator.generate(configFilePath, createScriptPath, dropScriptPath, validationStatementsPath);
+                ddlScriptsGenerator.generate(configFilePath, createScriptPath, dropScriptPath, validationStatementsPath, systemPropertiesDefaultDecoratorContextSupplier.get());
             } catch (InvalidConfigurationException e) {
                 log.log(Level.SEVERE, "Posmulten invalid configuration");
                 e.getErrorMessages().forEach(message ->
                         log.log(Level.SEVERE, "Configuration error: {0}", message)
                 );
                 System.exit(1);
-            } catch (SharedSchemaContextBuilderException | NoDefaultSharedSchemaContextBuilderFactorySupplierException e) {
+            } catch (SharedSchemaContextBuilderException |
+                     NoDefaultSharedSchemaContextBuilderFactorySupplierException e) {
                 log.log(Level.SEVERE, "Posmulten invalid configuration");
                 log.log(Level.SEVERE, "Configuration error: {0}", e.getMessage());
                 System.exit(1);
