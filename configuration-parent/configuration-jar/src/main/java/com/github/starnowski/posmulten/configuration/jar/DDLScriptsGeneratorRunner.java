@@ -16,11 +16,11 @@ import static com.github.starnowski.posmulten.configuration.jar.Constants.*;
 public class DDLScriptsGeneratorRunner {
 
     public static void main(String[] args) throws IOException {
-        if (Boolean.TRUE.equals(Boolean.valueOf(System.getProperty("posmulten.configuration.config.version.print")))) {
+        if (Boolean.TRUE.equals(Boolean.valueOf(System.getProperty(PRINT_PROJECT_VERSION_PROPERTY)))) {
             java.io.InputStream is = DDLScriptsGeneratorRunner.class.getClassLoader().getResourceAsStream("configuration-jar.properties");
             java.util.Properties p = new Properties();
             p.load(is);
-            String version = p.getProperty("configuration.jar.project.version");
+            String version = p.getProperty(PROJECT_VERSION_PROPERTY);
             System.out.print(version);
         } else if (Boolean.TRUE.equals(Boolean.valueOf(System.getProperty("posmulten.configuration.config.yaml.syntax.guide.print")))) {
             java.io.InputStream input = DDLScriptsGeneratorRunner.class.getClassLoader().getResourceAsStream("configuration-yaml-interpreter-readme.txt");
