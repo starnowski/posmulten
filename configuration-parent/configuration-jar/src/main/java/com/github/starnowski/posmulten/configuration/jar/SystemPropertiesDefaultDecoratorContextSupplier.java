@@ -9,11 +9,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.github.starnowski.posmulten.configuration.jar.Constants.CONTEXT_DECORATOR_REPLACECHARACTERSMAP_PROPERTY;
+import static com.github.starnowski.posmulten.configuration.jar.Constants.CONTEXT_DECORATOR_REPLACECHARACTERSMAP_SEPARATOR_PROPERTY;
 
 public class SystemPropertiesDefaultDecoratorContextSupplier {
 
-    private static String REPLACECHARACTERSMAP_PAIR_PATTERN = "(.*)=(.*)";
-    private static Pattern replaceCharactersMapPattern = Pattern.compile(REPLACECHARACTERSMAP_PAIR_PATTERN);
+    private static final String REPLACECHARACTERSMAP_PAIR_PATTERN = "(.*)=(.*)";
+    private static final Pattern replaceCharactersMapPattern = Pattern.compile(REPLACECHARACTERSMAP_PAIR_PATTERN);
 
     private final SystemPropertyReader systemPropertyReader;
 
@@ -25,12 +26,12 @@ public class SystemPropertiesDefaultDecoratorContextSupplier {
         this.systemPropertyReader = systemPropertyReader;
     }
 
-    public DefaultDecoratorContext get()
-    {
+    public DefaultDecoratorContext get() {
         DefaultDecoratorContext.DefaultDecoratorContextBuilder decoratorContextBuilder = DefaultDecoratorContext.builder();
         String patternsValue = systemPropertyReader.read(CONTEXT_DECORATOR_REPLACECHARACTERSMAP_PROPERTY);
         if (patternsValue != null) {
-            String[] patterns = patternsValue.split(",");
+            String separator = systemPropertyReader.read(CONTEXT_DECORATOR_REPLACECHARACTERSMAP_SEPARATOR_PROPERTY);
+            String[] patterns = patternsValue.split(separator == null ? "," : separator);
             Map<String, String> replaceCharactersMap = new HashMap<>();
             for (String patternPari : patterns) {
                 Matcher m = replaceCharactersMapPattern.matcher(patternPari);
