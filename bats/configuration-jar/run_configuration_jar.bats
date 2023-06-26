@@ -79,7 +79,7 @@ function setup {
 
 @test "Run executable jar file with passed java properties for valid configuration file to generate creation script and sql file with validation statements for template parameters" {
   #given
-  CONFIGURATION_FILE_PATH="$CONFIGURATION_YAML_TEST_RESOURCES_DIR_PATH/only-mandatory-fields-with-template-values.yaml"
+  CONFIGURATION_FILE_PATH="$CONFIGURATION_YAML_TEST_RESOURCES_DIR_PATH/configuration-with-template-values.yaml"
   [ -f "$CONFIGURATION_FILE_PATH" ]
   # Results files
   [ ! -f "$BATS_TMPDIR/$TIMESTAMP/create_script.sql" ]
