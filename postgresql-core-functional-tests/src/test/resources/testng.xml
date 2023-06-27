@@ -70,6 +70,7 @@
             <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.sanity.RLSForSingleTableInNonPublicSchemaTest" />
             <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.sanity.RLSForSingleTableInPublicSchemaTest" />
             <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.sanity.BuilderWithTemplateValuesRLSForSingleTableTest" />
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.sanity.BuilderWithTemplateValuesAndDatabaseOperationsRLSForSingleTableTest" />
         </classes>
     </test>
     <test name="Full tests with Shared Schema Builder 4">

@@ -78,9 +78,9 @@ class DatabaseOperationExecutorItTest extends Specification {
     def "test 6: check statements should failed"()
     {
         when:
-        tested.execute(dataSource, definitions, DatabaseOperationType.VALIDATE)
+            tested.execute(dataSource, definitions, DatabaseOperationType.VALIDATE)
 
         then:
-        thrown(ValidationDatabaseOperationsException)
+            thrown(ValidationDatabaseOperationsException)
     }
 }
