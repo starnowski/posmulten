@@ -119,8 +119,6 @@ public class DefaultYamlConfigurationTest extends AbstractTransactionalTestNGSpr
         DefaultSharedSchemaContextBuilderFactoryResolver defaultSharedSchemaContextBuilderFactoryResolver = new DefaultSharedSchemaContextBuilderFactoryResolver();
         IDefaultSharedSchemaContextBuilderFactory factory = defaultSharedSchemaContextBuilderFactoryResolver.resolve(INTEGRATION_CONFIGURATION_TEST_FILE_PATH);
         DefaultSharedSchemaContextBuilder builder = factory.build(resolveFilePath(INTEGRATION_CONFIGURATION_TEST_FILE_PATH));
-        sharedSchemaContext = builder.build();
-        sqlDefinitions.addAll(sharedSchemaContext.getSqlDefinitions());
         DefaultDecoratorContext decoratorContext = DefaultDecoratorContext.builder()
                 .withReplaceCharactersMap(MapBuilder.mapBuilder()
                         .put("{{template_schema_value}}", "non_public_schema")
@@ -128,9 +126,8 @@ public class DefaultYamlConfigurationTest extends AbstractTransactionalTestNGSpr
                         .build())
                 .build();
         SharedSchemaContextDecoratorFactory sharedSchemaContextDecoratorFactory = new SharedSchemaContextDecoratorFactory();
-        sharedSchemaContext = sharedSchemaContextDecoratorFactory.build(sharedSchemaContext, decoratorContext);
+        sharedSchemaContext = sharedSchemaContextDecoratorFactory.build(builder.build(), decoratorContext);
         setCurrentTenantIdFunctionInvocationFactory = sharedSchemaContext.getISetCurrentTenantIdFunctionInvocationFactory();
-        sqlDefinitions.clear();
         sqlDefinitions.addAll(sharedSchemaContext.getSqlDefinitions());
     }
 

@@ -138,7 +138,7 @@ jobs:
         run: export PGPASSWORD=postgres && psql -f 'db_scripts/prepare_postgresql-core_db.sql' -U postgres -h 127.0.0.1
 
       - name: Run tests
-        run: ./mvnw -DskipTests --quiet clean install && ./mvnw -pl :postgresql-core -P !unit-tests,integration-tests test && ./mvnw -pl :postgresql-core-functional-tests,configuration-yaml-interpreter-functional-tests -P !unit-tests,functional-tests test
+        run: ./mvnw -DskipTests --quiet clean install && ./mvnw -pl :postgresql-core -P !unit-tests,integration-tests test && ./mvnw -pl :postgresql-core-functional-tests,:configuration-yaml-interpreter-functional-tests -P !unit-tests,functional-tests test
 
   configuration_e2e_tests:
     needs: [compilation_and_unit_tests, database_tests, testing_configuration_jar]
