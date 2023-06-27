@@ -161,4 +161,20 @@ class DatabaseOperationExecutorTest extends Specification {
         where:
             exception << [new SQLException(), new ValidationDatabaseOperationsException(new HashMap<String, Set<String>>())]
     }
+
+    @Unroll
+    def"should throw exception when operation type is null"()
+    {
+        given:
+            def tested = new DatabaseOperationExecutor()
+            DataSource dataSource = Mock(DataSource)
+            List<SQLDefinition> sqlDefinitions = new ArrayList<>()
+
+        when:
+            tested.execute(dataSource, sqlDefinitions, null)
+
+        then:
+            def ex = thrown(IllegalArgumentException)
+            ex.message == "DatabaseOperationType can not be null"
+    }
 }

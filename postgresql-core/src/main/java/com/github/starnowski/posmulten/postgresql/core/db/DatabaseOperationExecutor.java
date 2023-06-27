@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static com.github.starnowski.posmulten.postgresql.core.db.DatabaseOperationType.*;
 
@@ -34,8 +35,7 @@ public class DatabaseOperationExecutor {
     }
 
     public void execute(DataSource dataSource, List<SQLDefinition> sqlDefinitions, DatabaseOperationType operationType) throws SQLException, ValidationDatabaseOperationsException {
-        IDatabaseOperationsProcessor processor = operationsProcessorMap.get(operationType);
-        processor.run(dataSource, sqlDefinitions);
+        Optional.ofNullable(operationsProcessorMap.get(operationType)).orElseThrow(() -> new IllegalArgumentException("DatabaseOperationType can not be null")).run(dataSource, sqlDefinitions);
     }
 
     Map<DatabaseOperationType, IDatabaseOperationsProcessor> getOperationsProcessorMap() {
