@@ -27,6 +27,34 @@ https://www.markdownguide.org/basic-syntax/
 
 ## [Unreleased]
 
+### Added
+
+- Added dectorator for sqlDefinitions that replace template value like {{schema}} to any passed value in all definitions [283](https://github.com/starnowski/posmulten/issues/283)
+    - Added com.github.starnowski.posmulten.configuration.jar.Constants type. [283](https://github.com/starnowski/posmulten/issues/283)
+    - Added com.github.starnowski.posmulten.configuration.jar.DDLScriptsGeneratorRunner type. [283](https://github.com/starnowski/posmulten/issues/283)
+    - Added com.github.starnowski.posmulten.configuration.jar.SystemPropertiesDefaultDecoratorContextSupplier type. [283](https://github.com/starnowski/posmulten/issues/283)
+    - Added com.github.starnowski.posmulten.configuration.DDLScriptsGenerator type. [283](https://github.com/starnowski/posmulten/issues/283)
+    - Added com.github.starnowski.posmulten.configuration.SystemPropertyReader type. [283](https://github.com/starnowski/posmulten/issues/283)
+    - Added com.github.starnowski.posmulten.postgresql.core.context.decorator.AbstractSharedSchemaContextDecorator type. [283](https://github.com/starnowski/posmulten/issues/283)
+    - Added com.github.starnowski.posmulten.postgresql.core.context.decorator.BasicSharedSchemaContextDecorator type. [283](https://github.com/starnowski/posmulten/issues/283)
+    - Added com.github.starnowski.posmulten.postgresql.core.context.decorator.BasicSharedSchemaContextDecoratorContext type. [283](https://github.com/starnowski/posmulten/issues/283)
+    - Added com.github.starnowski.posmulten.postgresql.core.context.decorator.BasicSharedSchemaContextDecoratorFactory type. [283](https://github.com/starnowski/posmulten/issues/283)
+    - Added com.github.starnowski.posmulten.postgresql.core.context.decorator.DefaultDecorator type. [283](https://github.com/starnowski/posmulten/issues/283)
+    - Added com.github.starnowski.posmulten.postgresql.core.context.decorator.DefaultDecoratorContext type. [283](https://github.com/starnowski/posmulten/issues/283)
+    - Added com.github.starnowski.posmulten.postgresql.core.context.decorator.IDecorator type. [283](https://github.com/starnowski/posmulten/issues/283)
+    - Added com.github.starnowski.posmulten.postgresql.core.context.decorator.ISharedSchemaContextDecorator type. [283](https://github.com/starnowski/posmulten/issues/283)
+    - Added com.github.starnowski.posmulten.postgresql.core.context.decorator.ISharedSchemaContextDecoratorFactory type. [283](https://github.com/starnowski/posmulten/issues/283)
+    - Added com.github.starnowski.posmulten.postgresql.core.context.decorator.SharedSchemaContextDecoratorFactory type. [283](https://github.com/starnowski/posmulten/issues/283)
+    - Added com.github.starnowski.posmulten.postgresql.core.db.DatabaseOperationExecutor type. [283](https://github.com/starnowski/posmulten/issues/283)
+    - Added com.github.starnowski.posmulten.postgresql.core.db.DatabaseOperationType type. [283](https://github.com/starnowski/posmulten/issues/283)
+    - Added com.github.starnowski.posmulten.postgresql.core.db.operations.CreateOperationsProcessor type. [283](https://github.com/starnowski/posmulten/issues/283)
+    - Added com.github.starnowski.posmulten.postgresql.core.db.operations.DatabaseOperationsLoggerProcessor type. [283](https://github.com/starnowski/posmulten/issues/283)
+    - Added com.github.starnowski.posmulten.postgresql.core.db.operations.DropOperationsProcessor type. [283](https://github.com/starnowski/posmulten/issues/283)
+    - Added com.github.starnowski.posmulten.postgresql.core.db.operations.IDatabaseOperationsProcessor type. [283](https://github.com/starnowski/posmulten/issues/283)
+    - Added com.github.starnowski.posmulten.postgresql.core.db.operations.ValidateOperationsProcessor type. [283](https://github.com/starnowski/posmulten/issues/283)
+    - Added com.github.starnowski.posmulten.postgresql.core.db.operations.ValidationDatabaseOperationsException type. [283](https://github.com/starnowski/posmulten/issues/283)
+    - Added com.github.starnowski.posmulten.postgresql.core.db.operations.util.SQLUtil type. [283](https://github.com/starnowski/posmulten/issues/283)
+
 ## [0.6.0] - 2023-01-14
 
 ### Changed

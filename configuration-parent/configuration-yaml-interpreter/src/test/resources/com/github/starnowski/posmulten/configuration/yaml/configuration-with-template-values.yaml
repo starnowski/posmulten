@@ -1,0 +1,10 @@
+default_schema: "{{db_schema}}"
+grantee: "{{db_rls_grantee}}"
+tables:
+  - name: users
+    rls_policy:
+      name: users_table_rls_policy
+      primary_key_definition:
+        name_for_function_that_checks_if_record_exists_in_table: "is_user_exists"
+        pk_columns_name_to_type:
+          id: bigint
