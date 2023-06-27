@@ -35,7 +35,11 @@ https://www.markdownguide.org/basic-syntax/
     - Added com.github.starnowski.posmulten.configuration.jar.SystemPropertiesDefaultDecoratorContextSupplier type. [283](https://github.com/starnowski/posmulten/issues/283)
     - Added com.github.starnowski.posmulten.configuration.DDLScriptsGenerator type. [283](https://github.com/starnowski/posmulten/issues/283)
     - Added com.github.starnowski.posmulten.configuration.SystemPropertyReader type. [283](https://github.com/starnowski/posmulten/issues/283)
-    - Added com.github.starnowski.posmulten.configuration.SystemPropertyReader type. [283](https://github.com/starnowski/posmulten/issues/283)
+    - Added com.github.starnowski.posmulten.postgresql.core.context.decorator.AbstractSharedSchemaContextDecorator type. [283](https://github.com/starnowski/posmulten/issues/283)
+    - Added com.github.starnowski.posmulten.postgresql.core.context.decorator.BasicSharedSchemaContextDecorator type. [283](https://github.com/starnowski/posmulten/issues/283)
+    - Added com.github.starnowski.posmulten.postgresql.core.context.decorator.BasicSharedSchemaContextDecoratorContext type. [283](https://github.com/starnowski/posmulten/issues/283)
+    - Added com.github.starnowski.posmulten.postgresql.core.context.decorator.BasicSharedSchemaContextDecoratorFactory type. [283](https://github.com/starnowski/posmulten/issues/283)
+    - Added com.github.starnowski.posmulten.postgresql.core.context.decorator.DefaultDecorator type. [283](https://github.com/starnowski/posmulten/issues/283)
 
 ## [0.6.0] - 2023-01-14
 
