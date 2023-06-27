@@ -45,6 +45,9 @@ https://www.markdownguide.org/basic-syntax/
     - Added com.github.starnowski.posmulten.postgresql.core.context.decorator.ISharedSchemaContextDecorator type. [283](https://github.com/starnowski/posmulten/issues/283)
     - Added com.github.starnowski.posmulten.postgresql.core.context.decorator.ISharedSchemaContextDecoratorFactory type. [283](https://github.com/starnowski/posmulten/issues/283)
     - Added com.github.starnowski.posmulten.postgresql.core.context.decorator.SharedSchemaContextDecoratorFactory type. [283](https://github.com/starnowski/posmulten/issues/283)
+    - Added com.github.starnowski.posmulten.postgresql.core.db.DatabaseOperationExecutor type. [283](https://github.com/starnowski/posmulten/issues/283)
+    - Added com.github.starnowski.posmulten.postgresql.core.db.DatabaseOperationType type. [283](https://github.com/starnowski/posmulten/issues/283)
+    - Added com.github.starnowski.posmulten.postgresql.core.db.operations.CreateOperationsProcessor type. [283](https://github.com/starnowski/posmulten/issues/283)
 
 ## [0.6.0] - 2023-01-14
 
