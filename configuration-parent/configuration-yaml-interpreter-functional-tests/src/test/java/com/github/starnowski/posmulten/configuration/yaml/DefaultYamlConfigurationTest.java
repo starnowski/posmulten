@@ -1,5 +1,9 @@
 package com.github.starnowski.posmulten.configuration.yaml;
 
+import com.github.starnowski.posmulten.configuration.DefaultSharedSchemaContextBuilderFactoryResolver;
+import com.github.starnowski.posmulten.configuration.NoDefaultSharedSchemaContextBuilderFactorySupplierException;
+import com.github.starnowski.posmulten.configuration.core.context.IDefaultSharedSchemaContextBuilderFactory;
+import com.github.starnowski.posmulten.configuration.core.exceptions.InvalidConfigurationException;
 import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition;
 import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder;
 import com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaContext;
@@ -26,6 +30,8 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import javax.sql.DataSource;
+import java.net.URISyntaxException;
+import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,6 +39,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.github.starnowski.posmulten.configuration.yaml.TestApplication.CLEAR_DATABASE_SCRIPT_PATH;
+import static com.github.starnowski.posmulten.configuration.yaml.TestApplication.INTEGRATION_CONFIGURATION_TEST_FILE_PATH;
 import static com.github.starnowski.posmulten.postgresql.core.db.DatabaseOperationType.*;
 import static com.github.starnowski.posmulten.postgresql.test.utils.MapBuilder.mapBuilder;
 import static com.github.starnowski.posmulten.postgresql.test.utils.TestUtils.*;
@@ -94,6 +101,10 @@ public class DefaultYamlConfigurationTest extends AbstractTransactionalTestNGSpr
         return (getSchema() == null ? "" : getSchema() + ".") + "users";
     }
 
+    protected String resolveFilePath(String filePath) throws URISyntaxException {
+        return Paths.get(this.getClass().getResource(filePath).toURI()).toFile().getPath();
+    }
+
     @DataProvider(name = "userData")
     protected static Object[][] userData()
     {
@@ -104,32 +115,11 @@ public class DefaultYamlConfigurationTest extends AbstractTransactionalTestNGSpr
     }
 
     @Test(testName = "create SQL definitions", description = "Create SQL function that creates statements that set current tenant value, retrieve current tenant value and create the row level security policy for a table that is multi-tenant aware")
-    public void createSQLDefinitions() throws SharedSchemaContextBuilderException {
-        DefaultSharedSchemaContextBuilder defaultSharedSchemaContextBuilder = new DefaultSharedSchemaContextBuilder(getSchemaForSharedSchemaContextBuilderInitialization());
-        defaultSharedSchemaContextBuilder.setCurrentTenantIdProperty(VALID_CURRENT_TENANT_ID_PROPERTY_NAME);
-        defaultSharedSchemaContextBuilder.setForceRowLevelSecurityForTableOwner(true);
-        defaultSharedSchemaContextBuilder.setGrantee(getGranteeForSharedSchemaContextBuilderInitialization());
-        defaultSharedSchemaContextBuilder.createTenantColumnForTable(NOTIFICATIONS_TABLE_NAME);
-        defaultSharedSchemaContextBuilder.createRLSPolicyForTable(NOTIFICATIONS_TABLE_NAME, prepareIdColumnTypeForSingleColumnKey("uuid", "uuid"), CUSTOM_TENANT_COLUMN_NAME, "notifications_table_rls_policy");
-        defaultSharedSchemaContextBuilder.createRLSPolicyForTable(USERS_TABLE_NAME, prepareIdColumnTypeForSingleColumnKey("id", "bigint"), "tenant_id", "users_table_rls_policy");
-        defaultSharedSchemaContextBuilder.createRLSPolicyForTable(POSTS_TABLE_NAME, prepareIdColumnTypeForSingleColumnKey("id", "bigint"), "tenant_id", "posts_table_rls_policy");
-        defaultSharedSchemaContextBuilder.createRLSPolicyForTable(GROUPS_TABLE_NAME, prepareIdColumnTypeForSingleColumnKey("uuid", "uuid"), "tenant_id", "groups_table_rls_policy");
-        defaultSharedSchemaContextBuilder.createRLSPolicyForTable(USERS_GROUPS_TABLE_NAME, new HashMap<>(), "tenant_id", "users_groups_table_rls_policy");
-        defaultSharedSchemaContextBuilder.createRLSPolicyForTable(COMMENTS_TABLE_NAME, mapBuilder().put("id", "int").put("user_id", "bigint").build(), CUSTOM_TENANT_COLUMN_NAME, "comments_table_rls_policy");
-        defaultSharedSchemaContextBuilder.createSameTenantConstraintForForeignKey(POSTS_TABLE_NAME, USERS_TABLE_NAME, mapBuilder().put("user_id", "id").build(), POSTS_USERS_FK_CONSTRAINT_NAME);
-        defaultSharedSchemaContextBuilder.createSameTenantConstraintForForeignKey(COMMENTS_TABLE_NAME, USERS_TABLE_NAME, mapBuilder().put("user_id", "id").build(), COMMENTS_USERS_FK_CONSTRAINT_NAME);
-        defaultSharedSchemaContextBuilder.createSameTenantConstraintForForeignKey(COMMENTS_TABLE_NAME, POSTS_TABLE_NAME, mapBuilder().put("post_id", "id").build(), COMMENTS_POSTS_FK_CONSTRAINT_NAME);
-        defaultSharedSchemaContextBuilder.createSameTenantConstraintForForeignKey(COMMENTS_TABLE_NAME, COMMENTS_TABLE_NAME, mapBuilder().put("parent_comment_id", "id").put("parent_comment_user_id", "user_id").build(), COMMENTS_PARENT_COMMENTS_FK_CONSTRAINT_NAME);
-        defaultSharedSchemaContextBuilder.createSameTenantConstraintForForeignKey(NOTIFICATIONS_TABLE_NAME, USERS_TABLE_NAME, mapBuilder().put("user_id", "id").build(), NOTIFICATIONS_USERS_COMMENTS_FK_CONSTRAINT_NAME);
-        defaultSharedSchemaContextBuilder.createSameTenantConstraintForForeignKey(USERS_GROUPS_TABLE_NAME, USERS_TABLE_NAME, mapBuilder().put("user_id", "id").build(), USERS_GROUPS_USERS_FK_CONSTRAINT_NAME);
-        defaultSharedSchemaContextBuilder.createSameTenantConstraintForForeignKey(USERS_GROUPS_TABLE_NAME, GROUPS_TABLE_NAME, mapBuilder().put("group_id", "uuid").build(), USERS_GROUPS_GROUPS_FK_CONSTRAINT_NAME);
-
-        defaultSharedSchemaContextBuilder.setNameForFunctionThatChecksIfRecordExistsInTable(USERS_TABLE_NAME, "is_user_belongs_to_current_tenant");
-        defaultSharedSchemaContextBuilder.setNameForFunctionThatChecksIfRecordExistsInTable(POSTS_TABLE_NAME, "is_post_belongs_to_current_tenant");
-        defaultSharedSchemaContextBuilder.setNameForFunctionThatChecksIfRecordExistsInTable(COMMENTS_TABLE_NAME, "is_comment_belongs_to_current_tenant");
-        defaultSharedSchemaContextBuilder.setNameForFunctionThatChecksIfRecordExistsInTable(GROUPS_TABLE_NAME, "is_group_belongs_to_current_tenant");
-        this.sharedSchemaContext = defaultSharedSchemaContextBuilder.build();
-        setCurrentTenantIdFunctionInvocationFactory = sharedSchemaContext.getISetCurrentTenantIdFunctionInvocationFactory();
+    public void createSQLDefinitions() throws SharedSchemaContextBuilderException, NoDefaultSharedSchemaContextBuilderFactorySupplierException, InvalidConfigurationException, URISyntaxException {
+        DefaultSharedSchemaContextBuilderFactoryResolver defaultSharedSchemaContextBuilderFactoryResolver = new DefaultSharedSchemaContextBuilderFactoryResolver();
+        IDefaultSharedSchemaContextBuilderFactory factory = defaultSharedSchemaContextBuilderFactoryResolver.resolve(INTEGRATION_CONFIGURATION_TEST_FILE_PATH);
+        DefaultSharedSchemaContextBuilder builder = factory.build(resolveFilePath(INTEGRATION_CONFIGURATION_TEST_FILE_PATH));
+        sharedSchemaContext = builder.build();
         sqlDefinitions.addAll(sharedSchemaContext.getSqlDefinitions());
         DefaultDecoratorContext decoratorContext = DefaultDecoratorContext.builder()
                 .withReplaceCharactersMap(MapBuilder.mapBuilder()

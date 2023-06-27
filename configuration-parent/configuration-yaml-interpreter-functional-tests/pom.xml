@@ -74,6 +74,12 @@
             <artifactId>jaxb-runtime</artifactId>
             <version>2.3.2</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.starnowski.posmulten.configuration</groupId>
+            <artifactId>configuration</artifactId>
+            <version>0.7.0-SNAPHOST</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <profiles>

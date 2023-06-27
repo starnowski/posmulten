@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class TestApplication {
 
     public static final String CLEAR_DATABASE_SCRIPT_PATH = "/com/github/starnowski/posmulten/configuration/yaml/clean-database.sql";
+    public static final String INTEGRATION_CONFIGURATION_TEST_FILE_PATH = "/com/github/starnowski/posmulten/configuration/yaml/integration-tests-configuration.yaml";
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     public static void main(String[] args) {
