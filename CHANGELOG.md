@@ -34,6 +34,8 @@ https://www.markdownguide.org/basic-syntax/
     - Added com.github.starnowski.posmulten.configuration.jar.DDLScriptsGeneratorRunner type. [283](https://github.com/starnowski/posmulten/issues/283)
     - Added com.github.starnowski.posmulten.configuration.jar.SystemPropertiesDefaultDecoratorContextSupplier type. [283](https://github.com/starnowski/posmulten/issues/283)
     - Added com.github.starnowski.posmulten.configuration.DDLScriptsGenerator type. [283](https://github.com/starnowski/posmulten/issues/283)
+    - Added com.github.starnowski.posmulten.configuration.SystemPropertyReader type. [283](https://github.com/starnowski/posmulten/issues/283)
+    - Added com.github.starnowski.posmulten.configuration.SystemPropertyReader type. [283](https://github.com/starnowski/posmulten/issues/283)
 
 ## [0.6.0] - 2023-01-14
 
