@@ -1,0 +1,99 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
+<suite name="Group of group Suite" verbose="1">
+    <test name="Foreign key constraint for single column">
+        <classes>
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.constraint.CreateCurrentTenantForeignKeyConstraintForPostsTableFromPublicSchemaTest" />
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.constraint.CreateCurrentTenantForeignKeyConstraintForPostsTableFromNonPublicSchemaTest" />
+        </classes>
+    </test>
+    <test name="Foreign key constraint for composite key">
+        <classes>
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.constraint.CreateCurrentTenantCompositeForeignKeyConstraintForCommentsTableFromPublicSchemaTest" />
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.constraint.CreateCurrentTenantCompositeForeignKeyConstraintForCommentsTableFromNonPublicSchemaTest" />
+        </classes>
+    </test>
+    <test name="Checking if function body is going to be updated even if function is defined as IMMUTABLE">
+        <classes>
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.constraint.IsTenantValidBasedOnConstantValuesFunctionDefinitionMutableInPublicSchemaTest" />
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.constraint.IsTenantValidBasedOnConstantValuesFunctionDefinitionMutableInNonPublicSchemaTest" />
+        </classes>
+    </test>
+    <test name="Row Level Security Policy for single table">
+        <classes>
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.rls.CreateRLSForSingleTableInPublicSchemaTest" />
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.rls.CreateRLSForSingleTableInNonPublicSchemaTest" />
+        </classes>
+    </test>
+    <test name="Row Level Security Policy for single table and non privileged user">
+        <classes>
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.rls.CreateRLSForSingleTableInNonPublicSchemaForNonPrivilegedUserTest" />
+        </classes>
+    </test>
+    <test name="Setting reference to records that belongs to different tenant with Row Level Security Policy set but without constraints for foreign keys">
+        <classes>
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.rls.RLSWithSettingReferenceWithoutConstraintForCurrentTenantForeignKeyInNonPublicSchemaTest" />
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.rls.RLSWithSettingReferenceWithoutConstraintForCurrentTenantForeignKeyInPublicSchemaTest" />
+        </classes>
+    </test>
+    <test name="Setting constraint ">
+        <classes>
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.constraint.TenantIdentifierValidConstraintInPublicSchemaTest" />
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.constraint.TenantIdentifierValidConstraintInNonPublicSchemaTest" />
+        </classes>
+    </test>
+    <test name="Setting Row Level Security Policy for single table that the tenant column was just added">
+        <classes>
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.rls.CreateRLSForSingleTableForWhichTenantColumnWasJustAddedInNonPublicSchemaTest" />
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.rls.CreateRLSForSingleTableForWhichTenantColumnWasJustAddedInPublicSchemaTest" />
+        </classes>
+    </test>
+    <test name="Setting constraint for tenant column that checks if the tenant identifier has the correct value">
+        <classes>
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.rls.CreateTenantIdentifierValidConstraintForRLSTablesInNonPublicSchemaTest" />
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.rls.CreateTenantIdentifierValidConstraintForRLSTablesInPublicSchemaTest" />
+        </classes>
+    </test>
+    <test name="Full tests with Shared Schema Builder 1">
+        <classes>
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.sanity.CreateCurrentTenantCompositeForeignKeyConstraintForCommentsTableInNonPublicSchemaTest" />
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.sanity.CreateCurrentTenantCompositeForeignKeyConstraintForCommentsTableInPublicSchemaTest" />
+        </classes>
+    </test>
+    <test name="Full tests with Shared Schema Builder 2">
+        <classes>
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.sanity.RLSForSingleTableForWhichTenantColumnWasJustAddedInNonPublicSchemaTest" />
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.sanity.RLSForSingleTableForWhichTenantColumnWasJustAddedInPublicSchemaTest" />
+        </classes>
+    </test>
+    <test name="Full tests with Shared Schema Builder 3">
+        <classes>
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.sanity.RLSForSingleTableInNonPublicSchemaTest" />
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.sanity.RLSForSingleTableInPublicSchemaTest" />
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.sanity.BuilderWithTemplateValuesRLSForSingleTableTest" />
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.sanity.BuilderWithTemplateValuesAndDatabaseOperationsRLSForSingleTableTest" />
+        </classes>
+    </test>
+    <test name="Full tests with Shared Schema Builder 4">
+        <classes>
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.sanity.RLSWithSettingReferenceWithConstraintForCurrentTenantForeignKeyInNonPublicSchemaTest" />
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.sanity.RLSWithSettingReferenceWithConstraintForCurrentTenantForeignKeyInPublicSchemaTest" />
+        </classes>
+    </test>
+    <test name="Full tests with Shared Schema Builder 5">
+        <classes>
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.sanity.RLSPolicyAndForeignKeyConstraintInManyToManyTableInNonPublicSchemaTest" />
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.sanity.RLSPolicyAndForeignKeyConstraintInManyToManyTableInPublicSchemaTest" />
+        </classes>
+    </test>
+    <test name="Creation of RLS policies for multiple schemas with one builder object">
+        <classes>
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.sanity.RLSForNonDefaultSchemaInNonPublicSchemaTest" />
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.sanity.RLSForNonDefaultSchemaInPublicSchemaTest" />
+        </classes>
+    </test>
+    <test name="Creation of shared schema context with custom sql definitions">
+        <classes>
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.custom.CreateColumnsWithCustomSQLDefinitionsTest" />
+        </classes>
+    </test>
+</suite>

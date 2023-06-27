@@ -11,6 +11,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>configuration-yaml-interpreter</module>
+        <module>configuration-yaml-interpreter-functional-tests</module>
         <module>configuration-core</module>
         <module>configuration</module>
         <module>configuration-jar</module>
