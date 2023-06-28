@@ -1249,7 +1249,7 @@ WITH CHECK (non_public_schema._tenant_hast_auth(tenant, 'ALL', 'WITH_CHECK', 'co
 ...
 ```
 
-Please be in mind that above code use [configuration](../configuration-parent/configuration) and [configuration-yaml-interpreter](../configuration-parent/configuration-yaml-interpreter) modules.
+Please be in mind that above code use [configuration](configuration-parent/configuration) and [configuration-yaml-interpreter](configuration-parent/configuration-yaml-interpreter) modules.
 Where configuration for th Posmulten library is store in Yaml file.
 However, you can also pass template values as parameters to DefaultSharedSchemaContextBuilder methods.
 
