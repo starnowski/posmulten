@@ -1,0 +1,99 @@
+default_schema: "{{template_schema_value}}"
+current_tenant_id_property_type:  "VARCHAR(255)"
+current_tenant_id_property: "pos.c.ten"
+get_current_tenant_id_function_name: "get_ten_id"
+set_current_tenant_id_function_name: "set_tenant"
+equals_current_tenant_identifier_function_name: "equals_cur_tenant"
+tenant_has_authorities_function_name: "_tenant_hast_auth"
+force_row_level_security_for_table_owner: true
+default_tenant_id_column: "tenant_id"
+grantee: "{{template_user_grantee}}"
+set_current_tenant_identifier_as_default_value_for_tenant_column_in_all_tables: true
+valid_tenant_value_constraint:
+  is_tenant_valid_function_name:  is_t_valid
+  is_tenant_valid_constraint_name:  "is_tenant_valid_constraint_sdfa"
+  tenant_identifiers_blacklist:
+    - invalid_tenant
+    - "Some strange tenant ID"
+tables:
+  - name: users
+    rls_policy:
+      name: users_table_rls_policy
+      tenant_column:  tenant_id
+      primary_key_definition:
+        name_for_function_that_checks_if_record_exists_in_table: "is_user_exists"
+        pk_columns_name_to_type:
+          id: bigint
+  - name: posts
+    rls_policy:
+      name: "posts_table_rls_policy"
+      tenant_column:  tenant_id
+      skip_adding_of_tenant_column_default_value: false
+      primary_key_definition:
+        name_for_function_that_checks_if_record_exists_in_table: "is_post_exists"
+        pk_columns_name_to_type:
+          id: bigint
+    foreign_keys:
+      - constraint_name:  "posts_users_tenant_constraint"
+        table_name: "users"
+        foreign_key_primary_key_columns_mappings:
+          user_id:  id
+  - name: "comments"
+    rls_policy:
+      name: comments_table_rls_policy
+      tenant_column:  tenant
+      skip_adding_of_tenant_column_default_value: true
+      primary_key_definition:
+        name_for_function_that_checks_if_record_exists_in_table: "is_comment_exists"
+        pk_columns_name_to_type:
+          id: int
+          user_id: bigint
+    foreign_keys:
+      - constraint_name:  "comments_users_tenant_constraint"
+        table_name: users
+        foreign_key_primary_key_columns_mappings:
+          user_id:  id
+      - constraint_name:  "comments_posts_tenant_constraint"
+        table_name: posts
+        foreign_key_primary_key_columns_mappings:
+          post_id:  id
+      - constraint_name:  "comments_comment_parent_tenant_constraint"
+        table_name: comments
+        foreign_key_primary_key_columns_mappings:
+          parent_comment_id:  id
+          parent_comment_user_id:  user_id
+  - name: notifications
+    rls_policy:
+      name: notifications_table_rls_policy
+      tenant_column:  tenant
+      create_tenant_column_for_table: true
+      valid_tenant_value_constraint_name: "is_tenant_id_valid"
+      primary_key_definition:
+        name_for_function_that_checks_if_record_exists_in_table: "is_notification_exists"
+        pk_columns_name_to_type:
+          uuid: uuid
+    foreign_keys:
+      - constraint_name:  "notifications_users_tenant_constraint"
+        table_name: users
+        foreign_key_primary_key_columns_mappings:
+          user_id:  id
+  - name: groups
+    rls_policy:
+      name: "groups_table_rls_policy"
+      tenant_column:  tenant_id
+      primary_key_definition:
+        name_for_function_that_checks_if_record_exists_in_table: "is_groups_exists"
+        pk_columns_name_to_type:
+          uuid: uuid
+  - name: users_groups
+    rls_policy:
+      name: groups_table_rls_policy
+    foreign_keys:
+      - constraint_name:  "users_tenant_constraint"
+        table_name: "users"
+        foreign_key_primary_key_columns_mappings:
+          user_id:  id
+      - constraint_name:  "groups_tenant_constraint"
+        table_name: "groups"
+        foreign_key_primary_key_columns_mappings:
+          group_id:  uuid

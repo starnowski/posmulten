@@ -1,0 +1,8 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
+<suite name="Group of group Suite" verbose="1">
+    <test name="Creation of shared schema context with configuration file">
+        <classes>
+            <class name="com.github.starnowski.posmulten.configuration.yaml.DefaultYamlConfigurationTest" />
+        </classes>
+    </test>
+</suite>
