@@ -51,6 +51,7 @@
         * [Setting custom name for table tenant column constraint](#setting-custom-name-for-table-tenant-column-constraint)
     * [Naming convention and its constraints](#naming-convention-and-its-constraints)
 * [Adding custom sql definitions](#adding-custom-sql-definitions)
+* [Using template variables in context builder](#using-template-variables-in-context-builder)
 * [Reporting issues](#reporting-issues)
 * [Project contribution](#project-contribution)
 
@@ -1148,6 +1149,90 @@ Example:
 
 The method that passes only the creation script or creation and drop script for other missing scripts set "SELECT 1" as the default script.
 Whether the drop script or scripts, check if the creation script was applied correctly.
+
+# Using template variables in context builder
+
+Very often database schema names can be different depending on the environment, the database schema can have a different name for the dev environment than for the production environment.
+For example schema can have value "{{template_schema_value}}" and db user can have "{{template_user_grantee}}".
+
+```sql
+CREATE OR REPLACE FUNCTION {{template_schema_value}}.set_tenant(VARCHAR(255)) RETURNS VOID AS $$
+BEGIN
+PERFORM set_config('pos.c.ten', $1, false);
+END
+$$ LANGUAGE plpgsql
+VOLATILE;
+
+CREATE POLICY comments_table_rls_policy ON {{template_schema_value}}.comments
+FOR ALL
+TO "{{template_user_grantee}}"
+USING ({{template_schema_value}}._tenant_hast_auth(tenant, 'ALL', 'USING', 'comments', '{{template_schema_value}}'))
+WITH CHECK ({{template_schema_value}}._tenant_hast_auth(tenant, 'ALL', 'WITH_CHECK', 'comments', '{{template_schema_value}}'));
+...
+```
+
+Such generated statements can be used with [Liquibase](https://www.liquibase.org/) or [Flyway](https://flywaydb.org/).
+Both those tools allow specifying configuration variables that be injected into scripts before executing them.
+Posmulten also has decorator types that can replace template variables with passed values.
+Such a feature can be useful when there is a need to run generated scripts during application tests.
+The below code demonstrates it:
+
+```java
+import com.github.starnowski.posmulten.configuration.DefaultSharedSchemaContextBuilderFactoryResolver;
+import com.github.starnowski.posmulten.configuration.NoDefaultSharedSchemaContextBuilderFactorySupplierException;
+import com.github.starnowski.posmulten.configuration.core.context.IDefaultSharedSchemaContextBuilderFactory;
+import com.github.starnowski.posmulten.configuration.core.exceptions.InvalidConfigurationException;
+import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition;
+import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder;
+import com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaContext;
+import com.github.starnowski.posmulten.postgresql.core.context.decorator.DefaultDecoratorContext;
+import com.github.starnowski.posmulten.postgresql.core.context.decorator.SharedSchemaContextDecoratorFactory;
+import com.github.starnowski.posmulten.postgresql.core.context.exceptions.SharedSchemaContextBuilderException;
+import com.github.starnowski.posmulten.postgresql.core.db.DatabaseOperationExecutor;
+import com.github.starnowski.posmulten.postgresql.core.db.operations.exceptions.ValidationDatabaseOperationsException;
+import com.github.starnowski.posmulten.postgresql.core.rls.function.ISetCurrentTenantIdFunctionInvocationFactory;
+import com.github.starnowski.posmulten.postgresql.test.utils.MapBuilder;
+
+import javax.sql.DataSource;
+import java.net.URISyntaxException;
+import java.nio.file.Paths;
+/...
+
+
+    public void createSQLDefinitions() throws SharedSchemaContextBuilderException, NoDefaultSharedSchemaContextBuilderFactorySupplierException, InvalidConfigurationException, URISyntaxException, ValidationDatabaseOperationsException, SQLException {
+        DefaultSharedSchemaContextBuilderFactoryResolver defaultSharedSchemaContextBuilderFactoryResolver = new DefaultSharedSchemaContextBuilderFactoryResolver();
+        IDefaultSharedSchemaContextBuilderFactory factory = defaultSharedSchemaContextBuilderFactoryResolver.resolve(INTEGRATION_CONFIGURATION_TEST_FILE_PATH);
+        DefaultSharedSchemaContextBuilder builder = factory.build(resolveFilePath(INTEGRATION_CONFIGURATION_TEST_FILE_PATH));
+        DefaultDecoratorContext decoratorContext = DefaultDecoratorContext.builder()
+                .withReplaceCharactersMap(MapBuilder.mapBuilder()
+                        .put("{{template_schema_value}}", "non_public_schema")
+                        .put("{{template_user_grantee}}", CORE_OWNER_USER)
+                        .build())
+                .build();
+        ISharedSchemaContext defaultContext = builder.build();
+        // Display original SQL statements
+        this.databaseOperationExecutor.execute(dataSource, defaultContext.getSqlDefinitions(), LOG_ALL);
+        SharedSchemaContextDecoratorFactory sharedSchemaContextDecoratorFactory = new SharedSchemaContextDecoratorFactory();
+        sharedSchemaContext = sharedSchemaContextDecoratorFactory.build(defaultContext, decoratorContext);
+        setCurrentTenantIdFunctionInvocationFactory = sharedSchemaContext.getISetCurrentTenantIdFunctionInvocationFactory();
+        sqlDefinitions.addAll(sharedSchemaContext.getSqlDefinitions());
+    }
+
+
+    public void executeSQLDefinitions() {
+            try {
+            this.databaseOperationExecutor.execute(dataSource, sharedSchemaContext.getSqlDefinitions(), CREATE);
+            this.databaseOperationExecutor.execute(dataSource, sharedSchemaContext.getSqlDefinitions(), LOG_ALL);
+            this.databaseOperationExecutor.execute(dataSource, sharedSchemaContext.getSqlDefinitions(), VALIDATE);
+            } catch (SQLException e) {
+            throw new RuntimeException(e);
+            } catch (ValidationDatabaseOperationsException e) {
+            throw new RuntimeException(e);
+            }
+            }
+```
+
+
 
 # Reporting issues
 * Any new issues please report in [GitHub site](https://github.com/starnowski/posmulten/issues)

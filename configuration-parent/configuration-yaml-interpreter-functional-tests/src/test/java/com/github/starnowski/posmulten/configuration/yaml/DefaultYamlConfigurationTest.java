@@ -56,23 +56,8 @@ import static org.testng.Assert.assertTrue;
 public class DefaultYamlConfigurationTest extends AbstractTransactionalTestNGSpringContextTests {
 
     protected static final String CORE_OWNER_USER = "postgresql-core-owner";
-    protected static final String NON_PRIVILEGED_USER = "postgresql-core-user";
-    protected static final String USERS_TABLE_NAME = "users";
-    protected static final String POSTS_TABLE_NAME = "posts";
-    protected static final String GROUPS_TABLE_NAME = "groups";
-    protected static final String USERS_GROUPS_TABLE_NAME = "users_groups";
-    protected static final String COMMENTS_TABLE_NAME = "comments";
-    protected static final String NOTIFICATIONS_TABLE_NAME = "notifications";
     protected static final String USER_TENANT = "primary_tenant";
     protected static final String SECONDARY_USER_TENANT = "someXDAFAS_id";
-    protected static final String CUSTOM_TENANT_COLUMN_NAME = "tenant";
-    protected static final String POSTS_USERS_FK_CONSTRAINT_NAME = "posts_users_fk_cu";
-    protected static final String COMMENTS_USERS_FK_CONSTRAINT_NAME = "comments_users_fk_cu";
-    protected static final String COMMENTS_POSTS_FK_CONSTRAINT_NAME = "comments_posts_fk_cu";
-    protected static final String COMMENTS_PARENT_COMMENTS_FK_CONSTRAINT_NAME = "comments_parent_comments_fk_cu";
-    protected static final String NOTIFICATIONS_USERS_COMMENTS_FK_CONSTRAINT_NAME = "notifications_users_fk_cu";
-    protected static final String USERS_GROUPS_USERS_FK_CONSTRAINT_NAME = "users_groups_users_fk_cu";
-    protected static final String USERS_GROUPS_GROUPS_FK_CONSTRAINT_NAME = "users_groups_groups_fk_cu";
     protected ISetCurrentTenantIdFunctionInvocationFactory setCurrentTenantIdFunctionInvocationFactory;
     protected ISharedSchemaContext sharedSchemaContext;
     @Autowired
@@ -115,7 +100,7 @@ public class DefaultYamlConfigurationTest extends AbstractTransactionalTestNGSpr
     }
 
     @Test(testName = "create SQL definitions", description = "Create SQL function that creates statements that set current tenant value, retrieve current tenant value and create the row level security policy for a table that is multi-tenant aware")
-    public void createSQLDefinitions() throws SharedSchemaContextBuilderException, NoDefaultSharedSchemaContextBuilderFactorySupplierException, InvalidConfigurationException, URISyntaxException {
+    public void createSQLDefinitions() throws SharedSchemaContextBuilderException, NoDefaultSharedSchemaContextBuilderFactorySupplierException, InvalidConfigurationException, URISyntaxException, ValidationDatabaseOperationsException, SQLException {
         DefaultSharedSchemaContextBuilderFactoryResolver defaultSharedSchemaContextBuilderFactoryResolver = new DefaultSharedSchemaContextBuilderFactoryResolver();
         IDefaultSharedSchemaContextBuilderFactory factory = defaultSharedSchemaContextBuilderFactoryResolver.resolve(INTEGRATION_CONFIGURATION_TEST_FILE_PATH);
         DefaultSharedSchemaContextBuilder builder = factory.build(resolveFilePath(INTEGRATION_CONFIGURATION_TEST_FILE_PATH));
@@ -125,8 +110,11 @@ public class DefaultYamlConfigurationTest extends AbstractTransactionalTestNGSpr
                         .put("{{template_user_grantee}}", CORE_OWNER_USER)
                         .build())
                 .build();
+        ISharedSchemaContext defaultContext = builder.build();
+        // Display original SQL statements
+        this.databaseOperationExecutor.execute(dataSource, defaultContext.getSqlDefinitions(), LOG_ALL);
         SharedSchemaContextDecoratorFactory sharedSchemaContextDecoratorFactory = new SharedSchemaContextDecoratorFactory();
-        sharedSchemaContext = sharedSchemaContextDecoratorFactory.build(builder.build(), decoratorContext);
+        sharedSchemaContext = sharedSchemaContextDecoratorFactory.build(defaultContext, decoratorContext);
         setCurrentTenantIdFunctionInvocationFactory = sharedSchemaContext.getISetCurrentTenantIdFunctionInvocationFactory();
         sqlDefinitions.addAll(sharedSchemaContext.getSqlDefinitions());
     }
@@ -139,6 +127,7 @@ public class DefaultYamlConfigurationTest extends AbstractTransactionalTestNGSpr
     public void executeSQLDefinitions() {
         try {
             this.databaseOperationExecutor.execute(dataSource, sharedSchemaContext.getSqlDefinitions(), CREATE);
+            this.databaseOperationExecutor.execute(dataSource, sharedSchemaContext.getSqlDefinitions(), LOG_ALL);
             this.databaseOperationExecutor.execute(dataSource, sharedSchemaContext.getSqlDefinitions(), VALIDATE);
         } catch (SQLException e) {
             throw new RuntimeException(e);
