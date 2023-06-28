@@ -1232,6 +1232,26 @@ import java.nio.file.Paths;
             }
 ```
 
+Library will generate SQL statements with replaced values:
+
+```sql
+CREATE OR REPLACE FUNCTION non_public_schema.get_ten_id() RETURNS VARCHAR(255) AS $$
+SELECT current_setting('pos.c.ten')
+$$ LANGUAGE sql
+STABLE
+PARALLEL SAFE;
+
+CREATE POLICY comments_table_rls_policy ON non_public_schema.comments
+FOR ALL
+TO "postgresql-core-owner"
+USING (non_public_schema._tenant_hast_auth(tenant, 'ALL', 'USING', 'comments', 'non_public_schema'))
+WITH CHECK (non_public_schema._tenant_hast_auth(tenant, 'ALL', 'WITH_CHECK', 'comments', 'non_public_schema'));
+...
+```
+
+Please be in mind that above code use [configuration](../configuration-parent/configuration) and [configuration-yaml-interpreter](../configuration-parent/configuration-yaml-interpreter) modules.
+Where configuration for th Posmulten library is store in Yaml file.
+However, you can also pass template values as parameters to DefaultSharedSchemaContextBuilder methods.
 
 
 # Reporting issues
