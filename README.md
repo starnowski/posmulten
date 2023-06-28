@@ -357,7 +357,7 @@ You can use it just by adding it as a dependency in the project descriptor file 
         <dependency>
             <groupId>com.github.starnowski.posmulten</groupId>
             <artifactId>postgresql-core</artifactId>
-            <version>0.6.0</version>
+            <version>0.7.0</version>
         </dependency>
 ```
 
