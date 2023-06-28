@@ -6,7 +6,7 @@
     <parent>
         <artifactId>configuration-parent</artifactId>
         <groupId>com.github.starnowski.posmulten.configuration</groupId>
-        <version>0.7.0-SNAPHOST</version>
+        <version>0.8.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>configuration-yaml-interpreter-functional-tests</artifactId>
@@ -77,7 +77,7 @@
         <dependency>
             <groupId>com.github.starnowski.posmulten.configuration</groupId>
             <artifactId>configuration</artifactId>
-            <version>0.7.0-SNAPHOST</version>
+            <version>0.8.0-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
