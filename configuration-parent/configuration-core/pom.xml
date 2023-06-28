@@ -11,6 +11,10 @@
 
     <artifactId>configuration-core</artifactId>
 
+    <properties>
+        <license.dir>${project.parent.basedir}/..</license.dir>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>com.github.starnowski.posmulten</groupId>
