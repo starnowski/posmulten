@@ -15,6 +15,7 @@
         <org.reflections.reflections>0.9.12</org.reflections.reflections>
         <bmunit.extension.project.version>1.1.1</bmunit.extension.project.version>
         <org.jboss.byteman.version>3.0.10</org.jboss.byteman.version>
+        <license.dir>${project.parent.basedir}/..</license.dir>
     </properties>
 
     <dependencies>
