@@ -13,6 +13,7 @@
 
     <properties>
         <configuration.jar.project.version>${project.version}</configuration.jar.project.version>
+        <license.dir>${project.parent.basedir}/..</license.dir>
     </properties>
 
     <dependencies>
