@@ -33,7 +33,7 @@ https://www.markdownguide.org/basic-syntax/
 
 ### Added
 
-- Enhancment to DatabaseOperationExecutor and IDatabaseOperationsProcessor types [288](https://github.com/starnowski/posmulten/issues/288)
+- Added enhancement to DatabaseOperationExecutor and IDatabaseOperationsProcessor types [288](https://github.com/starnowski/posmulten/issues/288)
     - Added method com.github.starnowski.posmulten.postgresql.core.db.DatabaseOperationExecutor#execute(Connection, List<SQLDefinition> sqlDefinitions, DatabaseOperationType). [288](https://github.com/starnowski/posmulten/issues/288)
     - Added method com.github.starnowski.posmulten.postgresql.core.db.operations.CreateOperationsProcessor#run(Connection, List<SQLDefinition> sqlDefinitions). [288](https://github.com/starnowski/posmulten/issues/288)
     - Added method com.github.starnowski.posmulten.postgresql.core.db.operations.DatabaseOperationsLoggerProcessor#run(Connection, List<SQLDefinition> sqlDefinitions). [288](https://github.com/starnowski/posmulten/issues/288)
