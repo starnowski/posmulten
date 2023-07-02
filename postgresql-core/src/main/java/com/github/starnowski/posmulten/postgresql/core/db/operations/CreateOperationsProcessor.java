@@ -24,6 +24,7 @@
 package com.github.starnowski.posmulten.postgresql.core.db.operations;
 
 import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition;
+import com.github.starnowski.posmulten.postgresql.core.db.operations.exceptions.ValidationDatabaseOperationsException;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -33,12 +34,17 @@ import java.util.List;
 
 public class CreateOperationsProcessor implements IDatabaseOperationsProcessor {
     @Override
-    public void run(DataSource dataSource, List<SQLDefinition> sqlDefinitions) throws SQLException {
+    public void run(DataSource dataSource, List<SQLDefinition> sqlDefinitions) throws SQLException, ValidationDatabaseOperationsException {
         try (Connection connection = dataSource.getConnection()) {
-            for (SQLDefinition sqlDefinition : sqlDefinitions) {
-                Statement statement = connection.createStatement();
-                statement.execute(sqlDefinition.getCreateScript());
-            }
+            this.run(connection, sqlDefinitions);
+        }
+    }
+
+    @Override
+    public void run(Connection connection, List<SQLDefinition> sqlDefinitions) throws SQLException, ValidationDatabaseOperationsException {
+        for (SQLDefinition sqlDefinition : sqlDefinitions) {
+            Statement statement = connection.createStatement();
+            statement.execute(sqlDefinition.getCreateScript());
         }
     }
 }

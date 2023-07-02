@@ -24,6 +24,7 @@
 package com.github.starnowski.posmulten.postgresql.core.db.operations;
 
 import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition;
+import com.github.starnowski.posmulten.postgresql.core.db.operations.exceptions.ValidationDatabaseOperationsException;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -34,14 +35,19 @@ import java.util.List;
 
 public class DropOperationsProcessor implements IDatabaseOperationsProcessor {
     @Override
-    public void run(DataSource dataSource, List<SQLDefinition> sqlDefinitions) throws SQLException {
+    public void run(DataSource dataSource, List<SQLDefinition> sqlDefinitions) throws SQLException, ValidationDatabaseOperationsException {
         try (Connection connection = dataSource.getConnection()) {
-            LinkedList<SQLDefinition> stack = new LinkedList<>();
-            sqlDefinitions.forEach(stack::push);
-            for (SQLDefinition sqlDefinition : stack) {
-                Statement statement = connection.createStatement();
-                statement.execute(sqlDefinition.getDropScript());
-            }
+            this.run(connection, sqlDefinitions);
+        }
+    }
+
+    @Override
+    public void run(Connection connection, List<SQLDefinition> sqlDefinitions) throws SQLException, ValidationDatabaseOperationsException {
+        LinkedList<SQLDefinition> stack = new LinkedList<>();
+        sqlDefinitions.forEach(stack::push);
+        for (SQLDefinition sqlDefinition : stack) {
+            Statement statement = connection.createStatement();
+            statement.execute(sqlDefinition.getDropScript());
         }
     }
 }
