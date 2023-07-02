@@ -28,6 +28,17 @@ https://www.markdownguide.org/basic-syntax/
 
 ## [Unreleased]
 
+## [0.7.1] - 2023-07-02
+
+### Added
+
+- Enhancment to DatabaseOperationExecutor and IDatabaseOperationsProcessor types [288](https://github.com/starnowski/posmulten/issues/288)
+    - Added method com.github.starnowski.posmulten.postgresql.core.db.DatabaseOperationExecutor#execute(Connection, List<SQLDefinition> sqlDefinitions, DatabaseOperationType). [288](https://github.com/starnowski/posmulten/issues/288)
+    - Added method com.github.starnowski.posmulten.postgresql.core.db.operations.CreateOperationsProcessor#run(Connection, List<SQLDefinition> sqlDefinitions). [288](https://github.com/starnowski/posmulten/issues/288)
+    - Added method com.github.starnowski.posmulten.postgresql.core.db.operations.DatabaseOperationsLoggerProcessor#run(Connection, List<SQLDefinition> sqlDefinitions). [288](https://github.com/starnowski/posmulten/issues/288)
+    - Added method com.github.starnowski.posmulten.postgresql.core.db.operations.DropOperationsProcessor#run(Connection, List<SQLDefinition> sqlDefinitions). [288](https://github.com/starnowski/posmulten/issues/288)
+    - Added method com.github.starnowski.posmulten.postgresql.core.db.operations.IDatabaseOperationsProcessor#run(Connection, List<SQLDefinition> sqlDefinitions). [288](https://github.com/starnowski/posmulten/issues/288)
+
 ## [0.7.0] - 2023-06-28
 
 ### Added
