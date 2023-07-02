@@ -32,6 +32,10 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Logger;
 
+/**
+ * Database operation process logs all scripts that can be obtained from SQL definitions.
+ * This processor does not execute any operation on the database
+ */
 public class DatabaseOperationsLoggerProcessor implements IDatabaseOperationsProcessor {
 
     private final Logger logger = Logger.getLogger(DatabaseOperationsLoggerProcessor.class.getName());
