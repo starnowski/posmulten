@@ -33,7 +33,19 @@ import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Database operation process that executes drop scripts.
+ */
 public class DropOperationsProcessor implements IDatabaseOperationsProcessor {
+    /**
+     * Executes drop scripts for dataSource object.
+     * Process attempts to establish a connection with the data source that this DataSource object represents.
+     * At the end of operation the established connection object is going to be closed.
+     * @param dataSource Datasource object
+     * @param sqlDefinitions list of sql definitions objects
+     * @throws SQLException
+     * @throws ValidationDatabaseOperationsException
+     */
     @Override
     public void run(DataSource dataSource, List<SQLDefinition> sqlDefinitions) throws SQLException, ValidationDatabaseOperationsException {
         try (Connection connection = dataSource.getConnection()) {
@@ -41,6 +53,13 @@ public class DropOperationsProcessor implements IDatabaseOperationsProcessor {
         }
     }
 
+    /**
+     * Executes drop scripts for passed connection object.
+     * @param connection Connection object
+     * @param sqlDefinitions list of sql definitions objects
+     * @throws SQLException
+     * @throws ValidationDatabaseOperationsException
+     */
     @Override
     public void run(Connection connection, List<SQLDefinition> sqlDefinitions) throws SQLException, ValidationDatabaseOperationsException {
         LinkedList<SQLDefinition> stack = new LinkedList<>();
