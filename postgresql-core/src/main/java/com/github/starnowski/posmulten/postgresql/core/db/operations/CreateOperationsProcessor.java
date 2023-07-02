@@ -24,6 +24,7 @@
 package com.github.starnowski.posmulten.postgresql.core.db.operations;
 
 import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition;
+import com.github.starnowski.posmulten.postgresql.core.db.operations.exceptions.ValidationDatabaseOperationsException;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -31,14 +32,38 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
+/**
+ * Database operation process that executes creation scripts.
+ */
 public class CreateOperationsProcessor implements IDatabaseOperationsProcessor {
+    /**
+     * Executes creation scripts for dataSource object.
+     * Process attempts to establish a connection with the data source that this DataSource object represents.
+     * At the end of operation the established connection object is going to be closed.
+     * @param dataSource Datasource object
+     * @param sqlDefinitions list of sql definitions objects
+     * @throws SQLException
+     * @throws ValidationDatabaseOperationsException
+     */
     @Override
-    public void run(DataSource dataSource, List<SQLDefinition> sqlDefinitions) throws SQLException {
+    public void run(DataSource dataSource, List<SQLDefinition> sqlDefinitions) throws SQLException, ValidationDatabaseOperationsException {
         try (Connection connection = dataSource.getConnection()) {
-            for (SQLDefinition sqlDefinition : sqlDefinitions) {
-                Statement statement = connection.createStatement();
-                statement.execute(sqlDefinition.getCreateScript());
-            }
+            this.run(connection, sqlDefinitions);
+        }
+    }
+
+    /**
+     * Executes creation scripts for passed connection object.
+     * @param connection Connection object
+     * @param sqlDefinitions list of sql definitions objects
+     * @throws SQLException
+     * @throws ValidationDatabaseOperationsException
+     */
+    @Override
+    public void run(Connection connection, List<SQLDefinition> sqlDefinitions) throws SQLException, ValidationDatabaseOperationsException {
+        for (SQLDefinition sqlDefinition : sqlDefinitions) {
+            Statement statement = connection.createStatement();
+            statement.execute(sqlDefinition.getCreateScript());
         }
     }
 }

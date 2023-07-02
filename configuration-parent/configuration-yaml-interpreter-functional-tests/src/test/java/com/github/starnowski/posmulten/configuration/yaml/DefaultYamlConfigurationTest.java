@@ -65,8 +65,8 @@ public class DefaultYamlConfigurationTest extends AbstractTransactionalTestNGSpr
     protected JdbcTemplate ownerJdbcTemplate;
 
     @Autowired
-    private DataSource dataSource;
-    private DatabaseOperationExecutor databaseOperationExecutor = new DatabaseOperationExecutor();
+    protected DataSource dataSource;
+    protected DatabaseOperationExecutor databaseOperationExecutor = new DatabaseOperationExecutor();
     protected List<SQLDefinition> sqlDefinitions = new ArrayList<>();
 
     protected String getGranteeForSharedSchemaContextBuilderInitialization() {
@@ -124,7 +124,7 @@ public class DefaultYamlConfigurationTest extends AbstractTransactionalTestNGSpr
                     config = @SqlConfig(transactionMode = ISOLATED),
                     executionPhase = BEFORE_TEST_METHOD)})
     @Test(dependsOnMethods = {"createSQLDefinitions"}, testName = "execute SQL definitions")
-    public void executeSQLDefinitions() {
+    public void executeSQLDefinitions() throws SQLException {
         try {
             this.databaseOperationExecutor.execute(dataSource, sharedSchemaContext.getSqlDefinitions(), CREATE);
             this.databaseOperationExecutor.execute(dataSource, sharedSchemaContext.getSqlDefinitions(), LOG_ALL);
