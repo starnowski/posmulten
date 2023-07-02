@@ -11,6 +11,7 @@ import spock.lang.Specification
 import spock.lang.Unroll
 
 import javax.sql.DataSource
+import java.sql.Connection
 import java.sql.SQLException
 import java.util.stream.Collectors
 
@@ -44,6 +45,34 @@ class DatabaseOperationExecutorTest extends Specification {
             0 * databaseOperationsLoggerProcessor.run(dataSource, sqlDefinitions)
     }
 
+    def"should invoke correct operation processor for CREATE operation for connection"()
+    {
+        given:
+            def createOperationProcessor = Mock(IDatabaseOperationsProcessor)
+            def dropOperationProcessor = Mock(IDatabaseOperationsProcessor)
+            def validateOperationProcessor = Mock(IDatabaseOperationsProcessor)
+            def databaseOperationsLoggerProcessor = Mock(DatabaseOperationsLoggerProcessor)
+            Map<DatabaseOperationType, IDatabaseOperationsProcessor> operationsProcessorMap = new HashMap<>();
+            operationsProcessorMap.put(DatabaseOperationType.DROP, dropOperationProcessor)
+            operationsProcessorMap.put(DatabaseOperationType.CREATE, createOperationProcessor)
+            operationsProcessorMap.put(DatabaseOperationType.VALIDATE, validateOperationProcessor)
+            operationsProcessorMap.put(DatabaseOperationType.LOG_ALL, databaseOperationsLoggerProcessor)
+            def tested = new DatabaseOperationExecutor(operationsProcessorMap)
+            Connection connection = Mock(Connection)
+            List<SQLDefinition> sqlDefinitions = new ArrayList<>()
+
+        when:
+            tested.execute(connection, sqlDefinitions, DatabaseOperationType.CREATE)
+
+        then:
+            1 * createOperationProcessor.run(connection, sqlDefinitions)
+
+        and: "no other processor should be invoked"
+            0 * dropOperationProcessor.run(connection, sqlDefinitions)
+            0 * validateOperationProcessor.run(connection, sqlDefinitions)
+            0 * databaseOperationsLoggerProcessor.run(connection, sqlDefinitions)
+    }
+
     def"should invoke correct operation processor for DROP operation"()
     {
         given:
@@ -70,6 +99,34 @@ class DatabaseOperationExecutorTest extends Specification {
             0 * createOperationProcessor.run(dataSource, sqlDefinitions)
             0 * validateOperationProcessor.run(dataSource, sqlDefinitions)
             0 * databaseOperationsLoggerProcessor.run(dataSource, sqlDefinitions)
+    }
+
+    def"should invoke correct operation processor for DROP operation for connection"()
+    {
+        given:
+        def createOperationProcessor = Mock(IDatabaseOperationsProcessor)
+        def dropOperationProcessor = Mock(IDatabaseOperationsProcessor)
+        def validateOperationProcessor = Mock(IDatabaseOperationsProcessor)
+        def databaseOperationsLoggerProcessor = Mock(DatabaseOperationsLoggerProcessor)
+        Map<DatabaseOperationType, IDatabaseOperationsProcessor> operationsProcessorMap = new HashMap<>();
+        operationsProcessorMap.put(DatabaseOperationType.DROP, dropOperationProcessor)
+        operationsProcessorMap.put(DatabaseOperationType.CREATE, createOperationProcessor)
+        operationsProcessorMap.put(DatabaseOperationType.VALIDATE, validateOperationProcessor)
+        operationsProcessorMap.put(DatabaseOperationType.LOG_ALL, databaseOperationsLoggerProcessor)
+        def tested = new DatabaseOperationExecutor(operationsProcessorMap)
+        Connection connection = Mock(Connection)
+        List<SQLDefinition> sqlDefinitions = new ArrayList<>()
+
+        when:
+        tested.execute(connection, sqlDefinitions, DatabaseOperationType.DROP)
+
+        then:
+        1 * dropOperationProcessor.run(connection, sqlDefinitions)
+
+        and: "no other processor should be invoked"
+        0 * createOperationProcessor.run(connection, sqlDefinitions)
+        0 * validateOperationProcessor.run(connection, sqlDefinitions)
+        0 * databaseOperationsLoggerProcessor.run(connection, sqlDefinitions)
     }
 
     def"should invoke correct operation processor for VALIDATE operation"()
@@ -100,6 +157,34 @@ class DatabaseOperationExecutorTest extends Specification {
             0 * databaseOperationsLoggerProcessor.run(dataSource, sqlDefinitions)
     }
 
+    def"should invoke correct operation processor for VALIDATE operation for connection"()
+    {
+        given:
+            def createOperationProcessor = Mock(IDatabaseOperationsProcessor)
+            def dropOperationProcessor = Mock(IDatabaseOperationsProcessor)
+            def validateOperationProcessor = Mock(IDatabaseOperationsProcessor)
+            def databaseOperationsLoggerProcessor = Mock(DatabaseOperationsLoggerProcessor)
+            Map<DatabaseOperationType, IDatabaseOperationsProcessor> operationsProcessorMap = new HashMap<>();
+            operationsProcessorMap.put(DatabaseOperationType.DROP, dropOperationProcessor)
+            operationsProcessorMap.put(DatabaseOperationType.CREATE, createOperationProcessor)
+            operationsProcessorMap.put(DatabaseOperationType.VALIDATE, validateOperationProcessor)
+            operationsProcessorMap.put(DatabaseOperationType.LOG_ALL, databaseOperationsLoggerProcessor)
+            def tested = new DatabaseOperationExecutor(operationsProcessorMap)
+            Connection connection = Mock(Connection)
+            List<SQLDefinition> sqlDefinitions = new ArrayList<>()
+
+        when:
+            tested.execute(connection, sqlDefinitions, DatabaseOperationType.VALIDATE)
+
+        then:
+            1 * validateOperationProcessor.run(connection, sqlDefinitions)
+
+        and: "no other processor should be invoked"
+            0 * createOperationProcessor.run(connection, sqlDefinitions)
+            0 * dropOperationProcessor.run(connection, sqlDefinitions)
+            0 * databaseOperationsLoggerProcessor.run(connection, sqlDefinitions)
+    }
+
     def"should invoke correct operation processor for LOG_ALL operation"()
     {
         given:
@@ -126,6 +211,34 @@ class DatabaseOperationExecutorTest extends Specification {
             0 * createOperationProcessor.run(dataSource, sqlDefinitions)
             0 * dropOperationProcessor.run(dataSource, sqlDefinitions)
             0 * validateOperationProcessor.run(dataSource, sqlDefinitions)
+    }
+
+    def"should invoke correct operation processor for LOG_ALL operation for connection"()
+    {
+        given:
+            def createOperationProcessor = Mock(IDatabaseOperationsProcessor)
+            def dropOperationProcessor = Mock(IDatabaseOperationsProcessor)
+            def validateOperationProcessor = Mock(IDatabaseOperationsProcessor)
+            def databaseOperationsLoggerProcessor = Mock(DatabaseOperationsLoggerProcessor)
+            Map<DatabaseOperationType, IDatabaseOperationsProcessor> operationsProcessorMap = new HashMap<>();
+            operationsProcessorMap.put(DatabaseOperationType.DROP, dropOperationProcessor)
+            operationsProcessorMap.put(DatabaseOperationType.CREATE, createOperationProcessor)
+            operationsProcessorMap.put(DatabaseOperationType.VALIDATE, validateOperationProcessor)
+            operationsProcessorMap.put(DatabaseOperationType.LOG_ALL, databaseOperationsLoggerProcessor)
+            def tested = new DatabaseOperationExecutor(operationsProcessorMap)
+            Connection connection = Mock(Connection)
+            List<SQLDefinition> sqlDefinitions = new ArrayList<>()
+
+        when:
+            tested.execute(connection, sqlDefinitions, DatabaseOperationType.LOG_ALL)
+
+        then:
+            1 * databaseOperationsLoggerProcessor.run(connection, sqlDefinitions)
+
+        and: "no other processor should be invoked"
+            0 * createOperationProcessor.run(connection, sqlDefinitions)
+            0 * dropOperationProcessor.run(connection, sqlDefinitions)
+            0 * validateOperationProcessor.run(connection, sqlDefinitions)
     }
 
     def "should have expected list of operation processor" (){
@@ -163,6 +276,29 @@ class DatabaseOperationExecutorTest extends Specification {
     }
 
     @Unroll
+    def"should rethrow exception [#exception] thrown by database operation processor for connection"()
+    {
+        given:
+            def createOperationProcessor = Mock(IDatabaseOperationsProcessor)
+            Map<DatabaseOperationType, IDatabaseOperationsProcessor> operationsProcessorMap = new HashMap<>()
+            operationsProcessorMap.put(DatabaseOperationType.CREATE, createOperationProcessor)
+            def tested = new DatabaseOperationExecutor(operationsProcessorMap)
+            Connection connection = Mock(Connection)
+            List<SQLDefinition> sqlDefinitions = new ArrayList<>()
+
+        when:
+            tested.execute(connection, sqlDefinitions, DatabaseOperationType.CREATE)
+
+        then:
+            1 * createOperationProcessor.run(connection, sqlDefinitions) >> { throw exception }
+            def ex = thrown(exception.getClass())
+            ex.is(exception)
+
+        where:
+            exception << [new SQLException(), new ValidationDatabaseOperationsException(new HashMap<String, Set<String>>())]
+    }
+
+    @Unroll
     def"should throw exception when operation type is null"()
     {
         given:
@@ -172,6 +308,22 @@ class DatabaseOperationExecutorTest extends Specification {
 
         when:
             tested.execute(dataSource, sqlDefinitions, null)
+
+        then:
+            def ex = thrown(IllegalArgumentException)
+            ex.message == "DatabaseOperationType can not be null"
+    }
+
+    @Unroll
+    def"should throw exception when operation type is null for connection"()
+    {
+        given:
+            def tested = new DatabaseOperationExecutor()
+            Connection connection = Mock(Connection)
+            List<SQLDefinition> sqlDefinitions = new ArrayList<>()
+
+        when:
+            tested.execute(connection, sqlDefinitions, null)
 
         then:
             def ex = thrown(IllegalArgumentException)

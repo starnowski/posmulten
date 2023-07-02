@@ -28,6 +28,7 @@ import com.github.starnowski.posmulten.postgresql.core.db.operations.*;
 import com.github.starnowski.posmulten.postgresql.core.db.operations.exceptions.ValidationDatabaseOperationsException;
 
 import javax.sql.DataSource;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
@@ -59,6 +60,10 @@ public class DatabaseOperationExecutor {
 
     public void execute(DataSource dataSource, List<SQLDefinition> sqlDefinitions, DatabaseOperationType operationType) throws SQLException, ValidationDatabaseOperationsException {
         Optional.ofNullable(operationsProcessorMap.get(operationType)).orElseThrow(() -> new IllegalArgumentException("DatabaseOperationType can not be null")).run(dataSource, sqlDefinitions);
+    }
+
+    public void execute(Connection connection, List<SQLDefinition> sqlDefinitions, DatabaseOperationType operationType) throws SQLException, ValidationDatabaseOperationsException {
+        Optional.ofNullable(operationsProcessorMap.get(operationType)).orElseThrow(() -> new IllegalArgumentException("DatabaseOperationType can not be null")).run(connection, sqlDefinitions);
     }
 
     Map<DatabaseOperationType, IDatabaseOperationsProcessor> getOperationsProcessorMap() {
