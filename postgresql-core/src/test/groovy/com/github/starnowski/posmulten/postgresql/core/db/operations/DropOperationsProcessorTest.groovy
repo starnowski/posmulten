@@ -37,6 +37,28 @@ class DropOperationsProcessorTest extends Specification {
     }
 
     @Unroll
+    def "should run drop scripts for connection"(){
+        given:
+            def tested = new DropOperationsProcessor()
+            def connection = Mock(Connection)
+            def statement = Mock(Statement)
+            connection.createStatement() >> statement
+            LinkedList<SQLDefinition> stack = new LinkedList<>()
+
+        when:
+            tested.run(connection, definitions)
+
+        then:
+            definitions.forEach({it -> stack.push(it)})
+            stack.stream().forEach({it ->
+                1 * statement.execute(it.getDropScript())
+            })
+
+        where:
+            definitions << [[sqlDef("cre1"), sqlDef("cre2")], [sqlDef("creX"), sqlDef("creY"), sqlDef("creZ")]]
+    }
+
+    @Unroll
     def "should rethrow exception thrown during executing drop scripts"(){
         given:
             def tested = new DropOperationsProcessor()
@@ -51,6 +73,29 @@ class DropOperationsProcessorTest extends Specification {
 
         when:
             tested.run(dataSource, definitions)
+
+        then:
+            thrown(SQLException)
+
+        where:
+            definitions                                         |   dsThatThrowsExceptions
+            [sqlDef("cre1"), sqlDef("cre2")]                    |   ["cre1"]
+            [sqlDef("creX"), sqlDef("creY"), sqlDef("creZ")]    |   ["creZ"]
+    }
+
+    @Unroll
+    def "should rethrow exception thrown during executing drop scripts for connection"(){
+        given:
+            def tested = new DropOperationsProcessor()
+            def connection = Mock(Connection)
+            def statement = Mock(Statement)
+            connection.createStatement() >> statement
+            dsThatThrowsExceptions.forEach({it ->
+                statement.execute(it) >> { throw new SQLException()}
+            })
+
+        when:
+            tested.run(connection, definitions)
 
         then:
             thrown(SQLException)
