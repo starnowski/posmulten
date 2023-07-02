@@ -9,6 +9,7 @@ https://keepachangelog.com/en/1.0.0/
 https://www.markdownguide.org/basic-syntax/
 
 * [Unreleased](#unreleased)
+* [0.7.1](#071---2023-07-02)
 * [0.7.0](#070---2023-06-28)
 * [0.6.0](#060---2023-01-14)
 * [0.5.6](#056---2022-11-04)
@@ -38,6 +39,7 @@ https://www.markdownguide.org/basic-syntax/
     - Added method com.github.starnowski.posmulten.postgresql.core.db.operations.DatabaseOperationsLoggerProcessor#run(Connection, List<SQLDefinition> sqlDefinitions). [288](https://github.com/starnowski/posmulten/issues/288)
     - Added method com.github.starnowski.posmulten.postgresql.core.db.operations.DropOperationsProcessor#run(Connection, List<SQLDefinition> sqlDefinitions). [288](https://github.com/starnowski/posmulten/issues/288)
     - Added method com.github.starnowski.posmulten.postgresql.core.db.operations.IDatabaseOperationsProcessor#run(Connection, List<SQLDefinition> sqlDefinitions). [288](https://github.com/starnowski/posmulten/issues/288)
+    - Added method com.github.starnowski.posmulten.postgresql.core.db.operations.ValidateOperationsProcessor#run(Connection, List<SQLDefinition> sqlDefinitions). [288](https://github.com/starnowski/posmulten/issues/288)
 
 ## [0.7.0] - 2023-06-28
 
