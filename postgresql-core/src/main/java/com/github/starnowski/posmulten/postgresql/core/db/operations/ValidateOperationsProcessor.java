@@ -35,6 +35,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * Database operation process that executes validation scripts.
+ */
 public class ValidateOperationsProcessor implements IDatabaseOperationsProcessor {
 
     private final SQLUtil sqlUtil;
@@ -47,6 +50,15 @@ public class ValidateOperationsProcessor implements IDatabaseOperationsProcessor
         this.sqlUtil = sqlUtil;
     }
 
+    /**
+     * Executes validation scripts for dataSource object.
+     * Process attempts to establish a connection with the data source that this DataSource object represents.
+     * At the end of operation the established connection object is going to be closed.
+     * @param dataSource Datasource object
+     * @param sqlDefinitions list of sql definitions objects
+     * @throws SQLException
+     * @throws ValidationDatabaseOperationsException in the case when any check script returns a value equal to or below 0
+     */
     @Override
     public void run(DataSource dataSource, List<SQLDefinition> sqlDefinitions) throws SQLException, ValidationDatabaseOperationsException {
         Map<String, Set<String>> failedChecks = null;
@@ -72,6 +84,13 @@ public class ValidateOperationsProcessor implements IDatabaseOperationsProcessor
                 .collect(Collectors.toMap(cs1 -> cs1.getKey(), cs2 -> new HashSet<String>(Collections.singletonList(cs2.getValue())), (o1, o2) -> new HashSet<String>(Stream.concat(o1.stream(), o2.stream()).collect(Collectors.toSet())), () -> new LinkedHashMap<String, Set<String>>()));
     }
 
+    /**
+     * Executes validation scripts for passed connection object.
+     * @param connection Connection object
+     * @param sqlDefinitions list of sql definitions objects
+     * @throws SQLException
+     * @throws ValidationDatabaseOperationsException in the case when any check script returns a value equal to or below 0
+     */
     @Override
     public void run(Connection connection, List<SQLDefinition> sqlDefinitions) throws SQLException, ValidationDatabaseOperationsException {
         Map<String, Set<String>> failedChecks = runValidation(sqlDefinitions, connection);
