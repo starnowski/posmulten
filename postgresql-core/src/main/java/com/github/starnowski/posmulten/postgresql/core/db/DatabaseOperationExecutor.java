@@ -37,6 +37,9 @@ import java.util.Optional;
 
 import static com.github.starnowski.posmulten.postgresql.core.db.DatabaseOperationType.*;
 
+/**
+ * Invokes operation {@link DatabaseOperationType} for specific database operations processor {@link IDatabaseOperationsProcessor}.
+ */
 public class DatabaseOperationExecutor {
 
     private final Map<DatabaseOperationType, IDatabaseOperationsProcessor> operationsProcessorMap;
@@ -58,10 +61,26 @@ public class DatabaseOperationExecutor {
         return result;
     }
 
+    /**
+     * Invokes  {@link IDatabaseOperationsProcessor#run(DataSource, List)} method for specific database operations processor by operation object and pass datasource and sqlDefinitions
+     * @param dataSource Datasource object
+     * @param sqlDefinitions list of sql definitions objects
+     * @param operationType operation type which should be executed
+     * @throws SQLException
+     * @throws ValidationDatabaseOperationsException
+     */
     public void execute(DataSource dataSource, List<SQLDefinition> sqlDefinitions, DatabaseOperationType operationType) throws SQLException, ValidationDatabaseOperationsException {
         Optional.ofNullable(operationsProcessorMap.get(operationType)).orElseThrow(() -> new IllegalArgumentException("DatabaseOperationType can not be null")).run(dataSource, sqlDefinitions);
     }
 
+    /**
+     * Invokes  {@link IDatabaseOperationsProcessor#run(DataSource, List)} method for specific database operations processor by operation object and pass connection and sqlDefinitions
+     * @param connection Connection object
+     * @param sqlDefinitions list of sql definitions objects
+     * @param operationType operation type which should be executed
+     * @throws SQLException
+     * @throws ValidationDatabaseOperationsException
+     */
     public void execute(Connection connection, List<SQLDefinition> sqlDefinitions, DatabaseOperationType operationType) throws SQLException, ValidationDatabaseOperationsException {
         Optional.ofNullable(operationsProcessorMap.get(operationType)).orElseThrow(() -> new IllegalArgumentException("DatabaseOperationType can not be null")).run(connection, sqlDefinitions);
     }
