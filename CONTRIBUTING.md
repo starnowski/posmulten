@@ -82,4 +82,13 @@ IN PROGRESS - suggestions are welcomed!
 Please be in mind that this document is still in progress.
 That means that if your have any suggestions or questions about this document or even whole project than please don't hesitate to write about.
 If you don't like to report your suggestions as issue than you can also write to me on my [linkedin account](https://pl.linkedin.com/in/szymon-tarnowski-a104b4150) 
- 
+
+### Adding licence
+
+To add licence header from file license.txt go to directory for specific module and execute below command.
+
+```bash
+mvn license:format
+```
+
+Check ["Adding License Information Using Maven"](https://dzone.com/articles/adding-license-information) for more details.
