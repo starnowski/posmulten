@@ -9,6 +9,7 @@ https://keepachangelog.com/en/1.0.0/
 https://www.markdownguide.org/basic-syntax/
 
 * [Unreleased](#unreleased)
+* [0.7.2](#072---2023-07-03)
 * [0.7.1](#071---2023-07-02)
 * [0.7.0](#070---2023-06-28)
 * [0.6.0](#060---2023-01-14)
@@ -28,6 +29,15 @@ https://www.markdownguide.org/basic-syntax/
 * [0.2.0](#020---2020-11-14)
 
 ## [Unreleased]
+
+## [0.7.2] - 2023-07-03
+
+### Changed
+
+- Removed condition table_catalog = 'postgresql_core' from check statements [291](https://github.com/starnowski/posmulten/issues/291)
+    - Removed invalid condition from SQL query that checks if changes applied by com.github.starnowski.posmulten.postgresql.core.SetNotNullStatementProducer component were added. [291](https://github.com/starnowski/posmulten/issues/291)
+    - Removed invalid condition from SQL query that checks if changes applied by com.github.starnowski.posmulten.postgresql.core.SetDefaultStatementProducer component were added. [291](https://github.com/starnowski/posmulten/issues/291)
+    - Removed invalid condition from SQL query that checks if changes applied by com.github.starnowski.posmulten.postgresql.core.CreateColumnStatementProducer component were added. [291](https://github.com/starnowski/posmulten/issues/291)
 
 ## [0.7.1] - 2023-07-02
 

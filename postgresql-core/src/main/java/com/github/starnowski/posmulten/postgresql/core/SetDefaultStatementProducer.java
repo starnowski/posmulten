@@ -79,7 +79,6 @@ public class SetDefaultStatementProducer {
     private List<String> prepareCheckingStatements(ISetDefaultStatementProducerParameters parameters) {
         StringBuilder sb = new StringBuilder();
         sb.append("SELECT COUNT(1) FROM information_schema.columns WHERE ");
-        sb.append("table_catalog = 'postgresql_core' AND ");
         if (parameters.getSchema() == null) {
             sb.append("table_schema = 'public'");
         } else {
