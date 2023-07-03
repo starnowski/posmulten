@@ -217,7 +217,6 @@ class CreateColumnStatementProducerTest extends Specification {
     {
         StringBuilder sb = new StringBuilder()
         sb.append("SELECT COUNT(1) FROM information_schema.columns WHERE ")
-        sb.append("table_catalog = 'postgresql_core' AND ")
         if (schema == null)
         {
             sb.append("table_schema = 'public'")
