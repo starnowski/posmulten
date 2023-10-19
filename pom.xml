@@ -13,6 +13,7 @@
         <module>postgresql-core-functional-tests</module>
         <module>test-utils</module>
         <module>configuration-parent</module>
+        <module>openwebstart</module>
     </modules>
 
     <name>posmulten</name>
