@@ -10,7 +10,7 @@ import java.util.stream.Collectors
 class DefaultSharedSchemaContextComparatorTest extends Specification {
 
     @Unroll
-    def "should return correct differences for creation scripts for left #left and right #right"(){
+    def "should return correct differences (only on left #onlyOnLeft and only on right #onlyOnRight for creation scripts for left #left and right #right"(){
         given:
             SharedSchemaContextComparator tested = new DefaultSharedSchemaContextComparator()
             ISharedSchemaContext leftContext = Mock(ISharedSchemaContext)
@@ -34,10 +34,11 @@ class DefaultSharedSchemaContextComparatorTest extends Specification {
             SharedSchemaContextComparator.SharedSchemaContextComparableResults result = tested.compare(leftContext, rightContext)
 
         then:
-            result.get
+            result.getCreationScriptsDifferences().getExistedOnlyOnLeft() == onlyOnLeft
+            result.getCreationScriptsDifferences().getExistedOnlyOnRight() == onlyOnRight
 
         where:
-            left | right
-            []      | []
+            left | right ||  onlyOnLeft || onlyOnRight
+            []      | [] || [] || []
     }
 }

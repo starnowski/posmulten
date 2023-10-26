@@ -3,7 +3,12 @@ package com.github.starnowski.posmulten.postgresql.core.context.comparable;
 import com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaContext;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+
+import static java.util.Collections.unmodifiableList;
+import static java.util.Optional.ofNullable;
 
 public interface SharedSchemaContextComparator {
 
@@ -18,9 +23,9 @@ public interface SharedSchemaContextComparator {
             this.checkScriptsDifferences = checkScriptsDifferences;
         }
 
-        private ComparableResult creationScriptsDifferences;
-        private ComparableResult deletionScriptsDifferences;
-        private ComparableResult checkScriptsDifferences;
+        private final ComparableResult creationScriptsDifferences;
+        private final ComparableResult deletionScriptsDifferences;
+        private final ComparableResult checkScriptsDifferences;
 
         public ComparableResult getCreationScriptsDifferences() {
             return creationScriptsDifferences;
@@ -36,8 +41,20 @@ public interface SharedSchemaContextComparator {
     }
 
     class ComparableResult {
+        public ComparableResult(List<String> existedOnlyOnLeft, List<String> existedOnlyOnRight) {
+            this.existedOnlyOnLeft = unmodifiableList(ofNullable(existedOnlyOnLeft).orElse(new ArrayList<>()));
+            this.existedOnlyOnRight = unmodifiableList(ofNullable(existedOnlyOnRight).orElse(new ArrayList<>()));
+        }
 
-        private List<String> existedOnlyOnLeft = new ArrayList<>();
-        private List<String> existedOnlyOnRight = new ArrayList<>();
+        public List<String> getExistedOnlyOnLeft() {
+            return existedOnlyOnLeft;
+        }
+
+        public List<String> getExistedOnlyOnRight() {
+            return existedOnlyOnRight;
+        }
+
+        private final List<String> existedOnlyOnLeft;
+        private final List<String> existedOnlyOnRight;
     }
 }
