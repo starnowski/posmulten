@@ -170,8 +170,8 @@ class DefaultSharedSchemaContextComparatorTest extends Specification {
             SharedSchemaContextComparator.SharedSchemaContextComparableResults result = tested.diff(leftContext, rightContext)
 
         then:
-            result.getCreationScriptsDifferences().getExistedOnlyOnLeft() == onlyOnLeft
-            result.getCreationScriptsDifferences().getExistedOnlyOnRight() == onlyOnRight
+            result.getCheckScriptsDifferences().getExistedOnlyOnLeft() == onlyOnLeft
+            result.getCheckScriptsDifferences().getExistedOnlyOnRight() == onlyOnRight
 
         where:
             left | right ||  onlyOnLeft || onlyOnRight
