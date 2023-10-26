@@ -4,7 +4,7 @@ import com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaCont
 
 public class DefaultSharedSchemaContextComparator implements SharedSchemaContextComparator {
     @Override
-    public SharedSchemaContextComparableResults compare(ISharedSchemaContext left, ISharedSchemaContext right) {
+    public SharedSchemaContextComparableResults diff(ISharedSchemaContext left, ISharedSchemaContext right) {
         return null;
     }
 }

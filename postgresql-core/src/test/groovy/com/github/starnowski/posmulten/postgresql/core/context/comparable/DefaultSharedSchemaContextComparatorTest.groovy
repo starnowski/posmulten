@@ -31,7 +31,7 @@ class DefaultSharedSchemaContextComparatorTest extends Specification {
             }
 
         when:
-            SharedSchemaContextComparator.SharedSchemaContextComparableResults result = tested.compare(leftContext, rightContext)
+            SharedSchemaContextComparator.SharedSchemaContextComparableResults result = tested.diff(leftContext, rightContext)
 
         then:
             result.getCreationScriptsDifferences().getExistedOnlyOnLeft() == onlyOnLeft
@@ -39,6 +39,6 @@ class DefaultSharedSchemaContextComparatorTest extends Specification {
 
         where:
             left | right ||  onlyOnLeft || onlyOnRight
-            []      | [] || [] || []
+            ["x1", "x23", "cdasdf", "com one"]      | ["x1", "cdasdf", "this is new",  "com one"] || ["x23"] || ["this is new"]
     }
 }
