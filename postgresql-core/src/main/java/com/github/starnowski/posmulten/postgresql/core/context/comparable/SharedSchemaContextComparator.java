@@ -16,11 +16,11 @@ public interface SharedSchemaContextComparator {
     class SharedSchemaContextComparableResults {
 
         private final ComparableResult creationScriptsDifferences;
-        private final ComparableResult deletionScriptsDifferences;
+        private final ComparableResult dropScriptsDifferences;
         private final ComparableResult checkScriptsDifferences;
-        public SharedSchemaContextComparableResults(ComparableResult creationScriptsDifferences, ComparableResult deletionScriptsDifferences, ComparableResult checkScriptsDifferences) {
+        public SharedSchemaContextComparableResults(ComparableResult creationScriptsDifferences, ComparableResult dropScriptsDifferences, ComparableResult checkScriptsDifferences) {
             this.creationScriptsDifferences = creationScriptsDifferences;
-            this.deletionScriptsDifferences = deletionScriptsDifferences;
+            this.dropScriptsDifferences = dropScriptsDifferences;
             this.checkScriptsDifferences = checkScriptsDifferences;
         }
 
@@ -28,8 +28,8 @@ public interface SharedSchemaContextComparator {
             return creationScriptsDifferences;
         }
 
-        public ComparableResult getDeletionScriptsDifferences() {
-            return deletionScriptsDifferences;
+        public ComparableResult getDropScriptsDifferences() {
+            return dropScriptsDifferences;
         }
 
         public ComparableResult getCheckScriptsDifferences() {
