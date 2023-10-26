@@ -179,4 +179,36 @@ class DefaultSharedSchemaContextComparatorTest extends Specification {
             [["x1", "x23", "cdasdf"], ["com one"]]      | [["x1"], ["cdasdf", "com one"]] || ["x23"] || []
             [["x1", "cdasdf"], ["com one"]]      | [["x1", "cdasdf"], ["this is new",  "com one"]] || [] || ["this is new"]
     }
+
+    @Unroll
+    def "should return empty list as differences for creation scripts when there is no differences between definitions for checking scripts #collection"(){
+        given:
+            SharedSchemaContextComparator tested = new DefaultSharedSchemaContextComparator()
+            ISharedSchemaContext leftContext = Mock(ISharedSchemaContext)
+            ISharedSchemaContext rightContext = Mock(ISharedSchemaContext)
+            leftContext.getSqlDefinitions() >> {
+                collection.stream().map({
+                    def defMock = Mock(SQLDefinition)
+                    defMock.getCheckingStatements() >> it
+                    defMock
+                }).collect(toList())
+            }
+            rightContext.getSqlDefinitions() >> {
+                collection.stream().map({
+                    def defMock = Mock(SQLDefinition)
+                    defMock.getCheckingStatements() >> it
+                    defMock
+                }).collect(toList())
+            }
+
+        when:
+            SharedSchemaContextComparator.SharedSchemaContextComparableResults result = tested.diff(leftContext, rightContext)
+
+        then:
+            result.getCheckScriptsDifferences().getExistedOnlyOnLeft().isEmpty()
+            result.getCheckScriptsDifferences().getExistedOnlyOnRight().isEmpty()
+
+        where:
+        collection << [[["x1", "cdasdf", "this is new"],  ["com one"]]]
+    }
 }
