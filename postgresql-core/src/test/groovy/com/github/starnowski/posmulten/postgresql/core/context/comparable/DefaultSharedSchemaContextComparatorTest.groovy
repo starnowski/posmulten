@@ -122,6 +122,14 @@ class DefaultSharedSchemaContextComparatorTest extends Specification {
             result.getDropScriptsDifferences().getExistedOnlyOnLeft() == onlyOnLeft
             result.getDropScriptsDifferences().getExistedOnlyOnRight() == onlyOnRight
 
+        and: "there should be no differences for creation scripts"
+            result.getCreationScriptsDifferences().getExistedOnlyOnLeft().isEmpty()
+            result.getCreationScriptsDifferences().getExistedOnlyOnRight().isEmpty()
+
+        and: "there should be no differences for checking scripts"
+            result.getCheckScriptsDifferences().getExistedOnlyOnLeft().isEmpty()
+            result.getCheckScriptsDifferences().getExistedOnlyOnRight().isEmpty()
+
         where:
             left | right ||  onlyOnLeft || onlyOnRight
             ["x1", "x23", "cdasdf", "com one"]      | ["x1", "cdasdf", "this is new",  "com one"] || ["x23"] || ["this is new"]
@@ -156,6 +164,14 @@ class DefaultSharedSchemaContextComparatorTest extends Specification {
         then:
             result.getDropScriptsDifferences().getExistedOnlyOnLeft().isEmpty()
             result.getDropScriptsDifferences().getExistedOnlyOnRight().isEmpty()
+
+        and: "there should be no differences for creation scripts"
+            result.getCreationScriptsDifferences().getExistedOnlyOnLeft().isEmpty()
+            result.getCreationScriptsDifferences().getExistedOnlyOnRight().isEmpty()
+
+        and: "there should be no differences for checking scripts"
+            result.getCheckScriptsDifferences().getExistedOnlyOnLeft().isEmpty()
+            result.getCheckScriptsDifferences().getExistedOnlyOnRight().isEmpty()
 
         where:
             collection << [["x1", "cdasdf", "this is new",  "com one"]]
