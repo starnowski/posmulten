@@ -7,6 +7,8 @@ import spock.lang.Unroll
 
 import java.util.stream.Collectors
 
+import static java.util.stream.Collectors.toList
+
 class DefaultSharedSchemaContextComparatorTest extends Specification {
 
     @Unroll
@@ -20,14 +22,14 @@ class DefaultSharedSchemaContextComparatorTest extends Specification {
                     def defMock = Mock(SQLDefinition)
                     defMock.getCreateScript() >> it
                     defMock
-                }).collect(Collectors.toList())
+                }).collect(toList())
             }
             rightContext.getSqlDefinitions() >> {
                 right.stream().map({
                     def defMock = Mock(SQLDefinition)
                     defMock.getCreateScript() >> it
                     defMock
-                }).collect(Collectors.toList())
+                }).collect(toList())
             }
 
         when:
@@ -55,14 +57,14 @@ class DefaultSharedSchemaContextComparatorTest extends Specification {
                     def defMock = Mock(SQLDefinition)
                     defMock.getCreateScript() >> it
                     defMock
-                }).collect(Collectors.toList())
+                }).collect(toList())
             }
             rightContext.getSqlDefinitions() >> {
                 collection.stream().map({
                     def defMock = Mock(SQLDefinition)
                     defMock.getCreateScript() >> it
                     defMock
-                }).collect(Collectors.toList())
+                }).collect(toList())
             }
 
         when:
@@ -87,14 +89,14 @@ class DefaultSharedSchemaContextComparatorTest extends Specification {
                     def defMock = Mock(SQLDefinition)
                     defMock.getDropScript() >> it
                     defMock
-                }).collect(Collectors.toList())
+                }).collect(toList())
             }
             rightContext.getSqlDefinitions() >> {
                 right.stream().map({
                     def defMock = Mock(SQLDefinition)
                     defMock.getDropScript() >> it
                     defMock
-                }).collect(Collectors.toList())
+                }).collect(toList())
             }
 
         when:
@@ -122,14 +124,14 @@ class DefaultSharedSchemaContextComparatorTest extends Specification {
                     def defMock = Mock(SQLDefinition)
                     defMock.getDropScript() >> it
                     defMock
-                }).collect(Collectors.toList())
+                }).collect(toList())
             }
             rightContext.getSqlDefinitions() >> {
                 collection.stream().map({
                     def defMock = Mock(SQLDefinition)
                     defMock.getDropScript() >> it
                     defMock
-                }).collect(Collectors.toList())
+                }).collect(toList())
             }
 
         when:
@@ -141,5 +143,40 @@ class DefaultSharedSchemaContextComparatorTest extends Specification {
 
         where:
             collection << [["x1", "cdasdf", "this is new",  "com one"]]
+    }
+
+    @Unroll
+    def "should return correct differences (only on left #onlyOnLeft and only on right #onlyOnRight for checking scripts for left #left and right #right"(){
+        given:
+            SharedSchemaContextComparator tested = new DefaultSharedSchemaContextComparator()
+            ISharedSchemaContext leftContext = Mock(ISharedSchemaContext)
+            ISharedSchemaContext rightContext = Mock(ISharedSchemaContext)
+            leftContext.getSqlDefinitions() >> {
+                left.stream().map({
+                    def defMock = Mock(SQLDefinition)
+                    defMock.getCheckingStatements() >> it
+                    defMock
+                }).collect(toList())
+            }
+            rightContext.getSqlDefinitions() >> {
+                right.stream().map({
+                    def defMock = Mock(SQLDefinition)
+                    defMock.getCheckingStatements() >> it
+                    defMock
+                }).collect(toList())
+            }
+
+        when:
+            SharedSchemaContextComparator.SharedSchemaContextComparableResults result = tested.diff(leftContext, rightContext)
+
+        then:
+            result.getCreationScriptsDifferences().getExistedOnlyOnLeft() == onlyOnLeft
+            result.getCreationScriptsDifferences().getExistedOnlyOnRight() == onlyOnRight
+
+        where:
+            left | right ||  onlyOnLeft || onlyOnRight
+            [["x1", "x23"], ["cdasdf", "com one"]]      | [["x1", "cdasdf"], ["this is new",  "com one"]] || ["x23"] || ["this is new"]
+            [["x1", "x23", "cdasdf"], ["com one"]]      | [["x1"], ["cdasdf", "com one"]] || ["x23"] || []
+            [["x1", "cdasdf"], ["com one"]]      | [["x1", "cdasdf"], ["this is new",  "com one"]] || [] || ["this is new"]
     }
 }
