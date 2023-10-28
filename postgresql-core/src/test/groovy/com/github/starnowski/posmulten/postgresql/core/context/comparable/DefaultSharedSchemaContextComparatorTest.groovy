@@ -298,5 +298,7 @@ class DefaultSharedSchemaContextComparatorTest extends Specification {
             result.getCreationScriptsDifferences().getExistedOnlyOnRight() == ["cr7"]
             result.getDropScriptsDifferences().getExistedOnlyOnLeft() == ["drop1", "drop2", "drop3"]
             result.getDropScriptsDifferences().getExistedOnlyOnRight() == ["drop5", "drop9", "drop6"]
+            result.getCheckScriptsDifferences().getExistedOnlyOnLeft() == ["cdasdf", "com one", "CHECK2"]
+            result.getCheckScriptsDifferences().getExistedOnlyOnRight() == ["YYYY", "CHECKX"]
     }
 }
