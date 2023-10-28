@@ -259,4 +259,44 @@ class DefaultSharedSchemaContextComparatorTest extends Specification {
         where:
         collection << [[["x1", "cdasdf", "this is new"],  ["com one"]]]
     }
+
+    def "should return correct differences"(){
+        given:
+            SharedSchemaContextComparator tested = new DefaultSharedSchemaContextComparator()
+            ISharedSchemaContext leftContext = Mock(ISharedSchemaContext)
+            ISharedSchemaContext rightContext = Mock(ISharedSchemaContext)
+            def creation1 = ["cr1", "cr2", "cr3", "cr4"]
+            def creation2 = ["cr1", "cr3", "cr4", "cr7"]
+            def drop1 = ["drop1", "drop2", "drop3", "drop4"]
+            def drop2 = ["drop5", "drop4", "drop9", "drop6"]
+            def checking1 = [["x1", "x23"], ["cdasdf", "com one"], ["CHECK1"], ["CHECK2"]]
+            def checking2 = [["x1", "x23"], ["YYYY"], ["CHECK1"], ["CHECKX"]]
+            leftContext.getSqlDefinitions() >> creation1.stream().map({
+                def defMock = Mock(SQLDefinition)
+                defMock.getCreateScript() >> it
+                defMock
+            }).collect(toList())
+            for (int i = 0; i < drop1.size(); i++) {
+                leftContext.getSqlDefinitions().get(i).getDropScript() >> drop1.get(i)
+                leftContext.getSqlDefinitions().get(i).getCheckingStatements() >> checking1.get(i)
+            }
+            rightContext.getSqlDefinitions() >> creation2.stream().map({
+                def defMock = Mock(SQLDefinition)
+                defMock.getCreateScript() >> it
+                defMock
+            }).collect(toList())
+            for (int i = 0; i < drop2.size(); i++) {
+                rightContext.getSqlDefinitions().get(i).getDropScript() >> drop2.get(i)
+                rightContext.getSqlDefinitions().get(i).getCheckingStatements() >> checking2.get(i)
+            }
+
+        when:
+            SharedSchemaContextComparator.SharedSchemaContextComparableResults result = tested.diff(leftContext, rightContext)
+
+        then:
+            result.getCreationScriptsDifferences().getExistedOnlyOnLeft() == ["cr2"]
+            result.getCreationScriptsDifferences().getExistedOnlyOnRight() == ["cr7"]
+            result.getDropScriptsDifferences().getExistedOnlyOnLeft() == ["drop1", "drop2", "drop3"]
+            result.getDropScriptsDifferences().getExistedOnlyOnRight() == ["drop5", "drop9", "drop6"]
+    }
 }
