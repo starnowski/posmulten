@@ -14,6 +14,9 @@ import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import spock.lang.Unroll
 
+import java.nio.file.Files
+import java.nio.file.Paths
+
 import static com.github.starnowski.posmulten.configuration.yaml.TestProperties.*
 import static com.github.starnowski.posmulten.postgresql.test.utils.MapBuilder.mapBuilder
 import static java.util.Arrays.asList
@@ -21,155 +24,6 @@ import static java.util.stream.Collectors.toList
 
 class SharedSchemaContextConfigurationYamlDaoTest extends AbstractSpecification {
 
-    private static String ALL_FIELDS_CONTENT = """
-default_schema: public
-current_tenant_id_property_type:  "VARCHAR(255)"
-current_tenant_id_property: "pos.c.ten"
-get_current_tenant_id_function_name: "get_ten_id"
-set_current_tenant_id_function_name: "set_tenant"
-equals_current_tenant_identifier_function_name: "equals_cur_tenant"
-tenant_has_authorities_function_name: "_tenant_hast_auth"
-force_row_level_security_for_table_owner: true
-default_tenant_id_column: "tenant_id"
-grantee: "application-user"
-set_current_tenant_identifier_as_default_value_for_tenant_column_in_all_tables: true
-valid_tenant_value_constraint:
-  is_tenant_valid_function_name:  is_t_valid
-  is_tenant_valid_constraint_name:  "is_tenant_valid_constraint_SDFA"
-  tenant_identifiers_blacklist:
-    - invalid_tenant
-    - "Some strange tenant ID"
-    - "'; DROP ALL TABLES"
-tables:
-  - name: users
-    rls_policy:
-      name: users_table_rls_policy
-      tenant_column:  tenant_id
-      primary_key_definition:
-        name_for_function_that_checks_if_record_exists_in_table: "is_user_exists"
-        pk_columns_name_to_type:
-          id: bigint
-  - name: posts
-    rls_policy:
-      name: "posts_table_rls_policy"
-      tenant_column:  tenant_id
-      skip_adding_of_tenant_column_default_value: false
-      primary_key_definition:
-        name_for_function_that_checks_if_record_exists_in_table: "is_post_exists"
-        pk_columns_name_to_type:
-          id: bigint
-    foreign_keys:
-      - constraint_name:  "posts_users_tenant_constraint"
-        table_name: "users"
-        foreign_key_primary_key_columns_mappings:
-          user_id:  id
-  - name: "comments"
-    rls_policy:
-      name: comments_table_rls_policy
-      tenant_column:  tenant
-      skip_adding_of_tenant_column_default_value: true
-      primary_key_definition:
-        name_for_function_that_checks_if_record_exists_in_table: "is_comment_exists"
-        pk_columns_name_to_type:
-          id: int
-          user_id: bigint
-    foreign_keys:
-      - constraint_name:  "comments_users_tenant_constraint"
-        table_name: users
-        foreign_key_primary_key_columns_mappings:
-          user_id:  id
-      - constraint_name:  "comments_posts_tenant_constraint"
-        table_name: posts
-        foreign_key_primary_key_columns_mappings:
-          post_id:  id
-      - constraint_name:  "comments_comment_parent_tenant_constraint"
-        table_name: comments
-        foreign_key_primary_key_columns_mappings:
-          parent_comment_id:  id
-          parent_comment_user_id:  user_id
-  - name: notifications
-    rls_policy:
-      name: notifications_table_rls_policy
-      tenant_column:  tenant
-      create_tenant_column_for_table: true
-      valid_tenant_value_constraint_name: "is_tenant_id_valid"
-      primary_key_definition:
-        name_for_function_that_checks_if_record_exists_in_table: "is_notification_exists"
-        pk_columns_name_to_type:
-          uuid: uuid
-    foreign_keys:
-      - constraint_name:  "notifications_users_tenant_constraint"
-        table_name: users
-        foreign_key_primary_key_columns_mappings:
-          user_id:  id
-  - name: dictionary
-    schema: no_other_schema
-    rls_policy:
-      name: dictionary_table_rls_policy
-      tenant_column:  tenant_id
-      primary_key_definition:
-        name_for_function_that_checks_if_record_exists_in_table: "is_dictionary_exists"
-        pk_columns_name_to_type:
-          id: bigint
-  # table with blank (null) schema
-  - name: dictionary_1
-    schema:
-    rls_policy:
-      name: dictionary_1_table_rls_policy
-      tenant_column:  tenant_id
-      primary_key_definition:
-        name_for_function_that_checks_if_record_exists_in_table: "is_dictionary_1_exists"
-        pk_columns_name_to_type:
-          id: bigint
-  # table with null schema
-  - name: dictionary_2
-    schema:
-    rls_policy:
-      name: dictionary_2_table_rls_policy
-      tenant_column:  tenant_id
-      primary_key_definition:
-        name_for_function_that_checks_if_record_exists_in_table: "is_dictionary_2_exists"
-        pk_columns_name_to_type:
-          id: bigint
-  - name: notifications_1
-    rls_policy:
-      name: notifications_1_table_rls_policy
-      tenant_column:  tenant
-      create_tenant_column_for_table: true
-    foreign_keys:
-      - constraint_name:  "notifications_1_dictionary_tenant_constraint"
-        table_name: dictionary
-        table_schema: no_other_schema
-        foreign_key_primary_key_columns_mappings:
-          dictionary_id:  id
-custom_sql_definitions:
-  - position: AT_END
-    creation_script:  |
-      ALTER ...
-    validation_scripts:
-      - |
-        SELECT (6) FROM ...
-  - position: AT_BEGINNING
-    creation_script: |
-      ALTER COLUMN ...
-    drop_script: |
-      ALTER DROP ...
-    validation_scripts:
-        - |
-          SELECT (13) FROM ...
-        - "SELECT (1) ..... FROM DUAL"
-  - position: CUSTOM
-    custom_position: "Some custom position"
-    creation_script:  |
-      ALTER ...
-    validation_scripts:
-      - |
-        SELECT (371) FROM ..."""
-
-    private static ONLY_MANDATORY_CONTENT = """
-default_schema: non_public
-grantee: "db-user"
-"""
 
     @Rule
     public TemporaryFolder tempFolder = new TemporaryFolder()
@@ -184,6 +38,22 @@ grantee: "db-user"
 
         when:
             def result = tested.read(resolvedPath)
+
+        then:
+            result
+
+        where:
+            filePath << [ALL_FIELDS_FILE_PATH, ONLY_MANDATORY_FIELDS_FILE_PATH, INTEGRATION_TESTS_FILE_PATH, ONLY_MANDATORY_FIELDS_WITH_TEMPLATE_VALUES_FILE_PATH]
+    }
+
+    @Unroll
+    def "should return non null object based on conten of file #filePath"()
+    {
+        given:
+            def resolvedPath = resolveFilePath(filePath)
+
+        when:
+            def result = tested.readFromContent(new String(Files.readAllBytes(Paths.get(resolvedPath))))
 
         then:
             result
@@ -212,19 +82,6 @@ grantee: "db-user"
 
         where:
             filePath << [ALL_FIELDS_FILE_PATH, ONLY_MANDATORY_FIELDS_FILE_PATH]
-    }
-
-    @Unroll
-    def "should return object based on yaml content"()
-    {
-        when:
-            def result = tested.readFromContent(content)
-
-        then:
-            result
-
-        where:
-            content << [ALL_FIELDS_CONTENT, ONLY_MANDATORY_CONTENT]
     }
 
     @Unroll
@@ -269,6 +126,28 @@ grantee: "db-user"
     }
 
     @Unroll
+    def "for the content of file '#filePath' should return object with expected fields : defaultSchema (#defaultSchema), currentTenantIdPropertyType (#currentTenantIdPropertyType), currentTenantIdProperty (#currentTenantIdProperty), getCurrentTenantIdFunctionName (#getCurrentTenantIdFunctionName), setCurrentTenantIdFunctionName (#setCurrentTenantIdFunctionName)"()
+    {
+        given:
+            def resolvedPath = resolveFilePath(filePath)
+
+        when:
+            def result = tested.readFromContent(new String(Files.readAllBytes(Paths.get(resolvedPath))))
+
+        then:
+            result.getDefaultSchema() == defaultSchema
+            result.getCurrentTenantIdProperty() == currentTenantIdProperty
+            result.getCurrentTenantIdPropertyType() == currentTenantIdPropertyType
+            result.getGetCurrentTenantIdFunctionName() == getCurrentTenantIdFunctionName
+            result.getSetCurrentTenantIdFunctionName() == setCurrentTenantIdFunctionName
+
+        where:
+            filePath                        |   defaultSchema   |   currentTenantIdProperty                 |   currentTenantIdPropertyType         |   getCurrentTenantIdFunctionName                              |   setCurrentTenantIdFunctionName
+            ALL_FIELDS_FILE_PATH            |   "public"        |   stringWrapper("pos.c.ten")          |   stringWrapper("VARCHAR(255)") |   stringWrapper("get_ten_id")    |   stringWrapper("set_tenant")
+            ONLY_MANDATORY_FIELDS_FILE_PATH |   "non_public"    |   null                                    |   null                                |   null            |   null
+    }
+
+    @Unroll
     def "for file '#filePath' should return object with expected fields : defaultSchema (#defaultSchema), grantee (#grantee)"()
     {
         given:
@@ -288,6 +167,25 @@ grantee: "db-user"
     }
 
     @Unroll
+    def "for the content of file '#filePath' should return object with expected fields : defaultSchema (#defaultSchema), grantee (#grantee)"()
+    {
+        given:
+            def resolvedPath = resolveFilePath(filePath)
+
+        when:
+            def result = tested.readFromContent(new String(Files.readAllBytes(Paths.get(resolvedPath))))
+
+        then:
+            result.getDefaultSchema() == defaultSchema
+            result.getGrantee() == grantee
+
+        where:
+            filePath                                                |   defaultSchema       |   grantee
+            ONLY_MANDATORY_FIELDS_WITH_TEMPLATE_VALUES_FILE_PATH    |   "{{db_schema}}"     |   "{{db_grantee}}"
+            CONFIGURATION_WITH_TEMPLATE_VALUES_FILE_PATH            |   "{{db_schema}}"     |   "{{db_rls_grantee}}"
+    }
+
+    @Unroll
     def "for file '#filePath' should return object with expected fields : equalsCurrentTenantIdentifierFunctionName (#equalsCurrentTenantIdentifierFunctionName), tenantHasAuthoritiesFunctionName (#tenantHasAuthoritiesFunctionName), forceRowLevelSecurityForTableOwner (#forceRowLevelSecurityForTableOwner), defaultTenantIdColumn (#defaultTenantIdColumn), grantee (#grantee), setCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables (#setCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables)"()
     {
         given:
@@ -295,6 +193,29 @@ grantee: "db-user"
 
         when:
             def result = tested.read(resolvedPath)
+
+        then:
+            result.getEqualsCurrentTenantIdentifierFunctionName() == equalsCurrentTenantIdentifierFunctionName
+            result.getTenantHasAuthoritiesFunctionName() == tenantHasAuthoritiesFunctionName
+            result.getForceRowLevelSecurityForTableOwner() == forceRowLevelSecurityForTableOwner
+            result.getDefaultTenantIdColumn() == defaultTenantIdColumn
+            result.getGrantee() == grantee
+            result.getCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables() == setCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables
+
+        where:
+            filePath                        |   equalsCurrentTenantIdentifierFunctionName       |   tenantHasAuthoritiesFunctionName            |   forceRowLevelSecurityForTableOwner  |   defaultTenantIdColumn               |   grantee             |   setCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables
+            ALL_FIELDS_FILE_PATH            |   stringWrapper("equals_cur_tenant")          |   stringWrapper("_tenant_hast_auth")  |   true                                |   stringWrapper("tenant_id")      |   "application-user"  |   true
+            ONLY_MANDATORY_FIELDS_FILE_PATH |   null                                            |   null                                        |   null                                |   null                                |   "db-user"           |   null
+    }
+
+    @Unroll
+    def "for the content of file '#filePath' should return object with expected fields : equalsCurrentTenantIdentifierFunctionName (#equalsCurrentTenantIdentifierFunctionName), tenantHasAuthoritiesFunctionName (#tenantHasAuthoritiesFunctionName), forceRowLevelSecurityForTableOwner (#forceRowLevelSecurityForTableOwner), defaultTenantIdColumn (#defaultTenantIdColumn), grantee (#grantee), setCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables (#setCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables)"()
+    {
+        given:
+            def resolvedPath = resolveFilePath(filePath)
+
+        when:
+            def result = tested.readFromContent(new String(Files.readAllBytes(Paths.get(resolvedPath))))
 
         then:
             result.getEqualsCurrentTenantIdentifierFunctionName() == equalsCurrentTenantIdentifierFunctionName
