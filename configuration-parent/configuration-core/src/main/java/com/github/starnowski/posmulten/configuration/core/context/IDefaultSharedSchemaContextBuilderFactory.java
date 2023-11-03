@@ -29,4 +29,6 @@ import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSche
 public interface IDefaultSharedSchemaContextBuilderFactory {
 
     DefaultSharedSchemaContextBuilder build(String filePath) throws InvalidConfigurationException;
+
+    DefaultSharedSchemaContextBuilder buildForContent(String content) throws InvalidConfigurationException;
 }

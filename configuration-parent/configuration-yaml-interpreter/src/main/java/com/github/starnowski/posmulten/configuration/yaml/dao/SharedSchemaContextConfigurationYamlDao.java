@@ -61,6 +61,12 @@ public class SharedSchemaContextConfigurationYamlDao {
         return result;
     }
 
+    public SharedSchemaContextConfiguration readFromContent(String content) throws IOException, YamlInvalidSchema {
+        SharedSchemaContextConfiguration result = mapper.readValue(content, SharedSchemaContextConfiguration.class);
+        validateConfigurationObject(result);
+        return result;
+    }
+
     public void save(SharedSchemaContextConfiguration configuration, String filePath) throws IOException, YamlInvalidSchema {
         validateConfigurationObject(configuration);
         mapper.writeValue(new File(filePath), configuration);
