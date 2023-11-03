@@ -336,6 +336,28 @@ class SharedSchemaContextConfigurationYamlDaoTest extends AbstractSpecification 
     }
 
     @Unroll
+    def "for the content of file '#filePath' should return object that contains expected foreign key configuration #foreignKey for table #table"()
+    {
+        given:
+            def resolvedPath = resolveFilePath(filePath)
+
+        when:
+            def results = tested.readFromContent(new String(Files.readAllBytes(Paths.get(resolvedPath)))).getTables().stream().filter({t -> (table == t.getName()) }).flatMap({t -> t.getForeignKeys().stream()}).collect(toList())
+
+        then:
+            results.contains(foreignKey)
+
+        where:
+            filePath                        |   table               |   foreignKey
+            ALL_FIELDS_FILE_PATH            |   "posts"             |   new ForeignKeyConfiguration().setTableName("users").setConstraintName("posts_users_tenant_constraint").setForeignKeyPrimaryKeyColumnsMappings(mapBuilder().put("user_id", "id").build())
+            ALL_FIELDS_FILE_PATH            |   "comments"          |   new ForeignKeyConfiguration().setTableName("users").setConstraintName("comments_users_tenant_constraint").setForeignKeyPrimaryKeyColumnsMappings(mapBuilder().put("user_id", "id").build())
+            ALL_FIELDS_FILE_PATH            |   "comments"          |   new ForeignKeyConfiguration().setTableName("posts").setConstraintName("comments_posts_tenant_constraint").setForeignKeyPrimaryKeyColumnsMappings(mapBuilder().put("post_id", "id").build())
+            ALL_FIELDS_FILE_PATH            |   "comments"          |   new ForeignKeyConfiguration().setTableName("comments").setConstraintName("comments_comment_parent_tenant_constraint").setForeignKeyPrimaryKeyColumnsMappings(mapBuilder().put("parent_comment_id", "id").put("parent_comment_user_id", "user_id").build())
+            ALL_FIELDS_FILE_PATH            |   "notifications"     |   new ForeignKeyConfiguration().setTableName("users").setConstraintName("notifications_users_tenant_constraint").setForeignKeyPrimaryKeyColumnsMappings(mapBuilder().put("user_id", "id").build())
+            ALL_FIELDS_FILE_PATH            |   "notifications_1"   |   new ForeignKeyConfiguration().setTableName("dictionary").setTableSchema(Optional.of("no_other_schema")).setConstraintName("notifications_1_dictionary_tenant_constraint").setForeignKeyPrimaryKeyColumnsMappings(mapBuilder().put("dictionary_id", "id").build())
+    }
+
+    @Unroll
     def "should return object based on file which was created based on test object #testObject"()
     {
         given:
