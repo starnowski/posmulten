@@ -250,6 +250,24 @@ class SharedSchemaContextConfigurationYamlDaoTest extends AbstractSpecification 
     }
 
     @Unroll
+    def "for the content of file '#filePath' should return object with expected fields related to valid tenant value constraint #properties"()
+    {
+        given:
+            def resolvedPath = resolveFilePath(filePath)
+
+        when:
+            def result = tested.readFromContent(new String(Files.readAllBytes(Paths.get(resolvedPath))))
+
+        then:
+            result.getValidTenantValueConstraint() == properties
+
+        where:
+            filePath                        |   properties
+            ONLY_MANDATORY_FIELDS_FILE_PATH |   null
+            ALL_FIELDS_FILE_PATH            |   new ValidTenantValueConstraintConfiguration().setIsTenantValidConstraintName("is_tenant_valid_constraint_SDFA").setIsTenantValidFunctionName("is_t_valid").setTenantIdentifiersBlacklist(asList("invalid_tenant", "Some strange tenant ID", "'; DROP ALL TABLES"))
+    }
+
+    @Unroll
     def "for file '#filePath' should return object that contains expected table configuration #tableEntry (without comparing foreign keys entries)"()
     {
         given:
@@ -257,6 +275,29 @@ class SharedSchemaContextConfigurationYamlDaoTest extends AbstractSpecification 
 
         when:
             def results = tested.read(resolvedPath).getTables().stream().map({table -> table.setForeignKeys(null) }).collect(toList())
+
+        then:
+            results.contains(tableEntry)
+
+        where:
+            filePath                        |   tableEntry
+            ALL_FIELDS_FILE_PATH            |   new TableEntry().setName("users").setRlsPolicy(new RLSPolicy().setName("users_table_rls_policy").setTenantColumn("tenant_id").setPrimaryKeyDefinition(new PrimaryKeyDefinition().setNameForFunctionThatChecksIfRecordExistsInTable("is_user_exists").setPrimaryKeyColumnsNameToTypeMap(mapBuilder().put("id", "bigint").build())))
+            ALL_FIELDS_FILE_PATH            |   new TableEntry().setName("posts").setRlsPolicy(new RLSPolicy().setName("posts_table_rls_policy").setTenantColumn("tenant_id").setPrimaryKeyDefinition(new PrimaryKeyDefinition().setNameForFunctionThatChecksIfRecordExistsInTable("is_post_exists").setPrimaryKeyColumnsNameToTypeMap(mapBuilder().put("id", "bigint").build())).setSkipAddingOfTenantColumnDefaultValue(false))
+            ALL_FIELDS_FILE_PATH            |   new TableEntry().setName("comments").setRlsPolicy(new RLSPolicy().setName("comments_table_rls_policy").setTenantColumn("tenant").setPrimaryKeyDefinition(new PrimaryKeyDefinition().setNameForFunctionThatChecksIfRecordExistsInTable("is_comment_exists").setPrimaryKeyColumnsNameToTypeMap(mapBuilder().put("id", "int").put("user_id", "bigint").build())).setSkipAddingOfTenantColumnDefaultValue(true))
+            ALL_FIELDS_FILE_PATH            |   new TableEntry().setName("notifications").setRlsPolicy(new RLSPolicy().setName("notifications_table_rls_policy").setTenantColumn("tenant").setPrimaryKeyDefinition(new PrimaryKeyDefinition().setNameForFunctionThatChecksIfRecordExistsInTable("is_notification_exists").setPrimaryKeyColumnsNameToTypeMap(mapBuilder().put("uuid", "uuid").build())).setCreateTenantColumnForTable(true).setValidTenantValueConstraintName("is_tenant_id_valid"))
+            ALL_FIELDS_FILE_PATH            |   new TableEntry().setName("dictionary").setSchema(Optional.of("no_other_schema")).setRlsPolicy(new RLSPolicy().setName("dictionary_table_rls_policy").setTenantColumn("tenant_id").setPrimaryKeyDefinition(new PrimaryKeyDefinition().setNameForFunctionThatChecksIfRecordExistsInTable("is_dictionary_exists").setPrimaryKeyColumnsNameToTypeMap(mapBuilder().put("id", "bigint").build())))
+            ALL_FIELDS_FILE_PATH            |   new TableEntry().setName("dictionary_1").setSchema(Optional.ofNullable(null)).setRlsPolicy(new RLSPolicy().setName("dictionary_1_table_rls_policy").setTenantColumn("tenant_id").setPrimaryKeyDefinition(new PrimaryKeyDefinition().setNameForFunctionThatChecksIfRecordExistsInTable("is_dictionary_1_exists").setPrimaryKeyColumnsNameToTypeMap(mapBuilder().put("id", "bigint").build())))
+            ALL_FIELDS_FILE_PATH            |   new TableEntry().setName("dictionary_2").setSchema(Optional.ofNullable(null)).setRlsPolicy(new RLSPolicy().setName("dictionary_2_table_rls_policy").setTenantColumn("tenant_id").setPrimaryKeyDefinition(new PrimaryKeyDefinition().setNameForFunctionThatChecksIfRecordExistsInTable("is_dictionary_2_exists").setPrimaryKeyColumnsNameToTypeMap(mapBuilder().put("id", "bigint").build())))
+    }
+
+    @Unroll
+    def "for content of file '#filePath' should return object that contains expected table configuration #tableEntry (without comparing foreign keys entries)"()
+    {
+        given:
+            def resolvedPath = resolveFilePath(filePath)
+
+        when:
+            def results = tested.readFromContent(new String(Files.readAllBytes(Paths.get(resolvedPath)))).getTables().stream().map({table -> table.setForeignKeys(null) }).collect(toList())
 
         then:
             results.contains(tableEntry)
