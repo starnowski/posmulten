@@ -5,12 +5,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class CodeDisplayApp {
-    private JTextArea inputTextArea;
-    private JTextArea outputTextArea1;
-    private JTextArea outputTextArea2;
-    private JTextArea outputTextArea3;
-
-    public CodeDisplayApp() {
+    public CodeDisplayApp(YamlSharedSchemaContextFactory factory) {
+        this.factory = factory;
         JFrame frame = new JFrame("Code Display App");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(600, 400);
@@ -40,6 +36,16 @@ public class CodeDisplayApp {
 
         frame.add(panel);
         frame.setVisible(true);
+    }
+
+    private final YamlSharedSchemaContextFactory factory;
+    private JTextArea inputTextArea;
+    private JTextArea outputTextArea1;
+    private JTextArea outputTextArea2;
+    private JTextArea outputTextArea3;
+
+    public CodeDisplayApp() {
+        this(new YamlSharedSchemaContextFactory());
     }
 
     public static void main(String[] args) {
