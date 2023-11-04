@@ -61,18 +61,22 @@ class YamlSharedSchemaContextFactoryTest extends spock.lang.Specification {
 
     def "it should throw SharedSchemaContextBuilderException for an invalid builder"() {
         given:
-        String yaml = """  # Your YAML content here """
-        DefaultDecoratorContext decoratorContext = new DefaultDecoratorContext()
-        def customFactory = Mock(IDefaultSharedSchemaContextBuilderFactory)
-        def customDecoratorFactory = Mock(SharedSchemaContextDecoratorFactory)
-
-        yamlSharedSchemaContextFactory = new YamlSharedSchemaContextFactory(customFactory, customDecoratorFactory)
-        customFactory.buildForContent(_) >> { throw new MissingRLSGranteeDeclarationException("") }
+            String yaml = """  # Your YAML content here """
+            DefaultDecoratorContext decoratorContext = new DefaultDecoratorContext()
+            def customFactory = Mock(IDefaultSharedSchemaContextBuilderFactory)
+            yamlSharedSchemaContextFactory = new YamlSharedSchemaContextFactory(customFactory, null)
+            def builderException = new MissingRLSGranteeDeclarationException("")
+            def context1 = Mock(ISharedSchemaContext)
+            def builder = Mock(DefaultSharedSchemaContextBuilder)
+            def context2 = Mock(ISharedSchemaContextDecorator)
+            customFactory.buildForContent(yaml) >> builder
+            builder.build() >> {throw builderException}
 
         when:
-        def result = { yamlSharedSchemaContextFactory.build(yaml, decoratorContext) }
+            yamlSharedSchemaContextFactory.build(yaml, null)
 
         then:
-        result() == SharedSchemaContextBuilderException
+            def ex = thrown(MissingRLSGranteeDeclarationException)
+            ex == builderException
     }
 }
