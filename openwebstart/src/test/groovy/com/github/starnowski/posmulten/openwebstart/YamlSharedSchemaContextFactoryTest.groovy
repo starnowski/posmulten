@@ -5,6 +5,7 @@ import com.github.starnowski.posmulten.configuration.core.exceptions.InvalidConf
 import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder
 import com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaContext
 import com.github.starnowski.posmulten.postgresql.core.context.decorator.DefaultDecoratorContext
+import com.github.starnowski.posmulten.postgresql.core.context.decorator.ISharedSchemaContextDecorator
 import com.github.starnowski.posmulten.postgresql.core.context.decorator.SharedSchemaContextDecoratorFactory
 import com.github.starnowski.posmulten.postgresql.core.context.exceptions.MissingRLSGranteeDeclarationException
 import com.github.starnowski.posmulten.postgresql.core.context.exceptions.SharedSchemaContextBuilderException
@@ -21,14 +22,23 @@ class YamlSharedSchemaContextFactoryTest extends spock.lang.Specification {
 
     def "it should build ISharedSchemaContext using default factory and decorator"() {
         given:
-        String yaml = """  # Your YAML content here """
-        DefaultDecoratorContext decoratorContext = new DefaultDecoratorContext()
+            String yaml = """  # Your YAML content here """
+            DefaultDecoratorContext decoratorContext = new DefaultDecoratorContext()
+            def customFactory = Mock(IDefaultSharedSchemaContextBuilderFactory)
+            def customDecoratorFactory = Mock(SharedSchemaContextDecoratorFactory)
+            yamlSharedSchemaContextFactory = new YamlSharedSchemaContextFactory(customFactory, customDecoratorFactory)
+            def context1 = Mock(ISharedSchemaContext)
+            def builder = Mock(DefaultSharedSchemaContextBuilder)
+            def context2 = Mock(ISharedSchemaContextDecorator)
+            customFactory.buildForContent(yaml) >> builder
+            builder.build() >> context1
+            customDecoratorFactory.build(context1, decoratorContext) >> context2
 
         when:
-        def result = yamlSharedSchemaContextFactory.build(yaml, decoratorContext)
+            def result = yamlSharedSchemaContextFactory.build(yaml, decoratorContext)
 
         then:
-        result instanceof ISharedSchemaContext
+            result == context2
     }
 
     def "it should build ISharedSchemaContext using custom factory and decorator"() {
