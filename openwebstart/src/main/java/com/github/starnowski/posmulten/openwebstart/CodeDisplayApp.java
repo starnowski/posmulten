@@ -27,14 +27,13 @@ public class CodeDisplayApp {
 
         JButton submitButton = new JButton("Submit");
         submitButton.setName("Submit");
-        submitButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String inputCode = inputTextArea.getText();
-                outputTextArea1.setText(inputCode);
-                outputTextArea2.setText(inputCode);
-                outputTextArea3.setText(inputCode);
-            }
+        System.out.println("before addActionListener");
+        submitButton.addActionListener(e -> {
+            System.out.println("actionPerformed : " + e.getActionCommand());
+            String inputCode = inputTextArea.getText();
+            outputTextArea1.setText(inputCode);
+            outputTextArea2.setText(inputCode);
+            outputTextArea3.setText(inputCode);
         });
 
         JPanel panel = new JPanel();
@@ -45,7 +44,7 @@ public class CodeDisplayApp {
         panel.add(submitButton);
 
         frame.add(panel);
-        frame.setVisible(true);
+        frame.pack();
     }
     public CodeDisplayApp() {
         this(new YamlSharedSchemaContextFactory());
@@ -55,7 +54,8 @@ public class CodeDisplayApp {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new CodeDisplayApp();
+                CodeDisplayApp app = new CodeDisplayApp();
+                app.getFrame().setVisible(true);
             }
         });
     }
