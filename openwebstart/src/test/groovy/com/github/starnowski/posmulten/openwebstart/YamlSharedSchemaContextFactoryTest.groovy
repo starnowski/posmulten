@@ -2,6 +2,7 @@ package com.github.starnowski.posmulten.openwebstart
 
 import com.github.starnowski.posmulten.configuration.core.context.IDefaultSharedSchemaContextBuilderFactory
 import com.github.starnowski.posmulten.configuration.core.exceptions.InvalidConfigurationException
+import com.github.starnowski.posmulten.configuration.yaml.exceptions.YamlInvalidSchema
 import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder
 import com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaContext
 import com.github.starnowski.posmulten.postgresql.core.context.decorator.DefaultDecoratorContext
@@ -41,34 +42,21 @@ class YamlSharedSchemaContextFactoryTest extends spock.lang.Specification {
             result == context2
     }
 
-    def "it should build ISharedSchemaContext using custom factory and decorator"() {
-        given:
-        String yaml = """  # Your YAML content here """
-        DefaultDecoratorContext decoratorContext = new DefaultDecoratorContext()
-        def customFactory = Mock(IDefaultSharedSchemaContextBuilderFactory)
-        def customDecoratorFactory = Mock(SharedSchemaContextDecoratorFactory)
-
-        yamlSharedSchemaContextFactory = new YamlSharedSchemaContextFactory(customFactory, customDecoratorFactory)
-        customFactory.buildForContent(_) >> new DefaultSharedSchemaContextBuilder().build()
-        customDecoratorFactory.build(_, decoratorContext) >> Mock(ISharedSchemaContext)
-
-        when:
-        def result = yamlSharedSchemaContextFactory.build(yaml, decoratorContext)
-
-        then:
-        result instanceof ISharedSchemaContext
-    }
-
     def "it should throw InvalidConfigurationException for invalid YAML"() {
         given:
-        String invalidYaml = "invalid_yaml"
-        DefaultDecoratorContext decoratorContext = new DefaultDecoratorContext()
+            String yaml = """  # Your YAML content here """
+            DefaultDecoratorContext decoratorContext = new DefaultDecoratorContext()
+            def customFactory = Mock(IDefaultSharedSchemaContextBuilderFactory)
+            yamlSharedSchemaContextFactory = new YamlSharedSchemaContextFactory(customFactory, null)
+            def yamlException = new YamlInvalidSchema(["test"])
+            customFactory.buildForContent(yaml) >> {throw yamlException}
 
         when:
-        def result = { yamlSharedSchemaContextFactory.build(invalidYaml, decoratorContext) }
+            yamlSharedSchemaContextFactory.build(yaml, null)
 
         then:
-        result() == InvalidConfigurationException
+            def ex = thrown(YamlInvalidSchema)
+            ex == yamlException
     }
 
     def "it should throw SharedSchemaContextBuilderException for an invalid builder"() {
