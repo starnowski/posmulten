@@ -5,9 +5,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class CodeDisplayApp {
+
+    private final JFrame frame;
+    private final YamlSharedSchemaContextFactory factory;
+    private final JTextArea inputTextArea;
+    private final JTextArea outputTextArea1;
+    private final JTextArea outputTextArea2;
+    private final JTextArea outputTextArea3;
     public CodeDisplayApp(YamlSharedSchemaContextFactory factory) {
         this.factory = factory;
-        JFrame frame = new JFrame("Code Display App");
+        frame = new JFrame("Code Display App");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(600, 400);
 
@@ -15,8 +22,11 @@ public class CodeDisplayApp {
         outputTextArea1 = new JTextArea(10, 40);
         outputTextArea2 = new JTextArea(10, 40);
         outputTextArea3 = new JTextArea(10, 40);
+        inputTextArea.setName("configuration");
+        outputTextArea1.setName("creationScripts");
 
         JButton submitButton = new JButton("Submit");
+        submitButton.setName("Submit");
         submitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -37,13 +47,6 @@ public class CodeDisplayApp {
         frame.add(panel);
         frame.setVisible(true);
     }
-
-    private final YamlSharedSchemaContextFactory factory;
-    private JTextArea inputTextArea;
-    private JTextArea outputTextArea1;
-    private JTextArea outputTextArea2;
-    private JTextArea outputTextArea3;
-
     public CodeDisplayApp() {
         this(new YamlSharedSchemaContextFactory());
     }
@@ -55,5 +58,9 @@ public class CodeDisplayApp {
                 new CodeDisplayApp();
             }
         });
+    }
+
+    public JFrame getFrame() {
+        return frame;
     }
 }
