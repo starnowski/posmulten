@@ -15,6 +15,8 @@ import java.awt.event.ActionListener;
 import java.util.LinkedList;
 import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.joining;
+
 public class PosmultenApp extends JFrame {
     public static final String CREATION_SCRIPTS_TEXTFIELD_NAME = "creationScripts";
     public static final String DROP_SCRIPTS_TEXTFIELD_NAME = "dropScripts";
@@ -90,14 +92,15 @@ public class PosmultenApp extends JFrame {
             String inputCode = inputTextArea.getText();
             try {
                 ISharedSchemaContext context = factory.build(inputCode, DefaultDecoratorContext.builder().build());
-                creationScriptsTextArea.setText(context.getSqlDefinitions().stream().map(definition -> definition.getCreateScript()).collect(Collectors.joining("\n")));
+                creationScriptsTextArea.setText(context.getSqlDefinitions().stream().map(definition -> definition.getCreateScript()).collect(joining("\n")));
                 LinkedList<SQLDefinition> stack = new LinkedList<>();
                 context.getSqlDefinitions().forEach(stack::push);
-                dropScriptsTextArea.setText(stack.stream().map(definition -> definition.getDropScript()).collect(Collectors.joining("\n")));
-                checkingScriptsTextArea.setText(context.getSqlDefinitions().stream().filter(definition -> definition.getCheckingStatements() != null).flatMap(definition -> definition.getCheckingStatements().stream()).collect(Collectors.joining("\n")));
+                dropScriptsTextArea.setText(stack.stream().map(definition -> definition.getDropScript()).collect(joining("\n")));
+                checkingScriptsTextArea.setText(context.getSqlDefinitions().stream().filter(definition -> definition.getCheckingStatements() != null).flatMap(definition -> definition.getCheckingStatements().stream()).collect(joining("\n")));
                 scriptsPanel.setVisible(true);
             } catch (InvalidConfigurationException ex) {
-                throw new RuntimeException(ex);
+                errorTextArea.setText(ex.getErrorMessages().stream().collect(joining("\n")));
+                errorPanel.setVisible(true);
             } catch (SharedSchemaContextBuilderException ex) {
                 errorTextArea.setText(ex.getMessage());
                 errorPanel.setVisible(true);
