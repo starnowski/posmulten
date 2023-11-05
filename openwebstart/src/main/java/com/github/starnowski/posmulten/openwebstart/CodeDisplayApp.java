@@ -26,7 +26,7 @@ public class CodeDisplayApp {
         outputTextArea1.setName("creationScripts");
 
         JButton submitButton = new JButton("Submit");
-        submitButton.setName("Submit");
+        submitButton.setName("submitBtn");
         System.out.println("before addActionListener");
         submitButton.addActionListener(e -> {
             System.out.println("actionPerformed : " + e.getActionCommand());
@@ -45,6 +45,7 @@ public class CodeDisplayApp {
 
         frame.add(panel);
         frame.pack();
+        frame.setVisible(false);
     }
     public CodeDisplayApp() {
         this(new YamlSharedSchemaContextFactory());

@@ -4,14 +4,23 @@ import com.github.starnowski.posmulten.configuration.core.exceptions.InvalidConf
 import com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaContext;
 import com.github.starnowski.posmulten.postgresql.core.context.decorator.DefaultDecoratorContext;
 import com.github.starnowski.posmulten.postgresql.core.context.exceptions.SharedSchemaContextBuilderException;
+import org.assertj.swing.core.GenericTypeMatcher;
+import org.assertj.swing.core.MouseButton;
 import org.assertj.swing.edt.FailOnThreadViolationRepaintManager;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
+import org.assertj.swing.fixture.JButtonFixture;
+import org.awaitility.Awaitility;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.time.Duration;
 
 public class CodeDisplayAppMockedSwingTest {
 
@@ -32,7 +41,7 @@ public class CodeDisplayAppMockedSwingTest {
     }
 
     @Test
-    public void shouldCopyTextInLabelWhenClickingButton() throws SharedSchemaContextBuilderException, InvalidConfigurationException {
+    public void shouldCopyTextInLabelWhenClickingButton() throws SharedSchemaContextBuilderException, InvalidConfigurationException, InterruptedException {
 //        window.textBox("textToCopy").enterText("Some random text");
 //        window.button("copyButton").click();
 //        window.label("copiedText").requireText("Some random text");
@@ -41,9 +50,14 @@ public class CodeDisplayAppMockedSwingTest {
         Mockito.when(factory.build(Mockito.eq(yaml), Mockito.any(DefaultDecoratorContext.class))).thenReturn(context);
         window.textBox("configuration").enterText(yaml);
 
-        window.click();
+        window.button("submitBtn").click();
+//        for (ActionListener al : window.button("submitBtn").target().getActionListeners()) {
+//            al.actionPerformed(null);
+//        }
+//        GuiActionRunner.execute(() -> window.button("submitBtn").click());
 
-        window.textBox("creationScripts").requireText("XXXX1");
+//        Thread.sleep(20000);
+        window.textBox("creationScripts").requireText(yaml);
     }
 
     @AfterEach
