@@ -10,6 +10,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import static javax.swing.SwingUtilities.invokeAndWait;
 
+@Deprecated
 public class SimpleCopyApplication extends JFrame {
     private static final long serialVersionUID = 1L;
 
