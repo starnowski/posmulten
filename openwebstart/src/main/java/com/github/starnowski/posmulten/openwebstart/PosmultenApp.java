@@ -99,7 +99,8 @@ public class PosmultenApp extends JFrame {
             } catch (InvalidConfigurationException ex) {
                 throw new RuntimeException(ex);
             } catch (SharedSchemaContextBuilderException ex) {
-                throw new RuntimeException(ex);
+                errorTextArea.setText(ex.getMessage());
+                errorPanel.setVisible(true);
             } catch (RuntimeException exception) {
                 System.out.println("exception");
             }
