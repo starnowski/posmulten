@@ -29,7 +29,6 @@ public class PosmultenApp extends JFrame {
 
     public PosmultenApp(YamlSharedSchemaContextFactory factory) {
         this.factory = factory;
-//        setMiglayout(new LC().wrapAfter(1), new AC().align("center"), new AC());
         setMiglayout();
         setName("Posmulten");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -46,26 +45,22 @@ public class PosmultenApp extends JFrame {
 
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        JLabel configurationLabel = new JLabel("Yaml configuration");
+        configurationLabel.setAlignmentX(JButton.CENTER_ALIGNMENT);
+        panel.add(configurationLabel);
         panel.add(new JScrollPane(inputTextArea), BorderLayout.CENTER);
-
-        scriptsPanel = new JPanel();
-        scriptsPanel.setName(SCRIPTS_PANEL_NAME);
-        scriptsPanel.setLayout(new BoxLayout(scriptsPanel, BoxLayout.Y_AXIS));
-        scriptsPanel.add(new JScrollPane(creationScriptsTextArea));
-        scriptsPanel.add(new JScrollPane(dropScriptsTextArea));
-        scriptsPanel.add(new JScrollPane(checkingScriptsTextArea));
-        panel.add(scriptsPanel);
         submitButton.setAlignmentX(JButton.CENTER_ALIGNMENT);
-        panel.add(submitButton, BorderLayout.CENTER);
+        panel.add(submitButton);
+        scriptsPanel = prepareScriptsPanel();
+        panel.add(scriptsPanel);
         add(panel);
 
         scriptsPanel.setVisible(false);
 
         pack();
 
-
         submitButton.addActionListener(e -> {
-            System.out.println("actionPerformed : " + e.getActionCommand());
+            scriptsPanel.setVisible(false);
             String inputCode = inputTextArea.getText();
             try {
                 ISharedSchemaContext context = factory.build(inputCode, DefaultDecoratorContext.builder().build());
@@ -83,6 +78,16 @@ public class PosmultenApp extends JFrame {
                 System.out.println("exception");
             }
         });
+    }
+
+    private JPanel prepareScriptsPanel(){
+        JPanel panel = new JPanel();
+        panel.setName(SCRIPTS_PANEL_NAME);
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.add(new JScrollPane(creationScriptsTextArea));
+        panel.add(new JScrollPane(dropScriptsTextArea));
+        panel.add(new JScrollPane(checkingScriptsTextArea));
+        return panel;
     }
 
     public PosmultenApp() {
