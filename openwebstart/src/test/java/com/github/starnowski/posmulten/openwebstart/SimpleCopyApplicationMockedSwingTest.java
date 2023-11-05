@@ -5,10 +5,8 @@ import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
 import org.junit.jupiter.api.*;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @Disabled
-class SimpleCopyApplicationTest {
+class SimpleCopyApplicationMockedSwingTest {
     private FrameFixture window;
 
     @BeforeAll
