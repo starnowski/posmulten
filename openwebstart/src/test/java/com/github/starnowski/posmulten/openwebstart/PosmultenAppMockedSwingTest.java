@@ -39,7 +39,6 @@ class PosmultenAppMockedSwingTest {
         frame.setVisible(true);
     }
 
-
     @Test
     public void shouldDisplayCreationScriptsForCorrectConfigurationWhenClickingSubmitButton() throws SharedSchemaContextBuilderException, InvalidConfigurationException, InterruptedException {
         String yaml = "Some yaml";
@@ -61,7 +60,7 @@ class PosmultenAppMockedSwingTest {
         Mockito.when(context.getSqlDefinitions()).thenReturn(definitions);
         window.textBox("configuration").enterText(yaml);
         window.button("submitBtn").click();
-        window.textBox("dropScripts").requireText("DROP fun" + "\n" + "ALTER TABLE Drop some Fun");
+        window.textBox("dropScripts").requireText("ALTER TABLE Drop some Fun" + "\n" + "DROP fun");
     }
 
     private SQLDefinition sqlDef(String creationScript, String dropScript)

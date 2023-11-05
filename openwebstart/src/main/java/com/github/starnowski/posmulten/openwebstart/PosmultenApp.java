@@ -1,6 +1,7 @@
 package com.github.starnowski.posmulten.openwebstart;
 
 import com.github.starnowski.posmulten.configuration.core.exceptions.InvalidConfigurationException;
+import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition;
 import com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaContext;
 import com.github.starnowski.posmulten.postgresql.core.context.decorator.DefaultDecoratorContext;
 import com.github.starnowski.posmulten.postgresql.core.context.exceptions.SharedSchemaContextBuilderException;
@@ -9,6 +10,7 @@ import net.miginfocom.layout.LC;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
+import java.util.LinkedList;
 import java.util.stream.Collectors;
 
 public class PosmultenApp extends JFrame {
@@ -43,12 +45,16 @@ public class PosmultenApp extends JFrame {
             try {
                 ISharedSchemaContext context = factory.build(inputCode, DefaultDecoratorContext.builder().build());
                 outputTextArea1.setText(context.getSqlDefinitions().stream().map(definition -> definition.getCreateScript()).collect(Collectors.joining("\n")));
+                LinkedList<SQLDefinition> stack = new LinkedList<>();
+                context.getSqlDefinitions().forEach(stack::push);
+                outputTextArea2.setText(stack.stream().map(definition -> definition.getDropScript()).collect(Collectors.joining("\n")));
             } catch (InvalidConfigurationException ex) {
                 throw new RuntimeException(ex);
             } catch (SharedSchemaContextBuilderException ex) {
                 throw new RuntimeException(ex);
+            } catch (RuntimeException exception) {
+                System.out.println("exception");
             }
-            outputTextArea2.setText(inputCode);
             outputTextArea3.setText(inputCode);
         });
 
