@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static com.github.starnowski.posmulten.openwebstart.PosmultenApp.*;
 import static java.util.Arrays.asList;
 import static java.util.Optional.ofNullable;
 import static org.junit.jupiter.api.Assertions.*;
@@ -43,39 +44,63 @@ class PosmultenAppMockedSwingTest {
     }
 
     @Test
+    public void shouldNotDisplayTextFieldsWithScriptsBeforeSubmittingConfiguration()
+    {
+        // THEN
+        window.textBox(CREATION_SCRIPTS_TEXTFIELD_NAME).requireNotVisible();
+        window.textBox(DROP_SCRIPTS_TEXTFIELD_NAME).requireNotVisible();
+        window.textBox(CHECKING_SCRIPTS_TEXTFIELD_NAME).requireNotVisible();
+    }
+
+    @Test
     public void shouldDisplayCreationScriptsForCorrectConfigurationWhenClickingSubmitButton() throws SharedSchemaContextBuilderException, InvalidConfigurationException, InterruptedException {
+        // GIVEN
         String yaml = "Some yaml";
         ISharedSchemaContext context = Mockito.mock(ISharedSchemaContext.class);
         Mockito.when(factory.build(Mockito.eq(yaml), Mockito.any(DefaultDecoratorContext.class))).thenReturn(context);
         List<SQLDefinition> definitions = asList(sqlDef("DEF 1", null), sqlDef("ALTER DEFINIT and Function", null));
         Mockito.when(context.getSqlDefinitions()).thenReturn(definitions);
-        window.textBox("configuration").enterText(yaml);
+        window.textBox(CONFIGURATION_TEXTFIELD_NAME).enterText(yaml);
+
+        // WHEN
         window.button("submitBtn").click();
-        window.textBox("creationScripts").requireText("DEF 1" + "\n" + "ALTER DEFINIT and Function");
+
+        // THEN
+        window.textBox(CREATION_SCRIPTS_TEXTFIELD_NAME).requireText("DEF 1" + "\n" + "ALTER DEFINIT and Function");
     }
 
     @Test
     public void shouldDisplayDropScriptsForCorrectConfigurationWhenClickingSubmitButton() throws SharedSchemaContextBuilderException, InvalidConfigurationException, InterruptedException {
+        // GIVEN
         String yaml = "Some yaml";
         ISharedSchemaContext context = Mockito.mock(ISharedSchemaContext.class);
         Mockito.when(factory.build(Mockito.eq(yaml), Mockito.any(DefaultDecoratorContext.class))).thenReturn(context);
         List<SQLDefinition> definitions = asList(sqlDef(null, "DROP fun"), sqlDef(null, "ALTER TABLE Drop some Fun"));
         Mockito.when(context.getSqlDefinitions()).thenReturn(definitions);
-        window.textBox("configuration").enterText(yaml);
+        window.textBox(CONFIGURATION_TEXTFIELD_NAME).enterText(yaml);
+
+        // WHEN
         window.button("submitBtn").click();
-        window.textBox("dropScripts").requireText("ALTER TABLE Drop some Fun" + "\n" + "DROP fun");
+
+        // THEN
+        window.textBox(DROP_SCRIPTS_TEXTFIELD_NAME).requireText("ALTER TABLE Drop some Fun" + "\n" + "DROP fun");
     }
 
     @Test
     public void shouldDisplayCheckingScriptsForCorrectConfigurationWhenClickingSubmitButton() throws SharedSchemaContextBuilderException, InvalidConfigurationException, InterruptedException {
+        // GIVEN
         String yaml = "Some yaml";
         ISharedSchemaContext context = Mockito.mock(ISharedSchemaContext.class);
         Mockito.when(factory.build(Mockito.eq(yaml), Mockito.any(DefaultDecoratorContext.class))).thenReturn(context);
         List<SQLDefinition> definitions = asList(sqlDef(null, null, "Some check1"), sqlDef(null, null, "check1", "check23\naaa"));
         Mockito.when(context.getSqlDefinitions()).thenReturn(definitions);
-        window.textBox("configuration").enterText(yaml);
+        window.textBox(CONFIGURATION_TEXTFIELD_NAME).enterText(yaml);
+
+        // WHEN
         window.button("submitBtn").click();
-        window.textBox("checkingScripts").requireText("Some check1" + "\n" + "check1" + "\n" + "check23\naaa");
+
+        // THEN
+        window.textBox(CHECKING_SCRIPTS_TEXTFIELD_NAME).requireText("Some check1" + "\n" + "check1" + "\n" + "check23\naaa");
     }
 
     private SQLDefinition sqlDef(String creationScript, String dropScript, String... checkingScripts)

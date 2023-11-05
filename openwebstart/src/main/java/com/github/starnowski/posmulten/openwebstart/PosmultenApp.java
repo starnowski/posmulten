@@ -14,6 +14,10 @@ import java.util.LinkedList;
 import java.util.stream.Collectors;
 
 public class PosmultenApp extends JFrame {
+    public static final String CREATION_SCRIPTS_TEXTFIELD_NAME = "creationScripts";
+    public static final String DROP_SCRIPTS_TEXTFIELD_NAME = "dropScripts";
+    public static final String CHECKING_SCRIPTS_TEXTFIELD_NAME = "checkingScripts";
+    public static final String CONFIGURATION_TEXTFIELD_NAME = "configuration";
     private final YamlSharedSchemaContextFactory factory;
     private final JTextArea inputTextArea;
     private final JTextArea outputTextArea1;
@@ -32,11 +36,11 @@ public class PosmultenApp extends JFrame {
         outputTextArea1 = new JTextArea(10, 20);
         outputTextArea2 = new JTextArea(10, 20);
         outputTextArea3 = new JTextArea(10, 20);
-        inputTextArea.setName("configuration");
+        inputTextArea.setName(CONFIGURATION_TEXTFIELD_NAME);
         inputTextArea.setToolTipText("Configuration");
-        outputTextArea1.setName("creationScripts");
-        outputTextArea2.setName("dropScripts");
-        outputTextArea3.setName("checkingScripts");
+        outputTextArea1.setName(CREATION_SCRIPTS_TEXTFIELD_NAME);
+        outputTextArea2.setName(DROP_SCRIPTS_TEXTFIELD_NAME);
+        outputTextArea3.setName(CHECKING_SCRIPTS_TEXTFIELD_NAME);
 
         JButton submitButton = new JButton("Submit");
         submitButton.setName("submitBtn");
