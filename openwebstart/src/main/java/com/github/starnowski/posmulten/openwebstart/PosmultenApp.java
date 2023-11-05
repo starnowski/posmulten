@@ -32,6 +32,7 @@ public class PosmultenApp extends JFrame {
         inputTextArea.setName("configuration");
         inputTextArea.setToolTipText("Configuration");
         outputTextArea1.setName("creationScripts");
+        outputTextArea2.setName("dropScripts");
 
         JButton submitButton = new JButton("Submit");
         submitButton.setName("submitBtn");
@@ -58,12 +59,6 @@ public class PosmultenApp extends JFrame {
         panel.add(new JScrollPane(outputTextArea3));
         panel.add(submitButton);
         add(panel);
-
-//        add(new JScrollPane(inputTextArea));
-//        add(new JScrollPane(outputTextArea1));
-//        add(new JScrollPane(outputTextArea2));
-//        add(new JScrollPane(outputTextArea3));
-//        add(submitButton);
 
         pack();
     }

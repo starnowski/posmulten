@@ -41,21 +41,34 @@ class PosmultenAppMockedSwingTest {
 
 
     @Test
-    public void shouldCopyTextInLabelWhenClickingButton() throws SharedSchemaContextBuilderException, InvalidConfigurationException, InterruptedException {
+    public void shouldDisplayCreationScriptsForCorrectConfigurationWhenClickingSubmitButton() throws SharedSchemaContextBuilderException, InvalidConfigurationException, InterruptedException {
         String yaml = "Some yaml";
         ISharedSchemaContext context = Mockito.mock(ISharedSchemaContext.class);
         Mockito.when(factory.build(Mockito.eq(yaml), Mockito.any(DefaultDecoratorContext.class))).thenReturn(context);
-        List<SQLDefinition> definitions = Arrays.asList(sqlDef("DEF 1"), sqlDef("ALTER DEFINIT and Function"));
+        List<SQLDefinition> definitions = Arrays.asList(sqlDef("DEF 1", null), sqlDef("ALTER DEFINIT and Function", null));
         Mockito.when(context.getSqlDefinitions()).thenReturn(definitions);
         window.textBox("configuration").enterText(yaml);
         window.button("submitBtn").click();
         window.textBox("creationScripts").requireText("DEF 1" + "\n" + "ALTER DEFINIT and Function");
     }
 
-    private SQLDefinition sqlDef(String creationScript)
+    @Test
+    public void shouldDisplayDropScriptsForCorrectConfigurationWhenClickingSubmitButton() throws SharedSchemaContextBuilderException, InvalidConfigurationException, InterruptedException {
+        String yaml = "Some yaml";
+        ISharedSchemaContext context = Mockito.mock(ISharedSchemaContext.class);
+        Mockito.when(factory.build(Mockito.eq(yaml), Mockito.any(DefaultDecoratorContext.class))).thenReturn(context);
+        List<SQLDefinition> definitions = Arrays.asList(sqlDef(null, "DROP fun"), sqlDef(null, "ALTER TABLE Drop some Fun"));
+        Mockito.when(context.getSqlDefinitions()).thenReturn(definitions);
+        window.textBox("configuration").enterText(yaml);
+        window.button("submitBtn").click();
+        window.textBox("dropScripts").requireText("DROP fun" + "\n" + "ALTER TABLE Drop some Fun");
+    }
+
+    private SQLDefinition sqlDef(String creationScript, String dropScript)
     {
         SQLDefinition sqlDefinition = Mockito.mock(SQLDefinition.class);
         Mockito.when(sqlDefinition.getCreateScript()).thenReturn(creationScript);
+        Mockito.when(sqlDefinition.getDropScript()).thenReturn(dropScript);
         return sqlDefinition;
     }
 
