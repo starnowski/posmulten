@@ -94,8 +94,6 @@ jobs:
     steps:
       - name: Git checkout
         uses: actions/checkout@v2
-      - name: Run xvfb
-        run: xvfb-run x.org_application_binary
 
         # Install JDKs and maven toolchain
       - uses: actions/setup-java@v3
