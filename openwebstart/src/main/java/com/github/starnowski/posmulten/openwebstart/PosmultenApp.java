@@ -45,9 +45,7 @@ public class PosmultenApp extends JFrame {
 
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        JLabel configurationLabel = new JLabel("Yaml configuration");
-        configurationLabel.setAlignmentX(JButton.CENTER_ALIGNMENT);
-        panel.add(configurationLabel);
+        panel.add(createCenteredLabel("Yaml configuration"));
         panel.add(new JScrollPane(inputTextArea), BorderLayout.CENTER);
         submitButton.setAlignmentX(JButton.CENTER_ALIGNMENT);
         panel.add(submitButton);
@@ -84,8 +82,11 @@ public class PosmultenApp extends JFrame {
         JPanel panel = new JPanel();
         panel.setName(SCRIPTS_PANEL_NAME);
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.add(createCenteredLabel("Creation scripts"));
         panel.add(new JScrollPane(creationScriptsTextArea));
+        panel.add(createCenteredLabel("Drop scripts"));
         panel.add(new JScrollPane(dropScriptsTextArea));
+        panel.add(createCenteredLabel("Checking statements scripts"));
         panel.add(new JScrollPane(checkingScriptsTextArea));
         return panel;
     }
@@ -113,6 +114,13 @@ public class PosmultenApp extends JFrame {
         textArea.setName(name);
         textArea.setVisible(visibleByDefault);
         return textArea;
+    }
+
+    private JLabel createCenteredLabel(String text)
+    {
+        JLabel label = new JLabel(text);
+        label.setAlignmentX(JButton.CENTER_ALIGNMENT);
+        return label;
     }
 
     public void setMiglayout(LC layout, AC columns, AC rows) {
