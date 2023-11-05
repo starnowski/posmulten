@@ -35,6 +35,7 @@ public class PosmultenApp extends JFrame {
         inputTextArea.setToolTipText("Configuration");
         outputTextArea1.setName("creationScripts");
         outputTextArea2.setName("dropScripts");
+        outputTextArea3.setName("checkingScripts");
 
         JButton submitButton = new JButton("Submit");
         submitButton.setName("submitBtn");

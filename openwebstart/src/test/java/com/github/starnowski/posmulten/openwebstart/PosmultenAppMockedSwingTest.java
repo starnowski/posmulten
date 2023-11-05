@@ -18,7 +18,10 @@ import org.mockito.Mockito;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
+import static java.util.Arrays.asList;
+import static java.util.Optional.ofNullable;
 import static org.junit.jupiter.api.Assertions.*;
 
 class PosmultenAppMockedSwingTest {
@@ -44,7 +47,7 @@ class PosmultenAppMockedSwingTest {
         String yaml = "Some yaml";
         ISharedSchemaContext context = Mockito.mock(ISharedSchemaContext.class);
         Mockito.when(factory.build(Mockito.eq(yaml), Mockito.any(DefaultDecoratorContext.class))).thenReturn(context);
-        List<SQLDefinition> definitions = Arrays.asList(sqlDef("DEF 1", null), sqlDef("ALTER DEFINIT and Function", null));
+        List<SQLDefinition> definitions = asList(sqlDef("DEF 1", null), sqlDef("ALTER DEFINIT and Function", null));
         Mockito.when(context.getSqlDefinitions()).thenReturn(definitions);
         window.textBox("configuration").enterText(yaml);
         window.button("submitBtn").click();
@@ -56,18 +59,31 @@ class PosmultenAppMockedSwingTest {
         String yaml = "Some yaml";
         ISharedSchemaContext context = Mockito.mock(ISharedSchemaContext.class);
         Mockito.when(factory.build(Mockito.eq(yaml), Mockito.any(DefaultDecoratorContext.class))).thenReturn(context);
-        List<SQLDefinition> definitions = Arrays.asList(sqlDef(null, "DROP fun"), sqlDef(null, "ALTER TABLE Drop some Fun"));
+        List<SQLDefinition> definitions = asList(sqlDef(null, "DROP fun"), sqlDef(null, "ALTER TABLE Drop some Fun"));
         Mockito.when(context.getSqlDefinitions()).thenReturn(definitions);
         window.textBox("configuration").enterText(yaml);
         window.button("submitBtn").click();
         window.textBox("dropScripts").requireText("ALTER TABLE Drop some Fun" + "\n" + "DROP fun");
     }
 
-    private SQLDefinition sqlDef(String creationScript, String dropScript)
+    @Test
+    public void shouldDisplayCheckingScriptsForCorrectConfigurationWhenClickingSubmitButton() throws SharedSchemaContextBuilderException, InvalidConfigurationException, InterruptedException {
+        String yaml = "Some yaml";
+        ISharedSchemaContext context = Mockito.mock(ISharedSchemaContext.class);
+        Mockito.when(factory.build(Mockito.eq(yaml), Mockito.any(DefaultDecoratorContext.class))).thenReturn(context);
+        List<SQLDefinition> definitions = asList(sqlDef(null, null, "Some check1"), sqlDef(null, null, "check1", "check23\naaa"));
+        Mockito.when(context.getSqlDefinitions()).thenReturn(definitions);
+        window.textBox("configuration").enterText(yaml);
+        window.button("submitBtn").click();
+        window.textBox("checkingScripts").requireText("Some check1" + "\n" + "check1" + "\n" + "check23\naaa");
+    }
+
+    private SQLDefinition sqlDef(String creationScript, String dropScript, String... checkingScripts)
     {
         SQLDefinition sqlDefinition = Mockito.mock(SQLDefinition.class);
         Mockito.when(sqlDefinition.getCreateScript()).thenReturn(creationScript);
         Mockito.when(sqlDefinition.getDropScript()).thenReturn(dropScript);
+        Mockito.when(sqlDefinition.getCheckingStatements()).thenReturn(asList(ofNullable(checkingScripts).orElseGet(() -> new String[0])));
         return sqlDefinition;
     }
 
