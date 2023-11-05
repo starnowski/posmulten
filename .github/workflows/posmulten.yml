@@ -273,7 +273,7 @@ jobs:
         uses: bcomnes/cleanup-xvfb@v1
 
   compatibility_tests:
-    needs: [configuration_e2e_tests, integraion_tests, documentation_tests]
+    needs: [configuration_e2e_tests, integraion_tests, documentation_tests, testing_swing_app]
     runs-on: ubuntu-latest
     name: "Running integration and functional tests that checks if code is compatible with postgres versions 10, 11, 12, 13"
     steps:
