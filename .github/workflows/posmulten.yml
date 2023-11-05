@@ -117,7 +117,9 @@ jobs:
             {"jdkVersion": "11", "jdkHome": "${{steps.setupJava11.outputs.path}}"}
             ]
       - name: Run Swing tests
-        run:  ./mvnw -DskipTests --quiet clean install && ./mvnw -pl :openwebstart -P !unit-tests,swing-tests test
+        run:  ./mvnw -DskipTests --quiet clean install && xvfb-run ./mvnw -pl :openwebstart -P !unit-tests,swing-tests test
+      - name: Cleanup xvfb pidx
+        uses: bcomnes/cleanup-xvfb@v1
 
   integraion_tests:
     needs: [compilation_and_unit_tests, database_tests, testing_configuration_jar, testing_swing_app]
