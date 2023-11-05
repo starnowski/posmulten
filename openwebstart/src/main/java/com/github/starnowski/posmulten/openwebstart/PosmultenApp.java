@@ -11,6 +11,7 @@ import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.util.LinkedList;
 import java.util.stream.Collectors;
 
@@ -19,13 +20,17 @@ public class PosmultenApp extends JFrame {
     public static final String DROP_SCRIPTS_TEXTFIELD_NAME = "dropScripts";
     public static final String CHECKING_SCRIPTS_TEXTFIELD_NAME = "checkingScripts";
     public static final String CONFIGURATION_TEXTFIELD_NAME = "configuration";
+    public static final String ERROR_TEXTFIELD_NAME = "errors";
+    public static final String ERROR_PANEL_NAME = "errors-panel";
     public static final String SCRIPTS_PANEL_NAME = "scriptsPanel";
     private final YamlSharedSchemaContextFactory factory;
     private final JTextArea inputTextArea;
     private final JTextArea creationScriptsTextArea;
     private final JTextArea dropScriptsTextArea;
     private final JTextArea checkingScriptsTextArea;
+    private final JTextArea errorTextArea;
     private final JPanel scriptsPanel;
+    private final JPanel errorPanel;
 
     public PosmultenApp(YamlSharedSchemaContextFactory factory) {
         this.factory = factory;
@@ -38,6 +43,7 @@ public class PosmultenApp extends JFrame {
         creationScriptsTextArea = prepareScriptTextArea(CREATION_SCRIPTS_TEXTFIELD_NAME);
         dropScriptsTextArea = prepareScriptTextArea(DROP_SCRIPTS_TEXTFIELD_NAME);
         checkingScriptsTextArea = prepareScriptTextArea(CHECKING_SCRIPTS_TEXTFIELD_NAME);
+        errorTextArea = prepareScriptTextArea(ERROR_TEXTFIELD_NAME);
         inputTextArea.setToolTipText("Configuration");
 
         JButton submitButton = new JButton("Submit");
@@ -50,45 +56,17 @@ public class PosmultenApp extends JFrame {
         submitButton.setAlignmentX(JButton.CENTER_ALIGNMENT);
         panel.add(submitButton);
         scriptsPanel = prepareScriptsPanel();
+        errorPanel = prepareErrorPanel();
         panel.add(scriptsPanel);
         add(panel);
+        add(errorPanel);
 
         scriptsPanel.setVisible(false);
+        errorPanel.setVisible(false);
 
         pack();
 
-        submitButton.addActionListener(e -> {
-            scriptsPanel.setVisible(false);
-            String inputCode = inputTextArea.getText();
-            try {
-                ISharedSchemaContext context = factory.build(inputCode, DefaultDecoratorContext.builder().build());
-                creationScriptsTextArea.setText(context.getSqlDefinitions().stream().map(definition -> definition.getCreateScript()).collect(Collectors.joining("\n")));
-                LinkedList<SQLDefinition> stack = new LinkedList<>();
-                context.getSqlDefinitions().forEach(stack::push);
-                dropScriptsTextArea.setText(stack.stream().map(definition -> definition.getDropScript()).collect(Collectors.joining("\n")));
-                checkingScriptsTextArea.setText(context.getSqlDefinitions().stream().filter(definition -> definition.getCheckingStatements() != null).flatMap(definition -> definition.getCheckingStatements().stream()).collect(Collectors.joining("\n")));
-                scriptsPanel.setVisible(true);
-            } catch (InvalidConfigurationException ex) {
-                throw new RuntimeException(ex);
-            } catch (SharedSchemaContextBuilderException ex) {
-                throw new RuntimeException(ex);
-            } catch (RuntimeException exception) {
-                System.out.println("exception");
-            }
-        });
-    }
-
-    private JPanel prepareScriptsPanel(){
-        JPanel panel = new JPanel();
-        panel.setName(SCRIPTS_PANEL_NAME);
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.add(createCenteredLabel("Creation scripts"));
-        panel.add(new JScrollPane(creationScriptsTextArea));
-        panel.add(createCenteredLabel("Drop scripts"));
-        panel.add(new JScrollPane(dropScriptsTextArea));
-        panel.add(createCenteredLabel("Checking statements scripts"));
-        panel.add(new JScrollPane(checkingScriptsTextArea));
-        return panel;
+        submitButton.addActionListener(prepareActionListenerForSubmitButton());
     }
 
     public PosmultenApp() {
@@ -105,6 +83,50 @@ public class PosmultenApp extends JFrame {
         });
     }
 
+    private ActionListener prepareActionListenerForSubmitButton() {
+        return e -> {
+            scriptsPanel.setVisible(false);
+            errorPanel.setVisible(false);
+            String inputCode = inputTextArea.getText();
+            try {
+                ISharedSchemaContext context = factory.build(inputCode, DefaultDecoratorContext.builder().build());
+                creationScriptsTextArea.setText(context.getSqlDefinitions().stream().map(definition -> definition.getCreateScript()).collect(Collectors.joining("\n")));
+                LinkedList<SQLDefinition> stack = new LinkedList<>();
+                context.getSqlDefinitions().forEach(stack::push);
+                dropScriptsTextArea.setText(stack.stream().map(definition -> definition.getDropScript()).collect(Collectors.joining("\n")));
+                checkingScriptsTextArea.setText(context.getSqlDefinitions().stream().filter(definition -> definition.getCheckingStatements() != null).flatMap(definition -> definition.getCheckingStatements().stream()).collect(Collectors.joining("\n")));
+                scriptsPanel.setVisible(true);
+            } catch (InvalidConfigurationException ex) {
+                throw new RuntimeException(ex);
+            } catch (SharedSchemaContextBuilderException ex) {
+                throw new RuntimeException(ex);
+            } catch (RuntimeException exception) {
+                System.out.println("exception");
+            }
+        };
+    }
+
+    private JPanel prepareScriptsPanel() {
+        JPanel panel = new JPanel();
+        panel.setName(SCRIPTS_PANEL_NAME);
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.add(createCenteredLabel("Creation scripts"));
+        panel.add(new JScrollPane(creationScriptsTextArea));
+        panel.add(createCenteredLabel("Drop scripts"));
+        panel.add(new JScrollPane(dropScriptsTextArea));
+        panel.add(createCenteredLabel("Checking statements scripts"));
+        panel.add(new JScrollPane(checkingScriptsTextArea));
+        return panel;
+    }
+
+    private JPanel prepareErrorPanel() {
+        JPanel panel = new JPanel();
+        panel.setName(ERROR_PANEL_NAME);
+        panel.setLayout(new BorderLayout()); // Use BorderLayout to make the JTextArea occupy 100% width.
+        panel.add(errorTextArea, BorderLayout.CENTER);
+        return panel;
+    }
+
     private JTextArea prepareScriptTextArea(String name) {
         return prepareScriptTextArea(name, true);
     }
@@ -116,8 +138,7 @@ public class PosmultenApp extends JFrame {
         return textArea;
     }
 
-    private JLabel createCenteredLabel(String text)
-    {
+    private JLabel createCenteredLabel(String text) {
         JLabel label = new JLabel(text);
         label.setAlignmentX(JButton.CENTER_ALIGNMENT);
         return label;

@@ -68,10 +68,8 @@ class PosmultenAppMockedSwingTest {
     @Test
     public void shouldNotDisplayTextFieldsWithScriptsBeforeSubmittingConfiguration() {
         // THEN
-//        findTextComponentFixtureByName(CREATION_SCRIPTS_TEXTFIELD_NAME).requireNotVisible();
-//        findTextComponentFixtureByName(DROP_SCRIPTS_TEXTFIELD_NAME).requireNotVisible();
-//        findTextComponentFixtureByName(CHECKING_SCRIPTS_TEXTFIELD_NAME).requireNotVisible();
         findPanelFixtureByName(SCRIPTS_PANEL_NAME).requireNotVisible();
+        findPanelFixtureByName(ERROR_PANEL_NAME).requireNotVisible();
     }
 
     @Test
