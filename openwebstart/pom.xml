@@ -168,7 +168,7 @@
             </build>
         </profile>
         <profile>
-            <id>integration-tests</id>
+            <id>swing-tests</id>
             <activation>
                 <activeByDefault>false</activeByDefault>
             </activation>
@@ -193,7 +193,7 @@
                         <version>2.22.1</version>
                         <configuration>
                             <includes>
-                                <include>**/*ItTest.java</include>
+                                <include>**/*SwingTest.java</include>
                             </includes>
                         </configuration>
                     </plugin>
