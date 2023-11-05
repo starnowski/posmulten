@@ -4,6 +4,7 @@ import com.github.starnowski.posmulten.configuration.core.exceptions.InvalidConf
 import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition;
 import com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaContext;
 import com.github.starnowski.posmulten.postgresql.core.context.decorator.DefaultDecoratorContext;
+import com.github.starnowski.posmulten.postgresql.core.context.exceptions.MissingRLSGranteeDeclarationException;
 import com.github.starnowski.posmulten.postgresql.core.context.exceptions.SharedSchemaContextBuilderException;
 import org.assertj.swing.core.GenericTypeMatcher;
 import org.assertj.swing.edt.FailOnThreadViolationRepaintManager;
@@ -127,6 +128,24 @@ class PosmultenAppMockedSwingTest {
         window.textBox(CHECKING_SCRIPTS_TEXTFIELD_NAME).requireText("Some check1" + "\n" + "check1" + "\n" + "check23\naaa");
         // Error panel should not be visible
         findPanelFixtureByName(ERROR_PANEL_NAME).requireNotVisible();
+    }
+
+    @Test
+    public void shouldDisplayErrorsForInvalidConfigurationWhenClickingSubmitButton() throws SharedSchemaContextBuilderException, InvalidConfigurationException, InterruptedException {
+        // GIVEN
+        String yaml = "Some yaml";
+        String exceptionMessage = "Missing grantee in configuration";
+        ISharedSchemaContext context = Mockito.mock(ISharedSchemaContext.class);
+        Mockito.when(factory.build(Mockito.eq(yaml), Mockito.any(DefaultDecoratorContext.class))).thenThrow(new MissingRLSGranteeDeclarationException(exceptionMessage));
+        window.textBox(CONFIGURATION_TEXTFIELD_NAME).enterText(yaml);
+
+        // WHEN
+        window.button("submitBtn").click();
+
+        // THEN
+        window.textBox(ERROR_TEXTFIELD_NAME).requireText(exceptionMessage);
+        // Scripts panel should not be visible
+        findPanelFixtureByName(SCRIPTS_PANEL_NAME).requireNotVisible();
     }
 
     private SQLDefinition sqlDef(String creationScript, String dropScript, String... checkingScripts) {

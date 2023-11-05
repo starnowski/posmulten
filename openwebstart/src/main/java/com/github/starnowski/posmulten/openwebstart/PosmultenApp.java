@@ -122,8 +122,9 @@ public class PosmultenApp extends JFrame {
     private JPanel prepareErrorPanel() {
         JPanel panel = new JPanel();
         panel.setName(ERROR_PANEL_NAME);
-        panel.setLayout(new BorderLayout()); // Use BorderLayout to make the JTextArea occupy 100% width.
-        panel.add(errorTextArea, BorderLayout.CENTER);
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.add(createCenteredLabel("Error during configuration processing!"));
+        panel.add(new JScrollPane(errorTextArea));
         return panel;
     }
 
