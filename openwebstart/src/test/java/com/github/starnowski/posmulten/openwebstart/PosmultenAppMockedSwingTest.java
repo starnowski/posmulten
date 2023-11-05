@@ -1,6 +1,7 @@
 package com.github.starnowski.posmulten.openwebstart;
 
 import com.github.starnowski.posmulten.configuration.core.exceptions.InvalidConfigurationException;
+import com.github.starnowski.posmulten.configuration.yaml.exceptions.YamlInvalidSchema;
 import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition;
 import com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaContext;
 import com.github.starnowski.posmulten.postgresql.core.context.decorator.DefaultDecoratorContext;
@@ -20,7 +21,9 @@ import org.mockito.Mockito;
 
 import javax.swing.*;
 import javax.swing.text.JTextComponent;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.github.starnowski.posmulten.openwebstart.PosmultenApp.*;
 import static java.util.Arrays.asList;
@@ -160,6 +163,23 @@ class PosmultenAppMockedSwingTest {
 
         // THEN
         window.textBox(ERROR_TEXTFIELD_NAME).requireText(exceptionMessage);
+        // Scripts panel should not be visible
+        findPanelFixtureByName(SCRIPTS_PANEL_NAME).requireNotVisible();
+    }
+
+    @Test
+    public void shouldDisplayErrorsForInvalidConfigurationWhenClickingSubmitButton() throws SharedSchemaContextBuilderException, InvalidConfigurationException, InterruptedException {
+        // GIVEN
+        String yaml = "Some yaml";
+        List<String> errorMessages = Arrays.asList("Some fields is required", "Exception during processing", "Missing values");
+        Mockito.when(factory.build(Mockito.eq(yaml), Mockito.any(DefaultDecoratorContext.class))).thenThrow(new YamlInvalidSchema(errorMessages));
+        window.textBox(CONFIGURATION_TEXTFIELD_NAME).enterText(yaml);
+
+        // WHEN
+        window.button("submitBtn").click();
+
+        // THEN
+        window.textBox(ERROR_TEXTFIELD_NAME).requireText(errorMessages.stream().collect(Collectors.joining("\n")));
         // Scripts panel should not be visible
         findPanelFixtureByName(SCRIPTS_PANEL_NAME).requireNotVisible();
     }
