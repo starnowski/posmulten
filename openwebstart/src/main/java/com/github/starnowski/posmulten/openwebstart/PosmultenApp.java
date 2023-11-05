@@ -18,11 +18,13 @@ public class PosmultenApp extends JFrame {
     public static final String DROP_SCRIPTS_TEXTFIELD_NAME = "dropScripts";
     public static final String CHECKING_SCRIPTS_TEXTFIELD_NAME = "checkingScripts";
     public static final String CONFIGURATION_TEXTFIELD_NAME = "configuration";
+    public static final String SCRIPTS_PANEL_NAME = "scriptsPanel";
     private final YamlSharedSchemaContextFactory factory;
     private final JTextArea inputTextArea;
     private final JTextArea creationScriptsTextArea;
     private final JTextArea dropScriptsTextArea;
     private final JTextArea checkingScriptsTextArea;
+    private final JPanel scriptsPanel;
 
     public PosmultenApp(YamlSharedSchemaContextFactory factory) {
         this.factory = factory;
@@ -45,7 +47,8 @@ public class PosmultenApp extends JFrame {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.add(new JScrollPane(inputTextArea));
 
-        JPanel scriptsPanel = new JPanel();
+        scriptsPanel = new JPanel();
+        scriptsPanel.setName(SCRIPTS_PANEL_NAME);
         scriptsPanel.setLayout(new BoxLayout(scriptsPanel, BoxLayout.Y_AXIS));
         scriptsPanel.add(new JScrollPane(creationScriptsTextArea));
         scriptsPanel.add(new JScrollPane(dropScriptsTextArea));

@@ -5,15 +5,20 @@ import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition;
 import com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaContext;
 import com.github.starnowski.posmulten.postgresql.core.context.decorator.DefaultDecoratorContext;
 import com.github.starnowski.posmulten.postgresql.core.context.exceptions.SharedSchemaContextBuilderException;
+import org.assertj.swing.core.GenericTypeMatcher;
 import org.assertj.swing.edt.FailOnThreadViolationRepaintManager;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
+import org.assertj.swing.fixture.JPanelFixture;
+import org.assertj.swing.fixture.JTextComponentFixture;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import javax.swing.*;
+import javax.swing.text.JTextComponent;
 import java.util.List;
 
 import static com.github.starnowski.posmulten.openwebstart.PosmultenApp.*;
@@ -29,6 +34,24 @@ class PosmultenAppMockedSwingTest {
         FailOnThreadViolationRepaintManager.install();
     }
 
+    private JTextComponentFixture findTextComponentFixtureByName(String name) {
+        return window.textBox(new GenericTypeMatcher<JTextComponent>(JTextComponent.class) {
+            @Override
+            protected boolean isMatching(JTextComponent jTextComponent) {
+                return name.equals(jTextComponent.getName());
+            }
+        });
+    }
+
+    private JPanelFixture findPanelFixtureByName(String name) {
+        return window.panel(new GenericTypeMatcher<JPanel>(JPanel.class) {
+            @Override
+            protected boolean isMatching(JPanel panel) {
+                return name.equals(panel.getName());
+            }
+        });
+    }
+
     @BeforeEach
     public void setUp() {
         factory = Mockito.mock(YamlSharedSchemaContextFactory.class);
@@ -41,9 +64,10 @@ class PosmultenAppMockedSwingTest {
     @Test
     public void shouldNotDisplayTextFieldsWithScriptsBeforeSubmittingConfiguration() {
         // THEN
-        window.textBox(CREATION_SCRIPTS_TEXTFIELD_NAME).requireNotVisible();
-        window.textBox(DROP_SCRIPTS_TEXTFIELD_NAME).requireNotVisible();
-        window.textBox(CHECKING_SCRIPTS_TEXTFIELD_NAME).requireNotVisible();
+//        findTextComponentFixtureByName(CREATION_SCRIPTS_TEXTFIELD_NAME).requireNotVisible();
+//        findTextComponentFixtureByName(DROP_SCRIPTS_TEXTFIELD_NAME).requireNotVisible();
+//        findTextComponentFixtureByName(CHECKING_SCRIPTS_TEXTFIELD_NAME).requireNotVisible();
+        findPanelFixtureByName(SCRIPTS_PANEL_NAME).requireNotVisible();
     }
 
     @Test
