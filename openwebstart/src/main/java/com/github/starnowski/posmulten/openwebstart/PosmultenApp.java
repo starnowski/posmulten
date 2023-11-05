@@ -19,6 +19,7 @@ public class PosmultenApp extends JFrame {
     private final JTextArea outputTextArea1;
     private final JTextArea outputTextArea2;
     private final JTextArea outputTextArea3;
+
     public PosmultenApp(YamlSharedSchemaContextFactory factory) {
         this.factory = factory;
 //        setMiglayout(new LC().wrapAfter(1), new AC().align("center"), new AC());
@@ -49,6 +50,7 @@ public class PosmultenApp extends JFrame {
                 LinkedList<SQLDefinition> stack = new LinkedList<>();
                 context.getSqlDefinitions().forEach(stack::push);
                 outputTextArea2.setText(stack.stream().map(definition -> definition.getDropScript()).collect(Collectors.joining("\n")));
+                outputTextArea3.setText(context.getSqlDefinitions().stream().filter(definition -> definition.getCheckingStatements() != null).flatMap(definition -> definition.getCheckingStatements().stream()).collect(Collectors.joining("\n")));
             } catch (InvalidConfigurationException ex) {
                 throw new RuntimeException(ex);
             } catch (SharedSchemaContextBuilderException ex) {
@@ -56,7 +58,6 @@ public class PosmultenApp extends JFrame {
             } catch (RuntimeException exception) {
                 System.out.println("exception");
             }
-            outputTextArea3.setText(inputCode);
         });
 
         JPanel panel = new JPanel();
@@ -69,16 +70,11 @@ public class PosmultenApp extends JFrame {
 
         pack();
     }
+
     public PosmultenApp() {
         this(new YamlSharedSchemaContextFactory());
     }
-    public void setMiglayout(LC layout, AC columns, AC rows) {
-        setLayout(new MigLayout(layout, columns, rows));
-    }
 
-    public void setMiglayout() {
-        setMiglayout(new LC(), new AC(), new AC());
-    }
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -87,5 +83,13 @@ public class PosmultenApp extends JFrame {
                 app.setVisible(true);
             }
         });
+    }
+
+    public void setMiglayout(LC layout, AC columns, AC rows) {
+        setLayout(new MigLayout(layout, columns, rows));
+    }
+
+    public void setMiglayout() {
+        setMiglayout(new LC(), new AC(), new AC());
     }
 }
