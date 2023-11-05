@@ -101,8 +101,9 @@ public class PosmultenApp extends JFrame {
             } catch (SharedSchemaContextBuilderException ex) {
                 errorTextArea.setText(ex.getMessage());
                 errorPanel.setVisible(true);
-            } catch (RuntimeException exception) {
-                System.out.println("exception");
+            } catch (RuntimeException ex) {
+                errorTextArea.setText(ex.getMessage());
+                errorPanel.setVisible(true);
             }
         };
     }
