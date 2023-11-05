@@ -12,22 +12,17 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 import static com.github.starnowski.posmulten.openwebstart.PosmultenApp.*;
 import static java.util.Arrays.asList;
 import static java.util.Optional.ofNullable;
-import static org.junit.jupiter.api.Assertions.*;
 
 class PosmultenAppMockedSwingTest {
-    private FrameFixture window;
     YamlSharedSchemaContextFactory factory;
+    private FrameFixture window;
 
     @BeforeAll
     public static void setUpOnce() {
@@ -44,8 +39,7 @@ class PosmultenAppMockedSwingTest {
     }
 
     @Test
-    public void shouldNotDisplayTextFieldsWithScriptsBeforeSubmittingConfiguration()
-    {
+    public void shouldNotDisplayTextFieldsWithScriptsBeforeSubmittingConfiguration() {
         // THEN
         window.textBox(CREATION_SCRIPTS_TEXTFIELD_NAME).requireNotVisible();
         window.textBox(DROP_SCRIPTS_TEXTFIELD_NAME).requireNotVisible();
@@ -103,8 +97,7 @@ class PosmultenAppMockedSwingTest {
         window.textBox(CHECKING_SCRIPTS_TEXTFIELD_NAME).requireText("Some check1" + "\n" + "check1" + "\n" + "check23\naaa");
     }
 
-    private SQLDefinition sqlDef(String creationScript, String dropScript, String... checkingScripts)
-    {
+    private SQLDefinition sqlDef(String creationScript, String dropScript, String... checkingScripts) {
         SQLDefinition sqlDefinition = Mockito.mock(SQLDefinition.class);
         Mockito.when(sqlDefinition.getCreateScript()).thenReturn(creationScript);
         Mockito.when(sqlDefinition.getDropScript()).thenReturn(dropScript);

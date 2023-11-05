@@ -20,9 +20,9 @@ public class PosmultenApp extends JFrame {
     public static final String CONFIGURATION_TEXTFIELD_NAME = "configuration";
     private final YamlSharedSchemaContextFactory factory;
     private final JTextArea inputTextArea;
-    private final JTextArea outputTextArea1;
-    private final JTextArea outputTextArea2;
-    private final JTextArea outputTextArea3;
+    private final JTextArea creationScriptsTextArea;
+    private final JTextArea dropScriptsTextArea;
+    private final JTextArea checkingScriptsTextArea;
 
     public PosmultenApp(YamlSharedSchemaContextFactory factory) {
         this.factory = factory;
@@ -32,29 +32,27 @@ public class PosmultenApp extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(600, 400);
 
-        inputTextArea = new JTextArea(10, 20);
-        outputTextArea1 = new JTextArea(10, 20);
-        outputTextArea2 = new JTextArea(10, 20);
-        outputTextArea3 = new JTextArea(10, 20);
-        inputTextArea.setName(CONFIGURATION_TEXTFIELD_NAME);
+        inputTextArea = prepareScriptTextArea(CONFIGURATION_TEXTFIELD_NAME);
+        creationScriptsTextArea = prepareScriptTextArea(CREATION_SCRIPTS_TEXTFIELD_NAME, false);
+        dropScriptsTextArea = prepareScriptTextArea(DROP_SCRIPTS_TEXTFIELD_NAME, false);
+        checkingScriptsTextArea = prepareScriptTextArea(CHECKING_SCRIPTS_TEXTFIELD_NAME, false);
         inputTextArea.setToolTipText("Configuration");
-        outputTextArea1.setName(CREATION_SCRIPTS_TEXTFIELD_NAME);
-        outputTextArea2.setName(DROP_SCRIPTS_TEXTFIELD_NAME);
-        outputTextArea3.setName(CHECKING_SCRIPTS_TEXTFIELD_NAME);
 
         JButton submitButton = new JButton("Submit");
         submitButton.setName("submitBtn");
-        System.out.println("before addActionListener");
         submitButton.addActionListener(e -> {
             System.out.println("actionPerformed : " + e.getActionCommand());
             String inputCode = inputTextArea.getText();
             try {
                 ISharedSchemaContext context = factory.build(inputCode, DefaultDecoratorContext.builder().build());
-                outputTextArea1.setText(context.getSqlDefinitions().stream().map(definition -> definition.getCreateScript()).collect(Collectors.joining("\n")));
+                creationScriptsTextArea.setText(context.getSqlDefinitions().stream().map(definition -> definition.getCreateScript()).collect(Collectors.joining("\n")));
+                creationScriptsTextArea.setVisible(true);
                 LinkedList<SQLDefinition> stack = new LinkedList<>();
                 context.getSqlDefinitions().forEach(stack::push);
-                outputTextArea2.setText(stack.stream().map(definition -> definition.getDropScript()).collect(Collectors.joining("\n")));
-                outputTextArea3.setText(context.getSqlDefinitions().stream().filter(definition -> definition.getCheckingStatements() != null).flatMap(definition -> definition.getCheckingStatements().stream()).collect(Collectors.joining("\n")));
+                dropScriptsTextArea.setText(stack.stream().map(definition -> definition.getDropScript()).collect(Collectors.joining("\n")));
+                dropScriptsTextArea.setVisible(true);
+                checkingScriptsTextArea.setText(context.getSqlDefinitions().stream().filter(definition -> definition.getCheckingStatements() != null).flatMap(definition -> definition.getCheckingStatements().stream()).collect(Collectors.joining("\n")));
+                checkingScriptsTextArea.setVisible(true);
             } catch (InvalidConfigurationException ex) {
                 throw new RuntimeException(ex);
             } catch (SharedSchemaContextBuilderException ex) {
@@ -66,9 +64,9 @@ public class PosmultenApp extends JFrame {
 
         JPanel panel = new JPanel();
         panel.add(new JScrollPane(inputTextArea));
-        panel.add(new JScrollPane(outputTextArea1));
-        panel.add(new JScrollPane(outputTextArea2));
-        panel.add(new JScrollPane(outputTextArea3));
+        panel.add(new JScrollPane(creationScriptsTextArea));
+        panel.add(new JScrollPane(dropScriptsTextArea));
+        panel.add(new JScrollPane(checkingScriptsTextArea));
         panel.add(submitButton);
         add(panel);
 
@@ -87,6 +85,17 @@ public class PosmultenApp extends JFrame {
                 app.setVisible(true);
             }
         });
+    }
+
+    private JTextArea prepareScriptTextArea(String name) {
+        return prepareScriptTextArea(name, true);
+    }
+
+    private JTextArea prepareScriptTextArea(String name, boolean visibleByDefault) {
+        JTextArea textArea = new JTextArea(10, 20);
+        textArea.setName(name);
+        textArea.setVisible(visibleByDefault);
+        return textArea;
     }
 
     public void setMiglayout(LC layout, AC columns, AC rows) {
