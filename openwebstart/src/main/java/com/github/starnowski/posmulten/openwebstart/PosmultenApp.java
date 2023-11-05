@@ -10,6 +10,7 @@ import net.miginfocom.layout.LC;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.LinkedList;
 import java.util.stream.Collectors;
 
@@ -45,7 +46,7 @@ public class PosmultenApp extends JFrame {
 
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.add(new JScrollPane(inputTextArea));
+        panel.add(new JScrollPane(inputTextArea), BorderLayout.CENTER);
 
         scriptsPanel = new JPanel();
         scriptsPanel.setName(SCRIPTS_PANEL_NAME);
@@ -54,7 +55,8 @@ public class PosmultenApp extends JFrame {
         scriptsPanel.add(new JScrollPane(dropScriptsTextArea));
         scriptsPanel.add(new JScrollPane(checkingScriptsTextArea));
         panel.add(scriptsPanel);
-        panel.add(submitButton);
+        submitButton.setAlignmentX(JButton.CENTER_ALIGNMENT);
+        panel.add(submitButton, BorderLayout.CENTER);
         add(panel);
 
         scriptsPanel.setVisible(false);
@@ -102,7 +104,7 @@ public class PosmultenApp extends JFrame {
     }
 
     private JTextArea prepareScriptTextArea(String name, boolean visibleByDefault) {
-        JTextArea textArea = new JTextArea(10, 20);
+        JTextArea textArea = new JTextArea(10, 300);
         textArea.setName(name);
         textArea.setVisible(visibleByDefault);
         return textArea;
