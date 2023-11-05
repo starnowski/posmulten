@@ -131,12 +131,28 @@ class PosmultenAppMockedSwingTest {
     }
 
     @Test
-    public void shouldDisplayErrorsForInvalidConfigurationWhenClickingSubmitButton() throws SharedSchemaContextBuilderException, InvalidConfigurationException, InterruptedException {
+    public void shouldDisplayErrorsForConfigurationWithInvalidContextWhenClickingSubmitButton() throws SharedSchemaContextBuilderException, InvalidConfigurationException, InterruptedException {
         // GIVEN
         String yaml = "Some yaml";
         String exceptionMessage = "Missing grantee in configuration";
-        ISharedSchemaContext context = Mockito.mock(ISharedSchemaContext.class);
         Mockito.when(factory.build(Mockito.eq(yaml), Mockito.any(DefaultDecoratorContext.class))).thenThrow(new MissingRLSGranteeDeclarationException(exceptionMessage));
+        window.textBox(CONFIGURATION_TEXTFIELD_NAME).enterText(yaml);
+
+        // WHEN
+        window.button("submitBtn").click();
+
+        // THEN
+        window.textBox(ERROR_TEXTFIELD_NAME).requireText(exceptionMessage);
+        // Scripts panel should not be visible
+        findPanelFixtureByName(SCRIPTS_PANEL_NAME).requireNotVisible();
+    }
+
+    @Test
+    public void shouldDisplayErrorsForSituationThatThrowsRuntimeExceptionsWhenClickingSubmitButton() throws SharedSchemaContextBuilderException, InvalidConfigurationException, InterruptedException {
+        // GIVEN
+        String yaml = "Some yaml";
+        String exceptionMessage = "Exception during processing";
+        Mockito.when(factory.build(Mockito.eq(yaml), Mockito.any(DefaultDecoratorContext.class))).thenThrow(new RuntimeException(exceptionMessage));
         window.textBox(CONFIGURATION_TEXTFIELD_NAME).enterText(yaml);
 
         // WHEN
