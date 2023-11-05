@@ -58,7 +58,7 @@ class PosmultenAppMockedSwingTest {
         PosmultenApp frame = GuiActionRunner.execute(() -> new PosmultenApp(factory));
         window = new FrameFixture(frame);
         window.show(); // shows the frame to test
-        frame.setLocation(-100, -100);
+        frame.setLocation(-1, -1);
     }
 
     @Test
