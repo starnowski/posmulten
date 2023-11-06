@@ -33,6 +33,7 @@ public class PosmultenApp extends JFrame {
     private final JTextArea errorTextArea;
     private final JPanel scriptsPanel;
     private final JPanel errorPanel;
+    private final ParametersPanel parametersPanel;
 
     public PosmultenApp(YamlSharedSchemaContextFactory factory) {
         this.factory = factory;
@@ -50,6 +51,7 @@ public class PosmultenApp extends JFrame {
 
         JButton submitButton = new JButton("Submit");
         submitButton.setName("submitBtn");
+        parametersPanel = new ParametersPanel();
 
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
@@ -57,6 +59,7 @@ public class PosmultenApp extends JFrame {
         panel.add(new JScrollPane(inputTextArea), BorderLayout.CENTER);
         submitButton.setAlignmentX(JButton.CENTER_ALIGNMENT);
         panel.add(submitButton);
+        panel.add(parametersPanel);
         scriptsPanel = prepareScriptsPanel();
         errorPanel = prepareErrorPanel();
         panel.add(scriptsPanel);
