@@ -86,15 +86,7 @@
                     <plugin>
                         <groupId>org.codehaus.gmavenplus</groupId>
                         <artifactId>gmavenplus-plugin</artifactId>
-                        <version>1.9.0</version>
-                        <executions>
-                            <execution>
-                                <goals>
-                                    <goal>compile</goal>
-                                    <goal>compileTests</goal>
-                                </goals>
-                            </execution>
-                        </executions>
+                        <version>1.5</version>
                     </plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
@@ -179,12 +171,12 @@
                     <plugin>
                         <groupId>org.codehaus.gmavenplus</groupId>
                         <artifactId>gmavenplus-plugin</artifactId>
-                        <version>1.9.0</version>
+                        <version>1.5</version>
                         <executions>
                             <execution>
                                 <goals>
                                     <goal>compile</goal>
-                                    <goal>compileTests</goal>
+                                    <goal>testCompile</goal>
                                 </goals>
                             </execution>
                         </executions>
@@ -212,15 +204,7 @@
                     <plugin>
                         <groupId>org.codehaus.gmavenplus</groupId>
                         <artifactId>gmavenplus-plugin</artifactId>
-                        <version>1.9.0</version>
-                        <executions>
-                            <execution>
-                                <goals>
-                                    <goal>compile</goal>
-                                    <goal>compileTests</goal>
-                                </goals>
-                            </execution>
-                        </executions>
+                        <version>1.5</version>
                     </plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
