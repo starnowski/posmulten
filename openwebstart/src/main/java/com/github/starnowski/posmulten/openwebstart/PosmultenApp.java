@@ -60,8 +60,8 @@ public class PosmultenApp extends JFrame {
         scriptsPanel = prepareScriptsPanel();
         errorPanel = prepareErrorPanel();
         panel.add(scriptsPanel);
+        panel.add(errorPanel);
         add(panel);
-        add(errorPanel);
 
         scriptsPanel.setVisible(false);
         errorPanel.setVisible(false);
