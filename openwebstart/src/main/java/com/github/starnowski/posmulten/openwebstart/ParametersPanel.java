@@ -48,20 +48,31 @@ public class ParametersPanel extends JPanel {
 
     private class ParameterPanel extends JPanel {
 
+        private final JTextArea parameterKeyTextArea;
+        private final JTextArea parameterValueTextArea;
+
         public ParameterPanel(int parameterIndex) {
             setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-            JTextArea parameterKeyTextArea = new JTextArea(1, 40);
+            parameterKeyTextArea = new JTextArea(1, 40);
             parameterKeyTextArea.setName("parameterKey" + parameterIndex);
             add(parameterKeyTextArea);
-            JTextArea parameterValueTextArea = new JTextArea(1, 40);
+            parameterValueTextArea = new JTextArea(1, 40);
             parameterValueTextArea.setName("parameterValue" + parameterIndex);
             add(parameterValueTextArea);
             JButton submitButton = new JButton("Remove");
             submitButton.setName("parameterRemove" + parameterIndex);
             add(submitButton);
-            submitButton.addActionListener(e -> {
-                ParametersPanel.this.remoteParameterPanel(parameterIndex);
-            });
+            submitButton.addActionListener(e -> ParametersPanel.this.remoteParameterPanel(parameterIndex));
+        }
+
+        public String getKey()
+        {
+            return parameterKeyTextArea.getText();
+        }
+
+        public String getValue()
+        {
+            return parameterValueTextArea.getText();
         }
     }
 }
