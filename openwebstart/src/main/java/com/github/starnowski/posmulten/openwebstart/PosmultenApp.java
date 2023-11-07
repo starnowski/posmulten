@@ -13,7 +13,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.util.LinkedList;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.joining;
 
@@ -35,6 +34,7 @@ public class PosmultenApp extends JFrame {
     private final JPanel scriptsPanel;
     private final JPanel errorPanel;
     private final ParametersPanel parametersPanel;
+    private final JCheckBox displayParametersCheckBox;
 
     public PosmultenApp(YamlSharedSchemaContextFactory factory) {
         this.factory = factory;
@@ -53,7 +53,7 @@ public class PosmultenApp extends JFrame {
         JButton submitButton = new JButton("Submit");
         submitButton.setName("submitBtn");
         parametersPanel = new ParametersPanel();
-        JCheckBox displayParametersCheckBox = new JCheckBox("Use template parameters", null, false);
+        displayParametersCheckBox = new JCheckBox("Use template parameters", null, false);
         displayParametersCheckBox.setName(DISPLAY_PARAMETERS_CHECK_BOX_NAME);
 
         JPanel optionsPanel = new JPanel();
@@ -108,7 +108,7 @@ public class PosmultenApp extends JFrame {
             errorPanel.setVisible(false);
             String inputCode = inputTextArea.getText();
             try {
-                ISharedSchemaContext context = factory.build(inputCode, DefaultDecoratorContext.builder().build());
+                ISharedSchemaContext context = factory.build(inputCode, prepareDefaultDecoratorContext());
                 creationScriptsTextArea.setText(context.getSqlDefinitions().stream().map(definition -> definition.getCreateScript()).collect(joining("\n")));
                 LinkedList<SQLDefinition> stack = new LinkedList<>();
                 context.getSqlDefinitions().forEach(stack::push);
@@ -126,6 +126,10 @@ public class PosmultenApp extends JFrame {
                 errorPanel.setVisible(true);
             }
         };
+    }
+
+    private DefaultDecoratorContext prepareDefaultDecoratorContext() {
+        return displayParametersCheckBox.isSelected() ? DefaultDecoratorContext.builder().withReplaceCharactersMap(parametersPanel.getParameters()).build() : DefaultDecoratorContext.builder().build();
     }
 
     private JPanel prepareScriptsPanel() {

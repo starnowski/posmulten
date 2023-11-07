@@ -2,8 +2,8 @@ package com.github.starnowski.posmulten.openwebstart;
 
 import javax.swing.*;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class ParametersPanel extends JPanel {
 
@@ -12,7 +12,7 @@ public class ParametersPanel extends JPanel {
     public static final String PARAMETER_VALUE_TEXTAREA_NAME_PREFIX = "parameterValue";
     private final JPanel addButtonPanel;
     private final JPanel parametersPanel;
-    private Map<Integer, ParameterPanel> parameterPanelList = new HashMap<>();
+    private final Map<Integer, ParameterPanel> parameterPanelList = new HashMap<>();
     private int parameterSequence = 0;
 
     public ParametersPanel() {
@@ -37,12 +37,15 @@ public class ParametersPanel extends JPanel {
         });
     }
 
-    void remoteParameterPanel(int parameterIndex)
-    {
+    void removeParameterPanel(int parameterIndex) {
         parametersPanel.remove(parameterPanelList.get(parameterIndex));
         parameterPanelList.remove(parameterIndex);
         parametersPanel.revalidate();
         parametersPanel.repaint();
+    }
+
+    public Map<String, String> getParameters() {
+        return parameterPanelList.values().stream().collect(Collectors.toMap(p -> p.getKey(), p -> p.getValue()));
     }
 
     private class ParameterPanel extends JPanel {
@@ -61,16 +64,14 @@ public class ParametersPanel extends JPanel {
             JButton submitButton = new JButton("Remove");
             submitButton.setName("parameterRemove" + parameterIndex);
             add(submitButton);
-            submitButton.addActionListener(e -> ParametersPanel.this.remoteParameterPanel(parameterIndex));
+            submitButton.addActionListener(e -> ParametersPanel.this.removeParameterPanel(parameterIndex));
         }
 
-        public String getKey()
-        {
+        public String getKey() {
             return parameterKeyTextArea.getText();
         }
 
-        public String getValue()
-        {
+        public String getValue() {
             return parameterValueTextArea.getText();
         }
     }
