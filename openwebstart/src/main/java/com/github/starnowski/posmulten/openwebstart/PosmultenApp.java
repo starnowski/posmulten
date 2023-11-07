@@ -47,6 +47,7 @@ public class PosmultenApp extends JFrame {
         // Get the screen size
         Dimension screenSize = toolkit.getScreenSize();
         setSize((int)screenSize.getWidth(), (int)screenSize.getHeight());
+        System.out.println("Screen size, width: " +  screenSize.getWidth() + " height: " + screenSize.getHeight());
         //https://stackoverflow.com/questions/11570356/jframe-in-full-screen-java
         setExtendedState(JFrame.MAXIMIZED_BOTH);
 //        setUndecorated(true);
