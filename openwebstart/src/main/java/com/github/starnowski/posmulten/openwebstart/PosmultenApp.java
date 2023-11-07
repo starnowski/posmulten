@@ -49,6 +49,7 @@ public class PosmultenApp extends JFrame {
         setSize((int)screenSize.getWidth(), (int)screenSize.getHeight());
         //https://stackoverflow.com/questions/11570356/jframe-in-full-screen-java
         setExtendedState(JFrame.MAXIMIZED_BOTH);
+//        setUndecorated(true);
 
         inputTextArea = prepareScriptTextArea(CONFIGURATION_TEXTFIELD_NAME);
         creationScriptsTextArea = prepareScriptTextArea(CREATION_SCRIPTS_TEXTFIELD_NAME);
