@@ -58,7 +58,7 @@ public class ParametersPanel extends JPanel {
 
         public ParameterPanel(int parameterIndex) {
             setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-            parameterKeyTextArea = new JTextArea(1, 40);
+            parameterKeyTextArea = new JTextArea(1, 20);
             parameterKeyTextArea.setName(PARAMETER_KEY_TEXTAREA_NAME_PREFIX + parameterIndex);
             parameterKeyTextArea.setBorder(createTextAreaBorder());
             add(parameterKeyTextArea);

@@ -41,7 +41,7 @@ public class PosmultenApp extends JFrame {
         setMiglayout();
         setName("Posmulten");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(600, 800);
+        setSize(400, 800);
 
         inputTextArea = prepareScriptTextArea(CONFIGURATION_TEXTFIELD_NAME);
         creationScriptsTextArea = prepareScriptTextArea(CREATION_SCRIPTS_TEXTFIELD_NAME);
