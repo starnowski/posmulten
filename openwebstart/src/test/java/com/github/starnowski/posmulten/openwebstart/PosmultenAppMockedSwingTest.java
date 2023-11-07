@@ -7,16 +7,15 @@ import com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaCont
 import com.github.starnowski.posmulten.postgresql.core.context.decorator.DefaultDecoratorContext;
 import com.github.starnowski.posmulten.postgresql.core.context.exceptions.MissingRLSGranteeDeclarationException;
 import com.github.starnowski.posmulten.postgresql.core.context.exceptions.SharedSchemaContextBuilderException;
+import com.github.starnowski.posmulten.postgresql.test.utils.MapBuilder;
 import org.assertj.swing.core.GenericTypeMatcher;
 import org.assertj.swing.edt.FailOnThreadViolationRepaintManager;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.fixture.JPanelFixture;
 import org.assertj.swing.fixture.JTextComponentFixture;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
 import javax.swing.*;
@@ -25,9 +24,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.github.starnowski.posmulten.openwebstart.ParametersPanel.*;
 import static com.github.starnowski.posmulten.openwebstart.PosmultenApp.*;
+import static com.github.starnowski.posmulten.postgresql.test.utils.MapBuilder.mapBuilder;
 import static java.util.Arrays.asList;
 import static java.util.Optional.ofNullable;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
 
 class PosmultenAppMockedSwingTest {
     YamlSharedSchemaContextFactory factory;
@@ -58,7 +62,7 @@ class PosmultenAppMockedSwingTest {
 
     @BeforeEach
     public void setUp() {
-        factory = Mockito.mock(YamlSharedSchemaContextFactory.class);
+        factory = mock(YamlSharedSchemaContextFactory.class);
         PosmultenApp frame = GuiActionRunner.execute(() -> new PosmultenApp(factory));
         window = new FrameFixture(frame);
         window.show(); // shows the frame to test
@@ -80,8 +84,8 @@ class PosmultenAppMockedSwingTest {
     public void shouldDisplayCreationScriptsForCorrectConfigurationWhenClickingSubmitButton() throws SharedSchemaContextBuilderException, InvalidConfigurationException, InterruptedException {
         // GIVEN
         String yaml = "Some yaml";
-        ISharedSchemaContext context = Mockito.mock(ISharedSchemaContext.class);
-        Mockito.when(factory.build(Mockito.eq(yaml), Mockito.any(DefaultDecoratorContext.class))).thenReturn(context);
+        ISharedSchemaContext context = mock(ISharedSchemaContext.class);
+        Mockito.when(factory.build(eq(yaml), any(DefaultDecoratorContext.class))).thenReturn(context);
         List<SQLDefinition> definitions = asList(sqlDef("DEF 1", null), sqlDef("ALTER DEFINIT and Function", null));
         Mockito.when(context.getSqlDefinitions()).thenReturn(definitions);
         window.textBox(CONFIGURATION_TEXTFIELD_NAME).enterText(yaml);
@@ -99,8 +103,8 @@ class PosmultenAppMockedSwingTest {
     public void shouldDisplayDropScriptsForCorrectConfigurationWhenClickingSubmitButton() throws SharedSchemaContextBuilderException, InvalidConfigurationException, InterruptedException {
         // GIVEN
         String yaml = "Some yaml";
-        ISharedSchemaContext context = Mockito.mock(ISharedSchemaContext.class);
-        Mockito.when(factory.build(Mockito.eq(yaml), Mockito.any(DefaultDecoratorContext.class))).thenReturn(context);
+        ISharedSchemaContext context = mock(ISharedSchemaContext.class);
+        Mockito.when(factory.build(eq(yaml), any(DefaultDecoratorContext.class))).thenReturn(context);
         List<SQLDefinition> definitions = asList(sqlDef(null, "DROP fun"), sqlDef(null, "ALTER TABLE Drop some Fun"));
         Mockito.when(context.getSqlDefinitions()).thenReturn(definitions);
         window.textBox(CONFIGURATION_TEXTFIELD_NAME).enterText(yaml);
@@ -118,8 +122,8 @@ class PosmultenAppMockedSwingTest {
     public void shouldDisplayCheckingScriptsForCorrectConfigurationWhenClickingSubmitButton() throws SharedSchemaContextBuilderException, InvalidConfigurationException, InterruptedException {
         // GIVEN
         String yaml = "Some yaml";
-        ISharedSchemaContext context = Mockito.mock(ISharedSchemaContext.class);
-        Mockito.when(factory.build(Mockito.eq(yaml), Mockito.any(DefaultDecoratorContext.class))).thenReturn(context);
+        ISharedSchemaContext context = mock(ISharedSchemaContext.class);
+        Mockito.when(factory.build(eq(yaml), any(DefaultDecoratorContext.class))).thenReturn(context);
         List<SQLDefinition> definitions = asList(sqlDef(null, null, "Some check1"), sqlDef(null, null, "check1", "check23\naaa"));
         Mockito.when(context.getSqlDefinitions()).thenReturn(definitions);
         window.textBox(CONFIGURATION_TEXTFIELD_NAME).enterText(yaml);
@@ -138,7 +142,7 @@ class PosmultenAppMockedSwingTest {
         // GIVEN
         String yaml = "Some yaml";
         String exceptionMessage = "Missing grantee in configuration";
-        Mockito.when(factory.build(Mockito.eq(yaml), Mockito.any(DefaultDecoratorContext.class))).thenThrow(new MissingRLSGranteeDeclarationException(exceptionMessage));
+        Mockito.when(factory.build(eq(yaml), any(DefaultDecoratorContext.class))).thenThrow(new MissingRLSGranteeDeclarationException(exceptionMessage));
         window.textBox(CONFIGURATION_TEXTFIELD_NAME).enterText(yaml);
 
         // WHEN
@@ -155,7 +159,7 @@ class PosmultenAppMockedSwingTest {
         // GIVEN
         String yaml = "Some yaml";
         String exceptionMessage = "Exception during processing";
-        Mockito.when(factory.build(Mockito.eq(yaml), Mockito.any(DefaultDecoratorContext.class))).thenThrow(new RuntimeException(exceptionMessage));
+        Mockito.when(factory.build(eq(yaml), any(DefaultDecoratorContext.class))).thenThrow(new RuntimeException(exceptionMessage));
         window.textBox(CONFIGURATION_TEXTFIELD_NAME).enterText(yaml);
 
         // WHEN
@@ -172,7 +176,7 @@ class PosmultenAppMockedSwingTest {
         // GIVEN
         String yaml = "Some yaml";
         List<String> errorMessages = Arrays.asList("Some fields is required", "Exception during processing", "Missing values");
-        Mockito.when(factory.build(Mockito.eq(yaml), Mockito.any(DefaultDecoratorContext.class))).thenThrow(new YamlInvalidSchema(errorMessages));
+        Mockito.when(factory.build(eq(yaml), any(DefaultDecoratorContext.class))).thenThrow(new YamlInvalidSchema(errorMessages));
         window.textBox(CONFIGURATION_TEXTFIELD_NAME).enterText(yaml);
 
         // WHEN
@@ -184,27 +188,42 @@ class PosmultenAppMockedSwingTest {
         findPanelFixtureByName(SCRIPTS_PANEL_NAME).requireNotVisible();
     }
 
-//    @Test
-//    public void shouldDisplayCreationScriptsForCorrectConfigurationWhenClickingSubmitButton() throws SharedSchemaContextBuilderException, InvalidConfigurationException, InterruptedException {
-//        // GIVEN
-//        String yaml = "Some yaml";
-//        ISharedSchemaContext context = Mockito.mock(ISharedSchemaContext.class);
-//        Mockito.when(factory.build(Mockito.eq(yaml), Mockito.any(DefaultDecoratorContext.class))).thenReturn(context);
-//        List<SQLDefinition> definitions = asList(sqlDef("DEF 1", null), sqlDef("ALTER DEFINIT and Function", null));
-//        Mockito.when(context.getSqlDefinitions()).thenReturn(definitions);
-//        window.textBox(CONFIGURATION_TEXTFIELD_NAME).enterText(yaml);
-//
-//        // WHEN
-//        window.button("submitBtn").click();
-//
-//        // THEN
-//        window.textBox(CREATION_SCRIPTS_TEXTFIELD_NAME).requireText("DEF 1" + "\n" + "ALTER DEFINIT and Function");
-//        // Error panel should not be visible
-//        findPanelFixtureByName(ERROR_PANEL_NAME).requireNotVisible();
-//    }
+    @Test
+    public void shouldPassCorrectParametersWhenClickingSubmitButton() throws SharedSchemaContextBuilderException, InvalidConfigurationException {
+        // GIVEN
+        String yaml = "Some yaml";
+        ArgumentCaptor<DefaultDecoratorContext> defaultDecoratorContextArgumentCaptor = ArgumentCaptor.forClass(DefaultDecoratorContext.class);
+        ISharedSchemaContext context = mock(ISharedSchemaContext.class);
+        Mockito.when(factory.build(eq(yaml), defaultDecoratorContextArgumentCaptor.capture())).thenReturn(context);
+        List<SQLDefinition> definitions = asList(sqlDef("DEF 1", null), sqlDef("ALTER DEFINIT and Function", null));
+        Mockito.when(context.getSqlDefinitions()).thenReturn(definitions);
+        window.textBox(CONFIGURATION_TEXTFIELD_NAME).enterText(yaml);
+        window.checkBox(DISPLAY_PARAMETERS_CHECK_BOX_NAME).check();
+        //Add parameter index 0
+        addParameter(0, "{{some_key}}", "value1");
+        addParameter(1, "url", "http://host");
+        addParameter(2, "username", "kant");
+
+        // WHEN
+        window.button("submitBtn").click();
+
+        // THEN
+        Assertions.assertEquals(defaultDecoratorContextArgumentCaptor.getValue().getReplaceCharactersMap(), mapBuilder().put("{{some_key}}", "value1").put("url", "http://host").put("username", "kant").build());
+        // Scripts panel should be visible
+        findPanelFixtureByName(SCRIPTS_PANEL_NAME).requireVisible();
+        window.textBox(CREATION_SCRIPTS_TEXTFIELD_NAME).requireText("DEF 1" + "\n" + "ALTER DEFINIT and Function");
+        // Error panel should not be visible
+        findPanelFixtureByName(ERROR_PANEL_NAME).requireNotVisible();
+    }
+
+    private void addParameter(int index, String key, String value) {
+        window.button(ADD_PARAMETER_BTN_NAME).click();
+        window.textBox(PARAMETER_KEY_TEXTAREA_NAME_PREFIX + index).enterText(key);
+        window.textBox(PARAMETER_VALUE_TEXTAREA_NAME_PREFIX + index).enterText(value);
+    }
 
     private SQLDefinition sqlDef(String creationScript, String dropScript, String... checkingScripts) {
-        SQLDefinition sqlDefinition = Mockito.mock(SQLDefinition.class);
+        SQLDefinition sqlDefinition = mock(SQLDefinition.class);
         Mockito.when(sqlDefinition.getCreateScript()).thenReturn(creationScript);
         Mockito.when(sqlDefinition.getDropScript()).thenReturn(dropScript);
         Mockito.when(sqlDefinition.getCheckingStatements()).thenReturn(asList(ofNullable(checkingScripts).orElseGet(() -> new String[0])));
