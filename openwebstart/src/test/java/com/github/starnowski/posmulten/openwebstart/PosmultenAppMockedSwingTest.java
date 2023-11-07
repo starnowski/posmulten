@@ -29,6 +29,7 @@ import static com.github.starnowski.posmulten.openwebstart.PosmultenApp.*;
 import static com.github.starnowski.posmulten.postgresql.test.utils.MapBuilder.mapBuilder;
 import static java.util.Arrays.asList;
 import static java.util.Optional.ofNullable;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
@@ -208,7 +209,37 @@ class PosmultenAppMockedSwingTest {
         window.button("submitBtn").click();
 
         // THEN
-        Assertions.assertEquals(defaultDecoratorContextArgumentCaptor.getValue().getReplaceCharactersMap(), mapBuilder().put("{{some_key}}", "value1").put("url", "http://host").put("username", "kant").build());
+        assertEquals(defaultDecoratorContextArgumentCaptor.getValue().getReplaceCharactersMap(), mapBuilder().put("{{some_key}}", "value1").put("url", "http://host").put("username", "kant").build());
+        // Scripts panel should be visible
+        findPanelFixtureByName(SCRIPTS_PANEL_NAME).requireVisible();
+        window.textBox(CREATION_SCRIPTS_TEXTFIELD_NAME).requireText("DEF 1" + "\n" + "ALTER DEFINIT and Function");
+        // Error panel should not be visible
+        findPanelFixtureByName(ERROR_PANEL_NAME).requireNotVisible();
+    }
+
+    @Test
+    public void shouldPassCorrectParametersEvenWhenSomeParametersWereRemovedWhenClickingSubmitButton() throws SharedSchemaContextBuilderException, InvalidConfigurationException {
+        // GIVEN
+        String yaml = "Some yaml";
+        ArgumentCaptor<DefaultDecoratorContext> defaultDecoratorContextArgumentCaptor = ArgumentCaptor.forClass(DefaultDecoratorContext.class);
+        ISharedSchemaContext context = mock(ISharedSchemaContext.class);
+        Mockito.when(factory.build(eq(yaml), defaultDecoratorContextArgumentCaptor.capture())).thenReturn(context);
+        List<SQLDefinition> definitions = asList(sqlDef("DEF 1", null), sqlDef("ALTER DEFINIT and Function", null));
+        Mockito.when(context.getSqlDefinitions()).thenReturn(definitions);
+        window.textBox(CONFIGURATION_TEXTFIELD_NAME).enterText(yaml);
+        window.checkBox(DISPLAY_PARAMETERS_CHECK_BOX_NAME).check();
+        //Add parameter index 0
+        addParameter(0, "{{some_key}}", "value1");
+        addParameter(1, "url", "http://host");
+        addParameter(2, "username", "kant");
+        addParameter(3, "some key", "Simon");
+        window.button(PARAMETER_REMOVE_BTN_PREFIX + 1).click();
+
+        // WHEN
+        window.button("submitBtn").click();
+
+        // THEN
+        assertEquals(defaultDecoratorContextArgumentCaptor.getValue().getReplaceCharactersMap(), mapBuilder().put("{{some_key}}", "value1").put("username", "kant").put("some key", "Simon").build());
         // Scripts panel should be visible
         findPanelFixtureByName(SCRIPTS_PANEL_NAME).requireVisible();
         window.textBox(CREATION_SCRIPTS_TEXTFIELD_NAME).requireText("DEF 1" + "\n" + "ALTER DEFINIT and Function");

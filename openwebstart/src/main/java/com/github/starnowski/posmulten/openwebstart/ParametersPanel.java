@@ -10,6 +10,7 @@ public class ParametersPanel extends JPanel {
     public static final String ADD_PARAMETER_BTN_NAME = "addParameterBtn";
     public static final String PARAMETER_KEY_TEXTAREA_NAME_PREFIX = "parameterKey";
     public static final String PARAMETER_VALUE_TEXTAREA_NAME_PREFIX = "parameterValue";
+    public static final String PARAMETER_REMOVE_BTN_PREFIX = "parameterRemove";
     private final JPanel addButtonPanel;
     private final JPanel parametersPanel;
     private final Map<Integer, ParameterPanel> parameterPanelList = new HashMap<>();
@@ -62,7 +63,7 @@ public class ParametersPanel extends JPanel {
             parameterValueTextArea.setName(PARAMETER_VALUE_TEXTAREA_NAME_PREFIX + parameterIndex);
             add(parameterValueTextArea);
             JButton submitButton = new JButton("Remove");
-            submitButton.setName("parameterRemove" + parameterIndex);
+            submitButton.setName(PARAMETER_REMOVE_BTN_PREFIX + parameterIndex);
             add(submitButton);
             submitButton.addActionListener(e -> ParametersPanel.this.removeParameterPanel(parameterIndex));
         }
