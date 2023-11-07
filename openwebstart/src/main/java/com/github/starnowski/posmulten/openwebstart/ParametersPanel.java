@@ -8,6 +8,8 @@ import java.util.Map;
 public class ParametersPanel extends JPanel {
 
     public static final String ADD_PARAMETER_BTN_NAME = "addParameterBtn";
+    public static final String PARAMETER_KEY_TEXTAREA_NAME_PREFIX = "parameterKey";
+    public static final String PARAMETER_VALUE_TEXTAREA_NAME_PREFIX = "parameterValue";
     private final JPanel addButtonPanel;
     private final JPanel parametersPanel;
     private Map<Integer, ParameterPanel> parameterPanelList = new HashMap<>();
@@ -26,7 +28,6 @@ public class ParametersPanel extends JPanel {
         add(addButtonPanel);
 
         submitButton.addActionListener(e -> {
-            System.out.println("Add new parameter");
             int currentIndex = parameterSequence++;
             ParameterPanel parameterPanel = new ParameterPanel(currentIndex);
             parameterPanelList.put(currentIndex, parameterPanel);
@@ -38,12 +39,10 @@ public class ParametersPanel extends JPanel {
 
     void remoteParameterPanel(int parameterIndex)
     {
-        System.out.println("remoteParameterPanel " + parameterIndex);
         parametersPanel.remove(parameterPanelList.get(parameterIndex));
         parameterPanelList.remove(parameterIndex);
         parametersPanel.revalidate();
         parametersPanel.repaint();
-        System.out.println("END remoteParameterPanel " + parameterIndex);
     }
 
     private class ParameterPanel extends JPanel {
@@ -54,10 +53,10 @@ public class ParametersPanel extends JPanel {
         public ParameterPanel(int parameterIndex) {
             setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
             parameterKeyTextArea = new JTextArea(1, 40);
-            parameterKeyTextArea.setName("parameterKey" + parameterIndex);
+            parameterKeyTextArea.setName(PARAMETER_KEY_TEXTAREA_NAME_PREFIX + parameterIndex);
             add(parameterKeyTextArea);
             parameterValueTextArea = new JTextArea(1, 40);
-            parameterValueTextArea.setName("parameterValue" + parameterIndex);
+            parameterValueTextArea.setName(PARAMETER_VALUE_TEXTAREA_NAME_PREFIX + parameterIndex);
             add(parameterValueTextArea);
             JButton submitButton = new JButton("Remove");
             submitButton.setName("parameterRemove" + parameterIndex);
