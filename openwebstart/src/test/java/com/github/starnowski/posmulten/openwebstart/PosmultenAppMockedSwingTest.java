@@ -184,6 +184,25 @@ class PosmultenAppMockedSwingTest {
         findPanelFixtureByName(SCRIPTS_PANEL_NAME).requireNotVisible();
     }
 
+//    @Test
+//    public void shouldDisplayCreationScriptsForCorrectConfigurationWhenClickingSubmitButton() throws SharedSchemaContextBuilderException, InvalidConfigurationException, InterruptedException {
+//        // GIVEN
+//        String yaml = "Some yaml";
+//        ISharedSchemaContext context = Mockito.mock(ISharedSchemaContext.class);
+//        Mockito.when(factory.build(Mockito.eq(yaml), Mockito.any(DefaultDecoratorContext.class))).thenReturn(context);
+//        List<SQLDefinition> definitions = asList(sqlDef("DEF 1", null), sqlDef("ALTER DEFINIT and Function", null));
+//        Mockito.when(context.getSqlDefinitions()).thenReturn(definitions);
+//        window.textBox(CONFIGURATION_TEXTFIELD_NAME).enterText(yaml);
+//
+//        // WHEN
+//        window.button("submitBtn").click();
+//
+//        // THEN
+//        window.textBox(CREATION_SCRIPTS_TEXTFIELD_NAME).requireText("DEF 1" + "\n" + "ALTER DEFINIT and Function");
+//        // Error panel should not be visible
+//        findPanelFixtureByName(ERROR_PANEL_NAME).requireNotVisible();
+//    }
+
     private SQLDefinition sqlDef(String creationScript, String dropScript, String... checkingScripts) {
         SQLDefinition sqlDefinition = Mockito.mock(SQLDefinition.class);
         Mockito.when(sqlDefinition.getCreateScript()).thenReturn(creationScript);

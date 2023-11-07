@@ -25,6 +25,7 @@ public class PosmultenApp extends JFrame {
     public static final String ERROR_TEXTFIELD_NAME = "errors";
     public static final String ERROR_PANEL_NAME = "errors-panel";
     public static final String SCRIPTS_PANEL_NAME = "scriptsPanel";
+    public static final String DISPLAY_PARAMETERS_CHECK_BOX_NAME = "displayParametersCheckBox";
     private final YamlSharedSchemaContextFactory factory;
     private final JTextArea inputTextArea;
     private final JTextArea creationScriptsTextArea;
@@ -52,13 +53,22 @@ public class PosmultenApp extends JFrame {
         JButton submitButton = new JButton("Submit");
         submitButton.setName("submitBtn");
         parametersPanel = new ParametersPanel();
+        JCheckBox displayParametersCheckBox = new JCheckBox("Use template parameters", null, false);
+        displayParametersCheckBox.setName(DISPLAY_PARAMETERS_CHECK_BOX_NAME);
+
+        JPanel optionsPanel = new JPanel();
+        optionsPanel.setLayout(new BoxLayout(optionsPanel, BoxLayout.X_AXIS));
 
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.add(createCenteredLabel("Yaml configuration"));
         panel.add(new JScrollPane(inputTextArea), BorderLayout.CENTER);
         submitButton.setAlignmentX(JButton.CENTER_ALIGNMENT);
-        panel.add(submitButton);
+
+        optionsPanel.add(displayParametersCheckBox);
+        optionsPanel.add(submitButton);
+        panel.add(optionsPanel);
+
         panel.add(parametersPanel);
         scriptsPanel = prepareScriptsPanel();
         errorPanel = prepareErrorPanel();
@@ -68,10 +78,14 @@ public class PosmultenApp extends JFrame {
 
         scriptsPanel.setVisible(false);
         errorPanel.setVisible(false);
+        parametersPanel.setVisible(false);
 
         pack();
 
         submitButton.addActionListener(prepareActionListenerForSubmitButton());
+        displayParametersCheckBox.addChangeListener(c -> {
+            parametersPanel.setVisible(displayParametersCheckBox.isSelected());
+        });
     }
 
     public PosmultenApp() {
