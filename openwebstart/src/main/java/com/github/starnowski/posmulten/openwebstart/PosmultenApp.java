@@ -41,7 +41,14 @@ public class PosmultenApp extends JFrame {
         setMiglayout();
         setName("Posmulten");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(400, 800);
+        // Get the default toolkit
+        Toolkit toolkit = Toolkit.getDefaultToolkit();
+
+        // Get the screen size
+        Dimension screenSize = toolkit.getScreenSize();
+        setSize((int)screenSize.getWidth(), (int)screenSize.getHeight());
+        //https://stackoverflow.com/questions/11570356/jframe-in-full-screen-java
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
 
         inputTextArea = prepareScriptTextArea(CONFIGURATION_TEXTFIELD_NAME);
         creationScriptsTextArea = prepareScriptTextArea(CREATION_SCRIPTS_TEXTFIELD_NAME);
