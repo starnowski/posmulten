@@ -65,8 +65,6 @@ class PosmultenAppMockedSwingTest {
     public void setUp() {
         factory = mock(YamlSharedSchemaContextFactory.class);
         PosmultenApp frame = GuiActionRunner.execute(() -> new PosmultenApp(factory));
-        window = new FrameFixture(frame);
-        window.show(); // shows the frame to test
         //Hack to fix issue for ubuntu and xvfb : org.assertj.swing.exception.ActionFailedException: The component to click is out of the boundaries of the screen
         frame.setLocation(0, 0);
         String osName = System.getProperty("os.name");
@@ -74,6 +72,8 @@ class PosmultenAppMockedSwingTest {
             //Hack to fix issue for ubuntu and xvfb : org.assertj.swing.exception.ActionFailedException: The component to click is out of the boundaries of the screen
             frame.setUndecorated(true);
         }
+        window = new FrameFixture(frame);
+        window.show(); // shows the frame to test
     }
 
     @Test
