@@ -70,7 +70,7 @@ class PosmultenAppMockedSwingTest {
         String osName = System.getProperty("os.name");
         if (osName != null && osName.toLowerCase().contains("linux")) {
             //Hack to fix issue for ubuntu and xvfb : org.assertj.swing.exception.ActionFailedException: The component to click is out of the boundaries of the screen
-            frame.setLocation(-600, -300);
+            frame.setLocation(-900, 0);
         } else {
             frame.setLocation(0, 0);
         }
