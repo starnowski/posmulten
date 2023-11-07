@@ -93,6 +93,7 @@ public class PosmultenApp extends JFrame {
         displayParametersCheckBox.addChangeListener(c -> {
             parametersPanel.setVisible(displayParametersCheckBox.isSelected());
         });
+        pack();
     }
 
     public PosmultenApp() {
@@ -104,7 +105,7 @@ public class PosmultenApp extends JFrame {
             @Override
             public void run() {
                 PosmultenApp app = new PosmultenApp();
-                app.pack();
+//                app.pack();
                 app.setVisible(true);
             }
         });

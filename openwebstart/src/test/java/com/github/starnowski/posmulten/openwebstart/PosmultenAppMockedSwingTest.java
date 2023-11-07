@@ -74,7 +74,7 @@ class PosmultenAppMockedSwingTest {
             //Hack to fix issue for ubuntu and xvfb : org.assertj.swing.exception.ActionFailedException: The component to click is out of the boundaries of the screen
 //            frame.setUndecorated(true);
         }
-        frame.setLocationByPlatform(true);
+//        frame.setLocationByPlatform(true);
         window = new FrameFixture(frame);
         window.show(); // shows the frame to test
     }
