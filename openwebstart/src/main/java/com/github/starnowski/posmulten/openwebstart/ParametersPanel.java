@@ -1,6 +1,8 @@
 package com.github.starnowski.posmulten.openwebstart;
 
 import javax.swing.*;
+import javax.swing.border.Border;
+import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -58,16 +60,35 @@ public class ParametersPanel extends JPanel {
             setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
             parameterKeyTextArea = new JTextArea(1, 40);
             parameterKeyTextArea.setName(PARAMETER_KEY_TEXTAREA_NAME_PREFIX + parameterIndex);
+            parameterKeyTextArea.setBorder(createTextAreaBorder());
             add(parameterKeyTextArea);
+            add(createSpacingPanel());
             parameterValueTextArea = new JTextArea(1, 40);
             parameterValueTextArea.setName(PARAMETER_VALUE_TEXTAREA_NAME_PREFIX + parameterIndex);
+            parameterValueTextArea.setBorder(createTextAreaBorder());
             add(parameterValueTextArea);
+            add(createSpacingPanel());
             JButton submitButton = new JButton("Remove");
             submitButton.setName(PARAMETER_REMOVE_BTN_PREFIX + parameterIndex);
             add(submitButton);
             submitButton.addActionListener(e -> ParametersPanel.this.removeParameterPanel(parameterIndex));
         }
 
+        private JPanel createSpacingPanel()
+        {
+            // Create an empty panel with a preferred size for spacing
+            JPanel spacingPanel = new JPanel();
+            spacingPanel.setPreferredSize(new Dimension(10, 10)); // Adjust the size as needed
+            return spacingPanel;
+        }
+
+        private Border  createTextAreaBorder()
+        {
+            return BorderFactory.createCompoundBorder(
+                    BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK), // Top and bottom border
+                    BorderFactory.createEmptyBorder(5, 5, 5, 5) // Padding around the text area
+            );
+        }
         public String getKey() {
             return parameterKeyTextArea.getText();
         }
