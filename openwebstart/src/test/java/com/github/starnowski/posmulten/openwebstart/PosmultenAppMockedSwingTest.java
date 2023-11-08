@@ -37,6 +37,7 @@ import static org.mockito.Mockito.mock;
 class PosmultenAppMockedSwingTest {
     YamlSharedSchemaContextFactory factory;
     private FrameFixture window;
+    private PosmultenApp tested;
 
     @BeforeAll
     public static void setUpOnce() {
@@ -64,19 +65,19 @@ class PosmultenAppMockedSwingTest {
     @BeforeEach
     public void setUp() {
         factory = mock(YamlSharedSchemaContextFactory.class);
-        PosmultenApp frame = GuiActionRunner.execute(() -> new PosmultenApp(factory));
+        tested = GuiActionRunner.execute(() -> new PosmultenApp(factory));
         //Hack to fix issue for ubuntu and xvfb : org.assertj.swing.exception.ActionFailedException: The component to click is out of the boundaries of the screen
 //        frame.setLocation(0, 0);
-        window = new FrameFixture(frame);
+        window = new FrameFixture(tested);
         window.show(); // shows the frame to test
         String osName = System.getProperty("os.name");
         if (osName != null && osName.toLowerCase().contains("linux")) {
 //            frame.setLocationByPlatform(true);
-            frame.setLocation(-700, 0);
+            tested.setLocation(-700, 0);
             //Hack to fix issue for ubuntu and xvfb : org.assertj.swing.exception.ActionFailedException: The component to click is out of the boundaries of the screen
 //            frame.setUndecorated(true);
         } else {
-            frame.setLocation(0, 0);
+            tested.setLocation(0, 0);
         }
 //        window = new FrameFixture(frame);
 //        window.show(); // shows the frame to test
@@ -236,6 +237,7 @@ class PosmultenAppMockedSwingTest {
         Mockito.when(context.getSqlDefinitions()).thenReturn(definitions);
         window.textBox(CONFIGURATION_TEXTFIELD_NAME).enterText(yaml);
         window.checkBox(DISPLAY_PARAMETERS_CHECK_BOX_NAME).check();
+        tested.setLocationRelativeTo(null);
         //Add parameter index 0
         addParameter(0, "{{some_key}}", "value1");
         addParameter(1, "url", "http://host");
