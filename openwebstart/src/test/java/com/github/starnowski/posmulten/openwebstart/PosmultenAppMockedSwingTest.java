@@ -67,16 +67,19 @@ class PosmultenAppMockedSwingTest {
         PosmultenApp frame = GuiActionRunner.execute(() -> new PosmultenApp(factory));
         //Hack to fix issue for ubuntu and xvfb : org.assertj.swing.exception.ActionFailedException: The component to click is out of the boundaries of the screen
 //        frame.setLocation(0, 0);
+        window = new FrameFixture(frame);
+        window.show(); // shows the frame to test
         String osName = System.getProperty("os.name");
         if (osName != null && osName.toLowerCase().contains("linux")) {
 //            frame.setLocationByPlatform(true);
             frame.setLocation(-600, -100);
             //Hack to fix issue for ubuntu and xvfb : org.assertj.swing.exception.ActionFailedException: The component to click is out of the boundaries of the screen
 //            frame.setUndecorated(true);
+        } else {
+            frame.setLocation(0, 0);
         }
-//        frame.setLocationByPlatform(true);
-        window = new FrameFixture(frame);
-        window.show(); // shows the frame to test
+//        window = new FrameFixture(frame);
+//        window.show(); // shows the frame to test
     }
 
     @Test
