@@ -205,7 +205,7 @@ class PosmultenAppMockedSwingTest {
         List<SQLDefinition> definitions = asList(sqlDef("DEF 1", null), sqlDef("ALTER DEFINIT and Function", null));
         Mockito.when(context.getSqlDefinitions()).thenReturn(definitions);
         getMovedComponent(window.textBox(CONFIGURATION_TEXTFIELD_NAME)).enterText(yaml);
-        window.checkBox(DISPLAY_PARAMETERS_CHECK_BOX_NAME).check();
+        getMovedComponent(window.checkBox(DISPLAY_PARAMETERS_CHECK_BOX_NAME).check());
 //        selectCheckBox(window.checkBox(DISPLAY_PARAMETERS_CHECK_BOX_NAME), true);
         //Add parameter index 0
         addParameter(0, "{{some_key}}", "value1");
@@ -235,7 +235,7 @@ class PosmultenAppMockedSwingTest {
         List<SQLDefinition> definitions = asList(sqlDef("DEF 1", null), sqlDef("ALTER DEFINIT and Function", null));
         Mockito.when(context.getSqlDefinitions()).thenReturn(definitions);
         getMovedComponent(window.textBox(CONFIGURATION_TEXTFIELD_NAME)).enterText(yaml);
-        window.checkBox(DISPLAY_PARAMETERS_CHECK_BOX_NAME).check();
+        getMovedComponent(window.checkBox(DISPLAY_PARAMETERS_CHECK_BOX_NAME).check());
 //        selectCheckBox(window.checkBox(DISPLAY_PARAMETERS_CHECK_BOX_NAME), true);
         //Add parameter index 0
         addParameter(0, "{{some_key}}", "value1");
