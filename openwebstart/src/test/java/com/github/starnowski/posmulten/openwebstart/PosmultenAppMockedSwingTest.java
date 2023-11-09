@@ -78,6 +78,9 @@ class PosmultenAppMockedSwingTest {
         window = new FrameFixture(tested);
         window.show(); // shows the frame to test
         tested.setLocation(0, 0);
+        if (isRunningOnVirtualScreen) {
+            window.maximize();
+        }
     }
 
     @Test
