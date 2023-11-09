@@ -73,7 +73,8 @@ class PosmultenAppMockedSwingTest {
         String osName = System.getProperty("os.name");
         if (osName != null && osName.toLowerCase().contains("linux")) {
 //            frame.setLocationByPlatform(true);
-            tested.setLocation(-700, 50);
+            tested.setLocation(-1000, 0);
+//            tested.setLocation(0, 0);
             //Hack to fix issue for ubuntu and xvfb : org.assertj.swing.exception.ActionFailedException: The component to click is out of the boundaries of the screen
 //            frame.setUndecorated(true);
         } else {
@@ -215,6 +216,7 @@ class PosmultenAppMockedSwingTest {
         addParameter(2, "username", "kant");
 
         // WHEN
+        System.out.println("submitBtn Button cordinates x" + window.button("submitBtn").target().getX() + " y :  " + window.button("submitBtn").target().getY());
         window.button("submitBtn").click();
 
         // THEN
@@ -237,15 +239,22 @@ class PosmultenAppMockedSwingTest {
         Mockito.when(context.getSqlDefinitions()).thenReturn(definitions);
         window.textBox(CONFIGURATION_TEXTFIELD_NAME).enterText(yaml);
         window.checkBox(DISPLAY_PARAMETERS_CHECK_BOX_NAME).check();
-        tested.setLocationRelativeTo(null);
         //Add parameter index 0
         addParameter(0, "{{some_key}}", "value1");
         addParameter(1, "url", "http://host");
         addParameter(2, "username", "kant");
         addParameter(3, "some key", "Simon");
-        window.button(PARAMETER_REMOVE_BTN_PREFIX + 1).click();
+        System.out.println("Before DELETE Button cordinates x" + window.button(PARAMETER_REMOVE_BTN_PREFIX + 1).target().getX() + " y :  " + window.button(PARAMETER_REMOVE_BTN_PREFIX + 1).target().getY());
+//        tested.setLocationRelativeTo(window.button(PARAMETER_REMOVE_BTN_PREFIX + 1).target());
+        tested.setLocation(-window.button(PARAMETER_REMOVE_BTN_PREFIX + 1).target().getX(), -window.button(PARAMETER_REMOVE_BTN_PREFIX + 1).target().getY());
+        System.out.println("After DELETE Button cordinates x" + window.button(PARAMETER_REMOVE_BTN_PREFIX + 1).target().getX() + " y :  " + window.button(PARAMETER_REMOVE_BTN_PREFIX + 1).target().getY());
+        window.button(PARAMETER_REMOVE_BTN_PREFIX + 1).focus().click();
 
         // WHEN
+        System.out.println("Before submitBtn Button cordinates x" + window.button("submitBtn").target().getX() + " y :  " + window.button("submitBtn").target().getY());
+//        tested.setLocationRelativeTo(window.button("submitBtn").target());
+        tested.setLocation(-window.button("submitBtn").target().getX(), -window.button("submitBtn").target().getY());
+        System.out.println("After submitBtn Button cordinates x" + window.button("submitBtn").target().getX() + " y :  " + window.button("submitBtn").target().getY());
         window.button("submitBtn").click();
 
         // THEN
