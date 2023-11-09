@@ -74,6 +74,7 @@ class PosmultenAppMockedSwingTest {
         tested = GuiActionRunner.execute(() -> new PosmultenApp(factory));
         //Hack to fix issue for ubuntu and xvfb : org.assertj.swing.exception.ActionFailedException: The component to click is out of the boundaries of the screen
         isRunningInHeadlessEnvironment = isHeadless();
+        System.out.println("Is running in headless environment: " + isRunningInHeadlessEnvironment);
         window = new FrameFixture(tested);
         window.show(); // shows the frame to test
         tested.setLocation(0, 0);
