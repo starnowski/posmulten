@@ -50,9 +50,7 @@ class PosmultenAppMockedSwingTest {
     }
 
     private static boolean isRunningOnVirtualScreen() {
-        String display = System.getProperty("xvfbRunningTests");
-        System.out.println("System.getProperty(\"xvfbRunningTests\") : " + System.getProperty("xvfbRunningTests"));
-        return display != null && !display.trim().isEmpty() && Boolean.getBoolean(display.trim());
+        return Boolean.getBoolean("xvfbRunningTests");
     }
 
     private JTextComponentFixture findTextComponentFixtureByName(String name) {
