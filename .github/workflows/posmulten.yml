@@ -272,7 +272,7 @@ jobs:
       - name: Install openbox
         run:  sudo apt install openbox
       - name: Copy xstartup
-        run:  cp ./swing/xstartup $HOME/.vnc/xstartup && chmod +x $HOME/.vnc/xstartup
+        run:  mkdir $HOME/.vnc && cp ./swing/xstartup $HOME/.vnc/xstartup && chmod +x $HOME/.vnc/xstartup
       - name: Setting password for tightvncserver
         run:  ./swing/setpassword.sh
       - name: Run Swing tests
