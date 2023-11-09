@@ -270,13 +270,13 @@ jobs:
       - name: Run Swing tests
         id: swingTest1
         continue-on-error: true
-        run:  ./mvnw -DskipTests --quiet clean install && xvfb-run --auto-servernum --server-args "-screen 0 1600x900x24" ./mvnw -pl :openwebstart -DxvfbRunningTests=true -P !unit-tests,swing-tests test
+        run:  ./mvnw -DskipTests --quiet clean install && xvfb-run --auto-servernum --server-args "-screen 0 1600x900x24" ./mvnw -pl :openwebstart '-DxvfbRunningTests=true' -P !unit-tests,swing-tests test
         #https://www.thisdot.co/blog/how-to-retry-failed-steps-in-github-action-workflows/
 #        https://stackoverflow.com/questions/54443705/change-default-screen-resolution-on-headless-ubuntu
       - name: Run Swing tests (Second time)
         id: swingTest2
         if: steps.swingTest1.outcome == 'failure'
-        run:  ./mvnw -DskipTests --quiet clean install && xvfb-run --auto-servernum --server-args "-screen 0 1600x900x24" ./mvnw -pl :openwebstart -DxvfbRunningTests=true -P !unit-tests,swing-tests test
+        run:  ./mvnw -DskipTests --quiet clean install && xvfb-run --auto-servernum --server-args "-screen 0 1600x900x24" ./mvnw -pl :openwebstart '-DxvfbRunningTests=true' -P !unit-tests,swing-tests test
       - name: Cleanup xvfb pidx
         uses: bcomnes/cleanup-xvfb@v1
 
