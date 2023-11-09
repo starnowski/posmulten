@@ -21,6 +21,9 @@ OLD_DISPLAY=${DISPLAY}
 vncserver ":${NEW_DISPLAY}" -localhost -geometry 1600x1200 -depth 16
 export DISPLAY=:${NEW_DISPLAY}
 
+# Start gnome-wm
+gnome-wm &
+
 "$@"
 TEST_RESULT="$?"
 
