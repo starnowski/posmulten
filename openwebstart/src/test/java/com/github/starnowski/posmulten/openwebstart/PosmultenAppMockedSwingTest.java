@@ -280,7 +280,9 @@ class PosmultenAppMockedSwingTest {
 
     private void selectCheckBox(JCheckBoxFixture checkBoxFixture, boolean selected) {
         if (isRunningOnVirtualScreen) {
-            checkBoxFixture.target().setSelected(selected);
+//            checkBoxFixture.target().setSelected(selected);
+            window.moveTo(new Point(-checkBoxFixture.target().getX(), -checkBoxFixture.target().getY()));
+            window.checkBox(DISPLAY_PARAMETERS_CHECK_BOX_NAME).check(selected);
         } else {
             getMovedComponent(window.checkBox(DISPLAY_PARAMETERS_CHECK_BOX_NAME)).check(selected);
         }
