@@ -269,6 +269,8 @@ jobs:
             ]
       - name: Install tightvncserver
         run:  sudo apt-get update && sudo apt install tightvncserver
+      - name: Setting password for tightvncserver
+        run:  ./swing/setpassword.sh
       - name: Run Swing tests
         id: swingTest1
         continue-on-error: true
