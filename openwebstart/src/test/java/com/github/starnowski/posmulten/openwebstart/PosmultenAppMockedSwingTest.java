@@ -262,37 +262,36 @@ class PosmultenAppMockedSwingTest {
     private <C extends Component, F extends AbstractComponentFixture<F, C, ?>> F getMovedComponent(F fixtureWithComponent) {
         //Hack to fix issue for ubuntu and xvfb : org.assertj.swing.exception.ActionFailedException: The component to click is out of the boundaries of the screen
         if (isRunningOnVirtualScreen) {
-            tested.setLocation(-fixtureWithComponent.target().getX(), -fixtureWithComponent.target().getY());
+//            tested.setLocation(-fixtureWithComponent.target().getX(), -fixtureWithComponent.target().getY());
         }
         return fixtureWithComponent;
     }
 
-    private <C extends Component, F extends AbstractComponentFixture<F, C, ?>> F getCenteredComponent(F fixtureWithComponent) {
-        //Hack to fix issue for ubuntu and xvfb : org.assertj.swing.exception.ActionFailedException: The component to click is out of the boundaries of the screen
-        if (isRunningOnVirtualScreen) {
-            tested.setLocationRelativeTo(fixtureWithComponent.target());
-        }
-        return fixtureWithComponent;
-    }
+//    private <C extends Component, F extends AbstractComponentFixture<F, C, ?>> F getCenteredComponent(F fixtureWithComponent) {
+//        //Hack to fix issue for ubuntu and xvfb : org.assertj.swing.exception.ActionFailedException: The component to click is out of the boundaries of the screen
+//        if (isRunningOnVirtualScreen) {
+//            tested.setLocationRelativeTo(fixtureWithComponent.target());
+//        }
+//        return fixtureWithComponent;
+//    }
 
-    private <C extends Component, F extends AbstractComponentFixture<F, C, ?>> F getComponentWithDefaultSettings(F fixtureWithComponent) {
-        //Hack to fix issue for ubuntu and xvfb : org.assertj.swing.exception.ActionFailedException: The component to click is out of the boundaries of the screen
-        if (isRunningOnVirtualScreen) {
-            tested.setLocation(0, 0);
-        }
-        return fixtureWithComponent;
-    }
+//    private <C extends Component, F extends AbstractComponentFixture<F, C, ?>> F getComponentWithDefaultSettings(F fixtureWithComponent) {
+//        //Hack to fix issue for ubuntu and xvfb : org.assertj.swing.exception.ActionFailedException: The component to click is out of the boundaries of the screen
+//        if (isRunningOnVirtualScreen) {
+//            tested.setLocation(0, 0);
+//        }
+//        return fixtureWithComponent;
+//    }
 
-    private void selectCheckBox(JCheckBoxFixture checkBoxFixture, boolean selected) {
-        if (isRunningOnVirtualScreen) {
-//            checkBoxFixture.target().setSelected(selected);
-            System.out.println("Checkbox cordinates: " + checkBoxFixture.target().getX() + " " + checkBoxFixture.target().getY());
-            window.moveTo(new Point(-checkBoxFixture.target().getX(), -checkBoxFixture.target().getY()));
-            checkBoxFixture.check(selected);
-        } else {
-            getMovedComponent(checkBoxFixture).check(selected);
-        }
-    }
+//    private void selectCheckBox(JCheckBoxFixture checkBoxFixture, boolean selected) {
+//        if (isRunningOnVirtualScreen) {
+//            System.out.println("Checkbox cordinates: " + checkBoxFixture.target().getX() + " " + checkBoxFixture.target().getY());
+//            window.moveTo(new Point(-checkBoxFixture.target().getX(), -checkBoxFixture.target().getY()));
+//            checkBoxFixture.check(selected);
+//        } else {
+//            getMovedComponent(checkBoxFixture).check(selected);
+//        }
+//    }
 
     private void addParameter(int index, String key, String value) {
         getMovedComponent(window.button(ADD_PARAMETER_BTN_NAME)).click();
