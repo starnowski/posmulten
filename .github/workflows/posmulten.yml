@@ -269,6 +269,8 @@ jobs:
             ]
       - name: Install tightvncserver
         run:  sudo apt-get update && sudo apt install tightvncserver
+      - name: Install tightvncserver
+        run:  sudo apt install gnome-wm
       - name: Setting password for tightvncserver
         run:  ./swing/setpassword.sh
       - name: Run Swing tests
