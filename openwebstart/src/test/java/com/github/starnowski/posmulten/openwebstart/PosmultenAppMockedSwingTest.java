@@ -31,7 +31,6 @@ import java.util.stream.Collectors;
 import static com.github.starnowski.posmulten.openwebstart.ParametersPanel.*;
 import static com.github.starnowski.posmulten.openwebstart.PosmultenApp.*;
 import static com.github.starnowski.posmulten.postgresql.test.utils.MapBuilder.mapBuilder;
-import static java.awt.GraphicsEnvironment.isHeadless;
 import static java.util.Arrays.asList;
 import static java.util.Optional.ofNullable;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -43,11 +42,16 @@ class PosmultenAppMockedSwingTest {
     YamlSharedSchemaContextFactory factory;
     private FrameFixture window;
     private PosmultenApp tested;
-    private boolean isRunningInHeadlessEnvironment;
+    private boolean isRunningOnVirtualScreen;
 
     @BeforeAll
     public static void setUpOnce() {
         FailOnThreadViolationRepaintManager.install();
+    }
+
+    private static boolean isRunningOnVirtualScreen() {
+        String display = System.getenv("DISPLAY");
+        return display != null && display.trim().isEmpty();
     }
 
     private JTextComponentFixture findTextComponentFixtureByName(String name) {
@@ -73,8 +77,8 @@ class PosmultenAppMockedSwingTest {
         factory = mock(YamlSharedSchemaContextFactory.class);
         tested = GuiActionRunner.execute(() -> new PosmultenApp(factory));
         //Hack to fix issue for ubuntu and xvfb : org.assertj.swing.exception.ActionFailedException: The component to click is out of the boundaries of the screen
-        isRunningInHeadlessEnvironment = isHeadless();
-        System.out.println("Is running in headless environment: " + isRunningInHeadlessEnvironment);
+        isRunningOnVirtualScreen = isRunningOnVirtualScreen();
+        System.out.println("Is running in headless environment: " + isRunningOnVirtualScreen);
         window = new FrameFixture(tested);
         window.show(); // shows the frame to test
         tested.setLocation(0, 0);
@@ -256,7 +260,7 @@ class PosmultenAppMockedSwingTest {
 
     private <C extends Component, F extends AbstractComponentFixture<F, C, ?>> F getMovedComponent(F fixtureWithComponent) {
         //Hack to fix issue for ubuntu and xvfb : org.assertj.swing.exception.ActionFailedException: The component to click is out of the boundaries of the screen
-        if (isRunningInHeadlessEnvironment) {
+        if (isRunningOnVirtualScreen) {
             tested.setLocation(-fixtureWithComponent.target().getX(), -fixtureWithComponent.target().getY());
         }
         return fixtureWithComponent;
