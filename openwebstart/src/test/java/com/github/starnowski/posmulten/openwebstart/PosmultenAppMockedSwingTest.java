@@ -7,16 +7,17 @@ import com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaCont
 import com.github.starnowski.posmulten.postgresql.core.context.decorator.DefaultDecoratorContext;
 import com.github.starnowski.posmulten.postgresql.core.context.exceptions.MissingRLSGranteeDeclarationException;
 import com.github.starnowski.posmulten.postgresql.core.context.exceptions.SharedSchemaContextBuilderException;
-import com.github.starnowski.posmulten.postgresql.test.utils.MapBuilder;
 import org.assertj.swing.core.GenericTypeMatcher;
-import org.assertj.swing.driver.ComponentDriver;
 import org.assertj.swing.edt.FailOnThreadViolationRepaintManager;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.AbstractComponentFixture;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.fixture.JPanelFixture;
 import org.assertj.swing.fixture.JTextComponentFixture;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
@@ -30,6 +31,7 @@ import java.util.stream.Collectors;
 import static com.github.starnowski.posmulten.openwebstart.ParametersPanel.*;
 import static com.github.starnowski.posmulten.openwebstart.PosmultenApp.*;
 import static com.github.starnowski.posmulten.postgresql.test.utils.MapBuilder.mapBuilder;
+import static java.awt.GraphicsEnvironment.isHeadless;
 import static java.util.Arrays.asList;
 import static java.util.Optional.ofNullable;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -41,6 +43,7 @@ class PosmultenAppMockedSwingTest {
     YamlSharedSchemaContextFactory factory;
     private FrameFixture window;
     private PosmultenApp tested;
+    private boolean isRunningInHeadlessEnvironment;
 
     @BeforeAll
     public static void setUpOnce() {
@@ -70,21 +73,10 @@ class PosmultenAppMockedSwingTest {
         factory = mock(YamlSharedSchemaContextFactory.class);
         tested = GuiActionRunner.execute(() -> new PosmultenApp(factory));
         //Hack to fix issue for ubuntu and xvfb : org.assertj.swing.exception.ActionFailedException: The component to click is out of the boundaries of the screen
-//        frame.setLocation(0, 0);
+        isRunningInHeadlessEnvironment = isHeadless();
         window = new FrameFixture(tested);
         window.show(); // shows the frame to test
-        String osName = System.getProperty("os.name");
-        if (osName != null && osName.toLowerCase().contains("linux")) {
-//            frame.setLocationByPlatform(true);
-            tested.setLocation(-1000, 0);
-//            tested.setLocation(0, 0);
-            //Hack to fix issue for ubuntu and xvfb : org.assertj.swing.exception.ActionFailedException: The component to click is out of the boundaries of the screen
-//            frame.setUndecorated(true);
-        } else {
-            tested.setLocation(0, 0);
-        }
-//        window = new FrameFixture(frame);
-//        window.show(); // shows the frame to test
+        tested.setLocation(0, 0);
     }
 
     @Test
@@ -102,10 +94,10 @@ class PosmultenAppMockedSwingTest {
         Mockito.when(factory.build(eq(yaml), any(DefaultDecoratorContext.class))).thenReturn(context);
         List<SQLDefinition> definitions = asList(sqlDef("DEF 1", null), sqlDef("ALTER DEFINIT and Function", null));
         Mockito.when(context.getSqlDefinitions()).thenReturn(definitions);
-        window.textBox(CONFIGURATION_TEXTFIELD_NAME).enterText(yaml);
+        getMovedComponent(window.textBox(CONFIGURATION_TEXTFIELD_NAME)).enterText(yaml);
 
         // WHEN
-        window.button("submitBtn").click();
+        getMovedComponent(window.button("submitBtn")).click();
 
         // THEN
         window.textBox(CREATION_SCRIPTS_TEXTFIELD_NAME).requireText("DEF 1" + "\n" + "ALTER DEFINIT and Function");
@@ -121,10 +113,10 @@ class PosmultenAppMockedSwingTest {
         Mockito.when(factory.build(eq(yaml), any(DefaultDecoratorContext.class))).thenReturn(context);
         List<SQLDefinition> definitions = asList(sqlDef(null, "DROP fun"), sqlDef(null, "ALTER TABLE Drop some Fun"));
         Mockito.when(context.getSqlDefinitions()).thenReturn(definitions);
-        window.textBox(CONFIGURATION_TEXTFIELD_NAME).enterText(yaml);
+        getMovedComponent(window.textBox(CONFIGURATION_TEXTFIELD_NAME)).enterText(yaml);
 
         // WHEN
-        window.button("submitBtn").click();
+        getMovedComponent(window.button("submitBtn")).click();
 
         // THEN
         window.textBox(DROP_SCRIPTS_TEXTFIELD_NAME).requireText("ALTER TABLE Drop some Fun" + "\n" + "DROP fun");
@@ -140,10 +132,10 @@ class PosmultenAppMockedSwingTest {
         Mockito.when(factory.build(eq(yaml), any(DefaultDecoratorContext.class))).thenReturn(context);
         List<SQLDefinition> definitions = asList(sqlDef(null, null, "Some check1"), sqlDef(null, null, "check1", "check23\naaa"));
         Mockito.when(context.getSqlDefinitions()).thenReturn(definitions);
-        window.textBox(CONFIGURATION_TEXTFIELD_NAME).enterText(yaml);
+        getMovedComponent(window.textBox(CONFIGURATION_TEXTFIELD_NAME)).enterText(yaml);
 
         // WHEN
-        window.button("submitBtn").click();
+        getMovedComponent(window.button("submitBtn")).click();
 
         // THEN
         window.textBox(CHECKING_SCRIPTS_TEXTFIELD_NAME).requireText("Some check1" + "\n" + "check1" + "\n" + "check23\naaa");
@@ -157,10 +149,10 @@ class PosmultenAppMockedSwingTest {
         String yaml = "Some yaml";
         String exceptionMessage = "Missing grantee in configuration";
         Mockito.when(factory.build(eq(yaml), any(DefaultDecoratorContext.class))).thenThrow(new MissingRLSGranteeDeclarationException(exceptionMessage));
-        window.textBox(CONFIGURATION_TEXTFIELD_NAME).enterText(yaml);
+        getMovedComponent(window.textBox(CONFIGURATION_TEXTFIELD_NAME)).enterText(yaml);
 
         // WHEN
-        window.button("submitBtn").click();
+        getMovedComponent(window.button("submitBtn")).click();
 
         // THEN
         window.textBox(ERROR_TEXTFIELD_NAME).requireText(exceptionMessage);
@@ -174,10 +166,10 @@ class PosmultenAppMockedSwingTest {
         String yaml = "Some yaml";
         String exceptionMessage = "Exception during processing";
         Mockito.when(factory.build(eq(yaml), any(DefaultDecoratorContext.class))).thenThrow(new RuntimeException(exceptionMessage));
-        window.textBox(CONFIGURATION_TEXTFIELD_NAME).enterText(yaml);
+        getMovedComponent(window.textBox(CONFIGURATION_TEXTFIELD_NAME)).enterText(yaml);
 
         // WHEN
-        window.button("submitBtn").click();
+        getMovedComponent(window.button("submitBtn")).click();
 
         // THEN
         window.textBox(ERROR_TEXTFIELD_NAME).requireText(exceptionMessage);
@@ -191,10 +183,10 @@ class PosmultenAppMockedSwingTest {
         String yaml = "Some yaml";
         List<String> errorMessages = Arrays.asList("Some fields is required", "Exception during processing", "Missing values");
         Mockito.when(factory.build(eq(yaml), any(DefaultDecoratorContext.class))).thenThrow(new YamlInvalidSchema(errorMessages));
-        window.textBox(CONFIGURATION_TEXTFIELD_NAME).enterText(yaml);
+        getMovedComponent(window.textBox(CONFIGURATION_TEXTFIELD_NAME)).enterText(yaml);
 
         // WHEN
-        window.button("submitBtn").click();
+        getMovedComponent(window.button("submitBtn")).click();
 
         // THEN
         window.textBox(ERROR_TEXTFIELD_NAME).requireText(errorMessages.stream().collect(Collectors.joining("\n")));
@@ -211,8 +203,8 @@ class PosmultenAppMockedSwingTest {
         Mockito.when(factory.build(eq(yaml), defaultDecoratorContextArgumentCaptor.capture())).thenReturn(context);
         List<SQLDefinition> definitions = asList(sqlDef("DEF 1", null), sqlDef("ALTER DEFINIT and Function", null));
         Mockito.when(context.getSqlDefinitions()).thenReturn(definitions);
-        window.textBox(CONFIGURATION_TEXTFIELD_NAME).enterText(yaml);
-        window.checkBox(DISPLAY_PARAMETERS_CHECK_BOX_NAME).check();
+        getMovedComponent(window.textBox(CONFIGURATION_TEXTFIELD_NAME)).enterText(yaml);
+        getMovedComponent(window.checkBox(DISPLAY_PARAMETERS_CHECK_BOX_NAME)).check();
         //Add parameter index 0
         addParameter(0, "{{some_key}}", "value1");
         addParameter(1, "url", "http://host");
@@ -220,7 +212,7 @@ class PosmultenAppMockedSwingTest {
 
         // WHEN
         System.out.println("submitBtn Button cordinates x" + window.button("submitBtn").target().getX() + " y :  " + window.button("submitBtn").target().getY());
-        window.button("submitBtn").click();
+        getMovedComponent(window.button("submitBtn")).click();
 
         // THEN
         assertEquals(defaultDecoratorContextArgumentCaptor.getValue().getReplaceCharactersMap(), mapBuilder().put("{{some_key}}", "value1").put("url", "http://host").put("username", "kant").build());
@@ -240,8 +232,8 @@ class PosmultenAppMockedSwingTest {
         Mockito.when(factory.build(eq(yaml), defaultDecoratorContextArgumentCaptor.capture())).thenReturn(context);
         List<SQLDefinition> definitions = asList(sqlDef("DEF 1", null), sqlDef("ALTER DEFINIT and Function", null));
         Mockito.when(context.getSqlDefinitions()).thenReturn(definitions);
-        window.textBox(CONFIGURATION_TEXTFIELD_NAME).enterText(yaml);
-        window.checkBox(DISPLAY_PARAMETERS_CHECK_BOX_NAME).check();
+        getMovedComponent(window.textBox(CONFIGURATION_TEXTFIELD_NAME)).enterText(yaml);
+        getMovedComponent(window.checkBox(DISPLAY_PARAMETERS_CHECK_BOX_NAME)).check();
         //Add parameter index 0
         addParameter(0, "{{some_key}}", "value1");
         addParameter(1, "url", "http://host");
@@ -261,16 +253,18 @@ class PosmultenAppMockedSwingTest {
         findPanelFixtureByName(ERROR_PANEL_NAME).requireNotVisible();
     }
 
-    private <C extends Component, F extends AbstractComponentFixture<F, C , ?>>  F getMovedComponent(F fixtureWithComponent)
-    {
-        tested.setLocation(-fixtureWithComponent.target().getX(), -fixtureWithComponent.target().getY());
+    private <C extends Component, F extends AbstractComponentFixture<F, C, ?>> F getMovedComponent(F fixtureWithComponent) {
+        //Hack to fix issue for ubuntu and xvfb : org.assertj.swing.exception.ActionFailedException: The component to click is out of the boundaries of the screen
+        if (isRunningInHeadlessEnvironment) {
+            tested.setLocation(-fixtureWithComponent.target().getX(), -fixtureWithComponent.target().getY());
+        }
         return fixtureWithComponent;
     }
 
     private void addParameter(int index, String key, String value) {
-        window.button(ADD_PARAMETER_BTN_NAME).click();
-        window.textBox(PARAMETER_KEY_TEXTAREA_NAME_PREFIX + index).enterText(key);
-        window.textBox(PARAMETER_VALUE_TEXTAREA_NAME_PREFIX + index).enterText(value);
+        getMovedComponent(window.button(ADD_PARAMETER_BTN_NAME)).click();
+        getMovedComponent(window.textBox(PARAMETER_KEY_TEXTAREA_NAME_PREFIX + index)).enterText(key);
+        getMovedComponent(window.textBox(PARAMETER_VALUE_TEXTAREA_NAME_PREFIX + index)).enterText(value);
     }
 
     private SQLDefinition sqlDef(String creationScript, String dropScript, String... checkingScripts) {
