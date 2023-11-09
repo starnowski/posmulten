@@ -9,8 +9,10 @@ import com.github.starnowski.posmulten.postgresql.core.context.exceptions.Missin
 import com.github.starnowski.posmulten.postgresql.core.context.exceptions.SharedSchemaContextBuilderException;
 import com.github.starnowski.posmulten.postgresql.test.utils.MapBuilder;
 import org.assertj.swing.core.GenericTypeMatcher;
+import org.assertj.swing.driver.ComponentDriver;
 import org.assertj.swing.edt.FailOnThreadViolationRepaintManager;
 import org.assertj.swing.edt.GuiActionRunner;
+import org.assertj.swing.fixture.AbstractComponentFixture;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.fixture.JPanelFixture;
 import org.assertj.swing.fixture.JTextComponentFixture;
@@ -20,6 +22,7 @@ import org.mockito.Mockito;
 
 import javax.swing.*;
 import javax.swing.text.JTextComponent;
+import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -244,18 +247,10 @@ class PosmultenAppMockedSwingTest {
         addParameter(1, "url", "http://host");
         addParameter(2, "username", "kant");
         addParameter(3, "some key", "Simon");
-        System.out.println("Before DELETE Button cordinates x" + window.button(PARAMETER_REMOVE_BTN_PREFIX + 1).target().getX() + " y :  " + window.button(PARAMETER_REMOVE_BTN_PREFIX + 1).target().getY());
-//        tested.setLocationRelativeTo(window.button(PARAMETER_REMOVE_BTN_PREFIX + 1).target());
-        tested.setLocation(-window.button(PARAMETER_REMOVE_BTN_PREFIX + 1).target().getX(), -window.button(PARAMETER_REMOVE_BTN_PREFIX + 1).target().getY());
-        System.out.println("After DELETE Button cordinates x" + window.button(PARAMETER_REMOVE_BTN_PREFIX + 1).target().getX() + " y :  " + window.button(PARAMETER_REMOVE_BTN_PREFIX + 1).target().getY());
-        window.button(PARAMETER_REMOVE_BTN_PREFIX + 1).focus().click();
+        getMovedComponent(window.button(PARAMETER_REMOVE_BTN_PREFIX + 1)).click();
 
         // WHEN
-        System.out.println("Before submitBtn Button cordinates x" + window.button("submitBtn").target().getX() + " y :  " + window.button("submitBtn").target().getY());
-//        tested.setLocationRelativeTo(window.button("submitBtn").target());
-        tested.setLocation(-window.button("submitBtn").target().getX(), -window.button("submitBtn").target().getY());
-        System.out.println("After submitBtn Button cordinates x" + window.button("submitBtn").target().getX() + " y :  " + window.button("submitBtn").target().getY());
-        window.button("submitBtn").click();
+        getMovedComponent(window.button("submitBtn")).click();
 
         // THEN
         assertEquals(defaultDecoratorContextArgumentCaptor.getValue().getReplaceCharactersMap(), mapBuilder().put("{{some_key}}", "value1").put("username", "kant").put("some key", "Simon").build());
@@ -264,6 +259,12 @@ class PosmultenAppMockedSwingTest {
         window.textBox(CREATION_SCRIPTS_TEXTFIELD_NAME).requireText("DEF 1" + "\n" + "ALTER DEFINIT and Function");
         // Error panel should not be visible
         findPanelFixtureByName(ERROR_PANEL_NAME).requireNotVisible();
+    }
+
+    private <C extends Component, F extends AbstractComponentFixture<F, C , ?>>  F getMovedComponent(F fixtureWithComponent)
+    {
+        tested.setLocation(-fixtureWithComponent.target().getX(), -fixtureWithComponent.target().getY());
+        return fixtureWithComponent;
     }
 
     private void addParameter(int index, String key, String value) {
