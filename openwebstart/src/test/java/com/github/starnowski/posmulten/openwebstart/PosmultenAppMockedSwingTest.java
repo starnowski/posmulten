@@ -50,7 +50,7 @@ class PosmultenAppMockedSwingTest {
     }
 
     private static boolean isRunningOnVirtualScreen() {
-        String display = System.getenv("DISPLAY");
+        String display = System.getenv("XVFB_RUNNING_TESTS");
         return display != null && display.trim().isEmpty();
     }
 
