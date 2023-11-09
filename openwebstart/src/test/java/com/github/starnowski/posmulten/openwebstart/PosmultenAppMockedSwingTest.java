@@ -10,10 +10,7 @@ import com.github.starnowski.posmulten.postgresql.core.context.exceptions.Shared
 import org.assertj.swing.core.GenericTypeMatcher;
 import org.assertj.swing.edt.FailOnThreadViolationRepaintManager;
 import org.assertj.swing.edt.GuiActionRunner;
-import org.assertj.swing.fixture.AbstractComponentFixture;
-import org.assertj.swing.fixture.FrameFixture;
-import org.assertj.swing.fixture.JPanelFixture;
-import org.assertj.swing.fixture.JTextComponentFixture;
+import org.assertj.swing.fixture.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -208,7 +205,7 @@ class PosmultenAppMockedSwingTest {
         List<SQLDefinition> definitions = asList(sqlDef("DEF 1", null), sqlDef("ALTER DEFINIT and Function", null));
         Mockito.when(context.getSqlDefinitions()).thenReturn(definitions);
         getMovedComponent(window.textBox(CONFIGURATION_TEXTFIELD_NAME)).enterText(yaml);
-        getMovedComponent(window.checkBox(DISPLAY_PARAMETERS_CHECK_BOX_NAME)).check();
+        selectCheckBox(window.checkBox(DISPLAY_PARAMETERS_CHECK_BOX_NAME), true);
         //Add parameter index 0
         addParameter(0, "{{some_key}}", "value1");
         addParameter(1, "url", "http://host");
@@ -237,7 +234,7 @@ class PosmultenAppMockedSwingTest {
         List<SQLDefinition> definitions = asList(sqlDef("DEF 1", null), sqlDef("ALTER DEFINIT and Function", null));
         Mockito.when(context.getSqlDefinitions()).thenReturn(definitions);
         getMovedComponent(window.textBox(CONFIGURATION_TEXTFIELD_NAME)).enterText(yaml);
-        getMovedComponent(window.checkBox(DISPLAY_PARAMETERS_CHECK_BOX_NAME)).check();
+        selectCheckBox(window.checkBox(DISPLAY_PARAMETERS_CHECK_BOX_NAME), true);
         //Add parameter index 0
         addParameter(0, "{{some_key}}", "value1");
         addParameter(1, "url", "http://host");
@@ -279,6 +276,14 @@ class PosmultenAppMockedSwingTest {
             tested.setLocation(0, 0);
         }
         return fixtureWithComponent;
+    }
+
+    private void selectCheckBox(JCheckBoxFixture checkBoxFixture, boolean selected) {
+        if (isRunningOnVirtualScreen) {
+            checkBoxFixture.target().setSelected(selected);
+        } else {
+            getMovedComponent(window.checkBox(DISPLAY_PARAMETERS_CHECK_BOX_NAME)).check(selected);
+        }
     }
 
     private void addParameter(int index, String key, String value) {
