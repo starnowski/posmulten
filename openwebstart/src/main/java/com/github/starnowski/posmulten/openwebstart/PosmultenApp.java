@@ -26,6 +26,7 @@ public class PosmultenApp extends JFrame {
     public static final String ERROR_PANEL_NAME = "errors-panel";
     public static final String SCRIPTS_PANEL_NAME = "scriptsPanel";
     public static final String DISPLAY_PARAMETERS_CHECK_BOX_NAME = "displayParametersCheckBox";
+    public static final String DIFF_CONFIGURATIONS_CHECK_BOX_NAME = "diffConfigurationsCheckBox";
     private final YamlSharedSchemaContextFactory factory;
     private final JTextArea inputTextArea;
     private final JTextArea previousConfigurationInputTextArea;
@@ -37,6 +38,7 @@ public class PosmultenApp extends JFrame {
     private final JPanel errorPanel;
     private final ParametersPanel parametersPanel;
     private final JCheckBox displayParametersCheckBox;
+    private final JCheckBox diffConfigurationsCheckBox;
 
     public PosmultenApp(YamlSharedSchemaContextFactory factory) {
         this.factory = factory;
@@ -67,6 +69,8 @@ public class PosmultenApp extends JFrame {
         parametersPanel = new ParametersPanel();
         displayParametersCheckBox = new JCheckBox("Use template parameters", null, false);
         displayParametersCheckBox.setName(DISPLAY_PARAMETERS_CHECK_BOX_NAME);
+        diffConfigurationsCheckBox = new JCheckBox("Compare configurations", null, false);
+        diffConfigurationsCheckBox.setName(DIFF_CONFIGURATIONS_CHECK_BOX_NAME);
 
         JPanel optionsPanel = new JPanel();
         optionsPanel.setLayout(new BoxLayout(optionsPanel, BoxLayout.X_AXIS));
@@ -74,13 +78,13 @@ public class PosmultenApp extends JFrame {
         // Create a JTabbedPane
         JTabbedPane tabbedPane = new JTabbedPane();
         tabbedPane.addTab("Yaml configuration", new JScrollPane(inputTextArea));
-        tabbedPane.addTab("Previous yaml configuration to compare with", new JScrollPane(previousConfigurationInputTextArea));
 
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.add(tabbedPane, BorderLayout.CENTER);
         submitButton.setAlignmentX(JButton.CENTER_ALIGNMENT);
 
+        optionsPanel.add(diffConfigurationsCheckBox);
         optionsPanel.add(displayParametersCheckBox);
         optionsPanel.add(submitButton);
         panel.add(optionsPanel);
@@ -99,6 +103,18 @@ public class PosmultenApp extends JFrame {
         submitButton.addActionListener(prepareActionListenerForSubmitButton());
         displayParametersCheckBox.addChangeListener(c -> {
             parametersPanel.setVisible(displayParametersCheckBox.isSelected());
+        });
+        diffConfigurationsCheckBox.addChangeListener(c -> {
+            System.out.println("diffConfigurationsCheckBox.addChangeListener: " + diffConfigurationsCheckBox.isSelected());
+            if (diffConfigurationsCheckBox.isSelected()) {
+                if (tabbedPane.getTabCount() == 1) {
+                    tabbedPane.insertTab("Previous yaml configuration to compare with", null, new JScrollPane(previousConfigurationInputTextArea), null, 1);
+                }
+            } else {
+                if (tabbedPane.getTabCount() == 2) {
+                    tabbedPane.removeTabAt(1);
+                }
+            }
         });
         pack();
     }
