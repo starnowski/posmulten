@@ -269,6 +269,20 @@ class PosmultenAppMockedSwingTest {
         window.panel(PARAMETERS_LABELS_PANEL_NAME).requireVisible();
     }
 
+    @Test
+    public void shouldNotDisplayLabelsPanelWhenAllParametersWhereRemoved() {
+        // GIVEN
+        getMovedComponent(window.checkBox(DISPLAY_PARAMETERS_CHECK_BOX_NAME).check());
+        addParameter(0, "{{some_key}}", "value1");
+        window.panel(PARAMETERS_LABELS_PANEL_NAME).requireVisible();
+
+        // WHEN
+        getMovedComponent(window.button(PARAMETER_REMOVE_BTN_PREFIX + 0)).click();
+
+        // THEN
+        findPanelFixtureByName(PARAMETERS_LABELS_PANEL_NAME).requireNotVisible();
+    }
+
     private <C extends Component, F extends AbstractComponentFixture<F, C, ?>> F getMovedComponent(F fixtureWithComponent) {
         //Hack to fix issue for ubuntu and xvfb : org.assertj.swing.exception.ActionFailedException: The component to click is out of the boundaries of the screen
         if (isRunningOnVirtualScreen) {
