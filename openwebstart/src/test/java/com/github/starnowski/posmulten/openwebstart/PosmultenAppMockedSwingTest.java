@@ -86,6 +86,7 @@ class PosmultenAppMockedSwingTest {
         // THEN
         findPanelFixtureByName(SCRIPTS_PANEL_NAME).requireNotVisible();
         findPanelFixtureByName(ERROR_PANEL_NAME).requireNotVisible();
+        findPanelFixtureByName(PARAMETERS_LABELS_PANEL_NAME).requireNotVisible();
     }
 
     @Test
@@ -253,6 +254,19 @@ class PosmultenAppMockedSwingTest {
         window.textBox(CREATION_SCRIPTS_TEXTFIELD_NAME).requireText("DEF 1" + "\n" + "ALTER DEFINIT and Function");
         // Error panel should not be visible
         findPanelFixtureByName(ERROR_PANEL_NAME).requireNotVisible();
+    }
+
+    @Test
+    public void shouldDisplayLabelsPanelWhenAtLeastOneParameterIsGoingToBeAdded() {
+        // GIVEN
+        getMovedComponent(window.checkBox(DISPLAY_PARAMETERS_CHECK_BOX_NAME).check());
+        findPanelFixtureByName(PARAMETERS_LABELS_PANEL_NAME).requireNotVisible();
+
+        // WHEN
+        addParameter(0, "{{some_key}}", "value1");
+
+        // THEN
+        window.panel(PARAMETERS_LABELS_PANEL_NAME).requireVisible();
     }
 
     private <C extends Component, F extends AbstractComponentFixture<F, C, ?>> F getMovedComponent(F fixtureWithComponent) {

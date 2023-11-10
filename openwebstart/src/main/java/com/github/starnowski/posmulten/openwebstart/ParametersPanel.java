@@ -13,6 +13,7 @@ public class ParametersPanel extends JPanel {
     public static final String PARAMETER_KEY_TEXTAREA_NAME_PREFIX = "parameterKey";
     public static final String PARAMETER_VALUE_TEXTAREA_NAME_PREFIX = "parameterValue";
     public static final String PARAMETER_REMOVE_BTN_PREFIX = "parameterRemove";
+    public static final String PARAMETERS_LABELS_PANEL_NAME = "ParametersLabelsPanel";
     private final JPanel addButtonPanel;
     private final JPanel parametersPanel;
     private final JPanel labelsPanel;
@@ -60,6 +61,7 @@ public class ParametersPanel extends JPanel {
     private JPanel prepareLabelsPanel()
     {
         JPanel panel = new JPanel();
+        panel.setName(PARAMETERS_LABELS_PANEL_NAME);
         panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
         JLabel parameterKeyLabel = new JLabel("Parameter key");
         parameterKeyLabel.setName("ParameterKeyLabel");
