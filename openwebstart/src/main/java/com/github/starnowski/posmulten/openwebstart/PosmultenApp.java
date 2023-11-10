@@ -21,12 +21,14 @@ public class PosmultenApp extends JFrame {
     public static final String DROP_SCRIPTS_TEXTFIELD_NAME = "dropScripts";
     public static final String CHECKING_SCRIPTS_TEXTFIELD_NAME = "checkingScripts";
     public static final String CONFIGURATION_TEXTFIELD_NAME = "configuration";
+    public static final String PREVIOUS_CONFIGURATION_TEXTFIELD_NAME = "previousConfiguration";
     public static final String ERROR_TEXTFIELD_NAME = "errors";
     public static final String ERROR_PANEL_NAME = "errors-panel";
     public static final String SCRIPTS_PANEL_NAME = "scriptsPanel";
     public static final String DISPLAY_PARAMETERS_CHECK_BOX_NAME = "displayParametersCheckBox";
     private final YamlSharedSchemaContextFactory factory;
     private final JTextArea inputTextArea;
+    private final JTextArea previousConfigurationInputTextArea;
     private final JTextArea creationScriptsTextArea;
     private final JTextArea dropScriptsTextArea;
     private final JTextArea checkingScriptsTextArea;
@@ -50,18 +52,15 @@ public class PosmultenApp extends JFrame {
         System.out.println("Screen size, width: " +  screenSize.getWidth() + " height: " + screenSize.getHeight());
         //https://stackoverflow.com/questions/11570356/jframe-in-full-screen-java
         setExtendedState(JFrame.MAXIMIZED_BOTH);
-//        setUndecorated(true);
-//        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-//        GraphicsDevice gd = ge.getDefaultScreenDevice();
-//        GraphicsConfiguration gc = gd.getDefaultConfiguration();
-//        setBounds(gc.getBounds());
 
         inputTextArea = prepareScriptTextArea(CONFIGURATION_TEXTFIELD_NAME);
+        previousConfigurationInputTextArea = prepareScriptTextArea(PREVIOUS_CONFIGURATION_TEXTFIELD_NAME);
         creationScriptsTextArea = prepareScriptTextArea(CREATION_SCRIPTS_TEXTFIELD_NAME);
         dropScriptsTextArea = prepareScriptTextArea(DROP_SCRIPTS_TEXTFIELD_NAME);
         checkingScriptsTextArea = prepareScriptTextArea(CHECKING_SCRIPTS_TEXTFIELD_NAME);
         errorTextArea = prepareScriptTextArea(ERROR_TEXTFIELD_NAME);
         inputTextArea.setToolTipText("Configuration");
+        previousConfigurationInputTextArea.setToolTipText("Previous configuration to compare with");
 
         JButton submitButton = new JButton("Submit");
         submitButton.setName("submitBtn");
@@ -72,10 +71,14 @@ public class PosmultenApp extends JFrame {
         JPanel optionsPanel = new JPanel();
         optionsPanel.setLayout(new BoxLayout(optionsPanel, BoxLayout.X_AXIS));
 
+        // Create a JTabbedPane
+        JTabbedPane tabbedPane = new JTabbedPane();
+        tabbedPane.addTab("Yaml configuration", new JScrollPane(inputTextArea));
+        tabbedPane.addTab("Previous yaml configuration to compare with", new JScrollPane(previousConfigurationInputTextArea));
+
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.add(createCenteredLabel("Yaml configuration"));
-        panel.add(new JScrollPane(inputTextArea), BorderLayout.CENTER);
+        panel.add(tabbedPane, BorderLayout.CENTER);
         submitButton.setAlignmentX(JButton.CENTER_ALIGNMENT);
 
         optionsPanel.add(displayParametersCheckBox);
