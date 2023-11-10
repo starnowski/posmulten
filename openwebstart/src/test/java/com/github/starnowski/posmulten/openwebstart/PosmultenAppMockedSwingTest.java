@@ -205,10 +205,8 @@ class PosmultenAppMockedSwingTest {
         Mockito.when(factory.build(eq(yaml), defaultDecoratorContextArgumentCaptor.capture())).thenReturn(context);
         List<SQLDefinition> definitions = asList(sqlDef("DEF 1", null), sqlDef("ALTER DEFINIT and Function", null));
         Mockito.when(context.getSqlDefinitions()).thenReturn(definitions);
-//        window.checkBox(DISPLAY_PARAMETERS_CHECK_BOX_NAME).check();
         getMovedComponent(window.textBox(CONFIGURATION_TEXTFIELD_NAME)).enterText(yaml);
         getMovedComponent(window.checkBox(DISPLAY_PARAMETERS_CHECK_BOX_NAME).check());
-//        selectCheckBox(window.checkBox(DISPLAY_PARAMETERS_CHECK_BOX_NAME), true);
         //Add parameter index 0
         addParameter(0, "{{some_key}}", "value1");
         addParameter(1, "url", "http://host");
@@ -236,10 +234,8 @@ class PosmultenAppMockedSwingTest {
         Mockito.when(factory.build(eq(yaml), defaultDecoratorContextArgumentCaptor.capture())).thenReturn(context);
         List<SQLDefinition> definitions = asList(sqlDef("DEF 1", null), sqlDef("ALTER DEFINIT and Function", null));
         Mockito.when(context.getSqlDefinitions()).thenReturn(definitions);
-//        window.checkBox(DISPLAY_PARAMETERS_CHECK_BOX_NAME).check();
         getMovedComponent(window.textBox(CONFIGURATION_TEXTFIELD_NAME)).enterText(yaml);
         getMovedComponent(window.checkBox(DISPLAY_PARAMETERS_CHECK_BOX_NAME).check());
-//        selectCheckBox(window.checkBox(DISPLAY_PARAMETERS_CHECK_BOX_NAME), true);
         //Add parameter index 0
         addParameter(0, "{{some_key}}", "value1");
         addParameter(1, "url", "http://host");
@@ -266,32 +262,6 @@ class PosmultenAppMockedSwingTest {
         }
         return fixtureWithComponent;
     }
-
-//    private <C extends Component, F extends AbstractComponentFixture<F, C, ?>> F getCenteredComponent(F fixtureWithComponent) {
-//        //Hack to fix issue for ubuntu and xvfb : org.assertj.swing.exception.ActionFailedException: The component to click is out of the boundaries of the screen
-//        if (isRunningOnVirtualScreen) {
-//            tested.setLocationRelativeTo(fixtureWithComponent.target());
-//        }
-//        return fixtureWithComponent;
-//    }
-
-//    private <C extends Component, F extends AbstractComponentFixture<F, C, ?>> F getComponentWithDefaultSettings(F fixtureWithComponent) {
-//        //Hack to fix issue for ubuntu and xvfb : org.assertj.swing.exception.ActionFailedException: The component to click is out of the boundaries of the screen
-//        if (isRunningOnVirtualScreen) {
-//            tested.setLocation(0, 0);
-//        }
-//        return fixtureWithComponent;
-//    }
-
-//    private void selectCheckBox(JCheckBoxFixture checkBoxFixture, boolean selected) {
-//        if (isRunningOnVirtualScreen) {
-//            System.out.println("Checkbox cordinates: " + checkBoxFixture.target().getX() + " " + checkBoxFixture.target().getY());
-//            window.moveTo(new Point(-checkBoxFixture.target().getX(), -checkBoxFixture.target().getY()));
-//            checkBoxFixture.check(selected);
-//        } else {
-//            getMovedComponent(checkBoxFixture).check(selected);
-//        }
-//    }
 
     private void addParameter(int index, String key, String value) {
         getMovedComponent(window.button(ADD_PARAMETER_BTN_NAME)).click();
