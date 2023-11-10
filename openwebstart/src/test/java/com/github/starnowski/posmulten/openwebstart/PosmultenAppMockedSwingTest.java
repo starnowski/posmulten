@@ -22,6 +22,7 @@ import javax.swing.*;
 import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -152,10 +153,10 @@ class PosmultenAppMockedSwingTest {
         String yaml = "Some yaml";
         String exceptionMessage = "Missing grantee in configuration";
         Mockito.when(factory.build(eq(yaml), any(DefaultDecoratorContext.class))).thenThrow(new MissingRLSGranteeDeclarationException(exceptionMessage));
-        getMovedComponent(window.textBox(CONFIGURATION_TEXTFIELD_NAME)).enterText(yaml);
+        window.textBox(CONFIGURATION_TEXTFIELD_NAME).enterText(yaml);
 
         // WHEN
-        getMovedComponent(window.button("submitBtn")).click();
+        window.button("submitBtn").click();
 
         // THEN
         window.textBox(ERROR_TEXTFIELD_NAME).requireText(exceptionMessage);
@@ -169,10 +170,10 @@ class PosmultenAppMockedSwingTest {
         String yaml = "Some yaml";
         String exceptionMessage = "Exception during processing";
         Mockito.when(factory.build(eq(yaml), any(DefaultDecoratorContext.class))).thenThrow(new RuntimeException(exceptionMessage));
-        getMovedComponent(window.textBox(CONFIGURATION_TEXTFIELD_NAME)).enterText(yaml);
+        window.textBox(CONFIGURATION_TEXTFIELD_NAME).enterText(yaml);
 
         // WHEN
-        getMovedComponent(window.button("submitBtn")).click();
+        window.button("submitBtn").click();
 
         // THEN
         window.textBox(ERROR_TEXTFIELD_NAME).requireText(exceptionMessage);
@@ -186,10 +187,10 @@ class PosmultenAppMockedSwingTest {
         String yaml = "Some yaml";
         List<String> errorMessages = Arrays.asList("Some fields is required", "Exception during processing", "Missing values");
         Mockito.when(factory.build(eq(yaml), any(DefaultDecoratorContext.class))).thenThrow(new YamlInvalidSchema(errorMessages));
-        getMovedComponent(window.textBox(CONFIGURATION_TEXTFIELD_NAME)).enterText(yaml);
+        window.textBox(CONFIGURATION_TEXTFIELD_NAME).enterText(yaml);
 
         // WHEN
-        getMovedComponent(window.button("submitBtn")).click();
+        window.button("submitBtn").click();
 
         // THEN
         window.textBox(ERROR_TEXTFIELD_NAME).requireText(errorMessages.stream().collect(Collectors.joining("\n")));
@@ -206,16 +207,15 @@ class PosmultenAppMockedSwingTest {
         Mockito.when(factory.build(eq(yaml), defaultDecoratorContextArgumentCaptor.capture())).thenReturn(context);
         List<SQLDefinition> definitions = asList(sqlDef("DEF 1", null), sqlDef("ALTER DEFINIT and Function", null));
         Mockito.when(context.getSqlDefinitions()).thenReturn(definitions);
-        getMovedComponent(window.textBox(CONFIGURATION_TEXTFIELD_NAME)).enterText(yaml);
-        getMovedComponent(window.checkBox(DISPLAY_PARAMETERS_CHECK_BOX_NAME).check());
+        window.textBox(CONFIGURATION_TEXTFIELD_NAME).enterText(yaml);
+        window.checkBox(DISPLAY_PARAMETERS_CHECK_BOX_NAME).check();
         //Add parameter index 0
         addParameter(0, "{{some_key}}", "value1");
         addParameter(1, "url", "http://host");
         addParameter(2, "username", "kant");
 
         // WHEN
-        System.out.println("submitBtn Button cordinates x" + window.button("submitBtn").target().getX() + " y :  " + window.button("submitBtn").target().getY());
-        getMovedComponent(window.button("submitBtn")).click();
+        window.button("submitBtn").click();
 
         // THEN
         assertEquals(defaultDecoratorContextArgumentCaptor.getValue().getReplaceCharactersMap(), mapBuilder().put("{{some_key}}", "value1").put("url", "http://host").put("username", "kant").build());
@@ -235,17 +235,17 @@ class PosmultenAppMockedSwingTest {
         Mockito.when(factory.build(eq(yaml), defaultDecoratorContextArgumentCaptor.capture())).thenReturn(context);
         List<SQLDefinition> definitions = asList(sqlDef("DEF 1", null), sqlDef("ALTER DEFINIT and Function", null));
         Mockito.when(context.getSqlDefinitions()).thenReturn(definitions);
-        getMovedComponent(window.textBox(CONFIGURATION_TEXTFIELD_NAME)).enterText(yaml);
-        getMovedComponent(window.checkBox(DISPLAY_PARAMETERS_CHECK_BOX_NAME).check());
+        window.textBox(CONFIGURATION_TEXTFIELD_NAME).enterText(yaml);
+        window.checkBox(DISPLAY_PARAMETERS_CHECK_BOX_NAME).check();
         //Add parameter index 0
         addParameter(0, "{{some_key}}", "value1");
         addParameter(1, "url", "http://host");
         addParameter(2, "username", "kant");
         addParameter(3, "some key", "Simon");
-        getMovedComponent(window.button(PARAMETER_REMOVE_BTN_PREFIX + 1)).click();
+        window.button(PARAMETER_REMOVE_BTN_PREFIX + 1).click();
 
         // WHEN
-        getMovedComponent(window.button("submitBtn")).click();
+        window.button("submitBtn").click();
 
         // THEN
         assertEquals(defaultDecoratorContextArgumentCaptor.getValue().getReplaceCharactersMap(), mapBuilder().put("{{some_key}}", "value1").put("username", "kant").put("some key", "Simon").build());
@@ -281,6 +281,36 @@ class PosmultenAppMockedSwingTest {
 
         // THEN
         findPanelFixtureByName(PARAMETERS_LABELS_PANEL_NAME).requireNotVisible();
+    }
+
+    @Test
+    public void shouldNotPassAnyParametersWhenAfterAddingParametersUncheckCheckbox() throws SharedSchemaContextBuilderException, InvalidConfigurationException {
+        // GIVEN
+        String yaml = "Some yaml";
+        ArgumentCaptor<DefaultDecoratorContext> defaultDecoratorContextArgumentCaptor = ArgumentCaptor.forClass(DefaultDecoratorContext.class);
+        ISharedSchemaContext context = mock(ISharedSchemaContext.class);
+        Mockito.when(factory.build(eq(yaml), defaultDecoratorContextArgumentCaptor.capture())).thenReturn(context);
+        List<SQLDefinition> definitions = asList(sqlDef("DEF 1", null), sqlDef("ALTER DEFINIT and Function", null));
+        Mockito.when(context.getSqlDefinitions()).thenReturn(definitions);
+        getMovedComponent(window.textBox(CONFIGURATION_TEXTFIELD_NAME)).enterText(yaml);
+        window.checkBox(DISPLAY_PARAMETERS_CHECK_BOX_NAME).check();
+        //Add parameter index 0
+        addParameter(0, "{{some_key}}", "value1");
+        addParameter(1, "url", "http://host");
+        addParameter(2, "username", "kant");
+        addParameter(3, "some key", "Simon");
+        window.checkBox(DISPLAY_PARAMETERS_CHECK_BOX_NAME).uncheck();
+
+        // WHEN
+        window.button("submitBtn").click();
+
+        // THEN
+        assertEquals(defaultDecoratorContextArgumentCaptor.getValue().getReplaceCharactersMap(), new HashMap<>());
+        // Scripts panel should be visible
+        findPanelFixtureByName(SCRIPTS_PANEL_NAME).requireVisible();
+        window.textBox(CREATION_SCRIPTS_TEXTFIELD_NAME).requireText("DEF 1" + "\n" + "ALTER DEFINIT and Function");
+        // Error panel should not be visible
+        findPanelFixtureByName(ERROR_PANEL_NAME).requireNotVisible();
     }
 
     private <C extends Component, F extends AbstractComponentFixture<F, C, ?>> F getMovedComponent(F fixtureWithComponent) {
