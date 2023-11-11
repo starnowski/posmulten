@@ -155,24 +155,49 @@ public class PosmultenApp extends JFrame {
             scriptsPanel.setVisible(false);
             errorPanel.setVisible(false);
             sharedSchemaContextComparableResultsPanel.setVisible(false);
-            String inputCode = inputTextArea.getText();
-            try {
-                ISharedSchemaContext context = factory.build(inputCode, prepareDefaultDecoratorContext());
-                creationScriptsTextArea.setText(context.getSqlDefinitions().stream().map(definition -> definition.getCreateScript()).collect(joining("\n")));
-                LinkedList<SQLDefinition> stack = new LinkedList<>();
-                context.getSqlDefinitions().forEach(stack::push);
-                dropScriptsTextArea.setText(stack.stream().map(definition -> definition.getDropScript()).collect(joining("\n")));
-                checkingScriptsTextArea.setText(context.getSqlDefinitions().stream().filter(definition -> definition.getCheckingStatements() != null).flatMap(definition -> definition.getCheckingStatements().stream()).collect(joining("\n")));
-                scriptsPanel.setVisible(true);
-            } catch (InvalidConfigurationException ex) {
-                errorTextArea.setText(ex.getErrorMessages().stream().collect(joining("\n")));
-                errorPanel.setVisible(true);
-            } catch (SharedSchemaContextBuilderException ex) {
-                errorTextArea.setText(ex.getMessage());
-                errorPanel.setVisible(true);
-            } catch (RuntimeException ex) {
-                errorTextArea.setText(ex.getMessage());
-                errorPanel.setVisible(true);
+            if (diffConfigurationsCheckBox.isSelected()) {
+                //TODO Handle exceptions
+                ISharedSchemaContext mainContext = null;
+                try {
+                    mainContext = factory.build(inputTextArea.getText(), prepareDefaultDecoratorContext());
+                } catch (InvalidConfigurationException ex) {
+                    throw new RuntimeException(ex);
+                } catch (SharedSchemaContextBuilderException ex) {
+                    throw new RuntimeException(ex);
+                } catch (RuntimeException ex) {
+                    throw new RuntimeException(ex);
+                }
+                ISharedSchemaContext previousContext = null;
+                try {
+                    previousContext = factory.build(previousConfigurationInputTextArea.getText(), prepareDefaultDecoratorContext());
+                } catch (InvalidConfigurationException ex) {
+                    throw new RuntimeException(ex);
+                } catch (SharedSchemaContextBuilderException ex) {
+                    throw new RuntimeException(ex);
+                } catch (RuntimeException ex) {
+                    throw new RuntimeException(ex);
+                }
+                sharedSchemaContextComparableResultsPanel.displayDiff(sharedSchemaContextComparator.diff(previousContext, mainContext));
+                sharedSchemaContextComparableResultsPanel.setVisible(true);
+            } else {
+                try {
+                    ISharedSchemaContext context = factory.build(inputTextArea.getText(), prepareDefaultDecoratorContext());
+                    creationScriptsTextArea.setText(context.getSqlDefinitions().stream().map(definition -> definition.getCreateScript()).collect(joining("\n")));
+                    LinkedList<SQLDefinition> stack = new LinkedList<>();
+                    context.getSqlDefinitions().forEach(stack::push);
+                    dropScriptsTextArea.setText(stack.stream().map(definition -> definition.getDropScript()).collect(joining("\n")));
+                    checkingScriptsTextArea.setText(context.getSqlDefinitions().stream().filter(definition -> definition.getCheckingStatements() != null).flatMap(definition -> definition.getCheckingStatements().stream()).collect(joining("\n")));
+                    scriptsPanel.setVisible(true);
+                } catch (InvalidConfigurationException ex) {
+                    errorTextArea.setText(ex.getErrorMessages().stream().collect(joining("\n")));
+                    errorPanel.setVisible(true);
+                } catch (SharedSchemaContextBuilderException ex) {
+                    errorTextArea.setText(ex.getMessage());
+                    errorPanel.setVisible(true);
+                } catch (RuntimeException ex) {
+                    errorTextArea.setText(ex.getMessage());
+                    errorPanel.setVisible(true);
+                }
             }
         };
     }
