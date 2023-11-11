@@ -14,6 +14,7 @@ public class SharedSchemaContextComparableResultsPanel extends JTabbedPane {
     public static final String CHECKING_SCRIPTS_DIFFERENCES_EXISTED_ONLY_ON_LEFT_TEXT_AREA_NAME = "dropScriptsDifferencesExistedOnlyOnLeftTextArea";
     public static final String CHECKING_SCRIPTS_DIFFERENCES_EXISTED_ONLY_ON_RIGHT_TEXT_AREA_NAME = "dropScriptsDifferencesExistedOnlyOnRightTextArea";
     public static final String CREATION_SCRIPTS_TAB_NAME = "creationScriptsTab";
+    public static final String DROP_SCRIPTS_TAB_NAME = "dropScriptsTab";
     private final JTextArea creationScriptsDifferencesExistedOnlyOnLeftTextArea;
     private final JTextArea creationScriptsDifferencesExistedOnlyOnRightTextArea;
     private final JTextArea dropScriptsDifferencesExistedOnlyOnLeftTextArea;
@@ -32,6 +33,7 @@ public class SharedSchemaContextComparableResultsPanel extends JTabbedPane {
         addTab("Creation Scripts", creationScriptsTabbedPanel);
 
         JTabbedPane dropScriptsTabbedPanel = new JTabbedPane();
+        dropScriptsTabbedPanel.setName(DROP_SCRIPTS_TAB_NAME);
         dropScriptsDifferencesExistedOnlyOnLeftTextArea = prepareScriptTextArea(DROP_SCRIPTS_DIFFERENCES_EXISTED_ONLY_ON_LEFT_TEXT_AREA_NAME);
         dropScriptsTabbedPanel.addTab("Exist only in previous", new JScrollPane(dropScriptsDifferencesExistedOnlyOnLeftTextArea));
 

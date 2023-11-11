@@ -58,4 +58,35 @@ public class PosmultenAppDiffOptionMockedSwingTest extends AbstractSwingTest {
 //        findPanelFixtureByName(ERROR_PANEL_NAME).requireNotVisible();
         //TODO
     }
+
+    @Test
+    public void shouldDisplayDifferenceForDropScriptsForTwoDifferentCorrectConfigurationWhenClickingSubmitButton() throws SharedSchemaContextBuilderException, InvalidConfigurationException {
+        // GIVEN
+        String yaml1 = "Some yaml";
+        String yaml2 = "Previous yaml";
+        ISharedSchemaContext context1 = mock(ISharedSchemaContext.class);
+        ISharedSchemaContext context2 = mock(ISharedSchemaContext.class);
+        when(factory.build(eq(yaml1), any(DefaultDecoratorContext.class))).thenReturn(context1);
+        when(factory.build(eq(yaml2), any(DefaultDecoratorContext.class))).thenReturn(context2);
+        when(sharedSchemaContextComparator.diff(eq(context2), eq(context1)))
+                .thenReturn(new SharedSchemaContextComparator.SharedSchemaContextComparableResults(
+                       null,
+                        new SharedSchemaContextComparator.ComparableResult(asList("drop1", "x132"), asList("drop1554")),
+                        null));
+        window.textBox(CONFIGURATION_TEXTFIELD_NAME).enterText(yaml1);
+        window.checkBox(DIFF_CONFIGURATIONS_CHECK_BOX_NAME).check();
+        window.tabbedPane(MAIN_TAB_PANEL_NAME).selectTab(1);
+        window.textBox(PREVIOUS_CONFIGURATION_TEXTFIELD_NAME).enterText(yaml2);
+
+        // WHEN
+        window.button("submitBtn").click();
+
+        // THEN
+        window.textBox(DROP_SCRIPTS_DIFFERENCES_EXISTED_ONLY_ON_LEFT_TEXT_AREA_NAME).requireText("drop1" + "\n" + "x132");
+        window.tabbedPane(DROP_SCRIPTS_TAB_NAME).selectTab(1);
+        window.textBox(DROP_SCRIPTS_DIFFERENCES_EXISTED_ONLY_ON_RIGHT_TEXT_AREA_NAME).requireText("drop1554");
+        // Error panel should not be visible
+//        findPanelFixtureByName(ERROR_PANEL_NAME).requireNotVisible();
+        //TODO
+    }
 }
