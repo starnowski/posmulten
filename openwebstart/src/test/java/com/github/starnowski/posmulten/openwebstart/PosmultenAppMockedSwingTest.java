@@ -69,6 +69,15 @@ class PosmultenAppMockedSwingTest {
         });
     }
 
+    private JTabbedPaneFixture findJTabbedPaneFixtureByName(String name) {
+        return window.tabbedPane(new GenericTypeMatcher<JTabbedPane>(JTabbedPane.class) {
+            @Override
+            protected boolean isMatching(JTabbedPane panel) {
+                return name.equals(panel.getName());
+            }
+        });
+    }
+
     @BeforeEach
     public void setUp() {
         factory = mock(YamlSharedSchemaContextFactory.class);
@@ -88,7 +97,7 @@ class PosmultenAppMockedSwingTest {
         findPanelFixtureByName(SCRIPTS_PANEL_NAME).requireNotVisible();
         findPanelFixtureByName(ERROR_PANEL_NAME).requireNotVisible();
         findPanelFixtureByName(PARAMETERS_LABELS_PANEL_NAME).requireNotVisible();
-        findPanelFixtureByName(DIFF_PANEL_NAME).requireNotVisible();
+        findJTabbedPaneFixtureByName(DIFF_PANEL_NAME).requireNotVisible();
     }
 
     @Test

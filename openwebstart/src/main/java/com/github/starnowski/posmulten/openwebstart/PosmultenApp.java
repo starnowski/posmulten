@@ -96,6 +96,7 @@ public class PosmultenApp extends JFrame {
         errorPanel = prepareErrorPanel();
         sharedSchemaContextComparableResultsPanel = new SharedSchemaContextComparableResultsPanel();
         sharedSchemaContextComparableResultsPanel.setName(DIFF_PANEL_NAME);
+        sharedSchemaContextComparableResultsPanel.setVisible(false);
 
         panel.add(scriptsPanel);
         panel.add(errorPanel);
@@ -143,6 +144,7 @@ public class PosmultenApp extends JFrame {
         return e -> {
             scriptsPanel.setVisible(false);
             errorPanel.setVisible(false);
+            sharedSchemaContextComparableResultsPanel.setVisible(false);
             String inputCode = inputTextArea.getText();
             try {
                 ISharedSchemaContext context = factory.build(inputCode, prepareDefaultDecoratorContext());
