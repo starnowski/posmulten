@@ -7,6 +7,7 @@ import com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaCont
 import com.github.starnowski.posmulten.postgresql.core.context.decorator.DefaultDecoratorContext;
 import com.github.starnowski.posmulten.postgresql.core.context.exceptions.MissingRLSGranteeDeclarationException;
 import com.github.starnowski.posmulten.postgresql.core.context.exceptions.SharedSchemaContextBuilderException;
+import org.assertj.swing.edt.GuiActionRunner;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
@@ -28,6 +29,13 @@ import static org.mockito.Mockito.mock;
 
 class PosmultenAppMockedSwingTest extends AbstractSwingTest {
 
+    private YamlSharedSchemaContextFactory factory;
+
+    protected PosmultenApp preparePosmultenApp() {
+        factory = mock(YamlSharedSchemaContextFactory.class);
+        return GuiActionRunner.execute(() -> new PosmultenApp(factory));
+    }
+
     @Test
     public void shouldNotDisplayTextFieldsWithScriptsBeforeSubmittingConfiguration() {
         // THEN
@@ -38,7 +46,7 @@ class PosmultenAppMockedSwingTest extends AbstractSwingTest {
     }
 
     @Test
-    public void shouldDisplayCreationScriptsForCorrectConfigurationWhenClickingSubmitButton() throws SharedSchemaContextBuilderException, InvalidConfigurationException, InterruptedException {
+    public void shouldDisplayCreationScriptsForCorrectConfigurationWhenClickingSubmitButton() throws SharedSchemaContextBuilderException, InvalidConfigurationException {
         // GIVEN
         String yaml = "Some yaml";
         ISharedSchemaContext context = mock(ISharedSchemaContext.class);
@@ -57,7 +65,7 @@ class PosmultenAppMockedSwingTest extends AbstractSwingTest {
     }
 
     @Test
-    public void shouldDisplayDropScriptsForCorrectConfigurationWhenClickingSubmitButton() throws SharedSchemaContextBuilderException, InvalidConfigurationException, InterruptedException {
+    public void shouldDisplayDropScriptsForCorrectConfigurationWhenClickingSubmitButton() throws SharedSchemaContextBuilderException, InvalidConfigurationException {
         // GIVEN
         String yaml = "Some yaml";
         ISharedSchemaContext context = mock(ISharedSchemaContext.class);
@@ -76,7 +84,7 @@ class PosmultenAppMockedSwingTest extends AbstractSwingTest {
     }
 
     @Test
-    public void shouldDisplayCheckingScriptsForCorrectConfigurationWhenClickingSubmitButton() throws SharedSchemaContextBuilderException, InvalidConfigurationException, InterruptedException {
+    public void shouldDisplayCheckingScriptsForCorrectConfigurationWhenClickingSubmitButton() throws SharedSchemaContextBuilderException, InvalidConfigurationException {
         // GIVEN
         String yaml = "Some yaml";
         ISharedSchemaContext context = mock(ISharedSchemaContext.class);
@@ -95,7 +103,7 @@ class PosmultenAppMockedSwingTest extends AbstractSwingTest {
     }
 
     @Test
-    public void shouldDisplayErrorsForConfigurationWithInvalidContextWhenClickingSubmitButton() throws SharedSchemaContextBuilderException, InvalidConfigurationException, InterruptedException {
+    public void shouldDisplayErrorsForConfigurationWithInvalidContextWhenClickingSubmitButton() throws SharedSchemaContextBuilderException, InvalidConfigurationException {
         // GIVEN
         String yaml = "Some yaml";
         String exceptionMessage = "Missing grantee in configuration";
@@ -112,7 +120,7 @@ class PosmultenAppMockedSwingTest extends AbstractSwingTest {
     }
 
     @Test
-    public void shouldDisplayErrorsForSituationThatThrowsRuntimeExceptionsWhenClickingSubmitButton() throws SharedSchemaContextBuilderException, InvalidConfigurationException, InterruptedException {
+    public void shouldDisplayErrorsForSituationThatThrowsRuntimeExceptionsWhenClickingSubmitButton() throws SharedSchemaContextBuilderException, InvalidConfigurationException {
         // GIVEN
         String yaml = "Some yaml";
         String exceptionMessage = "Exception during processing";
@@ -129,7 +137,7 @@ class PosmultenAppMockedSwingTest extends AbstractSwingTest {
     }
 
     @Test
-    public void shouldDisplayErrorsForInvalidConfigurationWhenClickingSubmitButton() throws SharedSchemaContextBuilderException, InvalidConfigurationException, InterruptedException {
+    public void shouldDisplayErrorsForInvalidConfigurationWhenClickingSubmitButton() throws SharedSchemaContextBuilderException, InvalidConfigurationException {
         // GIVEN
         String yaml = "Some yaml";
         List<String> errorMessages = Arrays.asList("Some fields is required", "Exception during processing", "Missing values");

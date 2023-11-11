@@ -20,7 +20,6 @@ import static java.util.Optional.ofNullable;
 import static org.mockito.Mockito.mock;
 
 public abstract class AbstractSwingTest {
-    protected YamlSharedSchemaContextFactory factory;
     protected FrameFixture window;
     protected PosmultenApp tested;
     protected boolean isRunningOnVirtualScreen;
@@ -61,10 +60,11 @@ public abstract class AbstractSwingTest {
         });
     }
 
+    protected abstract PosmultenApp preparePosmultenApp();
+
     @BeforeEach
     public void setUp() {
-        factory = mock(YamlSharedSchemaContextFactory.class);
-        tested = GuiActionRunner.execute(() -> new PosmultenApp(factory));
+        tested = GuiActionRunner.execute(() -> preparePosmultenApp());
         //Hack to fix issue for ubuntu and xvfb : org.assertj.swing.exception.ActionFailedException: The component to click is out of the boundaries of the screen
         isRunningOnVirtualScreen = isRunningOnVirtualScreen();
         System.out.println("Is running in headless environment: " + isRunningOnVirtualScreen);

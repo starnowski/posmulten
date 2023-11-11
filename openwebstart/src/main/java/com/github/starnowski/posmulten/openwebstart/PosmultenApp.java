@@ -3,6 +3,8 @@ package com.github.starnowski.posmulten.openwebstart;
 import com.github.starnowski.posmulten.configuration.core.exceptions.InvalidConfigurationException;
 import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition;
 import com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaContext;
+import com.github.starnowski.posmulten.postgresql.core.context.comparable.DefaultSharedSchemaContextComparator;
+import com.github.starnowski.posmulten.postgresql.core.context.comparable.SharedSchemaContextComparator;
 import com.github.starnowski.posmulten.postgresql.core.context.decorator.DefaultDecoratorContext;
 import com.github.starnowski.posmulten.postgresql.core.context.exceptions.SharedSchemaContextBuilderException;
 import net.miginfocom.layout.AC;
@@ -41,9 +43,19 @@ public class PosmultenApp extends JFrame {
     private final JCheckBox displayParametersCheckBox;
     private final JCheckBox diffConfigurationsCheckBox;
     private final SharedSchemaContextComparableResultsPanel sharedSchemaContextComparableResultsPanel;
+    private final SharedSchemaContextComparator sharedSchemaContextComparator;
+
+    public PosmultenApp() {
+        this(new YamlSharedSchemaContextFactory());
+    }
 
     public PosmultenApp(YamlSharedSchemaContextFactory factory) {
+        this(factory, new DefaultSharedSchemaContextComparator());
+    }
+
+    public PosmultenApp(YamlSharedSchemaContextFactory factory, SharedSchemaContextComparator sharedSchemaContextComparator) {
         this.factory = factory;
+        this.sharedSchemaContextComparator = sharedSchemaContextComparator;
         setMiglayout();
         setName("Posmulten");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -52,8 +64,8 @@ public class PosmultenApp extends JFrame {
 
         // Get the screen size
         Dimension screenSize = toolkit.getScreenSize();
-        setSize((int)screenSize.getWidth(), (int)screenSize.getHeight());
-        System.out.println("Screen size, width: " +  screenSize.getWidth() + " height: " + screenSize.getHeight());
+        setSize((int) screenSize.getWidth(), (int) screenSize.getHeight());
+        System.out.println("Screen size, width: " + screenSize.getWidth() + " height: " + screenSize.getHeight());
         //https://stackoverflow.com/questions/11570356/jframe-in-full-screen-java
         setExtendedState(JFrame.MAXIMIZED_BOTH);
 
@@ -123,10 +135,6 @@ public class PosmultenApp extends JFrame {
             }
         });
         pack();
-    }
-
-    public PosmultenApp() {
-        this(new YamlSharedSchemaContextFactory());
     }
 
     public static void main(String[] args) {
