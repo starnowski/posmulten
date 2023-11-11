@@ -3,9 +3,9 @@ package com.github.starnowski.posmulten.openwebstart;
 import com.github.starnowski.posmulten.postgresql.core.context.comparable.SharedSchemaContextComparator;
 
 import javax.swing.*;
-import java.util.stream.Collectors;
 
 import static java.util.Optional.ofNullable;
+import static java.util.stream.Collectors.joining;
 
 public class SharedSchemaContextComparableResultsPanel extends JTabbedPane {
 
@@ -58,11 +58,12 @@ public class SharedSchemaContextComparableResultsPanel extends JTabbedPane {
 
     public void displayDiff(SharedSchemaContextComparator.SharedSchemaContextComparableResults sharedSchemaContextComparableResults) {
         SharedSchemaContextComparator.ComparableResult dummyResults = new SharedSchemaContextComparator.ComparableResult(null, null);
-        creationScriptsDifferencesExistedOnlyOnLeftTextArea.setText(ofNullable(sharedSchemaContextComparableResults.getCreationScriptsDifferences()).orElse(dummyResults).getExistedOnlyOnLeft().stream().collect(Collectors.joining("\n")));
-        creationScriptsDifferencesExistedOnlyOnRightTextArea.setText(ofNullable(sharedSchemaContextComparableResults.getCreationScriptsDifferences()).orElse(dummyResults).getExistedOnlyOnRight().stream().collect(Collectors.joining("\n")));
-        dropScriptsDifferencesExistedOnlyOnLeftTextArea.setText(ofNullable(sharedSchemaContextComparableResults.getDropScriptsDifferences()).orElse(dummyResults).getExistedOnlyOnLeft().stream().collect(Collectors.joining("\n")));
-        dropScriptsDifferencesExistedOnlyOnRightTextArea.setText(ofNullable(sharedSchemaContextComparableResults.getDropScriptsDifferences()).orElse(dummyResults).getExistedOnlyOnRight().stream().collect(Collectors.joining("\n")));
-        //TODO
+        creationScriptsDifferencesExistedOnlyOnLeftTextArea.setText(ofNullable(sharedSchemaContextComparableResults.getCreationScriptsDifferences()).orElse(dummyResults).getExistedOnlyOnLeft().stream().collect(joining("\n")));
+        creationScriptsDifferencesExistedOnlyOnRightTextArea.setText(ofNullable(sharedSchemaContextComparableResults.getCreationScriptsDifferences()).orElse(dummyResults).getExistedOnlyOnRight().stream().collect(joining("\n")));
+        dropScriptsDifferencesExistedOnlyOnLeftTextArea.setText(ofNullable(sharedSchemaContextComparableResults.getDropScriptsDifferences()).orElse(dummyResults).getExistedOnlyOnLeft().stream().collect(joining("\n")));
+        dropScriptsDifferencesExistedOnlyOnRightTextArea.setText(ofNullable(sharedSchemaContextComparableResults.getDropScriptsDifferences()).orElse(dummyResults).getExistedOnlyOnRight().stream().collect(joining("\n")));
+        checkingScriptsDifferencesExistedOnlyOnLeftTextArea.setText(ofNullable(sharedSchemaContextComparableResults.getCheckScriptsDifferences()).orElse(dummyResults).getExistedOnlyOnLeft().stream().collect(joining("\n")));
+        checkingScriptsDifferencesExistedOnlyOnRightTextArea.setText(ofNullable(sharedSchemaContextComparableResults.getCheckScriptsDifferences()).orElse(dummyResults).getExistedOnlyOnRight().stream().collect(joining("\n")));
     }
 
     private JTextArea prepareScriptTextArea(String name) {

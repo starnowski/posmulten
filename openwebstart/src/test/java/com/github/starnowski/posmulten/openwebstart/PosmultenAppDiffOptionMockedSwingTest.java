@@ -117,7 +117,7 @@ public class PosmultenAppDiffOptionMockedSwingTest extends AbstractSwingTest {
         // THEN
 
         window.tabbedPane(DIFF_PANEL_NAME).selectTab(CHECKING_SCRIPTS_TAB_TITLE);
-        window.textBox(CHECKING_SCRIPTS_DIFFERENCES_EXISTED_ONLY_ON_LEFT_TEXT_AREA_NAME).requireText("drop1" + "\n" + "x132" + "\n" + "some drop");
+        window.textBox(CHECKING_SCRIPTS_DIFFERENCES_EXISTED_ONLY_ON_LEFT_TEXT_AREA_NAME).requireText("check37" + "\n" + "x132" + "\n" + "some drop");
         window.tabbedPane(CHECKING_SCRIPTS_TAB_NAME).selectTab(1);
         window.textBox(CHECKING_SCRIPTS_DIFFERENCES_EXISTED_ONLY_ON_RIGHT_TEXT_AREA_NAME).requireText("SELECT 1 FROM ..." + "\n" + "some fun");
         // Error panel should not be visible
