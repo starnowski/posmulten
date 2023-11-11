@@ -3,6 +3,7 @@ package com.github.starnowski.posmulten.openwebstart;
 import com.github.starnowski.posmulten.postgresql.core.context.comparable.SharedSchemaContextComparator;
 
 import javax.swing.*;
+import java.util.stream.Collectors;
 
 public class SharedSchemaContextComparableResultsPanel extends JTabbedPane {
 
@@ -12,6 +13,7 @@ public class SharedSchemaContextComparableResultsPanel extends JTabbedPane {
     public static final String DROP_SCRIPTS_DIFFERENCES_EXISTED_ONLY_ON_RIGHT_TEXT_AREA_NAME = "dropScriptsDifferencesExistedOnlyOnRightTextArea";
     public static final String CHECKING_SCRIPTS_DIFFERENCES_EXISTED_ONLY_ON_LEFT_TEXT_AREA_NAME = "dropScriptsDifferencesExistedOnlyOnLeftTextArea";
     public static final String CHECKING_SCRIPTS_DIFFERENCES_EXISTED_ONLY_ON_RIGHT_TEXT_AREA_NAME = "dropScriptsDifferencesExistedOnlyOnRightTextArea";
+    public static final String CREATION_SCRIPTS_TAB_NAME = "creationScriptsTab";
     private final JTextArea creationScriptsDifferencesExistedOnlyOnLeftTextArea;
     private final JTextArea creationScriptsDifferencesExistedOnlyOnRightTextArea;
     private final JTextArea dropScriptsDifferencesExistedOnlyOnLeftTextArea;
@@ -21,6 +23,7 @@ public class SharedSchemaContextComparableResultsPanel extends JTabbedPane {
 
     public SharedSchemaContextComparableResultsPanel() {
         JTabbedPane creationScriptsTabbedPanel = new JTabbedPane();
+        creationScriptsTabbedPanel.setName(CREATION_SCRIPTS_TAB_NAME);
         creationScriptsDifferencesExistedOnlyOnLeftTextArea = prepareScriptTextArea(CREATION_SCRIPTS_DIFFERENCES_EXISTED_ONLY_ON_LEFT_TEXT_AREA_NAME);
         creationScriptsTabbedPanel.addTab("Exist only in previous", new JScrollPane(creationScriptsDifferencesExistedOnlyOnLeftTextArea));
 
@@ -45,10 +48,10 @@ public class SharedSchemaContextComparableResultsPanel extends JTabbedPane {
         addTab("Checking Scripts", checkingScriptsTabbedPanel);
     }
 
-    public void displayDiff(SharedSchemaContextComparator.SharedSchemaContextComparableResults sharedSchemaContextComparableResults)
-    {
+    public void displayDiff(SharedSchemaContextComparator.SharedSchemaContextComparableResults sharedSchemaContextComparableResults) {
+        creationScriptsDifferencesExistedOnlyOnLeftTextArea.setText(sharedSchemaContextComparableResults.getCreationScriptsDifferences().getExistedOnlyOnLeft().stream().collect(Collectors.joining("\n")));
+        creationScriptsDifferencesExistedOnlyOnRightTextArea.setText(sharedSchemaContextComparableResults.getCreationScriptsDifferences().getExistedOnlyOnRight().stream().collect(Collectors.joining("\n")));
         //TODO
-
     }
 
     private JTextArea prepareScriptTextArea(String name) {

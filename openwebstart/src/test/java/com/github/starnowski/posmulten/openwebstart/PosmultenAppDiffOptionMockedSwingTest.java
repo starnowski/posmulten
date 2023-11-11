@@ -9,8 +9,7 @@ import org.assertj.swing.edt.GuiActionRunner;
 import org.junit.jupiter.api.Test;
 
 import static com.github.starnowski.posmulten.openwebstart.PosmultenApp.*;
-import static com.github.starnowski.posmulten.openwebstart.SharedSchemaContextComparableResultsPanel.CREATION_SCRIPTS_DIFFERENCES_EXISTED_ONLY_ON_LEFT_TEXT_AREA_NAME;
-import static com.github.starnowski.posmulten.openwebstart.SharedSchemaContextComparableResultsPanel.CREATION_SCRIPTS_DIFFERENCES_EXISTED_ONLY_ON_RIGHT_TEXT_AREA_NAME;
+import static com.github.starnowski.posmulten.openwebstart.SharedSchemaContextComparableResultsPanel.*;
 import static java.util.Arrays.asList;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -53,6 +52,7 @@ public class PosmultenAppDiffOptionMockedSwingTest extends AbstractSwingTest {
 
         // THEN
         window.textBox(CREATION_SCRIPTS_DIFFERENCES_EXISTED_ONLY_ON_LEFT_TEXT_AREA_NAME).requireText("left1" + "\n" + "x132");
+        window.tabbedPane(CREATION_SCRIPTS_TAB_NAME).selectTab(1);
         window.textBox(CREATION_SCRIPTS_DIFFERENCES_EXISTED_ONLY_ON_RIGHT_TEXT_AREA_NAME).requireText("something new" + "\n" + "new thing" + "\n" + "some def");
         // Error panel should not be visible
 //        findPanelFixtureByName(ERROR_PANEL_NAME).requireNotVisible();
