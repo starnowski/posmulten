@@ -17,7 +17,9 @@ public class SharedSchemaContextComparableResultsPanel extends JTabbedPane {
     public static final String CHECKING_SCRIPTS_DIFFERENCES_EXISTED_ONLY_ON_RIGHT_TEXT_AREA_NAME = "dropScriptsDifferencesExistedOnlyOnRightTextArea";
     public static final String CREATION_SCRIPTS_TAB_NAME = "creationScriptsTab";
     public static final String DROP_SCRIPTS_TAB_NAME = "dropScriptsTab";
+    public static final String CHECKING_SCRIPTS_TAB_NAME = "checkingScriptsTab";
     public static final String DROP_SCRIPTS_TAB_TITLE = "Drop Scripts";
+    public static final String CHECKING_SCRIPTS_TAB_TITLE = "Checking Scripts";
     private final JTextArea creationScriptsDifferencesExistedOnlyOnLeftTextArea;
     private final JTextArea creationScriptsDifferencesExistedOnlyOnRightTextArea;
     private final JTextArea dropScriptsDifferencesExistedOnlyOnLeftTextArea;
@@ -45,12 +47,13 @@ public class SharedSchemaContextComparableResultsPanel extends JTabbedPane {
         addTab(DROP_SCRIPTS_TAB_TITLE, dropScriptsTabbedPanel);
 
         JTabbedPane checkingScriptsTabbedPanel = new JTabbedPane();
+        checkingScriptsTabbedPanel.setName(CHECKING_SCRIPTS_TAB_NAME);
         checkingScriptsDifferencesExistedOnlyOnLeftTextArea = prepareScriptTextArea(CHECKING_SCRIPTS_DIFFERENCES_EXISTED_ONLY_ON_LEFT_TEXT_AREA_NAME);
         checkingScriptsTabbedPanel.addTab("Exist only in previous", new JScrollPane(checkingScriptsDifferencesExistedOnlyOnLeftTextArea));
 
         checkingScriptsDifferencesExistedOnlyOnRightTextArea = prepareScriptTextArea(CHECKING_SCRIPTS_DIFFERENCES_EXISTED_ONLY_ON_RIGHT_TEXT_AREA_NAME);
         checkingScriptsTabbedPanel.addTab("Exist only in new", new JScrollPane(checkingScriptsDifferencesExistedOnlyOnRightTextArea));
-        addTab("Checking Scripts", checkingScriptsTabbedPanel);
+        addTab(CHECKING_SCRIPTS_TAB_TITLE, checkingScriptsTabbedPanel);
     }
 
     public void displayDiff(SharedSchemaContextComparator.SharedSchemaContextComparableResults sharedSchemaContextComparableResults) {
