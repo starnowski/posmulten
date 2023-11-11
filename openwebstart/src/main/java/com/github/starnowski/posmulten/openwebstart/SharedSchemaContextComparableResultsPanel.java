@@ -5,6 +5,8 @@ import com.github.starnowski.posmulten.postgresql.core.context.comparable.Shared
 import javax.swing.*;
 import java.util.stream.Collectors;
 
+import static java.util.Optional.ofNullable;
+
 public class SharedSchemaContextComparableResultsPanel extends JTabbedPane {
 
     public static final String CREATION_SCRIPTS_DIFFERENCES_EXISTED_ONLY_ON_LEFT_TEXT_AREA_NAME = "creationScriptsDifferencesExistedOnlyOnLeftTextArea";
@@ -15,6 +17,7 @@ public class SharedSchemaContextComparableResultsPanel extends JTabbedPane {
     public static final String CHECKING_SCRIPTS_DIFFERENCES_EXISTED_ONLY_ON_RIGHT_TEXT_AREA_NAME = "dropScriptsDifferencesExistedOnlyOnRightTextArea";
     public static final String CREATION_SCRIPTS_TAB_NAME = "creationScriptsTab";
     public static final String DROP_SCRIPTS_TAB_NAME = "dropScriptsTab";
+    public static final String DROP_SCRIPTS_TAB_TITLE = "Drop Scripts";
     private final JTextArea creationScriptsDifferencesExistedOnlyOnLeftTextArea;
     private final JTextArea creationScriptsDifferencesExistedOnlyOnRightTextArea;
     private final JTextArea dropScriptsDifferencesExistedOnlyOnLeftTextArea;
@@ -39,7 +42,7 @@ public class SharedSchemaContextComparableResultsPanel extends JTabbedPane {
 
         dropScriptsDifferencesExistedOnlyOnRightTextArea = prepareScriptTextArea(DROP_SCRIPTS_DIFFERENCES_EXISTED_ONLY_ON_RIGHT_TEXT_AREA_NAME);
         dropScriptsTabbedPanel.addTab("Exist only in new", new JScrollPane(dropScriptsDifferencesExistedOnlyOnRightTextArea));
-        addTab("Drop Scripts", dropScriptsTabbedPanel);
+        addTab(DROP_SCRIPTS_TAB_TITLE, dropScriptsTabbedPanel);
 
         JTabbedPane checkingScriptsTabbedPanel = new JTabbedPane();
         checkingScriptsDifferencesExistedOnlyOnLeftTextArea = prepareScriptTextArea(CHECKING_SCRIPTS_DIFFERENCES_EXISTED_ONLY_ON_LEFT_TEXT_AREA_NAME);
@@ -51,8 +54,11 @@ public class SharedSchemaContextComparableResultsPanel extends JTabbedPane {
     }
 
     public void displayDiff(SharedSchemaContextComparator.SharedSchemaContextComparableResults sharedSchemaContextComparableResults) {
-        creationScriptsDifferencesExistedOnlyOnLeftTextArea.setText(sharedSchemaContextComparableResults.getCreationScriptsDifferences().getExistedOnlyOnLeft().stream().collect(Collectors.joining("\n")));
-        creationScriptsDifferencesExistedOnlyOnRightTextArea.setText(sharedSchemaContextComparableResults.getCreationScriptsDifferences().getExistedOnlyOnRight().stream().collect(Collectors.joining("\n")));
+        SharedSchemaContextComparator.ComparableResult dummyResults = new SharedSchemaContextComparator.ComparableResult(null, null);
+        creationScriptsDifferencesExistedOnlyOnLeftTextArea.setText(ofNullable(sharedSchemaContextComparableResults.getCreationScriptsDifferences()).orElse(dummyResults).getExistedOnlyOnLeft().stream().collect(Collectors.joining("\n")));
+        creationScriptsDifferencesExistedOnlyOnRightTextArea.setText(ofNullable(sharedSchemaContextComparableResults.getCreationScriptsDifferences()).orElse(dummyResults).getExistedOnlyOnRight().stream().collect(Collectors.joining("\n")));
+        dropScriptsDifferencesExistedOnlyOnLeftTextArea.setText(ofNullable(sharedSchemaContextComparableResults.getDropScriptsDifferences()).orElse(dummyResults).getExistedOnlyOnLeft().stream().collect(Collectors.joining("\n")));
+        dropScriptsDifferencesExistedOnlyOnRightTextArea.setText(ofNullable(sharedSchemaContextComparableResults.getDropScriptsDifferences()).orElse(dummyResults).getExistedOnlyOnRight().stream().collect(Collectors.joining("\n")));
         //TODO
     }
 

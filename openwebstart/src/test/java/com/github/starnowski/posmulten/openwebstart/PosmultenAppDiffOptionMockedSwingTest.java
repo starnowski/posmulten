@@ -82,6 +82,8 @@ public class PosmultenAppDiffOptionMockedSwingTest extends AbstractSwingTest {
         window.button("submitBtn").click();
 
         // THEN
+
+        window.tabbedPane(DIFF_PANEL_NAME).selectTab(DROP_SCRIPTS_TAB_TITLE);
         window.textBox(DROP_SCRIPTS_DIFFERENCES_EXISTED_ONLY_ON_LEFT_TEXT_AREA_NAME).requireText("drop1" + "\n" + "x132");
         window.tabbedPane(DROP_SCRIPTS_TAB_NAME).selectTab(1);
         window.textBox(DROP_SCRIPTS_DIFFERENCES_EXISTED_ONLY_ON_RIGHT_TEXT_AREA_NAME).requireText("drop1554");
