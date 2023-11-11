@@ -27,6 +27,7 @@ public class PosmultenApp extends JFrame {
     public static final String SCRIPTS_PANEL_NAME = "scriptsPanel";
     public static final String DISPLAY_PARAMETERS_CHECK_BOX_NAME = "displayParametersCheckBox";
     public static final String DIFF_CONFIGURATIONS_CHECK_BOX_NAME = "diffConfigurationsCheckBox";
+    public static final String DIFF_PANEL_NAME = "diffPanel";
     private final YamlSharedSchemaContextFactory factory;
     private final JTextArea inputTextArea;
     private final JTextArea previousConfigurationInputTextArea;
@@ -39,6 +40,7 @@ public class PosmultenApp extends JFrame {
     private final ParametersPanel parametersPanel;
     private final JCheckBox displayParametersCheckBox;
     private final JCheckBox diffConfigurationsCheckBox;
+    private final SharedSchemaContextComparableResultsPanel sharedSchemaContextComparableResultsPanel;
 
     public PosmultenApp(YamlSharedSchemaContextFactory factory) {
         this.factory = factory;
@@ -92,8 +94,12 @@ public class PosmultenApp extends JFrame {
         panel.add(parametersPanel);
         scriptsPanel = prepareScriptsPanel();
         errorPanel = prepareErrorPanel();
+        sharedSchemaContextComparableResultsPanel = new SharedSchemaContextComparableResultsPanel();
+        sharedSchemaContextComparableResultsPanel.setName(DIFF_PANEL_NAME);
+
         panel.add(scriptsPanel);
         panel.add(errorPanel);
+        panel.add(sharedSchemaContextComparableResultsPanel);
         add(panel);
 
         scriptsPanel.setVisible(false);
@@ -105,7 +111,6 @@ public class PosmultenApp extends JFrame {
             parametersPanel.setVisible(displayParametersCheckBox.isSelected());
         });
         diffConfigurationsCheckBox.addChangeListener(c -> {
-            System.out.println("diffConfigurationsCheckBox.addChangeListener: " + diffConfigurationsCheckBox.isSelected());
             if (diffConfigurationsCheckBox.isSelected()) {
                 if (tabbedPane.getTabCount() == 1) {
                     tabbedPane.insertTab("Previous yaml configuration to compare with", null, new JScrollPane(previousConfigurationInputTextArea), null, 1);

@@ -88,6 +88,7 @@ class PosmultenAppMockedSwingTest {
         findPanelFixtureByName(SCRIPTS_PANEL_NAME).requireNotVisible();
         findPanelFixtureByName(ERROR_PANEL_NAME).requireNotVisible();
         findPanelFixtureByName(PARAMETERS_LABELS_PANEL_NAME).requireNotVisible();
+        findPanelFixtureByName(DIFF_PANEL_NAME).requireNotVisible();
     }
 
     @Test
