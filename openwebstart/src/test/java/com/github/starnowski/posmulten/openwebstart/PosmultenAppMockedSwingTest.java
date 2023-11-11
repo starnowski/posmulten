@@ -7,89 +7,26 @@ import com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaCont
 import com.github.starnowski.posmulten.postgresql.core.context.decorator.DefaultDecoratorContext;
 import com.github.starnowski.posmulten.postgresql.core.context.exceptions.MissingRLSGranteeDeclarationException;
 import com.github.starnowski.posmulten.postgresql.core.context.exceptions.SharedSchemaContextBuilderException;
-import org.assertj.swing.core.GenericTypeMatcher;
-import org.assertj.swing.edt.FailOnThreadViolationRepaintManager;
-import org.assertj.swing.edt.GuiActionRunner;
-import org.assertj.swing.fixture.*;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
-import javax.swing.*;
-import javax.swing.text.JTextComponent;
-import java.awt.*;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.github.starnowski.posmulten.openwebstart.ParametersPanel.*;
+import static com.github.starnowski.posmulten.openwebstart.ParametersPanel.PARAMETERS_LABELS_PANEL_NAME;
+import static com.github.starnowski.posmulten.openwebstart.ParametersPanel.PARAMETER_REMOVE_BTN_PREFIX;
 import static com.github.starnowski.posmulten.openwebstart.PosmultenApp.*;
 import static com.github.starnowski.posmulten.postgresql.test.utils.MapBuilder.mapBuilder;
 import static java.util.Arrays.asList;
-import static java.util.Optional.ofNullable;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 
-class PosmultenAppMockedSwingTest {
-    YamlSharedSchemaContextFactory factory;
-    private FrameFixture window;
-    private PosmultenApp tested;
-    private boolean isRunningOnVirtualScreen;
-
-    @BeforeAll
-    public static void setUpOnce() {
-        FailOnThreadViolationRepaintManager.install();
-    }
-
-    private static boolean isRunningOnVirtualScreen() {
-        return Boolean.getBoolean("xvfbRunningTests");
-    }
-
-    private JTextComponentFixture findTextComponentFixtureByName(String name) {
-        return window.textBox(new GenericTypeMatcher<JTextComponent>(JTextComponent.class) {
-            @Override
-            protected boolean isMatching(JTextComponent jTextComponent) {
-                return name.equals(jTextComponent.getName());
-            }
-        });
-    }
-
-    private JPanelFixture findPanelFixtureByName(String name) {
-        return window.panel(new GenericTypeMatcher<JPanel>(JPanel.class) {
-            @Override
-            protected boolean isMatching(JPanel panel) {
-                return name.equals(panel.getName());
-            }
-        });
-    }
-
-    private JTabbedPaneFixture findJTabbedPaneFixtureByName(String name) {
-        return window.tabbedPane(new GenericTypeMatcher<JTabbedPane>(JTabbedPane.class) {
-            @Override
-            protected boolean isMatching(JTabbedPane panel) {
-                return name.equals(panel.getName());
-            }
-        });
-    }
-
-    @BeforeEach
-    public void setUp() {
-        factory = mock(YamlSharedSchemaContextFactory.class);
-        tested = GuiActionRunner.execute(() -> new PosmultenApp(factory));
-        //Hack to fix issue for ubuntu and xvfb : org.assertj.swing.exception.ActionFailedException: The component to click is out of the boundaries of the screen
-        isRunningOnVirtualScreen = isRunningOnVirtualScreen();
-        System.out.println("Is running in headless environment: " + isRunningOnVirtualScreen);
-        window = new FrameFixture(tested);
-        window.show(); // shows the frame to test
-        tested.setLocation(0, 0);
-        window.maximize();
-    }
+class PosmultenAppMockedSwingTest extends AbstractSwingTest {
 
     @Test
     public void shouldNotDisplayTextFieldsWithScriptsBeforeSubmittingConfiguration() {
@@ -321,32 +258,5 @@ class PosmultenAppMockedSwingTest {
         window.textBox(CREATION_SCRIPTS_TEXTFIELD_NAME).requireText("DEF 1" + "\n" + "ALTER DEFINIT and Function");
         // Error panel should not be visible
         findPanelFixtureByName(ERROR_PANEL_NAME).requireNotVisible();
-    }
-
-    private <C extends Component, F extends AbstractComponentFixture<F, C, ?>> F getMovedComponent(F fixtureWithComponent) {
-        //Hack to fix issue for ubuntu and xvfb : org.assertj.swing.exception.ActionFailedException: The component to click is out of the boundaries of the screen
-        if (isRunningOnVirtualScreen) {
-//            tested.setLocation(-fixtureWithComponent.target().getX(), -fixtureWithComponent.target().getY());
-        }
-        return fixtureWithComponent;
-    }
-
-    private void addParameter(int index, String key, String value) {
-        getMovedComponent(window.button(ADD_PARAMETER_BTN_NAME)).click();
-        getMovedComponent(window.textBox(PARAMETER_KEY_TEXTAREA_NAME_PREFIX + index)).enterText(key);
-        getMovedComponent(window.textBox(PARAMETER_VALUE_TEXTAREA_NAME_PREFIX + index)).enterText(value);
-    }
-
-    private SQLDefinition sqlDef(String creationScript, String dropScript, String... checkingScripts) {
-        SQLDefinition sqlDefinition = mock(SQLDefinition.class);
-        Mockito.when(sqlDefinition.getCreateScript()).thenReturn(creationScript);
-        Mockito.when(sqlDefinition.getDropScript()).thenReturn(dropScript);
-        Mockito.when(sqlDefinition.getCheckingStatements()).thenReturn(asList(ofNullable(checkingScripts).orElseGet(() -> new String[0])));
-        return sqlDefinition;
-    }
-
-    @AfterEach
-    public void tearDown() {
-        window.cleanUp();
     }
 }
