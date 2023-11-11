@@ -30,6 +30,7 @@ public class PosmultenApp extends JFrame {
     public static final String DISPLAY_PARAMETERS_CHECK_BOX_NAME = "displayParametersCheckBox";
     public static final String DIFF_CONFIGURATIONS_CHECK_BOX_NAME = "diffConfigurationsCheckBox";
     public static final String DIFF_PANEL_NAME = "diffPanel";
+    public static final String MAIN_TAB_PANEL_NAME = "mainTabPanel";
     private final YamlSharedSchemaContextFactory factory;
     private final JTextArea inputTextArea;
     private final JTextArea previousConfigurationInputTextArea;
@@ -91,6 +92,7 @@ public class PosmultenApp extends JFrame {
 
         // Create a JTabbedPane
         JTabbedPane tabbedPane = new JTabbedPane();
+        tabbedPane.setName(MAIN_TAB_PANEL_NAME);
         tabbedPane.addTab("Yaml configuration", new JScrollPane(inputTextArea));
 
         JPanel panel = new JPanel();
