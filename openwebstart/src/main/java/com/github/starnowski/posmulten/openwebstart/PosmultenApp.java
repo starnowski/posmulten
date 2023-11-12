@@ -1,7 +1,6 @@
 package com.github.starnowski.posmulten.openwebstart;
 
 import com.github.starnowski.posmulten.configuration.core.exceptions.InvalidConfigurationException;
-import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition;
 import com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaContext;
 import com.github.starnowski.posmulten.postgresql.core.context.comparable.DefaultSharedSchemaContextComparator;
 import com.github.starnowski.posmulten.postgresql.core.context.comparable.SharedSchemaContextComparator;
@@ -14,8 +13,6 @@ import net.miginfocom.swing.MigLayout;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.util.LinkedList;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
@@ -38,7 +35,7 @@ public class PosmultenApp extends JFrame {
     private final JTextArea previousConfigurationInputTextArea;
     private final ScriptPanel creationScriptsTextArea;
     private final ScriptPanel dropScriptsTextArea;
-    private final JTextArea checkingScriptsTextArea;
+    private final ScriptPanel checkingScriptsTextArea;
     private final JTextArea errorTextArea;
     private final JPanel scriptsPanel;
     private final JPanel errorPanel;
@@ -76,7 +73,7 @@ public class PosmultenApp extends JFrame {
         previousConfigurationInputTextArea = prepareScriptTextArea(PREVIOUS_CONFIGURATION_TEXTFIELD_NAME);
         creationScriptsTextArea = new ScriptPanel(CREATION_SCRIPTS_TEXTFIELD_NAME);
         dropScriptsTextArea = new ScriptPanel(DROP_SCRIPTS_TEXTFIELD_NAME);
-        checkingScriptsTextArea = prepareScriptTextArea(CHECKING_SCRIPTS_TEXTFIELD_NAME);
+        checkingScriptsTextArea = new ScriptPanel(CHECKING_SCRIPTS_TEXTFIELD_NAME);
         errorTextArea = prepareScriptTextArea(ERROR_TEXTFIELD_NAME);
         inputTextArea.setToolTipText("Configuration");
         previousConfigurationInputTextArea.setToolTipText("Previous configuration to compare with");
@@ -186,7 +183,7 @@ public class PosmultenApp extends JFrame {
                     ISharedSchemaContext context = factory.build(inputTextArea.getText(), prepareDefaultDecoratorContext());
                     creationScriptsTextArea.display(context.getSqlDefinitions().stream().map(definition -> definition.getCreateScript()).collect(toList()));
                     dropScriptsTextArea.display(context.getSqlDefinitions().stream().map(definition -> definition.getDropScript()).collect(toList()), true);
-                    checkingScriptsTextArea.setText(context.getSqlDefinitions().stream().filter(definition -> definition.getCheckingStatements() != null).flatMap(definition -> definition.getCheckingStatements().stream()).collect(joining("\n")));
+                    checkingScriptsTextArea.display(context.getSqlDefinitions().stream().filter(definition -> definition.getCheckingStatements() != null).flatMap(definition -> definition.getCheckingStatements().stream()).collect(toList()));
                     scriptsPanel.setVisible(true);
                 } catch (InvalidConfigurationException ex) {
                     errorTextArea.setText(ex.getErrorMessages().stream().collect(joining("\n")));
