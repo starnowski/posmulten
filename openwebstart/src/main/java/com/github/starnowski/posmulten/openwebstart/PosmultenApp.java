@@ -15,8 +15,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.util.LinkedList;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toList;
 
 public class PosmultenApp extends JFrame {
     public static final String CREATION_SCRIPTS_TEXTFIELD_NAME = "creationScripts";
@@ -34,7 +36,7 @@ public class PosmultenApp extends JFrame {
     private final YamlSharedSchemaContextFactory factory;
     private final JTextArea inputTextArea;
     private final JTextArea previousConfigurationInputTextArea;
-    private final JTextArea creationScriptsTextArea;
+    private final ScriptPanel creationScriptsTextArea;
     private final JTextArea dropScriptsTextArea;
     private final JTextArea checkingScriptsTextArea;
     private final JTextArea errorTextArea;
@@ -72,7 +74,7 @@ public class PosmultenApp extends JFrame {
 
         inputTextArea = prepareScriptTextArea(CONFIGURATION_TEXTFIELD_NAME);
         previousConfigurationInputTextArea = prepareScriptTextArea(PREVIOUS_CONFIGURATION_TEXTFIELD_NAME);
-        creationScriptsTextArea = prepareScriptTextArea(CREATION_SCRIPTS_TEXTFIELD_NAME);
+        creationScriptsTextArea = new ScriptPanel(CREATION_SCRIPTS_TEXTFIELD_NAME);
         dropScriptsTextArea = prepareScriptTextArea(DROP_SCRIPTS_TEXTFIELD_NAME);
         checkingScriptsTextArea = prepareScriptTextArea(CHECKING_SCRIPTS_TEXTFIELD_NAME);
         errorTextArea = prepareScriptTextArea(ERROR_TEXTFIELD_NAME);
@@ -182,9 +184,10 @@ public class PosmultenApp extends JFrame {
             } else {
                 try {
                     ISharedSchemaContext context = factory.build(inputTextArea.getText(), prepareDefaultDecoratorContext());
-                    creationScriptsTextArea.setText(context.getSqlDefinitions().stream().map(definition -> definition.getCreateScript()).collect(joining("\n")));
+                    creationScriptsTextArea.display(context.getSqlDefinitions().stream().map(definition -> definition.getCreateScript()).collect(toList()));
                     LinkedList<SQLDefinition> stack = new LinkedList<>();
                     context.getSqlDefinitions().forEach(stack::push);
+                    //TODO Set checkbox with Reverse Order as checked
                     dropScriptsTextArea.setText(stack.stream().map(definition -> definition.getDropScript()).collect(joining("\n")));
                     checkingScriptsTextArea.setText(context.getSqlDefinitions().stream().filter(definition -> definition.getCheckingStatements() != null).flatMap(definition -> definition.getCheckingStatements().stream()).collect(joining("\n")));
                     scriptsPanel.setVisible(true);
