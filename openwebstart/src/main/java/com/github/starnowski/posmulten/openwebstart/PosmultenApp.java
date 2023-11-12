@@ -37,7 +37,7 @@ public class PosmultenApp extends JFrame {
     private final JTextArea inputTextArea;
     private final JTextArea previousConfigurationInputTextArea;
     private final ScriptPanel creationScriptsTextArea;
-    private final JTextArea dropScriptsTextArea;
+    private final ScriptPanel dropScriptsTextArea;
     private final JTextArea checkingScriptsTextArea;
     private final JTextArea errorTextArea;
     private final JPanel scriptsPanel;
@@ -75,7 +75,7 @@ public class PosmultenApp extends JFrame {
         inputTextArea = prepareScriptTextArea(CONFIGURATION_TEXTFIELD_NAME);
         previousConfigurationInputTextArea = prepareScriptTextArea(PREVIOUS_CONFIGURATION_TEXTFIELD_NAME);
         creationScriptsTextArea = new ScriptPanel(CREATION_SCRIPTS_TEXTFIELD_NAME);
-        dropScriptsTextArea = prepareScriptTextArea(DROP_SCRIPTS_TEXTFIELD_NAME);
+        dropScriptsTextArea = new ScriptPanel(DROP_SCRIPTS_TEXTFIELD_NAME);
         checkingScriptsTextArea = prepareScriptTextArea(CHECKING_SCRIPTS_TEXTFIELD_NAME);
         errorTextArea = prepareScriptTextArea(ERROR_TEXTFIELD_NAME);
         inputTextArea.setToolTipText("Configuration");
@@ -185,10 +185,7 @@ public class PosmultenApp extends JFrame {
                 try {
                     ISharedSchemaContext context = factory.build(inputTextArea.getText(), prepareDefaultDecoratorContext());
                     creationScriptsTextArea.display(context.getSqlDefinitions().stream().map(definition -> definition.getCreateScript()).collect(toList()));
-                    LinkedList<SQLDefinition> stack = new LinkedList<>();
-                    context.getSqlDefinitions().forEach(stack::push);
-                    //TODO Set checkbox with Reverse Order as checked
-                    dropScriptsTextArea.setText(stack.stream().map(definition -> definition.getDropScript()).collect(joining("\n")));
+                    dropScriptsTextArea.display(context.getSqlDefinitions().stream().map(definition -> definition.getDropScript()).collect(toList()), true);
                     checkingScriptsTextArea.setText(context.getSqlDefinitions().stream().filter(definition -> definition.getCheckingStatements() != null).flatMap(definition -> definition.getCheckingStatements().stream()).collect(joining("\n")));
                     scriptsPanel.setVisible(true);
                 } catch (InvalidConfigurationException ex) {

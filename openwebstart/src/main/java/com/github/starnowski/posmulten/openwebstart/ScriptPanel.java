@@ -1,6 +1,7 @@
 package com.github.starnowski.posmulten.openwebstart;
 
 import javax.swing.*;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 
@@ -18,6 +19,7 @@ public class ScriptPanel extends JPanel {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         add(reverseDisplayOrderCheckBox);
         add(new JScrollPane(scriptsTextArea));
+        reverseDisplayOrderCheckBox.addChangeListener(e -> display(reverseDisplayOrderCheckBox.isSelected()));
     }
 
     public void display(List<String> scriptLines) {
@@ -31,23 +33,26 @@ public class ScriptPanel extends JPanel {
     }
 
     private void display(boolean displayWithReverseOrder) {
+        String scripts;
         if (scriptLines == null) {
-            scriptsTextArea.setText("");
+            scripts = "";
         } else {
             if (displayWithReverseOrder) {
-                Stack<String> stack = new Stack<>();
-                scriptLines.forEach(script -> stack.push(script));
-                scriptsTextArea.setText(stack.stream().collect(joining("\n")));
+                LinkedList<String> stack = new LinkedList<>();
+                scriptLines.forEach(stack::push);
+                scripts = stack.stream().collect(joining("\n"));
             } else {
-                scriptsTextArea.setText(scriptLines.stream().collect(joining("\n")));
+                scripts = scriptLines.stream().collect(joining("\n"));
             }
         }
+        scriptsTextArea.setText(scripts);
     }
 
     private JTextArea prepareScriptTextArea(String name, boolean visibleByDefault) {
         JTextArea textArea = new JTextArea(10, 300);
         textArea.setName(name);
         textArea.setVisible(visibleByDefault);
+        textArea.setEditable(false);
         return textArea;
     }
 }
