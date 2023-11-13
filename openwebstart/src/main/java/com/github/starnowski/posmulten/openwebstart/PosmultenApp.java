@@ -29,6 +29,7 @@ public class PosmultenApp extends JFrame {
     public static final String DIFF_CONFIGURATIONS_CHECK_BOX_NAME = "diffConfigurationsCheckBox";
     public static final String DIFF_PANEL_NAME = "diffPanel";
     public static final String MAIN_TAB_PANEL_NAME = "mainTabPanel";
+    public static final String ERROR_TAB_PANEL_NAME = "errorTabPanel";
     private final YamlSharedSchemaContextFactory factory;
     private final JTextArea inputTextArea;
     private final JTextArea previousConfigurationInputTextArea;
@@ -44,6 +45,7 @@ public class PosmultenApp extends JFrame {
     private final SharedSchemaContextComparableResultsPanel sharedSchemaContextComparableResultsPanel;
     private final SharedSchemaContextComparator sharedSchemaContextComparator;
     private final TextAreaExceptionEnricher textAreaExceptionEnricher;
+    private final JTabbedPane errorTabbedPane;
 
     public PosmultenApp() {
         this(new YamlSharedSchemaContextFactory());
@@ -99,6 +101,10 @@ public class PosmultenApp extends JFrame {
         tabbedPane.setName(MAIN_TAB_PANEL_NAME);
         tabbedPane.addTab("Yaml configuration", new JScrollPane(inputTextArea));
 
+        errorTabbedPane = new JTabbedPane();
+        errorTabbedPane.setName(ERROR_TAB_PANEL_NAME);
+        errorTabbedPane.setVisible(false);
+
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.add(tabbedPane, BorderLayout.CENTER);
@@ -117,12 +123,11 @@ public class PosmultenApp extends JFrame {
         sharedSchemaContextComparableResultsPanel.setVisible(false);
 
         panel.add(scriptsPanel);
-        panel.add(errorPanel);
+        panel.add(errorTabbedPane);
         panel.add(sharedSchemaContextComparableResultsPanel);
         add(panel);
 
         scriptsPanel.setVisible(false);
-        errorPanel.setVisible(false);
         parametersPanel.setVisible(false);
 
         submitButton.addActionListener(prepareActionListenerForSubmitButton());
@@ -159,6 +164,8 @@ public class PosmultenApp extends JFrame {
             scriptsPanel.setVisible(false);
             errorPanel.setVisible(false);
             sharedSchemaContextComparableResultsPanel.setVisible(false);
+            errorTabbedPane.setVisible(false);
+            errorTabbedPane.removeAll();
             if (diffConfigurationsCheckBox.isSelected()) {
                 //TODO Handle exceptions
                 ISharedSchemaContext mainContext = null;
@@ -193,6 +200,8 @@ public class PosmultenApp extends JFrame {
                 } catch (Exception ex) {
                     textAreaExceptionEnricher.enrich(errorTextArea, ex);
                     errorPanel.setVisible(true);
+                    errorTabbedPane.addTab("Errors", errorPanel);
+                    errorTabbedPane.setVisible(true);
                 }
             }
         };

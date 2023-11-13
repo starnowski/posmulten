@@ -41,7 +41,7 @@ class PosmultenAppMockedSwingTest extends AbstractSwingTest {
     public void shouldNotDisplayTextFieldsWithScriptsBeforeSubmittingConfiguration() {
         // THEN
         findPanelFixtureByName(SCRIPTS_PANEL_NAME).requireNotVisible();
-        findPanelFixtureByName(ERROR_PANEL_NAME).requireNotVisible();
+        findJTabbedPaneFixtureByName(ERROR_TAB_PANEL_NAME).requireNotVisible();
         findPanelFixtureByName(PARAMETERS_LABELS_PANEL_NAME).requireNotVisible();
         findJTabbedPaneFixtureByName(DIFF_PANEL_NAME).requireNotVisible();
     }
@@ -62,7 +62,7 @@ class PosmultenAppMockedSwingTest extends AbstractSwingTest {
         // THEN
         window.textBox(CREATION_SCRIPTS_TEXTFIELD_NAME).requireText("DEF 1" + "\n" + "ALTER DEFINIT and Function");
         // Error panel should not be visible
-        findPanelFixtureByName(ERROR_PANEL_NAME).requireNotVisible();
+        findJTabbedPaneFixtureByName(ERROR_TAB_PANEL_NAME).requireNotVisible();
     }
 
     @Test
@@ -81,7 +81,7 @@ class PosmultenAppMockedSwingTest extends AbstractSwingTest {
         // THEN
         window.textBox(DROP_SCRIPTS_TEXTFIELD_NAME).requireText("ALTER TABLE Drop some Fun" + "\n" + "DROP fun");
         // Error panel should not be visible
-        findPanelFixtureByName(ERROR_PANEL_NAME).requireNotVisible();
+        findJTabbedPaneFixtureByName(ERROR_TAB_PANEL_NAME).requireNotVisible();
     }
 
     @Test
@@ -100,7 +100,7 @@ class PosmultenAppMockedSwingTest extends AbstractSwingTest {
         // THEN
         window.textBox(CHECKING_SCRIPTS_TEXTFIELD_NAME).requireText("Some check1" + "\n" + "check1" + "\n" + "check23\naaa");
         // Error panel should not be visible
-        findPanelFixtureByName(ERROR_PANEL_NAME).requireNotVisible();
+        findJTabbedPaneFixtureByName(ERROR_TAB_PANEL_NAME).requireNotVisible();
     }
 
     @Test
@@ -179,7 +179,7 @@ class PosmultenAppMockedSwingTest extends AbstractSwingTest {
         findPanelFixtureByName(SCRIPTS_PANEL_NAME).requireVisible();
         window.textBox(CREATION_SCRIPTS_TEXTFIELD_NAME).requireText("DEF 1" + "\n" + "ALTER DEFINIT and Function");
         // Error panel should not be visible
-        findPanelFixtureByName(ERROR_PANEL_NAME).requireNotVisible();
+        findJTabbedPaneFixtureByName(ERROR_TAB_PANEL_NAME).requireNotVisible();
     }
 
     @Test
@@ -209,7 +209,7 @@ class PosmultenAppMockedSwingTest extends AbstractSwingTest {
         findPanelFixtureByName(SCRIPTS_PANEL_NAME).requireVisible();
         window.textBox(CREATION_SCRIPTS_TEXTFIELD_NAME).requireText("DEF 1" + "\n" + "ALTER DEFINIT and Function");
         // Error panel should not be visible
-        findPanelFixtureByName(ERROR_PANEL_NAME).requireNotVisible();
+        findJTabbedPaneFixtureByName(ERROR_TAB_PANEL_NAME).requireNotVisible();
     }
 
     @Test
@@ -266,6 +266,6 @@ class PosmultenAppMockedSwingTest extends AbstractSwingTest {
         findPanelFixtureByName(SCRIPTS_PANEL_NAME).requireVisible();
         window.textBox(CREATION_SCRIPTS_TEXTFIELD_NAME).requireText("DEF 1" + "\n" + "ALTER DEFINIT and Function");
         // Error panel should not be visible
-        findPanelFixtureByName(ERROR_PANEL_NAME).requireNotVisible();
+        findJTabbedPaneFixtureByName(ERROR_TAB_PANEL_NAME).requireNotVisible();
     }
 }
