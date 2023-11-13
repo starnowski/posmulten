@@ -22,6 +22,7 @@ import static com.github.starnowski.posmulten.openwebstart.ParametersPanel.PARAM
 import static com.github.starnowski.posmulten.openwebstart.PosmultenApp.*;
 import static com.github.starnowski.posmulten.postgresql.test.utils.MapBuilder.mapBuilder;
 import static java.util.Arrays.asList;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -131,7 +132,7 @@ class PosmultenAppMockedSwingTest extends AbstractSwingTest {
         window.button("submitBtn").click();
 
         // THEN
-        window.textBox(ERROR_TEXTFIELD_NAME).requireText(exceptionMessage);
+        assertThat(window.textBox(ERROR_TEXTFIELD_NAME).text()).startsWith(exceptionMessage).contains("java.lang.RuntimeException:");
         // Scripts panel should not be visible
         findPanelFixtureByName(SCRIPTS_PANEL_NAME).requireNotVisible();
     }
