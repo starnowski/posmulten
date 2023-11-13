@@ -14,7 +14,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
-import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
 public class PosmultenApp extends JFrame {
@@ -44,6 +43,7 @@ public class PosmultenApp extends JFrame {
     private final JCheckBox diffConfigurationsCheckBox;
     private final SharedSchemaContextComparableResultsPanel sharedSchemaContextComparableResultsPanel;
     private final SharedSchemaContextComparator sharedSchemaContextComparator;
+    private final TextAreaExceptionEnricher textAreaExceptionEnricher;
 
     public PosmultenApp() {
         this(new YamlSharedSchemaContextFactory());
@@ -54,8 +54,13 @@ public class PosmultenApp extends JFrame {
     }
 
     public PosmultenApp(YamlSharedSchemaContextFactory factory, SharedSchemaContextComparator sharedSchemaContextComparator) {
+        this(factory, sharedSchemaContextComparator, new TextAreaExceptionEnricher());
+    }
+
+    public PosmultenApp(YamlSharedSchemaContextFactory factory, SharedSchemaContextComparator sharedSchemaContextComparator, TextAreaExceptionEnricher textAreaExceptionEnricher) {
         this.factory = factory;
         this.sharedSchemaContextComparator = sharedSchemaContextComparator;
+        this.textAreaExceptionEnricher = textAreaExceptionEnricher;
         setMiglayout();
         setName("Posmulten");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -185,14 +190,8 @@ public class PosmultenApp extends JFrame {
                     dropScriptsTextArea.display(context.getSqlDefinitions().stream().map(definition -> definition.getDropScript()).collect(toList()), true);
                     checkingScriptsTextArea.display(context.getSqlDefinitions().stream().filter(definition -> definition.getCheckingStatements() != null).flatMap(definition -> definition.getCheckingStatements().stream()).collect(toList()));
                     scriptsPanel.setVisible(true);
-                } catch (InvalidConfigurationException ex) {
-                    errorTextArea.setText(ex.getErrorMessages().stream().collect(joining("\n")));
-                    errorPanel.setVisible(true);
-                } catch (SharedSchemaContextBuilderException ex) {
-                    errorTextArea.setText(ex.getMessage());
-                    errorPanel.setVisible(true);
-                } catch (RuntimeException ex) {
-                    errorTextArea.setText(ex.getMessage());
+                } catch (Exception ex) {
+                    textAreaExceptionEnricher.enrich(errorTextArea, ex);
                     errorPanel.setVisible(true);
                 }
             }
