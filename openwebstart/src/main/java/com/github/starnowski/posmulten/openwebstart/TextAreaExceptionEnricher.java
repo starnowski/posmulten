@@ -5,6 +5,9 @@ import com.github.starnowski.posmulten.postgresql.core.context.exceptions.Shared
 
 import javax.swing.*;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 import static java.util.stream.Collectors.joining;
 
 public class TextAreaExceptionEnricher {
@@ -16,10 +19,15 @@ public class TextAreaExceptionEnricher {
         } else if (ex instanceof SharedSchemaContextBuilderException) {
             SharedSchemaContextBuilderException e = (SharedSchemaContextBuilderException) ex;
             errorTextArea.setText(ex.getMessage());
-        } else if (ex instanceof RuntimeException) {
-            RuntimeException e = (RuntimeException) ex;
-            errorTextArea.setText(ex.getMessage());
-            //TODO Print stacktrace
+        } else if (ex instanceof Exception) {
+            // Capture the stack trace
+            StringWriter sw = new StringWriter();
+            PrintWriter pw = new PrintWriter(sw);
+            ex.printStackTrace(pw);
+            String stackTrace = sw.toString();
+
+            // Display message and the stack trace in the JTextArea
+            errorTextArea.setText(ex.getMessage() + "\n" + stackTrace);
         }
     }
 }

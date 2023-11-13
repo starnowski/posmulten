@@ -45,6 +45,7 @@ class TextAreaExceptionEnricherSpec extends Specification {
             exceptionEnricher.enrich(errorTextArea, ex)
 
         then:
-            errorTextArea.text == "Runtime error"
+            errorTextArea.text.startsWith("Runtime error")
+            errorTextArea.text.contains("java.lang.RuntimeException: Runtime error")
     }
 }
