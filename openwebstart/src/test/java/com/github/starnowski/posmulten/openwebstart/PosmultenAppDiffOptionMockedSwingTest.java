@@ -133,8 +133,6 @@ public class PosmultenAppDiffOptionMockedSwingTest extends AbstractSwingTest {
         // GIVEN
         String yaml1 = "Some yaml";
         String yaml2 = "Previous yaml";
-        ISharedSchemaContext context1 = mock(ISharedSchemaContext.class);
-        ISharedSchemaContext context2 = mock(ISharedSchemaContext.class);
         String exceptionMessage2 = "Some errors for previous configuration";
         String exceptionMessage1 = "Missing grantee in configuration";
         Mockito.when(factory.build(eq(yaml1), any(DefaultDecoratorContext.class))).thenThrow(new MissingRLSGranteeDeclarationException(exceptionMessage1));
@@ -151,5 +149,26 @@ public class PosmultenAppDiffOptionMockedSwingTest extends AbstractSwingTest {
         window.textBox(ERROR_TEXTFIELD_NAME).requireText(exceptionMessage1);
         window.tabbedPane(ERROR_TAB_PANEL_NAME).selectTab(1);
         assertThat(window.textBox(ERROR_PREVIOUS_CONFIGURATION_TEXTFIELD_NAME).text()).startsWith(exceptionMessage2).contains("java.lang.RuntimeException:");
+    }
+
+    @Test
+    public void shouldDisplayErrorsForPreviousConfigurationsWhenClickingSubmitButton() throws SharedSchemaContextBuilderException, InvalidConfigurationException {
+        // GIVEN
+        String yaml1 = "Some yaml";
+        String yaml2 = "Previous yaml";
+        ISharedSchemaContext context1 = mock(ISharedSchemaContext.class);
+        String exceptionMessage2 = "Some errors for previous configuration";
+        Mockito.when(factory.build(eq(yaml1), any(DefaultDecoratorContext.class))).thenReturn(context1);
+        Mockito.when(factory.build(eq(yaml2), any(DefaultDecoratorContext.class))).thenThrow(new MissingRLSGranteeDeclarationException(exceptionMessage2));
+        window.textBox(CONFIGURATION_TEXTFIELD_NAME).enterText(yaml1);
+        window.checkBox(DIFF_CONFIGURATIONS_CHECK_BOX_NAME).check();
+        window.tabbedPane(MAIN_TAB_PANEL_NAME).selectTab(1);
+        window.textBox(PREVIOUS_CONFIGURATION_TEXTFIELD_NAME).enterText(yaml2);
+
+        // WHEN
+        window.button("submitBtn").click();
+
+        // THEN
+        window.textBox(ERROR_PREVIOUS_CONFIGURATION_TEXTFIELD_NAME).requireText(exceptionMessage2);
     }
 }
