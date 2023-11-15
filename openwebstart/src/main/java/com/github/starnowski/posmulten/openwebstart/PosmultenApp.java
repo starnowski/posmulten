@@ -24,12 +24,15 @@ public class PosmultenApp extends JFrame {
     public static final String PREVIOUS_CONFIGURATION_TEXTFIELD_NAME = "previousConfiguration";
     public static final String ERROR_TEXTFIELD_NAME = "errors";
     public static final String ERROR_PANEL_NAME = "errors-panel";
+    public static final String ERROR_PREVIOUS_CONFIGURATION_TEXTFIELD_NAME = "previousConfigurationErrors";
+    public static final String ERROR_PREVIOUS_CONFIGURATION_PANEL_NAME = "previous-configuration-errors-panel";
     public static final String SCRIPTS_PANEL_NAME = "scriptsPanel";
     public static final String DISPLAY_PARAMETERS_CHECK_BOX_NAME = "displayParametersCheckBox";
     public static final String DIFF_CONFIGURATIONS_CHECK_BOX_NAME = "diffConfigurationsCheckBox";
     public static final String DIFF_PANEL_NAME = "diffPanel";
     public static final String MAIN_TAB_PANEL_NAME = "mainTabPanel";
     public static final String ERROR_TAB_PANEL_NAME = "errorTabPanel";
+
     private final YamlSharedSchemaContextFactory factory;
     private final JTextArea inputTextArea;
     private final JTextArea previousConfigurationInputTextArea;
@@ -37,8 +40,10 @@ public class PosmultenApp extends JFrame {
     private final ScriptPanel dropScriptsTextArea;
     private final ScriptPanel checkingScriptsTextArea;
     private final JTextArea errorTextArea;
+    private final JTextArea previousConfigurationErrorTextArea;
     private final JPanel scriptsPanel;
     private final JPanel errorPanel;
+    private final JPanel previousConfigurationErrorPanel;
     private final ParametersPanel parametersPanel;
     private final JCheckBox displayParametersCheckBox;
     private final JCheckBox diffConfigurationsCheckBox;
@@ -82,6 +87,7 @@ public class PosmultenApp extends JFrame {
         dropScriptsTextArea = new ScriptPanel(DROP_SCRIPTS_TEXTFIELD_NAME);
         checkingScriptsTextArea = new ScriptPanel(CHECKING_SCRIPTS_TEXTFIELD_NAME);
         errorTextArea = prepareScriptTextArea(ERROR_TEXTFIELD_NAME);
+        previousConfigurationErrorTextArea = prepareScriptTextArea(ERROR_PREVIOUS_CONFIGURATION_TEXTFIELD_NAME);
         inputTextArea.setToolTipText("Configuration");
         previousConfigurationInputTextArea.setToolTipText("Previous configuration to compare with");
 
@@ -118,6 +124,7 @@ public class PosmultenApp extends JFrame {
         panel.add(parametersPanel);
         scriptsPanel = prepareScriptsPanel();
         errorPanel = prepareErrorPanel();
+        previousConfigurationErrorPanel = preparePreviousConfigurationErrorPanel();
         sharedSchemaContextComparableResultsPanel = new SharedSchemaContextComparableResultsPanel();
         sharedSchemaContextComparableResultsPanel.setName(DIFF_PANEL_NAME);
         sharedSchemaContextComparableResultsPanel.setVisible(false);
@@ -230,6 +237,15 @@ public class PosmultenApp extends JFrame {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.add(createCenteredLabel("Error during configuration processing!"));
         panel.add(new JScrollPane(errorTextArea));
+        return panel;
+    }
+
+    private JPanel preparePreviousConfigurationErrorPanel() {
+        JPanel panel = new JPanel();
+        panel.setName(ERROR_PREVIOUS_CONFIGURATION_PANEL_NAME);
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.add(createCenteredLabel("Error during previous configuration processing!"));
+        panel.add(new JScrollPane(previousConfigurationErrorTextArea));
         return panel;
     }
 

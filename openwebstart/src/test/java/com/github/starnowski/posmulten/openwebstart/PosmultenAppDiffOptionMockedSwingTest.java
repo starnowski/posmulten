@@ -4,13 +4,16 @@ import com.github.starnowski.posmulten.configuration.core.exceptions.InvalidConf
 import com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaContext;
 import com.github.starnowski.posmulten.postgresql.core.context.comparable.SharedSchemaContextComparator;
 import com.github.starnowski.posmulten.postgresql.core.context.decorator.DefaultDecoratorContext;
+import com.github.starnowski.posmulten.postgresql.core.context.exceptions.MissingRLSGranteeDeclarationException;
 import com.github.starnowski.posmulten.postgresql.core.context.exceptions.SharedSchemaContextBuilderException;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import static com.github.starnowski.posmulten.openwebstart.PosmultenApp.*;
 import static com.github.starnowski.posmulten.openwebstart.SharedSchemaContextComparableResultsPanel.*;
 import static java.util.Arrays.asList;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
@@ -123,5 +126,30 @@ public class PosmultenAppDiffOptionMockedSwingTest extends AbstractSwingTest {
         // Error panel should not be visible
 //        findPanelFixtureByName(ERROR_PANEL_NAME).requireNotVisible();
         //TODO
+    }
+
+    @Test
+    public void shouldDisplayErrorsForTwoInvalidConfigurationsWhenClickingSubmitButton() throws SharedSchemaContextBuilderException, InvalidConfigurationException {
+        // GIVEN
+        String yaml1 = "Some yaml";
+        String yaml2 = "Previous yaml";
+        ISharedSchemaContext context1 = mock(ISharedSchemaContext.class);
+        ISharedSchemaContext context2 = mock(ISharedSchemaContext.class);
+        String exceptionMessage2 = "Some errors for previous configuration";
+        String exceptionMessage1 = "Missing grantee in configuration";
+        Mockito.when(factory.build(eq(yaml1), any(DefaultDecoratorContext.class))).thenThrow(new MissingRLSGranteeDeclarationException(exceptionMessage1));
+        Mockito.when(factory.build(eq(yaml2), any(DefaultDecoratorContext.class))).thenThrow(new RuntimeException(exceptionMessage2));
+        window.textBox(CONFIGURATION_TEXTFIELD_NAME).enterText(yaml1);
+        window.checkBox(DIFF_CONFIGURATIONS_CHECK_BOX_NAME).check();
+        window.tabbedPane(MAIN_TAB_PANEL_NAME).selectTab(1);
+        window.textBox(PREVIOUS_CONFIGURATION_TEXTFIELD_NAME).enterText(yaml2);
+
+        // WHEN
+        window.button("submitBtn").click();
+
+        // THEN
+        window.textBox(ERROR_TEXTFIELD_NAME).requireText(exceptionMessage1);
+        window.tabbedPane(ERROR_TAB_PANEL_NAME).selectTab(1);
+        assertThat(window.textBox(ERROR_PREVIOUS_CONFIGURATION_TEXTFIELD_NAME).text()).startsWith(exceptionMessage2).contains("java.lang.RuntimeException:");
     }
 }
