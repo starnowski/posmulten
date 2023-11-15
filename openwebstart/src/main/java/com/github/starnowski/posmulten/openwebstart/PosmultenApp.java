@@ -174,29 +174,36 @@ public class PosmultenApp extends JFrame {
             errorTabbedPane.setVisible(false);
             errorTabbedPane.removeAll();
             if (diffConfigurationsCheckBox.isSelected()) {
-                //TODO Handle exceptions
+                Exception ex1 = null;
+                Exception ex2 = null;
                 ISharedSchemaContext mainContext = null;
                 try {
                     mainContext = factory.build(inputTextArea.getText(), prepareDefaultDecoratorContext());
-                } catch (InvalidConfigurationException ex) {
-                    throw new RuntimeException(ex);
-                } catch (SharedSchemaContextBuilderException ex) {
-                    throw new RuntimeException(ex);
-                } catch (RuntimeException ex) {
-                    throw new RuntimeException(ex);
+                } catch (Exception ex) {
+                    ex1 = ex;
                 }
                 ISharedSchemaContext previousContext = null;
                 try {
                     previousContext = factory.build(previousConfigurationInputTextArea.getText(), prepareDefaultDecoratorContext());
-                } catch (InvalidConfigurationException ex) {
-                    throw new RuntimeException(ex);
-                } catch (SharedSchemaContextBuilderException ex) {
-                    throw new RuntimeException(ex);
-                } catch (RuntimeException ex) {
-                    throw new RuntimeException(ex);
+                } catch (Exception ex) {
+                    ex2 = ex;
                 }
-                sharedSchemaContextComparableResultsPanel.displayDiff(sharedSchemaContextComparator.diff(previousContext, mainContext));
-                sharedSchemaContextComparableResultsPanel.setVisible(true);
+                if (ex1 == null && ex2 == null) {
+                    sharedSchemaContextComparableResultsPanel.displayDiff(sharedSchemaContextComparator.diff(previousContext, mainContext));
+                    sharedSchemaContextComparableResultsPanel.setVisible(true);
+                } else {
+                    if (ex1 != null) {
+                        textAreaExceptionEnricher.enrich(errorTextArea, ex1);
+                        errorPanel.setVisible(true);
+                        errorTabbedPane.addTab("Errors for main configuration", errorPanel);
+                    }
+                    if (ex2 != null) {
+                        textAreaExceptionEnricher.enrich(previousConfigurationErrorTextArea, ex2);
+                        previousConfigurationErrorPanel.setVisible(true);
+                        errorTabbedPane.addTab("Errors for previous configuration", previousConfigurationErrorPanel);
+                    }
+                    errorTabbedPane.setVisible(true);
+                }
             } else {
                 try {
                     ISharedSchemaContext context = factory.build(inputTextArea.getText(), prepareDefaultDecoratorContext());
