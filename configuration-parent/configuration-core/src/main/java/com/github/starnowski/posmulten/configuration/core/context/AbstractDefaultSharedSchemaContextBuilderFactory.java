@@ -38,5 +38,13 @@ public abstract class AbstractDefaultSharedSchemaContextBuilderFactory implement
         return defaultSharedSchemaContextBuilderFactory.build(contextConfiguration);
     }
 
+    @Override
+    public DefaultSharedSchemaContextBuilder buildForContent(String content) throws InvalidConfigurationException {
+        SharedSchemaContextConfiguration contextConfiguration = prepareConfigurationBasedOnContent(content);
+        return defaultSharedSchemaContextBuilderFactory.build(contextConfiguration);
+    }
+
+    protected abstract SharedSchemaContextConfiguration prepareConfigurationBasedOnContent(String content) throws InvalidConfigurationException;
+
     protected abstract SharedSchemaContextConfiguration prepareConfigurationBasedOnFile(String filePath) throws InvalidConfigurationException;
 }
