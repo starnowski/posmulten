@@ -8,7 +8,7 @@ import spock.lang.Specification
 
 import javax.swing.JTextArea
 
-class TextAreaExceptionEnricherSpec extends Specification {
+class TextAreaExceptionEnricherTest extends Specification {
     def "should enrich JTextArea with error messages for InvalidConfigurationException"() {
         given:
         JTextArea errorTextArea = new JTextArea()
