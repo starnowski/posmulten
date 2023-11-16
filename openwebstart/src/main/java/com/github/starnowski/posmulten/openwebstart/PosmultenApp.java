@@ -44,7 +44,7 @@ public class PosmultenApp extends JFrame {
     private final ScriptPanel checkingScriptsTextArea;
     private final JTextArea errorTextArea;
     private final JTextArea previousConfigurationErrorTextArea;
-    private final JPanel scriptsPanel;
+    private final JTabbedPane scriptsPanel;
     private final JPanel errorPanel;
     private final JPanel previousConfigurationErrorPanel;
     private final ParametersPanel parametersPanel;
@@ -228,16 +228,12 @@ public class PosmultenApp extends JFrame {
         return displayParametersCheckBox.isSelected() ? DefaultDecoratorContext.builder().withReplaceCharactersMap(parametersPanel.getParameters()).build() : DefaultDecoratorContext.builder().build();
     }
 
-    private JPanel prepareScriptsPanel() {
-        JPanel panel = new JPanel();
+    private JTabbedPane prepareScriptsPanel() {
+        JTabbedPane panel = new JTabbedPane();
         panel.setName(SCRIPTS_PANEL_NAME);
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.add(createCenteredLabel(CREATION_SCRIPTS_TAB_NAME));
-        panel.add(new JScrollPane(creationScriptsTextArea));
-        panel.add(createCenteredLabel(DROP_SCRIPTS_TAB_NAME));
-        panel.add(new JScrollPane(dropScriptsTextArea));
-        panel.add(createCenteredLabel(CHECKING_STATEMENTS_SCRIPTS_TAB_NAME));
-        panel.add(new JScrollPane(checkingScriptsTextArea));
+        panel.addTab(CREATION_SCRIPTS_TAB_NAME, new JScrollPane(creationScriptsTextArea));
+        panel.addTab(DROP_SCRIPTS_TAB_NAME, new JScrollPane(dropScriptsTextArea));
+        panel.addTab(CHECKING_STATEMENTS_SCRIPTS_TAB_NAME, new JScrollPane(checkingScriptsTextArea));
         return panel;
     }
 

@@ -12,6 +12,8 @@ import org.mockito.Mockito;
 
 import static com.github.starnowski.posmulten.openwebstart.PosmultenApp.*;
 import static com.github.starnowski.posmulten.openwebstart.SharedSchemaContextComparableResultsPanel.*;
+import static com.github.starnowski.posmulten.openwebstart.SharedSchemaContextComparableResultsPanel.CREATION_SCRIPTS_TAB_NAME;
+import static com.github.starnowski.posmulten.openwebstart.SharedSchemaContextComparableResultsPanel.DROP_SCRIPTS_TAB_NAME;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;

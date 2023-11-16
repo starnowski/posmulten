@@ -79,6 +79,7 @@ class PosmultenAppMockedSwingTest extends AbstractSwingTest {
         getMovedComponent(window.button("submitBtn")).click();
 
         // THEN
+        window.tabbedPane(SCRIPTS_PANEL_NAME).selectTab(DROP_SCRIPTS_TAB_NAME);
         window.textBox(DROP_SCRIPTS_TEXTFIELD_NAME).requireText("ALTER TABLE Drop some Fun" + "\n" + "DROP fun");
         // Error panel should not be visible
         findJTabbedPaneFixtureByName(ERROR_TAB_PANEL_NAME).requireNotVisible();
@@ -98,6 +99,7 @@ class PosmultenAppMockedSwingTest extends AbstractSwingTest {
         getMovedComponent(window.button("submitBtn")).click();
 
         // THEN
+        window.tabbedPane(SCRIPTS_PANEL_NAME).selectTab(CHECKING_STATEMENTS_SCRIPTS_TAB_NAME);
         window.textBox(CHECKING_SCRIPTS_TEXTFIELD_NAME).requireText("Some check1" + "\n" + "check1" + "\n" + "check23\naaa");
         // Error panel should not be visible
         findJTabbedPaneFixtureByName(ERROR_TAB_PANEL_NAME).requireNotVisible();
