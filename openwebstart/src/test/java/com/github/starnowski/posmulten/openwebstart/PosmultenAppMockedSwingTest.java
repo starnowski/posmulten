@@ -40,7 +40,7 @@ class PosmultenAppMockedSwingTest extends AbstractSwingTest {
     @Test
     public void shouldNotDisplayTextFieldsWithScriptsBeforeSubmittingConfiguration() {
         // THEN
-        findPanelFixtureByName(SCRIPTS_PANEL_NAME).requireNotVisible();
+        findJTabbedPaneFixtureByName(SCRIPTS_PANEL_NAME).requireNotVisible();
         findJTabbedPaneFixtureByName(ERROR_TAB_PANEL_NAME).requireNotVisible();
         findPanelFixtureByName(PARAMETERS_LABELS_PANEL_NAME).requireNotVisible();
         findJTabbedPaneFixtureByName(DIFF_PANEL_NAME).requireNotVisible();
@@ -119,7 +119,7 @@ class PosmultenAppMockedSwingTest extends AbstractSwingTest {
         // THEN
         window.textBox(ERROR_TEXTFIELD_NAME).requireText(exceptionMessage);
         // Scripts panel should not be visible
-        findPanelFixtureByName(SCRIPTS_PANEL_NAME).requireNotVisible();
+        findJTabbedPaneFixtureByName(SCRIPTS_PANEL_NAME).requireNotVisible();
     }
 
     @Test
@@ -136,7 +136,7 @@ class PosmultenAppMockedSwingTest extends AbstractSwingTest {
         // THEN
         assertThat(window.textBox(ERROR_TEXTFIELD_NAME).text()).startsWith(exceptionMessage).contains("java.lang.RuntimeException:");
         // Scripts panel should not be visible
-        findPanelFixtureByName(SCRIPTS_PANEL_NAME).requireNotVisible();
+        findJTabbedPaneFixtureByName(SCRIPTS_PANEL_NAME).requireNotVisible();
     }
 
     @Test
@@ -153,7 +153,7 @@ class PosmultenAppMockedSwingTest extends AbstractSwingTest {
         // THEN
         window.textBox(ERROR_TEXTFIELD_NAME).requireText(errorMessages.stream().collect(Collectors.joining("\n")));
         // Scripts panel should not be visible
-        findPanelFixtureByName(SCRIPTS_PANEL_NAME).requireNotVisible();
+        findJTabbedPaneFixtureByName(SCRIPTS_PANEL_NAME).requireNotVisible();
     }
 
     @Test
@@ -178,7 +178,7 @@ class PosmultenAppMockedSwingTest extends AbstractSwingTest {
         // THEN
         assertEquals(defaultDecoratorContextArgumentCaptor.getValue().getReplaceCharactersMap(), mapBuilder().put("{{some_key}}", "value1").put("url", "http://host").put("username", "kant").build());
         // Scripts panel should be visible
-        findPanelFixtureByName(SCRIPTS_PANEL_NAME).requireVisible();
+        findJTabbedPaneFixtureByName(SCRIPTS_PANEL_NAME).requireVisible();
         window.textBox(CREATION_SCRIPTS_TEXTFIELD_NAME).requireText("DEF 1" + "\n" + "ALTER DEFINIT and Function");
         // Error panel should not be visible
         findJTabbedPaneFixtureByName(ERROR_TAB_PANEL_NAME).requireNotVisible();
@@ -208,7 +208,7 @@ class PosmultenAppMockedSwingTest extends AbstractSwingTest {
         // THEN
         assertEquals(defaultDecoratorContextArgumentCaptor.getValue().getReplaceCharactersMap(), mapBuilder().put("{{some_key}}", "value1").put("username", "kant").put("some key", "Simon").build());
         // Scripts panel should be visible
-        findPanelFixtureByName(SCRIPTS_PANEL_NAME).requireVisible();
+        findJTabbedPaneFixtureByName(SCRIPTS_PANEL_NAME).requireVisible();
         window.textBox(CREATION_SCRIPTS_TEXTFIELD_NAME).requireText("DEF 1" + "\n" + "ALTER DEFINIT and Function");
         // Error panel should not be visible
         findJTabbedPaneFixtureByName(ERROR_TAB_PANEL_NAME).requireNotVisible();
@@ -265,7 +265,7 @@ class PosmultenAppMockedSwingTest extends AbstractSwingTest {
         // THEN
         assertEquals(defaultDecoratorContextArgumentCaptor.getValue().getReplaceCharactersMap(), new HashMap<>());
         // Scripts panel should be visible
-        findPanelFixtureByName(SCRIPTS_PANEL_NAME).requireVisible();
+        findJTabbedPaneFixtureByName(SCRIPTS_PANEL_NAME).requireVisible();
         window.textBox(CREATION_SCRIPTS_TEXTFIELD_NAME).requireText("DEF 1" + "\n" + "ALTER DEFINIT and Function");
         // Error panel should not be visible
         findJTabbedPaneFixtureByName(ERROR_TAB_PANEL_NAME).requireNotVisible();
