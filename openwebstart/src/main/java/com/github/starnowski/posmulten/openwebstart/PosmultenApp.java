@@ -32,6 +32,9 @@ public class PosmultenApp extends JFrame {
     public static final String DIFF_PANEL_NAME = "diffPanel";
     public static final String MAIN_TAB_PANEL_NAME = "mainTabPanel";
     public static final String ERROR_TAB_PANEL_NAME = "errorTabPanel";
+    public static final String CREATION_SCRIPTS_TAB_NAME = "Creation scripts";
+    public static final String DROP_SCRIPTS_TAB_NAME = "Drop scripts";
+    public static final String CHECKING_STATEMENTS_SCRIPTS_TAB_NAME = "Checking statements scripts";
 
     private final YamlSharedSchemaContextFactory factory;
     private final JTextArea inputTextArea;
@@ -229,11 +232,11 @@ public class PosmultenApp extends JFrame {
         JPanel panel = new JPanel();
         panel.setName(SCRIPTS_PANEL_NAME);
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.add(createCenteredLabel("Creation scripts"));
+        panel.add(createCenteredLabel(CREATION_SCRIPTS_TAB_NAME));
         panel.add(new JScrollPane(creationScriptsTextArea));
-        panel.add(createCenteredLabel("Drop scripts"));
+        panel.add(createCenteredLabel(DROP_SCRIPTS_TAB_NAME));
         panel.add(new JScrollPane(dropScriptsTextArea));
-        panel.add(createCenteredLabel("Checking statements scripts"));
+        panel.add(createCenteredLabel(CHECKING_STATEMENTS_SCRIPTS_TAB_NAME));
         panel.add(new JScrollPane(checkingScriptsTextArea));
         return panel;
     }
