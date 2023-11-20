@@ -36,18 +36,18 @@ https://www.markdownguide.org/basic-syntax/
 ### Added
 
 - Create skeleton project for Swing application [295](https://github.com/starnowski/posmulten/issues/295)
-    - Added method com.github.starnowski.posmulten.configuration.core.context.AbstractDefaultSharedSchemaContextBuilderFactory#buildForContent(String)
-    - Added method com.github.starnowski.posmulten.configuration.core.context.IDefaultSharedSchemaContextBuilderFactory#buildForContent(String)
-    - Added method com.github.starnowski.posmulten.configuration.yaml.context.YamlConfigurationDefaultSharedSchemaContextBuilderFactory#prepareConfigurationBasedOnContent(String)
-    - Added method com.github.starnowski.posmulten.configuration.yaml.dao.SharedSchemaContextConfigurationYamlDao#readFromContent(String)
-    - Added type com.github.starnowski.posmulten.openwebstart.ParametersPanel
-    - Added type com.github.starnowski.posmulten.openwebstart.PosmultenApp
-    - Added type com.github.starnowski.posmulten.openwebstart.ScriptPanel
-    - Added type com.github.starnowski.posmulten.openwebstart.SharedSchemaContextComparableResultsPanel
-    - Added type com.github.starnowski.posmulten.openwebstart.TextAreaExceptionEnricher
-    - Added type com.github.starnowski.posmulten.openwebstart.YamlSharedSchemaContextFactory
-    - Added type com.github.starnowski.posmulten.postgresql.core.context.comparable.DefaultSharedSchemaContextComparator
-    - Added type com.github.starnowski.posmulten.postgresql.core.context.comparable.SharedSchemaContextComparator
+    - Added method com.github.starnowski.posmulten.configuration.core.context.AbstractDefaultSharedSchemaContextBuilderFactory#buildForContent(String) [295](https://github.com/starnowski/posmulten/issues/295)
+    - Added method com.github.starnowski.posmulten.configuration.core.context.IDefaultSharedSchemaContextBuilderFactory#buildForContent(String) [295](https://github.com/starnowski/posmulten/issues/295)
+    - Added method com.github.starnowski.posmulten.configuration.yaml.context.YamlConfigurationDefaultSharedSchemaContextBuilderFactory#prepareConfigurationBasedOnContent(String) [295](https://github.com/starnowski/posmulten/issues/295)
+    - Added method com.github.starnowski.posmulten.configuration.yaml.dao.SharedSchemaContextConfigurationYamlDao#readFromContent(String) [295](https://github.com/starnowski/posmulten/issues/295)
+    - Added type com.github.starnowski.posmulten.openwebstart.ParametersPanel [295](https://github.com/starnowski/posmulten/issues/295)
+    - Added type com.github.starnowski.posmulten.openwebstart.PosmultenApp [295](https://github.com/starnowski/posmulten/issues/295)
+    - Added type com.github.starnowski.posmulten.openwebstart.ScriptPanel [295](https://github.com/starnowski/posmulten/issues/295)
+    - Added type com.github.starnowski.posmulten.openwebstart.SharedSchemaContextComparableResultsPanel [295](https://github.com/starnowski/posmulten/issues/295)
+    - Added type com.github.starnowski.posmulten.openwebstart.TextAreaExceptionEnricher [295](https://github.com/starnowski/posmulten/issues/295)
+    - Added type com.github.starnowski.posmulten.openwebstart.YamlSharedSchemaContextFactory [295](https://github.com/starnowski/posmulten/issues/295)
+    - Added type com.github.starnowski.posmulten.postgresql.core.context.comparable.DefaultSharedSchemaContextComparator [295](https://github.com/starnowski/posmulten/issues/295)
+    - Added type com.github.starnowski.posmulten.postgresql.core.context.comparable.SharedSchemaContextComparator [295](https://github.com/starnowski/posmulten/issues/295)
 
 ## [0.7.2] - 2023-07-03
 
