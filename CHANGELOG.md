@@ -9,6 +9,7 @@ https://keepachangelog.com/en/1.0.0/
 https://www.markdownguide.org/basic-syntax/
 
 * [Unreleased](#unreleased)
+* [0.8.0](#080---2023-11-20)
 * [0.7.2](#072---2023-07-03)
 * [0.7.1](#071---2023-07-02)
 * [0.7.0](#070---2023-06-28)
@@ -29,6 +30,24 @@ https://www.markdownguide.org/basic-syntax/
 * [0.2.0](#020---2020-11-14)
 
 ## [Unreleased]
+
+## [0.8.0] - 2023-11-20
+
+### Added
+
+- Create skeleton project for Swing application [295](https://github.com/starnowski/posmulten/issues/295)
+    - Added method com.github.starnowski.posmulten.configuration.core.context.AbstractDefaultSharedSchemaContextBuilderFactory#buildForContent(String)
+    - Added method com.github.starnowski.posmulten.configuration.core.context.IDefaultSharedSchemaContextBuilderFactory#buildForContent(String)
+    - Added method com.github.starnowski.posmulten.configuration.yaml.context.YamlConfigurationDefaultSharedSchemaContextBuilderFactory#prepareConfigurationBasedOnContent(String)
+    - Added method com.github.starnowski.posmulten.configuration.yaml.dao.SharedSchemaContextConfigurationYamlDao#readFromContent(String)
+    - Added type com.github.starnowski.posmulten.openwebstart.ParametersPanel
+    - Added type com.github.starnowski.posmulten.openwebstart.PosmultenApp
+    - Added type com.github.starnowski.posmulten.openwebstart.ScriptPanel
+    - Added type com.github.starnowski.posmulten.openwebstart.SharedSchemaContextComparableResultsPanel
+    - Added type com.github.starnowski.posmulten.openwebstart.TextAreaExceptionEnricher
+    - Added type com.github.starnowski.posmulten.openwebstart.YamlSharedSchemaContextFactory
+    - Added type com.github.starnowski.posmulten.postgresql.core.context.comparable.DefaultSharedSchemaContextComparator
+    - Added type com.github.starnowski.posmulten.postgresql.core.context.comparable.SharedSchemaContextComparator
 
 ## [0.7.2] - 2023-07-03
 
