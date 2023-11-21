@@ -17,3 +17,9 @@ For example:
 ```bash
 java -jar .\openwebstart-0.8.0-SNAPSHOT-jar-with-dependencies.jar
 ```
+
+After running application we can see default screen
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/starnowski/posmulten/master/doc/Separate_database.png">
+</p>
