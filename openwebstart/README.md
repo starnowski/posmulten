@@ -21,5 +21,18 @@ java -jar .\openwebstart-0.8.0-SNAPSHOT-jar-with-dependencies.jar
 After running application we can see default screen
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/starnowski/posmulten/master/doc/Separate_database.png">
+  <img src="https://raw.githubusercontent.com/starnowski/posmulten/master/doc/opewebstart/Basic_view.PNG">
 </p>
+
+To generate DDL script we just need to enter configuration content in "Yaml configuration" tab and click "Submit"
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/starnowski/posmulten/master/doc/opewebstart/Basic_view_1.PNG">
+</p>
+
+The is a possibility to add template parameters, we just need to select "Use template parameters" checkbox
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/starnowski/posmulten/master/doc/opewebstart/Parameters.PNG">
+</p>
+
