@@ -18,7 +18,7 @@ java -jar .\openwebstart-0.8.0-SNAPSHOT-jar-with-dependencies.jar
 
 For more details please check [openwebstart](https://github.com/starnowski/posmulten/tree/master/openwebstart) module.
 
-Jar can be also execute as Java Web Start application (for Java 9 or later it is required to use [OpeWebStart](https://openwebstart.com/))
+Jar can be also execute as [Java Web Start application](posmulten.jnlp) (for Java 9 or later it is required to use [OpeWebStart](https://openwebstart.com/))
 
 # About author
 Hi,
