@@ -13,7 +13,7 @@ It is implemented with Swing library.
 It can be used by executing created jar (jar can be found in [Maven repository](https://repo1.maven.org/maven2/com/github/starnowski/posmulten/openwebstart/0.8.0/openwebstart-0.8.0-jar-with-dependencies.jar))
 
 ```bash
-java -jar .\openwebstart-0.8.0-SNAPSHOT-jar-with-dependencies.jar
+java -jar openwebstart-0.8.0-SNAPSHOT-jar-with-dependencies.jar
 ```
 
 For more details please check [openwebstart](https://github.com/starnowski/posmulten/tree/master/openwebstart) module.
