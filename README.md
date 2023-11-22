@@ -52,6 +52,7 @@
     * [Naming convention and its constraints](#naming-convention-and-its-constraints)
 * [Adding custom sql definitions](#adding-custom-sql-definitions)
 * [Using template variables in context builder](#using-template-variables-in-context-builder)
+* [GUI - Swing application](#gui)
 * [Reporting issues](#reporting-issues)
 * [Project contribution](#project-contribution)
 
@@ -357,7 +358,7 @@ You can use it just by adding it as a dependency in the project descriptor file 
         <dependency>
             <groupId>com.github.starnowski.posmulten</groupId>
             <artifactId>postgresql-core</artifactId>
-            <version>0.7.2</version>
+            <version>0.8.0</version>
         </dependency>
 ```
 
@@ -1253,6 +1254,9 @@ Please be in mind that above code use [configuration](configuration-parent/confi
 Where configuration for th Posmulten library is store in Yaml file.
 However, you can also pass template values as parameters to DefaultSharedSchemaContextBuilder methods.
 
+# GUI
+There is a GUI application implemented in the Swing library. 
+For more details, please check the [openwebstart](openwebstart) module.
 
 # Reporting issues
 * Any new issues please report in [GitHub site](https://github.com/starnowski/posmulten/issues)
