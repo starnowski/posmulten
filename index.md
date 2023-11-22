@@ -1,8 +1,12 @@
 * [Introduction](#introduction)
+* [About author](#about-author)
 * [Links](#links)
 
-
 # Introduction
+
+Posmulten library is an open-source project for the generation of SQL DDL statements that make it easy for implementation of Shared Schema Multi-tenancy strategy via the Row Security Policies in the Postgres database.
+
+# About author
 Hi,
 
 My name is Simon, currently I am working for Epam as  Senior Software Engineer.
