@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jnlp spec="8">
+    <information>
+        <title>Posmulten application</title>
+    </information>
+    <resources>
+        <j2se version="1.8+" />
+        <jar href="https://repo1.maven.org/maven2/com/github/starnowski/posmulten/openwebstart/0.8.0/openwebstart-0.8.0-jar-with-dependencies.jar" />
+    </resources>
+    <application-desc main-class="com.github.starnowski.posmulten.openwebstart.PosmultenApp"/>
+</jnlp>
