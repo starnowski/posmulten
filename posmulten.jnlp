@@ -8,7 +8,4 @@
         <jar href="https://repo1.maven.org/maven2/com/github/starnowski/posmulten/openwebstart/0.8.0/openwebstart-0.8.0-jar-with-dependencies.jar" />
     </resources>
     <application-desc main-class="com.github.starnowski.posmulten.openwebstart.PosmultenApp"/>
-    <security>
-        <all-permissions/>
-    </security>
 </jnlp>
