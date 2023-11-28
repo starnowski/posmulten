@@ -54,10 +54,10 @@ class PosmultenAppMockedSwingTest extends AbstractSwingTest {
         Mockito.when(factory.build(eq(yaml), any(DefaultDecoratorContext.class))).thenReturn(context);
         List<SQLDefinition> definitions = asList(sqlDef("DEF 1", null), sqlDef("ALTER DEFINIT and Function", null));
         Mockito.when(context.getSqlDefinitions()).thenReturn(definitions);
-        getMovedComponent(window.textBox(CONFIGURATION_TEXTFIELD_NAME)).enterText(yaml);
+        window.textBox(CONFIGURATION_TEXTFIELD_NAME).enterText(yaml);
 
         // WHEN
-        getMovedComponent(window.button("submitBtn")).click();
+        window.button("submitBtn").click();
 
         // THEN
         window.textBox(CREATION_SCRIPTS_TEXTFIELD_NAME).requireText("DEF 1" + "\n" + "ALTER DEFINIT and Function");
@@ -73,10 +73,10 @@ class PosmultenAppMockedSwingTest extends AbstractSwingTest {
         Mockito.when(factory.build(eq(yaml), any(DefaultDecoratorContext.class))).thenReturn(context);
         List<SQLDefinition> definitions = asList(sqlDef(null, "DROP fun"), sqlDef(null, "ALTER TABLE Drop some Fun"));
         Mockito.when(context.getSqlDefinitions()).thenReturn(definitions);
-        getMovedComponent(window.textBox(CONFIGURATION_TEXTFIELD_NAME)).enterText(yaml);
+        window.textBox(CONFIGURATION_TEXTFIELD_NAME).enterText(yaml);
 
         // WHEN
-        getMovedComponent(window.button("submitBtn")).click();
+        window.button("submitBtn").click();
 
         // THEN
         window.tabbedPane(SCRIPTS_PANEL_NAME).selectTab(DROP_SCRIPTS_TAB_NAME);
@@ -93,10 +93,10 @@ class PosmultenAppMockedSwingTest extends AbstractSwingTest {
         Mockito.when(factory.build(eq(yaml), any(DefaultDecoratorContext.class))).thenReturn(context);
         List<SQLDefinition> definitions = asList(sqlDef(null, null, "Some check1"), sqlDef(null, null, "check1", "check23\naaa"));
         Mockito.when(context.getSqlDefinitions()).thenReturn(definitions);
-        getMovedComponent(window.textBox(CONFIGURATION_TEXTFIELD_NAME)).enterText(yaml);
+        window.textBox(CONFIGURATION_TEXTFIELD_NAME).enterText(yaml);
 
         // WHEN
-        getMovedComponent(window.button("submitBtn")).click();
+        window.button("submitBtn").click();
 
         // THEN
         window.tabbedPane(SCRIPTS_PANEL_NAME).selectTab(CHECKING_STATEMENTS_SCRIPTS_TAB_NAME);
@@ -217,7 +217,7 @@ class PosmultenAppMockedSwingTest extends AbstractSwingTest {
     @Test
     public void shouldDisplayLabelsPanelWhenAtLeastOneParameterIsGoingToBeAdded() {
         // GIVEN
-        getMovedComponent(window.checkBox(DISPLAY_PARAMETERS_CHECK_BOX_NAME).check());
+        window.checkBox(DISPLAY_PARAMETERS_CHECK_BOX_NAME).check();
         findPanelFixtureByName(PARAMETERS_LABELS_PANEL_NAME).requireNotVisible();
 
         // WHEN
@@ -230,12 +230,12 @@ class PosmultenAppMockedSwingTest extends AbstractSwingTest {
     @Test
     public void shouldNotDisplayLabelsPanelWhenAllParametersWhereRemoved() {
         // GIVEN
-        getMovedComponent(window.checkBox(DISPLAY_PARAMETERS_CHECK_BOX_NAME).check());
+        window.checkBox(DISPLAY_PARAMETERS_CHECK_BOX_NAME).check();
         addParameter(0, "{{some_key}}", "value1");
         window.panel(PARAMETERS_LABELS_PANEL_NAME).requireVisible();
 
         // WHEN
-        getMovedComponent(window.button(PARAMETER_REMOVE_BTN_PREFIX + 0)).click();
+        window.button(PARAMETER_REMOVE_BTN_PREFIX + 0).click();
 
         // THEN
         findPanelFixtureByName(PARAMETERS_LABELS_PANEL_NAME).requireNotVisible();
@@ -250,7 +250,7 @@ class PosmultenAppMockedSwingTest extends AbstractSwingTest {
         Mockito.when(factory.build(eq(yaml), defaultDecoratorContextArgumentCaptor.capture())).thenReturn(context);
         List<SQLDefinition> definitions = asList(sqlDef("DEF 1", null), sqlDef("ALTER DEFINIT and Function", null));
         Mockito.when(context.getSqlDefinitions()).thenReturn(definitions);
-        getMovedComponent(window.textBox(CONFIGURATION_TEXTFIELD_NAME)).enterText(yaml);
+        window.textBox(CONFIGURATION_TEXTFIELD_NAME).enterText(yaml);
         window.checkBox(DISPLAY_PARAMETERS_CHECK_BOX_NAME).check();
         //Add parameter index 0
         addParameter(0, "{{some_key}}", "value1");

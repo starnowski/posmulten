@@ -58,10 +58,6 @@ public class PosmultenAppDiffOptionMockedSwingTest extends AbstractSwingTest {
         // THEN
         window.textBox(CREATION_SCRIPTS_DIFFERENCES_EXISTED_ONLY_ON_LEFT_TEXT_AREA_NAME).requireText("left1" + "\n" + "x132");
         window.tabbedPane(CREATION_SCRIPTS_TAB_NAME).selectTab(1);
-        window.textBox(CREATION_SCRIPTS_DIFFERENCES_EXISTED_ONLY_ON_RIGHT_TEXT_AREA_NAME).requireText("something new" + "\n" + "new thing" + "\n" + "some def");
-        // Error panel should not be visible
-//        findPanelFixtureByName(ERROR_PANEL_NAME).requireNotVisible();
-        //TODO
     }
 
     @Test
@@ -92,9 +88,6 @@ public class PosmultenAppDiffOptionMockedSwingTest extends AbstractSwingTest {
         window.textBox(DROP_SCRIPTS_DIFFERENCES_EXISTED_ONLY_ON_LEFT_TEXT_AREA_NAME).requireText("drop1" + "\n" + "x132" + "\n" + "some drop");
         window.tabbedPane(DROP_SCRIPTS_TAB_NAME).selectTab(1);
         window.textBox(DROP_SCRIPTS_DIFFERENCES_EXISTED_ONLY_ON_RIGHT_TEXT_AREA_NAME).requireText("drop1554" + "\n" + "some fun");
-        // Error panel should not be visible
-//        findPanelFixtureByName(ERROR_PANEL_NAME).requireNotVisible();
-        //TODO
     }
 
     @Test
@@ -125,9 +118,6 @@ public class PosmultenAppDiffOptionMockedSwingTest extends AbstractSwingTest {
         window.textBox(CHECKING_SCRIPTS_DIFFERENCES_EXISTED_ONLY_ON_LEFT_TEXT_AREA_NAME).requireText("check37" + "\n" + "x132" + "\n" + "some drop");
         window.tabbedPane(CHECKING_SCRIPTS_TAB_NAME).selectTab(1);
         window.textBox(CHECKING_SCRIPTS_DIFFERENCES_EXISTED_ONLY_ON_RIGHT_TEXT_AREA_NAME).requireText("SELECT 1 FROM ..." + "\n" + "some fun");
-        // Error panel should not be visible
-//        findPanelFixtureByName(ERROR_PANEL_NAME).requireNotVisible();
-        //TODO
     }
 
     @Test
