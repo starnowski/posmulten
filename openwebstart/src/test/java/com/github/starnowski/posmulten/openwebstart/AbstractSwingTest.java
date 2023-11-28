@@ -74,18 +74,10 @@ public abstract class AbstractSwingTest {
         window.maximize();
     }
 
-    protected <C extends Component, F extends AbstractComponentFixture<F, C, ?>> F getMovedComponent(F fixtureWithComponent) {
-        //Hack to fix issue for ubuntu and xvfb : org.assertj.swing.exception.ActionFailedException: The component to click is out of the boundaries of the screen
-        if (isRunningOnVirtualScreen) {
-//            tested.setLocation(-fixtureWithComponent.target().getX(), -fixtureWithComponent.target().getY());
-        }
-        return fixtureWithComponent;
-    }
-
     protected void addParameter(int index, String key, String value) {
-        getMovedComponent(window.button(ADD_PARAMETER_BTN_NAME)).click();
-        getMovedComponent(window.textBox(PARAMETER_KEY_TEXTAREA_NAME_PREFIX + index)).enterText(key);
-        getMovedComponent(window.textBox(PARAMETER_VALUE_TEXTAREA_NAME_PREFIX + index)).enterText(value);
+        window.button(ADD_PARAMETER_BTN_NAME).click();
+        window.textBox(PARAMETER_KEY_TEXTAREA_NAME_PREFIX + index).enterText(key);
+        window.textBox(PARAMETER_VALUE_TEXTAREA_NAME_PREFIX + index).enterText(value);
     }
 
     protected SQLDefinition sqlDef(String creationScript, String dropScript, String... checkingScripts) {
