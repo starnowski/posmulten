@@ -1,15 +1,13 @@
 package com.github.starnowski.posmulten.postgresql.core;
 
-import com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValue;
 import com.github.starnowski.posmulten.postgresql.core.context.TableKey;
+import com.github.starnowski.posmulten.postgresql.core.rls.IConstraintProducerParameters;
 
 import java.util.Map;
 
-public interface IForeignKeyConstraintStatementParameters {
+public interface IForeignKeyConstraintStatementParameters extends IConstraintProducerParameters {
 
-    Map<String, FunctionArgumentValue> getPrimaryColumnsValuesMap();
-
-    TableKey getTableKey();
+    Map<String, String> getForeignKeyColumnMappings();
 
     TableKey getReferenceTableKey();
 
