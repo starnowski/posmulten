@@ -1,15 +1,8 @@
 package com.github.starnowski.posmulten.postgresql.core
 
-import com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValue
 import com.github.starnowski.posmulten.postgresql.core.context.TableKey
 import com.github.starnowski.posmulten.postgresql.core.rls.AbstractConstraintProducerTest
-import com.github.starnowski.posmulten.postgresql.core.rls.IsRecordBelongsToCurrentTenantConstraintProducer
-import com.github.starnowski.posmulten.postgresql.core.rls.IsRecordBelongsToCurrentTenantConstraintProducerParameters
-import com.github.starnowski.posmulten.postgresql.core.rls.function.IsRecordBelongsToCurrentTenantFunctionInvocationFactory
-import spock.lang.Specification
 import spock.lang.Unroll
-
-import static com.github.starnowski.posmulten.postgresql.core.common.function.FunctionArgumentValue.forReference
 
 class ForeignKeyConstraintStatementProducerTest extends AbstractConstraintProducerTest<IForeignKeyConstraintStatementParameters, ForeignKeyConstraintStatementProducer> {
 
@@ -39,6 +32,11 @@ class ForeignKeyConstraintStatementProducerTest extends AbstractConstraintProduc
             "user_belongs_tt"   |   "secondary" | "users"   |   "public"        |   "notifications" |   [ss : "uuid"]                           ||  "ALTER TABLE IF EXISTS \"secondary\".\"users\" ADD CONSTRAINT user_belongs_tt FOREIGN KEY (ss) REFERENCES \"public\".\"notifications\" (uuid) MATCH SIMPLE;"
             "user_belongs_tt"   |   "secondary" | "users"   |   null            |   "users"         |   [v : "secondary_colId", rv : "uuid"]    ||  "ALTER TABLE IF EXISTS \"secondary\".\"users\" ADD CONSTRAINT user_belongs_tt FOREIGN KEY (rv, v) REFERENCES \"users\" (uuid, secondary_colId) MATCH SIMPLE;"
             "some_fk_const"     |   "secondary" | "users"   |   "secondary"     |   "comments"      |   [x1 : "c", uuu : "a", ranV : "b"]       ||  "ALTER TABLE IF EXISTS \"secondary\".\"users\" ADD CONSTRAINT some_fk_const FOREIGN KEY (ranV, uuu, x1) REFERENCES \"secondary\".\"comments\" (b, a, c) MATCH SIMPLE;"
+    }
+
+    @Override
+    def shouldSkipDefaultCreationTest() {
+        true
     }
 
     @Override

@@ -1,6 +1,5 @@
 package com.github.starnowski.posmulten.postgresql.core.rls
 
-
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -11,6 +10,9 @@ abstract class AbstractConstraintProducerTest<X extends IConstraintProducerParam
     {
         given:
             def parameters = returnCorrectParametersMockObject()
+            if (shouldSkipDefaultCreationTest()) {
+                return
+            }
 
         when:
             def definition = returnTestedObject().produce(parameters)
@@ -28,6 +30,11 @@ abstract class AbstractConstraintProducerTest<X extends IConstraintProducerParam
             "users"         |   null            |    "constraint_222"       ||   /ALTER TABLE "users" ADD CONSTRAINT constraint_222 CHECK .*;/
             "notifications" |   null            |    "constraint_XXX"       ||   /ALTER TABLE "notifications" ADD CONSTRAINT constraint_XXX CHECK .*;/
             "notifications" |   "other_schema"  |    "fk_constraint"        ||   /ALTER TABLE "other_schema"\."notifications" ADD CONSTRAINT fk_constraint CHECK .*;/
+    }
+
+    def shouldSkipDefaultCreationTest()
+    {
+        false
     }
 
     @Unroll
