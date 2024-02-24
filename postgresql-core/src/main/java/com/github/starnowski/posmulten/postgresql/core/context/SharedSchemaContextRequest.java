@@ -28,7 +28,72 @@ import java.util.*;
 public class SharedSchemaContextRequest implements Cloneable {
 
     public static final String DEFAULT_TENANT_ID_COLUMN = "tenant_id";
-
+    /**
+     * A map that stores information about columns that are required to creation of shared schema multi-tenancy strategy.
+     * Information about columns are store for each table that required to have row level security policy.
+     * The table identifier ({@link TableKey}) is the map key and  information ({@link ITableColumns}) about columns are its value.
+     *
+     * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricher
+     * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.TableRLSPolicyEnricher
+     * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.TenantColumnSQLDefinitionsEnricher
+     */
+    private final Map<TableKey, ITableColumns> tableColumnsList = new HashMap<>();
+    /**
+     * Collection that stores table identifiers ({@link TableKey}) for which a column for tenant identifier should be added.
+     *
+     * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.TenantColumnSQLDefinitionsEnricher
+     */
+    private final Set<TableKey> createTenantColumnTableLists = new HashSet<>();
+    /**
+     * A map that stores information that describes the row level security policy properties for tables.
+     * Properties are store for each table that required to have row level security policy.
+     * The table identifier ({@link TableKey}) is the map key and the row level security policy properties ({@link ITableRLSPolicyProperties}) are its value.
+     *
+     * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.TableRLSPolicyEnricher
+     */
+    private final Map<TableKey, ITableRLSPolicyProperties> tableRLSPolicies = new HashMap<>();
+    /**
+     * A map that stores information that are required to the creation of constraint that checks if foreign key in the main table refers to record
+     * that exists in the foreign table and which belongs to the current tenant.
+     * The map key is an object of type {@link SameTenantConstraintForForeignKey} that contains table keys ({@link TableKey})
+     * for main table ({@link SameTenantConstraintForForeignKey#mainTable}) that has foreign key columns and the foreign
+     * table ({@link SameTenantConstraintForForeignKey#foreignKeyTable}) which has primary key columns. The map key also
+     * contains the set of column names for the foreign key ({@link SameTenantConstraintForForeignKey#foreignKeyColumns}).
+     * The object of type {@link ISameTenantConstraintForForeignKeyProperties} is the map value.
+     * <p>
+     * In case when {@link #createForeignKeyConstraintWithTenantColumn} has true value then instead of function that checks
+     * if specific reference key exist in scope of tenant, the foreign key constraint that tenant column is part of composite key is being created.
+     *
+     * In case when {@link #ignoreCreationOfConstraintThatChecksIfRecordBelongsToCurrentTenant} is true then creation of functions that checks if
+     * record exists for specific tenant is ignored.
+     *
+     * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricher
+     * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher
+     */
+    private final Map<SameTenantConstraintForForeignKey, ISameTenantConstraintForForeignKeyProperties> sameTenantConstraintForForeignKeyProperties = new HashMap<>();
+    /**
+     * A map that stores the names for a function that checks if there is a record with a specified identifier that is
+     * assigned to the current tenant for the specified table. The map key is a table identifier ({@link TableKey}), and the
+     * value is the function name.
+     */
+    private final Map<TableKey, String> functionThatChecksIfRecordExistsInTableNames = new HashMap<>();
+    /**
+     * A map that stores the custom names for a constraint that checks if the tenant identifier is valid.
+     * The map key is a table identifier ({@link TableKey}), and the value is the constraint name.
+     *
+     * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.IsTenantIdentifierValidConstraintEnricher
+     */
+    private final Map<TableKey, String> tenantValidConstraintCustomNamePerTables = new HashMap<>();
+    /**
+     * A set of table identifiers for which adding of default value declaration for tenant column should be skipped.
+     *
+     * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.DefaultValueForTenantColumnEnricher
+     */
+    private final Set<TableKey> tablesThatAddingOfTenantColumnDefaultValueShouldBeSkipped = new HashSet<>();
+    /**
+     * Pairs of custom SQL definitions and their positions.
+     */
+    private final List<CustomSQLDefinitionPair> customSQLDefinitionPairs = new ArrayList<>();
     /**
      * Name of default schema used during building process.
      */
@@ -73,22 +138,6 @@ public class SharedSchemaContextRequest implements Cloneable {
      */
     private String defaultTenantIdColumn = DEFAULT_TENANT_ID_COLUMN;
     /**
-     * A map that stores information about columns that are required to creation of shared schema multi-tenancy strategy.
-     * Information about columns are store for each table that required to have row level security policy.
-     * The table identifier ({@link TableKey}) is the map key and  information ({@link ITableColumns}) about columns are its value.
-     *
-     * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricher
-     * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.TableRLSPolicyEnricher
-     * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.TenantColumnSQLDefinitionsEnricher
-     */
-    private final Map<TableKey, ITableColumns> tableColumnsList = new HashMap<>();
-    /**
-     * Collection that stores table identifiers ({@link TableKey}) for which a column for tenant identifier should be added.
-     *
-     * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.TenantColumnSQLDefinitionsEnricher
-     */
-    private final Set<TableKey> createTenantColumnTableLists = new HashSet<>();
-    /**
      * The toggle, based on which builder is going to <a href="https://www.postgresql.org/docs/9.6/ddl-rowsecurity.html">force row level security for table owner</a>
      * (true) or not (false). The default value is false.
      *
@@ -96,42 +145,11 @@ public class SharedSchemaContextRequest implements Cloneable {
      */
     private boolean forceRowLevelSecurityForTableOwner;
     /**
-     * A map that stores information that describes the row level security policy properties for tables.
-     * Properties are store for each table that required to have row level security policy.
-     * The table identifier ({@link TableKey}) is the map key and the row level security policy properties ({@link ITableRLSPolicyProperties}) are its value.
-     *
-     * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.TableRLSPolicyEnricher
-     */
-    private final Map<TableKey, ITableRLSPolicyProperties> tableRLSPolicies = new HashMap<>();
-    /**
-     * A map that stores information that are required to the creation of constraint that checks if foreign key in the main table refers to record
-     * that exists in the foreign table and which belongs to the current tenant.
-     * The map key is an object of type {@link SameTenantConstraintForForeignKey} that contains table keys ({@link TableKey})
-     * for main table ({@link SameTenantConstraintForForeignKey#mainTable}) that has foreign key columns and the foreign
-     * table ({@link SameTenantConstraintForForeignKey#foreignKeyTable}) which has primary key columns. The map key also
-     * contains the set of column names for the foreign key ({@link SameTenantConstraintForForeignKey#foreignKeyColumns}).
-     * The object of type {@link ISameTenantConstraintForForeignKeyProperties} is the map value.
-     *
-     * In case when {@link #createForeignKeyConstraintWithTenantColumn} has true value then instead of function that checks
-     * if specific reference key exist in scope of tenant, the foreign key constraint that tenant column is part of composite key is being created.
-     *
-     * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricher
-     * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher
-     */
-    private final Map<SameTenantConstraintForForeignKey, ISameTenantConstraintForForeignKeyProperties> sameTenantConstraintForForeignKeyProperties = new HashMap<>();
-    /**
      * Default grantee for which the row level security should be added.
      *
      * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.TableRLSPolicyEnricher
      */
     private String grantee;
-    /**
-     * A map that stores the names for a function that checks if there is a record with a specified identifier that is
-     * assigned to the current tenant for the specified table. The map key is a table identifier ({@link TableKey}), and the
-     * value is the function name.
-     */
-    private final Map<TableKey, String> functionThatChecksIfRecordExistsInTableNames = new HashMap<>();
-
     /**
      * A list that stores invalid tenant identifiers.
      *
@@ -151,7 +169,6 @@ public class SharedSchemaContextRequest implements Cloneable {
      * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.IsTenantIdentifierValidConstraintEnricher
      */
     private String isTenantValidConstraintName;
-
     /**
      * The toggle, based on which builder is going to add constraint for all tables that required rls policy
      * (true) or not (false). The default value is false.
@@ -159,15 +176,6 @@ public class SharedSchemaContextRequest implements Cloneable {
      * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.IsTenantIdentifierValidConstraintEnricher
      */
     private boolean constraintForValidTenantValueShouldBeAdded;
-
-    /**
-     * A map that stores the custom names for a constraint that checks if the tenant identifier is valid.
-     * The map key is a table identifier ({@link TableKey}), and the value is the constraint name.
-     *
-     * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.IsTenantIdentifierValidConstraintEnricher
-     */
-    private final Map<TableKey, String> tenantValidConstraintCustomNamePerTables = new HashMap<>();
-
     /**
      * The toggle, based on which builder is going to add default value declaration for tenant column in all tables that required rls policy
      * (true) or not (false). The default value is false.
@@ -175,37 +183,35 @@ public class SharedSchemaContextRequest implements Cloneable {
      * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.DefaultValueForTenantColumnEnricher
      */
     private boolean currentTenantIdentifierAsDefaultValueForTenantColumnInAllTables;
-
-    /**
-     * A set of table identifiers for which adding of default value declaration for tenant column should be skipped.
-     *
-     * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.DefaultValueForTenantColumnEnricher
-     */
-    private final Set<TableKey> tablesThatAddingOfTenantColumnDefaultValueShouldBeSkipped = new HashSet<>();
-
     /**
      * Maximum allowed length for the identifier.
      *
      * @see IdentifierLengthValidator
      */
     private Integer identifierMaxLength;
-
     /**
      * Minimum allowed length for the identifier.
      *
      * @see IdentifierLengthValidator
      */
     private Integer identifierMinLength;
-
-    /**
-     * Pairs of custom SQL definitions and their positions.
-     */
-    private final List<CustomSQLDefinitionPair> customSQLDefinitionPairs = new ArrayList<>();
     /**
      * Create the foreign key constraint that tenant column is part of composite key. Instead of function that check if
      * reference key exist for specific tenant.
      */
     private Boolean createForeignKeyConstraintWithTenantColumn;
+    /**
+     * Ignore creation of function that check if reference key exist for specific tenant.
+     */
+    private Boolean ignoreCreationOfConstraintThatChecksIfRecordBelongsToCurrentTenant;
+
+    public Boolean getIgnoreCreationOfConstraintThatChecksIfRecordBelongsToCurrentTenant() {
+        return ignoreCreationOfConstraintThatChecksIfRecordBelongsToCurrentTenant;
+    }
+
+    public void setIgnoreCreationOfConstraintThatChecksIfRecordBelongsToCurrentTenant(Boolean ignoreCreationOfConstraintThatChecksIfRecordBelongsToCurrentTenant) {
+        this.ignoreCreationOfConstraintThatChecksIfRecordBelongsToCurrentTenant = ignoreCreationOfConstraintThatChecksIfRecordBelongsToCurrentTenant;
+    }
 
     public Boolean getCreateForeignKeyConstraintWithTenantColumn() {
         return createForeignKeyConstraintWithTenantColumn;
