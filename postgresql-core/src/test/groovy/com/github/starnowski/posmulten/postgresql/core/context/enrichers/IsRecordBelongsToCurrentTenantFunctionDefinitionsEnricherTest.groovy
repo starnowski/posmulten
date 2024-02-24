@@ -13,7 +13,7 @@ import spock.lang.Unroll
 import static com.github.starnowski.posmulten.postgresql.test.utils.MapBuilder.mapBuilder
 import static com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContextRequest.DEFAULT_TENANT_ID_COLUMN
 import static java.lang.String.format
-import static java.util.Collections.unmodifiableCollection
+import static java.util.Collections.unmodifiableList
 
 class IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricherTest extends Specification {
 
@@ -208,7 +208,7 @@ class IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricherTest extends Spec
             def tested = new IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricher(isRecordBelongsToCurrentTenantFunctionDefinitionProducer)
         //TODO use builder
             sharedSchemaContextRequest.setCreateForeignKeyConstraintWithTenantColumn(true)
-            def oldSqlDefinitions = unmodifiableCollection(context.getSqlDefinitions())
+            def oldSqlDefinitions = unmodifiableList(context.getSqlDefinitions())
 
         when:
             def result = tested.enrich(context, sharedSchemaContextRequest)
