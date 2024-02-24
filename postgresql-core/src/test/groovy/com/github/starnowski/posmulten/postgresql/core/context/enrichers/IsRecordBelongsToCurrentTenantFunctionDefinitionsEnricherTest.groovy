@@ -13,6 +13,7 @@ import spock.lang.Unroll
 import static com.github.starnowski.posmulten.postgresql.test.utils.MapBuilder.mapBuilder
 import static com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContextRequest.DEFAULT_TENANT_ID_COLUMN
 import static java.lang.String.format
+import static java.util.Collections.unmodifiableCollection
 
 class IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricherTest extends Specification {
 
@@ -195,6 +196,28 @@ class IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricherTest extends Spec
             "users"     |   "some_other_schema"
             "comments"  |   "some_other_schema"
             "comments"  |   null
+    }
+
+    def "should ignore creating any sql definition when the createForeignKeyConstraintWithTenantColumn has true value"()
+    {
+        given:
+            def builder = prepareBuilder(null)
+            def sharedSchemaContextRequest = builder.getSharedSchemaContextRequestCopy()
+            def context = new SharedSchemaContext()
+            def isRecordBelongsToCurrentTenantFunctionDefinitionProducer = Mock(IsRecordBelongsToCurrentTenantFunctionDefinitionProducer)
+            def tested = new IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricher(isRecordBelongsToCurrentTenantFunctionDefinitionProducer)
+        //TODO use builder
+            sharedSchemaContextRequest.setCreateForeignKeyConstraintWithTenantColumn(true)
+            def oldSqlDefinitions = unmodifiableCollection(context.getSqlDefinitions())
+
+        when:
+            def result = tested.enrich(context, sharedSchemaContextRequest)
+
+        then:
+            oldSqlDefinitions == result.getSqlDefinitions()
+
+        and: "no producer should be executed"
+            0 * isRecordBelongsToCurrentTenantFunctionDefinitionProducer._
     }
 
     TableKey tk(String table, String schema)
