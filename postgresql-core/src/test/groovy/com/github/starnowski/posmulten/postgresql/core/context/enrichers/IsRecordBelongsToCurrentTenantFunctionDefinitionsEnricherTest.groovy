@@ -201,13 +201,31 @@ class IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricherTest extends Spec
     def "should ignore creating any sql definition when the createForeignKeyConstraintWithTenantColumn has true value"()
     {
         given:
-            def builder = prepareBuilder(null)
+            def builder = prepareBuilder(null).setCreateForeignKeyConstraintWithTenantColumn(true)
             def sharedSchemaContextRequest = builder.getSharedSchemaContextRequestCopy()
             def context = new SharedSchemaContext()
             def isRecordBelongsToCurrentTenantFunctionDefinitionProducer = Mock(IsRecordBelongsToCurrentTenantFunctionDefinitionProducer)
             def tested = new IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricher(isRecordBelongsToCurrentTenantFunctionDefinitionProducer)
-        //TODO use builder
-            sharedSchemaContextRequest.setCreateForeignKeyConstraintWithTenantColumn(true)
+            def oldSqlDefinitions = unmodifiableList(context.getSqlDefinitions())
+
+        when:
+            def result = tested.enrich(context, sharedSchemaContextRequest)
+
+        then:
+            oldSqlDefinitions == result.getSqlDefinitions()
+
+        and: "no producer should be executed"
+            0 * isRecordBelongsToCurrentTenantFunctionDefinitionProducer._
+    }
+
+    def "should ignore creating any sql definition when the ignoreCreationOfConstraintThatChecksIfRecordBelongsToCurrentTenant has true value"()
+    {
+        given:
+            def builder = prepareBuilder(null).setIgnoreCreationOfConstraintThatChecksIfRecordBelongsToCurrentTenant(true)
+            def sharedSchemaContextRequest = builder.getSharedSchemaContextRequestCopy()
+            def context = new SharedSchemaContext()
+            def isRecordBelongsToCurrentTenantFunctionDefinitionProducer = Mock(IsRecordBelongsToCurrentTenantFunctionDefinitionProducer)
+            def tested = new IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricher(isRecordBelongsToCurrentTenantFunctionDefinitionProducer)
             def oldSqlDefinitions = unmodifiableList(context.getSqlDefinitions())
 
         when:

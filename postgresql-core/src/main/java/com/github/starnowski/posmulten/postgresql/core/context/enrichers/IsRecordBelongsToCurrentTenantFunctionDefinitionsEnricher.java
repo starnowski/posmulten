@@ -47,7 +47,7 @@ public class IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricher implement
 
     @Override
     public ISharedSchemaContext enrich(ISharedSchemaContext context, SharedSchemaContextRequest request) throws MissingFunctionNameDeclarationForTableException {
-        if (TRUE.equals(request.getCreateForeignKeyConstraintWithTenantColumn())) {
+        if (TRUE.equals(request.getCreateForeignKeyConstraintWithTenantColumn()) || TRUE.equals(request.getIgnoreCreationOfConstraintThatChecksIfRecordBelongsToCurrentTenant())) {
             return context;
         }
         List<TableKey> tableRequiredFunction = request.getSameTenantConstraintForForeignKeyProperties().keySet().stream().map(constraintKey -> constraintKey.getForeignKeyTable()).distinct().collect(toList());
