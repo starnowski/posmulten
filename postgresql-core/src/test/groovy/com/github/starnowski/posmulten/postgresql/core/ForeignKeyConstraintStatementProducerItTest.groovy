@@ -1,8 +1,6 @@
 package com.github.starnowski.posmulten.postgresql.core
 
 import com.github.starnowski.posmulten.postgresql.core.context.TableKey
-import com.github.starnowski.posmulten.postgresql.core.rls.DefaultIsRecordBelongsToCurrentTenantConstraintProducerParameters
-import com.github.starnowski.posmulten.postgresql.core.rls.IsRecordBelongsToCurrentTenantConstraintProducer
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.jdbc.core.JdbcTemplate
@@ -48,8 +46,8 @@ class ForeignKeyConstraintStatementProducerItTest extends Specification {
             isConstraintExists(jdbcTemplate, schema, table, constraintName)
 
         where:
-            testConstraintName      |   testSchema      | testTable     |   referenceSchema |   referenceTable  |   foreignKeyColumnMappings
-                "f_key_users"             |   "non_public_schema_with_composite_key"        | "posts"       |   "non_public_schema_with_composite_key"            |   "users"         |   [tenant_id : "tenant_id", user_id: "id"]
+            testConstraintName          |   testSchema                                      | testTable     |   referenceSchema                                     |   referenceTable  |   foreignKeyColumnMappings
+            "f_key_users"               |   "non_public_schema_with_composite_key"          | "posts"       |   "non_public_schema_with_composite_key"              |   "users"         |   [tenant_id : "tenant_id", user_id: "id"]
     }
 
     def cleanup() {
