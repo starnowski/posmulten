@@ -230,6 +230,68 @@ class IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricherTest extends
             "comments"  |   null                ||  "Missing object of type IsRecordBelongsToCurrentTenantFunctionInvocationFactory for table comments and schema null"
     }
 
+    @Unroll
+    def "should not create any SQL definitions when the ignoreCreationOfConstraintThatChecksIfRecordBelongsToCurrentTenant is true"()
+    {
+        given:
+            def builder = new DefaultSharedSchemaContextBuilder(null)
+            .createRLSPolicyForTable("users", [:], "tenant", "N/A")
+            .createRLSPolicyForTable("comments", [:], "tenant_id", "N/A")
+            .createRLSPolicyForTable("some_table", [:], "tenant_xxx_id", "N/A")
+            .createSameTenantConstraintForForeignKey("comments", "users", mapBuilder().put("user_id", "id").build(), "comments_users_fk_con")
+            .createSameTenantConstraintForForeignKey("some_table", "users", mapBuilder().put("owner_id", "id").build(), "some_table_same_tenant_users_con")
+            .createSameTenantConstraintForForeignKey("some_table", "comments", mapBuilder().put("some_comment_id", "uuid").build(), "some_table_comments_const_ten")
+            .setIgnoreCreationOfConstraintThatChecksIfRecordBelongsToCurrentTenant(true)
+            def sharedSchemaContextRequest = builder.getSharedSchemaContextRequestCopy()
+            def context = new SharedSchemaContext()
+            def usersTableKey = tk("users", null)
+            def commentsTableKey = tk("comments", null)
+            def isUserBelongsToCurrentTenantFunctionInvocationFactory = Mock(IsRecordBelongsToCurrentTenantFunctionInvocationFactory)
+            def isCommentBelongsToCurrentTenantFunctionInvocationFactory = Mock(IsRecordBelongsToCurrentTenantFunctionInvocationFactory)
+            context.getTableKeysIsRecordBelongsToCurrentTenantFunctionInvocationFactoryMap().put(usersTableKey, isUserBelongsToCurrentTenantFunctionInvocationFactory)
+            context.getTableKeysIsRecordBelongsToCurrentTenantFunctionInvocationFactoryMap().put(commentsTableKey, isCommentBelongsToCurrentTenantFunctionInvocationFactory)
+
+            def isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer = Mock(IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer)
+            def tested = new IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher(isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer)
+
+        when:
+            tested.enrich(context, sharedSchemaContextRequest)
+
+        then:
+            0 * isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer.produce(_)
+    }
+
+    @Unroll
+    def "should not create any SQL definitions when the createForeignKeyConstraintWithTenantColumn is true"()
+    {
+        given:
+            def builder = new DefaultSharedSchemaContextBuilder(null)
+                    .createRLSPolicyForTable("users", [:], "tenant", "N/A")
+                    .createRLSPolicyForTable("comments", [:], "tenant_id", "N/A")
+                    .createRLSPolicyForTable("some_table", [:], "tenant_xxx_id", "N/A")
+                    .createSameTenantConstraintForForeignKey("comments", "users", mapBuilder().put("user_id", "id").build(), "comments_users_fk_con")
+                    .createSameTenantConstraintForForeignKey("some_table", "users", mapBuilder().put("owner_id", "id").build(), "some_table_same_tenant_users_con")
+                    .createSameTenantConstraintForForeignKey("some_table", "comments", mapBuilder().put("some_comment_id", "uuid").build(), "some_table_comments_const_ten")
+                    .setCreateForeignKeyConstraintWithTenantColumn(true)
+            def sharedSchemaContextRequest = builder.getSharedSchemaContextRequestCopy()
+            def context = new SharedSchemaContext()
+            def usersTableKey = tk("users", null)
+            def commentsTableKey = tk("comments", null)
+            def isUserBelongsToCurrentTenantFunctionInvocationFactory = Mock(IsRecordBelongsToCurrentTenantFunctionInvocationFactory)
+            def isCommentBelongsToCurrentTenantFunctionInvocationFactory = Mock(IsRecordBelongsToCurrentTenantFunctionInvocationFactory)
+            context.getTableKeysIsRecordBelongsToCurrentTenantFunctionInvocationFactoryMap().put(usersTableKey, isUserBelongsToCurrentTenantFunctionInvocationFactory)
+            context.getTableKeysIsRecordBelongsToCurrentTenantFunctionInvocationFactoryMap().put(commentsTableKey, isCommentBelongsToCurrentTenantFunctionInvocationFactory)
+
+            def isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer = Mock(IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer)
+            def tested = new IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher(isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer)
+
+        when:
+            tested.enrich(context, sharedSchemaContextRequest)
+
+        then:
+            0 * isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer.produce(_)
+    }
+
     TableKey tk(String table, String schema)
     {
         new TableKey(table, schema)
