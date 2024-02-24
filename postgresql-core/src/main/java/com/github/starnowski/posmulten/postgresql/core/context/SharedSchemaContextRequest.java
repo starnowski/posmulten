@@ -1,25 +1,25 @@
 /**
- *     Posmulten library is an open-source project for the generation
- *     of SQL DDL statements that make it easy for implementation of
- *     Shared Schema Multi-tenancy strategy via the Row Security
- *     Policies in the Postgres database.
- *
- *     Copyright (C) 2020  Szymon Tarnowski
- *
- *     This library is free software; you can redistribute it and/or
- *     modify it under the terms of the GNU Lesser General Public
- *     License as published by the Free Software Foundation; either
- *     version 2.1 of the License, or (at your option) any later version.
- *
- *     This library is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *     Lesser General Public License for more details.
- *
- *     You should have received a copy of the GNU Lesser General Public
- *     License along with this library; if not, write to the Free Software
- *     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301
- *     USA
+ * Posmulten library is an open-source project for the generation
+ * of SQL DDL statements that make it easy for implementation of
+ * Shared Schema Multi-tenancy strategy via the Row Security
+ * Policies in the Postgres database.
+ * <p>
+ * Copyright (C) 2020  Szymon Tarnowski
+ * <p>
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ * <p>
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301
+ * USA
  */
 package com.github.starnowski.posmulten.postgresql.core.context;
 
@@ -81,13 +81,13 @@ public class SharedSchemaContextRequest implements Cloneable {
      * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.TableRLSPolicyEnricher
      * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.TenantColumnSQLDefinitionsEnricher
      */
-    private Map<TableKey, ITableColumns> tableColumnsList = new HashMap<>();
+    private final Map<TableKey, ITableColumns> tableColumnsList = new HashMap<>();
     /**
      * Collection that stores table identifiers ({@link TableKey}) for which a column for tenant identifier should be added.
      *
      * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.TenantColumnSQLDefinitionsEnricher
      */
-    private Set<TableKey> createTenantColumnTableLists = new HashSet<>();
+    private final Set<TableKey> createTenantColumnTableLists = new HashSet<>();
     /**
      * The toggle, based on which builder is going to <a href="https://www.postgresql.org/docs/9.6/ddl-rowsecurity.html">force row level security for table owner</a>
      * (true) or not (false). The default value is false.
@@ -102,7 +102,7 @@ public class SharedSchemaContextRequest implements Cloneable {
      *
      * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.TableRLSPolicyEnricher
      */
-    private Map<TableKey, ITableRLSPolicyProperties> tableRLSPolicies = new HashMap<>();
+    private final Map<TableKey, ITableRLSPolicyProperties> tableRLSPolicies = new HashMap<>();
     /**
      * A map that stores information that are required to the creation of constraint that checks if foreign key in the main table refers to record
      * that exists in the foreign table and which belongs to the current tenant.
@@ -112,10 +112,13 @@ public class SharedSchemaContextRequest implements Cloneable {
      * contains the set of column names for the foreign key ({@link SameTenantConstraintForForeignKey#foreignKeyColumns}).
      * The object of type {@link ISameTenantConstraintForForeignKeyProperties} is the map value.
      *
+     * In case when {@link #createForeignKeyConstraintWithTenantColumn} has true value then instead of function that checks
+     * if specific reference key exist in scope of tenant, the foreign key constraint that tenant column is part of composite key is being created.
+     *
      * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricher
      * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher
      */
-    private Map<SameTenantConstraintForForeignKey, ISameTenantConstraintForForeignKeyProperties> sameTenantConstraintForForeignKeyProperties = new HashMap<>();
+    private final Map<SameTenantConstraintForForeignKey, ISameTenantConstraintForForeignKeyProperties> sameTenantConstraintForForeignKeyProperties = new HashMap<>();
     /**
      * Default grantee for which the row level security should be added.
      *
@@ -127,7 +130,7 @@ public class SharedSchemaContextRequest implements Cloneable {
      * assigned to the current tenant for the specified table. The map key is a table identifier ({@link TableKey}), and the
      * value is the function name.
      */
-    private Map<TableKey, String> functionThatChecksIfRecordExistsInTableNames = new HashMap<>();
+    private final Map<TableKey, String> functionThatChecksIfRecordExistsInTableNames = new HashMap<>();
 
     /**
      * A list that stores invalid tenant identifiers.
@@ -163,7 +166,7 @@ public class SharedSchemaContextRequest implements Cloneable {
      *
      * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.IsTenantIdentifierValidConstraintEnricher
      */
-    private Map<TableKey, String> tenantValidConstraintCustomNamePerTables = new HashMap<>();
+    private final Map<TableKey, String> tenantValidConstraintCustomNamePerTables = new HashMap<>();
 
     /**
      * The toggle, based on which builder is going to add default value declaration for tenant column in all tables that required rls policy
@@ -178,7 +181,7 @@ public class SharedSchemaContextRequest implements Cloneable {
      *
      * @see com.github.starnowski.posmulten.postgresql.core.context.enrichers.DefaultValueForTenantColumnEnricher
      */
-    private Set<TableKey> tablesThatAddingOfTenantColumnDefaultValueShouldBeSkipped = new HashSet<>();
+    private final Set<TableKey> tablesThatAddingOfTenantColumnDefaultValueShouldBeSkipped = new HashSet<>();
 
     /**
      * Maximum allowed length for the identifier.
@@ -197,7 +200,20 @@ public class SharedSchemaContextRequest implements Cloneable {
     /**
      * Pairs of custom SQL definitions and their positions.
      */
-    private List<CustomSQLDefinitionPair> customSQLDefinitionPairs = new ArrayList<>();
+    private final List<CustomSQLDefinitionPair> customSQLDefinitionPairs = new ArrayList<>();
+    /**
+     * Create the foreign key constraint that tenant column is part of composite key. Instead of function that check if
+     * reference key exist for specific tenant.
+     */
+    private Boolean createForeignKeyConstraintWithTenantColumn;
+
+    public Boolean getCreateForeignKeyConstraintWithTenantColumn() {
+        return createForeignKeyConstraintWithTenantColumn;
+    }
+
+    public void setCreateForeignKeyConstraintWithTenantColumn(Boolean createForeignKeyConstraintWithTenantColumn) {
+        this.createForeignKeyConstraintWithTenantColumn = createForeignKeyConstraintWithTenantColumn;
+    }
 
     public String getDefaultTenantIdColumn() {
         return defaultTenantIdColumn;
