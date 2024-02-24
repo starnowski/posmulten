@@ -49,9 +49,13 @@ class ForeignKeyConstraintStatementProducerItTest extends Specification {
             sqlUtils.assertAllCheckingStatementsArePassing(definition)
 
         where:
-            testConstraintName          |   testSchema                                      | testTable     |   referenceSchema                                     |   referenceTable  |   foreignKeyColumnMappings
-            "f_key_users"               |   "non_public_schema_with_composite_key"          | "posts"       |   "non_public_schema_with_composite_key"              |   "users"         |   [tenant_id : "tenant_id", user_id: "id"]
-            "f_key_users_groups_to_users"               |   "non_public_schema_with_composite_key"          | "users_groups"       |   "non_public_schema_with_composite_key"              |   "users"         |   [tenant_id : "tenant_id", user_id: "id"]
+            testConstraintName                          |   testSchema                                      | testTable             |   referenceSchema                                     |   referenceTable  |   foreignKeyColumnMappings
+            "f_key_users"                               |   "non_public_schema_with_composite_key"          | "posts"               |   "non_public_schema_with_composite_key"              |   "users"         |   [tenant_id : "tenant_id", user_id: "id"]
+            "f_key_users_groups_to_users"               |   "non_public_schema_with_composite_key"          | "users_groups"        |   "non_public_schema_with_composite_key"              |   "users"         |   [tenant_id : "tenant_id", user_id: "id"]
+            "f_key_posts_to_users"                      |   "non_public_schema_with_composite_key"          | "posts"               |   "non_public_schema_with_composite_key"              |   "users"         |   [tenant_id : "tenant_id", user_id: "id"]
+            "f_key_comments_to_users"                   |   "non_public_schema_with_composite_key"          | "comments"            |   "non_public_schema_with_composite_key"              |   "users"         |   [tenant : "tenant_id", user_id: "id"]
+            "f_comments_to_posts"                       |   "non_public_schema_with_composite_key"          | "comments"            |   "non_public_schema_with_composite_key"              |   "posts"         |   [tenant : "tenant_id", post_id: "id"]
+            "f_comments_to_parent_comment"              |   "non_public_schema_with_composite_key"          | "comments"            |   "non_public_schema_with_composite_key"              |   "comments"      |   [tenant : "tenant", parent_comment_id: "id", parent_comment_user_id: "user_id"]
     }
 
     @Unroll
@@ -77,9 +81,13 @@ class ForeignKeyConstraintStatementProducerItTest extends Specification {
             sqlUtils.assertAllResultForCheckingStatementsAreEqualZero(definition)
 
         where:
-            testConstraintName          |   testSchema                                      | testTable     |   referenceSchema                                     |   referenceTable  |   foreignKeyColumnMappings
-            "f_key_users"               |   "non_public_schema_with_composite_key"          | "posts"       |   "non_public_schema_with_composite_key"              |   "users"         |   [tenant_id : "tenant_id", user_id: "id"]
-            "f_key_users_groups_to_users"               |   "non_public_schema_with_composite_key"          | "users_groups"       |   "non_public_schema_with_composite_key"              |   "users"         |   [tenant_id : "tenant_id", user_id: "id"]
+            testConstraintName                          |   testSchema                                      | testTable             |   referenceSchema                                     |   referenceTable  |   foreignKeyColumnMappings
+            "f_key_users"                               |   "non_public_schema_with_composite_key"          | "posts"               |   "non_public_schema_with_composite_key"              |   "users"         |   [tenant_id : "tenant_id", user_id: "id"]
+            "f_key_users_groups_to_users"               |   "non_public_schema_with_composite_key"          | "users_groups"        |   "non_public_schema_with_composite_key"              |   "users"         |   [tenant_id : "tenant_id", user_id: "id"]
+            "f_key_posts_to_users"                      |   "non_public_schema_with_composite_key"          | "posts"               |   "non_public_schema_with_composite_key"              |   "users"         |   [tenant_id : "tenant_id", user_id: "id"]
+            "f_key_comments_to_users"                   |   "non_public_schema_with_composite_key"          | "comments"            |   "non_public_schema_with_composite_key"              |   "users"         |   [tenant : "tenant_id", user_id: "id"]
+            "f_comments_to_posts"                       |   "non_public_schema_with_composite_key"          | "comments"            |   "non_public_schema_with_composite_key"              |   "posts"         |   [tenant : "tenant_id", post_id: "id"]
+            "f_comments_to_parent_comment"              |   "non_public_schema_with_composite_key"          | "comments"            |   "non_public_schema_with_composite_key"              |   "comments"      |   [tenant : "tenant", parent_comment_id: "id", parent_comment_user_id: "user_id"]
     }
 
 }
