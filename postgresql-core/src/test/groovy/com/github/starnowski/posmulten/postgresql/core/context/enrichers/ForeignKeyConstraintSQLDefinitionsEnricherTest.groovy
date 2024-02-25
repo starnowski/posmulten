@@ -2,22 +2,13 @@ package com.github.starnowski.posmulten.postgresql.core.context.enrichers
 
 import com.github.starnowski.posmulten.postgresql.core.DefaultForeignKeyConstraintStatementParameters
 import com.github.starnowski.posmulten.postgresql.core.ForeignKeyConstraintStatementProducer
-import com.github.starnowski.posmulten.postgresql.core.IForeignKeyConstraintStatementParameters
 import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition
 import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder
-import com.github.starnowski.posmulten.postgresql.core.context.IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer
-import com.github.starnowski.posmulten.postgresql.core.context.IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducerParameters
 import com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContext
 import com.github.starnowski.posmulten.postgresql.core.context.TableKey
-import com.github.starnowski.posmulten.postgresql.core.rls.function.IsRecordBelongsToCurrentTenantFunctionInvocationFactory
 import spock.lang.Specification
 import spock.lang.Unroll
 
-import static com.github.starnowski.posmulten.postgresql.test.utils.MapBuilder.mapBuilder
-import static com.github.starnowski.posmulten.postgresql.test.utils.MapBuilder.mapBuilder
-import static com.github.starnowski.posmulten.postgresql.test.utils.MapBuilder.mapBuilder
-import static com.github.starnowski.posmulten.postgresql.test.utils.MapBuilder.mapBuilder
-import static com.github.starnowski.posmulten.postgresql.test.utils.MapBuilder.mapBuilder
 import static com.github.starnowski.posmulten.postgresql.test.utils.MapBuilder.mapBuilder
 
 class ForeignKeyConstraintSQLDefinitionsEnricherTest extends Specification {
@@ -33,6 +24,7 @@ class ForeignKeyConstraintSQLDefinitionsEnricherTest extends Specification {
                     .createSameTenantConstraintForForeignKey("comments", "users", mapBuilder().put("user_id", "id").build(), "comments_users_fk_con")
                     .createSameTenantConstraintForForeignKey("some_table", "users", mapBuilder().put("owner_id", "id").build(), "some_table_same_tenant_users_con")
                     .createSameTenantConstraintForForeignKey("some_table", "comments", mapBuilder().put("some_comment_id", "uuid").build(), "some_table_comments_const_ten")
+                    .setCreateForeignKeyConstraintWithTenantColumn(true)
             def sharedSchemaContextRequest = builder.getSharedSchemaContextRequestCopy()
             def context = new SharedSchemaContext()
             def usersTableKey = tk("users", schema)
@@ -55,7 +47,7 @@ class ForeignKeyConstraintSQLDefinitionsEnricherTest extends Specification {
                     .withTableName(someTableKey.getTable())
                     .withTableSchema(someTableKey.getSchema())
                     .withReferenceTableKey(usersTableKey)
-                    .withForeignKeyColumnMappings(mapBuilder().put("user_id", "id").build())
+                    .withForeignKeyColumnMappings(mapBuilder().put("owner_id", "id").build())
                     .build()
 
             def expectedSomeTableCommentConstraintParameters = DefaultForeignKeyConstraintStatementParameters.builder()
@@ -69,20 +61,19 @@ class ForeignKeyConstraintSQLDefinitionsEnricherTest extends Specification {
             def isCommentsUserBelongsToSameTenantConstraint = Mock(SQLDefinition)
             def isSomeTableUserBelongsToSameTenantConstraint = Mock(SQLDefinition)
             def isSomeTableCommentBelongsToSameTenantConstraint = Mock(SQLDefinition)
-            def isSomeTableCommentBelongsToSameTenantConstraint1 = Mock(SQLDefinition)
 
         when:
             def result = tested.enrich(context, sharedSchemaContextRequest)
 
         then:
-            1 * foreignKeyConstraintStatementProducer.produce(expectedCommentUserConstraintParameters) >> [isCommentsUserBelongsToSameTenantConstraint]
-            1 * foreignKeyConstraintStatementProducer.produce(expectedSomeTableUserConstraintParameters) >> [isSomeTableUserBelongsToSameTenantConstraint]
-            1 * foreignKeyConstraintStatementProducer.produce(expectedSomeTableCommentConstraintParameters) >> [isSomeTableCommentBelongsToSameTenantConstraint, isSomeTableCommentBelongsToSameTenantConstraint1]
+            1 * foreignKeyConstraintStatementProducer.produce(expectedCommentUserConstraintParameters) >> isCommentsUserBelongsToSameTenantConstraint
+            1 * foreignKeyConstraintStatementProducer.produce(expectedSomeTableUserConstraintParameters) >> isSomeTableUserBelongsToSameTenantConstraint
+            1 * foreignKeyConstraintStatementProducer.produce(expectedSomeTableCommentConstraintParameters) >> isSomeTableCommentBelongsToSameTenantConstraint
             0 * foreignKeyConstraintStatementProducer.produce(_)
             result.getSqlDefinitions().contains(isSomeTableUserBelongsToSameTenantConstraint)
             result.getSqlDefinitions().contains(isSomeTableCommentBelongsToSameTenantConstraint)
             result.getSqlDefinitions().contains(isCommentsUserBelongsToSameTenantConstraint)
-            result.getSqlDefinitions().size() == 4
+            result.getSqlDefinitions().size() == 3
 
         where:
             schema << [null, "public", "some_schema"]

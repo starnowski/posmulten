@@ -3,6 +3,7 @@ package com.github.starnowski.posmulten.postgresql.core;
 import com.github.starnowski.posmulten.postgresql.core.context.TableKey;
 
 import java.util.Map;
+import java.util.Objects;
 
 import static java.util.Collections.unmodifiableMap;
 
@@ -49,6 +50,30 @@ public class DefaultForeignKeyConstraintStatementParameters implements IForeignK
     @Override
     public String getTableSchema() {
         return tableSchema;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DefaultForeignKeyConstraintStatementParameters that = (DefaultForeignKeyConstraintStatementParameters) o;
+        return Objects.equals(foreignKeyColumnMappings, that.foreignKeyColumnMappings) && Objects.equals(constraintName, that.constraintName) && Objects.equals(tableName, that.tableName) && Objects.equals(tableSchema, that.tableSchema) && Objects.equals(referenceTableKey, that.referenceTableKey);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(foreignKeyColumnMappings, constraintName, tableName, tableSchema, referenceTableKey);
+    }
+
+    @Override
+    public String toString() {
+        return "DefaultForeignKeyConstraintStatementParameters{" +
+                "foreignKeyColumnMappings=" + foreignKeyColumnMappings +
+                ", constraintName='" + constraintName + '\'' +
+                ", tableName='" + tableName + '\'' +
+                ", tableSchema='" + tableSchema + '\'' +
+                ", referenceTableKey=" + referenceTableKey +
+                '}';
     }
 
     public static class Builder {
