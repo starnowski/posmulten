@@ -4,6 +4,7 @@ import com.github.starnowski.posmulten.postgresql.core.DefaultForeignKeyConstrai
 import com.github.starnowski.posmulten.postgresql.core.ForeignKeyConstraintStatementProducer
 import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition
 import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder
+import com.github.starnowski.posmulten.postgresql.core.context.IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer
 import com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContext
 import com.github.starnowski.posmulten.postgresql.core.context.TableKey
 import spock.lang.Specification
@@ -74,6 +75,30 @@ class ForeignKeyConstraintSQLDefinitionsEnricherTest extends Specification {
             result.getSqlDefinitions().contains(isSomeTableCommentBelongsToSameTenantConstraint)
             result.getSqlDefinitions().contains(isCommentsUserBelongsToSameTenantConstraint)
             result.getSqlDefinitions().size() == 3
+
+        where:
+            schema << [null, "public", "some_schema"]
+    }
+
+    @Unroll
+    def "should return non sql definition when there is no foreign key constraint request for schema #schema"()
+    {
+        given:
+            def builder = new DefaultSharedSchemaContextBuilder(schema)
+                    .createRLSPolicyForTable("users", [:], "tenant", "N/A")
+                    .createRLSPolicyForTable("comments", [:], "tenant_id", "N/A")
+                    .createRLSPolicyForTable("some_table", [:], "tenant_xxx_id", "N/A")
+            def sharedSchemaContextRequest = builder.getSharedSchemaContextRequestCopy()
+            def context = new SharedSchemaContext()
+            def foreignKeyConstraintStatementProducer = Mock(ForeignKeyConstraintStatementProducer)
+            def tested = new ForeignKeyConstraintSQLDefinitionsEnricher(foreignKeyConstraintStatementProducer)
+
+        when:
+            def result = tested.enrich(context, sharedSchemaContextRequest)
+
+        then:
+            0 * foreignKeyConstraintStatementProducer.produce(_)
+            result.getSqlDefinitions().size() == 0
 
         where:
             schema << [null, "public", "some_schema"]
