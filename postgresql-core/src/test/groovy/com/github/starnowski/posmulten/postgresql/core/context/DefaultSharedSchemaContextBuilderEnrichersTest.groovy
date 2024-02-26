@@ -44,6 +44,7 @@ class DefaultSharedSchemaContextBuilderEnrichersTest extends Specification {
                                                 IsTenantValidFunctionInvocationFactoryEnricher.class, TenantColumnSQLDefinitionsEnricher.class,
                                                 TableRLSSettingsSQLDefinitionsEnricher.class, TableRLSPolicyEnricher.class,
                                                 IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricher.class, IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher.class,
+                                                ForeignKeyConstraintSQLDefinitionsEnricher.class,
                                                 IsTenantIdentifierValidConstraintEnricher.class, DefaultValueForTenantColumnEnricher.class,
                                                 CurrentTenantIdPropertyTypeEnricher.class, CustomSQLDefinitionsAtEndEnricher.class]
             DefaultSharedSchemaContextBuilder builder = new DefaultSharedSchemaContextBuilder()
