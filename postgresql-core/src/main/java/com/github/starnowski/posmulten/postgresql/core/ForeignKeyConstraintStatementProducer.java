@@ -28,6 +28,9 @@ public class ForeignKeyConstraintStatementProducer extends AbstractConstraintPro
     @Override
     protected void validate(IForeignKeyConstraintStatementParameters parameters) {
         super.validate(parameters);
+        if (parameters.getReferenceTableKey() == null) {
+            throw new IllegalArgumentException("Reference table key object can not be null");
+        }
         if (parameters.getReferenceTableKey().getTable() == null || parameters.getReferenceTableKey().getTable().trim().isEmpty()) {
             throw new IllegalArgumentException("Reference table can not be null or empty");
         }
