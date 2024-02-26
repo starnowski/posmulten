@@ -7,6 +7,8 @@ import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSche
 import com.github.starnowski.posmulten.postgresql.core.context.IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer
 import com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContext
 import com.github.starnowski.posmulten.postgresql.core.context.TableKey
+import com.github.starnowski.posmulten.postgresql.core.context.exceptions.MissingConstraintNameDeclarationForTableException
+import com.github.starnowski.posmulten.postgresql.core.rls.function.IsRecordBelongsToCurrentTenantFunctionInvocationFactory
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -102,6 +104,45 @@ class ForeignKeyConstraintSQLDefinitionsEnricherTest extends Specification {
 
         where:
             schema << [null, "public", "some_schema"]
+    }
+
+    @Unroll
+    def "should throw an exception when there missing the constraint name declaration for table #table and schema #schema and foreign keys #foreignKeyPrimaryKeyColumnsMappings"()
+    {
+        given:
+            def builder = new DefaultSharedSchemaContextBuilder(schema)
+                    .createRLSPolicyForTable("tab1", [:], "tenant", "N/A")
+                    .createRLSPolicyForTable(table, [:], "tenant_xxx_id", "N/A")
+                    .createSameTenantConstraintForForeignKey(table, "tab1", foreignKeyPrimaryKeyColumnsMappings, null)
+                    .setCreateForeignKeyConstraintWithTenantColumn(true)
+            def sharedSchemaContextRequest = builder.getSharedSchemaContextRequestCopy()
+            def context = new SharedSchemaContext()
+
+            def foreignKeyConstraintStatementProducer = Mock(ForeignKeyConstraintStatementProducer)
+            def tested = new ForeignKeyConstraintSQLDefinitionsEnricher(foreignKeyConstraintStatementProducer)
+
+        when:
+            tested.enrich(context, sharedSchemaContextRequest)
+
+        then:
+            def ex = thrown(MissingConstraintNameDeclarationForTableException)
+
+        and: "message should match"
+            ex.message == expectedMessage
+
+        and: "exception object should have correct table key"
+            ex.tableKey == tk(table, schema)
+
+        and: "exception object should have correct foreign keys set"
+            ex.foreignKeysColumns == foreignKeyPrimaryKeyColumnsMappings.keySet()
+
+        where:
+            table       |   schema              |   foreignKeyPrimaryKeyColumnsMappings                     ||  expectedMessage
+            "users"     |   null                |   [uuid: "N/A"]                                           ||  "Missing constraint name that in table users and schema null checks  if the foreign key columns (uuid) refers to records that belong to the same tenant"
+            "users"     |   "public"            |   [uuid: "N/A"]                                           ||  "Missing constraint name that in table users and schema public checks  if the foreign key columns (uuid) refers to records that belong to the same tenant"
+            "users"     |   "some_other_schema" |   [uuid: "N/A"]                                           ||  "Missing constraint name that in table users and schema some_other_schema checks  if the foreign key columns (uuid) refers to records that belong to the same tenant"
+            "comments"  |   "some_other_schema" |   [comment_id: "N/A", comment_owner_id: "N/A"]            ||  "Missing constraint name that in table comments and schema some_other_schema checks  if the foreign key columns (comment_id, comment_owner_id) refers to records that belong to the same tenant"
+            "comments"  |   null                |   [comment_id: "N/A", comment_owner_id: "N/A"]            ||  "Missing constraint name that in table comments and schema null checks  if the foreign key columns (comment_id, comment_owner_id) refers to records that belong to the same tenant"
     }
 
     TableKey tk(String table, String schema)
