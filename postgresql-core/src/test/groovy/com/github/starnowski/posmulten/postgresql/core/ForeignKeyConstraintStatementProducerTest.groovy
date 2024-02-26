@@ -90,6 +90,26 @@ class ForeignKeyConstraintStatementProducerTest extends AbstractConstraintProduc
             schema << ["", " ", "          "]
     }
 
+    @Unroll
+    def "should throw an exception of type 'IllegalArgumentException' when the foreignKeyColumnMappings is empty or null (#foreignKeyColumnMappings)" () {
+        given:
+            def parameters = returnCorrectParametersMockObject()
+            parameters.getConstraintName() >> "fk_some"
+
+        when:
+            returnTestedObject().produce(parameters)
+
+        then:
+            _ * parameters.getForeignKeyColumnMappings() >> foreignKeyColumnMappings
+            def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+            ex.message == "The foreign keys column mappings map object can not be null or empty"
+
+        where:
+            foreignKeyColumnMappings << [[:], null]
+    }
+
     @Override
     def shouldSkipDefaultCreationTest() {
         true
