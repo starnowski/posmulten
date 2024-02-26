@@ -34,6 +34,26 @@ class ForeignKeyConstraintStatementProducerTest extends AbstractConstraintProduc
             "some_fk_const"     |   "secondary" | "users"   |   "secondary"     |   "comments"      |   [x1 : "c", uuu : "a", ranV : "b"]       ||  "ALTER TABLE IF EXISTS \"secondary\".\"users\" ADD CONSTRAINT some_fk_const FOREIGN KEY (ranV, uuu, x1) REFERENCES \"secondary\".\"comments\" (b, a, c) MATCH SIMPLE;"
     }
 
+    @Unroll
+    def "should throw an exception of type 'IllegalArgumentException' when the table name is empty or null (#table)" () {
+        given:
+            def parameters = returnCorrectParametersMockObject()
+            parameters.getConstraintName() >> "fk_some"
+
+        when:
+            returnTestedObject().produce(parameters)
+
+        then:
+            _ * parameters.getReferenceTableKey() >> new TableKey(table, null)
+            def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+            ex.message == "Reference table can not be null or empty"
+
+        where:
+            table << ["", " ", "          ", null]
+    }
+
     @Override
     def shouldSkipDefaultCreationTest() {
         true

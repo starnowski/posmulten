@@ -24,4 +24,12 @@ public class ForeignKeyConstraintStatementProducer extends AbstractConstraintPro
                 ") MATCH SIMPLE;";
         return sb;
     }
+
+    @Override
+    protected void validate(IForeignKeyConstraintStatementParameters parameters) {
+        super.validate(parameters);
+        if (parameters.getReferenceTableKey().getTable() == null || parameters.getReferenceTableKey().getTable().trim().isEmpty()) {
+            throw new IllegalArgumentException("Reference table can not be null or empty");
+        }
+    }
 }
