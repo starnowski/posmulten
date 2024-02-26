@@ -34,5 +34,8 @@ public class ForeignKeyConstraintStatementProducer extends AbstractConstraintPro
         if (parameters.getReferenceTableKey().getTable() == null || parameters.getReferenceTableKey().getTable().trim().isEmpty()) {
             throw new IllegalArgumentException("Reference table can not be null or empty");
         }
+        if (parameters.getReferenceTableKey().getSchema() != null && parameters.getReferenceTableKey().getSchema().trim().isEmpty()) {
+            throw new IllegalArgumentException("Reference schema can not be empty");
+        }
     }
 }

@@ -70,6 +70,26 @@ class ForeignKeyConstraintStatementProducerTest extends AbstractConstraintProduc
             table << ["", " ", "          ", null]
     }
 
+    @Unroll
+    def "should throw an exception of type 'IllegalArgumentException' when the reference schema is null (#schema)" () {
+        given:
+            def parameters = returnCorrectParametersMockObject()
+            parameters.getConstraintName() >> "fk_some"
+
+        when:
+            returnTestedObject().produce(parameters)
+
+        then:
+            _ * parameters.getReferenceTableKey() >> new TableKey("xxxx", schema)
+            def ex = thrown(IllegalArgumentException.class)
+
+        and: "exception should have correct message"
+            ex.message == "Reference schema can not be empty"
+
+        where:
+            schema << ["", " ", "          "]
+    }
+
     @Override
     def shouldSkipDefaultCreationTest() {
         true
