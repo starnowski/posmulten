@@ -42,7 +42,7 @@ class ForeignKeyConstraintSQLDefinitionsEnricherTest extends Specification {
                     .withTableName(commentsTableKey.getTable())
                     .withTableSchema(commentsTableKey.getSchema())
                     .withReferenceTableKey(usersTableKey)
-                    .withForeignKeyColumnMappings(mapBuilder().put("user_id", "id").build())
+                    .withForeignKeyColumnMappings(mapBuilder().put("user_id", "id").put("tenant_id", "tenant").build())
                     .build()
 
             def expectedSomeTableUserConstraintParameters = DefaultForeignKeyConstraintStatementParameters.builder()
@@ -50,7 +50,7 @@ class ForeignKeyConstraintSQLDefinitionsEnricherTest extends Specification {
                     .withTableName(someTableKey.getTable())
                     .withTableSchema(someTableKey.getSchema())
                     .withReferenceTableKey(usersTableKey)
-                    .withForeignKeyColumnMappings(mapBuilder().put("owner_id", "id").build())
+                    .withForeignKeyColumnMappings(mapBuilder().put("owner_id", "id").put("tenant_xxx_id", "tenant").build())
                     .build()
 
             def expectedSomeTableCommentConstraintParameters = DefaultForeignKeyConstraintStatementParameters.builder()
@@ -58,7 +58,7 @@ class ForeignKeyConstraintSQLDefinitionsEnricherTest extends Specification {
                     .withTableName(someTableKey.getTable())
                     .withTableSchema(someTableKey.getSchema())
                     .withReferenceTableKey(commentsTableKey)
-                    .withForeignKeyColumnMappings(mapBuilder().put("some_comment_id", "uuid").build())
+                    .withForeignKeyColumnMappings(mapBuilder().put("some_comment_id", "uuid").put("tenant_xxx_id", "tenant_id").build())
                     .build()
 
             def isCommentsUserBelongsToSameTenantConstraint = Mock(SQLDefinition)
@@ -105,6 +105,8 @@ class ForeignKeyConstraintSQLDefinitionsEnricherTest extends Specification {
         where:
             schema << [null, "public", "some_schema"]
     }
+
+    //TODO Ignore if flag is false
 
     @Unroll
     def "should throw an exception when there missing the constraint name declaration for table #table and schema #schema and foreign keys #foreignKeyPrimaryKeyColumnsMappings"()

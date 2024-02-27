@@ -3,15 +3,14 @@ package com.github.starnowski.posmulten.postgresql.core.context.enrichers;
 import com.github.starnowski.posmulten.postgresql.core.DefaultForeignKeyConstraintStatementParameters;
 import com.github.starnowski.posmulten.postgresql.core.ForeignKeyConstraintStatementProducer;
 import com.github.starnowski.posmulten.postgresql.core.IForeignKeyConstraintStatementParameters;
-import com.github.starnowski.posmulten.postgresql.core.context.ISameTenantConstraintForForeignKeyProperties;
-import com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaContext;
-import com.github.starnowski.posmulten.postgresql.core.context.SameTenantConstraintForForeignKey;
-import com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContextRequest;
+import com.github.starnowski.posmulten.postgresql.core.context.*;
 import com.github.starnowski.posmulten.postgresql.core.context.exceptions.MissingConstraintNameDeclarationForTableException;
 import com.github.starnowski.posmulten.postgresql.core.context.exceptions.SharedSchemaContextBuilderException;
 import com.github.starnowski.posmulten.postgresql.core.util.Pair;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static java.lang.Boolean.TRUE;
 import static java.lang.String.format;
@@ -46,12 +45,16 @@ public class ForeignKeyConstraintSQLDefinitionsEnricher implements ISharedSchema
                                 key.getMainTable().getSchema(),
                                 key.getForeignKeyColumns().stream().sorted().collect(joining(", "))));
             }
+            String mainTableTenantColumn = request.resolveTenantColumnByTableKey(key.getMainTable());
+            String referenceTableTenantColumn = request.resolveTenantColumnByTableKey(key.getForeignKeyTable());
+            Map<String, String> foreignKeyPrimaryKeyColumnsMappings = new HashMap<>(requestProperties.getForeignKeyPrimaryKeyColumnsMappings());
+            foreignKeyPrimaryKeyColumnsMappings.put(mainTableTenantColumn, referenceTableTenantColumn);
             IForeignKeyConstraintStatementParameters parameters = DefaultForeignKeyConstraintStatementParameters.builder()
                     .withConstraintName(requestProperties.getConstraintName())
                     .withTableName(key.getMainTable().getTable())
                     .withTableSchema(key.getMainTable().getSchema())
                     .withReferenceTableKey(key.getForeignKeyTable())
-                    .withForeignKeyColumnMappings(requestProperties.getForeignKeyPrimaryKeyColumnsMappings())
+                    .withForeignKeyColumnMappings(foreignKeyPrimaryKeyColumnsMappings)
                     .build();
             context.addSQLDefinition(producer.produce(parameters));
         }
