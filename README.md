@@ -48,7 +48,8 @@
     * [Setting function name that checks if passed identifier is the same as current tenant identifier](#setting-function-name-that-checks-if-passed-identifier-is-the-same-as-current-tenant-identifier)
     * [Setting function name that checks if passed primary key for a specific table exists for the current tenant](#setting-function-name-that-checks-if-passed-primary-key-for-a-specific-table-exists-for-the-current-tenant)
     * [Setting a list of invalid tenant identifier values](#setting-a-list-of-invalid-tenant-identifier-values)
-        * [Setting custom name for table tenant column constraint](#setting-custom-name-for-table-tenant-column-constraint)
+    * [Setting custom name for table tenant column constraint](#setting-custom-name-for-table-tenant-column-constraint)
+    * [Setting foreign key constraint where tenant column is part of composite key](#setting-foreign-key-constraint-where-tenant-column-is-part-of-composite-key)
     * [Naming convention and its constraints](#naming-convention-and-its-constraints)
 * [Adding custom sql definitions](#adding-custom-sql-definitions)
 * [Using template variables in context builder](#using-template-variables-in-context-builder)
@@ -1108,6 +1109,29 @@ the builder will produce below statements:
 ALTER TABLE "users" ADD CONSTRAINT tenant_should_be_valid CHECK (tenant_id IS NULL OR is_tenant_id_valid(tenant_id));
 ALTER TABLE "posts" ADD CONSTRAINT posts_tenant_is_valid CHECK (tenant_id IS NULL OR is_tenant_id_valid(tenant_id));
 ```
+
+#### Setting foreign key constraint where tenant column is part of composite key
+There might be a situation when your database model assumes that the tenant column is part of the table's primary key and, that being said, also part of the foreign keys.
+This means that, for example, all your unique constraint has to cover tenant column value.
+Having such a database model allows easier migration of tenant data between databases.
+Below there is example how to specify such shared context object:
+We have two tables, "users" and "notifications"
+
+```java
+DefaultSharedSchemaContextBuilder defaultSharedSchemaContextBuilder = new DefaultSharedSchemaContextBuilder(getSchemaForSharedSchemaContextBuilderInitialization());
+//....
+        // We have two tables, "users" and "notifications".
+        // Setting tables for which RLS should be created
+        defaultSharedSchemaContextBuilder.createRLSPolicyForTable("users", mapBuilder().put(("id", "bigint").build() , "tenant_id", "users_table_rls_policy");
+        defaultSharedSchemaContextBuilder.createRLSPolicyForTable("notifications", mapBuilder().put(("uuid", "uuid").build(), "notification_tenant", "notifications_table_rls_policy");
+        
+        // Setting foreign key constraint declaration with method 'createSameTenantConstraintForForeignKey'
+        defaultSharedSchemaContextBuilder.createSameTenantConstraintForForeignKey("notification, "users", mapBuilder().put("user_id", "id").build(), "notification_users_fk");
+```
+
+
+
+TODO
 
 ### Naming convention and its constraints
 By default function name can have a length from 1 to 63 characters. 
