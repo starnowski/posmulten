@@ -90,6 +90,7 @@ class ForeignKeyConstraintSQLDefinitionsEnricherTest extends Specification {
                     .createRLSPolicyForTable("users", [:], "tenant", "N/A")
                     .createRLSPolicyForTable("comments", [:], "tenant_id", "N/A")
                     .createRLSPolicyForTable("some_table", [:], "tenant_xxx_id", "N/A")
+                    .setCreateForeignKeyConstraintWithTenantColumn(true)
             def sharedSchemaContextRequest = builder.getSharedSchemaContextRequestCopy()
             def context = new SharedSchemaContext()
             def foreignKeyConstraintStatementProducer = Mock(ForeignKeyConstraintStatementProducer)
@@ -106,7 +107,32 @@ class ForeignKeyConstraintSQLDefinitionsEnricherTest extends Specification {
             schema << [null, "public", "some_schema"]
     }
 
-    //TODO Ignore if flag is false
+    @Unroll
+    def "should return non sql definition when the createForeignKeyConstraintWithTenantColumn is null or false (#flag)"()
+    {
+        given:
+            def builder = new DefaultSharedSchemaContextBuilder(null)
+                    .createRLSPolicyForTable("users", [:], "tenant", "N/A")
+                    .createRLSPolicyForTable("comments", [:], "tenant_id", "N/A")
+                    .createRLSPolicyForTable("some_table", [:], "tenant_xxx_id", "N/A")
+                    .setCreateForeignKeyConstraintWithTenantColumn(flag)
+            def sharedSchemaContextRequest = builder.getSharedSchemaContextRequestCopy()
+            def context = new SharedSchemaContext()
+            def foreignKeyConstraintStatementProducer = Mock(ForeignKeyConstraintStatementProducer)
+            def tested = new ForeignKeyConstraintSQLDefinitionsEnricher(foreignKeyConstraintStatementProducer)
+
+        when:
+            def result = tested.enrich(context, sharedSchemaContextRequest)
+
+        then:
+            result.getSqlDefinitions().size() == 0
+
+        and: "no SQLDefinition producer should be called"
+            0 * foreignKeyConstraintStatementProducer.produce(_)
+
+        where:
+            flag << [null, false]
+    }
 
     @Unroll
     def "should throw an exception when there missing the constraint name declaration for table #table and schema #schema and foreign keys #foreignKeyPrimaryKeyColumnsMappings"()
