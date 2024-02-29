@@ -1118,8 +1118,12 @@ Below there is example how to specify such shared context object:
 We have two tables, "users" and "notifications".
 
 ```java
-DefaultSharedSchemaContextBuilder defaultSharedSchemaContextBuilder = new DefaultSharedSchemaContextBuilder(getSchemaForSharedSchemaContextBuilderInitialization());
-//....
+        DefaultSharedSchemaContextBuilder defaultSharedSchemaContextBuilder = new DefaultSharedSchemaContextBuilder(null);
+
+        // Setting flag with true value
+        defaultSharedSchemaContextBuilder.setCreateForeignKeyConstraintWithTenantColumn(true);
+        
+        //....
         // We have two tables, "users" and "notifications".
         // Setting tables for which RLS should be created
         defaultSharedSchemaContextBuilder.createRLSPolicyForTable("users", mapBuilder().put(("id", "bigint").build() , "tenant_id", "users_table_rls_policy");
@@ -1132,9 +1136,12 @@ DefaultSharedSchemaContextBuilder defaultSharedSchemaContextBuilder = new Defaul
         //defaultSharedSchemaContextBuilder.setNameForFunctionThatChecksIfRecordExistsInTable("users", "is_user_belongs_to_current_tenant");
 ```
 
+the builder will produce below statements:
 
+```sql
+ALTER TABLE IF EXISTS "notifications" ADD CONSTRAINT notification_users_fk FOREIGN KEY (notification_tenant, user_id) REFERENCES "users" (tenant_id, id) MATCH SIMPLE;
+```
 
-TODO
 
 ### Naming convention and its constraints
 By default function name can have a length from 1 to 63 characters. 
