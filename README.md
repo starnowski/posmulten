@@ -1115,7 +1115,7 @@ There might be a situation when your database model assumes that the tenant colu
 This means that, for example, all your unique constraint has to cover tenant column value.
 Having such a database model allows easier migration of tenant data between databases.
 Below there is example how to specify such shared context object:
-We have two tables, "users" and "notifications"
+We have two tables, "users" and "notifications".
 
 ```java
 DefaultSharedSchemaContextBuilder defaultSharedSchemaContextBuilder = new DefaultSharedSchemaContextBuilder(getSchemaForSharedSchemaContextBuilderInitialization());
@@ -1127,6 +1127,9 @@ DefaultSharedSchemaContextBuilder defaultSharedSchemaContextBuilder = new Defaul
         
         // Setting foreign key constraint declaration with method 'createSameTenantConstraintForForeignKey'
         defaultSharedSchemaContextBuilder.createSameTenantConstraintForForeignKey("notification, "users", mapBuilder().put("user_id", "id").build(), "notification_users_fk");
+
+        // Setting a name for a function that checks if user record (reference table for our foreign key example) exists is not needed
+        //defaultSharedSchemaContextBuilder.setNameForFunctionThatChecksIfRecordExistsInTable("users", "is_user_belongs_to_current_tenant");
 ```
 
 
