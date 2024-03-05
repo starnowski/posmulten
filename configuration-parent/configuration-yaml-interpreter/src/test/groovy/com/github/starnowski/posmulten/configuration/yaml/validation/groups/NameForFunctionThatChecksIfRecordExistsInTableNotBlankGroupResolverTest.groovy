@@ -23,7 +23,6 @@ class NameForFunctionThatChecksIfRecordExistsInTableNotBlankGroupResolverTest ex
             value << [null, false]
     }
 
-    @Unroll
     def "should return null as group validation class when createForeignKeyConstraintWithTenantColumn is true"(){
         given:
             def tested = new NameForFunctionThatChecksIfRecordExistsInTableNotBlankGroupResolver()

@@ -8,6 +8,6 @@ public class NameForFunctionThatChecksIfRecordExistsInTableNotBlankGroupResolver
 
     @Override
     public Class<PrimaryKeyDefinition.NameForFunctionThatChecksIfRecordExistsInTableNotBlank> resolveForSharedSchemaContextConfiguration(SharedSchemaContextConfiguration sharedSchemaContextConfiguration, ValidatorGroupResolverContext context) {
-        return null;
+        return Boolean.TRUE.equals(sharedSchemaContextConfiguration.getCreateForeignKeyConstraintWithTenantColumn()) ? null : PrimaryKeyDefinition.NameForFunctionThatChecksIfRecordExistsInTableNotBlank.class;
     }
 }
