@@ -76,6 +76,7 @@ public class DefaultSharedSchemaContextBuilderConfigurationEnricher {
         if (contextConfiguration.getCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables() != null) {
             builder.setCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables(contextConfiguration.getCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables());
         }
+        builder.setCreateForeignKeyConstraintWithTenantColumn(contextConfiguration.getCreateForeignKeyConstraintWithTenantColumn());
         validTenantValueConstraintConfigurationEnricher.enrich(builder, contextConfiguration.getValidTenantValueConstraint());
         tablesEntriesEnricher.enrich(builder, contextConfiguration.getTables());
         sqlDefinitionsValidationEnricher.enrich(builder, contextConfiguration.getSqlDefinitionsValidation());
