@@ -142,7 +142,7 @@ The rls_policy entry is required to specify the RLS policy for table.
 | Property name |   Type    | Required                                                                                                                     |   Nullable    |   Description |
 |---------------|-----------|------------------------------------------------------------------------------------------------------------------------------|---------------|---------------|
 |[pk_columns_name_to_type](#pk_columns_name_to_type)   |   Map  | No                                                                                                                           |   Yes  |   Map of primary key columns where the key is column name and value is its type   |
-|[name_for_function_that_checks_if_record_exists_in_table](#name_for_function_that_checks_if_record_exists_in_table)   |   String  | if flag [create_foreignkey_constraint_with_tenant_column](#create_foreignkey_constraint_with_tenant_column) is null or false |   No  |   Function name that checks if passed primary key for a specific table exists for the current tenant   |
+|[name_for_function_that_checks_if_record_exists_in_table](#name_for_function_that_checks_if_record_exists_in_table)   |   String  | if flag [create_foreignkey_constraint_with_tenant_column](#create_foreignkey_constraint_with_tenant_column) is null or false |   Yes  |   Function name that checks if passed primary key for a specific table exists for the current tenant   |
 
 ### foreign_keys
 An array of objects that defines foreign key constraint for a table with RLS policy.
