@@ -5,6 +5,8 @@ import com.github.starnowski.posmulten.configuration.yaml.model.SharedSchemaCont
 import java.util.Collections;
 import java.util.List;
 
+import static java.util.stream.Collectors.toList;
+
 public class ValidatorGroupsResolver {
 
     private final List<ValidatorGroupResolver> validatorGroupResolvers;
@@ -22,7 +24,6 @@ public class ValidatorGroupsResolver {
     }
 
     public List<Class> resolveForSharedSchemaContextConfiguration(SharedSchemaContextConfiguration sharedSchemaContextConfiguration, ValidatorGroupResolver.ValidatorGroupResolverContext validatorGroupResolverContext) {
-        //ValidatorGroupResolver
-        return null;
+        return validatorGroupResolvers.stream().map(resolver -> resolver.resolveForSharedSchemaContextConfiguration(sharedSchemaContextConfiguration, validatorGroupResolverContext)).collect(toList());
     }
 }
