@@ -71,6 +71,10 @@
             <groupId>org.jeasy</groupId>
             <artifactId>easy-random-core</artifactId>
         </dependency>
+        <dependency>
+            <groupId>net.bytebuddy</groupId>
+            <artifactId>byte-buddy</artifactId>
+        </dependency>
     </dependencies>
 
     <profiles>

@@ -4,5 +4,9 @@ import com.github.starnowski.posmulten.configuration.yaml.model.SharedSchemaCont
 
 public interface ValidatorGroupResolver<T> {
 
-    Class<T> resolveForSharedSchemaContextConfiguration(SharedSchemaContextConfiguration sharedSchemaContextConfiguration);
+    Class<T> resolveForSharedSchemaContextConfiguration(SharedSchemaContextConfiguration sharedSchemaContextConfiguration, ValidatorGroupResolverContext context);
+
+    interface ValidatorGroupResolverContext {
+
+    }
 }

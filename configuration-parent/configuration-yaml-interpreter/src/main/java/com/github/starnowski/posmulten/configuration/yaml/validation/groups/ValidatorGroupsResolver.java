@@ -2,7 +2,7 @@ package com.github.starnowski.posmulten.configuration.yaml.validation.groups;
 
 import com.github.starnowski.posmulten.configuration.yaml.model.SharedSchemaContextConfiguration;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class ValidatorGroupsResolver {
@@ -10,7 +10,7 @@ public class ValidatorGroupsResolver {
     private final List<ValidatorGroupResolver> validatorGroupResolvers;
 
     public ValidatorGroupsResolver() {
-        this(Arrays.asList(new NameForFunctionThatChecksIfRecordExistsInTableNotBlankGroupResolver()));
+        this(Collections.singletonList(new NameForFunctionThatChecksIfRecordExistsInTableNotBlankGroupResolver()));
     }
 
     public ValidatorGroupsResolver(List<ValidatorGroupResolver> validatorGroupResolvers) {
@@ -21,7 +21,7 @@ public class ValidatorGroupsResolver {
         return validatorGroupResolvers;
     }
 
-    List<Class> resolveForSharedSchemaContextConfiguration(SharedSchemaContextConfiguration sharedSchemaContextConfiguration) {
+    public List<Class> resolveForSharedSchemaContextConfiguration(SharedSchemaContextConfiguration sharedSchemaContextConfiguration, ValidatorGroupResolver.ValidatorGroupResolverContext validatorGroupResolverContext) {
         //ValidatorGroupResolver
         return null;
     }
