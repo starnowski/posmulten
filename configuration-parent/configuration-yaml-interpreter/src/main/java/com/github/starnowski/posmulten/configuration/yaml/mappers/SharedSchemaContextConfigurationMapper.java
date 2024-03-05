@@ -39,6 +39,7 @@ public class SharedSchemaContextConfigurationMapper implements IConfigurationMap
     @Override
     public SharedSchemaContextConfiguration map(com.github.starnowski.posmulten.configuration.core.model.SharedSchemaContextConfiguration input) {
         return input == null ? null : new SharedSchemaContextConfiguration()
+                .setCreateForeignKeyConstraintWithTenantColumn(input.getCreateForeignKeyConstraintWithTenantColumn())
                 .setCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables(input.getCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables())
                 .setCurrentTenantIdProperty(input.getCurrentTenantIdProperty() == null ? null : valueOf(input.getCurrentTenantIdProperty()))
                 .setCurrentTenantIdPropertyType(input.getCurrentTenantIdPropertyType() == null ? null : valueOf(input.getCurrentTenantIdPropertyType()))
@@ -59,6 +60,7 @@ public class SharedSchemaContextConfigurationMapper implements IConfigurationMap
     @Override
     public com.github.starnowski.posmulten.configuration.core.model.SharedSchemaContextConfiguration unmap(SharedSchemaContextConfiguration output) {
         return output == null ? null : new com.github.starnowski.posmulten.configuration.core.model.SharedSchemaContextConfiguration()
+                .setCreateForeignKeyConstraintWithTenantColumn(output.getCreateForeignKeyConstraintWithTenantColumn())
                 .setCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables(output.getCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables())
                 .setCurrentTenantIdProperty(output.getCurrentTenantIdProperty() == null ? null : output.getCurrentTenantIdProperty().getValue())
                 .setCurrentTenantIdPropertyType(output.getCurrentTenantIdPropertyType() == null ? null : output.getCurrentTenantIdPropertyType().getValue())

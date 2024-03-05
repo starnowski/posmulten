@@ -25,7 +25,7 @@ class ValidatorGroupsResolverTest extends Specification {
             def vgr1 = Mock(ValidatorGroupResolver)
             def vgr2 = Mock(ValidatorGroupResolver)
             def tested = new ValidatorGroupsResolver([vgr1, vgr2])
-            def sharedSchemaContextConfiguration = Mock(SharedSchemaContextConfiguration)
+            def sharedSchemaContextConfiguration = new SharedSchemaContextConfiguration()
             def validatorGroupResolverContext = Mock(ValidatorGroupResolver.ValidatorGroupResolverContext)
 
         when:

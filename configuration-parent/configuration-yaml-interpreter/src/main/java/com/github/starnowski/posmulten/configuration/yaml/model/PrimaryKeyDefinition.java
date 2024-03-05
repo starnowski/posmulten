@@ -49,5 +49,5 @@ public class PrimaryKeyDefinition {
     @JsonProperty(value = "name_for_function_that_checks_if_record_exists_in_table")
     private String nameForFunctionThatChecksIfRecordExistsInTable;
 
-    public static class NameForFunctionThatChecksIfRecordExistsInTableNotBlank {}
+    public interface NameForFunctionThatChecksIfRecordExistsInTableNotBlank {}
 }
