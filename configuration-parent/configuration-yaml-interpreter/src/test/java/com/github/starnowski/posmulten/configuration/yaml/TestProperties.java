@@ -3,6 +3,7 @@ package com.github.starnowski.posmulten.configuration.yaml;
 public class TestProperties {
 
     public static final String ALL_FIELDS_FILE_PATH = "/com/github/starnowski/posmulten/configuration/yaml/all-fields.yaml";
+    public static final String ALL_FIELDS_WITH_FOREIGN_KEY_CONSTRAINT_FILE_PATH = "/com/github/starnowski/posmulten/configuration/yaml/all-fields-with-foreign-key-constraint.yaml";
     public static final String INTEGRATION_TESTS_FILE_PATH = "/com/github/starnowski/posmulten/configuration/yaml/integration-tests-configuration.yaml";
     public static final String DISABLED_SQL_DEFINITIONS_VALIDATION_FILE_PATH = "/com/github/starnowski/posmulten/configuration/yaml/disabled-sql-definitions-validation.yaml";
     public static final String SQL_DEFINITIONS_VALIDATION_WITH_CUSTOM_CONSTRAINTS_FILE_PATH = "/com/github/starnowski/posmulten/configuration/yaml/sql-definitions-validation-with-custom-constraints.yaml";

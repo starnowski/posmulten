@@ -43,11 +43,11 @@ class SharedSchemaContextConfigurationYamlDaoTest extends AbstractSpecification 
             result
 
         where:
-            filePath << [ALL_FIELDS_FILE_PATH, ONLY_MANDATORY_FIELDS_FILE_PATH, INTEGRATION_TESTS_FILE_PATH, ONLY_MANDATORY_FIELDS_WITH_TEMPLATE_VALUES_FILE_PATH]
+            filePath << [ALL_FIELDS_FILE_PATH, ONLY_MANDATORY_FIELDS_FILE_PATH, INTEGRATION_TESTS_FILE_PATH, ONLY_MANDATORY_FIELDS_WITH_TEMPLATE_VALUES_FILE_PATH, ALL_FIELDS_WITH_FOREIGN_KEY_CONSTRAINT_FILE_PATH]
     }
 
     @Unroll
-    def "should return non null object based on conten of file #filePath"()
+    def "should return non null object based on content of file #filePath"()
     {
         given:
             def resolvedPath = resolveFilePath(filePath)

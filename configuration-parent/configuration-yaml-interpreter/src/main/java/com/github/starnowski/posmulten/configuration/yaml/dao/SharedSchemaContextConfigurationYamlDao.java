@@ -38,10 +38,7 @@ import javax.validation.groups.Default;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
@@ -80,7 +77,7 @@ public class SharedSchemaContextConfigurationYamlDao {
         ValidatorGroupsResolver validatorGroupsResolver = new ValidatorGroupsResolver();
         List<Class> validationGroupsList = validatorGroupsResolver.resolveForSharedSchemaContextConfiguration(configuration, null);
         validationGroupsList.add(Default.class);
-        Class[] validationGroups = validationGroupsList.toArray(new Class[0]);
+        Class[] validationGroups = validationGroupsList.stream().filter(Objects::nonNull).collect(toList()).toArray(new Class[0]);
         Set<ConstraintViolation<SharedSchemaContextConfiguration>> errors = validator.validate(configuration, validationGroups);
         if (!errors.isEmpty()) {
             throw new YamlInvalidSchema(prepareErrorsMessages(errors));
