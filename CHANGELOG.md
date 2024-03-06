@@ -50,7 +50,7 @@ https://www.markdownguide.org/basic-syntax/
     - Added property ignoreCreationOfConstraintThatChecksIfRecordBelongsToCurrentTenant in com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContextRequest type. [301](https://github.com/starnowski/posmulten/issues/301)
     - Added getter and setter method for property createForeignKeyConstraintWithTenantColumn in com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContextRequest type. [301](https://github.com/starnowski/posmulten/issues/301)
     - Added getter and setter method for property ignoreCreationOfConstraintThatChecksIfRecordBelongsToCurrentTenant in com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContextRequest type. [301](https://github.com/starnowski/posmulten/issues/301)
-
+    - Added com.github.starnowski.posmulten.postgresql.core.context.enrichers.ForeignKeyConstraintSQLDefinitionsEnricher type. [301](https://github.com/starnowski/posmulten/issues/301)
     
 ## [0.8.0] - 2023-11-20
 
