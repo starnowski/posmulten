@@ -1,13 +1,44 @@
 package com.github.starnowski.posmulten.postgresql.core.rls
 
-
 import spock.lang.Specification
 import spock.lang.Unroll
 
 abstract class AbstractConstraintProducerTest<X extends IConstraintProducerParameters, P extends AbstractConstraintProducer<X>> extends Specification {
 
     @Unroll
-    def "should return correct definition based on the generic parameters object for table #table and schema #schema with constraint name #constraintName"()
+    def "should return correct definition for creation script based on the generic parameters object for table #table and schema #schema with constraint name #constraintName"()
+    {
+        given:
+            def parameters = returnCorrectParametersMockObject()
+            if (shouldSkipDefaultCreationTest()) {
+                return
+            }
+
+        when:
+            def definition = returnTestedObject().produce(parameters)
+
+        then:
+            _ * parameters.getConstraintName() >> constraintName
+            _ * parameters.getTableName() >> table
+            _ * parameters.getTableSchema() >> schema
+            definition.getCreateScript() ==~ expectedCreateStatementPattern
+
+        where:
+            table           |   schema          |   constraintName          ||   expectedCreateStatementPattern
+            "users"         |   "public"        |    "const_1"              ||   /ALTER TABLE "public"\."users" ADD CONSTRAINT const_1 CHECK .*;/
+            "users"         |   null            |    "const_1"              ||   /ALTER TABLE "users" ADD CONSTRAINT const_1 CHECK .*;/
+            "users"         |   null            |    "constraint_222"       ||   /ALTER TABLE "users" ADD CONSTRAINT constraint_222 CHECK .*;/
+            "notifications" |   null            |    "constraint_XXX"       ||   /ALTER TABLE "notifications" ADD CONSTRAINT constraint_XXX CHECK .*;/
+            "notifications" |   "other_schema"  |    "fk_constraint"        ||   /ALTER TABLE "other_schema"\."notifications" ADD CONSTRAINT fk_constraint CHECK .*;/
+    }
+
+    def shouldSkipDefaultCreationTest()
+    {
+        false
+    }
+
+    @Unroll
+    def "should return correct definition for drop script based on the generic parameters object for table #table and schema #schema with constraint name #constraintName"()
     {
         given:
             def parameters = returnCorrectParametersMockObject()
@@ -20,15 +51,14 @@ abstract class AbstractConstraintProducerTest<X extends IConstraintProducerParam
             _ * parameters.getTableName() >> table
             _ * parameters.getTableSchema() >> schema
             definition.getDropScript() == expectedDropStatement
-            definition.getCreateScript() ==~ expectedCreateStatementPattern
 
         where:
-            table           |   schema          |   constraintName          ||  expectedDropStatement                                                                       |   expectedCreateStatementPattern
-            "users"         |   "public"        |    "const_1"              ||  "ALTER TABLE \"public\".\"users\" DROP CONSTRAINT IF EXISTS const_1;"                       |   /ALTER TABLE "public"\."users" ADD CONSTRAINT const_1 CHECK .*;/
-            "users"         |   null            |    "const_1"              ||  "ALTER TABLE \"users\" DROP CONSTRAINT IF EXISTS const_1;"                                  |   /ALTER TABLE "users" ADD CONSTRAINT const_1 CHECK .*;/
-            "users"         |   null            |    "constraint_222"       ||  "ALTER TABLE \"users\" DROP CONSTRAINT IF EXISTS constraint_222;"                           |   /ALTER TABLE "users" ADD CONSTRAINT constraint_222 CHECK .*;/
-            "notifications" |   null            |    "constraint_XXX"       ||  "ALTER TABLE \"notifications\" DROP CONSTRAINT IF EXISTS constraint_XXX;"                   |   /ALTER TABLE "notifications" ADD CONSTRAINT constraint_XXX CHECK .*;/
-            "notifications" |   "other_schema"  |    "fk_constraint"        ||  "ALTER TABLE \"other_schema\".\"notifications\" DROP CONSTRAINT IF EXISTS fk_constraint;"   |   /ALTER TABLE "other_schema"\."notifications" ADD CONSTRAINT fk_constraint CHECK .*;/
+            table           |   schema          |   constraintName          ||  expectedDropStatement
+            "users"         |   "public"        |    "const_1"              ||  "ALTER TABLE \"public\".\"users\" DROP CONSTRAINT IF EXISTS const_1;"
+            "users"         |   null            |    "const_1"              ||  "ALTER TABLE \"users\" DROP CONSTRAINT IF EXISTS const_1;"
+            "users"         |   null            |    "constraint_222"       ||  "ALTER TABLE \"users\" DROP CONSTRAINT IF EXISTS constraint_222;"
+            "notifications" |   null            |    "constraint_XXX"       ||  "ALTER TABLE \"notifications\" DROP CONSTRAINT IF EXISTS constraint_XXX;"
+            "notifications" |   "other_schema"  |    "fk_constraint"        ||  "ALTER TABLE \"other_schema\".\"notifications\" DROP CONSTRAINT IF EXISTS fk_constraint;"
     }
 
     @Unroll

@@ -31,6 +31,27 @@ https://www.markdownguide.org/basic-syntax/
 
 ## [Unreleased]
 
+### Added
+
+- Add functionality that create foreign key instead of constraint that check if foreign key belongs to tenant [301](https://github.com/starnowski/posmulten/issues/301)
+    - Added property createForeignKeyConstraintWithTenantColumn in com.github.starnowski.posmulten.configuration.core.model.SharedSchemaContextConfiguration type. [301](https://github.com/starnowski/posmulten/issues/301)
+    - Added com.github.starnowski.posmulten.configuration.yaml.model.PrimaryKeyDefinition.NameForFunctionThatChecksIfRecordExistsInTableNotBlank type. [301](https://github.com/starnowski/posmulten/issues/301)
+    - Added property createForeignKeyConstraintWithTenantColumn in com.github.starnowski.posmulten.configuration.yaml.model.SharedSchemaContextConfiguration type. [301](https://github.com/starnowski/posmulten/issues/301)
+    - Added getter and setter method for property createForeignKeyConstraintWithTenantColumn in com.github.starnowski.posmulten.configuration.yaml.model.SharedSchemaContextConfiguration type. [301](https://github.com/starnowski/posmulten/issues/301)
+    - Added com.github.starnowski.posmulten.configuration.yaml.validation.groups.NameForFunctionThatChecksIfRecordExistsInTableNotBlankGroupResolver type. [301](https://github.com/starnowski/posmulten/issues/301)
+    - Added com.github.starnowski.posmulten.configuration.yaml.validation.groups.ValidatorGroupResolver type. [301](https://github.com/starnowski/posmulten/issues/301)
+    - Added com.github.starnowski.posmulten.configuration.yaml.validation.groups.ValidatorGroupsResolver type. [301](https://github.com/starnowski/posmulten/issues/301)
+    - Added com.github.starnowski.posmulten.postgresql.core.DefaultForeignKeyConstraintStatementParameters type. [301](https://github.com/starnowski/posmulten/issues/301)
+    - Added com.github.starnowski.posmulten.postgresql.core.ForeignKeyConstraintStatementProducer type. [301](https://github.com/starnowski/posmulten/issues/301)
+    - Added com.github.starnowski.posmulten.postgresql.core.IForeignKeyConstraintStatementParameters type. [301](https://github.com/starnowski/posmulten/issues/301)
+    - Added com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#setIgnoreCreationOfConstraintThatChecksIfRecordBelongsToCurrentTenant(Boolean) method. [301](https://github.com/starnowski/posmulten/issues/301)
+    - Added com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder#setCreateForeignKeyConstraintWithTenantColumn(Boolean) method. [301](https://github.com/starnowski/posmulten/issues/301)
+    - Added property createForeignKeyConstraintWithTenantColumn in com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContextRequest type. [301](https://github.com/starnowski/posmulten/issues/301)
+    - Added property ignoreCreationOfConstraintThatChecksIfRecordBelongsToCurrentTenant in com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContextRequest type. [301](https://github.com/starnowski/posmulten/issues/301)
+    - Added getter and setter method for property createForeignKeyConstraintWithTenantColumn in com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContextRequest type. [301](https://github.com/starnowski/posmulten/issues/301)
+    - Added getter and setter method for property ignoreCreationOfConstraintThatChecksIfRecordBelongsToCurrentTenant in com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContextRequest type. [301](https://github.com/starnowski/posmulten/issues/301)
+    - Added com.github.starnowski.posmulten.postgresql.core.context.enrichers.ForeignKeyConstraintSQLDefinitionsEnricher type. [301](https://github.com/starnowski/posmulten/issues/301)
+    
 ## [0.8.0] - 2023-11-20
 
 ### Added
@@ -74,7 +95,7 @@ https://www.markdownguide.org/basic-syntax/
 
 ### Added
 
-- Added dectorator for sqlDefinitions that replace template value like {{schema}} to any passed value in all definitions [283](https://github.com/starnowski/posmulten/issues/283)
+- Added decorator for sqlDefinitions that replace template value like {{schema}} to any passed value in all definitions [283](https://github.com/starnowski/posmulten/issues/283)
     - Added com.github.starnowski.posmulten.configuration.jar.Constants type. [283](https://github.com/starnowski/posmulten/issues/283)
     - Added com.github.starnowski.posmulten.configuration.jar.DDLScriptsGeneratorRunner type. [283](https://github.com/starnowski/posmulten/issues/283)
     - Added com.github.starnowski.posmulten.configuration.jar.SystemPropertiesDefaultDecoratorContextSupplier type. [283](https://github.com/starnowski/posmulten/issues/283)
