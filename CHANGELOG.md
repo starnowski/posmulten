@@ -31,6 +31,14 @@ https://www.markdownguide.org/basic-syntax/
 
 ## [Unreleased]
 
+### Added
+
+- Add functionality that create foreign key instead of constraint that check if foreign key belongs to tenant [301](https://github.com/starnowski/posmulten/issues/301)
+    - Added property createForeignKeyConstraintWithTenantColumn in com.github.starnowski.posmulten.configuration.core.model.SharedSchemaContextConfiguration type. [301](https://github.com/starnowski/posmulten/issues/301)
+    - Added com.github.starnowski.posmulten.configuration.yaml.model.PrimaryKeyDefinition.NameForFunctionThatChecksIfRecordExistsInTableNotBlank type. [301](https://github.com/starnowski/posmulten/issues/301)
+
+
+
 ## [0.8.0] - 2023-11-20
 
 ### Added
