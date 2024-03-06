@@ -29,17 +29,16 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.github.starnowski.posmulten.configuration.yaml.exceptions.YamlInvalidSchema;
 import com.github.starnowski.posmulten.configuration.yaml.model.SharedSchemaContextConfiguration;
+import com.github.starnowski.posmulten.configuration.yaml.validation.groups.ValidatorGroupsResolver;
 import org.hibernate.validator.internal.engine.path.NodeImpl;
 import org.hibernate.validator.internal.engine.path.PathImpl;
 
 import javax.validation.*;
+import javax.validation.groups.Default;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
@@ -75,7 +74,11 @@ public class SharedSchemaContextConfigurationYamlDao {
     private void validateConfigurationObject(SharedSchemaContextConfiguration configuration) throws YamlInvalidSchema {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
-        Set<ConstraintViolation<SharedSchemaContextConfiguration>> errors = validator.validate(configuration);
+        ValidatorGroupsResolver validatorGroupsResolver = new ValidatorGroupsResolver();
+        List<Class> validationGroupsList = validatorGroupsResolver.resolveForSharedSchemaContextConfiguration(configuration, null);
+        validationGroupsList.add(Default.class);
+        Class[] validationGroups = validationGroupsList.stream().filter(Objects::nonNull).collect(toList()).toArray(new Class[0]);
+        Set<ConstraintViolation<SharedSchemaContextConfiguration>> errors = validator.validate(configuration, validationGroups);
         if (!errors.isEmpty()) {
             throw new YamlInvalidSchema(prepareErrorsMessages(errors));
         }

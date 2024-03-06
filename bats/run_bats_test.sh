@@ -59,6 +59,21 @@ export DATABASE_TESTS_SCHEMA_NAME="non_public_schema"
 bats -rt "$SCRIPT_DIR/schema_structure"
 DATABASE_TESTS_NON_PUBLIC_SCHEMA_RESULT="$?"
 
+echo "Running schema structure tests for 'non_public_schema_with_composite_key' schema"
+export DATABASE_TESTS_SCHEMA_NAME="non_public_schema_with_composite_key"
+bats -rt "$SCRIPT_DIR/schema_structure"
+DATABASE_TESTS_NON_PUBLIC_SCHEMA_COMPOSITE_KEY_RESULT="$?"
+
+echo "Running schema keys tests for 'public' schema"
+export DATABASE_TESTS_SCHEMA_NAME="public"
+bats -rt "$SCRIPT_DIR/schema_keys"
+DATABASE_TESTS_PUBLIC_SCHEMA_KEYS_RESULT="$?"
+
+echo "Running schema keys tests for 'non_public_schema' schema"
+export DATABASE_TESTS_SCHEMA_NAME="non_public_schema"
+bats -rt "$SCRIPT_DIR/schema_keys"
+DATABASE_TESTS_NON_PUBLIC_SCHEMA_KEYS_RESULT="$?"
+
 echo "Running rls policy tests for 'public' schema"
 export DATABASE_TESTS_SCHEMA_NAME="public"
 bats -rt "$SCRIPT_DIR/rls_policy"
@@ -69,7 +84,12 @@ export DATABASE_TESTS_SCHEMA_NAME="non_public_schema"
 bats -rt "$SCRIPT_DIR/rls_policy"
 DATABASE_TESTS_NON_PUBLIC_RLS_RESULT="$?"
 
-[[ $DATABASE_TESTS_RESULT -eq 0 ]] && [[ $DATABASE_TESTS_PUBLIC_SCHEMA_RESULT -eq 0 ]] && [[ $DATABASE_TESTS_NON_PUBLIC_SCHEMA_RESULT -eq 0 ]] && [[ $DATABASE_TESTS_PUBLIC_RLS_RESULT -eq 0 ]] && [[ $DATABASE_TESTS_NON_PUBLIC_RLS_RESULT -eq 0 ]]
+echo "Running rls policy tests for 'non_public_schema_with_composite_key' schema"
+export DATABASE_TESTS_SCHEMA_NAME="non_public_schema_with_composite_key"
+bats -rt "$SCRIPT_DIR/rls_policy"
+DATABASE_TESTS_NON_PUBLIC_SCHEMA_COMPOSITE_KEY_RLS_RESULT="$?"
+
+[[ $DATABASE_TESTS_RESULT -eq 0 ]] && [[ $DATABASE_TESTS_PUBLIC_SCHEMA_RESULT -eq 0 ]] && [[ $DATABASE_TESTS_NON_PUBLIC_SCHEMA_RESULT -eq 0 ]] && [[ $DATABASE_TESTS_PUBLIC_SCHEMA_KEYS_RESULT -eq 0 ]] && [[ $DATABASE_TESTS_NON_PUBLIC_SCHEMA_KEYS_RESULT -eq 0 ]]  && [[ $DATABASE_TESTS_PUBLIC_RLS_RESULT -eq 0 ]] && [[ $DATABASE_TESTS_NON_PUBLIC_RLS_RESULT -eq 0 ]] && [[ $DATABASE_TESTS_NON_PUBLIC_SCHEMA_COMPOSITE_KEY_RESULT -eq 0 ]] && [[ $DATABASE_TESTS_NON_PUBLIC_SCHEMA_COMPOSITE_KEY_RLS_RESULT -eq 0 ]]
 
 #
 # TIPS!

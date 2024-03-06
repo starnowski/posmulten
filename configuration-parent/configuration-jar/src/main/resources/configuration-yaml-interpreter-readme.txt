@@ -75,17 +75,18 @@ tables:
 
 ## Root properties
 
-| Property name |   Type    |   Required    |   Nullable    |   Description |
-|---------------|-----------|---------------|---------------|---------------|
-|#default_schema |    String  |   Yes |   Yes |   Name of the database schema for which changes should be applied. |
-|#current_tenant_id_property_type |  String  |   No    |   No  |   Type of column that stores tenant identifier and it is also the type of parameters for some generated functions. |
-|#current_tenant_id_property |  String  |   No    |   No  |   Property name that stores the value of tenant identifier in the database connection. |
-|#get_current_tenant_id_function_name |  String  |   No    |   No  |   Name of the function that returns the current tenant identifier. |
-|#set_current_tenant_id_function_name |  String  |   No    |   No  |   Name of the function that sets the current tenant identifier. |
-|#tenant_has_authorities_function_name |  String  |   No    |   No  |   Name of the function name that checks if the current tenant has authority to a table row. |
-|#force_row_level_security_for_table_owner |  Boolean  |   No    |   Yes  |   Option that force RLS policy for table owner. |
-|#default_tenant_id_column |  String  |   No    |   No  |   Default name of column that stores tenant identifier. |
-|#grantee |  String  |   Yes    |   No  |   Database user for which RLS policy is going to be created. |
+| Property name |   Type    |   Required    |   Nullable    | Description                                                                                                                                               |
+|---------------|-----------|---------------|---------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|
+|#default_schema |    String  |   Yes |   Yes | Name of the database schema for which changes should be applied.                                                                                          |
+|#current_tenant_id_property_type |  String  |   No    |   No  | Type of column that stores tenant identifier and it is also the type of parameters for some generated functions.                                          |
+|#current_tenant_id_property |  String  |   No    |   No  | Property name that stores the value of tenant identifier in the database connection.                                                                      |
+|#get_current_tenant_id_function_name |  String  |   No    |   No  | Name of the function that returns the current tenant identifier.                                                                                          |
+|#set_current_tenant_id_function_name |  String  |   No    |   No  | Name of the function that sets the current tenant identifier.                                                                                             |
+|#tenant_has_authorities_function_name |  String  |   No    |   No  | Name of the function name that checks if the current tenant has authority to a table row.                                                                 |
+|#force_row_level_security_for_table_owner |  Boolean  |   No    |   Yes  | Option that force RLS policy for table owner.                                                                                                             |
+|#default_tenant_id_column |  String  |   No    |   No  | Default name of column that stores tenant identifier.                                                                                                     |
+|#grantee |  String  |   Yes    |   No  | Database user for which RLS policy is going to be created.                                                                                                |
+|#create_foreignkey_constraint_with_tenant_column |  Boolean  |   No    |   Yes  | Create the foreign key constraint that tenant column is part of composite key. Instead of function that check if reference key exist for specific tenant. |
 
 | Property name |   Type    |   Required    |   Nullable    |   Description |
 |---------------|-----------|---------------|---------------|---------------|
@@ -145,10 +146,10 @@ The rls\_policy entry is required to specify the RLS policy for table.
 
 ### primary_key_definition
 
-| Property name |   Type    |   Required    |   Nullable    |   Description |
-|---------------|-----------|---------------|---------------|---------------|
-|#pk_columns_name_to_type   |   Map  |   No |   Yes  |   Map of primary key columns where the key is column name and value is its type   |
-|#name_for_function_that_checks_if_record_exists_in_table   |   String  |   Yes |   No  |   Function name that checks if passed primary key for a specific table exists for the current tenant   |
+| Property name |   Type    | Required                                                                                                                     |   Nullable    |   Description |
+|---------------|-----------|------------------------------------------------------------------------------------------------------------------------------|---------------|---------------|
+|#pk_columns_name_to_type   |   Map  | No                                                                                                                           |   Yes  |   Map of primary key columns where the key is column name and value is its type   |
+|#name_for_function_that_checks_if_record_exists_in_table   |   String  | if flag #create_foreignkey_constraint_with_tenant_column is null or false |   Yes  |   Function name that checks if passed primary key for a specific table exists for the current tenant   |
 
 ### foreign_keys
 
@@ -436,6 +437,19 @@ grantee: "application-user"
 
 For more information please check https://github.com/starnowski/posmulten#setting-default-database-user-for-rls-policy.
 
+### create_foreignkey_constraint_with_tenant_column
+
+Create the foreign key constraint that tenant column is part of composite key.
+Instead of function that check if reference key exist for specific tenant.
+
+Example:
+
+```yaml
+create_foreignkey_constraint_with_tenant_column: true
+```
+
+For more information please check https://github.com/starnowski/posmulten#setting-foreign-key-constraint-where-tenant-column-is-part-of-composite-key.
+
 ### set_current_tenant_identifier_as_default_value_for_tenant_column_in_all_tables
 
 Generate a statement that sets a default value for the tenant column in all tables.
@@ -518,6 +532,7 @@ This is a valid case for example for a many-to-many relation table without any p
 
 Function name that checks if passed primary key for a specific table exists for the current tenant.
 This function is generated only when some other table has a #foreign_keys that refers to the primary key table.
+if flag #create_foreignkey_constraint_with_tenant_column is null or false then value is mandatory.
 
 For more information please check:
 

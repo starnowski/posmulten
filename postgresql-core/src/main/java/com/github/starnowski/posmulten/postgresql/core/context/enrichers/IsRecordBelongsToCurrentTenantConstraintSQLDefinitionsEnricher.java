@@ -31,6 +31,7 @@ import com.github.starnowski.posmulten.postgresql.core.util.Pair;
 
 import java.util.List;
 
+import static java.lang.Boolean.TRUE;
 import static java.lang.String.format;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
@@ -49,6 +50,9 @@ public class IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher impl
 
     @Override
     public ISharedSchemaContext enrich(ISharedSchemaContext context, SharedSchemaContextRequest request) throws MissingConstraintNameDeclarationForTableException, MissingIsRecordBelongsToCurrentTenantFunctionInvocationFactoryException {
+        if (TRUE.equals(request.getCreateForeignKeyConstraintWithTenantColumn()) || TRUE.equals(request.getIgnoreCreationOfConstraintThatChecksIfRecordBelongsToCurrentTenant())) {
+            return context;
+        }
         List<Pair<SameTenantConstraintForForeignKey, ISameTenantConstraintForForeignKeyProperties>> constrainsRequests = request.getSameTenantConstraintForForeignKeyProperties().entrySet().stream().map(entry -> new Pair<SameTenantConstraintForForeignKey, ISameTenantConstraintForForeignKeyProperties>(entry.getKey(), entry.getValue())).collect(toList());
         for (Pair<SameTenantConstraintForForeignKey, ISameTenantConstraintForForeignKeyProperties> constraintRequest : constrainsRequests)
         {

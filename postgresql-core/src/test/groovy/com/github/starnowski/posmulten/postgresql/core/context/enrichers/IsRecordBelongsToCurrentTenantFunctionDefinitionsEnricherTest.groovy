@@ -13,6 +13,7 @@ import spock.lang.Unroll
 import static com.github.starnowski.posmulten.postgresql.test.utils.MapBuilder.mapBuilder
 import static com.github.starnowski.posmulten.postgresql.core.context.SharedSchemaContextRequest.DEFAULT_TENANT_ID_COLUMN
 import static java.lang.String.format
+import static java.util.Collections.unmodifiableList
 
 class IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricherTest extends Specification {
 
@@ -138,11 +139,11 @@ class IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricherTest extends Spec
     {
         given:
             def builder = new DefaultSharedSchemaContextBuilder(schema)
-            builder.createRLSPolicyForTable("users", [id: "N/A"], "tenant", "N/A")
-            builder.createRLSPolicyForTable("comments", [uuid: "N/A"], "tenant_id", "N/A")
-            builder.createRLSPolicyForTable("some_table", [somedid: "N/A"], "tenant_xxx_id", "N/A")
-            builder.setNameForFunctionThatChecksIfRecordExistsInTable("users", "is_user_exists")
-            builder.setNameForFunctionThatChecksIfRecordExistsInTable("comments", "is_comment_exists")
+            .createRLSPolicyForTable("users", [id: "N/A"], "tenant", "N/A")
+            .createRLSPolicyForTable("comments", [uuid: "N/A"], "tenant_id", "N/A")
+            .createRLSPolicyForTable("some_table", [somedid: "N/A"], "tenant_xxx_id", "N/A")
+            .setNameForFunctionThatChecksIfRecordExistsInTable("users", "is_user_exists")
+            .setNameForFunctionThatChecksIfRecordExistsInTable("comments", "is_comment_exists")
             def sharedSchemaContextRequest = builder.getSharedSchemaContextRequestCopy()
             def context = new SharedSchemaContext()
             def iGetCurrentTenantIdFunctionInvocationFactory = Mock(IGetCurrentTenantIdFunctionInvocationFactory)
@@ -166,9 +167,9 @@ class IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricherTest extends Spec
     {
         given:
             def builder = new DefaultSharedSchemaContextBuilder(schema)
-            builder.createRLSPolicyForTable(table, [id: "N/A"], "tenant", "N/A")
-            builder.createRLSPolicyForTable("comments", [uuid: "N/A"], "tenant_id", "N/A")
-            builder.createSameTenantConstraintForForeignKey("comments", table, mapBuilder().put("N/A", "N/A").build(), "N/A")
+            .createRLSPolicyForTable(table, [id: "N/A"], "tenant", "N/A")
+            .createRLSPolicyForTable("comments", [uuid: "N/A"], "tenant_id", "N/A")
+            .createSameTenantConstraintForForeignKey("comments", table, mapBuilder().put("N/A", "N/A").build(), "N/A")
             def sharedSchemaContextRequest = builder.getSharedSchemaContextRequestCopy()
             def context = new SharedSchemaContext()
             def iGetCurrentTenantIdFunctionInvocationFactory = Mock(IGetCurrentTenantIdFunctionInvocationFactory)
@@ -195,6 +196,46 @@ class IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricherTest extends Spec
             "users"     |   "some_other_schema"
             "comments"  |   "some_other_schema"
             "comments"  |   null
+    }
+
+    def "should ignore creating any sql definition when the createForeignKeyConstraintWithTenantColumn has true value"()
+    {
+        given:
+            def builder = prepareBuilder(null).setCreateForeignKeyConstraintWithTenantColumn(true)
+            def sharedSchemaContextRequest = builder.getSharedSchemaContextRequestCopy()
+            def context = new SharedSchemaContext()
+            def isRecordBelongsToCurrentTenantFunctionDefinitionProducer = Mock(IsRecordBelongsToCurrentTenantFunctionDefinitionProducer)
+            def tested = new IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricher(isRecordBelongsToCurrentTenantFunctionDefinitionProducer)
+            def oldSqlDefinitions = unmodifiableList(context.getSqlDefinitions())
+
+        when:
+            def result = tested.enrich(context, sharedSchemaContextRequest)
+
+        then:
+            oldSqlDefinitions == result.getSqlDefinitions()
+
+        and: "no producer should be executed"
+            0 * isRecordBelongsToCurrentTenantFunctionDefinitionProducer._
+    }
+
+    def "should ignore creating any sql definition when the ignoreCreationOfConstraintThatChecksIfRecordBelongsToCurrentTenant has true value"()
+    {
+        given:
+            def builder = prepareBuilder(null).setIgnoreCreationOfConstraintThatChecksIfRecordBelongsToCurrentTenant(true)
+            def sharedSchemaContextRequest = builder.getSharedSchemaContextRequestCopy()
+            def context = new SharedSchemaContext()
+            def isRecordBelongsToCurrentTenantFunctionDefinitionProducer = Mock(IsRecordBelongsToCurrentTenantFunctionDefinitionProducer)
+            def tested = new IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricher(isRecordBelongsToCurrentTenantFunctionDefinitionProducer)
+            def oldSqlDefinitions = unmodifiableList(context.getSqlDefinitions())
+
+        when:
+            def result = tested.enrich(context, sharedSchemaContextRequest)
+
+        then:
+            oldSqlDefinitions == result.getSqlDefinitions()
+
+        and: "no producer should be executed"
+            0 * isRecordBelongsToCurrentTenantFunctionDefinitionProducer._
     }
 
     TableKey tk(String table, String schema)

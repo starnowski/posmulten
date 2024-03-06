@@ -17,12 +17,12 @@ class IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricherTest extends
     {
         given:
             def builder = new DefaultSharedSchemaContextBuilder(schema)
-            builder.createRLSPolicyForTable("users", [:], "tenant", "N/A")
-            builder.createRLSPolicyForTable("comments", [:], "tenant_id", "N/A")
-            builder.createRLSPolicyForTable("some_table", [:], "tenant_xxx_id", "N/A")
-            builder.createSameTenantConstraintForForeignKey("comments", "users", mapBuilder().put("user_id", "id").build(), "comments_users_fk_con")
-            builder.createSameTenantConstraintForForeignKey("some_table", "users", mapBuilder().put("owner_id", "id").build(), "some_table_same_tenant_users_con")
-            builder.createSameTenantConstraintForForeignKey("some_table", "comments", mapBuilder().put("some_comment_id", "uuid").build(), "some_table_comments_const_ten")
+            .createRLSPolicyForTable("users", [:], "tenant", "N/A")
+            .createRLSPolicyForTable("comments", [:], "tenant_id", "N/A")
+            .createRLSPolicyForTable("some_table", [:], "tenant_xxx_id", "N/A")
+            .createSameTenantConstraintForForeignKey("comments", "users", mapBuilder().put("user_id", "id").build(), "comments_users_fk_con")
+            .createSameTenantConstraintForForeignKey("some_table", "users", mapBuilder().put("owner_id", "id").build(), "some_table_same_tenant_users_con")
+            .createSameTenantConstraintForForeignKey("some_table", "comments", mapBuilder().put("some_comment_id", "uuid").build(), "some_table_comments_const_ten")
             def sharedSchemaContextRequest = builder.getSharedSchemaContextRequestCopy()
             def context = new SharedSchemaContext()
             def usersTableKey = tk("users", schema)
@@ -84,9 +84,9 @@ class IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricherTest extends
     {
         given:
             def builder = new DefaultSharedSchemaContextBuilder(schema)
-            builder.createRLSPolicyForTable("users", [:], "tenant", "N/A")
-            builder.createRLSPolicyForTable("comments", [:], "tenant_id", "N/A")
-            builder.createRLSPolicyForTable("some_table", [:], "tenant_xxx_id", "N/A")
+            .createRLSPolicyForTable("users", [:], "tenant", "N/A")
+            .createRLSPolicyForTable("comments", [:], "tenant_id", "N/A")
+            .createRLSPolicyForTable("some_table", [:], "tenant_xxx_id", "N/A")
             def sharedSchemaContextRequest = builder.getSharedSchemaContextRequestCopy()
             def context = new SharedSchemaContext()
             def isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer = Mock(IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer)
@@ -108,10 +108,10 @@ class IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricherTest extends
     {
         given:
             def builder = new DefaultSharedSchemaContextBuilder(schema)
-            builder.createRLSPolicyForTable("users", [:], "tenant", "N/A")
-            builder.createRLSPolicyForTable("some_table", [:], "tenant_xxx_id", "N/A")
-            builder.createSameTenantConstraintForForeignKey("some_table", "users", mapBuilder().put("owner_id", "id").build(), "some_table_same_tenant_users_owner_con")
-            builder.createSameTenantConstraintForForeignKey("some_table", "users", mapBuilder().put("parent_id", "id").build(), "some_table_same_tenant_users_parent_con")
+            .createRLSPolicyForTable("users", [:], "tenant", "N/A")
+            .createRLSPolicyForTable("some_table", [:], "tenant_xxx_id", "N/A")
+            .createSameTenantConstraintForForeignKey("some_table", "users", mapBuilder().put("owner_id", "id").build(), "some_table_same_tenant_users_owner_con")
+            .createSameTenantConstraintForForeignKey("some_table", "users", mapBuilder().put("parent_id", "id").build(), "some_table_same_tenant_users_parent_con")
             def sharedSchemaContextRequest = builder.getSharedSchemaContextRequestCopy()
             def context = new SharedSchemaContext()
             def usersTableKey = tk("users", schema)
@@ -159,9 +159,9 @@ class IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricherTest extends
     {
         given:
             def builder = new DefaultSharedSchemaContextBuilder(schema)
-            builder.createRLSPolicyForTable("tab1", [:], "tenant", "N/A")
-            builder.createRLSPolicyForTable(table, [:], "tenant_xxx_id", "N/A")
-            builder.createSameTenantConstraintForForeignKey(table, "tab1", foreignKeyPrimaryKeyColumnsMappings, null)
+            .createRLSPolicyForTable("tab1", [:], "tenant", "N/A")
+            .createRLSPolicyForTable(table, [:], "tenant_xxx_id", "N/A")
+            .createSameTenantConstraintForForeignKey(table, "tab1", foreignKeyPrimaryKeyColumnsMappings, null)
             def sharedSchemaContextRequest = builder.getSharedSchemaContextRequestCopy()
             def context = new SharedSchemaContext()
             def usersTableKey = tk("tab1", schema)
@@ -200,9 +200,9 @@ class IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricherTest extends
     {
         given:
             def builder = new DefaultSharedSchemaContextBuilder(schema)
-            builder.createRLSPolicyForTable("tab1", [:], "tenant", "N/A")
-            builder.createRLSPolicyForTable(table, [:], "tenant_xxx_id", "N/A")
-            builder.createSameTenantConstraintForForeignKey("tab1", table, [uuid: "N/A"] , "fun_1")
+            .createRLSPolicyForTable("tab1", [:], "tenant", "N/A")
+            .createRLSPolicyForTable(table, [:], "tenant_xxx_id", "N/A")
+            .createSameTenantConstraintForForeignKey("tab1", table, [uuid: "N/A"] , "fun_1")
             def sharedSchemaContextRequest = builder.getSharedSchemaContextRequestCopy()
             def context = new SharedSchemaContext()
 
@@ -228,6 +228,68 @@ class IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricherTest extends
             "users"     |   "some_other_schema" ||  "Missing object of type IsRecordBelongsToCurrentTenantFunctionInvocationFactory for table users and schema some_other_schema"
             "comments"  |   "some_other_schema" ||  "Missing object of type IsRecordBelongsToCurrentTenantFunctionInvocationFactory for table comments and schema some_other_schema"
             "comments"  |   null                ||  "Missing object of type IsRecordBelongsToCurrentTenantFunctionInvocationFactory for table comments and schema null"
+    }
+
+    @Unroll
+    def "should not create any SQL definitions when the ignoreCreationOfConstraintThatChecksIfRecordBelongsToCurrentTenant is true"()
+    {
+        given:
+            def builder = new DefaultSharedSchemaContextBuilder(null)
+            .createRLSPolicyForTable("users", [:], "tenant", "N/A")
+            .createRLSPolicyForTable("comments", [:], "tenant_id", "N/A")
+            .createRLSPolicyForTable("some_table", [:], "tenant_xxx_id", "N/A")
+            .createSameTenantConstraintForForeignKey("comments", "users", mapBuilder().put("user_id", "id").build(), "comments_users_fk_con")
+            .createSameTenantConstraintForForeignKey("some_table", "users", mapBuilder().put("owner_id", "id").build(), "some_table_same_tenant_users_con")
+            .createSameTenantConstraintForForeignKey("some_table", "comments", mapBuilder().put("some_comment_id", "uuid").build(), "some_table_comments_const_ten")
+            .setIgnoreCreationOfConstraintThatChecksIfRecordBelongsToCurrentTenant(true)
+            def sharedSchemaContextRequest = builder.getSharedSchemaContextRequestCopy()
+            def context = new SharedSchemaContext()
+            def usersTableKey = tk("users", null)
+            def commentsTableKey = tk("comments", null)
+            def isUserBelongsToCurrentTenantFunctionInvocationFactory = Mock(IsRecordBelongsToCurrentTenantFunctionInvocationFactory)
+            def isCommentBelongsToCurrentTenantFunctionInvocationFactory = Mock(IsRecordBelongsToCurrentTenantFunctionInvocationFactory)
+            context.getTableKeysIsRecordBelongsToCurrentTenantFunctionInvocationFactoryMap().put(usersTableKey, isUserBelongsToCurrentTenantFunctionInvocationFactory)
+            context.getTableKeysIsRecordBelongsToCurrentTenantFunctionInvocationFactoryMap().put(commentsTableKey, isCommentBelongsToCurrentTenantFunctionInvocationFactory)
+
+            def isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer = Mock(IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer)
+            def tested = new IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher(isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer)
+
+        when:
+            tested.enrich(context, sharedSchemaContextRequest)
+
+        then:
+            0 * isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer.produce(_)
+    }
+
+    @Unroll
+    def "should not create any SQL definitions when the createForeignKeyConstraintWithTenantColumn is true"()
+    {
+        given:
+            def builder = new DefaultSharedSchemaContextBuilder(null)
+                    .createRLSPolicyForTable("users", [:], "tenant", "N/A")
+                    .createRLSPolicyForTable("comments", [:], "tenant_id", "N/A")
+                    .createRLSPolicyForTable("some_table", [:], "tenant_xxx_id", "N/A")
+                    .createSameTenantConstraintForForeignKey("comments", "users", mapBuilder().put("user_id", "id").build(), "comments_users_fk_con")
+                    .createSameTenantConstraintForForeignKey("some_table", "users", mapBuilder().put("owner_id", "id").build(), "some_table_same_tenant_users_con")
+                    .createSameTenantConstraintForForeignKey("some_table", "comments", mapBuilder().put("some_comment_id", "uuid").build(), "some_table_comments_const_ten")
+                    .setCreateForeignKeyConstraintWithTenantColumn(true)
+            def sharedSchemaContextRequest = builder.getSharedSchemaContextRequestCopy()
+            def context = new SharedSchemaContext()
+            def usersTableKey = tk("users", null)
+            def commentsTableKey = tk("comments", null)
+            def isUserBelongsToCurrentTenantFunctionInvocationFactory = Mock(IsRecordBelongsToCurrentTenantFunctionInvocationFactory)
+            def isCommentBelongsToCurrentTenantFunctionInvocationFactory = Mock(IsRecordBelongsToCurrentTenantFunctionInvocationFactory)
+            context.getTableKeysIsRecordBelongsToCurrentTenantFunctionInvocationFactoryMap().put(usersTableKey, isUserBelongsToCurrentTenantFunctionInvocationFactory)
+            context.getTableKeysIsRecordBelongsToCurrentTenantFunctionInvocationFactoryMap().put(commentsTableKey, isCommentBelongsToCurrentTenantFunctionInvocationFactory)
+
+            def isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer = Mock(IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer)
+            def tested = new IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher(isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer)
+
+        when:
+            tested.enrich(context, sharedSchemaContextRequest)
+
+        then:
+            0 * isRecordBelongsToCurrentTenantConstraintSQLDefinitionsProducer.produce(_)
     }
 
     TableKey tk(String table, String schema)

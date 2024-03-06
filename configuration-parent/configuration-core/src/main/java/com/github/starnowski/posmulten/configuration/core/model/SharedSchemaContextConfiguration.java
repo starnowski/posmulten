@@ -53,4 +53,5 @@ public class SharedSchemaContextConfiguration {
     private List<TableEntry> tables;
     private SqlDefinitionsValidation sqlDefinitionsValidation;
     private List<CustomDefinitionEntry> customDefinitions;
+    private Boolean createForeignKeyConstraintWithTenantColumn;
 }
