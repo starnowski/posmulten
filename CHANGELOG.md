@@ -74,7 +74,7 @@ https://www.markdownguide.org/basic-syntax/
 
 ### Added
 
-- Added dectorator for sqlDefinitions that replace template value like {{schema}} to any passed value in all definitions [283](https://github.com/starnowski/posmulten/issues/283)
+- Added decorator for sqlDefinitions that replace template value like {{schema}} to any passed value in all definitions [283](https://github.com/starnowski/posmulten/issues/283)
     - Added com.github.starnowski.posmulten.configuration.jar.Constants type. [283](https://github.com/starnowski/posmulten/issues/283)
     - Added com.github.starnowski.posmulten.configuration.jar.DDLScriptsGeneratorRunner type. [283](https://github.com/starnowski/posmulten/issues/283)
     - Added com.github.starnowski.posmulten.configuration.jar.SystemPropertiesDefaultDecoratorContextSupplier type. [283](https://github.com/starnowski/posmulten/issues/283)
