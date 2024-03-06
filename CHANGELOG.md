@@ -40,6 +40,10 @@ https://www.markdownguide.org/basic-syntax/
     - Added getter and setter method for property createForeignKeyConstraintWithTenantColumn in com.github.starnowski.posmulten.configuration.yaml.model.SharedSchemaContextConfiguration type. [301](https://github.com/starnowski/posmulten/issues/301)
     - Added com.github.starnowski.posmulten.configuration.yaml.validation.groups.NameForFunctionThatChecksIfRecordExistsInTableNotBlankGroupResolver type. [301](https://github.com/starnowski/posmulten/issues/301)
     - Added com.github.starnowski.posmulten.configuration.yaml.validation.groups.ValidatorGroupResolver type. [301](https://github.com/starnowski/posmulten/issues/301)
+    - Added com.github.starnowski.posmulten.configuration.yaml.validation.groups.ValidatorGroupsResolver type. [301](https://github.com/starnowski/posmulten/issues/301)
+    - Added com.github.starnowski.posmulten.postgresql.core.DefaultForeignKeyConstraintStatementParameters type. [301](https://github.com/starnowski/posmulten/issues/301)
+    - Added com.github.starnowski.posmulten.postgresql.core.ForeignKeyConstraintStatementProducer type. [301](https://github.com/starnowski/posmulten/issues/301)
+    - Added com.github.starnowski.posmulten.postgresql.core.IForeignKeyConstraintStatementParameters type. [301](https://github.com/starnowski/posmulten/issues/301)
 
 
 
