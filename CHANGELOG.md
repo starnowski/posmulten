@@ -9,6 +9,7 @@ https://keepachangelog.com/en/1.0.0/
 https://www.markdownguide.org/basic-syntax/
 
 * [Unreleased](#unreleased)
+* [0.8.1](#081---2024-03-07)
 * [0.8.0](#080---2023-11-20)
 * [0.7.2](#072---2023-07-03)
 * [0.7.1](#071---2023-07-02)
@@ -30,6 +31,8 @@ https://www.markdownguide.org/basic-syntax/
 * [0.2.0](#020---2020-11-14)
 
 ## [Unreleased]
+
+## [0.8.1] - 2024-03-07
 
 ### Added
 
