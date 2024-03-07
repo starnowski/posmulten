@@ -44,7 +44,9 @@ public class PrimaryKeyDefinition {
 
     @JsonProperty(value = "pk_columns_name_to_type")
     private Map<@NotBlank String, @NotBlank String> primaryKeyColumnsNameToTypeMap;
-    @NotBlank
-    @JsonProperty(value = "name_for_function_that_checks_if_record_exists_in_table", required = true)
+    @NotBlank(groups = NameForFunctionThatChecksIfRecordExistsInTableNotBlank.class)
+    @JsonProperty(value = "name_for_function_that_checks_if_record_exists_in_table")
     private String nameForFunctionThatChecksIfRecordExistsInTable;
+
+    public interface NameForFunctionThatChecksIfRecordExistsInTableNotBlank {}
 }

@@ -96,4 +96,9 @@
             <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.custom.CreateColumnsWithCustomSQLDefinitionsTest" />
         </classes>
     </test>
+    <test name="Creation of shared schema context with foreign key constraints">
+        <classes>
+            <class name="com.github.starnowski.posmulten.postgresql.core.functional.tests.sanity.foreignkeyconstraint.ForeignConstraintCheckTest" />
+        </classes>
+    </test>
 </suite>

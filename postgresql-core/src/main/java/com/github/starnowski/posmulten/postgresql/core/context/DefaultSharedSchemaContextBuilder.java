@@ -1,25 +1,25 @@
 /**
- *     Posmulten library is an open-source project for the generation
- *     of SQL DDL statements that make it easy for implementation of
- *     Shared Schema Multi-tenancy strategy via the Row Security
- *     Policies in the Postgres database.
- *
- *     Copyright (C) 2020  Szymon Tarnowski
- *
- *     This library is free software; you can redistribute it and/or
- *     modify it under the terms of the GNU Lesser General Public
- *     License as published by the Free Software Foundation; either
- *     version 2.1 of the License, or (at your option) any later version.
- *
- *     This library is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *     Lesser General Public License for more details.
- *
- *     You should have received a copy of the GNU Lesser General Public
- *     License along with this library; if not, write to the Free Software
- *     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301
- *     USA
+ * Posmulten library is an open-source project for the generation
+ * of SQL DDL statements that make it easy for implementation of
+ * Shared Schema Multi-tenancy strategy via the Row Security
+ * Policies in the Postgres database.
+ * <p>
+ * Copyright (C) 2020  Szymon Tarnowski
+ * <p>
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ * <p>
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301
+ * USA
  */
 package com.github.starnowski.posmulten.postgresql.core.context;
 
@@ -31,7 +31,9 @@ import com.github.starnowski.posmulten.postgresql.core.context.exceptions.Shared
 import com.github.starnowski.posmulten.postgresql.core.context.validators.*;
 import com.github.starnowski.posmulten.postgresql.core.context.validators.factories.IdentifierLengthValidatorFactory;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
@@ -57,7 +59,7 @@ public class DefaultSharedSchemaContextBuilder {
     /**
      * Collection that stores objects of type {@link ISharedSchemaContextEnricher} used for enriching result object ({@link #build()} method).
      */
-    private List<ISharedSchemaContextEnricher> enrichers = asList(new CustomSQLDefinitionsAtBeginningEnricher(), new GetCurrentTenantIdFunctionDefinitionEnricher(), new SetCurrentTenantIdFunctionDefinitionEnricher(), new TenantHasAuthoritiesFunctionDefinitionEnricher(), new IsTenantValidFunctionInvocationFactoryEnricher(), new TenantColumnSQLDefinitionsEnricher(), new TableRLSSettingsSQLDefinitionsEnricher(), new TableRLSPolicyEnricher(), new IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricher(), new IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher(), new IsTenantIdentifierValidConstraintEnricher(), new DefaultValueForTenantColumnEnricher(), new CurrentTenantIdPropertyTypeEnricher(), new CustomSQLDefinitionsAtEndEnricher());
+    private List<ISharedSchemaContextEnricher> enrichers = asList(new CustomSQLDefinitionsAtBeginningEnricher(), new GetCurrentTenantIdFunctionDefinitionEnricher(), new SetCurrentTenantIdFunctionDefinitionEnricher(), new TenantHasAuthoritiesFunctionDefinitionEnricher(), new IsTenantValidFunctionInvocationFactoryEnricher(), new TenantColumnSQLDefinitionsEnricher(), new TableRLSSettingsSQLDefinitionsEnricher(), new TableRLSPolicyEnricher(), new IsRecordBelongsToCurrentTenantFunctionDefinitionsEnricher(), new IsRecordBelongsToCurrentTenantConstraintSQLDefinitionsEnricher(), new ForeignKeyConstraintSQLDefinitionsEnricher(), new IsTenantIdentifierValidConstraintEnricher(), new DefaultValueForTenantColumnEnricher(), new CurrentTenantIdPropertyTypeEnricher(), new CustomSQLDefinitionsAtEndEnricher());
     /**
      * Collection that stores objects of type {@link ISharedSchemaContextRequestValidator} used for validation of request object (type {@link SharedSchemaContextRequest}) in {@link #build()} method.
      */
@@ -490,7 +492,7 @@ public class DefaultSharedSchemaContextBuilder {
         if (this.disableDefaultSqlDefinitionsValidators) {
             return getSqlDefinitionsValidatorsCopy();
         }
-        return asList(new FunctionDefinitionValidator(asList((new IdentifierLengthValidatorFactory()).build(request))));
+        return singletonList(new FunctionDefinitionValidator(singletonList((new IdentifierLengthValidatorFactory()).build(request))));
     }
 
     /**
@@ -599,5 +601,25 @@ public class DefaultSharedSchemaContextBuilder {
             e.printStackTrace();
         }
         return null;
+    }
+
+    /**
+     * Setting value for property {@link SharedSchemaContextRequest#ignoreCreationOfConstraintThatChecksIfRecordBelongsToCurrentTenant}
+     * @param ignoreCreationOfConstraintThatChecksIfRecordBelongsToCurrentTenant - flag value
+     * @return builder object for which method was invoked
+     */
+    public DefaultSharedSchemaContextBuilder setIgnoreCreationOfConstraintThatChecksIfRecordBelongsToCurrentTenant(Boolean ignoreCreationOfConstraintThatChecksIfRecordBelongsToCurrentTenant) {
+        this.sharedSchemaContextRequest.setIgnoreCreationOfConstraintThatChecksIfRecordBelongsToCurrentTenant(ignoreCreationOfConstraintThatChecksIfRecordBelongsToCurrentTenant);
+        return this;
+    }
+
+    /**
+     * Setting value for property {@link SharedSchemaContextRequest#createForeignKeyConstraintWithTenantColumn}
+     * @param createForeignKeyConstraintWithTenantColumn - flag value
+     * @return builder object for which method was invoked
+     */
+    public DefaultSharedSchemaContextBuilder setCreateForeignKeyConstraintWithTenantColumn(Boolean createForeignKeyConstraintWithTenantColumn) {
+        this.sharedSchemaContextRequest.setCreateForeignKeyConstraintWithTenantColumn(createForeignKeyConstraintWithTenantColumn);
+        return this;
     }
 }

@@ -138,4 +138,22 @@ class DefaultSharedSchemaContextBuilderConfigurationEnricherTest extends Abstrac
             result == builder
             1 * customDefinitionEntriesEnricher.enrich(builder, customDefinitions)
     }
+
+    @Unroll
+    def "should set builder component with specific property createForeignKeyConstraintWithTenantColumn with value #createForeignKeyConstraintWithTenantColumn"()
+    {
+        given:
+            def builder = prepareBuilderMockWithZeroExpectationOfMethodsInvocation()
+            def configuration = new SharedSchemaContextConfiguration().setCreateForeignKeyConstraintWithTenantColumn(createForeignKeyConstraintWithTenantColumn)
+
+        when:
+            def result = tested.enrich(builder, configuration)
+
+        then:
+            result == builder
+            1 * builder.setCreateForeignKeyConstraintWithTenantColumn(createForeignKeyConstraintWithTenantColumn)
+
+        where:
+            createForeignKeyConstraintWithTenantColumn << [null, false, true]
+    }
 }

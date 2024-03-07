@@ -269,3 +269,114 @@ CACHE 1;
 
 ALTER SEQUENCE non_public_schema.primary_sequence
 OWNER TO "postgresql-core-owner";
+
+-- The separate database schema, used for the test cases where there are no default privileges set, just like in case of 'public' schema.
+-- In this schema tables have composite key where tenant table is part of primary key
+CREATE SCHEMA non_public_schema_with_composite_key AUTHORIZATION "postgresql-core-owner";
+
+CREATE TABLE non_public_schema_with_composite_key.users
+(
+id bigint NOT NULL,
+name character varying(255),
+tenant_id character varying(255),
+CONSTRAINT users_pkey PRIMARY KEY (id, tenant_id)
+)
+WITH (
+OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+CREATE TABLE non_public_schema_with_composite_key.groups
+(
+uuid uuid NOT NULL,
+name character varying(255),
+tenant_id character varying(255),
+CONSTRAINT groups_pkey PRIMARY KEY (uuid, tenant_id)
+)
+WITH (
+OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+CREATE TABLE non_public_schema_with_composite_key.users_groups
+(
+user_id bigint NOT NULL,
+group_id uuid NOT NULL,
+tenant_id character varying(255)
+)
+WITH (
+OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+CREATE TABLE non_public_schema_with_composite_key.posts
+(
+id bigint NOT NULL,
+text text NOT NULL,
+user_id bigint NOT NULL,
+tenant_id character varying(255),
+CONSTRAINT posts_pkey PRIMARY KEY (id, tenant_id)
+)
+WITH (
+OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+CREATE TABLE non_public_schema_with_composite_key.comments
+(
+id int NOT NULL,
+user_id bigint NOT NULL,
+text text NOT NULL,
+post_id bigint NOT NULL,
+tenant character varying(255),
+
+parent_comment_id int,
+parent_comment_user_id bigint,
+
+CONSTRAINT comments_pkey PRIMARY KEY (id, user_id, tenant)
+)
+WITH (
+OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+CREATE TABLE non_public_schema_with_composite_key.notifications
+(
+    uuid uuid NOT NULL,
+    title character varying(255),
+    content text,
+    user_id bigint NOT NULL
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE non_public_schema_with_composite_key.users
+    OWNER to "postgresql-core-owner";
+
+ALTER TABLE non_public_schema_with_composite_key.groups
+OWNER to "postgresql-core-owner";
+
+ALTER TABLE non_public_schema_with_composite_key.users_groups
+OWNER to "postgresql-core-owner";
+
+ALTER TABLE non_public_schema_with_composite_key.posts
+OWNER to "postgresql-core-owner";
+
+ALTER TABLE non_public_schema_with_composite_key.comments
+OWNER to "postgresql-core-owner";
+
+ALTER TABLE non_public_schema_with_composite_key.notifications
+OWNER to "postgresql-core-owner";
+
+-- sequences definition
+CREATE SEQUENCE non_public_schema_with_composite_key.primary_sequence
+INCREMENT 1
+START 32
+MINVALUE 1
+MAXVALUE 9223372036854775807
+CACHE 1;
+
+ALTER SEQUENCE non_public_schema_with_composite_key.primary_sequence
+OWNER TO "postgresql-core-owner";
