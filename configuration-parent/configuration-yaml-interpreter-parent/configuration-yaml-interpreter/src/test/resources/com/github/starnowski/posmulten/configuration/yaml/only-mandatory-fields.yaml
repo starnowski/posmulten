@@ -1,0 +1,2 @@
+default_schema: non_public
+grantee: "db-user"
