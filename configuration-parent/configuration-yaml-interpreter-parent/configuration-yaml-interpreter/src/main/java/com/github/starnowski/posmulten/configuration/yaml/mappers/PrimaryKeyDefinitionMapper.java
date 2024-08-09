@@ -23,7 +23,7 @@
  */
 package com.github.starnowski.posmulten.configuration.yaml.mappers;
 
-import com.github.starnowski.posmulten.configuration.yaml.IConfigurationMapper;
+import com.github.starnowski.posmulten.configuration.yaml.core.IConfigurationMapper;
 import com.github.starnowski.posmulten.configuration.yaml.model.PrimaryKeyDefinition;
 
 public class PrimaryKeyDefinitionMapper implements IConfigurationMapper<com.github.starnowski.posmulten.configuration.core.model.PrimaryKeyDefinition, PrimaryKeyDefinition> {

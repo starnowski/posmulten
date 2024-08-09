@@ -21,8 +21,14 @@
     <dependencies>
         <dependency>
             <groupId>com.github.starnowski.posmulten.configuration</groupId>
-            <artifactId>configuration-core</artifactId>
+            <artifactId>configuration-yaml-interpreter-core</artifactId>
             <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.starnowski.posmulten.configuration</groupId>
+            <artifactId>common-tests</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.dataformat</groupId>

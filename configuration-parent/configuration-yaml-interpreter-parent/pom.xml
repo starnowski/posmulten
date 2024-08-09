@@ -14,6 +14,7 @@
     <modules>
         <module>configuration-yaml-interpreter</module>
         <module>configuration-yaml-interpreter-functional-tests</module>
+        <module>configuration-yaml-interpreter-core</module>
     </modules>
 
 </project>

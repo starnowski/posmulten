@@ -1,6 +1,6 @@
 package com.github.starnowski.posmulten.configuration.yaml.mappers
 
-import com.github.starnowski.posmulten.configuration.yaml.IConfigurationMapper
+import com.github.starnowski.posmulten.configuration.yaml.core.IConfigurationMapper
 import com.github.starnowski.posmulten.configuration.yaml.IntegerRandomizer
 import com.github.starnowski.posmulten.configuration.yaml.OptionalRandomizer
 import com.github.starnowski.posmulten.configuration.yaml.model.TableEntry

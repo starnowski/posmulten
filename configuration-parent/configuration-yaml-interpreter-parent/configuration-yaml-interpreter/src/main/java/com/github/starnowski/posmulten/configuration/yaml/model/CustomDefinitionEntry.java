@@ -25,6 +25,7 @@ package com.github.starnowski.posmulten.configuration.yaml.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.starnowski.posmulten.configuration.yaml.core.model.AbstractCustomDefinitionEntry;
 import com.github.starnowski.posmulten.configuration.yaml.validation.CustomPositionValidValue;
 import com.github.starnowski.posmulten.configuration.yaml.validation.EnumNamePattern;
 import lombok.EqualsAndHashCode;
@@ -49,7 +50,7 @@ import static java.util.stream.Collectors.toSet;
 @EqualsAndHashCode
 @ToString
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class CustomDefinitionEntry {
+public class CustomDefinitionEntry implements AbstractCustomDefinitionEntry<CustomDefinitionEntry> {
 
     private final static Set<String> correctCustomPositionValues = Stream.of(com.github.starnowski.posmulten.configuration.core.model.CustomDefinitionEntry.CustomDefinitionPosition.values()).map(Enum::name).collect(toSet());;
 
