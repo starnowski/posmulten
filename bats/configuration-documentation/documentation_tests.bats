@@ -8,7 +8,7 @@ function setup {
   export CONFIGURATION_YAML_TEST_RESOURCES_DIR_PATH="$BATS_TEST_DIRNAME/../../configuration-parent/configuration-yaml-interpreter/src/test/resources/com/github/starnowski/posmulten/configuration/yaml"
   mkdir -p "$BATS_TMPDIR/$TIMESTAMP"
   export CONFIGURATION_YAML_INTERPRETER_README_CONVERTER="$BATS_TEST_DIRNAME/../../configuration-parent/configuration-yaml-interpreter-readme-converter"
-  export CONFIGURATION_YAML_INTERPRETER="$BATS_TEST_DIRNAME/../../configuration-parent/configuration-yaml-interpreter"
+  export CONFIGURATION_YAML_INTERPRETER="$BATS_TEST_DIRNAME/../../configuration-parent/configuration-yaml-interpreter-parent/configuration-yaml-interpreter"
 }
 
 @test "The executable jar should print updated yaml syntax guide" {
