@@ -25,6 +25,7 @@ package com.github.starnowski.posmulten.configuration.yaml.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.starnowski.posmulten.configuration.yaml.core.model.AbstractPrimaryKeyDefinition;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -40,13 +41,11 @@ import java.util.Map;
 @EqualsAndHashCode
 @ToString
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class PrimaryKeyDefinition {
+public class PrimaryKeyDefinition implements AbstractPrimaryKeyDefinition {
 
     @JsonProperty(value = "pk_columns_name_to_type")
     private Map<@NotBlank String, @NotBlank String> primaryKeyColumnsNameToTypeMap;
     @NotBlank(groups = NameForFunctionThatChecksIfRecordExistsInTableNotBlank.class)
     @JsonProperty(value = "name_for_function_that_checks_if_record_exists_in_table")
     private String nameForFunctionThatChecksIfRecordExistsInTable;
-
-    public interface NameForFunctionThatChecksIfRecordExistsInTableNotBlank {}
 }

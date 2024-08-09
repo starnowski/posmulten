@@ -23,38 +23,26 @@
  */
 package com.github.starnowski.posmulten.configuration.yaml.core.model;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-import lombok.experimental.Accessors;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
-@Accessors(chain = true)
-@Getter
-@Setter
-@EqualsAndHashCode
-@ToString
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class TableEntry {
 
-    /**
-     * Table name
-     */
-    @NotBlank
-    @JsonProperty(value = "name", required = true)
-    private String name;
-    @JsonProperty(value = "schema")
-    private Optional<String> schema;
-    @Valid
-    @JsonProperty(value = "rls_policy")
-    private RLSPolicy rlsPolicy;
-    @JsonProperty(value = "foreign_keys")
-    private List<@Valid ForeignKeyConfiguration> foreignKeys;
+public interface AbstractForeignKeyConfiguration {
+
+    String getConstraintName();
+
+    void setConstraintName(String constraintName);
+
+    String getTableName();
+
+    void setTableName(String tableName);
+
+    Optional<String> getTableSchema();
+
+    void setTableSchema(Optional<String> tableSchema);
+
+    Map<String, String> getForeignKeyPrimaryKeyColumnsMappings();
+
+    void setForeignKeyPrimaryKeyColumnsMappings(Map<String, String> foreignKeyPrimaryKeyColumnsMappings);
+
 }

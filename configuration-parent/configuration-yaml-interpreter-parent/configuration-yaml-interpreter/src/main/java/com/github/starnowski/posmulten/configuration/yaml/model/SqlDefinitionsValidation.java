@@ -25,6 +25,7 @@ package com.github.starnowski.posmulten.configuration.yaml.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.starnowski.posmulten.configuration.yaml.core.model.AbstractSqlDefinitionsValidation;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -39,7 +40,7 @@ import javax.validation.constraints.Min;
 @EqualsAndHashCode
 @ToString
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class SqlDefinitionsValidation {
+public class SqlDefinitionsValidation implements AbstractSqlDefinitionsValidation {
 
     @Min(1)
     @JsonProperty(value = "identifier_max_length")

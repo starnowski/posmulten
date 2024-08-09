@@ -25,6 +25,7 @@ package com.github.starnowski.posmulten.configuration.yaml.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.starnowski.posmulten.configuration.yaml.core.model.AbstractValidTenantValueConstraintConfiguration;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -42,7 +43,7 @@ import java.util.List;
 @EqualsAndHashCode
 @ToString
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ValidTenantValueConstraintConfiguration {
+public class ValidTenantValueConstraintConfiguration implements AbstractValidTenantValueConstraintConfiguration<ValidTenantValueConstraintConfiguration, StringWrapperWithNotBlankValue> {
 
     @JsonProperty(value = "tenant_identifiers_blacklist", required = true)
     @Size(min = 1, message = "must have at least one element")

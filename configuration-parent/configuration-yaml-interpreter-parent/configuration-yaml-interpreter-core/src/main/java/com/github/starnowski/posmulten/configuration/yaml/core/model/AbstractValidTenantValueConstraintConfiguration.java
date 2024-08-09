@@ -23,38 +23,24 @@
  */
 package com.github.starnowski.posmulten.configuration.yaml.core.model;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-import lombok.experimental.Accessors;
+import java.util.List;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import java.util.Map;
-import java.util.Optional;
 
-@Accessors(chain = true)
-@Getter
-@Setter
-@EqualsAndHashCode
-@ToString
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class ForeignKeyConfiguration {
+public interface AbstractValidTenantValueConstraintConfiguration<T extends AbstractValidTenantValueConstraintConfiguration, SWWNB extends AbstractStringWrapperWithNotBlankValue> {
 
-    @JsonProperty(value = "constraint_name", required = true)
-    @NotBlank
-    private String constraintName;
-    @NotBlank
-    @JsonProperty(value = "table_name", required = true)
-    private String tableName;
-    @JsonProperty(value = "table_schema")
-    private Optional<String> tableSchema;
-    @JsonProperty(value = "foreign_key_primary_key_columns_mappings", required = true)
-    @NotNull
-    @Size(min = 1, message = "must have at least one element")
-    private Map<@NotBlank String, @NotBlank String> foreignKeyPrimaryKeyColumnsMappings;
+    public List<String> getTenantIdentifiersBlacklist();
+
+    public void setTenantIdentifiersBlacklist(List<String> tenantIdentifiersBlacklist);
+
+    public SWWNB getIsTenantValidFunctionName();
+
+    public SWWNB getIsTenantValidConstraintName();
+
+    public T setIsTenantValidFunctionName(String isTenantValidFunctionName);
+
+    public T setIsTenantValidConstraintName(String isTenantValidConstraintName);
+
+    public T setIsTenantValidFunctionName(SWWNB isTenantValidFunctionName);
+
+    public T setIsTenantValidConstraintName(SWWNB isTenantValidConstraintName);
 }

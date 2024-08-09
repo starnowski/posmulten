@@ -25,6 +25,7 @@ package com.github.starnowski.posmulten.configuration.yaml.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.starnowski.posmulten.configuration.yaml.core.model.AbstractForeignKeyConfiguration;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -43,7 +44,7 @@ import java.util.Optional;
 @EqualsAndHashCode
 @ToString
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ForeignKeyConfiguration {
+public class ForeignKeyConfiguration implements AbstractForeignKeyConfiguration {
 
     @JsonProperty(value = "constraint_name", required = true)
     @NotBlank

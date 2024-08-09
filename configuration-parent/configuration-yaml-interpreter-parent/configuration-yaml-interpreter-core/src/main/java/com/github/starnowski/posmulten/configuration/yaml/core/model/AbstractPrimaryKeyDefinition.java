@@ -23,30 +23,16 @@
  */
 package com.github.starnowski.posmulten.configuration.yaml.core.model;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-import lombok.experimental.Accessors;
-
-import javax.validation.constraints.NotBlank;
 import java.util.Map;
 
-@Accessors(chain = true)
-@Getter
-@Setter
-@EqualsAndHashCode
-@ToString
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class PrimaryKeyDefinition {
+public interface AbstractPrimaryKeyDefinition {
+    Map<String, String> getPrimaryKeyColumnsNameToTypeMap();
 
-    @JsonProperty(value = "pk_columns_name_to_type")
-    private Map<@NotBlank String, @NotBlank String> primaryKeyColumnsNameToTypeMap;
-    @NotBlank(groups = NameForFunctionThatChecksIfRecordExistsInTableNotBlank.class)
-    @JsonProperty(value = "name_for_function_that_checks_if_record_exists_in_table")
-    private String nameForFunctionThatChecksIfRecordExistsInTable;
+    void setPrimaryKeyColumnsNameToTypeMap(Map<String, String> primaryKeyColumnsNameToTypeMap);
+
+    String getNameForFunctionThatChecksIfRecordExistsInTable();
+
+    void setNameForFunctionThatChecksIfRecordExistsInTable(String nameForFunctionThatChecksIfRecordExistsInTable);
 
     public interface NameForFunctionThatChecksIfRecordExistsInTableNotBlank {}
 }

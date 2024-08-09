@@ -25,6 +25,8 @@ package com.github.starnowski.posmulten.configuration.yaml.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.starnowski.posmulten.configuration.yaml.core.model.AbstractPrimaryKeyDefinition;
+import com.github.starnowski.posmulten.configuration.yaml.core.model.AbstractRLSPolicy;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -40,7 +42,7 @@ import javax.validation.constraints.NotBlank;
 @EqualsAndHashCode
 @ToString
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class RLSPolicy {
+public class RLSPolicy implements AbstractRLSPolicy<RLSPolicy, StringWrapperWithNotBlankValue, PrimaryKeyDefinition> {
     @NotBlank
     @JsonProperty(value = "name", required = true)
     private String name;

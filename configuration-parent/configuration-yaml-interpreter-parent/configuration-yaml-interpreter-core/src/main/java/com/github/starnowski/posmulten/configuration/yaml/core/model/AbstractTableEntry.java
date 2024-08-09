@@ -23,30 +23,24 @@
  */
 package com.github.starnowski.posmulten.configuration.yaml.core.model;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-import lombok.experimental.Accessors;
+import java.util.List;
+import java.util.Optional;
 
-import javax.validation.constraints.Min;
+public interface AbstractTableEntry<RLSP extends AbstractRLSPolicy, FKC extends AbstractForeignKeyConfiguration> {
 
-@Accessors(chain = true)
-@Getter
-@Setter
-@EqualsAndHashCode
-@ToString
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class SqlDefinitionsValidation {
+    public String getName();
 
-    @Min(1)
-    @JsonProperty(value = "identifier_max_length")
-    private Integer identifierMaxLength;
-    @Min(1)
-    @JsonProperty(value = "identifier_min_length")
-    private Integer identifierMinLength;
-    @JsonProperty(value = "disabled")
-    private Boolean disabled;
+    public void setName(String name);
+
+    public Optional<String> getSchema();
+
+    public void setSchema(Optional<String> schema);
+
+    public RLSP getRlsPolicy();
+
+    public void setRlsPolicy(RLSP rlsPolicy);
+
+    public List<FKC> getForeignKeys();
+
+    public void setForeignKeys(List<FKC> foreignKeys);
 }

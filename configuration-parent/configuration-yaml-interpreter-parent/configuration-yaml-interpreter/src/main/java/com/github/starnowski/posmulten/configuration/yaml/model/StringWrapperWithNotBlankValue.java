@@ -25,12 +25,13 @@ package com.github.starnowski.posmulten.configuration.yaml.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.github.starnowski.posmulten.configuration.yaml.core.model.AbstractStringWrapperWithNotBlankValue;
 import lombok.EqualsAndHashCode;
 
 import javax.validation.constraints.NotBlank;
 
 @EqualsAndHashCode
-public final class StringWrapperWithNotBlankValue {
+public final class StringWrapperWithNotBlankValue implements AbstractStringWrapperWithNotBlankValue {
 
     @NotBlank
     private final String value;
