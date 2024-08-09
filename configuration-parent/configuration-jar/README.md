@@ -1,7 +1,7 @@
 
 The module is packaged as the uber jar that ables to generated DDL scripts that create the shared schema strategy based on configuration. 
 Currently, the module supports only the YAML file extensions. 
-To see how to prepare a configuration file, please check the [configuration-yaml-interpreter](../configuration-yaml-interpreter) module.
+To see how to prepare a configuration file, please check the [configuration-yaml-interpreter](../configuration-yaml-interpreter-parent/configuration-yaml-interpreter) module.
 The jar file required JAVA version 8 or newer.
 
 ### Usage

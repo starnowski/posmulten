@@ -1,2 +1,0 @@
-default_schema: "{{db_schema}}"
-grantee: "{{db_grantee}}"
