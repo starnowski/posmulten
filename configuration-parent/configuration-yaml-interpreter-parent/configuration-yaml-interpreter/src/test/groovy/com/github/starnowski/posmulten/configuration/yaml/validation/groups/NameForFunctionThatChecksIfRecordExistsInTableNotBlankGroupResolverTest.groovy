@@ -1,6 +1,6 @@
 package com.github.starnowski.posmulten.configuration.yaml.validation.groups
 
-import com.github.starnowski.posmulten.configuration.yaml.model.PrimaryKeyDefinition
+import com.github.starnowski.posmulten.configuration.yaml.core.model.AbstractPrimaryKeyDefinition
 import com.github.starnowski.posmulten.configuration.yaml.model.SharedSchemaContextConfiguration
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -17,7 +17,7 @@ class NameForFunctionThatChecksIfRecordExistsInTableNotBlankGroupResolverTest ex
             def result = tested.resolveForSharedSchemaContextConfiguration(sharedContext, null)
 
         then:
-            result == PrimaryKeyDefinition.NameForFunctionThatChecksIfRecordExistsInTableNotBlank
+            result == AbstractPrimaryKeyDefinition.NameForFunctionThatChecksIfRecordExistsInTableNotBlank
 
         where:
             value << [null, false]
