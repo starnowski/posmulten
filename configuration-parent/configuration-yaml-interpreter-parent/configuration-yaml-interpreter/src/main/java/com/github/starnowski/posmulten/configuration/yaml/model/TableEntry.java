@@ -44,7 +44,6 @@ import java.util.Optional;
 @ToString
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class TableEntry implements AbstractTableEntry<TableEntry, RLSPolicy, ForeignKeyConfiguration> {
-
     /**
      * Table name
      */
@@ -58,4 +57,9 @@ public class TableEntry implements AbstractTableEntry<TableEntry, RLSPolicy, For
     private RLSPolicy rlsPolicy;
     @JsonProperty(value = "foreign_keys")
     private List<@Valid ForeignKeyConfiguration> foreignKeys;
+    @Override
+    public TableEntry setForeignKeys(List<ForeignKeyConfiguration> foreignKeys) {
+        this.foreignKeys = foreignKeys;
+        return this;
+    }
 }

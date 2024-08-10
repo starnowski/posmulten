@@ -43,7 +43,6 @@ import java.util.List;
 @ToString
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class SharedSchemaContextConfiguration implements AbstractSharedSchemaContextConfiguration<SharedSchemaContextConfiguration, StringWrapperWithNotBlankValue, CustomDefinitionEntry, ValidTenantValueConstraintConfiguration, TableEntry, SqlDefinitionsValidation> {
-
     @NotBlank
     @JsonProperty(value = "default_schema", required = true)
     private String defaultSchema;
@@ -88,6 +87,12 @@ public class SharedSchemaContextConfiguration implements AbstractSharedSchemaCon
     private List<CustomDefinitionEntry> customSQLDefinitions;
     @JsonProperty(value = "create_foreignkey_constraint_with_tenant_column")
     private Boolean createForeignKeyConstraintWithTenantColumn;
+
+    @Override
+    public SharedSchemaContextConfiguration setTables(List<TableEntry> tables) {
+        this.tables = tables;
+        return this;
+    }
 
     @Override
     public SharedSchemaContextConfiguration setCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables(Boolean currentTenantIdentifierAsDefaultValueForTenantColumnInAllTables) {
