@@ -13,6 +13,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <license.dir>${project.parent.basedir}/../..</license.dir>
     </properties>
 
     <dependencies>
