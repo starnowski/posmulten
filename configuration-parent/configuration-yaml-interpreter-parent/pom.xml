@@ -12,6 +12,7 @@
 
     <artifactId>configuration-yaml-interpreter-parent</artifactId>
     <modules>
+        <module>common-tests</module>
         <module>configuration-yaml-interpreter</module>
         <module>configuration-yaml-interpreter-functional-tests</module>
         <module>configuration-yaml-interpreter-core</module>
