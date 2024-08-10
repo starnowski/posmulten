@@ -25,6 +25,7 @@ package com.github.starnowski.posmulten.configuration.yaml.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.starnowski.posmulten.configuration.yaml.core.model.AbstractSharedSchemaContextConfiguration;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -41,7 +42,7 @@ import java.util.List;
 @EqualsAndHashCode
 @ToString
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class SharedSchemaContextConfiguration {
+public class SharedSchemaContextConfiguration implements AbstractSharedSchemaContextConfiguration<SharedSchemaContextConfiguration, StringWrapperWithNotBlankValue, CustomDefinitionEntry, ValidTenantValueConstraintConfiguration, TableEntry, SqlDefinitionsValidation> {
 
     @NotBlank
     @JsonProperty(value = "default_schema", required = true)
