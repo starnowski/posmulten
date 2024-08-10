@@ -3,7 +3,7 @@ package com.github.starnowski.posmulten.configuration.yaml.dao
 import com.github.starnowski.posmulten.configuration.yaml.AbstractSpecification
 import com.github.starnowski.posmulten.configuration.yaml.IntegerRandomizer
 import com.github.starnowski.posmulten.configuration.yaml.OptionalRandomizer
-import com.github.starnowski.posmulten.configuration.yaml.exceptions.YamlInvalidSchema
+import com.github.starnowski.posmulten.configuration.yaml.core.exceptions.YamlInvalidSchema
 import com.github.starnowski.posmulten.configuration.yaml.model.*
 import org.jeasy.random.EasyRandom
 import org.jeasy.random.EasyRandomParameters

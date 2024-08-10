@@ -1,7 +1,7 @@
 package com.github.starnowski.posmulten.configuration.yaml.dao
 
 import com.github.starnowski.posmulten.configuration.yaml.AbstractSpecification
-import com.github.starnowski.posmulten.configuration.yaml.exceptions.YamlInvalidSchema
+import com.github.starnowski.posmulten.configuration.yaml.core.exceptions.YamlInvalidSchema
 import spock.lang.Unroll
 
 import java.nio.file.Files

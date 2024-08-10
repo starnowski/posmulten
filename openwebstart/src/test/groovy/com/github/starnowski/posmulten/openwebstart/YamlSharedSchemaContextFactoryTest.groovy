@@ -1,14 +1,13 @@
 package com.github.starnowski.posmulten.openwebstart
 
 import com.github.starnowski.posmulten.configuration.core.context.IDefaultSharedSchemaContextBuilderFactory
-import com.github.starnowski.posmulten.configuration.yaml.exceptions.YamlInvalidSchema
+import com.github.starnowski.posmulten.configuration.yaml.core.exceptions.YamlInvalidSchema
 import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSchemaContextBuilder
 import com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaContext
 import com.github.starnowski.posmulten.postgresql.core.context.decorator.DefaultDecoratorContext
 import com.github.starnowski.posmulten.postgresql.core.context.decorator.ISharedSchemaContextDecorator
 import com.github.starnowski.posmulten.postgresql.core.context.decorator.SharedSchemaContextDecoratorFactory
 import com.github.starnowski.posmulten.postgresql.core.context.exceptions.MissingRLSGranteeDeclarationException
-import spock.lang.Subject
 
 class YamlSharedSchemaContextFactoryTest extends spock.lang.Specification {
 

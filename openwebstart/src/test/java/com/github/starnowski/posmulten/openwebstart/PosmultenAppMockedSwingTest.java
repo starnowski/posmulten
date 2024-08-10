@@ -1,7 +1,7 @@
 package com.github.starnowski.posmulten.openwebstart;
 
 import com.github.starnowski.posmulten.configuration.core.exceptions.InvalidConfigurationException;
-import com.github.starnowski.posmulten.configuration.yaml.exceptions.YamlInvalidSchema;
+import com.github.starnowski.posmulten.configuration.yaml.core.exceptions.YamlInvalidSchema;
 import com.github.starnowski.posmulten.postgresql.core.common.SQLDefinition;
 import com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaContext;
 import com.github.starnowski.posmulten.postgresql.core.context.decorator.DefaultDecoratorContext;

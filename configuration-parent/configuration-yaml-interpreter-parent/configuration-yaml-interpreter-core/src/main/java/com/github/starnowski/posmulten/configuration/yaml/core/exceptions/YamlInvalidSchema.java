@@ -21,7 +21,7 @@
  *     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301
  *     USA
  */
-package com.github.starnowski.posmulten.configuration.yaml.exceptions;
+package com.github.starnowski.posmulten.configuration.yaml.core.exceptions;
 
 import com.github.starnowski.posmulten.configuration.core.exceptions.InvalidConfigurationException;
 

@@ -27,7 +27,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
-import com.github.starnowski.posmulten.configuration.yaml.exceptions.YamlInvalidSchema;
+import com.github.starnowski.posmulten.configuration.yaml.core.exceptions.YamlInvalidSchema;
 import com.github.starnowski.posmulten.configuration.yaml.model.SharedSchemaContextConfiguration;
 import com.github.starnowski.posmulten.configuration.yaml.validation.groups.ValidatorGroupsResolver;
 import org.hibernate.validator.internal.engine.path.NodeImpl;

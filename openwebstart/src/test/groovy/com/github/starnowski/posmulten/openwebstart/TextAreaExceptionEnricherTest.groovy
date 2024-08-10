@@ -1,7 +1,7 @@
 package com.github.starnowski.posmulten.openwebstart
 
 import com.github.starnowski.posmulten.configuration.core.exceptions.InvalidConfigurationException
-import com.github.starnowski.posmulten.configuration.yaml.exceptions.YamlInvalidSchema
+import com.github.starnowski.posmulten.configuration.yaml.core.exceptions.YamlInvalidSchema
 import com.github.starnowski.posmulten.postgresql.core.context.exceptions.MissingRLSGranteeDeclarationException
 import com.github.starnowski.posmulten.postgresql.core.context.exceptions.SharedSchemaContextBuilderException
 import spock.lang.Specification

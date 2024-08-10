@@ -27,7 +27,7 @@ import com.github.starnowski.posmulten.configuration.core.context.AbstractDefaul
 import com.github.starnowski.posmulten.configuration.core.exceptions.InvalidConfigurationException;
 import com.github.starnowski.posmulten.configuration.core.model.SharedSchemaContextConfiguration;
 import com.github.starnowski.posmulten.configuration.yaml.dao.SharedSchemaContextConfigurationYamlDao;
-import com.github.starnowski.posmulten.configuration.yaml.exceptions.YamlInvalidSchema;
+import com.github.starnowski.posmulten.configuration.yaml.core.exceptions.YamlInvalidSchema;
 import com.github.starnowski.posmulten.configuration.yaml.mappers.SharedSchemaContextConfigurationMapper;
 
 import java.io.IOException;
