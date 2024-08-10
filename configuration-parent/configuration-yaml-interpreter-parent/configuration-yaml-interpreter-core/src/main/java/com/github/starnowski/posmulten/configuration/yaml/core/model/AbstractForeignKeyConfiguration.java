@@ -27,22 +27,22 @@ import java.util.Map;
 import java.util.Optional;
 
 
-public interface AbstractForeignKeyConfiguration {
+public interface AbstractForeignKeyConfiguration<T extends AbstractForeignKeyConfiguration> {
 
     String getConstraintName();
 
-    void setConstraintName(String constraintName);
+    T setConstraintName(String constraintName);
 
     String getTableName();
 
-    void setTableName(String tableName);
+    T setTableName(String tableName);
 
     Optional<String> getTableSchema();
 
-    void setTableSchema(Optional<String> tableSchema);
+    T setTableSchema(Optional<String> tableSchema);
 
     Map<String, String> getForeignKeyPrimaryKeyColumnsMappings();
 
-    void setForeignKeyPrimaryKeyColumnsMappings(Map<String, String> foreignKeyPrimaryKeyColumnsMappings);
+    T setForeignKeyPrimaryKeyColumnsMappings(Map<String, String> foreignKeyPrimaryKeyColumnsMappings);
 
 }

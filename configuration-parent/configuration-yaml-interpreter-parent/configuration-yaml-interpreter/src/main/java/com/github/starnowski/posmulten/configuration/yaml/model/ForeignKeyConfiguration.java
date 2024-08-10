@@ -44,7 +44,7 @@ import java.util.Optional;
 @EqualsAndHashCode
 @ToString
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ForeignKeyConfiguration implements AbstractForeignKeyConfiguration {
+public class ForeignKeyConfiguration implements AbstractForeignKeyConfiguration<ForeignKeyConfiguration> {
 
     @JsonProperty(value = "constraint_name", required = true)
     @NotBlank

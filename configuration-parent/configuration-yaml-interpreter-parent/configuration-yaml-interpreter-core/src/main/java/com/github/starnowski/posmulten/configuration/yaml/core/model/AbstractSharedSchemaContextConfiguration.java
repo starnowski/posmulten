@@ -30,7 +30,7 @@ public interface AbstractSharedSchemaContextConfiguration<T extends AbstractShar
 
     String getDefaultSchema();
 
-    void setDefaultSchema(String defaultSchema);
+    T setDefaultSchema(String defaultSchema);
 
     SWWNBV getCurrentTenantIdPropertyType();
 
@@ -46,33 +46,33 @@ public interface AbstractSharedSchemaContextConfiguration<T extends AbstractShar
 
     Boolean getForceRowLevelSecurityForTableOwner();
 
-    void setForceRowLevelSecurityForTableOwner(Boolean forceRowLevelSecurityForTableOwner);
+    T setForceRowLevelSecurityForTableOwner(Boolean forceRowLevelSecurityForTableOwner);
 
     SWWNBV getDefaultTenantIdColumn();
 
     String getGrantee();
 
-    void setGrantee(String grantee);
+    T setGrantee(String grantee);
 
     Boolean getCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables();
 
-    void setCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables(Boolean currentTenantIdentifierAsDefaultValueForTenantColumnInAllTables);
+    T setCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables(Boolean currentTenantIdentifierAsDefaultValueForTenantColumnInAllTables);
 
     VTVCC getValidTenantValueConstraint();
 
-    void setValidTenantValueConstraint(VTVCC validTenantValueConstraint);
+    T setValidTenantValueConstraint(VTVCC validTenantValueConstraint);
 
     List<TE> getTables();
 
-    void setTables(List<TE> tables);
+    T setTables(List<TE> tables);
 
     SDV getSqlDefinitionsValidation();
 
-    void setSqlDefinitionsValidation(SDV sqlDefinitionsValidation);
+    T setSqlDefinitionsValidation(SDV sqlDefinitionsValidation);
 
     List<CDE> getCustomSQLDefinitions();
 
-    void setCustomSQLDefinitions(List<CDE> customSQLDefinitions);
+    T setCustomSQLDefinitions(List<CDE> customSQLDefinitions);
 
     Boolean getCreateForeignKeyConstraintWithTenantColumn();
     T setCreateForeignKeyConstraintWithTenantColumn(Boolean createForeignKeyConstraintWithTenantColumn);

@@ -26,21 +26,21 @@ package com.github.starnowski.posmulten.configuration.yaml.core.model;
 import java.util.List;
 import java.util.Optional;
 
-public interface AbstractTableEntry<RLSP extends AbstractRLSPolicy, FKC extends AbstractForeignKeyConfiguration> {
+public interface AbstractTableEntry<T extends AbstractTableEntry, RLSP extends AbstractRLSPolicy, FKC extends AbstractForeignKeyConfiguration> {
 
     public String getName();
 
-    public void setName(String name);
+    public T setName(String name);
 
     public Optional<String> getSchema();
 
-    public void setSchema(Optional<String> schema);
+    public T setSchema(Optional<String> schema);
 
     public RLSP getRlsPolicy();
 
-    public void setRlsPolicy(RLSP rlsPolicy);
+    public T setRlsPolicy(RLSP rlsPolicy);
 
     public List<FKC> getForeignKeys();
 
-    public void setForeignKeys(List<FKC> foreignKeys);
+    public T setForeignKeys(List<FKC> foreignKeys);
 }

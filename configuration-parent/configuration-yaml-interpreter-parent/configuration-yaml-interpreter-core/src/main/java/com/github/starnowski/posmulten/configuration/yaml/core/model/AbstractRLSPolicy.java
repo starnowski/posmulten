@@ -27,7 +27,7 @@ public interface AbstractRLSPolicy<T extends AbstractRLSPolicy, S extends Abstra
 
     String getName();
 
-    void setName(String name);
+    T setName(String name);
 
     S getTenantColumn();
 
@@ -37,7 +37,7 @@ public interface AbstractRLSPolicy<T extends AbstractRLSPolicy, S extends Abstra
 
     Boolean getCreateTenantColumnForTable();
 
-    void setCreateTenantColumnForTable(Boolean createTenantColumnForTable);
+    T setCreateTenantColumnForTable(Boolean createTenantColumnForTable);
 
     S getValidTenantValueConstraintName();
 
@@ -47,9 +47,9 @@ public interface AbstractRLSPolicy<T extends AbstractRLSPolicy, S extends Abstra
 
     Boolean getSkipAddingOfTenantColumnDefaultValue();
 
-    void setSkipAddingOfTenantColumnDefaultValue(Boolean skipAddingOfTenantColumnDefaultValue);
+    T setSkipAddingOfTenantColumnDefaultValue(Boolean skipAddingOfTenantColumnDefaultValue);
 
     PK getPrimaryKeyDefinition();
 
-    void setPrimaryKeyDefinition(PK primaryKeyDefinition);
+    T setPrimaryKeyDefinition(PK primaryKeyDefinition);
 }

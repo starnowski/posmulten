@@ -25,14 +25,14 @@ package com.github.starnowski.posmulten.configuration.yaml.core.model;
 
 import java.util.Map;
 
-public interface AbstractPrimaryKeyDefinition {
+public interface AbstractPrimaryKeyDefinition<T extends AbstractPrimaryKeyDefinition> {
     Map<String, String> getPrimaryKeyColumnsNameToTypeMap();
 
-    void setPrimaryKeyColumnsNameToTypeMap(Map<String, String> primaryKeyColumnsNameToTypeMap);
+    T setPrimaryKeyColumnsNameToTypeMap(Map<String, String> primaryKeyColumnsNameToTypeMap);
 
     String getNameForFunctionThatChecksIfRecordExistsInTable();
 
-    void setNameForFunctionThatChecksIfRecordExistsInTable(String nameForFunctionThatChecksIfRecordExistsInTable);
+    T setNameForFunctionThatChecksIfRecordExistsInTable(String nameForFunctionThatChecksIfRecordExistsInTable);
 
-    public interface NameForFunctionThatChecksIfRecordExistsInTableNotBlank {}
+    interface NameForFunctionThatChecksIfRecordExistsInTableNotBlank {}
 }

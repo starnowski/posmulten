@@ -29,19 +29,19 @@ public interface AbstractCustomDefinitionEntry<T extends AbstractCustomDefinitio
 
     String getCreationScript();
 
-    void setCreationScript(String creationScript);
+    T setCreationScript(String creationScript);
 
     String getDropScript();
 
-    void setDropScript(String dropScript);
+    T setDropScript(String dropScript);
 
     String getCustomPosition();
 
-    void setCustomPosition(String customPosition);
+    T setCustomPosition(String customPosition);
 
     List<String> getValidationScripts();
 
-    void setValidationScripts(List<String> validationScripts);
+    T setValidationScripts(List<String> validationScripts);
 
     com.github.starnowski.posmulten.configuration.core.model.CustomDefinitionEntry.CustomDefinitionPosition getPosition();
 

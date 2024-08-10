@@ -28,19 +28,19 @@ import java.util.List;
 
 public interface AbstractValidTenantValueConstraintConfiguration<T extends AbstractValidTenantValueConstraintConfiguration, SWWNB extends AbstractStringWrapperWithNotBlankValue> {
 
-    public List<String> getTenantIdentifiersBlacklist();
+    List<String> getTenantIdentifiersBlacklist();
 
-    public void setTenantIdentifiersBlacklist(List<String> tenantIdentifiersBlacklist);
+    T setTenantIdentifiersBlacklist(List<String> tenantIdentifiersBlacklist);
 
-    public SWWNB getIsTenantValidFunctionName();
+    SWWNB getIsTenantValidFunctionName();
 
-    public SWWNB getIsTenantValidConstraintName();
+    SWWNB getIsTenantValidConstraintName();
 
-    public T setIsTenantValidFunctionName(String isTenantValidFunctionName);
+    T setIsTenantValidFunctionName(String isTenantValidFunctionName);
 
-    public T setIsTenantValidConstraintName(String isTenantValidConstraintName);
+    T setIsTenantValidConstraintName(String isTenantValidConstraintName);
 
-    public T setIsTenantValidFunctionName(SWWNB isTenantValidFunctionName);
+    T setIsTenantValidFunctionName(SWWNB isTenantValidFunctionName);
 
-    public T setIsTenantValidConstraintName(SWWNB isTenantValidConstraintName);
+    T setIsTenantValidConstraintName(SWWNB isTenantValidConstraintName);
 }

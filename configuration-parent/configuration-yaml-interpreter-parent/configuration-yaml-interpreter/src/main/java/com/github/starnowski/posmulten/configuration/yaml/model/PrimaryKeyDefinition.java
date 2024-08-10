@@ -41,7 +41,7 @@ import java.util.Map;
 @EqualsAndHashCode
 @ToString
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class PrimaryKeyDefinition implements AbstractPrimaryKeyDefinition {
+public class PrimaryKeyDefinition implements AbstractPrimaryKeyDefinition<PrimaryKeyDefinition> {
 
     @JsonProperty(value = "pk_columns_name_to_type")
     private Map<@NotBlank String, @NotBlank String> primaryKeyColumnsNameToTypeMap;

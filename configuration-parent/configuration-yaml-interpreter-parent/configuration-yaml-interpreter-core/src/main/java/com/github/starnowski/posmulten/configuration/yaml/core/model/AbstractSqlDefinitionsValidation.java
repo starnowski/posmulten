@@ -23,18 +23,18 @@
  */
 package com.github.starnowski.posmulten.configuration.yaml.core.model;
 
-public interface AbstractSqlDefinitionsValidation {
+public interface AbstractSqlDefinitionsValidation<T extends AbstractSqlDefinitionsValidation> {
 
     Integer getIdentifierMaxLength();
 
-    void setIdentifierMaxLength(Integer identifierMaxLength);
+    T setIdentifierMaxLength(Integer identifierMaxLength);
 
     Integer getIdentifierMinLength();
 
-    void setIdentifierMinLength(Integer identifierMinLength);
+    T setIdentifierMinLength(Integer identifierMinLength);
 
     Boolean getDisabled();
 
-    void setDisabled(Boolean disabled);
+    T setDisabled(Boolean disabled);
 
 }

@@ -89,6 +89,11 @@ public class SharedSchemaContextConfiguration implements AbstractSharedSchemaCon
     @JsonProperty(value = "create_foreignkey_constraint_with_tenant_column")
     private Boolean createForeignKeyConstraintWithTenantColumn;
 
+    @Override
+    public SharedSchemaContextConfiguration setCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables(Boolean currentTenantIdentifierAsDefaultValueForTenantColumnInAllTables) {
+        return null;
+    }
+
     public SharedSchemaContextConfiguration setCreateForeignKeyConstraintWithTenantColumn(Boolean createForeignKeyConstraintWithTenantColumn) {
         this.createForeignKeyConstraintWithTenantColumn = createForeignKeyConstraintWithTenantColumn;
         return this;
