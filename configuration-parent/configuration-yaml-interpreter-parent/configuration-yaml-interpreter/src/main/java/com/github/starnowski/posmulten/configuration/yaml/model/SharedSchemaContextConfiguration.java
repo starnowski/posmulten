@@ -94,11 +94,6 @@ public class SharedSchemaContextConfiguration implements AbstractSharedSchemaCon
         return this;
     }
 
-    @Override
-    public SharedSchemaContextConfiguration setCurrentTenantIdentifierAsDefaultValueForTenantColumnInAllTables(Boolean currentTenantIdentifierAsDefaultValueForTenantColumnInAllTables) {
-        return null;
-    }
-
     public SharedSchemaContextConfiguration setCreateForeignKeyConstraintWithTenantColumn(Boolean createForeignKeyConstraintWithTenantColumn) {
         this.createForeignKeyConstraintWithTenantColumn = createForeignKeyConstraintWithTenantColumn;
         return this;
