@@ -28,7 +28,7 @@ import com.github.starnowski.posmulten.configuration.yaml.core.model.AbstractPri
 import com.github.starnowski.posmulten.configuration.yaml.core.model.AbstractRLSPolicy;
 import com.github.starnowski.posmulten.configuration.yaml.core.model.AbstractStringWrapperWithNotBlankValue;
 
-public abstract class AbstractRLSPolicyMapper<S extends AbstractStringWrapperWithNotBlankValue, PK extends AbstractPrimaryKeyDefinition, T extends AbstractRLSPolicy<T, S, PK>> extends AbstractConfigurationMapper<com.github.starnowski.posmulten.configuration.core.model.RLSPolicy, T> {
+public abstract class AbstractRLSPolicyMapper<S extends AbstractStringWrapperWithNotBlankValue, PK extends AbstractPrimaryKeyDefinition<PK>, T extends AbstractRLSPolicy<S, PK, T>> extends AbstractConfigurationMapper<com.github.starnowski.posmulten.configuration.core.model.RLSPolicy, T> {
 
     @Override
     public T map(com.github.starnowski.posmulten.configuration.core.model.RLSPolicy input) {

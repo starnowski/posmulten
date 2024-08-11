@@ -25,7 +25,7 @@ package com.github.starnowski.posmulten.configuration.yaml.core.model;
 
 import java.util.Map;
 
-public interface AbstractPrimaryKeyDefinition<T extends AbstractPrimaryKeyDefinition> {
+public interface AbstractPrimaryKeyDefinition<T extends AbstractPrimaryKeyDefinition<T>> {
     Map<String, String> getPrimaryKeyColumnsNameToTypeMap();
 
     T setPrimaryKeyColumnsNameToTypeMap(Map<String, String> primaryKeyColumnsNameToTypeMap);

@@ -43,7 +43,7 @@ import java.util.Optional;
 @EqualsAndHashCode
 @ToString
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class TableEntry implements AbstractTableEntry<TableEntry, RLSPolicy, ForeignKeyConfiguration> {
+public class TableEntry implements AbstractTableEntry<RLSPolicy, ForeignKeyConfiguration, TableEntry> {
     /**
      * Table name
      */

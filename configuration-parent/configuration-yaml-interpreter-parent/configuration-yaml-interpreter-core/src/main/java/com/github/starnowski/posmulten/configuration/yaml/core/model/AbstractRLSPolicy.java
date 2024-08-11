@@ -23,7 +23,7 @@
  */
 package com.github.starnowski.posmulten.configuration.yaml.core.model;
 
-public interface AbstractRLSPolicy<T extends AbstractRLSPolicy, S extends AbstractStringWrapperWithNotBlankValue, PK extends AbstractPrimaryKeyDefinition> {
+public interface AbstractRLSPolicy<S extends AbstractStringWrapperWithNotBlankValue, PK extends AbstractPrimaryKeyDefinition<PK>, T extends AbstractRLSPolicy<S, PK, T>> {
 
     String getName();
 

@@ -42,7 +42,7 @@ import javax.validation.constraints.NotBlank;
 @EqualsAndHashCode
 @ToString
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class RLSPolicy implements AbstractRLSPolicy<RLSPolicy, StringWrapperWithNotBlankValue, PrimaryKeyDefinition> {
+public class RLSPolicy implements AbstractRLSPolicy<StringWrapperWithNotBlankValue, PrimaryKeyDefinition, RLSPolicy> {
     @NotBlank
     @JsonProperty(value = "name", required = true)
     private String name;
