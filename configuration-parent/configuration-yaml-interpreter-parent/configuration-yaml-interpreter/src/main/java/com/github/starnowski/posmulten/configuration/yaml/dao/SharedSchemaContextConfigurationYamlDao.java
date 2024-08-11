@@ -1,25 +1,25 @@
 /**
- *     Posmulten library is an open-source project for the generation
- *     of SQL DDL statements that make it easy for implementation of
- *     Shared Schema Multi-tenancy strategy via the Row Security
- *     Policies in the Postgres database.
- *
- *     Copyright (C) 2020  Szymon Tarnowski
- *
- *     This library is free software; you can redistribute it and/or
- *     modify it under the terms of the GNU Lesser General Public
- *     License as published by the Free Software Foundation; either
- *     version 2.1 of the License, or (at your option) any later version.
- *
- *     This library is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *     Lesser General Public License for more details.
- *
- *     You should have received a copy of the GNU Lesser General Public
- *     License along with this library; if not, write to the Free Software
- *     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301
- *     USA
+ * Posmulten library is an open-source project for the generation
+ * of SQL DDL statements that make it easy for implementation of
+ * Shared Schema Multi-tenancy strategy via the Row Security
+ * Policies in the Postgres database.
+ * <p>
+ * Copyright (C) 2020  Szymon Tarnowski
+ * <p>
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ * <p>
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301
+ * USA
  */
 package com.github.starnowski.posmulten.configuration.yaml.dao;
 
@@ -27,6 +27,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
+import com.github.starnowski.posmulten.configuration.yaml.core.dao.AbstractSharedSchemaContextConfigurationYamlDao;
 import com.github.starnowski.posmulten.configuration.yaml.core.exceptions.YamlInvalidSchema;
 import com.github.starnowski.posmulten.configuration.yaml.model.SharedSchemaContextConfiguration;
 import com.github.starnowski.posmulten.configuration.yaml.validation.groups.ValidatorGroupsResolver;
@@ -45,7 +46,7 @@ import static java.util.stream.Collectors.toList;
 import static javax.validation.ElementKind.CONTAINER_ELEMENT;
 import static javax.validation.ElementKind.PROPERTY;
 
-public class SharedSchemaContextConfigurationYamlDao {
+public class SharedSchemaContextConfigurationYamlDao implements AbstractSharedSchemaContextConfigurationYamlDao<SharedSchemaContextConfiguration> {
 
     private final ObjectMapper mapper;
 
@@ -89,11 +90,10 @@ public class SharedSchemaContextConfigurationYamlDao {
     }
 
     private String prepareErrorMessage(ConstraintViolation<SharedSchemaContextConfiguration> error) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(resolvePropertyPath(error));
-        sb.append(" ");
-        sb.append(error.getMessage());
-        return sb.toString();
+        String sb = resolvePropertyPath(error) +
+                " " +
+                error.getMessage();
+        return sb;
     }
 
     private String resolvePropertyPath(ConstraintViolation<SharedSchemaContextConfiguration> error) {
@@ -104,7 +104,7 @@ public class SharedSchemaContextConfigurationYamlDao {
             PathImpl pathImpl = (PathImpl) path;
             Iterator<Path.Node> it = pathImpl.iterator();
             Path.Node parent = null;
-            for (; it.hasNext(); ) {
+            while (it.hasNext()) {
                 Path.Node node = it.next();
                 if (parent == null) {
                     Class<?> keyClass = SharedSchemaContextConfiguration.class;
