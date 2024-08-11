@@ -1,6 +1,6 @@
 package com.github.starnowski.posmulten.configuration.yaml.context
 
-import com.github.starnowski.posmulten.configuration.yaml.AbstractSpecification
+import com.github.starnowski.posmulten.configuration.common.yaml.AbstractSpecification
 import com.github.starnowski.posmulten.configuration.yaml.core.exceptions.YamlInvalidSchema
 import spock.lang.Unroll
 
