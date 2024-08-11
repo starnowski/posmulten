@@ -1,26 +1,20 @@
-package com.github.starnowski.posmulten.configuration.yaml.dao
+package com.github.starnowski.posmulten.configuration.common.yaml.dao
 
 import com.github.starnowski.posmulten.configuration.common.yaml.AbstractSpecification
-import com.github.starnowski.posmulten.configuration.common.yaml.dao.AbstractSharedSchemaContextConfigurationYamlDaoValidationTest
+import com.github.starnowski.posmulten.configuration.yaml.core.dao.AbstractSharedSchemaContextConfigurationYamlDao
 import com.github.starnowski.posmulten.configuration.yaml.core.exceptions.YamlInvalidSchema
 import spock.lang.Unroll
 
 import java.nio.file.Files
 import java.nio.file.Paths
 
-import static com.github.starnowski.posmulten.configuration.common.yaml.TestProperties.INVALID_LIST_NODES_BLANK_FIELDS_PATH
-import static com.github.starnowski.posmulten.configuration.common.yaml.TestProperties.INVALID_MAP_BLANK_FIELDS_PATH
-import static com.github.starnowski.posmulten.configuration.common.yaml.TestProperties.INVALID_ROOT_NODE_BLANK_FIELDS_FILE_PATH
-import static com.github.starnowski.posmulten.configuration.common.yaml.TestProperties.INVALID_NESTED_NODE_BLANK_FIELDS_FILE_PATH
-import static com.github.starnowski.posmulten.configuration.common.yaml.TestProperties.INVALID_NESTED_NODE_EMPTY_LIST_FILE_PATH
-import static com.github.starnowski.posmulten.configuration.common.yaml.TestProperties.INVALID_CUSTOM_DEFINITIONS_FIELDS_PATH
+import static com.github.starnowski.posmulten.configuration.common.yaml.TestProperties.*
 
-class SharedSchemaContextConfigurationYamlDaoValidationTest extends AbstractSharedSchemaContextConfigurationYamlDaoValidationTest<SharedSchemaContextConfigurationYamlDao> {
+abstract class AbstractSharedSchemaContextConfigurationYamlDaoValidationTest<T extends AbstractSharedSchemaContextConfigurationYamlDao<T>> extends AbstractSpecification {
 
-    @Override
-    protected SharedSchemaContextConfigurationYamlDao getSharedSchemaContextConfigurationYamlDao() {
-        new SharedSchemaContextConfigurationYamlDao()
-    }
+    protected T tested = getSharedSchemaContextConfigurationYamlDao()
+
+    protected abstract T getSharedSchemaContextConfigurationYamlDao()
 
     @Unroll
     def "should throw exception that contains error message (#errorMessage) for file invalid-root-node-blank-fields.yaml"()
