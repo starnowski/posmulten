@@ -42,7 +42,7 @@ import java.util.List;
 @EqualsAndHashCode
 @ToString
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class SharedSchemaContextConfiguration implements AbstractSharedSchemaContextConfiguration<SharedSchemaContextConfiguration, StringWrapperWithNotBlankValue, CustomDefinitionEntry, ValidTenantValueConstraintConfiguration, TableEntry, SqlDefinitionsValidation> {
+public class SharedSchemaContextConfiguration implements AbstractSharedSchemaContextConfiguration<StringWrapperWithNotBlankValue, CustomDefinitionEntry, ValidTenantValueConstraintConfiguration, TableEntry, SqlDefinitionsValidation, SharedSchemaContextConfiguration> {
     @NotBlank
     @JsonProperty(value = "default_schema", required = true)
     private String defaultSchema;

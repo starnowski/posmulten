@@ -25,7 +25,7 @@ package com.github.starnowski.posmulten.configuration.yaml.core.model;
 
 import java.util.List;
 
-public interface AbstractCustomDefinitionEntry<T extends AbstractCustomDefinitionEntry> {
+public interface AbstractCustomDefinitionEntry<T extends AbstractCustomDefinitionEntry<T>> {
 
     String getCreationScript();
 

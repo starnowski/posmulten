@@ -26,7 +26,7 @@ package com.github.starnowski.posmulten.configuration.yaml.core.model;
 
 import java.util.List;
 
-public interface AbstractSharedSchemaContextConfiguration<T extends AbstractSharedSchemaContextConfiguration, SWWNBV extends AbstractStringWrapperWithNotBlankValue, CDE extends AbstractCustomDefinitionEntry, VTVCC extends AbstractValidTenantValueConstraintConfiguration, TE extends AbstractTableEntry, SDV extends AbstractSqlDefinitionsValidation> {
+public interface AbstractSharedSchemaContextConfiguration<SWWNBV extends AbstractStringWrapperWithNotBlankValue, CDE extends AbstractCustomDefinitionEntry, VTVCC extends AbstractValidTenantValueConstraintConfiguration, TE extends AbstractTableEntry, SDV extends AbstractSqlDefinitionsValidation, T extends AbstractSharedSchemaContextConfiguration<SWWNBV, CDE, VTVCC, TE, SDV, T>> {
 
     String getDefaultSchema();
 
