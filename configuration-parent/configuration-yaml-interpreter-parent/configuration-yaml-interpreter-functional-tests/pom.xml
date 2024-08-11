@@ -30,12 +30,12 @@
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>com.github.starnowski.posmulten.configuration</groupId>-->
-<!--            <artifactId>configuration-core</artifactId>-->
-<!--            <version>${project.version}</version>-->
-<!--            <scope>test</scope>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>com.github.starnowski.posmulten.configuration</groupId>
+            <artifactId>configuration</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>com.github.starnowski.posmulten</groupId>
             <artifactId>test-utils</artifactId>
