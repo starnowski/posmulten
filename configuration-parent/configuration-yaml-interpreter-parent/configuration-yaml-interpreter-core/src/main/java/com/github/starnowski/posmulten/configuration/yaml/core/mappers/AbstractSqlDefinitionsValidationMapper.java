@@ -21,33 +21,18 @@
  *     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301
  *     USA
  */
-package com.github.starnowski.posmulten.configuration.yaml.model;
+package com.github.starnowski.posmulten.configuration.yaml.core.mappers;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.starnowski.posmulten.configuration.yaml.core.model.AbstractSqlDefinitionsValidation;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-import lombok.experimental.Accessors;
 
-import javax.validation.constraints.Min;
+public abstract class AbstractSqlDefinitionsValidationMapper<T extends AbstractSqlDefinitionsValidation<T>> extends AbstractConfigurationMapper<com.github.starnowski.posmulten.configuration.core.model.SqlDefinitionsValidation, T> {
+    @Override
+    public T map(com.github.starnowski.posmulten.configuration.core.model.SqlDefinitionsValidation input) {
+        return input == null ? null : createNewInstanceOfOutput().setDisabled(input.getDisabled()).setIdentifierMaxLength(input.getIdentifierMaxLength()).setIdentifierMinLength(input.getIdentifierMinLength());
+    }
 
-@Accessors(chain = true)
-@Getter
-@Setter
-@EqualsAndHashCode
-@ToString
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class SqlDefinitionsValidation implements AbstractSqlDefinitionsValidation<SqlDefinitionsValidation> {
-
-    @Min(1)
-    @JsonProperty(value = "identifier_max_length")
-    private Integer identifierMaxLength;
-    @Min(1)
-    @JsonProperty(value = "identifier_min_length")
-    private Integer identifierMinLength;
-    @JsonProperty(value = "disabled")
-    private Boolean disabled;
+    @Override
+    public com.github.starnowski.posmulten.configuration.core.model.SqlDefinitionsValidation unmap(T output) {
+        return output == null ? null : new com.github.starnowski.posmulten.configuration.core.model.SqlDefinitionsValidation().setDisabled(output.getDisabled()).setIdentifierMaxLength(output.getIdentifierMaxLength()).setIdentifierMinLength(output.getIdentifierMinLength());
+    }
 }
