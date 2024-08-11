@@ -28,7 +28,7 @@ import com.github.starnowski.posmulten.configuration.yaml.model.CustomDefinition
 
 public class CustomDefinitionEntryMapper extends AbstractCustomDefinitionEntryMapper<CustomDefinitionEntry> {
     @Override
-    protected CustomDefinitionEntry createNewInstanceOfType() {
+    protected CustomDefinitionEntry createNewInstanceOfOutput() {
         return new CustomDefinitionEntry();
     }
 }

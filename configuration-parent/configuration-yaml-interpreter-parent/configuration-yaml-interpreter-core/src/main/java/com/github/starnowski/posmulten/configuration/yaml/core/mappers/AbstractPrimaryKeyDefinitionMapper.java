@@ -24,19 +24,20 @@
 package com.github.starnowski.posmulten.configuration.yaml.core.mappers;
 
 import com.github.starnowski.posmulten.configuration.yaml.core.IConfigurationMapper;
-import com.github.starnowski.posmulten.configuration.yaml.core.model.AbstractCustomDefinitionEntry;
+import com.github.starnowski.posmulten.configuration.yaml.core.model.AbstractPrimaryKeyDefinition;
 
-public abstract class AbstractCustomDefinitionEntryMapper<T extends AbstractCustomDefinitionEntry<T>> extends AbstractConfigurationMapper<com.github.starnowski.posmulten.configuration.core.model.CustomDefinitionEntry, T> {
+public abstract class AbstractPrimaryKeyDefinitionMapper<T extends AbstractPrimaryKeyDefinition<T>> extends AbstractConfigurationMapper<com.github.starnowski.posmulten.configuration.core.model.PrimaryKeyDefinition, T> {
     @Override
-    public T map(com.github.starnowski.posmulten.configuration.core.model.CustomDefinitionEntry input) {
-        return input == null ? null : createNewInstanceOfOutput().setCreationScript(input.getCreationScript()).setDropScript(input.getDropScript())
-                .setPosition(input.getPosition()).setCustomPosition(input.getCustomPosition()).setValidationScripts(input.getValidationScripts());
+    public T map(com.github.starnowski.posmulten.configuration.core.model.PrimaryKeyDefinition input) {
+        return input == null ? null : createNewInstanceOfOutput()
+                .setNameForFunctionThatChecksIfRecordExistsInTable(input.getNameForFunctionThatChecksIfRecordExistsInTable())
+                .setPrimaryKeyColumnsNameToTypeMap(input.getPrimaryKeyColumnsNameToTypeMap());
     }
 
     @Override
-    public com.github.starnowski.posmulten.configuration.core.model.CustomDefinitionEntry unmap(T output) {
-        return output == null ? null : new com.github.starnowski.posmulten.configuration.core.model.CustomDefinitionEntry().setCreationScript(output.getCreationScript())
-                .setDropScript(output.getDropScript()).setPosition(output.getPosition()).setCustomPosition(output.getCustomPosition())
-                .setValidationScripts(output.getValidationScripts());
+    public com.github.starnowski.posmulten.configuration.core.model.PrimaryKeyDefinition unmap(T output) {
+        return output == null ? null : new com.github.starnowski.posmulten.configuration.core.model.PrimaryKeyDefinition()
+                .setNameForFunctionThatChecksIfRecordExistsInTable(output.getNameForFunctionThatChecksIfRecordExistsInTable())
+                .setPrimaryKeyColumnsNameToTypeMap(output.getPrimaryKeyColumnsNameToTypeMap());
     }
 }
