@@ -1,17 +1,8 @@
 package com.github.starnowski.posmulten.configuration.yaml.dao
 
-import com.github.starnowski.posmulten.configuration.common.yaml.AbstractSpecification
-import com.github.starnowski.posmulten.configuration.common.yaml.IntegerRandomizer
-import com.github.starnowski.posmulten.configuration.common.yaml.OptionalRandomizer
+import com.github.starnowski.posmulten.configuration.common.yaml.dao.AbstractSharedSchemaContextConfigurationYamlDaoTest
 import com.github.starnowski.posmulten.configuration.yaml.core.exceptions.YamlInvalidSchema
 import com.github.starnowski.posmulten.configuration.yaml.model.*
-import org.jeasy.random.EasyRandom
-import org.jeasy.random.EasyRandomParameters
-import org.jeasy.random.FieldPredicates
-import org.jeasy.random.randomizers.misc.EnumRandomizer
-import org.jeasy.random.randomizers.text.StringDelegatingRandomizer
-import org.junit.Rule
-import org.junit.rules.TemporaryFolder
 import spock.lang.Unroll
 
 import java.nio.file.Files
@@ -22,13 +13,7 @@ import static com.github.starnowski.posmulten.postgresql.test.utils.MapBuilder.m
 import static java.util.Arrays.asList
 import static java.util.stream.Collectors.toList
 
-class SharedSchemaContextConfigurationYamlDaoTest extends AbstractSpecification {
-
-
-    @Rule
-    public TemporaryFolder tempFolder = new TemporaryFolder()
-
-    def tested = new SharedSchemaContextConfigurationYamlDao()
+class SharedSchemaContextConfigurationYamlDaoTest extends AbstractSharedSchemaContextConfigurationYamlDaoTest<SharedSchemaContextConfiguration, SharedSchemaContextConfigurationYamlDao> {
 
     @Unroll
     def "should return non null object based on file #filePath"()
@@ -379,28 +364,34 @@ class SharedSchemaContextConfigurationYamlDaoTest extends AbstractSpecification 
             ]
     }
 
-    def "should return object based on file which was created based on random generated object"()
-    {
-        given:
-            EasyRandomParameters parameters = new EasyRandomParameters()
-                    .randomize(FieldPredicates.named("identifierMaxLength").and(FieldPredicates.ofType(Integer.class)).and(FieldPredicates.inClass(SqlDefinitionsValidation.class)), new IntegerRandomizer(1, 255))
-                    .randomize(FieldPredicates.named("identifierMinLength").and(FieldPredicates.ofType(Integer.class)).and(FieldPredicates.inClass(SqlDefinitionsValidation.class)), new IntegerRandomizer(1, 255))
-                    .randomize(FieldPredicates.named("schema").and(FieldPredicates.ofType(Optional.class)).and(FieldPredicates.inClass(TableEntry.class)), new OptionalRandomizer(StringDelegatingRandomizer.aNewStringDelegatingRandomizer(new IntegerRandomizer(1, 255)), true))
-                    .randomize(FieldPredicates.named("tableSchema").and(FieldPredicates.ofType(Optional.class)).and(FieldPredicates.inClass(ForeignKeyConfiguration.class)), new OptionalRandomizer(StringDelegatingRandomizer.aNewStringDelegatingRandomizer(new IntegerRandomizer(1, 255)), true))
-                    .randomize(FieldPredicates.named("position").and(FieldPredicates.ofType(String.class)).and(FieldPredicates.inClass(CustomDefinitionEntry.class)), StringDelegatingRandomizer.aNewStringDelegatingRandomizer(new EnumRandomizer(com.github.starnowski.posmulten.configuration.core.model.CustomDefinitionEntry.CustomDefinitionPosition)))
-            EasyRandom easyRandom = new EasyRandom(parameters)
-            def randomObject = easyRandom.nextObject(SharedSchemaContextConfiguration)
-            def tmpFile = tempFolder.newFile("rand-temp-config.yaml")
-            tested.save(randomObject, tmpFile.getAbsoluteFile().getAbsolutePath())
+    @Override
+    protected SharedSchemaContextConfigurationYamlDao getSharedSchemaContextConfigurationYamlDao() {
+        new SharedSchemaContextConfigurationYamlDao()
+    }
 
-        when:
-            def result = tested.read(tmpFile.getAbsoluteFile().getAbsolutePath())
+    @Override
+    protected Class<SharedSchemaContextConfiguration> getSharedSchemaContextConfigurationClass() {
+        SharedSchemaContextConfiguration.class
+    }
 
-        then:
-            result
+    @Override
+    protected Class<TableEntry> getTableEntryClass() {
+        TableEntry.class
+    }
 
-        and: "tests objects should be equal"
-            result == randomObject
+    @Override
+    protected Class<ForeignKeyConfiguration> getForeignKeyConfigurationClass() {
+        ForeignKeyConfiguration.class
+    }
+
+    @Override
+    protected Class<CustomDefinitionEntry> getCustomDefinitionEntryClass() {
+        CustomDefinitionEntry.class
+    }
+
+    @Override
+    protected Class<com.github.starnowski.posmulten.configuration.yaml.model.SqlDefinitionsValidation> getSqlDefinitionsValidationClass() {
+        SqlDefinitionsValidation.class
     }
 
     private StringWrapperWithNotBlankValue stringWrapper(String value)
