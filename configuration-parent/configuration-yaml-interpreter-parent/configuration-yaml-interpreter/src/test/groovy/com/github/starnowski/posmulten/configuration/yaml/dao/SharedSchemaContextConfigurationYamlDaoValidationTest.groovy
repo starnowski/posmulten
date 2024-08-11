@@ -7,12 +7,12 @@ import spock.lang.Unroll
 import java.nio.file.Files
 import java.nio.file.Paths
 
-import static com.github.starnowski.posmulten.configuration.yaml.TestProperties.INVALID_LIST_NODES_BLANK_FIELDS_PATH
-import static com.github.starnowski.posmulten.configuration.yaml.TestProperties.INVALID_MAP_BLANK_FIELDS_PATH
-import static com.github.starnowski.posmulten.configuration.yaml.TestProperties.INVALID_ROOT_NODE_BLANK_FIELDS_FILE_PATH
-import static com.github.starnowski.posmulten.configuration.yaml.TestProperties.INVALID_NESTED_NODE_BLANK_FIELDS_FILE_PATH
-import static com.github.starnowski.posmulten.configuration.yaml.TestProperties.INVALID_NESTED_NODE_EMPTY_LIST_FILE_PATH
-import static com.github.starnowski.posmulten.configuration.yaml.TestProperties.INVALID_CUSTOM_DEFINITIONS_FIELDS_PATH
+import static com.github.starnowski.posmulten.configuration.common.yaml.TestProperties.INVALID_LIST_NODES_BLANK_FIELDS_PATH
+import static com.github.starnowski.posmulten.configuration.common.yaml.TestProperties.INVALID_MAP_BLANK_FIELDS_PATH
+import static com.github.starnowski.posmulten.configuration.common.yaml.TestProperties.INVALID_ROOT_NODE_BLANK_FIELDS_FILE_PATH
+import static com.github.starnowski.posmulten.configuration.common.yaml.TestProperties.INVALID_NESTED_NODE_BLANK_FIELDS_FILE_PATH
+import static com.github.starnowski.posmulten.configuration.common.yaml.TestProperties.INVALID_NESTED_NODE_EMPTY_LIST_FILE_PATH
+import static com.github.starnowski.posmulten.configuration.common.yaml.TestProperties.INVALID_CUSTOM_DEFINITIONS_FIELDS_PATH
 
 class SharedSchemaContextConfigurationYamlDaoValidationTest extends AbstractSpecification {
 

@@ -1,4 +1,4 @@
-package com.github.starnowski.posmulten.configuration.yaml;
+package com.github.starnowski.posmulten.configuration.common.yaml;
 
 public class TestProperties {
 
