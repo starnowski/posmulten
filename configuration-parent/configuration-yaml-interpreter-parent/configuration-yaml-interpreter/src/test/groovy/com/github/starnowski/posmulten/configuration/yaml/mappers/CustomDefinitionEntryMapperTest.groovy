@@ -1,7 +1,6 @@
 package com.github.starnowski.posmulten.configuration.yaml.mappers
 
 import com.github.starnowski.posmulten.configuration.common.yaml.mappers.AbstractCustomDefinitionEntryMapperTest
-import com.github.starnowski.posmulten.configuration.core.model.CustomDefinitionEntry
 
 
 class CustomDefinitionEntryMapperTest extends AbstractCustomDefinitionEntryMapperTest<com.github.starnowski.posmulten.configuration.yaml.model.CustomDefinitionEntry, CustomDefinitionEntryMapper, ConfigurationMapperTestContext> {
@@ -9,11 +8,6 @@ class CustomDefinitionEntryMapperTest extends AbstractCustomDefinitionEntryMappe
     @Override
     protected ConfigurationMapperTestContext getConfigurationMapperTestContext() {
         new ConfigurationMapperTestContext()
-    }
-
-    @Override
-    protected Class<CustomDefinitionEntry> getConfigurationObjectClass() {
-        CustomDefinitionEntry.class
     }
 
     @Override
