@@ -16,6 +16,7 @@
         <module>configuration-yaml-interpreter</module>
         <module>configuration-yaml-interpreter-functional-tests</module>
         <module>configuration-yaml-interpreter-core</module>
+        <module>configuration-yaml-jakarta-interpreter</module>
     </modules>
 
 </project>
