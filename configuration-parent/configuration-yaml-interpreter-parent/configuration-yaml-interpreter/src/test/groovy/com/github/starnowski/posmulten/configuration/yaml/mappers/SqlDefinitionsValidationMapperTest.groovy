@@ -1,16 +1,18 @@
 package com.github.starnowski.posmulten.configuration.yaml.mappers
 
-import com.github.starnowski.posmulten.configuration.core.model.SqlDefinitionsValidation
+import com.github.starnowski.posmulten.configuration.common.yaml.mappers.AbstractSqlDefinitionsValidationMapperTest
+import com.github.starnowski.posmulten.configuration.yaml.model.SqlDefinitionsValidation
 
-class SqlDefinitionsValidationMapperTest extends AbstractConfigurationMapperTest<com.github.starnowski.posmulten.configuration.yaml.model.SqlDefinitionsValidation, com.github.starnowski.posmulten.configuration.core.model.SqlDefinitionsValidation, SqlDefinitionsValidationMapper> {
+class SqlDefinitionsValidationMapperTest extends AbstractSqlDefinitionsValidationMapperTest<SqlDefinitionsValidation, SqlDefinitionsValidationMapper, ConfigurationMapperTestContext> {
+
     @Override
-    protected Class<SqlDefinitionsValidation> getConfigurationObjectClass() {
-        SqlDefinitionsValidation.class
+    protected ConfigurationMapperTestContext getConfigurationMapperTestContext() {
+        new ConfigurationMapperTestContext()
     }
 
     @Override
-    protected Class<com.github.starnowski.posmulten.configuration.yaml.model.SqlDefinitionsValidation> getYamlConfigurationObjectClass() {
-        com.github.starnowski.posmulten.configuration.yaml.model.SqlDefinitionsValidation.class
+    protected Class<SqlDefinitionsValidation> getYamlConfigurationObjectClass() {
+        SqlDefinitionsValidation.class
     }
 
     @Override
@@ -19,26 +21,7 @@ class SqlDefinitionsValidationMapperTest extends AbstractConfigurationMapperTest
     }
 
     @Override
-    protected List<com.github.starnowski.posmulten.configuration.yaml.model.SqlDefinitionsValidation> prepareExpectedMappedObjectsList() {
-        [
-                new com.github.starnowski.posmulten.configuration.yaml.model.SqlDefinitionsValidation(),
-                new com.github.starnowski.posmulten.configuration.yaml.model.SqlDefinitionsValidation().setDisabled(true),
-                new com.github.starnowski.posmulten.configuration.yaml.model.SqlDefinitionsValidation().setDisabled(false),
-                new com.github.starnowski.posmulten.configuration.yaml.model.SqlDefinitionsValidation().setIdentifierMaxLength(1),
-                new com.github.starnowski.posmulten.configuration.yaml.model.SqlDefinitionsValidation().setIdentifierMinLength(5),
-                new com.github.starnowski.posmulten.configuration.yaml.model.SqlDefinitionsValidation().setIdentifierMinLength(3).setIdentifierMaxLength(11)
-        ]
-    }
-
-    @Override
-    protected List<SqlDefinitionsValidation> prepareExpectedUnmappeddObjectsList() {
-        [
-                new SqlDefinitionsValidation(),
-                new SqlDefinitionsValidation().setDisabled(true),
-                new SqlDefinitionsValidation().setDisabled(false),
-                new SqlDefinitionsValidation().setIdentifierMaxLength(1),
-                new SqlDefinitionsValidation().setIdentifierMinLength(5),
-                new SqlDefinitionsValidation().setIdentifierMinLength(3).setIdentifierMaxLength(11)
-        ]
+    protected SqlDefinitionsValidation createOutputInstance() {
+        new SqlDefinitionsValidation()
     }
 }
