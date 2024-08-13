@@ -1,6 +1,6 @@
 package com.github.starnowski.posmulten.configuration.yaml.jakarta.validation.groups;
 
-import com.github.starnowski.posmulten.configuration.yaml.model.SharedSchemaContextConfiguration;
+import com.github.starnowski.posmulten.configuration.yaml.jakarta.model.SharedSchemaContextConfiguration;
 
 import java.util.Collections;
 import java.util.List;
