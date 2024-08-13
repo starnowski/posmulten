@@ -1,8 +1,9 @@
 package com.github.starnowski.posmulten.configuration.yaml.mappers
 
 import com.github.starnowski.posmulten.configuration.common.yaml.mappers.AbstractForeignKeyConfigurationMapperTest
+import com.github.starnowski.posmulten.configuration.yaml.model.ForeignKeyConfiguration
 
-class ForeignKeyConfigurationMapperTest extends AbstractForeignKeyConfigurationMapperTest<com.github.starnowski.posmulten.configuration.yaml.model.ForeignKeyConfiguration, ForeignKeyConfigurationMapper, ConfigurationMapperTestContext> {
+class ForeignKeyConfigurationMapperTest extends AbstractForeignKeyConfigurationMapperTest<ForeignKeyConfiguration, ForeignKeyConfigurationMapper, ConfigurationMapperTestContext> {
 
     @Override
     protected ConfigurationMapperTestContext getConfigurationMapperTestContext() {
@@ -10,13 +11,13 @@ class ForeignKeyConfigurationMapperTest extends AbstractForeignKeyConfigurationM
     }
 
     @Override
-    protected com.github.starnowski.posmulten.configuration.yaml.model.ForeignKeyConfiguration createOutputInstance() {
-        new com.github.starnowski.posmulten.configuration.yaml.model.ForeignKeyConfiguration()
+    protected ForeignKeyConfiguration createOutputInstance() {
+        new ForeignKeyConfiguration()
     }
 
     @Override
-    protected Class<com.github.starnowski.posmulten.configuration.yaml.model.ForeignKeyConfiguration> getYamlConfigurationObjectClass() {
-        com.github.starnowski.posmulten.configuration.yaml.model.ForeignKeyConfiguration.class
+    protected Class<ForeignKeyConfiguration> getYamlConfigurationObjectClass() {
+        ForeignKeyConfiguration.class
     }
 
     @Override
