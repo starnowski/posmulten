@@ -14,6 +14,7 @@
 
     <properties>
         <com.fasterxml.jackson.dataformat.jackson-dataformat-yaml.version>2.17.2</com.fasterxml.jackson.dataformat.jackson-dataformat-yaml.version>
+        <org.hibernate.validator.version>6.0.20.Final</org.hibernate.validator.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <license.dir>${project.parent.basedir}/../..</license.dir>
     </properties>
@@ -50,6 +51,11 @@
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jdk8</artifactId>
             <version>${com.fasterxml.jackson.dataformat.jackson-dataformat-yaml.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>${org.hibernate.validator.version}</version>
         </dependency>
     </dependencies>
 

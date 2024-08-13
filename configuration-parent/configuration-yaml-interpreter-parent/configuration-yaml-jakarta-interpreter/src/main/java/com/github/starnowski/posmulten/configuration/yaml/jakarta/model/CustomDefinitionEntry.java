@@ -26,6 +26,8 @@ package com.github.starnowski.posmulten.configuration.yaml.jakarta.model;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.starnowski.posmulten.configuration.yaml.core.model.AbstractCustomDefinitionEntry;
+import com.github.starnowski.posmulten.configuration.yaml.jakarta.validation.CustomPositionValidValue;
+import com.github.starnowski.posmulten.configuration.yaml.jakarta.validation.EnumNamePattern;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
