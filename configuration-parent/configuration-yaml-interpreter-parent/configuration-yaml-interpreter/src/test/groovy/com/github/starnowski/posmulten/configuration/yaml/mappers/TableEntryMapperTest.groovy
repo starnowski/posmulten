@@ -1,20 +1,20 @@
 package com.github.starnowski.posmulten.configuration.yaml.mappers
 
-import com.github.starnowski.posmulten.configuration.core.model.TableEntry
-import com.github.starnowski.posmulten.configuration.core.model.ForeignKeyConfiguration
-import com.github.starnowski.posmulten.configuration.core.model.RLSPolicy
+import com.github.starnowski.posmulten.configuration.common.yaml.mappers.AbstractTableEntryMapperTest
+import com.github.starnowski.posmulten.configuration.yaml.model.ForeignKeyConfiguration
+import com.github.starnowski.posmulten.configuration.yaml.model.RLSPolicy
+import com.github.starnowski.posmulten.configuration.yaml.model.TableEntry
 
-import static java.util.Arrays.asList
+class TableEntryMapperTest extends AbstractTableEntryMapperTest<ForeignKeyConfiguration, RLSPolicy, TableEntry, TableEntryMapper, ConfigurationMapperTestContext> {
 
-class TableEntryMapperTest extends AbstractConfigurationMapperTest<com.github.starnowski.posmulten.configuration.yaml.model.TableEntry, com.github.starnowski.posmulten.configuration.core.model.TableEntry, TableEntryMapper> {
     @Override
-    protected Class<TableEntry> getConfigurationObjectClass() {
-        TableEntry.class
+    protected ConfigurationMapperTestContext getConfigurationMapperTestContext() {
+        new ConfigurationMapperTestContext()
     }
 
     @Override
-    protected Class<com.github.starnowski.posmulten.configuration.yaml.model.TableEntry> getYamlConfigurationObjectClass() {
-        com.github.starnowski.posmulten.configuration.yaml.model.TableEntry.class
+    protected Class<TableEntry> getYamlConfigurationObjectClass() {
+        TableEntry.class
     }
 
     @Override
@@ -23,28 +23,17 @@ class TableEntryMapperTest extends AbstractConfigurationMapperTest<com.github.st
     }
 
     @Override
-    protected List<com.github.starnowski.posmulten.configuration.yaml.model.TableEntry> prepareExpectedMappedObjectsList() {
-        [
-                new com.github.starnowski.posmulten.configuration.yaml.model.TableEntry(),
-                new com.github.starnowski.posmulten.configuration.yaml.model.TableEntry().setName("table_1"),
-                new com.github.starnowski.posmulten.configuration.yaml.model.TableEntry().setName("users_t").setRlsPolicy(new com.github.starnowski.posmulten.configuration.yaml.model.RLSPolicy()),
-                new com.github.starnowski.posmulten.configuration.yaml.model.TableEntry().setName("users_t").setForeignKeys(new ArrayList<com.github.starnowski.posmulten.configuration.yaml.model.ForeignKeyConfiguration>()),
-                new com.github.starnowski.posmulten.configuration.yaml.model.TableEntry().setName("users_t").setForeignKeys(asList(new com.github.starnowski.posmulten.configuration.yaml.model.ForeignKeyConfiguration().setTableName("tabXXX"))),
-                new com.github.starnowski.posmulten.configuration.yaml.model.TableEntry().setName("posts").setRlsPolicy(new com.github.starnowski.posmulten.configuration.yaml.model.RLSPolicy().setName("rls_users_policy"))
-                        .setForeignKeys(asList(new com.github.starnowski.posmulten.configuration.yaml.model.ForeignKeyConfiguration().setTableName("tabXXX"), new com.github.starnowski.posmulten.configuration.yaml.model.ForeignKeyConfiguration().setTableName("comments"))),
-        ]
+    protected TableEntry createOutputInstance() {
+        new TableEntry()
     }
 
     @Override
-    protected List<TableEntry> prepareExpectedUnmappeddObjectsList() {
-        [
-                new TableEntry(),
-                new TableEntry().setName("table_1"),
-                new TableEntry().setName("users_t").setRlsPolicy(new RLSPolicy()),
-                new TableEntry().setName("users_t").setForeignKeys(new ArrayList<ForeignKeyConfiguration>()),
-                new TableEntry().setName("users_t").setForeignKeys(asList(new ForeignKeyConfiguration().setTableName("tabXXX"))),
-                new TableEntry().setName("posts").setRlsPolicy(new RLSPolicy().setName("rls_users_policy"))
-                        .setForeignKeys(asList(new ForeignKeyConfiguration().setTableName("tabXXX"), new ForeignKeyConfiguration().setTableName("comments"))),
-        ]
+    protected ForeignKeyConfiguration createForeignKeyConfigurationInstance() {
+        new ForeignKeyConfiguration()
+    }
+
+    @Override
+    protected RLSPolicy createRLSPolicyInstance() {
+        new RLSPolicy()
     }
 }
