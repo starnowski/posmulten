@@ -1,42 +1,26 @@
 package com.github.starnowski.posmulten.configuration.yaml.mappers
 
-import com.github.starnowski.posmulten.configuration.core.model.PrimaryKeyDefinition
+import com.github.starnowski.posmulten.configuration.common.yaml.mappers.AbstractPrimaryKeyDefinitionMapperTest
+import com.github.starnowski.posmulten.configuration.yaml.model.PrimaryKeyDefinition
 
-import static com.github.starnowski.posmulten.postgresql.test.utils.MapBuilder.mapBuilder
-
-class PrimaryKeyDefinitionMapperTest extends AbstractConfigurationMapperTest<com.github.starnowski.posmulten.configuration.yaml.model.PrimaryKeyDefinition, com.github.starnowski.posmulten.configuration.core.model.PrimaryKeyDefinition, PrimaryKeyDefinitionMapper> {
+class PrimaryKeyDefinitionMapperTest extends AbstractPrimaryKeyDefinitionMapperTest<PrimaryKeyDefinition, PrimaryKeyDefinitionMapper, ConfigurationMapperTestContext> {
     @Override
-    protected Class<PrimaryKeyDefinition> getConfigurationObjectClass() {
-        PrimaryKeyDefinition.class
+    protected ConfigurationMapperTestContext getConfigurationMapperTestContext() {
+        new ConfigurationMapperTestContext()
     }
 
     @Override
-    protected Class<com.github.starnowski.posmulten.configuration.yaml.model.PrimaryKeyDefinition> getYamlConfigurationObjectClass() {
-        com.github.starnowski.posmulten.configuration.yaml.model.PrimaryKeyDefinition.class
+    protected PrimaryKeyDefinition createOutputInstance() {
+        new PrimaryKeyDefinition()
+    }
+
+    @Override
+    protected Class<PrimaryKeyDefinition> getYamlConfigurationObjectClass() {
+        PrimaryKeyDefinition.class
     }
 
     @Override
     protected PrimaryKeyDefinitionMapper getTestedObject() {
         new PrimaryKeyDefinitionMapper()
-    }
-
-    @Override
-    protected List<com.github.starnowski.posmulten.configuration.yaml.model.PrimaryKeyDefinition> prepareExpectedMappedObjectsList() {
-        [
-                new com.github.starnowski.posmulten.configuration.yaml.model.PrimaryKeyDefinition(),
-                new com.github.starnowski.posmulten.configuration.yaml.model.PrimaryKeyDefinition().setNameForFunctionThatChecksIfRecordExistsInTable("is_record_for_table_exists"),
-                new com.github.starnowski.posmulten.configuration.yaml.model.PrimaryKeyDefinition().setNameForFunctionThatChecksIfRecordExistsInTable("is_exists").setPrimaryKeyColumnsNameToTypeMap(mapBuilder().put("id", "int").build()),
-                new com.github.starnowski.posmulten.configuration.yaml.model.PrimaryKeyDefinition().setNameForFunctionThatChecksIfRecordExistsInTable("is_exists").setPrimaryKeyColumnsNameToTypeMap(mapBuilder().put("id", "int").put("some_uuid", "UUID").build())
-        ]
-    }
-
-    @Override
-    protected List<PrimaryKeyDefinition> prepareExpectedUnmappeddObjectsList() {
-        [
-                new PrimaryKeyDefinition(),
-                new PrimaryKeyDefinition().setNameForFunctionThatChecksIfRecordExistsInTable("is_record_for_table_exists"),
-                new PrimaryKeyDefinition().setNameForFunctionThatChecksIfRecordExistsInTable("is_exists").setPrimaryKeyColumnsNameToTypeMap(mapBuilder().put("id", "int").build()),
-                new PrimaryKeyDefinition().setNameForFunctionThatChecksIfRecordExistsInTable("is_exists").setPrimaryKeyColumnsNameToTypeMap(mapBuilder().put("id", "int").put("some_uuid", "UUID").build())
-        ]
     }
 }
