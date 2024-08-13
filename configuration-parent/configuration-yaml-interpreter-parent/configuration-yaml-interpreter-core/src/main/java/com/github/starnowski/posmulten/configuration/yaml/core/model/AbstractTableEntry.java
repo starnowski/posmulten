@@ -28,19 +28,19 @@ import java.util.Optional;
 
 public interface AbstractTableEntry<RLSP extends AbstractRLSPolicy, FKC extends AbstractForeignKeyConfiguration, T extends AbstractTableEntry<RLSP, FKC, T>> {
 
-    public String getName();
+    String getName();
 
-    public T setName(String name);
+    T setName(String name);
 
-    public Optional<String> getSchema();
+    Optional<String> getSchema();
 
-    public T setSchema(Optional<String> schema);
+    T setSchema(Optional<String> schema);
 
-    public RLSP getRlsPolicy();
+    RLSP getRlsPolicy();
 
-    public T setRlsPolicy(RLSP rlsPolicy);
+    T setRlsPolicy(RLSP rlsPolicy);
 
-    public List<FKC> getForeignKeys();
+    List<FKC> getForeignKeys();
 
-    public T setForeignKeys(List<FKC> foreignKeys);
+    T setForeignKeys(List<FKC> foreignKeys);
 }
