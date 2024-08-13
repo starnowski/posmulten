@@ -2,12 +2,10 @@ package com.github.starnowski.posmulten.configuration.common.yaml.mappers
 
 import com.github.starnowski.posmulten.configuration.core.model.ForeignKeyConfiguration
 import com.github.starnowski.posmulten.configuration.core.model.RLSPolicy
-import com.github.starnowski.posmulten.configuration.core.model.SqlDefinitionsValidation
 import com.github.starnowski.posmulten.configuration.core.model.TableEntry
 import com.github.starnowski.posmulten.configuration.yaml.core.IConfigurationMapper
 import com.github.starnowski.posmulten.configuration.yaml.core.model.AbstractForeignKeyConfiguration
 import com.github.starnowski.posmulten.configuration.yaml.core.model.AbstractRLSPolicy
-import com.github.starnowski.posmulten.configuration.yaml.core.model.AbstractSqlDefinitionsValidation
 import com.github.starnowski.posmulten.configuration.yaml.core.model.AbstractTableEntry
 
 import static java.util.Arrays.asList
