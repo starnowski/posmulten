@@ -13,6 +13,9 @@
     <artifactId>configuration-yaml-jakarta-interpreter</artifactId>
 
     <properties>
+        <java.version>11</java.version>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
         <com.fasterxml.jackson.dataformat.jackson-dataformat-yaml.version>2.17.2</com.fasterxml.jackson.dataformat.jackson-dataformat-yaml.version>
         <org.hibernate.validator.version>8.0.1.Final</org.hibernate.validator.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -62,6 +65,20 @@
             <artifactId>jakarta.validation-api</artifactId>
             <version>3.1.0</version>
         </dependency>
+        <!--tests-->
+        <dependency>
+            <groupId>org.apache.groovy</groupId>
+            <artifactId>groovy-all</artifactId>
+            <version>4.0.12</version>
+            <type>pom</type>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.spockframework</groupId>
+            <artifactId>spock-core</artifactId>
+            <version>2.4-M1-groovy-4.0</version>
+            <scope>test</scope>
+        </dependency>
 
     </dependencies>
 
@@ -107,33 +124,33 @@
                 </plugins>
             </build>
         </profile>
+        <profile>
+            <id>jdk11</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.gmavenplus</groupId>
+                        <artifactId>gmavenplus-plugin</artifactId>
+                        <version>3.0.0</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>compile</goal>
+                                    <goal>compileTests</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
     </profiles>
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.codehaus.gmavenplus</groupId>
-                <artifactId>gmavenplus-plugin</artifactId>
-                <version>1.5</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>compile</goal>
-                            <goal>testCompile</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.22.1</version>
-                <configuration>
-                    <forkMode>once</forkMode>
-                    <argLine>-Duser.language=en</argLine>
-                </configuration>
-            </plugin>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
