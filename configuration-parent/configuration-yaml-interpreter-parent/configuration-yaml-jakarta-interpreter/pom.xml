@@ -14,7 +14,7 @@
 
     <properties>
         <com.fasterxml.jackson.dataformat.jackson-dataformat-yaml.version>2.17.2</com.fasterxml.jackson.dataformat.jackson-dataformat-yaml.version>
-        <org.hibernate.validator.version>6.0.20.Final</org.hibernate.validator.version>
+        <org.hibernate.validator.version>8.0.1.Final</org.hibernate.validator.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <license.dir>${project.parent.basedir}/../..</license.dir>
     </properties>
@@ -43,9 +43,9 @@
         </dependency>
 
         <dependency>
-            <groupId>jakarta.validation</groupId>
-            <artifactId>jakarta.validation-api</artifactId>
-            <version>3.0.2</version> <!-- or the latest version -->
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-yaml</artifactId>
+            <version>${com.fasterxml.jackson.dataformat.jackson-dataformat-yaml.version}</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
@@ -57,6 +57,12 @@
             <artifactId>hibernate-validator</artifactId>
             <version>${org.hibernate.validator.version}</version>
         </dependency>
+        <dependency>
+            <groupId>jakarta.validation</groupId>
+            <artifactId>jakarta.validation-api</artifactId>
+            <version>3.1.0</version>
+        </dependency>
+
     </dependencies>
 
     <profiles>
