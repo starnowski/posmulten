@@ -1,4 +1,4 @@
-package com.github.starnowski.posmulten.configuration.yaml.context
+package com.github.starnowski.posmulten.configuration.yaml.jakarta.context
 
 import com.github.starnowski.posmulten.configuration.common.yaml.context.AbstractYamlConfigurationDefaultSharedSchemaContextBuilderFactorySupplierTest
 
