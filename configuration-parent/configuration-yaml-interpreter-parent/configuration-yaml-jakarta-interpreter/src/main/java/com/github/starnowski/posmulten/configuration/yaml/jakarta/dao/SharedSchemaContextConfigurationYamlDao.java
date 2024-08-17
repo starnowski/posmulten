@@ -37,7 +37,6 @@ import org.hibernate.validator.internal.engine.path.PathImpl;
 import jakarta.validation.*;
 import jakarta.validation.groups.Default;
 
-import javax.validation.ValidatorFactory;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -101,69 +100,69 @@ public class SharedSchemaContextConfigurationYamlDao implements AbstractSharedSc
     private String resolvePropertyPath(ConstraintViolation<SharedSchemaContextConfiguration> error) {
         StringBuilder sb = new StringBuilder();
         Path path = error.getPropertyPath();
-//        if (path instanceof PathImpl) {
-//            List<String> nodes = new ArrayList<>();
-//            PathImpl pathImpl = (PathImpl) path;
-//            Iterator<Path.Node> it = pathImpl.iterator();
-//            Path.Node parent = null;
-//            while (it.hasNext()) {
-//                Path.Node node = it.next();
-//                if (parent == null) {
-//                    Class<?> keyClass = SharedSchemaContextConfiguration.class;
-//                    prepareNodePathBasedOnParentNodeClass(nodes, node, keyClass);
-//                } else {
-//                    NodeImpl parentImpl = (NodeImpl) parent;
-//                    if (PROPERTY.equals(parentImpl.getKind())) {
-//                        Class<?> keyClass = parentImpl.getValue().getClass();
-//                        prepareNodePathBasedOnParentNodeClass(nodes, node, keyClass);
-//                    }
-//                }
-//                parent = node;
-//            }
-//            sb.append(nodes.stream().collect(joining(".")));
-//        } else {
+        if (path instanceof PathImpl) {
+            List<String> nodes = new ArrayList<>();
+            PathImpl pathImpl = (PathImpl) path;
+            Iterator<Path.Node> it = pathImpl.iterator();
+            Path.Node parent = null;
+            while (it.hasNext()) {
+                Path.Node node = it.next();
+                if (parent == null) {
+                    Class<?> keyClass = SharedSchemaContextConfiguration.class;
+                    prepareNodePathBasedOnParentNodeClass(nodes, node, keyClass);
+                } else {
+                    NodeImpl parentImpl = (NodeImpl) parent;
+                    if (PROPERTY.equals(parentImpl.getKind())) {
+                        Class<?> keyClass = parentImpl.getValue().getClass();
+                        prepareNodePathBasedOnParentNodeClass(nodes, node, keyClass);
+                    }
+                }
+                parent = node;
+            }
+            sb.append(nodes.stream().collect(joining(".")));
+        } else {
             sb.append(error.getPropertyPath());
-//        }
+        }
         return sb.toString();
     }
 
-//    private void prepareNodePathBasedOnParentNodeClass(List<String> nodes, Path.Node node, Class<?> parentNodeClass) {
-//        try {
-//            if (node.getName() == null) {
-//                return;
-//            }
-//            Field field = parentNodeClass.getDeclaredField(node.getName());
-//            JsonProperty annotation = field.getAnnotation(JsonProperty.class);
-//            if (annotation != null) {
-//                StringBuilder sb = new StringBuilder();
-//                sb.append(annotation.value() == null ? node.getName() : annotation.value());
-//                NodeImpl nodeImpl = (NodeImpl) node;
-//                if (nodeImpl.isIterable() && returnNodeIndex(nodeImpl) != null) {
-//                    sb.append("[");
-//                    sb.append(returnNodeIndex(nodeImpl));
-//                    sb.append("]");
-//                }
-//                nodes.add(sb.toString());
-//            }
-//        } catch (NoSuchFieldException e) {
-//            if (CONTAINER_ELEMENT.equals(node.getKind())) {
-//                if (node.getKey() != null) {
-//                    NodeImpl nodeImpl = (NodeImpl) node;
-//                    //nodeImpl.getTypeArgumentIndex() == 0 <- map key, nodeImpl.getTypeArgumentIndex() == 1 <- map value
-//                    if (nodeImpl.getTypeArgumentIndex() != null && nodeImpl.getTypeArgumentIndex() != 0) {
-//                        nodes.add(node.getKey().toString());
-//                        return;
-//                    }
-//                }
-//            }
-//            nodes.add(node.getName());
-//        }
-//    }
+    private void prepareNodePathBasedOnParentNodeClass(List<String> nodes, Path.Node node, Class<?> parentNodeClass) {
+        try {
+            if (node.getName() == null) {
+                return;
+            }
+            Field field = parentNodeClass.getDeclaredField(node.getName());
+            JsonProperty annotation = field.getAnnotation(JsonProperty.class);
+            if (annotation != null) {
+                StringBuilder sb = new StringBuilder();
+                sb.append(annotation.value() == null ? node.getName() : annotation.value());
+                NodeImpl nodeImpl = (NodeImpl) node;
+                if (nodeImpl.isIterable() && returnNodeIndex(nodeImpl) != null) {
+                    sb.append("[");
+                    sb.append(returnNodeIndex(nodeImpl));
+                    sb.append("]");
+                }
+                nodes.add(sb.toString());
+            }
+        } catch (NoSuchFieldException e) {
+            if (CONTAINER_ELEMENT.equals(node.getKind())) {
+                if (node.getKey() != null) {
+                    NodeImpl nodeImpl = (NodeImpl) node;
+                    //nodeImpl.getTypeArgumentIndex() == 0 <- map key, nodeImpl.getTypeArgumentIndex() == 1 <- map value
+                    if (nodeImpl.getTypeArgumentIndex() != null && nodeImpl.getTypeArgumentIndex() != 0) {
+                        nodes.add(node.getKey().toString());
+                        return;
+                    }
+                }
+            }
+            nodes.add(node.getName());
+        }
+    }
 
-//    private Integer returnNodeIndex(NodeImpl nodeImpl) {
-//        NodeImpl tmpNode = NodeImpl.createBeanNode(nodeImpl);
-//        return tmpNode.getIndex();
-//    }
+    private Integer returnNodeIndex(NodeImpl nodeImpl) {
+        NodeImpl tmpNode = NodeImpl.createBeanNode(nodeImpl);
+        return tmpNode.getIndex();
+    }
 
 
 }
