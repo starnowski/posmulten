@@ -229,8 +229,4 @@ public class DefaultYamlConfigurationTest extends AbstractTransactionalTestNGSpr
             throw new RuntimeException(e);
         }
     }
-
-    private Map<String, String> prepareIdColumnTypeForSingleColumnKey(String columnName, String columnType) {
-        return mapBuilder().put(columnName, columnType).build();
-    }
 }
