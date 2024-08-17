@@ -134,6 +134,16 @@
                     <plugin>
                         <groupId>org.codehaus.gmavenplus</groupId>
                         <artifactId>gmavenplus-plugin</artifactId>
+                        <version>1.5</version>
+                        <executions>
+                            <execution>
+                                <phase>none</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.gmavenplus</groupId>
+                        <artifactId>gmavenplus-plugin</artifactId>
                         <version>3.0.0</version>
                         <executions>
                             <execution>
@@ -155,13 +165,9 @@
                 <plugin>
                     <groupId>org.codehaus.gmavenplus</groupId>
                     <artifactId>gmavenplus-plugin</artifactId>
-                    <version>3.0.0</version>
                     <executions>
                         <execution>
-                            <goals>
-                                <goal>compile</goal>
-                                <goal>compileTests</goal>
-                            </goals>
+                            <phase>none</phase>
                         </execution>
                     </executions>
                 </plugin>
