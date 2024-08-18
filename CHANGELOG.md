@@ -63,6 +63,10 @@ https://www.markdownguide.org/basic-syntax/
     - Added com.github.starnowski.posmulten.configuration.yaml.context.YamlConfigurationDefaultSharedSchemaContextBuilderFactory type. [294](https://github.com/starnowski/posmulten/issues/294)
     - Added com.github.starnowski.posmulten.configuration.yaml.context.YamlConfigurationDefaultSharedSchemaContextBuilderFactorySupplier type. [294](https://github.com/starnowski/posmulten/issues/294)
     - Added com.github.starnowski.posmulten.configuration.yaml.jakarta.context.YamlConfigurationDefaultSharedSchemaContextBuilderFactory type. [294](https://github.com/starnowski/posmulten/issues/294)
+    - Added com.github.starnowski.posmulten.configuration.yaml.jakarta.context.YamlConfigurationDefaultSharedSchemaContextBuilderFactorySupplier type. [294](https://github.com/starnowski/posmulten/issues/294)
+    - Added com.github.starnowski.posmulten.configuration.yaml.jakarta.mappers.CustomDefinitionEntryMapper type. [294](https://github.com/starnowski/posmulten/issues/294)
+    - Added com.github.starnowski.posmulten.configuration.yaml.jakarta.mappers.ForeignKeyConfigurationMapper type. [294](https://github.com/starnowski/posmulten/issues/294)
+    - Added com.github.starnowski.posmulten.configuration.yaml.jakarta.mappers.PrimaryKeyDefinitionMapper type. [294](https://github.com/starnowski/posmulten/issues/294)
 
 ### Changed
 
