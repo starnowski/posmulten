@@ -47,6 +47,13 @@ https://www.markdownguide.org/basic-syntax/
     - Added com.github.starnowski.posmulten.configuration.yaml.core.mappers.AbstractPrimaryKeyDefinitionMapper type. [294](https://github.com/starnowski/posmulten/issues/294)
     - Added com.github.starnowski.posmulten.configuration.yaml.core.mappers.AbstractRLSPolicyMapper type. [294](https://github.com/starnowski/posmulten/issues/294)
     - Added com.github.starnowski.posmulten.configuration.yaml.core.mappers.AbstractSharedSchemaContextConfigurationMapper type. [294](https://github.com/starnowski/posmulten/issues/294)
+    - Added com.github.starnowski.posmulten.configuration.yaml.core.mappers.AbstractSqlDefinitionsValidationMapper type. [294](https://github.com/starnowski/posmulten/issues/294)
+    - Added com.github.starnowski.posmulten.configuration.yaml.core.mappers.AbstractTableEntryMapper type. [294](https://github.com/starnowski/posmulten/issues/294)
+    - Added com.github.starnowski.posmulten.configuration.yaml.core.mappers.AbstractValidTenantValueConstraintConfigurationMapper type. [294](https://github.com/starnowski/posmulten/issues/294)
+    - Added com.github.starnowski.posmulten.configuration.yaml.core.model.AbstractCustomDefinitionEntry type. [294](https://github.com/starnowski/posmulten/issues/294)
+    - Added com.github.starnowski.posmulten.configuration.yaml.core.model.AbstractForeignKeyConfiguration type. [294](https://github.com/starnowski/posmulten/issues/294)
+    - Added com.github.starnowski.posmulten.configuration.yaml.core.model.AbstractPrimaryKeyDefinition type. [294](https://github.com/starnowski/posmulten/issues/294)
+    - Added com.github.starnowski.posmulten.configuration.yaml.core.model.AbstractRLSPolicy type. [294](https://github.com/starnowski/posmulten/issues/294)
 
 ### Changed
 
