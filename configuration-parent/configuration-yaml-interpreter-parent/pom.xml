@@ -11,12 +11,16 @@
     <packaging>pom</packaging>
 
     <artifactId>configuration-yaml-interpreter-parent</artifactId>
+
+    <properties>
+        <license.dir>${project.parent.basedir}/..</license.dir>
+    </properties>
     <modules>
         <module>common-tests</module>
         <module>configuration-yaml-interpreter</module>
-        <module>configuration-yaml-interpreter-functional-tests</module>
         <module>configuration-yaml-interpreter-core</module>
         <module>configuration-yaml-jakarta-interpreter</module>
+        <module>configuration-yaml-interpreter-functional-tests-parent</module>
     </modules>
 
 </project>

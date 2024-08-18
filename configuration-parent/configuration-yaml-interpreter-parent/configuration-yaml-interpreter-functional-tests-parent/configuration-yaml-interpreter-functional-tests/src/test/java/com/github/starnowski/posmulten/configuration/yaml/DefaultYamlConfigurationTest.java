@@ -41,7 +41,6 @@ import java.util.Map;
 import static com.github.starnowski.posmulten.configuration.yaml.TestApplication.CLEAR_DATABASE_SCRIPT_PATH;
 import static com.github.starnowski.posmulten.configuration.yaml.TestApplication.INTEGRATION_CONFIGURATION_TEST_FILE_PATH;
 import static com.github.starnowski.posmulten.postgresql.core.db.DatabaseOperationType.*;
-import static com.github.starnowski.posmulten.postgresql.test.utils.MapBuilder.mapBuilder;
 import static com.github.starnowski.posmulten.postgresql.test.utils.TestUtils.*;
 import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.assertThat;
