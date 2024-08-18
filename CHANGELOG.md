@@ -60,8 +60,9 @@ https://www.markdownguide.org/basic-syntax/
     - Added com.github.starnowski.posmulten.configuration.yaml.core.model.AbstractStringWrapperWithNullValue type. [294](https://github.com/starnowski/posmulten/issues/294)
     - Added com.github.starnowski.posmulten.configuration.yaml.core.model.AbstractTableEntry type. [294](https://github.com/starnowski/posmulten/issues/294)
     - Added com.github.starnowski.posmulten.configuration.yaml.core.model.AbstractValidTenantValueConstraintConfiguration type. [294](https://github.com/starnowski/posmulten/issues/294)
-    - Added com.github.starnowski.posmulten.configuration.yaml.context.YamlConfigurationDefaultSharedSchemaContextBuilderFactory  type. [294](https://github.com/starnowski/posmulten/issues/294)
-    - Added com.github.starnowski.posmulten.configuration.yaml.context.YamlConfigurationDefaultSharedSchemaContextBuilderFactorySupplier   type. [294](https://github.com/starnowski/posmulten/issues/294)
+    - Added com.github.starnowski.posmulten.configuration.yaml.context.YamlConfigurationDefaultSharedSchemaContextBuilderFactory type. [294](https://github.com/starnowski/posmulten/issues/294)
+    - Added com.github.starnowski.posmulten.configuration.yaml.context.YamlConfigurationDefaultSharedSchemaContextBuilderFactorySupplier type. [294](https://github.com/starnowski/posmulten/issues/294)
+    - Added com.github.starnowski.posmulten.configuration.yaml.jakarta.context.YamlConfigurationDefaultSharedSchemaContextBuilderFactory type. [294](https://github.com/starnowski/posmulten/issues/294)
 
 ### Changed
 
@@ -76,10 +77,14 @@ https://www.markdownguide.org/basic-syntax/
     - Class com.github.starnowski.posmulten.configuration.yaml.mappers.SharedSchemaContextConfigurationMapper extends com.github.starnowski.posmulten.configuration.yaml.core.mappers.AbstractSharedSchemaContextConfigurationMapper [294](https://github.com/starnowski/posmulten/issues/294)
     - Class com.github.starnowski.posmulten.configuration.yaml.mappers.SqlDefinitionsValidationMapper extends com.github.starnowski.posmulten.configuration.yaml.core.mappers.AbstractSqlDefinitionsValidationMapper [294](https://github.com/starnowski/posmulten/issues/294)
     - Class com.github.starnowski.posmulten.configuration.yaml.mappers.TableEntryMapper extends com.github.starnowski.posmulten.configuration.yaml.core.mappers.AbstractTableEntryMapper [294](https://github.com/starnowski/posmulten/issues/294)
-    - Class com.github.starnowski.posmulten.configuration.yaml.model.CustomDefinitionEntry extends com.github.starnowski.posmulten.configuration.yaml.core.model.AbstractCustomDefinitionEntry [294](https://github.com/starnowski/posmulten/issues/294)
-    - Class com.github.starnowski.posmulten.configuration.yaml.model.ForeignKeyConfiguration extends com.github.starnowski.posmulten.configuration.yaml.core.model.AbstractForeignKeyConfiguration [294](https://github.com/starnowski/posmulten/issues/294)
-      - Class com.github.starnowski.posmulten.configuration.yaml.model.PrimaryKeyDefinition extends com.github.starnowski.posmulten.configuration.yaml.core.model.AbstractPrimaryKeyDefinition [294](https://github.com/starnowski/posmulten/issues/294)
-      - Class com.github.starnowski.posmulten.configuration.yaml.model.RLSPolicy extends com.github.starnowski.posmulten.configuration.yaml.core.model.AbstractRLSPolicy [294](https://github.com/starnowski/posmulten/issues/294)
+    - Class com.github.starnowski.posmulten.configuration.yaml.model.CustomDefinitionEntry implements com.github.starnowski.posmulten.configuration.yaml.core.model.AbstractCustomDefinitionEntry [294](https://github.com/starnowski/posmulten/issues/294)
+    - Class com.github.starnowski.posmulten.configuration.yaml.model.ForeignKeyConfiguration implements com.github.starnowski.posmulten.configuration.yaml.core.model.AbstractForeignKeyConfiguration [294](https://github.com/starnowski/posmulten/issues/294)
+    - Class com.github.starnowski.posmulten.configuration.yaml.model.PrimaryKeyDefinition implements com.github.starnowski.posmulten.configuration.yaml.core.model.AbstractPrimaryKeyDefinition [294](https://github.com/starnowski/posmulten/issues/294)
+    - Class com.github.starnowski.posmulten.configuration.yaml.model.RLSPolicy implements com.github.starnowski.posmulten.configuration.yaml.core.model.AbstractRLSPolicy [294](https://github.com/starnowski/posmulten/issues/294)
+    - Class com.github.starnowski.posmulten.configuration.yaml.model.SharedSchemaContextConfiguration implements com.github.starnowski.posmulten.configuration.yaml.core.model.AbstractSharedSchemaContextConfiguration [294](https://github.com/starnowski/posmulten/issues/294)
+    - Class com.github.starnowski.posmulten.configuration.yaml.model.SqlDefinitionsValidation implements com.github.starnowski.posmulten.configuration.yaml.core.model.AbstractSqlDefinitionsValidation [294](https://github.com/starnowski/posmulten/issues/294)
+    - Class com.github.starnowski.posmulten.configuration.yaml.model.StringWrapperWithNotBlankValue implements com.github.starnowski.posmulten.configuration.yaml.core.model.AbstractStringWrapperWithNotBlankValue [294](https://github.com/starnowski/posmulten/issues/294)
+    - Class com.github.starnowski.posmulten.configuration.yaml.model.ValidTenantValueConstraintConfiguration implements com.github.starnowski.posmulten.configuration.yaml.core.model.AbstractValidTenantValueConstraintConfiguration [294](https://github.com/starnowski/posmulten/issues/294)
 
 ## [0.8.1] - 2024-03-07
 
