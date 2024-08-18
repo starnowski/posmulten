@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.github.starnowski.posmulten.configuration</groupId>
         <artifactId>configuration-yaml-interpreter-parent</artifactId>
-        <version>0.9.0-SNAPSHOT</version>
+        <version>0.9.0</version>
     </parent>
 
     <artifactId>configuration-yaml-interpreter-functional-tests-parent</artifactId>
