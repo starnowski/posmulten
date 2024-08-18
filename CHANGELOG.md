@@ -9,6 +9,7 @@ https://keepachangelog.com/en/1.0.0/
 https://www.markdownguide.org/basic-syntax/
 
 * [Unreleased](#unreleased)
+* [0.9.0](#090---2024-08-18)
 * [0.8.1](#081---2024-03-07)
 * [0.8.0](#080---2023-11-20)
 * [0.7.2](#072---2023-07-03)
@@ -31,6 +32,18 @@ https://www.markdownguide.org/basic-syntax/
 * [0.2.0](#020---2020-11-14)
 
 ## [Unreleased]
+
+## [0.9.0] - 2024-08-18
+
+### Added
+
+- Create similar configuration interpreter as configuration-parent/configuration-yaml-interpreter for yaml files which use jakarta package instead of javax [294](https://github.com/starnowski/posmulten/issues/294)
+    - Added com.github.starnowski.posmulten.configuration.yaml.core.context.AbstractYamlConfigurationDefaultSharedSchemaContextBuilderFactory type. [294](https://github.com/starnowski/posmulten/issues/294)
+
+### Changed
+
+- Create similar configuration interpreter as configuration-parent/configuration-yaml-interpreter for yaml files which use jakarta package instead of javax [294](https://github.com/starnowski/posmulten/issues/294)
+    - Moved class com.github.starnowski.posmulten.configuration.yaml.IConfigurationMapper to package com.github.starnowski.posmulten.configuration.yaml.core [294](https://github.com/starnowski/posmulten/issues/294)
 
 ## [0.8.1] - 2024-03-07
 
