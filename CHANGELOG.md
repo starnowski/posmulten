@@ -81,6 +81,14 @@ https://www.markdownguide.org/basic-syntax/
     - Added com.github.starnowski.posmulten.configuration.yaml.jakarta.model.StringWrapperWithNotBlankValue type. [294](https://github.com/starnowski/posmulten/issues/294)
     - Added com.github.starnowski.posmulten.configuration.yaml.jakarta.model.StringWrapperWithNullValue type. [294](https://github.com/starnowski/posmulten/issues/294)
     - Added com.github.starnowski.posmulten.configuration.yaml.jakarta.model.TableEntry type. [294](https://github.com/starnowski/posmulten/issues/294)
+    - Added com.github.starnowski.posmulten.configuration.yaml.jakarta.model.ValidTenantValueConstraintConfiguration type. [294](https://github.com/starnowski/posmulten/issues/294)
+    - Added com.github.starnowski.posmulten.configuration.yaml.jakarta.validation.CustomPositionValidValue type. [294](https://github.com/starnowski/posmulten/issues/294)
+    - Added com.github.starnowski.posmulten.configuration.yaml.jakarta.validation.CustomPositionValidator type. [294](https://github.com/starnowski/posmulten/issues/294)
+    - Added com.github.starnowski.posmulten.configuration.yaml.jakarta.validation.EnumNamePattern type. [294](https://github.com/starnowski/posmulten/issues/294)
+    - Added com.github.starnowski.posmulten.configuration.yaml.jakarta.validation.EnumNamePatternValidator type. [294](https://github.com/starnowski/posmulten/issues/294)
+    - Added com.github.starnowski.posmulten.configuration.yaml.jakarta.validation.groups.NameForFunctionThatChecksIfRecordExistsInTableNotBlankGroupResolver type. [294](https://github.com/starnowski/posmulten/issues/294)
+    - Added com.github.starnowski.posmulten.configuration.yaml.jakarta.validation.groups.ValidatorGroupsResolver type. [294](https://github.com/starnowski/posmulten/issues/294)
+    - Added com.github.starnowski.posmulten.configuration.yaml.jakarta.validation.groups.ValidatorGroupsResolver type. [294](https://github.com/starnowski/posmulten/issues/294)
 
 ### Changed
 
