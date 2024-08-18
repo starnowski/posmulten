@@ -67,6 +67,20 @@ https://www.markdownguide.org/basic-syntax/
     - Added com.github.starnowski.posmulten.configuration.yaml.jakarta.mappers.CustomDefinitionEntryMapper type. [294](https://github.com/starnowski/posmulten/issues/294)
     - Added com.github.starnowski.posmulten.configuration.yaml.jakarta.mappers.ForeignKeyConfigurationMapper type. [294](https://github.com/starnowski/posmulten/issues/294)
     - Added com.github.starnowski.posmulten.configuration.yaml.jakarta.mappers.PrimaryKeyDefinitionMapper type. [294](https://github.com/starnowski/posmulten/issues/294)
+    - Added com.github.starnowski.posmulten.configuration.yaml.jakarta.mappers.RLSPolicyMapper type. [294](https://github.com/starnowski/posmulten/issues/294)
+    - Added com.github.starnowski.posmulten.configuration.yaml.jakarta.mappers.SharedSchemaContextConfigurationMapper type. [294](https://github.com/starnowski/posmulten/issues/294)
+    - Added com.github.starnowski.posmulten.configuration.yaml.jakarta.mappers.SqlDefinitionsValidationMapper type. [294](https://github.com/starnowski/posmulten/issues/294)
+    - Added com.github.starnowski.posmulten.configuration.yaml.jakarta.mappers.TableEntryMapper type. [294](https://github.com/starnowski/posmulten/issues/294)
+    - Added com.github.starnowski.posmulten.configuration.yaml.jakarta.mappers.ValidTenantValueConstraintConfigurationMapper type. [294](https://github.com/starnowski/posmulten/issues/294)
+    - Added com.github.starnowski.posmulten.configuration.yaml.jakarta.model.CustomDefinitionEntry type. [294](https://github.com/starnowski/posmulten/issues/294)
+    - Added com.github.starnowski.posmulten.configuration.yaml.jakarta.model.ForeignKeyConfiguration type. [294](https://github.com/starnowski/posmulten/issues/294)
+    - Added com.github.starnowski.posmulten.configuration.yaml.jakarta.model.PrimaryKeyDefinition type. [294](https://github.com/starnowski/posmulten/issues/294)
+    - Added com.github.starnowski.posmulten.configuration.yaml.jakarta.model.RLSPolicy type. [294](https://github.com/starnowski/posmulten/issues/294)
+    - Added com.github.starnowski.posmulten.configuration.yaml.jakarta.model.SharedSchemaContextConfiguration type. [294](https://github.com/starnowski/posmulten/issues/294)
+    - Added com.github.starnowski.posmulten.configuration.yaml.jakarta.model.SqlDefinitionsValidation type. [294](https://github.com/starnowski/posmulten/issues/294)
+    - Added com.github.starnowski.posmulten.configuration.yaml.jakarta.model.StringWrapperWithNotBlankValue type. [294](https://github.com/starnowski/posmulten/issues/294)
+    - Added com.github.starnowski.posmulten.configuration.yaml.jakarta.model.StringWrapperWithNullValue type. [294](https://github.com/starnowski/posmulten/issues/294)
+    - Added com.github.starnowski.posmulten.configuration.yaml.jakarta.model.TableEntry type. [294](https://github.com/starnowski/posmulten/issues/294)
 
 ### Changed
 
