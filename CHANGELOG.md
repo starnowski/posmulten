@@ -54,12 +54,21 @@ https://www.markdownguide.org/basic-syntax/
     - Added com.github.starnowski.posmulten.configuration.yaml.core.model.AbstractForeignKeyConfiguration type. [294](https://github.com/starnowski/posmulten/issues/294)
     - Added com.github.starnowski.posmulten.configuration.yaml.core.model.AbstractPrimaryKeyDefinition type. [294](https://github.com/starnowski/posmulten/issues/294)
     - Added com.github.starnowski.posmulten.configuration.yaml.core.model.AbstractRLSPolicy type. [294](https://github.com/starnowski/posmulten/issues/294)
+    - Added com.github.starnowski.posmulten.configuration.yaml.core.model.AbstractSharedSchemaContextConfiguration type. [294](https://github.com/starnowski/posmulten/issues/294)
+    - Added com.github.starnowski.posmulten.configuration.yaml.core.model.AbstractSqlDefinitionsValidation type. [294](https://github.com/starnowski/posmulten/issues/294)
+    - Added com.github.starnowski.posmulten.configuration.yaml.core.model.AbstractStringWrapperWithNotBlankValue type. [294](https://github.com/starnowski/posmulten/issues/294)
+    - Added com.github.starnowski.posmulten.configuration.yaml.core.model.AbstractStringWrapperWithNullValue type. [294](https://github.com/starnowski/posmulten/issues/294)
+    - Added com.github.starnowski.posmulten.configuration.yaml.core.model.AbstractTableEntry type. [294](https://github.com/starnowski/posmulten/issues/294)
+    - Added com.github.starnowski.posmulten.configuration.yaml.core.model.AbstractValidTenantValueConstraintConfiguration type. [294](https://github.com/starnowski/posmulten/issues/294)
+    - Added com.github.starnowski.posmulten.configuration.yaml.context.YamlConfigurationDefaultSharedSchemaContextBuilderFactory  type. [294](https://github.com/starnowski/posmulten/issues/294)
+    - Added com.github.starnowski.posmulten.configuration.yaml.context.YamlConfigurationDefaultSharedSchemaContextBuilderFactorySupplier   type. [294](https://github.com/starnowski/posmulten/issues/294)
 
 ### Changed
 
 - Create similar configuration interpreter as configuration-parent/configuration-yaml-interpreter for yaml files which use jakarta package instead of javax [294](https://github.com/starnowski/posmulten/issues/294)
     - Moved class com.github.starnowski.posmulten.configuration.yaml.IConfigurationMapper to package com.github.starnowski.posmulten.configuration.yaml.core [294](https://github.com/starnowski/posmulten/issues/294)
     - Moved class com.github.starnowski.posmulten.configuration.yaml.exceptions.InvalidConfigurationException to package com.github.starnowski.posmulten.configuration.yaml.core.exceptions [294](https://github.com/starnowski/posmulten/issues/294)
+    - Class com.github.starnowski.posmulten.configuration.yaml.dao.SharedSchemaContextConfigurationYamlDao implements com.github.starnowski.posmulten.configuration.yaml.core.dao.AbstractSharedSchemaContextConfigurationYamlDao [294](https://github.com/starnowski/posmulten/issues/294)
 
 ## [0.8.1] - 2024-03-07
 
