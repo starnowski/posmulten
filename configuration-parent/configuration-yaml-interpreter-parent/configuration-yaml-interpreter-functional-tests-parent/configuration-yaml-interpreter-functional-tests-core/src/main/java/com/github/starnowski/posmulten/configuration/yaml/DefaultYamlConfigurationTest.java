@@ -30,7 +30,9 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import javax.sql.DataSource;
+import java.io.*;
 import java.net.URISyntaxException;
+import java.nio.file.FileSystemNotFoundException;
 import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -83,8 +85,28 @@ public class DefaultYamlConfigurationTest extends AbstractTransactionalTestNGSpr
         return (getSchema() == null ? "" : getSchema() + ".") + "users";
     }
 
-    protected String resolveFilePath(String filePath) throws URISyntaxException {
-        return Paths.get(this.getClass().getResource(filePath).toURI()).toFile().getPath();
+    protected String resolveFilePath(String filePath) throws URISyntaxException, IOException {
+        try {
+            return Paths.get(this.getClass().getResource(filePath).toURI()).toFile().getPath();
+        } catch (FileSystemNotFoundException exception) {
+            InputStream inputStream = this.getClass().getResourceAsStream(filePath);
+            if (inputStream == null) {
+                throw new FileNotFoundException("Resource not found: " + filePath);
+            }
+
+            File tempFile = File.createTempFile("tempfile", ".tmp");
+            tempFile.deleteOnExit();
+
+            try (FileOutputStream out = new FileOutputStream(tempFile)) {
+                byte[] buffer = new byte[1024];
+                int bytesRead;
+                while ((bytesRead = inputStream.read(buffer)) != -1) {
+                    out.write(buffer, 0, bytesRead);
+                }
+            }
+
+            return tempFile.getPath();
+        }
     }
 
     @DataProvider(name = "userData")
@@ -97,7 +119,7 @@ public class DefaultYamlConfigurationTest extends AbstractTransactionalTestNGSpr
     }
 
     @Test(testName = "create SQL definitions", description = "Create SQL function that creates statements that set current tenant value, retrieve current tenant value and create the row level security policy for a table that is multi-tenant aware")
-    public void createSQLDefinitions() throws SharedSchemaContextBuilderException, NoDefaultSharedSchemaContextBuilderFactorySupplierException, InvalidConfigurationException, URISyntaxException, ValidationDatabaseOperationsException, SQLException {
+    public void createSQLDefinitions() throws SharedSchemaContextBuilderException, NoDefaultSharedSchemaContextBuilderFactorySupplierException, InvalidConfigurationException, URISyntaxException, ValidationDatabaseOperationsException, SQLException, IOException {
         DefaultSharedSchemaContextBuilderFactoryResolver defaultSharedSchemaContextBuilderFactoryResolver = new DefaultSharedSchemaContextBuilderFactoryResolver();
         IDefaultSharedSchemaContextBuilderFactory factory = defaultSharedSchemaContextBuilderFactoryResolver.resolve(INTEGRATION_CONFIGURATION_TEST_FILE_PATH);
         DefaultSharedSchemaContextBuilder builder = factory.build(resolveFilePath(INTEGRATION_CONFIGURATION_TEST_FILE_PATH));
