@@ -42,6 +42,11 @@ https://www.markdownguide.org/basic-syntax/
     - Added com.github.starnowski.posmulten.configuration.yaml.core.context.AbstractYamlConfigurationDefaultSharedSchemaContextBuilderFactorySupplier type. [294](https://github.com/starnowski/posmulten/issues/294)
     - Added com.github.starnowski.posmulten.configuration.yaml.core.dao.AbstractSharedSchemaContextConfigurationYamlDao type. [294](https://github.com/starnowski/posmulten/issues/294)
     - Added com.github.starnowski.posmulten.configuration.yaml.core.mappers.AbstractConfigurationMapper type. [294](https://github.com/starnowski/posmulten/issues/294)
+    - Added com.github.starnowski.posmulten.configuration.yaml.core.mappers.AbstractCustomDefinitionEntryMapper type. [294](https://github.com/starnowski/posmulten/issues/294)
+    - Added com.github.starnowski.posmulten.configuration.yaml.core.mappers.AbstractForeignKeyConfigurationMapper type. [294](https://github.com/starnowski/posmulten/issues/294)
+    - Added com.github.starnowski.posmulten.configuration.yaml.core.mappers.AbstractPrimaryKeyDefinitionMapper type. [294](https://github.com/starnowski/posmulten/issues/294)
+    - Added com.github.starnowski.posmulten.configuration.yaml.core.mappers.AbstractRLSPolicyMapper type. [294](https://github.com/starnowski/posmulten/issues/294)
+    - Added com.github.starnowski.posmulten.configuration.yaml.core.mappers.AbstractSharedSchemaContextConfigurationMapper type. [294](https://github.com/starnowski/posmulten/issues/294)
 
 ### Changed
 
