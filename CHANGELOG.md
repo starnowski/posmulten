@@ -76,7 +76,10 @@ https://www.markdownguide.org/basic-syntax/
     - Class com.github.starnowski.posmulten.configuration.yaml.mappers.SharedSchemaContextConfigurationMapper extends com.github.starnowski.posmulten.configuration.yaml.core.mappers.AbstractSharedSchemaContextConfigurationMapper [294](https://github.com/starnowski/posmulten/issues/294)
     - Class com.github.starnowski.posmulten.configuration.yaml.mappers.SqlDefinitionsValidationMapper extends com.github.starnowski.posmulten.configuration.yaml.core.mappers.AbstractSqlDefinitionsValidationMapper [294](https://github.com/starnowski/posmulten/issues/294)
     - Class com.github.starnowski.posmulten.configuration.yaml.mappers.TableEntryMapper extends com.github.starnowski.posmulten.configuration.yaml.core.mappers.AbstractTableEntryMapper [294](https://github.com/starnowski/posmulten/issues/294)
-    - Class com.github.starnowski.posmulten.configuration.yaml.mappers.ValidTenantValueConstraintConfigurationMapper extends com.github.starnowski.posmulten.configuration.yaml.core.mappers.AbstractValidTenantValueConstraintConfigurationMapper [294](https://github.com/starnowski/posmulten/issues/294)
+    - Class com.github.starnowski.posmulten.configuration.yaml.model.CustomDefinitionEntry extends com.github.starnowski.posmulten.configuration.yaml.core.model.AbstractCustomDefinitionEntry [294](https://github.com/starnowski/posmulten/issues/294)
+    - Class com.github.starnowski.posmulten.configuration.yaml.model.ForeignKeyConfiguration extends com.github.starnowski.posmulten.configuration.yaml.core.model.AbstractForeignKeyConfiguration [294](https://github.com/starnowski/posmulten/issues/294)
+      - Class com.github.starnowski.posmulten.configuration.yaml.model.PrimaryKeyDefinition extends com.github.starnowski.posmulten.configuration.yaml.core.model.AbstractPrimaryKeyDefinition [294](https://github.com/starnowski/posmulten/issues/294)
+      - Class com.github.starnowski.posmulten.configuration.yaml.model.RLSPolicy extends com.github.starnowski.posmulten.configuration.yaml.core.model.AbstractRLSPolicy [294](https://github.com/starnowski/posmulten/issues/294)
 
 ## [0.8.1] - 2024-03-07
 
