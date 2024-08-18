@@ -39,11 +39,15 @@ https://www.markdownguide.org/basic-syntax/
 
 - Create similar configuration interpreter as configuration-parent/configuration-yaml-interpreter for yaml files which use jakarta package instead of javax [294](https://github.com/starnowski/posmulten/issues/294)
     - Added com.github.starnowski.posmulten.configuration.yaml.core.context.AbstractYamlConfigurationDefaultSharedSchemaContextBuilderFactory type. [294](https://github.com/starnowski/posmulten/issues/294)
+    - Added com.github.starnowski.posmulten.configuration.yaml.core.context.AbstractYamlConfigurationDefaultSharedSchemaContextBuilderFactorySupplier type. [294](https://github.com/starnowski/posmulten/issues/294)
+    - Added com.github.starnowski.posmulten.configuration.yaml.core.dao.AbstractSharedSchemaContextConfigurationYamlDao type. [294](https://github.com/starnowski/posmulten/issues/294)
+    - Added com.github.starnowski.posmulten.configuration.yaml.core.mappers.AbstractConfigurationMapper type. [294](https://github.com/starnowski/posmulten/issues/294)
 
 ### Changed
 
 - Create similar configuration interpreter as configuration-parent/configuration-yaml-interpreter for yaml files which use jakarta package instead of javax [294](https://github.com/starnowski/posmulten/issues/294)
     - Moved class com.github.starnowski.posmulten.configuration.yaml.IConfigurationMapper to package com.github.starnowski.posmulten.configuration.yaml.core [294](https://github.com/starnowski/posmulten/issues/294)
+    - Moved class com.github.starnowski.posmulten.configuration.yaml.exceptions.InvalidConfigurationException to package com.github.starnowski.posmulten.configuration.yaml.core.exceptions [294](https://github.com/starnowski/posmulten/issues/294)
 
 ## [0.8.1] - 2024-03-07
 
