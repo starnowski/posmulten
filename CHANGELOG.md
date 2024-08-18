@@ -69,6 +69,8 @@ https://www.markdownguide.org/basic-syntax/
     - Moved class com.github.starnowski.posmulten.configuration.yaml.IConfigurationMapper to package com.github.starnowski.posmulten.configuration.yaml.core [294](https://github.com/starnowski/posmulten/issues/294)
     - Moved class com.github.starnowski.posmulten.configuration.yaml.exceptions.InvalidConfigurationException to package com.github.starnowski.posmulten.configuration.yaml.core.exceptions [294](https://github.com/starnowski/posmulten/issues/294)
     - Class com.github.starnowski.posmulten.configuration.yaml.dao.SharedSchemaContextConfigurationYamlDao implements com.github.starnowski.posmulten.configuration.yaml.core.dao.AbstractSharedSchemaContextConfigurationYamlDao [294](https://github.com/starnowski/posmulten/issues/294)
+    - Class com.github.starnowski.posmulten.configuration.yaml.mappers.CustomDefinitionEntryMapper  extends com.github.starnowski.posmulten.configuration.yaml.core.mappers.AbstractCustomDefinitionEntryMapper [294](https://github.com/starnowski/posmulten/issues/294)
+    - Class com.github.starnowski.posmulten.configuration.yaml.mappers.ForeignKeyConfigurationMapper  extends com.github.starnowski.posmulten.configuration.yaml.core.mappers.AbstractForeignKeyConfigurationMapper [294](https://github.com/starnowski/posmulten/issues/294)
 
 ## [0.8.1] - 2024-03-07
 
