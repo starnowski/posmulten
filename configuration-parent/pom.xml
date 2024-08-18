@@ -10,11 +10,10 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
     <modules>
-        <module>configuration-yaml-interpreter</module>
-        <module>configuration-yaml-interpreter-functional-tests</module>
         <module>configuration-core</module>
         <module>configuration</module>
         <module>configuration-jar</module>
+        <module>configuration-yaml-interpreter-parent</module>
     </modules>
     <groupId>com.github.starnowski.posmulten.configuration</groupId>
     <artifactId>configuration-parent</artifactId>
