@@ -1,7 +1,7 @@
 <settings>
     <servers>
         <server>
-            <id>${server}</id>
+            <id>maven-central-starnowski-posmulten</id>
             <username>${env.MAVEN_USERNAME}</username>
             <password>${env.MAVEN_PASSWORD}</password>
         </server>
